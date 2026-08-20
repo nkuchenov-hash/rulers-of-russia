@@ -1,0 +1,27 @@
+:root {
+  --page-bg: #151515;
+  --surface-primary: #202020;
+  --surface-elevated: #292929;
+  --text-primary: #f3f1eb;
+  --text-muted: #aaa7a0;
+  --accent-primary: #b7a777;
+  --accent-secondary: #77736a;
+  --border-emphasis: rgba(255,255,255,.14);
+  --map-land: #8e897d;
+  --map-water: #1a1d1e;
+  --display-font: Georgia, 'Times New Roman', serif;
+  --body-font: Inter, Arial, sans-serif;
+  --display-tracking: -0.02em;
+  --surface-radius: 14px;
+  --shadow-character: 0 14px 50px rgba(0,0,0,.2);
+  --texture-opacity: 0;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+}
