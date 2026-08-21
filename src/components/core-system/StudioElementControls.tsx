@@ -124,6 +124,10 @@ function restoreStyle(target: StylableElement, property: 'width' | 'height') {
   }
 }
 
+function restoreDisplayWhenAutomatic(target: StylableElement) {
+  target.style.display = target.getAttribute('data-studio-original-display') ?? '';
+}
+
 function ensureDimensionDisplay(target: StylableElement) {
   if (!(target instanceof HTMLElement)) return;
   if (window.getComputedStyle(target).display === 'inline') {
@@ -146,7 +150,6 @@ function applyDimension(target: StylableElement, property: 'width' | 'height', s
     target.style.width = cssValue;
   } else {
     target.style.height = cssValue;
-    // Explicit height in Studio means the requested visual box, even when the base component has a min-height.
     target.style.minHeight = cssValue;
     target.style.maxHeight = 'none';
   }
@@ -155,6 +158,7 @@ function applyDimension(target: StylableElement, property: 'width' | 'height', s
 function applyOverride(target: StylableElement, override?: ElementLayoutOverride) {
   applyDimension(target, 'width', override?.width);
   applyDimension(target, 'height', override?.height);
+  if (!override?.width && !override?.height) restoreDisplayWhenAutomatic(target);
 }
 
 function applyAllSavedOverrides() {
@@ -293,8 +297,15 @@ export function StudioElementControls() {
   }
 
   function resetSize() {
-    patchDimension('width', { value: actual.width, unit: 'auto' });
-    requestAnimationFrame(() => patchDimension('height', { value: actual.height, unit: 'auto' }));
+    const target = targetRef.current;
+    if (!target) return;
+
+    const store = readStore();
+    delete store[key];
+    writeStore(store);
+    setOverride({});
+    applyOverride(target, {});
+    requestAnimationFrame(() => measure(target));
   }
 
   async function sendAiMessage() {
