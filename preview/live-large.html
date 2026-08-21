@@ -3,9 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Правители России — Core Skeleton · Readable Scale</title>
+<title>Правители России — Core Skeleton · Live Canvas</title>
 <style>
-html,body{margin:0;background:#0f1314;min-height:100%;overflow:auto}#frame{display:block;width:1600px;min-width:1600px;height:100vh;min-height:900px;border:0;background:#eee5d4}
+html,body{margin:0;min-height:100%;overflow:auto;background:#c8bda7}
+body{background:
+  radial-gradient(circle at 12% 18%,rgba(255,248,232,.48),transparent 31%),
+  radial-gradient(circle at 88% 8%,rgba(135,104,66,.14),transparent 26%),
+  linear-gradient(135deg,#d7ccb7,#b9ad97 58%,#c8bda7)}
+#frame{display:block;width:100vw;min-width:100%;height:100vh;min-height:900px;border:0;background:transparent}
 </style>
 </head>
 <body>
@@ -14,12 +19,39 @@ html,body{margin:0;background:#0f1314;min-height:100%;overflow:auto}#frame{displ
 const frame=document.getElementById('frame');
 frame.addEventListener('load',()=>{
   const d=frame.contentDocument;
-  if(!d)return;
+  const w=frame.contentWindow;
+  if(!d||!w)return;
+
   const style=d.createElement('style');
   style.textContent=`
-  html,body{min-width:1600px!important;font-size:18px!important;overflow-x:auto!important}
-  .page,.page-wrap{width:1600px!important;min-width:1600px!important;max-width:none!important;margin:0!important}
-  :root{--head:86px!important;--header-h:86px!important;--rail:330px!important;--rail-w:330px!important;--drawer:600px!important;--drawer-w:600px!important}
+  :root{
+    --head:86px!important;--header-h:86px!important;
+    --rail:330px!important;--rail-w:330px!important;
+    --drawer:600px!important;--drawer-w:600px!important;
+    --ambient-base:#c7bca7;--ambient-light:#e7ddcb;--ambient-deep:#9e9078
+  }
+  html{min-width:0!important;background:var(--ambient-base)!important}
+  body{
+    min-width:0!important;font-size:19px!important;overflow-x:auto!important;
+    background:
+      radial-gradient(circle at 12% 16%,color-mix(in srgb,var(--ambient-light) 72%,transparent),transparent 30%),
+      radial-gradient(circle at 88% 12%,color-mix(in srgb,var(--accent) 10%,transparent),transparent 25%),
+      repeating-linear-gradient(0deg,rgba(70,55,35,.025) 0 1px,transparent 1px 5px),
+      linear-gradient(135deg,var(--ambient-light),var(--ambient-base) 56%,var(--ambient-deep))!important;
+    background-attachment:fixed!important;
+  }
+  body[data-era="medieval"]{--ambient-base:#8f7857;--ambient-light:#c8b187;--ambient-deep:#594632}
+  body[data-era="imperial"]{--ambient-base:#8c7657;--ambient-light:#c9b28a;--ambient-deep:#253842}
+  body[data-era="soviet"]{--ambient-base:#6f695d;--ambient-light:#bcb19d;--ambient-deep:#152326}
+  body[data-era="contemporary"]{--ambient-base:#839097;--ambient-light:#c7cdd0;--ambient-deep:#263942}
+
+  .page,.page-wrap{
+    width:calc(100vw - 56px)!important;
+    min-width:1320px!important;
+    max-width:1920px!important;
+    margin:28px auto 80px!important;
+    box-shadow:0 24px 80px rgba(25,20,14,.22),0 0 0 1px rgba(70,55,35,.18)!important;
+  }
   .topbar{height:86px!important;min-height:86px!important}
   .brand{font-size:30px!important;padding-left:34px!important;padding-right:34px!important}
   .mainnav,.main-nav{gap:50px!important}.mainnav button,.main-nav button,.utils button,.utilities button{font-size:16px!important}.utils button,.utilities button{padding-left:22px!important;padding-right:22px!important}
@@ -31,9 +63,38 @@ frame.addEventListener('load',()=>{
   .themes,.thematic-row{grid-template-columns:repeat(4,minmax(0,1fr))!important}.theme,.theme-card{min-height:345px!important;padding:28px 27px 72px!important}.theme h3,.theme-card h3{font-size:30px!important}.range,.theme-card .range{font-size:13px!important}.theme p,.theme li,.theme-card p,.theme-card li{font-size:15px!important;line-height:1.52!important}.theme li,.theme-card li{margin:6px 0!important}.mediazone,.image-zone{font-size:12px!important}.diagram{font-size:12px!important}
   .reign,.reign-timeline{min-height:245px!important;padding:28px 30px 32px!important;grid-template-columns:250px minmax(0,1fr) 250px!important;gap:28px!important}.adj,.adjacent{font-size:14px!important;padding:19px!important}.adj strong,.adjacent strong{font-size:20px!important}.timeline h3,.timeline-center h3{font-size:28px!important}.line,.timeline-line{margin-top:44px!important;margin-bottom:40px!important}.tl,.timeline-label{font-size:13px!important;line-height:1.45!important}.tl b,.timeline-label b{font-size:14px!important}
   .drawer,.drawer.open{font-size:16px!important}.dhead h2,.drawer-head h2{font-size:31px!important}.section p,.section li,.passport-section p,.passport-section li{font-size:15px!important;line-height:1.6!important}.tree{font-size:13px!important}.contract-table{font-size:14px!important}.fab,.inspector-fab{font-size:14px!important;padding:14px 19px!important}
-  @media(max-width:1599px) and (min-width:901px){html,body,.page,.page-wrap{min-width:1600px!important}.hero h1{font-size:112px!important}.themes,.thematic-row{grid-template-columns:repeat(4,minmax(0,1fr))!important}.primary,.primary-row{grid-template-columns:320px minmax(0,1fr) 400px!important}}
+
+  @media(min-width:1900px){
+    body{font-size:20px!important}
+    .hero h1{font-size:124px!important}
+    .summary,.hero-summary{font-size:21px!important}
+    .rname,.rail-name{font-size:20px!important}
+    .fact,.fact-row,.theme p,.theme li,.theme-card p,.theme-card li{font-size:16px!important}
+  }
   `;
   d.head.appendChild(style);
+
+  try{
+    w.eval(`
+      passports.BackgroundModule={
+        position:'Viewport background · behind the centered ruler-page content surface',
+        tree:'BackgroundModule\\n├─ AmbientBase\\n├─ EraTextureLayer\\n├─ Light/VignetteLayer\\n├─ OptionalContextArtwork\\n└─ ContentSurfaceShadow',
+        primitives:['Viewport layer','CSS gradients/textures','Optional responsive background image','Vignette/light layer','Content-surface shadow'],
+        data:'historicalVisualState.background {base,textureId?,artworkId?,focalPoint?,intensity}',
+        sources:'Historical Visual State Resolver + Media Registry when artworkId exists',
+        interaction:'Normally non-interactive. In Core Inspector mode, clicking the outer margin opens this passport.',
+        states:'core neutral · era-specific material · contextual artwork · reduced-motion/low-bandwidth fallback',
+        responsive:'Always fills viewport. Artwork focal point and crop change by breakpoint; content surface remains centered above it.',
+        hvs:'Maximum historical sensitivity: palette, texture, ambient artwork, light and material may change by period. It must never reduce content legibility.'
+      };
+      document.body.dataset.module='BackgroundModule';
+      document.body.addEventListener('click',function(e){
+        if(!inspect)return;
+        if(e.target!==document.body)return;
+        e.preventDefault();e.stopPropagation();openPassport('BackgroundModule',document.body);
+      });
+    `);
+  }catch(e){console.warn('Background passport injection failed',e)}
 });
 </script>
 </body>
