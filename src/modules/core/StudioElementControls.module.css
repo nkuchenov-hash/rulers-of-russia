@@ -148,6 +148,10 @@
   font-size: 16pt;
 }
 
+:global(.inspector-properties-panel output) {
+  display: none;
+}
+
 :global(.inspector-properties-panel .studio-element-controls-host) {
   display: block;
 }
