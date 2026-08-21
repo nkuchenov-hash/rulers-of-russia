@@ -3,6 +3,7 @@ import type { RulerPageData } from './pageModel';
 // Neutral fixture used by the generic Core skeleton.
 // It must never encode a specific historical ruler.
 export const labRulerPageData: RulerPageData = {
+  structureRevision: 2,
   id: 'generic-ruler',
   slug: 'generic-ruler',
   visualStateKey: 'core',
@@ -59,7 +60,8 @@ export const labRulerPageData: RulerPageData = {
     places: [
       { id: 'capital', label: 'Столица', x: 400, y: 225, kind: 'capital' },
       { id: 'region-a', label: 'Регион', x: 245, y: 155, kind: 'region' },
-      { id: 'region-b', label: 'Новое направление', x: 565, y: 160, kind: 'region' }
+      { id: 'region-b', label: 'Новое направление', x: 565, y: 160, kind: 'region' },
+      { id: 'campaign', label: 'Военное направление', x: 480, y: 285, kind: 'campaign' }
     ]
   },
   facts: [
