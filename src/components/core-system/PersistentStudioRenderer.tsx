@@ -3,11 +3,14 @@
 import { useEffect, useState } from 'react';
 import type { RulerPageData } from '@/content/rulers/pageModel';
 import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
+import { StudioElementControls } from '@/components/core-system/StudioElementControls';
 import {
   defaultInspectorTuning,
   STUDIO_TUNING_STORAGE_KEY,
   type InspectorTuning
 } from '@/components/core-system/CoreInspectorDrawer';
+
+const STUDIO_LAYOUT_STORAGE_KEY = 'rulers-of-russia:studio:element-layout:v1';
 
 function restoreStudioTuning(): void {
   try {
@@ -47,10 +50,12 @@ export function PersistentStudioRenderer({ data }: { data: RulerPageData }) {
   return (
     <>
       <CoreDesignSystemSkeleton data={data} editorMode />
+      <StudioElementControls />
       <button
         type="button"
         onClick={() => {
           window.localStorage.removeItem(STUDIO_TUNING_STORAGE_KEY);
+          window.localStorage.removeItem(STUDIO_LAYOUT_STORAGE_KEY);
           window.location.reload();
         }}
         style={{
