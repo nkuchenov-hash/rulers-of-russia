@@ -18,7 +18,7 @@ export const labRulerPageData: RulerPageData = {
     { id: 'r8', name: 'Правитель VIII', years: 'год—год', portraitLabel: 'VIII' }
   ],
   hero: {
-    datesLabel: 'ГОДЫ ЖИЗНИ / ПРАВЛЕНИЯ',
+    datesLabel: 'ГОДЫ ПРАВЛЕНИЯ',
     displayName: 'ИМЯ ПРАВИТЕЛЯ',
     summary: 'Короткая формула правления — 1–2 строки, объясняющие роль и историческое значение текущего правителя.',
     imageAssetId: null,
