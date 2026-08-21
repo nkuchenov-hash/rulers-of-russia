@@ -1,4 +1,4 @@
-import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
+import { PersistentStudioRenderer } from '@/components/core-system/PersistentStudioRenderer';
 import { assertGenericStudioData } from '@/content/rulers/assertGenericStudioData';
 import { studioGenericPageData } from '@/content/rulers/studioGenericPageData';
 
@@ -10,5 +10,5 @@ export const metadata = {
 const studioData = assertGenericStudioData(studioGenericPageData);
 
 export default function StudioPage() {
-  return <CoreDesignSystemSkeleton data={studioData} editorMode />;
+  return <PersistentStudioRenderer data={studioData} />;
 }
