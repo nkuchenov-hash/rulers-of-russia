@@ -4,6 +4,10 @@
  * reflow its siblings instead of overlapping them.
  */
 
+.core-site-surface {
+  --page-surface-width: min(1920px, calc(100vw - 48px));
+}
+
 .core-header {
   display: flex;
   align-items: stretch;
@@ -54,11 +58,16 @@
   max-width: 100%;
 }
 
+/* Primary row owns no independent minimum height. Its resolved height is the
+   tallest of Territory / Map / Facts. If all three become shorter in Studio,
+   the thematic row below moves up immediately. */
 .primary-content-row {
   display: flex;
   align-items: stretch;
   width: 100%;
   min-width: 0;
+  min-height: 0;
+  height: auto;
 }
 
 .primary-content-row > .core-module {
@@ -82,6 +91,13 @@
   flex: 0 1 auto;
 }
 
+/* When Studio gives the map module an explicit height, the canvas must obey
+   that box instead of preserving its legacy 370px minimum. */
+[data-inspector="on"] .historical-map-panel[style*="height"] > .map-canvas {
+  height: 100%;
+  min-height: 0;
+}
+
 .thematic-row {
   display: flex;
   align-items: stretch;
@@ -95,10 +111,20 @@
   max-width: 100%;
 }
 
+/* Reign chronology is a page-wide band. It remains in normal vertical flow,
+   but expands from Main Content across the rail column to the full Page Surface.
+   The offset is derived from the actual remaining Main Content width, so a
+   wider/narrower Historical Rail still yields exactly one full-width band. */
+.ruler-content > .reign-timeline {
+  position: relative;
+  width: var(--page-surface-width);
+  max-width: none;
+  left: calc(100% - var(--page-surface-width));
+}
+
 .reign-timeline {
   display: flex;
   align-items: stretch;
-  width: 100%;
   min-width: 0;
 }
 
@@ -157,5 +183,10 @@
     flex: 1 1 100%;
     width: 100% !important;
     max-width: 100%;
+  }
+
+  .ruler-content > .reign-timeline {
+    width: 100%;
+    left: 0;
   }
 }
