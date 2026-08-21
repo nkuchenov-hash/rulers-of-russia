@@ -7,12 +7,15 @@ import type { CoreInspectableId, CoreModuleId } from '@/modules/core/inspectorPa
 import {
   CoreInspectorDrawer,
   defaultInspectorTuning,
-  type InspectorTuning
+  defaultThematicCardSize,
+  type InspectorTuning,
+  type ThematicCardSize
 } from '@/components/core-system/CoreInspectorDrawer';
 import { heroGradientStyle } from '@/modules/hero/heroVisualContract';
 import { labRulerPageData } from '@/content/rulers/labRulerPageData';
 import type { RulerPageData, ThematicCardData } from '@/content/rulers/pageModel';
 import heroStyles from '@/modules/hero/HeroLayers.module.css';
+import cardStyles from '@/modules/core/ThematicCardSizing.module.css';
 
 type VisualStateKey = RulerPageData['visualStateKey'];
 
@@ -60,9 +63,17 @@ function ModuleRegion({
 
 function ThematicCard({
   card,
+  size,
+  inspectorEnabled,
+  selected,
+  onInspectCard,
   elementHandler
 }: {
   card: ThematicCardData;
+  size: ThematicCardSize;
+  inspectorEnabled: boolean;
+  selected: boolean;
+  onInspectCard: (cardId: string, target: Element) => void;
   elementHandler: (id: CoreInspectableId, normalAction?: () => void) => (event: MouseEvent<Element>) => void;
 }) {
   const variantClass = card.type === 'list'
@@ -74,7 +85,18 @@ function ThematicCard({
         : 'variant-mixed';
 
   return (
-    <article className={`thematic-card ${variantClass}`} data-card-id={card.id}>
+    <article
+      className={`thematic-card ${variantClass} ${cardStyles.card}`}
+      data-card-id={card.id}
+      data-inspector-card-selected={selected ? 'true' : 'false'}
+      style={{ width: `${size.width}px`, height: `${size.height}px` }}
+      onClick={(event) => {
+        if (!inspectorEnabled) return;
+        event.preventDefault();
+        event.stopPropagation();
+        onInspectCard(card.id, event.currentTarget);
+      }}
+    >
       <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>{card.title}</h2>
       {card.dateLabel && <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>{card.dateLabel}</small>}
 
@@ -117,6 +139,7 @@ export function CoreDesignSystemSkeleton({
   const [visualStateKey, setVisualStateKey] = useState<VisualStateKey>(data.visualStateKey);
   const [inspectorEnabled, setInspectorEnabled] = useState(editorMode);
   const [selectedId, setSelectedId] = useState<CoreInspectableId | null>(editorMode ? 'hero' : null);
+  const [selectedThematicCardId, setSelectedThematicCardId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [mapScale, setMapScale] = useState(1);
   const [inspectorTuning, setInspectorTuning] = useState<InspectorTuning>(defaultInspectorTuning);
@@ -148,12 +171,33 @@ export function CoreDesignSystemSkeleton({
     if (!inspectorEnabled) return;
     clearInspectorHighlight();
     target?.classList.add('is-inspector-selected');
+    if (id !== 'thematic-card') setSelectedThematicCardId(null);
     setSelectedId(id);
+  }
+
+  function inspectThematicCard(cardId: string, target: Element) {
+    if (!inspectorEnabled) return;
+    setSelectedThematicCardId(cardId);
+    openPassport('thematic-card', target);
   }
 
   function selectLayerFromTree(id: CoreInspectableId, targetSelector?: string) {
     if (!inspectorEnabled) return;
     const target = targetSelector ? document.querySelector(targetSelector) : null;
+
+    if (id === 'thematic-card') {
+      const cardTarget = target?.matches('[data-card-id]')
+        ? target
+        : target?.querySelector('[data-card-id]') ?? document.querySelector('[data-card-id]');
+      const cardId = cardTarget?.getAttribute('data-card-id') ?? null;
+      if (cardId && cardTarget) {
+        setSelectedThematicCardId(cardId);
+        openPassport(id, cardTarget);
+        cardTarget.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+        return;
+      }
+    }
+
     openPassport(id, target);
     target?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
   }
@@ -177,6 +221,7 @@ export function CoreDesignSystemSkeleton({
 
   function closeInspectorDrawer() {
     clearInspectorHighlight();
+    setSelectedThematicCardId(null);
     setSelectedId(null);
   }
 
@@ -184,9 +229,14 @@ export function CoreDesignSystemSkeleton({
     clearInspectorHighlight();
     setInspectorEnabled((value) => {
       const next = !value;
+      setSelectedThematicCardId(null);
       setSelectedId(next ? 'hero' : null);
       return next;
     });
+  }
+
+  function thematicCardSize(cardId: string): ThematicCardSize {
+    return inspectorTuning.thematicCardSizes[cardId] ?? defaultThematicCardSize;
   }
 
   return (
@@ -346,8 +396,23 @@ export function CoreDesignSystemSkeleton({
               </ModuleRegion>
             </div>
 
-            <ModuleRegion id="thematic-card" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="thematic-row">
-              {data.thematic.map((card) => <ThematicCard key={card.id} card={card} elementHandler={elementHandler} />)}
+            <ModuleRegion
+              id="thematic-card"
+              inspectorEnabled={editorMode && inspectorEnabled}
+              onInspect={openPassport}
+              className={`thematic-row ${cardStyles.row}`}
+            >
+              {data.thematic.map((card) => (
+                <ThematicCard
+                  key={card.id}
+                  card={card}
+                  size={thematicCardSize(card.id)}
+                  inspectorEnabled={editorMode && inspectorEnabled}
+                  selected={selectedThematicCardId === card.id}
+                  onInspectCard={inspectThematicCard}
+                  elementHandler={elementHandler}
+                />
+              ))}
             </ModuleRegion>
 
             <ModuleRegion id="reign-timeline" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="reign-timeline">
@@ -386,6 +451,7 @@ export function CoreDesignSystemSkeleton({
 
           <CoreInspectorDrawer
             selectedId={selectedId}
+            selectedThematicCardId={selectedThematicCardId}
             onClose={closeInspectorDrawer}
             onSelectLayer={selectLayerFromTree}
             tuning={inspectorTuning}
