@@ -1,4 +1,5 @@
 import { PersistentStudioRenderer } from '@/components/core-system/PersistentStudioRenderer';
+import { LabStudioSwitch } from '@/components/core-system/LabStudioSwitch';
 import { assertGenericStudioData } from '@/content/rulers/assertGenericStudioData';
 import { studioGenericPageData } from '@/content/rulers/studioGenericPageData';
 
@@ -10,5 +11,10 @@ export const metadata = {
 const studioData = assertGenericStudioData(studioGenericPageData);
 
 export default function StudioPage() {
-  return <PersistentStudioRenderer data={studioData} />;
+  return (
+    <>
+      <PersistentStudioRenderer data={studioData} />
+      <LabStudioSwitch mode="studio" />
+    </>
+  );
 }

@@ -1,4 +1,5 @@
 import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
+import { LabStudioSwitch } from '@/components/core-system/LabStudioSwitch';
 import { peterILabRulerPageData } from '@/content/rulers/peterILabRulerPageData';
 
 export const metadata = {
@@ -7,5 +8,10 @@ export const metadata = {
 };
 
 export default function LabPage() {
-  return <CoreDesignSystemSkeleton data={peterILabRulerPageData} />;
+  return (
+    <>
+      <CoreDesignSystemSkeleton data={peterILabRulerPageData} />
+      <LabStudioSwitch mode="lab" />
+    </>
+  );
 }
