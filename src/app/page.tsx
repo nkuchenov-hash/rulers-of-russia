@@ -1,5 +1,5 @@
-import { CoreSystemPrototype } from '@/components/CoreSystemPrototype';
+import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
 
 export default function HomePage() {
-  return <CoreSystemPrototype />;
+  return <CoreDesignSystemSkeleton />;
 }
