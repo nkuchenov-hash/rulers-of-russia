@@ -11,150 +11,152 @@ export type CoreModuleId =
   | 'thematic-card'
   | 'reign-timeline';
 
-export interface CoreModulePassport {
-  id: CoreModuleId;
+export type CoreElementId =
+  | 'background-artwork'
+  | 'header-brand'
+  | 'header-nav-item'
+  | 'header-search'
+  | 'header-hvs'
+  | 'header-menu'
+  | 'rail-control'
+  | 'rail-item'
+  | 'rail-portrait'
+  | 'rail-name'
+  | 'rail-dates'
+  | 'hero-dates'
+  | 'hero-name'
+  | 'hero-summary'
+  | 'hero-meta-item'
+  | 'hero-image'
+  | 'hero-action'
+  | 'key-event-row'
+  | 'key-events-all'
+  | 'page-tab'
+  | 'territory-summary'
+  | 'territory-legend-item'
+  | 'territory-map-action'
+  | 'map-canvas'
+  | 'map-boundary-layer'
+  | 'map-change-layer'
+  | 'map-place-label'
+  | 'map-controls'
+  | 'fact-row'
+  | 'facts-all'
+  | 'thematic-title'
+  | 'thematic-date'
+  | 'thematic-list-item'
+  | 'thematic-image'
+  | 'thematic-diagram'
+  | 'thematic-summary'
+  | 'thematic-action'
+  | 'timeline-previous'
+  | 'timeline-title'
+  | 'timeline-axis'
+  | 'timeline-event'
+  | 'timeline-event-date'
+  | 'timeline-next';
+
+export type CoreInspectableId = CoreModuleId | CoreElementId;
+
+export interface CorePassport {
+  id: CoreInspectableId;
+  kind: 'module' | 'element';
   label: string;
-  position: string;
-  anatomy: string[];
+  parent?: string;
+  what: string;
+  where: string;
+  structure: string[];
   tools: string[];
   data: string[];
   sources: string[];
+  flow: string[];
   interactions: string[];
+  fallback: string[];
   responsive: string[];
   hvs: string[];
 }
 
-export const coreModulePassports: Record<CoreModuleId, CoreModulePassport> = {
-  background: {
-    id: 'background',
-    label: 'BackgroundModule',
-    position: 'Viewport layer behind the centered site surface.',
-    anatomy: ['AmbientBase', 'EraTextureLayer', 'Light/VignetteLayer', 'OptionalContextArtwork', 'ContentSurfaceShadow'],
-    tools: ['CSS custom properties', 'HVS token resolver', 'Media Registry adapter', 'Responsive focal-point rules'],
-    data: ['historicalVisualState ambient tokens', 'optional backgroundArtworkId', 'optional focalPoint', 'texture intensity'],
-    sources: ['Historical Visual State Resolver', 'Media Registry when artwork is present'],
-    interactions: ['Normally non-interactive', 'Selectable only in Core Inspector mode'],
-    responsive: ['Always fills viewport', 'Artwork crop/focal point may change', 'Never scales the content surface down'],
-    hvs: ['May change palette, texture, ambient artwork, light and material', 'Must preserve content contrast']
-  },
-  header: {
-    id: 'header',
-    label: 'TopHeader',
-    position: 'Top of the site surface; persistent global navigation.',
-    anatomy: ['BrandZone', 'PrimaryNavigation', 'SearchTrigger', 'Theme/HVS utility', 'MenuTrigger'],
-    tools: ['CSS Grid', 'Sticky positioning', 'Navigation registry', 'Keyboard focus states'],
-    data: ['site.navigation.items[]', 'site.navigation.activeItem', 'site.utilities'],
-    sources: ['Site Configuration Registry'],
-    interactions: ['Navigate', 'Search', 'Open menu', 'Theme/HVS utility in skeleton mode'],
-    responsive: ['Desktop single row', 'Tablet condensed utilities', 'Mobile compact header/menu'],
-    hvs: ['Structure fixed', 'Material, contrast and accents may change']
-  },
-  'historical-rail': {
-    id: 'historical-rail',
-    label: 'HistoricalRail',
-    position: 'Left side of ruler page; persistent historical context.',
-    anatomy: ['RailControls', 'ChronologyAxis', 'ContextWindow', 'AuthorityItem[]', 'ActiveAuthorityItem', 'ScrollControls'],
-    tools: ['Virtualized list window', 'Chronology Graph adapter', 'Sticky container', 'Active-node resolver'],
-    data: ['chronology.contextWindow[]', 'chronology.activeAuthorityId', 'portraitId', 'reign start/end', 'group label'],
-    sources: ['Chronology Graph', 'Authority Registry', 'Media Registry'],
-    interactions: ['Scroll context window', 'Select authority', 'Jump to adjacent historical node'],
-    responsive: ['Desktop vertical rail', 'Tablet narrower rail', 'Mobile becomes drawer/horizontal history control'],
-    hvs: ['Axis geometry fixed', 'Portrait treatment, materials and accent may change']
-  },
-  hero: {
-    id: 'hero',
-    label: 'HeroPanel',
-    position: 'First main-content block; dominant visual entry into the reign.',
-    anatomy: ['PeriodLine', 'CanonicalName', 'EditorialSummary', 'MetadataStrip', 'HeroArtwork', 'HeroActions', 'KeyEventsCard slot'],
-    tools: ['Editorial typography scale', 'Media renderer', 'Responsive crop controller', 'Metadata cell primitive', 'ActionIconButton'],
-    data: ['identity.canonicalName', 'identity.lifeDates / reign.period', 'editorial.shortDescription', 'hero.metaItems[]', 'media.heroAssetId'],
-    sources: ['Authority Registry', 'Editorial Layer', 'Media Registry', 'Chronology Graph'],
-    interactions: ['Save', 'Share', 'Fullscreen artwork', 'Key-event navigation'],
-    responsive: ['Desktop split copy/art', 'Tablet balanced split', 'Mobile stacked hero with protected title size'],
-    hvs: ['Highest sensitivity', 'Artwork, typography treatment, material and composition accent may change; information order remains fixed']
-  },
-  'key-events': {
-    id: 'key-events',
-    label: 'HeroKeyEventsCard',
-    position: 'Overlay inside Hero artwork zone.',
-    anatomy: ['Heading', 'KeyEventRow[]', 'SeeAllAction'],
-    tools: ['Event list primitive', 'Overlay surface', 'Scroll/jump adapter'],
-    data: ['hero.keyEventIds[] → Event Registry'],
-    sources: ['Event Registry', 'Editorial ranking'],
-    interactions: ['Open event', 'Jump to all events'],
-    responsive: ['Desktop overlay', 'Mobile moves below hero copy/art'],
-    hvs: ['Surface treatment may change; row structure remains fixed']
-  },
-  'page-tabs': {
-    id: 'page-tabs',
-    label: 'PageTabs',
-    position: 'Directly below Hero; local navigation across current ruler page.',
-    anatomy: ['TabList', 'ActiveIndicator', 'ScrollTargetBinding'],
-    tools: ['Sticky nav', 'IntersectionObserver', 'Smooth scroll', 'Horizontal overflow on small screens'],
-    data: ['page.sections[]', 'activeSectionId'],
-    sources: ['Module Composition Resolver'],
-    interactions: ['Scroll to module', 'Update active tab from viewport'],
-    responsive: ['Single row on desktop', 'Horizontal scroll on mobile'],
-    hvs: ['Geometry fixed', 'Accent and typography treatment may change']
-  },
-  territory: {
-    id: 'territory',
-    label: 'TerritoryPanel',
-    position: 'Left column of the primary content row.',
-    anatomy: ['SectionTitle', 'Summary', 'LegendItem[]', 'MapEraAction'],
-    tools: ['Legend primitive', 'Semantic color tokens', 'Map-state adapter'],
-    data: ['territory.summary', 'territory.legend[]', 'map.stateIds[]'],
-    sources: ['Historical Map Dataset', 'Editorial Layer'],
-    interactions: ['Toggle/identify legend state', 'Open full era map'],
-    responsive: ['Desktop side panel', 'Mobile precedes map as explanatory block'],
-    hvs: ['Legend semantics fixed; map colors/material adapt through HVS']
-  },
-  map: {
-    id: 'map',
-    label: 'HistoricalMapPanel',
-    position: 'Center and largest column of the primary content row.',
-    anatomy: ['MapCanvas', 'BoundaryLayer[]', 'ChangeLayer[]', 'PlaceLabelLayer', 'EventMarkerLayer', 'MapControls'],
-    tools: ['SVG renderer initially', 'Layer manager', 'Viewport controller', 'Zoom controls', 'Tooltip/Popover', 'HistoricalMapState adapter'],
-    data: ['boundarySetId', 'changeSetIds[]', 'locationIds[]', 'eventIds[]', 'viewport'],
-    sources: ['Historical Map Dataset', 'Boundary Change Registry', 'Gazetteer', 'Event Registry', 'Source Registry'],
-    interactions: ['Zoom', 'Pan', 'Layer toggle', 'Select territory/place/event', 'Synchronize with reign timeline'],
-    responsive: ['Desktop interactive map', 'Mobile constrained aspect ratio with simplified labels'],
-    hvs: ['Map treatment may vary strongly by era; controls and semantic layer meanings remain stable']
-  },
-  facts: {
-    id: 'facts',
-    label: 'FactsPanel',
-    position: 'Right column of the primary content row.',
-    anatomy: ['SectionTitle', 'FactRow[]', 'AllFactsAction'],
-    tools: ['FactRow primitive', 'Icon slot', 'Structured-value formatter', 'Priority sorter'],
-    data: ['facts.items[] {icon,label,value,priority,sourceIds[]}'],
-    sources: ['Authority Registry', 'Polity Registry', 'Fact Resolver', 'Source Registry'],
-    interactions: ['Open complete facts sheet', 'Source disclosure later'],
-    responsive: ['Desktop side panel', 'Tablet/mobile becomes full-width list'],
-    hvs: ['Very low sensitivity; only material, icon treatment and accent change']
-  },
-  'thematic-card': {
-    id: 'thematic-card',
-    label: 'ThematicCard',
-    position: 'Secondary thematic row below Territory / Map / Facts.',
-    anatomy: ['Title', 'OptionalDateRange', 'Summary', 'VariantContent', 'OptionalMedia', 'CTA'],
-    tools: ['Variant renderer', 'List primitive', 'Media slot', 'Diagram slot', 'Editorial summary formatter'],
-    data: ['thematicModules[] {type,title,dateRange,summary,items[],mediaId?,diagramId?,cta}'],
-    sources: ['Module Composition Resolver', 'Event Registry', 'Editorial Layer', 'Media Registry', 'Relationship Registry'],
-    interactions: ['Open thematic detail', 'Open related event/person/media'],
-    responsive: ['Four-column desktop row', 'Two-column tablet', 'One-column mobile'],
-    hvs: ['Card material and media treatment may change; variant contract stays stable']
-  },
-  'reign-timeline': {
-    id: 'reign-timeline',
-    label: 'ReignTimeline',
-    position: 'Bottom of ruler page, below thematic modules.',
-    anatomy: ['SectionTitle', 'PreviousAuthorityCard', 'TimeAxis', 'TimelineEvent[]', 'NextAuthorityCard'],
-    tools: ['Scaled time-axis renderer', 'Event marker primitive', 'Chronology Graph adapter', 'Map synchronization hook'],
-    data: ['reign.start/end', 'keyEventIds[]', 'previousAuthorityId', 'nextAuthorityId'],
-    sources: ['Chronology Graph', 'Event Registry', 'Authority Registry'],
-    interactions: ['Select event', 'Synchronize map/state', 'Navigate previous/next authority'],
-    responsive: ['Desktop horizontal axis', 'Mobile horizontally scrollable axis or compact event list'],
-    hvs: ['Axis logic fixed; markers, type and material may change']
-  }
+const simple = (
+  id: CoreInspectableId,
+  kind: 'module' | 'element',
+  label: string,
+  parent: string | undefined,
+  what: string,
+  where: string,
+  structure: string[],
+  tools: string[],
+  data: string[],
+  sources: string[],
+  flow: string[],
+  interactions: string[],
+  fallback: string[],
+  responsive: string[],
+  hvs: string[]
+): CorePassport => ({ id, kind, label, parent, what, where, structure, tools, data, sources, flow, interactions, fallback, responsive, hvs });
+
+export const corePassports: Record<CoreInspectableId, CorePassport> = {
+  background: simple('background','module','Фон страницы',undefined,'Полноэкранная историческая среда вокруг основной поверхности сайта. Это отдельный Core-модуль, а не просто чёрный body.','Позади всей страницы правителя и в свободных полях по краям.',['Базовый материал/цвет','Текстура эпохи','Свет и виньетка','Опциональная фоновая иллюстрация','Тень основной поверхности'],['Historical Visual State задаёт визуальные параметры','CSS собирает слои и свет','Media Registry подключает одобренный artwork, если он нужен'],['historicalVisualState.background','backgroundArtworkId — необязательно','focalPoint / intensity'],['Historical Visual State Resolver','Media Registry'],['Сначала определяется историческое визуальное состояние.','Если оно требует artwork, Media Registry проверяет его статус.','Неодобренная картинка публично не используется.'],['На обычном сайте не интерактивен.','В режиме паспортов можно выбрать фон отдельно.'],['Без artwork остаётся материал и текстура эпохи.'],['Всегда закрывает viewport.','Artwork меняет кроп по focal point.'],['Может сильно меняться по эпохам, но обязан сохранять контраст контента.']),
+  'background-artwork': simple('background-artwork','element','Фоновая иллюстрация страницы','Фон страницы','Необязательная иллюстрация общего фона сайта. Она не является Hero-картинкой.','Внутри BackgroundModule, позади основной поверхности.',['Отдельный media asset','Focal point','Интенсивность','Затемнение/смешивание'],['Media Library','Media Registry','Responsive crop'],['historicalVisualState.backgroundArtworkId','MediaAsset.filePath','MediaAsset.focalPoint'],['Media Library','Media Registry'],['Файл создаётся или подбирается отдельно.','Получает статус «на проверке».','Редактор смотрит его вместе с реальной страницей.','Только после одобрения может использоваться публично.'],['В редакторском режиме: одобрить, отклонить, заменить.'],['Если asset не одобрен — этот слой отсутствует.'],['Кроп определяется focal point.'],['Opacity и blending зависят от HVS.']),
+
+  header: simple('header','module','Верхняя шапка',undefined,'Постоянная глобальная навигация сайта.','Самый верх основной поверхности.',['Бренд','Главная навигация','Поиск','Служебная кнопка HVS в skeleton','Меню'],['CSS Grid','Sticky positioning','Router','Site Configuration Registry'],['site.navigation.items[]','site.navigation.activeItem','site.utilities'],['Site Configuration Registry'],['Конфигурация создаёт пункты.','Текущий URL определяет активный пункт.'],['Навигация','Поиск','Открытие меню'],['Необязательная утилита может скрыться без разрушения шапки.'],['На мобильном навигация сворачивается.'],['Меняются материал и акценты, не логика.']),
+  'header-brand': simple('header-brand','element','Название сайта','Верхняя шапка','Брендовая ссылка на начало сайта.','Слева в шапке.',['Название или знак','Кликабельная область'],['Router Link','Focus state'],['site.brand.name','site.brand.homeHref'],['Site Configuration Registry'],['Загружается из общей конфигурации сайта.'],['Клик ведёт на главную/хронологию.'],['Текстовое название остаётся даже без логотипа.'],['На малой ширине может сокращаться визуально.'],['Меняется только визуальная обработка.']),
+  'header-nav-item': simple('header-nav-item','element','Пункт главного меню','Верхняя шапка','Один переход в глобальный раздел.','Центральная зона шапки.',['Подпись','Ссылка','Индикатор активного раздела'],['Router Link','Active route resolver'],['site.navigation.items[i]'],['Site Configuration Registry'],['Берётся один объект из массива навигации.','Активность вычисляется по URL.'],['Клик открывает раздел.'],['Отключённый раздел не показывается.'],['На мобильном уходит в меню.'],['Можно менять типографику и активный акцент.']),
+  'header-search': simple('header-search','element','Поиск','Верхняя шапка','Открывает поиск по сущностям сайта.','Справа в шапке.',['Кнопка','Иконка','Поисковый диалог'],['Search index adapter','Dialog/overlay','Keyboard shortcut'],['search.enabled','search.indexVersion'],['Search Index'],['Кнопка открывает диалог.','Запрос идёт в общий индекс.'],['Открыть поиск','Ввод запроса','Выбрать результат'],['При недоступном индексе показывается понятное состояние ошибки.'],['На мобильном остаётся иконкой.'],['Только цвет и материал.']),
+  'header-hvs': simple('header-hvs','element','Переключатель исторического состояния','Верхняя шапка','Служебный контрол skeleton для проверки того, как один Core меняется по эпохам. В публичном сайте этот контрол может отсутствовать.','Справа в шапке рядом с поиском.',['Кнопка','Текущее состояние'],['Historical Visual State Resolver'],['visualState.layerIds[]'],['HVS presets'],['Нажатие выбирает следующий тестовый HVS.','Resolver меняет только разрешённые tokens и treatments.'],['Переключить тестовое состояние.'],['Публичная страница получает HVS автоматически из данных правителя.'],['На мобильном может быть только в dev/editor режиме.'],['Это инструмент проверки самого HVS.']),
+  'header-menu': simple('header-menu','element','Кнопка меню','Верхняя шапка','Открывает дополнительную навигацию и служебные действия.','Крайняя правая зона шапки.',['Кнопка','Иконка','Drawer/menu'],['Dialog/Drawer primitive','Focus trap'],['site.menu.items[]'],['Site Configuration Registry'],['По нажатию открывается меню.'],['Открыть/закрыть меню','Выбрать пункт'],['Без JS основные ссылки должны оставаться достижимыми другим способом.'],['На мобильном становится основным контейнером навигации.'],['Меняется визуальная оболочка.']),
+
+  'historical-rail': simple('historical-rail','module','Левая историческая шкала',undefined,'Постоянно показывает место текущего правителя в большой истории.','Левая колонка страницы.',['Управление','Вертикальная ось','Окно соседних правителей','Активный правитель'],['Chronology Graph adapter','Sticky container','Контекстное окно списка'],['chronology.contextWindow[]','chronology.activeAuthorityId'],['Chronology Graph','Authority Registry','Media Registry'],['Chronology resolver выбирает соседний исторический диапазон.','Каждый item получает имя, годы и изображение.'],['Прокрутить контекст','Открыть другого правителя'],['Если портрета нет — item остаётся рабочим с текстовой заглушкой.'],['На мобильном превращается в горизонтальный список/drawer.'],['Материал и обработка портретов могут меняться.']),
+  'rail-control': simple('rail-control','element','Кнопка управления шкалой','Левая историческая шкала','Прокручивает или меняет режим исторического rail.','Верх rail.',['IconButton','Направление/действие'],['Button primitive','Chronology window controller'],['chronology.canMovePrevious / canMoveNext'],['Chronology Graph'],['Контрол спрашивает у графа, есть ли следующий диапазон.','После клика загружает соседнее окно.'],['Вверх/вниз/режим'],['Недоступное направление становится disabled.'],['На мобильном меняется геометрия кнопки.'],['Только внешний вид.']),
+  'rail-item': simple('rail-item','element','Карточка правителя в шкале','Левая историческая шкала','Один исторический узел в контекстном списке.','Вдоль вертикальной оси.',['Портрет','Имя','Годы','Активное состояние'],['AuthorityItem component','Chronology node resolver'],['chronology.contextWindow[i]'],['Chronology Graph','Authority Registry','Media Registry'],['ID узла приходит из Chronology Graph.','По ID подтягиваются имя, годы и медиа.'],['Клик открывает страницу узла.'],['Отсутствующие вторичные данные не ломают item.'],['Размер активного item может быть больше.'],['Материал/портретная обработка меняются.']),
+  'rail-portrait': simple('rail-portrait','element','Мини-портрет в шкале','Карточка правителя в шкале','Небольшое изображение для быстрой визуальной ориентации.','Слева внутри rail item.',['Media asset','Кроп','Alt'],['Media Registry','Image renderer'],['authority.railPortraitAssetId'],['Media Registry'],['ID правителя резолвится в одобренный media asset.'],['Обычно сам по себе не кликается; клик относится к item.'],['Если изображения нет — нейтральная текстовая/силуэтная заглушка.'],['Активный item может иметь другой aspect ratio.'],['Допустима эпохальная обработка, но лицо должно оставаться узнаваемым.']),
+  'rail-name': simple('rail-name','element','Имя правителя в шкале','Карточка правителя в шкале','Короткое отображаемое имя исторического узла.','Рядом с мини-портретом.',['Текст','Состояние active'],['Typography primitive'],['authority.shortName'],['Authority Registry'],['Берётся каноническое короткое имя.'],['Клик наследует переход item.'],['Если shortName нет — используется canonicalName.'],['Допускается перенос на 2 строки.'],['Можно менять гарнитуру/контраст.']),
+  'rail-dates': simple('rail-dates','element','Годы правления в шкале','Карточка правителя в шкале','Короткий диапазон времени для каждого узла.','Под именем в rail item.',['Начало','Конец','Форматтер дат'],['Historical date formatter'],['authority.reign.start','authority.reign.end'],['Authority Registry'],['Даты приходят как исторические значения.','Formatter корректно обрабатывает годы до н.э., неполные даты и неопределённость.'],['Клик наследует item.'],['Неизвестная граница показывается как «не позднее…»/«ок.» по данным, а не выдумывается.'],['Не должна обрезаться до нечитаемости.'],['Меняется только визуальный акцент.']),
+
+  hero: simple('hero','module','Hero-блок',undefined,'Главный визуальный вход в страницу правителя.','Первый большой блок справа от исторической шкалы.',['Годы','Имя','Короткое описание','Метаданные','Одна цельная Hero-картинка','Действия','Карточка ключевых событий'],['Editorial typography','Media renderer','Responsive crop','Metadata primitive'],['identity.*','reign.*','editorial.shortDescription','hero.imageAssetId','hero.keyEventIds[]'],['Authority Registry','Editorial Layer','Media Registry','Event Registry'],['Page Resolver собирает данные.','Hero image проходит отдельный review pipeline.','Компонент получает только разрешённые к публикации данные.'],['Сохранить','Поделиться','Открыть изображение','Открыть событие'],['Если обязательный Hero asset не одобрен, редакторская страница помечается незавершённой; публично неподтверждённый файл не показывается.'],['Desktop — copy + image; mobile — последовательная композиция.'],['HVS может сильно менять визуальный характер, но порядок информации остаётся.']),
+  'hero-dates': simple('hero-dates','element','Даты в Hero','Hero-блок','Главный временной ориентир правителя: годы жизни и/или правления согласно выбранному формату страницы.','Над именем.',['Значение даты','Historical date formatter'],['Date formatter','Editorial display rule'],['identity.lifeDates','reign.start','reign.end'],['Authority Registry'],['Resolver получает исторические даты.','Formatter решает, что именно показывать в этой строке.'],['Не интерактивно на публичной странице.'],['Неизвестность должна быть явно обозначена, а не заменена выдуманной датой.'],['Размер уменьшается умеренно, но остаётся читаемым.'],['Типографика и цвет могут меняться.']),
+  'hero-name': simple('hero-name','element','Имя правителя','Hero-блок','Главный заголовок страницы.','Крупнейший текст Hero.',['Каноническое display name','Опциональный эпитет как отдельная часть данных'],['Display typography','Line-break rules'],['identity.canonicalName','identity.epithet?'],['Authority Registry'],['Имя приходит из канонической записи.','Компонент может только переносить строки; не сокращает имя самовольно.'],['Не интерактивно.'],['Если имя длинное — используется утверждённая responsive-шкала, а не обрезание.'],['Переносы и размер адаптируются.'],['Гарнитура/треккинг могут меняться по HVS.']),
+  'hero-summary': simple('hero-summary','element','Короткая формула правления','Hero-блок','1–2 человеческие строки: кто это и почему его правление важно.','Под именем.',['Редакторский текст','Source links в данных'],['Editorial text renderer'],['editorial.shortDescription','editorial.shortDescriptionSourceIds[]'],['Editorial Layer','Source Registry'],['Текст готовится редактором/ИИ.','Фактические утверждения связываются с источниками.','После проверки сохраняется как редакционный текст, а не генерируется при каждом открытии.'],['Позже может открывать источники.'],['Если текст не утверждён — блок не подменяет его автоматически новым AI-текстом.'],['Максимальная ширина ограничена для чтения.'],['Только типографика/контраст.']),
+  'hero-meta-item': simple('hero-meta-item','element','Один параметр Hero','Hero-блок','Короткая пара «подпись → значение»: династия, статус, столица, длительность и т.п.','В нижней полосе Hero copy.',['Подпись','Значение','Formatter'],['MetadataCell','Structured value formatter'],['hero.metaItems[i]'],['Authority Registry','Polity Registry','Derived values'],['Module resolver выбирает разрешённый набор метаданных.','Значение форматируется по типу поля.'],['Позже отдельные значения могут вести к сущности, например к династии или городу.'],['Неизвестное значение либо скрывается, либо явно помечается — по правилу конкретного поля.'],['На мобильном становится 2×N сеткой.'],['Меняется материал разделителей и типографика.']),
+  'hero-image': simple('hero-image','element','Цельная Hero-картинка','Hero-блок','Одна законченная художественная картинка: правитель уже изображён внутри среды своей эпохи. Никакого отдельного слоя «фон + вырезанный правитель».','Правая визуальная зона Hero.',['Один файл изображения','Focal point для кропа','Safe text zone','Alt-текст','Статус проверки','Статус прав'],['ChatGPT Image / художник / архивный монтаж создаёт файл','Media Library хранит файл','Media Registry хранит запись и статусы','Review queue хранит решение человека','Image renderer применяет focal point и responsive crop'],['hero.imageAssetId → MediaAsset','MediaAsset.filePath','MediaAsset.reviewStatus','MediaAsset.rightsStatus','MediaAsset.focalPoint','MediaAsset.safeTextZone','MediaAsset.promptSpecPath?','MediaAsset.sourceIds[]'],['Media Library','Media Registry','Source Registry','Визуальный бриф/Prompt Spec'],['1. По данным правителя и HVS формируется визуальный бриф: период, среда, одежда, архитектура/ландшафт, свет, композиция и место под UI.','2. ChatGPT создаёт ОТДЕЛЬНЫЙ файл картинки. Он ещё не становится частью публичной страницы.','3. Файл загружается в Media Library; Media Registry создаёт asset со статусом «на проверке».','4. Редактор открывает настоящий Hero: картинка уже показана с реальным заголовком, метаданными и карточкой событий. Так проверяется не картинка сама по себе, а вся композиция.','5. Человек нажимает «Одобрить» или «Отклонить». При отклонении сохраняется причина, затем создаётся новая версия/asset.','6. Только после статуса «одобрено» и проверки прав ID записывается в hero.imageAssetId публичной страницы.','7. Публичный renderer повторно проверяет статус перед показом.'],['Публично: открыть изображение крупнее/поделиться, если предусмотрено.','Редакторски: одобрить, отклонить, заменить, сравнить версию.'],['Draft/review/rejected никогда не попадают в публичный Hero.','Если обязательной одобренной картинки нет — страница считается неготовой к публикации, а не подставляет случайную картинку.'],['Desktop/mobile используют один asset, но разные кропы только через утверждённый focal point/safe zone.'],['HVS влияет на требования визуального брифа и обработку, но не разбирает картинку на два слоя.']),
+  'hero-action': simple('hero-action','element','Кнопка действия Hero','Hero-блок','Одна компактная команда над Hero-картинкой.','Верхний правый угол изображения.',['IconButton','Tooltip','Action handler'],['Button primitive','Share API / Save service / Fullscreen viewer'],['hero.actions[]'],['Page configuration'],['Action определяется конфигурацией.','Кнопка вызывает конкретный handler.'],['Сохранить','Поделиться','Открыть изображение'],['Недоступное действие скрывается или disabled с объяснением.'],['Tap target не меньше мобильного стандарта.'],['Меняется материал кнопки.']),
+
+  'key-events': simple('key-events','module','Ключевые события',undefined,'Компактно показывает 3–5 главных событий правления внутри Hero.','Поверх Hero image.',['Заголовок','Строки событий','Кнопка «Все события»'],['Event list','Overlay surface','Event Registry adapter'],['hero.keyEventIds[]'],['Event Registry','Editorial ranking'],['Редакторский ranking выбирает события.','По ID подтягиваются дата и короткое название.'],['Открыть событие','Перейти ко всем событиям'],['Если событий мало — карточка уменьшается, но не заполняется искусственно.'],['На мобильном может уходить ниже изображения.'],['Материал карточки меняется; структура остаётся.']),
+  'key-event-row': simple('key-event-row','element','Строка ключевого события','Ключевые события','Одна короткая связка «дата + событие».','Внутри карточки ключевых событий.',['Дата','Короткое название','eventId'],['EventRow primitive','Historical date formatter'],['eventId → event.date / event.shortTitle'],['Event Registry'],['ID приходит из hero.keyEventIds.','Event Registry возвращает проверенное событие.'],['Клик открывает событие или прокручивает к нему.'],['Если дата спорная — показывается формат неопределённости из данных.'],['Название максимум на несколько строк.'],['Можно менять акцент даты.']),
+  'key-events-all': simple('key-events-all','element','Кнопка «Все события»','Ключевые события','Переход к полной событийной части текущего правления.','Низ карточки.',['CTA','Target section'],['Anchor/router action'],['page.sections.events'],['Module Composition Resolver'],['Target существует только если событийный раздел включён.'],['Прокрутить/открыть все события.'],['Если раздела нет — кнопка не показывается.'],['Сохраняет удобный tap target.'],['Акцент может меняться.']),
+
+  'page-tabs': simple('page-tabs','module','Навигация по странице',undefined,'Локальные вкладки-якоря текущего правителя.','Под Hero.',['Список вкладок','Активный индикатор'],['IntersectionObserver','Smooth scroll','Sticky nav'],['page.sections[]','activeSectionId'],['Module Composition Resolver'],['Секции страницы формируют список.','Viewport обновляет активный пункт.'],['Перейти к секции.'],['Модуль, которого нет на странице, не создаёт вкладку.'],['Горизонтальный scroll на мобильном.'],['Геометрия стабильна, оформление меняется.']),
+  'page-tab': simple('page-tab','element','Одна вкладка страницы','Навигация по странице','Ссылка-якорь на конкретный модуль.','В строке под Hero.',['Подпись','sectionId','active state'],['Anchor button','IntersectionObserver binding'],['page.sections[i]'],['Module Composition Resolver'],['Пункт создаётся только для реально существующего модуля.'],['Клик плавно прокручивает к модулю.'],['Если секция выключена — пункта нет.'],['На мобильном остаётся в горизонтальной ленте.'],['Меняется активный акцент.']),
+
+  territory: simple('territory','module','Территория',undefined,'Текстово объясняет, что именно показывает соседняя карта.','Слева от большой карты.',['Заголовок','Короткое объяснение','Легенда','Кнопка полной карты'],['Legend primitive','Map-state adapter'],['territory.summary','territory.legend[]','map.stateIds[]'],['Historical Map Dataset','Editorial Layer'],['Editorial summary описывает изменения.','Legend получает семантику из карты, а не придумывает отдельные цвета.'],['Выделить состояние','Открыть карту эпохи'],['Если изменений нет — прямо сообщается, что границы существенно не менялись.'],['На мобильном идёт перед картой.'],['Цвета легенды адаптируются, значения — нет.']),
+  'territory-summary': simple('territory-summary','element','Пояснение территории','Территория','Коротко объясняет территориальную динамику правления человеческим языком.','Под заголовком «Территория».',['Редакторский текст','sourceIds[]'],['Editorial text renderer'],['territory.summary','territory.summarySourceIds[]'],['Editorial Layer','Source Registry'],['Текст строится на change sets карты и проверяется редакционно.'],['Не интерактивно.'],['Без утверждённого summary показывается нейтральная техническая пометка только в редакторе.'],['Не должен становиться длинной статьёй.'],['Типографика меняется.']),
+  'territory-legend-item': simple('territory-legend-item','element','Один пункт легенды карты','Территория','Объясняет конкретный семантический слой карты.','Список под описанием территории.',['Маркер/штриховка','Человеческая подпись','layerId'],['LegendItem','Semantic map tokens'],['territory.legend[i] → map.layerId'],['Historical Map Dataset'],['Карта объявляет слои и их значение.','Legend renderer показывает тот же layerId тем же визуальным кодом.'],['Hover/click может подсветить слой на карте.'],['Слой без данных не показывается.'],['Подпись переносится, marker остаётся различим.'],['Цвет может меняться, смысл слоя фиксирован.']),
+  'territory-map-action': simple('territory-map-action','element','Кнопка «Карта эпохи»','Территория','Открывает расширенный картографический режим.','Низ панели территории.',['CTA','Target route/mode'],['Router/Dialog action'],['map.fullViewRoute'],['Map subsystem'],['Кнопка получает маршрут от map config.'],['Открыть полную карту.'],['Если расширенного режима пока нет — кнопка скрывается.'],['Полноразмерный tap target.'],['Только оформление.']),
+
+  map: simple('map','module','Историческая карта',undefined,'Интерактивно показывает территорию и географические последствия событий во времени.','Центр главного аналитического ряда.',['Полотно','Границы','Изменения','Подписи мест','События','Контролы'],['SVG renderer на первом этапе','Layer manager','Viewport controller','Tooltip/Popover','Timeline sync hook'],['boundarySetId','changeSetIds[]','locationIds[]','eventIds[]','viewport'],['Historical Map Dataset','Boundary Change Registry','Gazetteer','Event Registry','Source Registry'],['Выбирается состояние карты для текущей даты.','Layer manager собирает только подтверждённые слои.','Timeline может менять выбранное состояние.'],['Zoom','Pan','Выбрать место/территорию/событие','Включить слой'],['При неполных границах показывается uncertainty style, а не ложная точность.'],['На мобильном сокращается количество подписей, но не данные.'],['Картографический стиль меняется по эпохе.']),
+  'map-canvas': simple('map-canvas','element','Полотно карты','Историческая карта','Область, где рендерятся все географические слои.','Основная площадь map module.',['Viewport','SVG/Canvas root','Layer stack'],['SVG renderer','Viewport controller'],['map.viewport','map.activeStateId'],['Historical Map Dataset'],['Viewport задаёт видимую область.','Layer manager последовательно рисует слои.'],['Pan/zoom','Выбор объектов'],['Если геометрия не загрузилась — показывается понятное состояние недоступности карты.'],['Aspect ratio и количество labels адаптируются.'],['Фактура может меняться, география — нет.']),
+  'map-boundary-layer': simple('map-boundary-layer','element','Слой границ','Историческая карта','Геометрия территории государства в выбранный момент.','На map canvas.',['boundarySet','confidence','sourceIds[]'],['SVG path renderer','Geospatial simplifier'],['boundarySetId → geometry'],['Historical Map Dataset','Source Registry'],['По выбранной дате resolver выбирает boundary set.','Геометрия упрощается только визуально, исходные данные не меняются.'],['Hover может показывать название/статус.'],['Неуверенная граница рисуется специальным стилем.'],['Упрощение геометрии сильнее на мобильном.'],['Стиль линии меняется по эпохе.']),
+  'map-change-layer': simple('map-change-layer','element','Слой территориальных изменений','Историческая карта','Показывает приобретения, потери, спорные зоны или переходы статуса.','Поверх базовых границ.',['changeSetId','Тип изменения','Период','confidence'],['Layer manager','Semantic map tokens'],['changeSetIds[]'],['Boundary Change Registry'],['Для выбранной даты включаются только релевантные change sets.'],['Hover/click открывает объяснение изменения.'],['Спорные/неуверенные изменения имеют отдельное обозначение.'],['На мобильном часть вторичных слоёв выключена по умолчанию.'],['Цветовой код меняется, семантика нет.']),
+  'map-place-label': simple('map-place-label','element','Подпись места','Историческая карта','Название столицы, города, региона или географического объекта.','Поверх map canvas.',['placeId','Display name','Координаты','Priority'],['Gazetteer adapter','Label collision manager'],['locationIds[] → Gazetteer'],['Gazetteer'],['По placeId берётся исторически корректное название для выбранного периода.','Collision manager решает, какие подписи видимы.'],['Клик открывает место/связанные события.'],['Если подписи конфликтуют — скрывается менее важная, а не накладывается поверх.'],['На мобильном видны только приоритетные labels.'],['Типографика карты может меняться.']),
+  'map-controls': simple('map-controls','element','Управление картой','Историческая карта','Кнопки масштаба, слоёв и режима просмотра.','Поверх карты справа/снизу.',['Zoom +','Zoom −','Layers/expand'],['Viewport controller','Layer manager'],['map.capabilities'],['Map subsystem'],['Контрол включается только если действие доступно.'],['Zoom','Layers','Fullscreen'],['Недоступное действие disabled.'],['Крупные touch targets.'],['Форма/материал меняются.']),
+
+  facts: simple('facts','module','Факты',undefined,'Короткий список проверяемых структурированных сведений.','Справа от карты.',['Заголовок','Строки фактов','Кнопка всех фактов'],['Fact resolver','Structured-value formatter','Priority sorter'],['facts.items[]'],['Authority Registry','Polity Registry','Source Registry'],['Resolver собирает разрешённые факты и сортирует по приоритету.'],['Открыть полную карточку','Позже показать источник'],['Неизвестные значения не заменяются догадкой.'],['На мобильном становится полноширинным списком.'],['Очень низкая HVS-чувствительность.']),
+  'fact-row': simple('fact-row','element','Одна строка факта','Факты','Одна пара «что это → значение».','Внутри списка фактов.',['Иконка','Подпись','Значение','sourceIds[]'],['FactRow primitive','Value formatter'],['facts.items[i]'],['Fact Resolver','Source Registry'],['Тип факта определяет formatter.','Значение приходит из структурированных данных.'],['Позже клик может показать источник/подробность.'],['Если факт неизвестен, применяется правило конкретного поля: скрыть или показать «не установлено».'],['Значение переносится, но не обрезается до потери смысла.'],['Только визуальная оболочка.']),
+  'facts-all': simple('facts-all','element','Кнопка «Все факты»','Факты','Открывает расширенную структурированную карточку.','Низ facts panel.',['CTA','Target'],['Drawer/route action'],['facts.fullViewEnabled'],['Module config'],['Показывается только если есть расширенный набор.'],['Открыть все факты.'],['Если расширенного набора нет — кнопки нет.'],['Touch friendly.'],['Только оформление.']),
+
+  'thematic-card': simple('thematic-card','module','Тематическая карточка',undefined,'Универсальный контейнер ключевой темы правления: реформы, конфликты, люди, наследие и т.д.','Нижний тематический ряд.',['Заголовок','Период','Краткий текст','Вариант содержимого','Медиа/диаграмма','CTA'],['Variant renderer','List primitive','Media slot','Diagram slot'],['thematicModules[i]'],['Module Composition Resolver','Editorial Layer','Event Registry','Media Registry','Relationship Registry'],['Composition Resolver выбирает тип карточки по данным.','Variant renderer собирает соответствующие внутренние элементы.'],['Открыть тему','Открыть событие/персону/медиа'],['Карточка не заполняется искусственными элементами ради симметрии.'],['4/2/1 колонки.'],['Материал и artwork могут меняться.']),
+  'thematic-title': simple('thematic-title','element','Заголовок тематической карточки','Тематическая карточка','Название смыслового направления правления.','Вверху карточки.',['Title','module type'],['Display typography'],['thematicModule.title'],['Editorial Layer'],['Название приходит из утверждённой конфигурации модуля.'],['Обычно не кликается отдельно.'],['Обязательное поле для видимой карточки.'],['До 2 строк.'],['Типографика может меняться.']),
+  'thematic-date': simple('thematic-date','element','Период тематической карточки','Тематическая карточка','Диапазон времени, относящийся именно к этой теме.','Под заголовком.',['Date range','Formatter'],['Historical date formatter'],['thematicModule.dateRange'],['Event/Module data'],['Берётся из самой темы, а не автоматически из всего правления.'],['Не интерактивно.'],['Если периода нет — элемент отсутствует.'],['Короткая строка.'],['Цветовой акцент может меняться.']),
+  'thematic-list-item': simple('thematic-list-item','element','Строка тематического списка','Тематическая карточка','Один пункт: реформа, конфликт, решение или событие.','В list-варианте карточки.',['Дата/маркер','Название','targetId'],['List item primitive','Entity resolver'],['thematicModule.items[i]'],['Event/Reform/Conflict Registry'],['ID элемента резолвится в короткое display-содержимое.'],['Клик открывает подробность.'],['Неизвестные данные не создают пустую строку.'],['Количество видимых строк ограничено, остальные доступны по CTA.'],['Акцент даты/маркера меняется.']),
+  'thematic-image': simple('thematic-image','element','Изображение тематической карточки','Тематическая карточка','Одобренное изображение, которое усиливает тему карточки.','В image/mixed варианте.',['Media asset','Crop','Alt','Review status'],['Media Registry','Image renderer'],['thematicModule.mediaId'],['Media Library','Media Registry'],['Asset проходит тот же принцип review: файл → проверка в реальном контексте → approve → public.'],['Открыть изображение при необходимости.'],['Неодобренный asset не показывается.'],['Кроп по focal point.'],['Treatment может зависеть от HVS.']),
+  'thematic-diagram': simple('thematic-diagram','element','Схема внутри карточки','Тематическая карточка','Мини-диаграмма отношений, династии или структуры власти.','В diagram-варианте.',['Nodes','Edges','Active node'],['Relationship renderer'],['diagramId / relationIds[]'],['Relationship Registry'],['По IDs строится небольшая схема.'],['Клик по узлу открывает персону/сущность.'],['При слишком сложной схеме показывается сокращённый набор + CTA.'],['Упрощается на мобильном.'],['Линии/узлы меняют стиль.']),
+  'thematic-summary': simple('thematic-summary','element','Краткое описание темы','Тематическая карточка','2–4 строки, объясняющие смысл темы без перехода в статью.','Под заголовком/периодом.',['Editorial text','sourceIds[]'],['Text renderer'],['thematicModule.summary'],['Editorial Layer','Source Registry'],['Готовится и проверяется до публикации.'],['Не интерактивно.'],['Без утверждённого текста карточка может использовать другой variant, но не AI-текст на лету.'],['Ограниченная длина.'],['Типографика меняется.']),
+  'thematic-action': simple('thematic-action','element','Кнопка тематической карточки','Тематическая карточка','Открывает полный раздел по теме.','Внизу карточки.',['CTA label','Target'],['Router/anchor action'],['thematicModule.cta'],['Module Composition Resolver'],['CTA создаётся только если target существует.'],['Открыть подробный модуль.'],['Если target отсутствует — кнопка скрывается.'],['Touch friendly.'],['Оформление меняется.']),
+
+  'reign-timeline': simple('reign-timeline','module','Хронология правления',undefined,'Нижняя временная шкала только текущего правления.','Внизу страницы после тематических карточек.',['Предыдущий правитель','Заголовок','Временная ось','События','Следующий правитель'],['Scaled time-axis renderer','Chronology Graph adapter','Event markers','Map sync hook'],['reign.start/end','keyEventIds[]','previousAuthorityId','nextAuthorityId'],['Chronology Graph','Event Registry','Authority Registry'],['Диапазон строится из начала/конца правления.','События раскладываются по реальному времени внутри диапазона.'],['Выбрать событие','Синхронизировать карту','Перейти к соседнему правителю'],['Если точная дата события неизвестна, положение отражает диапазон/неопределённость.'],['На мобильном горизонтально прокручивается или превращается в компактный список.'],['Стиль оси меняется, математика времени — нет.']),
+  'timeline-previous': simple('timeline-previous','element','Предыдущий правитель','Хронология правления','Переход к предыдущему историческому узлу.','Слева от временной оси.',['Label','Имя','authorityId'],['Chronology Graph adapter','Router Link'],['previousAuthorityId'],['Chronology Graph','Authority Registry'],['Граф определяет предыдущий узел, включая сложные переходы власти.'],['Открыть предыдущую страницу.'],['Если линейного предыдущего узла нет, компонент использует специальное состояние/список ветвей.'],['На мобильном переносится под timeline.'],['Только оформление.']),
+  'timeline-title': simple('timeline-title','element','Заголовок хронологии','Хронология правления','Название нижней шкалы.','Над временной осью.',['Текст'],['Typography primitive'],['Статическая системная подпись'],['Core copy'],['Локализуется системой.'],['Не интерактивно.'],['Всегда присутствует.'],['Может уменьшаться.'],['Типографика меняется.']),
+  'timeline-axis': simple('timeline-axis','element','Временная ось правления','Хронология правления','Математическая шкала от начала до конца правления.','Центр нижнего timeline.',['Start','End','Scale','Markers'],['Time scale calculator','Axis renderer'],['reign.start','reign.end'],['Authority Registry'],['Дата начала = 0%, конец = 100%.','Все события получают позицию из реальной даты/диапазона.'],['Клик по свободной точке позже может менять состояние карты/времени.'],['Неполные даты используют uncertainty model.'],['На мобильном может быть шире viewport и скроллиться.'],['Толщина/стиль оси меняются.']),
+  'timeline-event': simple('timeline-event','element','Событие на шкале','Хронология правления','Одна историческая точка/диапазон внутри правления.','Под/над осью в своей временной позиции.',['Marker','Название','eventId','Position'],['Event marker','Time scale calculator'],['keyEventIds[i] → Event'],['Event Registry'],['Event Registry отдаёт дату.','Scale calculator переводит её в позицию.'],['Клик открывает событие и может синхронизировать карту.'],['Событие с диапазоном времени отображается диапазоном, а не ложной точкой.'],['Коллизии подписей разрешаются layout-алгоритмом.'],['Маркер меняет стиль.']),
+  'timeline-event-date': simple('timeline-event-date','element','Дата события на шкале','Событие на шкале','Человеческое отображение даты события.','Внутри подписи timeline event.',['Historical date','Formatter','Uncertainty marker'],['Historical date formatter'],['event.date'],['Event Registry'],['Форматтер учитывает точность и календарную систему.'],['Не интерактивно отдельно.'],['«ок.», диапазон или неопределённость показываются явно.'],['Не должна становиться микроскопической.'],['Акцент даты меняется.']),
+  'timeline-next': simple('timeline-next','element','Следующий правитель','Хронология правления','Переход к следующему историческому узлу.','Справа от временной оси.',['Label','Имя','authorityId'],['Chronology Graph adapter','Router Link'],['nextAuthorityId'],['Chronology Graph','Authority Registry'],['Граф определяет следующую власть; допускаются несколько ветвей.'],['Открыть следующую страницу/выбрать ветвь.'],['При нескольких преемниках показывается выбор, а не случайный один.'],['На мобильном переносится под timeline.'],['Только оформление.'])
 };
