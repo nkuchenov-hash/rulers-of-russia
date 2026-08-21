@@ -1,20 +1,20 @@
 'use client';
 
-import { useMemo, useState, type MouseEvent, type ReactNode } from 'react';
+import { useMemo, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { BackgroundModule } from '@/design-system/components/BackgroundModule';
 import { resolveHistoricalState, toCssVariables } from '@/historical-state/resolveHistoricalState';
+import type { CoreInspectableId, CoreModuleId } from '@/modules/core/inspectorPassports';
 import {
-  corePassports,
-  type CoreInspectableId,
-  type CoreModuleId
-} from '@/modules/core/inspectorPassports';
-import {
-  defaultHeroGradientSettings,
-  heroGradientStyle
-} from '@/modules/hero/heroVisualContract';
+  CoreInspectorDrawer,
+  defaultInspectorTuning,
+  type InspectorTuning
+} from '@/components/core-system/CoreInspectorDrawer';
+import { heroGradientStyle } from '@/modules/hero/heroVisualContract';
+import { labRulerPageData } from '@/content/rulers/labRulerPageData';
+import type { RulerPageData, ThematicCardData } from '@/content/rulers/pageModel';
 import heroStyles from '@/modules/hero/HeroLayers.module.css';
 
-type VisualStateKey = 'core' | 'medieval' | 'imperial' | 'soviet' | 'contemporary';
+type VisualStateKey = RulerPageData['visualStateKey'];
 
 const visualStates: Array<{ key: VisualStateKey; label: string; layerIds: string[] }> = [
   { key: 'core', label: 'База', layerIds: [] },
@@ -24,42 +24,26 @@ const visualStates: Array<{ key: VisualStateKey; label: string; layerIds: string
   { key: 'contemporary', label: 'Современность', layerIds: ['period:contemporary'] }
 ];
 
-const railItems = Array.from({ length: 8 }, (_, index) => ({
-  id: `authority-${index}`,
-  active: index === 3,
-  name: index === 3 ? 'ТЕКУЩИЙ ПРАВИТЕЛЬ' : 'Правитель',
-  years: index === 3 ? 'начало—конец правления' : 'год—год'
-}));
-
-const tabs = ['Обзор', 'Территория', 'Реформы', 'Конфликты', 'Наследие', 'Материалы'];
-const facts = [
-  ['Дата рождения', 'identity.birthDate'],
-  ['Место рождения', 'identity.birthPlaceId'],
-  ['Приход к власти', 'accession.date'],
-  ['Конец правления', 'reign.endDate'],
-  ['Династия / партия', 'identity.groupId'],
-  ['Вера / идеология', 'identity.beliefOrIdeology'],
-  ['Гос. устройство', 'polity.formOfGovernment']
-];
-
 function ModuleRegion({
   id,
   inspectorEnabled,
   onInspect,
   className,
+  style,
   children
 }: {
   id: CoreModuleId;
   inspectorEnabled: boolean;
-  onInspect: (id: CoreInspectableId) => void;
+  onInspect: (id: CoreInspectableId, target?: Element | null) => void;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 }) {
   function handleClick(event: MouseEvent<HTMLElement>) {
     if (!inspectorEnabled) return;
     event.preventDefault();
     event.stopPropagation();
-    onInspect(id);
+    onInspect(id, event.currentTarget);
   }
 
   return (
@@ -67,67 +51,74 @@ function ModuleRegion({
       className={`${className ?? ''} core-module ${inspectorEnabled ? 'is-inspectable' : ''}`.trim()}
       data-module-id={id}
       onClick={handleClick}
+      style={style}
     >
       {children}
     </section>
   );
 }
 
-function InspectorDrawer({
-  selectedId,
-  onClose
+function ThematicCard({
+  card,
+  elementHandler
 }: {
-  selectedId: CoreInspectableId | null;
-  onClose: () => void;
+  card: ThematicCardData;
+  elementHandler: (id: CoreInspectableId, normalAction?: () => void) => (event: MouseEvent<Element>) => void;
 }) {
-  if (!selectedId) return null;
-  const passport = corePassports[selectedId];
-
-  const sections: Array<[string, string[]]> = [
-    ['Из чего состоит', passport.structure],
-    ['Какими средствами собирается', passport.tools],
-    ['Какие данные использует', passport.data],
-    ['Откуда берутся данные', passport.sources],
-    ['Как работает по шагам', passport.flow],
-    ['Что делает пользователь', passport.interactions],
-    ['Если данных нет или что-то не прошло проверку', passport.fallback],
-    ['Как ведёт себя на разных экранах', passport.responsive],
-    ['Что может менять историческая эпоха', passport.hvs]
-  ];
+  const variantClass = card.type === 'list'
+    ? 'variant-list'
+    : card.type === 'image'
+      ? 'variant-image'
+      : card.type === 'diagram'
+        ? 'variant-diagram'
+        : 'variant-mixed';
 
   return (
-    <>
-      <button className="inspector-backdrop" aria-label="Закрыть паспорт" onClick={onClose} />
-      <aside className="inspector-drawer" aria-label={`Паспорт: ${passport.label}`}>
-        <header className="inspector-head">
-          <div>
-            <small>{passport.kind === 'module' ? 'ПАСПОРТ МОДУЛЯ' : 'ПАСПОРТ ЭЛЕМЕНТА'}</small>
-            {passport.parent && <span className="inspector-parent">Внутри: {passport.parent}</span>}
-            <h2>{passport.label}</h2>
-            <p><b>Что это:</b> {passport.what}</p>
-            <p><b>Где находится:</b> {passport.where}</p>
-          </div>
-          <button onClick={onClose} aria-label="Закрыть">×</button>
-        </header>
-        <div className="inspector-body">
-          {sections.map(([title, values]) => (
-            <section key={title}>
-              <h3>{title}</h3>
-              <ol>{values.map((value) => <li key={value}>{value}</li>)}</ol>
-            </section>
+    <article className={`thematic-card ${variantClass}`} data-card-id={card.id}>
+      <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>{card.title}</h2>
+      {card.dateLabel && <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>{card.dateLabel}</small>}
+
+      {card.type === 'list' && card.items && (
+        <ul>
+          {card.items.map((item, index) => (
+            <li data-element-id="thematic-list-item" onClick={elementHandler('thematic-list-item')} key={`${card.id}-${index}`}>
+              <b>{item.year}</b><span>{item.title}</span>
+            </li>
           ))}
+        </ul>
+      )}
+
+      {card.summary && <p data-element-id="thematic-summary" onClick={elementHandler('thematic-summary')}>{card.summary}</p>}
+
+      {card.type === 'diagram' && (
+        <div data-element-id="thematic-diagram" onClick={elementHandler('thematic-diagram')} className="relationship-diagram">
+          <b>текущий правитель</b><span>связи · люди · преемники</span>
         </div>
-      </aside>
-    </>
+      )}
+
+      {card.mediaLabel && (
+        <div data-element-id="thematic-image" onClick={elementHandler('thematic-image')} className="media-zone">{card.mediaLabel}</div>
+      )}
+
+      <button data-element-id="thematic-action" onClick={elementHandler('thematic-action')}>{card.actionLabel}</button>
+    </article>
   );
 }
 
-export function CoreDesignSystemSkeleton() {
-  const [visualStateKey, setVisualStateKey] = useState<VisualStateKey>('core');
-  const [inspectorEnabled, setInspectorEnabled] = useState(false);
-  const [selectedId, setSelectedId] = useState<CoreInspectableId | null>(null);
-  const [activeTab, setActiveTab] = useState('Обзор');
+export function CoreDesignSystemSkeleton({
+  data = labRulerPageData,
+  labMode = false
+}: {
+  data?: RulerPageData;
+  labMode?: boolean;
+}) {
+  const initialTab = data.tabs.find((tab) => tab.enabled)?.label ?? 'Обзор';
+  const [visualStateKey, setVisualStateKey] = useState<VisualStateKey>(data.visualStateKey);
+  const [inspectorEnabled, setInspectorEnabled] = useState(labMode);
+  const [selectedId, setSelectedId] = useState<CoreInspectableId | null>(labMode ? 'hero' : null);
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [mapScale, setMapScale] = useState(1);
+  const [inspectorTuning, setInspectorTuning] = useState<InspectorTuning>(defaultInspectorTuning);
 
   const visualState = visualStates.find((state) => state.key === visualStateKey) ?? visualStates[0];
   const resolvedState = useMemo(
@@ -135,9 +126,35 @@ export function CoreDesignSystemSkeleton() {
     [visualState.layerIds]
   );
 
-  function openPassport(id: CoreInspectableId) {
+  const heroVariables = {
+    '--hero-image-x': `${inspectorTuning.heroImageX}%`,
+    '--hero-image-y': `${inspectorTuning.heroImageY}%`,
+    '--hero-dates-size': `${inspectorTuning.heroDatesSize}px`,
+    '--hero-name-size': `${inspectorTuning.heroNameSize}px`,
+    '--hero-summary-size': `${inspectorTuning.heroSummarySize}px`,
+    '--hero-summary-width': `${inspectorTuning.heroSummaryWidth}px`,
+    '--hero-meta-size': `${inspectorTuning.heroMetaSize}px`,
+    '--hero-events-width': `${inspectorTuning.keyEventsWidth}px`,
+    '--hero-event-font-size': `${inspectorTuning.keyEventFontSize}px`,
+    '--hero-action-size': `${inspectorTuning.heroActionSize}px`
+  } as CSSProperties;
+
+  function clearInspectorHighlight() {
+    document.querySelectorAll('.is-inspector-selected').forEach((node) => node.classList.remove('is-inspector-selected'));
+  }
+
+  function openPassport(id: CoreInspectableId, target?: Element | null) {
     if (!inspectorEnabled) return;
+    clearInspectorHighlight();
+    target?.classList.add('is-inspector-selected');
     setSelectedId(id);
+  }
+
+  function selectLayerFromTree(id: CoreInspectableId, targetSelector?: string) {
+    if (!inspectorEnabled) return;
+    const target = targetSelector ? document.querySelector(targetSelector) : null;
+    openPassport(id, target);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
   }
 
   function elementHandler(id: CoreInspectableId, normalAction?: () => void) {
@@ -145,7 +162,7 @@ export function CoreDesignSystemSkeleton() {
       event.stopPropagation();
       if (inspectorEnabled) {
         event.preventDefault();
-        openPassport(id);
+        openPassport(id, event.currentTarget);
         return;
       }
       normalAction?.();
@@ -157,12 +174,34 @@ export function CoreDesignSystemSkeleton() {
     setVisualStateKey(visualStates[(index + 1) % visualStates.length].key);
   }
 
+  function closeInspectorDrawer() {
+    clearInspectorHighlight();
+    setSelectedId(null);
+  }
+
+  function toggleInspector() {
+    clearInspectorHighlight();
+    setInspectorEnabled((value) => {
+      const next = !value;
+      setSelectedId(next ? 'hero' : null);
+      return next;
+    });
+  }
+
   return (
     <BackgroundModule
       style={toCssVariables(resolvedState.tokens)}
       inspectorEnabled={inspectorEnabled}
-      onInspect={() => openPassport('background')}
+      onInspect={() => selectLayerFromTree('background', '[data-module-id="background"]')}
     >
+      {labMode && (
+        <div className="lab-runtime-badge">
+          <b>TEST LAB</b>
+          <span>renderer + data contracts + HVS + Inspector</span>
+          <code>src/content/rulers/labRulerPageData.ts</code>
+        </div>
+      )}
+
       <div
         className="core-site-surface"
         data-inspector={inspectorEnabled ? 'on' : 'off'}
@@ -193,13 +232,13 @@ export function CoreDesignSystemSkeleton() {
             </div>
             <div className="rail-list">
               <span className="rail-axis" />
-              {railItems.map((item) => (
+              {data.rail.map((item) => (
                 <article data-element-id="rail-item" onClick={elementHandler('rail-item')} className={`rail-item ${item.active ? 'active' : ''}`} key={item.id}>
-                  <div data-element-id="rail-portrait" onClick={elementHandler('rail-portrait')} className="rail-portrait">портрет</div>
+                  <div data-element-id="rail-portrait" onClick={elementHandler('rail-portrait')} className="rail-portrait">{item.portraitLabel ?? 'портрет'}</div>
                   <div>
                     <strong data-element-id="rail-name" onClick={elementHandler('rail-name')}>{item.name}</strong>
                     <span data-element-id="rail-dates" onClick={elementHandler('rail-dates')}>{item.years}</span>
-                    <small>{item.active ? 'chronology.activeAuthorityId' : `chronology.contextWindow[${item.id.split('-')[1]}]`}</small>
+                    <small>{item.active ? 'chronology.activeAuthorityId' : item.id}</small>
                   </div>
                 </article>
               ))}
@@ -207,9 +246,19 @@ export function CoreDesignSystemSkeleton() {
           </ModuleRegion>
 
           <main className="ruler-content">
-            <ModuleRegion id="hero" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className={`core-hero ${heroStyles.heroCanvas}`}>
+            <ModuleRegion
+              id="hero"
+              inspectorEnabled={inspectorEnabled}
+              onInspect={openPassport}
+              className={`core-hero ${heroStyles.heroCanvas}`}
+              style={heroVariables}
+            >
               <div className={`hero-art ${heroStyles.heroImage}`} data-element-id="hero-image" onClick={elementHandler('hero-image')}>
-                <span className={`hero-art-label ${heroStyles.imageLabel}`}>ЦЕЛЬНАЯ HERO-КАРТИНКА<br /><b>hero.imageAssetId</b><em>отдельный файл → проверка в настоящем Hero → одобрение человеком</em></span>
+                <span className={`hero-art-label ${heroStyles.imageLabel}`}>
+                  ЦЕЛЬНАЯ HERO-КАРТИНКА<br />
+                  <b>{data.hero.imageAssetId ?? 'hero.imageAssetId — пока нет approved asset'}</b>
+                  <em>отдельный файл → проверка в настоящем Hero → одобрение человеком</em>
+                </span>
                 <div className="hero-actions">
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>☆</button>
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>↗</button>
@@ -217,8 +266,10 @@ export function CoreDesignSystemSkeleton() {
                 </div>
                 <ModuleRegion id="key-events" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="key-events-card">
                   <h3>Ключевые события</h3>
-                  {[0,1,2,3].map((index) => (
-                    <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={index}><b>год</b><span>Название ключевого события {index + 1}</span></div>
+                  {data.hero.keyEvents.map((event) => (
+                    <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={event.id}>
+                      <b>{event.year}</b><span>{event.title}</span>
+                    </div>
                   ))}
                   <button data-element-id="key-events-all" onClick={elementHandler('key-events-all')}>Смотреть все →</button>
                 </ModuleRegion>
@@ -228,42 +279,41 @@ export function CoreDesignSystemSkeleton() {
                 className={heroStyles.gradientPanel}
                 data-element-id="hero-gradient"
                 onClick={elementHandler('hero-gradient')}
-                style={heroGradientStyle(defaultHeroGradientSettings)}
+                style={heroGradientStyle(inspectorTuning.gradient)}
                 aria-label="Полупрозрачный градиент Hero"
               >
                 <p className={heroStyles.gradientHint}>Градиент Hero · отдельный настраиваемый слой</p>
               </div>
 
               <div className={`hero-copy ${heroStyles.heroContent}`}>
-                <p className="hero-period" data-element-id="hero-dates" onClick={elementHandler('hero-dates')}>ГОДЫ ЖИЗНИ / ПРАВЛЕНИЯ</p>
-                <h1 data-element-id="hero-name" onClick={elementHandler('hero-name')}>ИМЯ<br />ПРАВИТЕЛЯ</h1>
-                <p className="hero-summary" data-element-id="hero-summary" onClick={elementHandler('hero-summary')}>Короткая формула правления — 1–2 строки, объясняющие роль и историческое значение текущего правителя.</p>
+                <p className="hero-period" data-element-id="hero-dates" onClick={elementHandler('hero-dates')}>{data.hero.datesLabel}</p>
+                <h1 data-element-id="hero-name" onClick={elementHandler('hero-name')}>{data.hero.displayName}</h1>
+                <p className="hero-summary" data-element-id="hero-summary" onClick={elementHandler('hero-summary')}>{data.hero.summary}</p>
                 <div className="hero-meta">
-                  {[
-                    ['ДИНАСТИЯ / КОНТЕКСТ','identity.dynastyOrGroup'],
-                    ['СТАТУС','identity.primaryTitle'],
-                    ['СТОЛИЦА','reign.capitalPlaceId'],
-                    ['ПРАВЛЕНИЕ','derived.reignDuration']
-                  ].map(([label, value]) => (
-                    <div data-element-id="hero-meta-item" onClick={elementHandler('hero-meta-item')} key={label}><small>{label}</small><strong>{value}</strong></div>
+                  {data.hero.meta.map((item) => (
+                    <div data-element-id="hero-meta-item" onClick={elementHandler('hero-meta-item')} key={item.id}>
+                      <small>{item.label}</small><strong>{item.value}</strong>
+                    </div>
                   ))}
                 </div>
               </div>
             </ModuleRegion>
 
             <ModuleRegion id="page-tabs" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="page-tabs">
-              {tabs.map((tab) => (
-                <button data-element-id="page-tab" key={tab} className={activeTab === tab ? 'active' : ''} onClick={elementHandler('page-tab', () => setActiveTab(tab))}>{tab}</button>
+              {data.tabs.filter((tab) => tab.enabled).map((tab) => (
+                <button data-element-id="page-tab" key={tab.id} className={activeTab === tab.label ? 'active' : ''} onClick={elementHandler('page-tab', () => setActiveTab(tab.label))}>{tab.label}</button>
               ))}
             </ModuleRegion>
 
             <div className="primary-content-row">
               <ModuleRegion id="territory" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="territory-panel">
                 <h2>ТЕРРИТОРИЯ</h2>
-                <p data-element-id="territory-summary" onClick={elementHandler('territory-summary')}><b>Короткое объяснение:</b> как менялась территория во время этого правления и что именно нужно увидеть на соседней карте.</p>
+                <p data-element-id="territory-summary" onClick={elementHandler('territory-summary')}><b>Короткое объяснение:</b> {data.territory.summary}</p>
                 <div className="territory-legend">
-                  {['Исходная территория','Присоединённые земли','Граница к концу правления','Зависимые / спорные территории'].map((item, index) => (
-                    <div data-element-id="territory-legend-item" onClick={elementHandler('territory-legend-item')} key={item}><i className={`legend-swatch type-${index}`} /><span>{item}</span></div>
+                  {data.territory.legend.map((item, index) => (
+                    <div data-element-id="territory-legend-item" onClick={elementHandler('territory-legend-item')} key={item.id}>
+                      <i className={`legend-swatch type-${index}`} /><span>{item.label}</span>
+                    </div>
                   ))}
                 </div>
                 <button data-element-id="territory-map-action" onClick={elementHandler('territory-map-action')} className="module-cta">Карта эпохи →</button>
@@ -290,68 +340,59 @@ export function CoreDesignSystemSkeleton() {
               <ModuleRegion id="facts" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="facts-panel">
                 <h2>ФАКТЫ</h2>
                 <div className="facts-list">
-                  {facts.map(([label, value]) => <div data-element-id="fact-row" onClick={elementHandler('fact-row')} className="fact-row" key={label}><span>◦</span><label>{label}</label><strong>{value}</strong></div>)}
+                  {data.facts.map((fact) => (
+                    <div data-element-id="fact-row" onClick={elementHandler('fact-row')} className="fact-row" key={fact.id}>
+                      <span>◦</span><label>{fact.label}</label><strong>{fact.value}</strong>
+                    </div>
+                  ))}
                 </div>
                 <button data-element-id="facts-all" onClick={elementHandler('facts-all')} className="module-cta">Все факты →</button>
               </ModuleRegion>
             </div>
 
             <ModuleRegion id="thematic-card" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="thematic-row">
-              <article className="thematic-card variant-list">
-                <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>РЕФОРМЫ</h2>
-                <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>период темы</small>
-                <ul>{[0,1,2,3,4].map((index) => <li data-element-id="thematic-list-item" onClick={elementHandler('thematic-list-item')} key={index}><b>год</b><span>Название реформы {index + 1}</span></li>)}</ul>
-                <button data-element-id="thematic-action" onClick={elementHandler('thematic-action')}>Все реформы →</button>
-              </article>
-
-              <article className="thematic-card variant-image">
-                <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>КОНФЛИКТЫ</h2>
-                <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>период темы</small>
-                <p data-element-id="thematic-summary" onClick={elementHandler('thematic-summary')}>2–4 строки о конфликтной оси правления.</p>
-                <div data-element-id="thematic-image" onClick={elementHandler('thematic-image')} className="media-zone">Одобренное изображение темы<br />thematicModule.mediaId</div>
-                <button data-element-id="thematic-action" onClick={elementHandler('thematic-action')}>Все конфликты →</button>
-              </article>
-
-              <article className="thematic-card variant-diagram">
-                <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>ДИНАСТИЯ / ЛЮДИ</h2>
-                <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>контекст</small>
-                <div data-element-id="thematic-diagram" onClick={elementHandler('thematic-diagram')} className="relationship-diagram"><b>текущий правитель</b><span>связи · люди · преемники</span></div>
-                <button data-element-id="thematic-action" onClick={elementHandler('thematic-action')}>Все персоны →</button>
-              </article>
-
-              <article className="thematic-card variant-mixed">
-                <h2 data-element-id="thematic-title" onClick={elementHandler('thematic-title')}>НАСЛЕДИЕ</h2>
-                <small data-element-id="thematic-date" onClick={elementHandler('thematic-date')}>период влияния</small>
-                <p data-element-id="thematic-summary" onClick={elementHandler('thematic-summary')}>Что правление оставило следующему периоду и какие последствия оказались долговечными.</p>
-                <div data-element-id="thematic-image" onClick={elementHandler('thematic-image')} className="media-zone">Изображение наследия</div>
-                <button data-element-id="thematic-action" onClick={elementHandler('thematic-action')}>Всё о наследии →</button>
-              </article>
+              {data.thematic.map((card) => <ThematicCard key={card.id} card={card} elementHandler={elementHandler} />)}
             </ModuleRegion>
 
             <ModuleRegion id="reign-timeline" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="reign-timeline">
-              <article data-element-id="timeline-previous" onClick={elementHandler('timeline-previous')} className="adjacent-ruler"><small>← Предыдущий правитель</small><strong>Имя предыдущего</strong></article>
+              <article data-element-id="timeline-previous" onClick={elementHandler('timeline-previous')} className="adjacent-ruler">
+                <small>← Предыдущий правитель</small><strong>{data.timeline.previous?.name ?? '—'}</strong>
+              </article>
               <div className="reign-timeline-center">
-                <h2 data-element-id="timeline-title" onClick={elementHandler('timeline-title')}>ХРОНОЛОГИЯ ПРАВЛЕНИЯ</h2>
-                <div data-element-id="timeline-axis" onClick={elementHandler('timeline-axis')} className="timeline-axis">{[0,20,40,60,80,100].map((left, index) => <i key={left} style={{ left: `${left}%` }} className={index === 0 || index === 5 ? 'edge' : ''} />)}</div>
-                <div className="timeline-events">
-                  {[0,1,2,3,4,5].map((index) => (
-                    <div data-element-id="timeline-event" onClick={elementHandler('timeline-event')} key={index}>
-                      <b data-element-id="timeline-event-date" onClick={elementHandler('timeline-event-date')}>{index === 0 ? 'начало' : index === 5 ? 'конец' : 'год'}</b>
-                      <span>{index === 0 ? 'Начало правления' : index === 5 ? 'Конец правления' : `Ключевое событие ${index}`}</span>
+                <h2 data-element-id="timeline-title" onClick={elementHandler('timeline-title')}>{data.timeline.title}</h2>
+                <div data-element-id="timeline-axis" onClick={elementHandler('timeline-axis')} className="timeline-axis">
+                  {data.timeline.events.map((event, index) => (
+                    <i key={event.id} style={{ left: `${(index / Math.max(1, data.timeline.events.length - 1)) * 100}%` }} className={index === 0 || index === data.timeline.events.length - 1 ? 'edge' : ''} />
+                  ))}
+                </div>
+                <div className="timeline-events" style={{ gridTemplateColumns: `repeat(${data.timeline.events.length},1fr)` }}>
+                  {data.timeline.events.map((event) => (
+                    <div data-element-id="timeline-event" onClick={elementHandler('timeline-event')} key={event.id}>
+                      <b data-element-id="timeline-event-date" onClick={elementHandler('timeline-event-date')}>{event.date}</b>
+                      <span>{event.title}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <article data-element-id="timeline-next" onClick={elementHandler('timeline-next')} className="adjacent-ruler next"><small>Следующий правитель →</small><strong>Имя следующего</strong></article>
+              <article data-element-id="timeline-next" onClick={elementHandler('timeline-next')} className="adjacent-ruler next">
+                <small>Следующий правитель →</small><strong>{data.timeline.next?.name ?? '—'}</strong>
+              </article>
             </ModuleRegion>
           </main>
         </div>
       </div>
 
-      <button className={`inspector-fab ${inspectorEnabled ? 'active' : ''}`} onClick={() => { setInspectorEnabled((value) => !value); setSelectedId(null); }}>
+      <button className={`inspector-fab ${inspectorEnabled ? 'active' : ''}`} onClick={toggleInspector}>
         {inspectorEnabled ? 'Паспорта: ВКЛ' : 'Проверить элементы'}
       </button>
-      <InspectorDrawer selectedId={selectedId} onClose={() => setSelectedId(null)} />
+
+      <CoreInspectorDrawer
+        selectedId={selectedId}
+        onClose={closeInspectorDrawer}
+        onSelectLayer={selectLayerFromTree}
+        tuning={inspectorTuning}
+        onTuningChange={setInspectorTuning}
+      />
     </BackgroundModule>
   );
 }
