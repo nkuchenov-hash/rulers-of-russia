@@ -15,6 +15,8 @@ A named historical ruler must never be hard-coded into:
 
 The generic renderer may only use neutral placeholder data such as «Имя правителя», «год—год», «значение» and semantic field labels.
 
+Inspector tree labels must also remain generic even when the Test Lab is currently rendering a specific ruler.
+
 ## Concrete rulers
 
 Concrete rulers are input data only.
