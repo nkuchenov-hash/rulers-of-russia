@@ -1,3 +1,5 @@
+export type RulerPageStructureRevision = 2;
+
 export interface RulerRailItem {
   id: string;
   name: string;
@@ -82,6 +84,7 @@ export interface RulerSourceRef {
 }
 
 export interface RulerPageData {
+  structureRevision: RulerPageStructureRevision;
   id: string;
   slug: string;
   visualStateKey: 'core' | 'medieval' | 'imperial' | 'soviet' | 'contemporary';
