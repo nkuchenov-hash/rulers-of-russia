@@ -1,8 +1,8 @@
 /* Core Inspector is an editor shell only.
    Critical rule: it may NEVER change the geometry, width, scale or spacing of the website renderer. */
 :root {
-  --inspector-left-width: 288px;
-  --inspector-right-width: 390px;
+  --inspector-left-width: 380px;
+  --inspector-right-width: 520px;
 }
 
 .core-site-surface[data-inspector='on'] [data-element-id] {
@@ -49,6 +49,8 @@
   color: #e5e5e5;
   border-color: #363636;
   box-shadow: 0 0 28px rgba(0, 0, 0, .24);
+  font-size: 16pt;
+  line-height: 1.4;
 }
 
 .inspector-layers-panel {
@@ -66,51 +68,51 @@
 
 .inspector-layers-head,
 .inspector-properties-head {
-  min-height: 68px;
-  padding: 12px 14px;
+  min-height: 88px;
+  padding: 16px 18px;
   border-bottom: 1px solid #363636;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   background: #1e1e1e;
 }
 
 .inspector-layers-head small,
 .inspector-properties-head small {
   display: block;
-  color: #8c8c8c;
-  font-size: 11px;
-  letter-spacing: .08em;
+  color: #a2a2a2;
+  font-size: 16pt;
+  letter-spacing: .05em;
 }
 
 .inspector-layers-head h2,
 .inspector-properties-head h2 {
-  margin: 2px 0 0;
-  font: 600 16px/1.2 var(--body-font);
+  margin: 4px 0 0;
+  font: 600 18pt/1.2 var(--body-font);
   color: #f2f2f2;
 }
 
 .inspector-properties-head h2 {
-  font-size: 18px;
+  font-size: 20pt;
 }
 
 .inspector-parent {
   display: block;
-  margin-top: 3px;
-  color: #8f8f8f;
-  font-size: 12px;
+  margin-top: 4px;
+  color: #aaa;
+  font-size: 16pt;
 }
 
 .inspector-properties-head > button {
-  width: 30px;
-  height: 30px;
+  width: 42px;
+  height: 42px;
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #bdbdbd;
+  color: #d0d0d0;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 20pt;
 }
 
 .inspector-properties-head > button:hover {
@@ -119,15 +121,15 @@
 }
 
 .inspector-properties-summary {
-  padding: 14px 16px 15px;
+  padding: 18px 20px;
   border-bottom: 1px solid #363636;
   background: #1e1e1e;
 }
 
 .inspector-properties-summary p {
-  margin: 0 0 11px;
-  color: #bdbdbd;
-  font-size: 13px;
+  margin: 0 0 16px;
+  color: #c9c9c9;
+  font-size: 16pt;
   line-height: 1.5;
 }
 
@@ -137,39 +139,40 @@
 
 .inspector-properties-summary b {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   color: #f0f0f0;
-  font-size: 12px;
+  font-size: 16pt;
   font-weight: 600;
 }
 
 .inspector-properties-body {
-  padding: 0 16px 36px;
+  padding: 0 20px 44px;
+  font-size: 16pt;
 }
 
 .inspector-properties-body > section {
-  padding: 15px 0;
+  padding: 20px 0;
   border-bottom: 1px solid #363636;
 }
 
 .inspector-properties-body h3 {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   color: #f0f0f0;
-  font-size: 13px;
+  font-size: 16pt;
   line-height: 1.35;
   font-weight: 600;
 }
 
 .inspector-properties-body ol {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 24px;
 }
 
 .inspector-properties-body li {
-  margin: 5px 0;
-  padding-left: 2px;
-  color: #aeb4b7;
-  font-size: 13px;
+  margin: 8px 0;
+  padding-left: 3px;
+  color: #c1c7ca;
+  font-size: 16pt;
   line-height: 1.48;
 }
 
@@ -182,6 +185,7 @@
   background: #1e1e1e !important;
   border-color: #4a4a4a !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, .24) !important;
+  font-size: 16pt !important;
 }
 
 .inspector-fab.active {
@@ -201,8 +205,8 @@
 
 @media (max-width: 900px) {
   :root {
-    --inspector-left-width: min(82vw, 300px);
-    --inspector-right-width: min(86vw, 340px);
+    --inspector-left-width: min(88vw, 380px);
+    --inspector-right-width: min(92vw, 520px);
   }
 
   .inspector-properties-panel {
