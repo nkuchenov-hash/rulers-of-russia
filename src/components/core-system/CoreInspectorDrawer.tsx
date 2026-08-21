@@ -26,6 +26,8 @@ export const defaultThematicCardSize: ThematicCardSize = {
   height: 300
 };
 
+export const STUDIO_TUNING_STORAGE_KEY = 'rulers-of-russia:studio:tuning:v1';
+
 export interface InspectorTuning {
   gradient: HeroGradientSettings;
   heroImageX: number;
@@ -204,7 +206,17 @@ function SettingsPanel({
   tuning: InspectorTuning;
   onChange: (next: InspectorTuning) => void;
 }) {
-  const patch = (partial: Partial<InspectorTuning>) => onChange({ ...tuning, ...partial });
+  const patch = (partial: Partial<InspectorTuning>) => {
+    const next = { ...tuning, ...partial };
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem(STUDIO_TUNING_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // Storage may be unavailable in private/restricted browser contexts.
+      }
+    }
+    onChange(next);
+  };
   const patchGradient = (partial: Partial<HeroGradientSettings>) =>
     patch({ gradient: { ...tuning.gradient, ...partial } });
 
