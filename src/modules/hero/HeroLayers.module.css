@@ -15,8 +15,9 @@
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 72% 34%, color-mix(in srgb, white 18%, transparent), transparent 26%),
+    radial-gradient(circle at var(--hero-image-x, 72%) var(--hero-image-y, 34%), color-mix(in srgb, white 18%, transparent), transparent 26%),
     linear-gradient(115deg, color-mix(in srgb, var(--ambient-deep) 12%, var(--surface-elevated)), color-mix(in srgb, var(--accent-primary) 22%, var(--surface-elevated)) 62%, var(--ambient-deep));
+  background-position: var(--hero-image-x, 50%) var(--hero-image-y, 50%);
 }
 
 .heroImage::after {
@@ -30,6 +31,19 @@
 .heroImage :global(.hero-actions),
 .heroImage :global(.key-events-card) {
   z-index: 7;
+}
+
+.heroImage :global(.hero-actions button) {
+  width: var(--hero-action-size, 40px) !important;
+  height: var(--hero-action-size, 40px) !important;
+}
+
+.heroImage :global(.key-events-card) {
+  width: var(--hero-events-width, 320px) !important;
+}
+
+.heroImage :global(.key-event) {
+  font-size: var(--hero-event-font-size, 12px) !important;
 }
 
 .imageLabel {
@@ -55,8 +69,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: -12%;
-  width: 12%;
+  right: calc(var(--hero-gradient-edge-softness, 12%) * -1);
+  width: var(--hero-gradient-edge-softness, 12%);
   background: linear-gradient(90deg, color-mix(in srgb, var(--surface-primary) 10%, transparent), transparent);
   pointer-events: none;
 }
@@ -97,6 +111,23 @@
   flex-direction: column;
   justify-content: flex-end;
   background: transparent !important;
+}
+
+.heroContent :global(.hero-period) {
+  font-size: var(--hero-dates-size, 22px) !important;
+}
+
+.heroContent :global(h1) {
+  font-size: var(--hero-name-size, 104px) !important;
+}
+
+.heroContent :global(.hero-summary) {
+  font-size: var(--hero-summary-size, 17px) !important;
+  max-width: var(--hero-summary-width, 620px) !important;
+}
+
+.heroContent :global(.hero-meta strong) {
+  font-size: var(--hero-meta-size, 13px) !important;
 }
 
 @media (min-width: 1650px) {
@@ -140,6 +171,10 @@
     min-height: 760px;
     justify-content: flex-start;
     padding: 50px 28px 32px !important;
+  }
+
+  .heroContent :global(h1) {
+    font-size: min(var(--hero-name-size, 92px), 16vw) !important;
   }
 
   .imageLabel {
