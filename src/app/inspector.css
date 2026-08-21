@@ -1,0 +1,112 @@
+/* Core Inspector is a development/editor tool. It must never obscure the page being inspected. */
+.core-site-surface[data-inspector='on'] [data-element-id] {
+  cursor: help;
+}
+
+/* A nested element wins over its parent module when hovered. */
+.core-site-surface[data-inspector='on'] .core-module.is-inspectable:hover {
+  outline: none;
+}
+.core-site-surface[data-inspector='on'] .core-module.is-inspectable:hover:not(:has([data-element-id]:hover)) {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+  z-index: 12;
+}
+.core-site-surface[data-inspector='on'] [data-element-id]:hover {
+  outline: 2px solid #d7ad62;
+  outline-offset: 2px;
+  position: relative;
+  z-index: 18;
+}
+.core-site-surface[data-inspector='on'] svg [data-element-id]:hover {
+  outline: none;
+  stroke: #d7ad62;
+  stroke-width: 4;
+}
+.core-site-surface[data-inspector='on'] svg text[data-element-id]:hover {
+  stroke: none;
+  fill: #d7ad62;
+  font-weight: 700;
+}
+
+/* The passport is a side inspector, not a modal. The page remains clickable while it is open. */
+.inspector-backdrop {
+  pointer-events: none !important;
+  background: transparent !important;
+}
+.inspector-drawer {
+  width: min(600px, 94vw);
+}
+.inspector-head {
+  padding: 28px 30px 24px;
+}
+.inspector-head > div {
+  min-width: 0;
+}
+.inspector-head small {
+  display: block;
+  font-size: 11px;
+}
+.inspector-parent {
+  display: block;
+  margin-top: 6px;
+  color: #9f978a;
+  font-size: 12px;
+}
+.inspector-head h2 {
+  margin-top: 10px;
+  font-size: 34px;
+}
+.inspector-head p {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.inspector-head p b {
+  color: #eee7da;
+}
+.inspector-body {
+  padding: 0 30px 44px;
+}
+.inspector-body > section {
+  padding: 20px 0;
+}
+.inspector-body h3 {
+  font-size: 12px;
+  line-height: 1.35;
+  text-transform: none;
+  letter-spacing: .04em;
+}
+.inspector-body ol {
+  margin: 0;
+  padding-left: 22px;
+}
+.inspector-body li {
+  margin: 7px 0;
+  padding-left: 4px;
+  color: #d7d0c5;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.hero-art-label em {
+  display: block;
+  max-width: 300px;
+  margin-top: 10px;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.45;
+  opacity: .82;
+}
+
+@media (max-width: 900px) {
+  .inspector-drawer {
+    width: min(520px, 96vw);
+  }
+  .inspector-head,
+  .inspector-body {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
