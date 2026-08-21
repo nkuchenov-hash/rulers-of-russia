@@ -41,10 +41,15 @@ export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
 
   'historical-rail': node('Левая историческая шкала', 'historical-rail', '[data-module-id="historical-rail"]', [
     node('Кнопки управления', 'rail-control', '[data-element-id="rail-control"]'),
-    node('Карточка правителя', 'rail-item', '[data-element-id="rail-item"]', [
-      node('Мини-портрет', 'rail-portrait', '[data-element-id="rail-portrait"]'),
-      node('Имя', 'rail-name', '[data-element-id="rail-name"]'),
-      node('Годы правления', 'rail-dates', '[data-element-id="rail-dates"]')
+    node('Текущий правитель', 'rail-active-item', '.rail-item.active', [
+      node('Портрет текущего правителя', 'rail-portrait', '.rail-item.active [data-element-id="rail-portrait"]'),
+      node('Имя текущего правителя', 'rail-name', '.rail-item.active [data-element-id="rail-name"]'),
+      node('Годы правления', 'rail-dates', '.rail-item.active [data-element-id="rail-dates"]')
+    ]),
+    node('Обычная карточка правителя', 'rail-item', '.rail-item:not(.active)', [
+      node('Мини-портрет', 'rail-portrait', '.rail-item:not(.active) [data-element-id="rail-portrait"]'),
+      node('Имя', 'rail-name', '.rail-item:not(.active) [data-element-id="rail-name"]'),
+      node('Годы правления', 'rail-dates', '.rail-item:not(.active) [data-element-id="rail-dates"]')
     ])
   ]),
 
