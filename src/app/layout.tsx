@@ -1,4 +1,5 @@
 import './globals.css';
+import './layout-contract.css';
 import './site-min-font.css';
 import './inspector.css';
 import type { ReactNode } from 'react';
