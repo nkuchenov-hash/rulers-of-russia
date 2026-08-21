@@ -1,0 +1,200 @@
+.structurePanel {
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  padding: 18px 20px 20px;
+  background: #0d1519;
+}
+
+.structureHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.structureHead h3 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: #d2ad68;
+}
+
+.structureHead span {
+  font-size: 11px;
+  color: #8f999e;
+}
+
+.tree {
+  display: grid;
+  gap: 2px;
+}
+
+.treeBranch {
+  display: grid;
+}
+
+.treeRow {
+  width: 100%;
+  min-height: 34px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #d9d5ce;
+  padding: 0 8px;
+  display: grid;
+  grid-template-columns: 18px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.treeRow:hover {
+  background: rgba(255,255,255,.055);
+}
+
+.treeRow.active {
+  background: rgba(210,173,104,.16);
+  color: #fff6e7;
+  box-shadow: inset 2px 0 0 #d2ad68;
+}
+
+.treeRow.group {
+  color: #aeb7ba;
+  cursor: default;
+}
+
+.treeRow.group:hover {
+  background: transparent;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+  color: #889397;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.layerIcon {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #758086;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.treeRow.active .layerIcon {
+  border-color: #d2ad68;
+  background: rgba(210,173,104,.24);
+}
+
+.treeLabel {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+.children {
+  position: relative;
+}
+
+.children::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 4px;
+  width: 1px;
+  background: rgba(255,255,255,.08);
+}
+
+.settingsPanel {
+  padding: 18px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: #11191d;
+}
+
+.settingsPanel h3 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: #d2ad68;
+}
+
+.settingRow {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 150px;
+  align-items: center;
+  gap: 14px;
+  min-height: 40px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.settingRow:first-of-type {
+  border-top: 0;
+}
+
+.settingRow label,
+.settingRow > span:first-child {
+  font-size: 12px;
+  line-height: 1.35;
+  color: #c8c3ba;
+}
+
+.settingRow input[type="range"] {
+  width: 100%;
+}
+
+.settingRow input[type="checkbox"] {
+  justify-self: end;
+  width: 18px;
+  height: 18px;
+}
+
+.settingRow select {
+  width: 100%;
+  min-height: 30px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: #0d1519;
+  color: #e7e1d7;
+  border-radius: 4px;
+  padding: 4px 7px;
+}
+
+.valuePair {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  align-items: center;
+  gap: 8px;
+}
+
+.valuePair output {
+  font-size: 11px;
+  color: #9ba4a8;
+  text-align: right;
+}
+
+.readOnlyNote {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 5px;
+  color: #9fa8aa;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+:global(.is-inspector-selected) {
+  outline: 3px solid #d2ad68 !important;
+  outline-offset: -3px !important;
+  position: relative;
+  z-index: 61 !important;
+}
