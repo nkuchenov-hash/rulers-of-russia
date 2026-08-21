@@ -1,0 +1,42 @@
+.lab-runtime-badge {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 86;
+  display: grid;
+  gap: 2px;
+  min-width: 280px;
+  padding: 11px 14px;
+  border: 1px solid rgba(210,173,104,.52);
+  border-radius: 6px;
+  background: rgba(13,21,25,.94);
+  color: #eee7da;
+  box-shadow: 0 12px 34px rgba(0,0,0,.28);
+  pointer-events: none;
+}
+
+.lab-runtime-badge b {
+  color: #d2ad68;
+  font-size: 11px;
+  letter-spacing: .13em;
+}
+
+.lab-runtime-badge span {
+  font-size: 11px;
+  color: #d3cdc3;
+}
+
+.lab-runtime-badge code {
+  margin-top: 3px;
+  font-size: 9px;
+  color: #8f999e;
+}
+
+@media (max-width: 700px) {
+  .lab-runtime-badge {
+    left: 10px;
+    bottom: 68px;
+    min-width: 0;
+    max-width: calc(100vw - 20px);
+  }
+}
