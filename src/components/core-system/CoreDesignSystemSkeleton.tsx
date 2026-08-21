@@ -7,7 +7,12 @@ import {
   corePassports,
   type CoreInspectableId,
   type CoreModuleId
-} from '@/modules/core/modulePassports';
+} from '@/modules/core/inspectorPassports';
+import {
+  defaultHeroGradientSettings,
+  heroGradientStyle
+} from '@/modules/hero/heroVisualContract';
+import heroStyles from '@/modules/hero/HeroLayers.module.css';
 
 type VisualStateKey = 'core' | 'medieval' | 'imperial' | 'soviet' | 'contemporary';
 
@@ -202,8 +207,34 @@ export function CoreDesignSystemSkeleton() {
           </ModuleRegion>
 
           <main className="ruler-content">
-            <ModuleRegion id="hero" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="core-hero">
-              <div className="hero-copy">
+            <ModuleRegion id="hero" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className={`core-hero ${heroStyles.heroCanvas}`}>
+              <div className={`hero-art ${heroStyles.heroImage}`} data-element-id="hero-image" onClick={elementHandler('hero-image')}>
+                <span className={`hero-art-label ${heroStyles.imageLabel}`}>ЦЕЛЬНАЯ HERO-КАРТИНКА<br /><b>hero.imageAssetId</b><em>отдельный файл → проверка в настоящем Hero → одобрение человеком</em></span>
+                <div className="hero-actions">
+                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>☆</button>
+                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>↗</button>
+                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>⛶</button>
+                </div>
+                <ModuleRegion id="key-events" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="key-events-card">
+                  <h3>Ключевые события</h3>
+                  {[0,1,2,3].map((index) => (
+                    <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={index}><b>год</b><span>Название ключевого события {index + 1}</span></div>
+                  ))}
+                  <button data-element-id="key-events-all" onClick={elementHandler('key-events-all')}>Смотреть все →</button>
+                </ModuleRegion>
+              </div>
+
+              <div
+                className={heroStyles.gradientPanel}
+                data-element-id="hero-gradient"
+                onClick={elementHandler('hero-gradient')}
+                style={heroGradientStyle(defaultHeroGradientSettings)}
+                aria-label="Полупрозрачный градиент Hero"
+              >
+                <p className={heroStyles.gradientHint}>Градиент Hero · отдельный настраиваемый слой</p>
+              </div>
+
+              <div className={`hero-copy ${heroStyles.heroContent}`}>
                 <p className="hero-period" data-element-id="hero-dates" onClick={elementHandler('hero-dates')}>ГОДЫ ЖИЗНИ / ПРАВЛЕНИЯ</p>
                 <h1 data-element-id="hero-name" onClick={elementHandler('hero-name')}>ИМЯ<br />ПРАВИТЕЛЯ</h1>
                 <p className="hero-summary" data-element-id="hero-summary" onClick={elementHandler('hero-summary')}>Короткая формула правления — 1–2 строки, объясняющие роль и историческое значение текущего правителя.</p>
@@ -217,22 +248,6 @@ export function CoreDesignSystemSkeleton() {
                     <div data-element-id="hero-meta-item" onClick={elementHandler('hero-meta-item')} key={label}><small>{label}</small><strong>{value}</strong></div>
                   ))}
                 </div>
-              </div>
-
-              <div className="hero-art" data-element-id="hero-image" onClick={elementHandler('hero-image')}>
-                <span className="hero-art-label">ЦЕЛЬНАЯ HERO-КАРТИНКА<br /><b>hero.imageAssetId</b><em>отдельный файл → проверка на странице → одобрение человеком</em></span>
-                <div className="hero-actions">
-                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>☆</button>
-                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>↗</button>
-                  <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>⛶</button>
-                </div>
-                <ModuleRegion id="key-events" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="key-events-card">
-                  <h3>Ключевые события</h3>
-                  {[0,1,2,3].map((index) => (
-                    <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={index}><b>год</b><span>Название ключевого события {index + 1}</span></div>
-                  ))}
-                  <button data-element-id="key-events-all" onClick={elementHandler('key-events-all')}>Смотреть все →</button>
-                </ModuleRegion>
               </div>
             </ModuleRegion>
 
