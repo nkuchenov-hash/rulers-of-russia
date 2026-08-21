@@ -1,0 +1,17 @@
+/* Public website typography guard.
+   Product rule: website text may not render below 16pt without an explicit product decision. */
+.core-site-surface {
+  font-size: 16pt;
+}
+
+.core-site-surface :where(p, li, button, a, label, small, span, strong, b, em, code, input, select, textarea, output),
+.core-site-surface svg text,
+.core-site-surface .rail-portrait,
+.core-site-surface .media-zone,
+.core-site-surface .relationship-diagram,
+.core-site-surface .fact-row,
+.core-site-surface .key-event,
+.core-site-surface .territory-legend > div,
+.core-site-surface .timeline-events > div {
+  font-size: max(16pt, 1em) !important;
+}

@@ -1,7 +1,8 @@
-/* Core Inspector is a development/editor tool. */
+/* Core Inspector is an editor shell only.
+   Critical rule: it may NEVER change the geometry, width, scale or spacing of the website renderer. */
 :root {
-  --inspector-left-width: 280px;
-  --inspector-right-width: 380px;
+  --inspector-left-width: 288px;
+  --inspector-right-width: 390px;
 }
 
 .core-site-surface[data-inspector='on'] [data-element-id] {
@@ -37,18 +38,7 @@
   font-weight: 700;
 }
 
-/* Figma-like editor workspace: layers left, live canvas center, properties right. */
-.background-module.is-inspectable {
-  padding-left: calc(var(--inspector-left-width) + 24px);
-  padding-right: calc(var(--inspector-right-width) + 24px);
-  overflow-x: auto;
-}
-
-.background-module.is-inspectable .core-site-surface {
-  width: max(1280px, calc(100vw - var(--inspector-left-width) - var(--inspector-right-width) - 72px));
-  max-width: none;
-}
-
+/* Figma-like tools: fixed overlays. They do not resize the page behind them. */
 .inspector-layers-panel,
 .inspector-properties-panel {
   position: fixed;
@@ -58,7 +48,7 @@
   background: #1e1e1e;
   color: #e5e5e5;
   border-color: #363636;
-  box-shadow: 0 0 24px rgba(0, 0, 0, .18);
+  box-shadow: 0 0 28px rgba(0, 0, 0, .24);
 }
 
 .inspector-layers-panel {
@@ -90,37 +80,37 @@
 .inspector-properties-head small {
   display: block;
   color: #8c8c8c;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: .08em;
 }
 
 .inspector-layers-head h2,
 .inspector-properties-head h2 {
   margin: 2px 0 0;
-  font: 600 14px/1.2 var(--body-font);
+  font: 600 16px/1.2 var(--body-font);
   color: #f2f2f2;
 }
 
 .inspector-properties-head h2 {
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .inspector-parent {
   display: block;
   margin-top: 3px;
   color: #8f8f8f;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .inspector-properties-head > button {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border: 0;
   border-radius: 4px;
   background: transparent;
   color: #bdbdbd;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .inspector-properties-head > button:hover {
@@ -137,7 +127,7 @@
 .inspector-properties-summary p {
   margin: 0 0 11px;
   color: #bdbdbd;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -149,7 +139,7 @@
   display: block;
   margin-bottom: 3px;
   color: #f0f0f0;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -165,7 +155,7 @@
 .inspector-properties-body h3 {
   margin: 0 0 8px;
   color: #f0f0f0;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.35;
   font-weight: 600;
 }
@@ -179,13 +169,12 @@
   margin: 5px 0;
   padding-left: 2px;
   color: #aeb4b7;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.48;
 }
 
-/* Inspector toggle becomes a canvas tool, not a floating property drawer trigger. */
 .inspector-fab {
-  left: calc(var(--inspector-left-width) + 18px) !important;
+  left: 18px !important;
   right: auto !important;
   bottom: 18px !important;
   z-index: 100 !important;
@@ -205,49 +194,18 @@
   max-width: 300px;
   margin-top: 10px;
   color: var(--text-primary);
-  font-size: 11px;
   font-style: normal;
   line-height: 1.45;
   opacity: .82;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   :root {
-    --inspector-left-width: 240px;
-    --inspector-right-width: 330px;
-  }
-
-  .background-module.is-inspectable .core-site-surface {
-    width: 1180px;
-  }
-}
-
-@media (max-width: 760px) {
-  :root {
-    --inspector-left-width: 210px;
-    --inspector-right-width: 300px;
-  }
-
-  .background-module.is-inspectable {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .inspector-layers-panel,
-  .inspector-properties-panel {
-    width: min(88vw, 340px);
+    --inspector-left-width: min(82vw, 300px);
+    --inspector-right-width: min(86vw, 340px);
   }
 
   .inspector-properties-panel {
     display: none;
-  }
-
-  .background-module.is-inspectable .core-site-surface {
-    width: 1120px;
-    margin-left: calc(min(88vw, 340px) + 12px);
-  }
-
-  .inspector-fab {
-    left: 14px !important;
   }
 }
