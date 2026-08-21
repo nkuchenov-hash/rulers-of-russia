@@ -13,7 +13,11 @@ export type CssTokenName =
   | '--display-tracking'
   | '--surface-radius'
   | '--shadow-character'
-  | '--texture-opacity';
+  | '--texture-opacity'
+  | '--ambient-base'
+  | '--ambient-light'
+  | '--ambient-deep'
+  | '--ambient-texture-opacity';
 
 export type HistoricalTokenSet = Partial<Record<CssTokenName, string>>;
 
