@@ -55,8 +55,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: calc(var(--hero-gradient-edge-softness, 12%) * -1);
-  width: var(--hero-gradient-edge-softness, 12%);
+  right: -12%;
+  width: 12%;
   background: linear-gradient(90deg, color-mix(in srgb, var(--surface-primary) 10%, transparent), transparent);
   pointer-events: none;
 }
@@ -76,6 +76,11 @@
   opacity: 0;
   transition: opacity .16s ease;
   pointer-events: none;
+}
+
+:global([data-inspector="on"]) .gradientPanel:hover {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
 }
 
 :global([data-inspector="on"]) .gradientPanel:hover .gradientHint {
