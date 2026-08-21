@@ -14,6 +14,16 @@ const node = (
   children?: InspectorTreeNode[]
 ): InspectorTreeNode => ({ label, id, targetSelector, children });
 
+const thematicCardChildren = (index: number): InspectorTreeNode[] => [
+  node('Заголовок', 'thematic-title', `.thematic-card:nth-child(${index}) [data-element-id="thematic-title"]`),
+  node('Период / дата', 'thematic-date', `.thematic-card:nth-child(${index}) [data-element-id="thematic-date"]`),
+  node('Элемент списка', 'thematic-list-item', `.thematic-card:nth-child(${index}) [data-element-id="thematic-list-item"]`),
+  node('Описание', 'thematic-summary', `.thematic-card:nth-child(${index}) [data-element-id="thematic-summary"]`),
+  node('Изображение', 'thematic-image', `.thematic-card:nth-child(${index}) [data-element-id="thematic-image"]`),
+  node('Диаграмма', 'thematic-diagram', `.thematic-card:nth-child(${index}) [data-element-id="thematic-diagram"]`),
+  node('Действие', 'thematic-action', `.thematic-card:nth-child(${index}) [data-element-id="thematic-action"]`)
+];
+
 export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
   background: node('Фон страницы', 'background', '[data-module-id="background"]', [
     node('Фоновая иллюстрация', 'background-artwork', '[data-element-id="background-artwork"]')
@@ -101,13 +111,10 @@ export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
   ]),
 
   'thematic-card': node('Тематические карточки', 'thematic-card', '[data-module-id="thematic-card"]', [
-    node('Заголовок карточки', 'thematic-title', '[data-element-id="thematic-title"]'),
-    node('Период / дата', 'thematic-date', '[data-element-id="thematic-date"]'),
-    node('Элемент списка', 'thematic-list-item', '[data-element-id="thematic-list-item"]'),
-    node('Описание', 'thematic-summary', '[data-element-id="thematic-summary"]'),
-    node('Изображение', 'thematic-image', '[data-element-id="thematic-image"]'),
-    node('Диаграмма', 'thematic-diagram', '[data-element-id="thematic-diagram"]'),
-    node('Действие', 'thematic-action', '[data-element-id="thematic-action"]')
+    node('Карточка 1', 'thematic-card', '.thematic-card:nth-child(1)', thematicCardChildren(1)),
+    node('Карточка 2', 'thematic-card', '.thematic-card:nth-child(2)', thematicCardChildren(2)),
+    node('Карточка 3', 'thematic-card', '.thematic-card:nth-child(3)', thematicCardChildren(3)),
+    node('Карточка 4', 'thematic-card', '.thematic-card:nth-child(4)', thematicCardChildren(4))
   ]),
 
   'reign-timeline': node('Хронология правления', 'reign-timeline', '[data-module-id="reign-timeline"]', [

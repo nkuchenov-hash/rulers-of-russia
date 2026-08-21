@@ -1,0 +1,19 @@
+.row {
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.card {
+  flex: 0 0 auto;
+  min-height: 0 !important;
+  max-height: none;
+  overflow: hidden;
+}
+
+.card[data-inspector-card-selected='true'] {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+}

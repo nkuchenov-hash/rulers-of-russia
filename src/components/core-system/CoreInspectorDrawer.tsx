@@ -16,6 +16,16 @@ import {
 } from '@/modules/hero/heroVisualContract';
 import styles from '@/modules/core/InspectorLayers.module.css';
 
+export interface ThematicCardSize {
+  width: number;
+  height: number;
+}
+
+export const defaultThematicCardSize: ThematicCardSize = {
+  width: 340,
+  height: 300
+};
+
 export interface InspectorTuning {
   gradient: HeroGradientSettings;
   heroImageX: number;
@@ -28,6 +38,7 @@ export interface InspectorTuning {
   keyEventsWidth: number;
   keyEventFontSize: number;
   heroActionSize: number;
+  thematicCardSizes: Record<string, ThematicCardSize>;
 }
 
 export const defaultInspectorTuning: InspectorTuning = {
@@ -41,7 +52,13 @@ export const defaultInspectorTuning: InspectorTuning = {
   heroMetaSize: 13,
   keyEventsWidth: 320,
   keyEventFontSize: 12,
-  heroActionSize: 40
+  heroActionSize: 40,
+  thematicCardSizes: {
+    reforms: { ...defaultThematicCardSize },
+    conflicts: { ...defaultThematicCardSize },
+    people: { ...defaultThematicCardSize },
+    legacy: { ...defaultThematicCardSize }
+  }
 };
 
 const pageModuleOrder: CoreModuleId[] = [
@@ -174,10 +191,12 @@ function RangeSetting({
 
 function SettingsPanel({
   selectedId,
+  selectedThematicCardId,
   tuning,
   onChange
 }: {
   selectedId: CoreInspectableId;
+  selectedThematicCardId: string | null;
   tuning: InspectorTuning;
   onChange: (next: InspectorTuning) => void;
 }) {
@@ -232,13 +251,28 @@ function SettingsPanel({
     controls = <RangeSetting label="Размер строки" value={tuning.keyEventFontSize} min={10} max={17} suffix="px" onChange={(value) => patch({ keyEventFontSize: value })} />;
   } else if (selectedId === 'hero-action') {
     controls = <RangeSetting label="Размер кнопки" value={tuning.heroActionSize} min={32} max={56} suffix="px" onChange={(value) => patch({ heroActionSize: value })} />;
+  } else if (selectedId === 'thematic-card' && selectedThematicCardId) {
+    const currentSize = tuning.thematicCardSizes[selectedThematicCardId] ?? defaultThematicCardSize;
+    const patchCardSize = (partial: Partial<ThematicCardSize>) => patch({
+      thematicCardSizes: {
+        ...tuning.thematicCardSizes,
+        [selectedThematicCardId]: { ...currentSize, ...partial }
+      }
+    });
+
+    controls = (
+      <>
+        <RangeSetting label="Ширина карточки" value={currentSize.width} min={260} max={560} suffix="px" onChange={(value) => patchCardSize({ width: value })} />
+        <RangeSetting label="Высота карточки" value={currentSize.height} min={220} max={520} suffix="px" onChange={(value) => patchCardSize({ height: value })} />
+      </>
+    );
   }
 
   return (
     <section className={styles.settingsPanel}>
       <div className={styles.panelSectionHead}>
         <h3>Настройки</h3>
-        <span>выбранный элемент</span>
+        <span>{selectedThematicCardId && selectedId === 'thematic-card' ? `карточка: ${selectedThematicCardId}` : 'выбранный элемент'}</span>
       </div>
       {controls ?? (
         <p className={styles.readOnlyNote}>
@@ -251,12 +285,14 @@ function SettingsPanel({
 
 export function CoreInspectorDrawer({
   selectedId,
+  selectedThematicCardId,
   onClose,
   onSelectLayer,
   tuning,
   onTuningChange
 }: {
   selectedId: CoreInspectableId | null;
+  selectedThematicCardId: string | null;
   onClose: () => void;
   onSelectLayer: (id: CoreInspectableId, targetSelector?: string) => void;
   tuning: InspectorTuning;
@@ -313,12 +349,17 @@ export function CoreInspectorDrawer({
           <div>
             <small>{passport.kind === 'module' ? 'МОДУЛЬ' : 'ЭЛЕМЕНТ'}</small>
             {passport.parent && <span className="inspector-parent">{passport.parent}</span>}
-            <h2>{passport.label}</h2>
+            <h2>{passport.label}{selectedId === 'thematic-card' && selectedThematicCardId ? ` · ${selectedThematicCardId}` : ''}</h2>
           </div>
           <button onClick={onClose} aria-label="Закрыть Inspector">×</button>
         </header>
 
-        <SettingsPanel selectedId={selectedId} tuning={tuning} onChange={onTuningChange} />
+        <SettingsPanel
+          selectedId={selectedId}
+          selectedThematicCardId={selectedThematicCardId}
+          tuning={tuning}
+          onChange={onTuningChange}
+        />
 
         <section className="inspector-properties-summary">
           <p><b>Что это</b>{passport.what}</p>
