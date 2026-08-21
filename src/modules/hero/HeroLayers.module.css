@@ -1,0 +1,147 @@
+.heroCanvas {
+  position: relative !important;
+  display: block !important;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.heroImage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 34%, color-mix(in srgb, white 18%, transparent), transparent 26%),
+    linear-gradient(115deg, color-mix(in srgb, var(--ambient-deep) 12%, var(--surface-elevated)), color-mix(in srgb, var(--accent-primary) 22%, var(--surface-elevated)) 62%, var(--ambient-deep));
+}
+
+.heroImage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ambient-deep) 8%, transparent), transparent 34%, color-mix(in srgb, var(--ambient-deep) 20%, transparent));
+}
+
+.heroImage :global(.hero-actions),
+.heroImage :global(.key-events-card) {
+  z-index: 7;
+}
+
+.imageLabel {
+  position: absolute !important;
+  left: auto !important;
+  right: 27% !important;
+  top: 31% !important;
+  z-index: 1;
+  max-width: 310px;
+}
+
+.gradientPanel {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: auto;
+  transition: width .24s ease, background .24s ease, backdrop-filter .24s ease;
+}
+
+.gradientPanel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(var(--hero-gradient-edge-softness, 12%) * -1);
+  width: var(--hero-gradient-edge-softness, 12%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--surface-primary) 10%, transparent), transparent);
+  pointer-events: none;
+}
+
+.gradientHint {
+  position: absolute;
+  left: 22px;
+  top: 22px;
+  margin: 0;
+  padding: 7px 10px;
+  border: 1px dashed color-mix(in srgb, var(--text-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--surface-elevated) 72%, transparent);
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .16s ease;
+  pointer-events: none;
+}
+
+:global([data-inspector="on"]) .gradientPanel:hover .gradientHint {
+  opacity: 1;
+}
+
+.heroContent {
+  position: relative !important;
+  z-index: 3 !important;
+  width: min(58%, 900px);
+  min-height: 560px;
+  padding: 56px 64px 38px 58px !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: transparent !important;
+}
+
+@media (min-width: 1650px) {
+  .heroCanvas,
+  .heroContent {
+    min-height: 610px;
+  }
+
+  .heroContent {
+    width: min(56%, 960px);
+  }
+}
+
+@media (max-width: 1250px) {
+  .heroContent {
+    width: 66%;
+    padding-left: 38px !important;
+    padding-right: 34px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroCanvas {
+    min-height: 760px;
+  }
+
+  .heroImage {
+    min-height: 760px !important;
+  }
+
+  .gradientPanel {
+    width: 100% !important;
+    height: 72%;
+    bottom: auto;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--surface-primary) 95%, transparent) 0%, color-mix(in srgb, var(--surface-primary) 72%, transparent) 55%, transparent 100%) !important;
+    backdrop-filter: blur(5px) !important;
+  }
+
+  .heroContent {
+    width: 100%;
+    min-height: 760px;
+    justify-content: flex-start;
+    padding: 50px 28px 32px !important;
+  }
+
+  .imageLabel {
+    right: 24px !important;
+    left: 24px !important;
+    top: 54% !important;
+    text-align: right;
+    max-width: none;
+  }
+}
