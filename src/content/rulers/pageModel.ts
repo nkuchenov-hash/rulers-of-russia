@@ -1,3 +1,5 @@
+export type RulerPageStructureRevision = 2;
+
 export interface RulerRailItem {
   id: string;
   name: string;
@@ -30,10 +32,30 @@ export interface TerritoryLegendItem {
   type: 'base' | 'gain' | 'end' | 'dependent';
 }
 
+export interface RulerMapPlace {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  kind?: 'capital' | 'city' | 'region' | 'campaign';
+}
+
+export interface RulerMapData {
+  ariaLabel: string;
+  primaryLabel: string;
+  changeLabel: string;
+  places: RulerMapPlace[];
+}
+
 export interface RulerFact {
   id: string;
   label: string;
   value: string;
+}
+
+export interface ThematicDiagramData {
+  centerLabel: string;
+  nodes: string[];
 }
 
 export interface ThematicCardData {
@@ -44,6 +66,7 @@ export interface ThematicCardData {
   summary?: string;
   items?: Array<{ year?: string; title: string }>;
   mediaLabel?: string;
+  diagram?: ThematicDiagramData;
   actionLabel: string;
 }
 
@@ -53,7 +76,15 @@ export interface RulerTimelineEvent {
   title: string;
 }
 
+export interface RulerSourceRef {
+  id: string;
+  title: string;
+  url: string;
+  supports: string[];
+}
+
 export interface RulerPageData {
+  structureRevision: RulerPageStructureRevision;
   id: string;
   slug: string;
   visualStateKey: 'core' | 'medieval' | 'imperial' | 'soviet' | 'contemporary';
@@ -63,6 +94,7 @@ export interface RulerPageData {
     displayName: string;
     summary: string;
     imageAssetId: string | null;
+    imageFallbackLabel?: string;
     meta: RulerMetaItem[];
     keyEvents: RulerKeyEvent[];
   };
@@ -71,6 +103,7 @@ export interface RulerPageData {
     summary: string;
     legend: TerritoryLegendItem[];
   };
+  map: RulerMapData;
   facts: RulerFact[];
   thematic: ThematicCardData[];
   timeline: {
@@ -79,4 +112,5 @@ export interface RulerPageData {
     next: { name: string } | null;
     events: RulerTimelineEvent[];
   };
+  sources: RulerSourceRef[];
 }

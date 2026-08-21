@@ -90,9 +90,10 @@ function ThematicCard({
 
       {card.summary && <p data-element-id="thematic-summary" onClick={elementHandler('thematic-summary')}>{card.summary}</p>}
 
-      {card.type === 'diagram' && (
+      {card.type === 'diagram' && card.diagram && (
         <div data-element-id="thematic-diagram" onClick={elementHandler('thematic-diagram')} className="relationship-diagram">
-          <b>текущий правитель</b><span>связи · люди · преемники</span>
+          <b>{card.diagram.centerLabel}</b>
+          <span>{card.diagram.nodes.join(' · ')}</span>
         </div>
       )}
 
@@ -107,15 +108,15 @@ function ThematicCard({
 
 export function CoreDesignSystemSkeleton({
   data = labRulerPageData,
-  labMode = false
+  editorMode = false
 }: {
   data?: RulerPageData;
-  labMode?: boolean;
+  editorMode?: boolean;
 }) {
   const initialTab = data.tabs.find((tab) => tab.enabled)?.label ?? 'Обзор';
   const [visualStateKey, setVisualStateKey] = useState<VisualStateKey>(data.visualStateKey);
-  const [inspectorEnabled, setInspectorEnabled] = useState(labMode);
-  const [selectedId, setSelectedId] = useState<CoreInspectableId | null>(labMode ? 'hero' : null);
+  const [inspectorEnabled, setInspectorEnabled] = useState(editorMode);
+  const [selectedId, setSelectedId] = useState<CoreInspectableId | null>(editorMode ? 'hero' : null);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [mapScale, setMapScale] = useState(1);
   const [inspectorTuning, setInspectorTuning] = useState<InspectorTuning>(defaultInspectorTuning);
@@ -191,25 +192,17 @@ export function CoreDesignSystemSkeleton({
   return (
     <BackgroundModule
       style={toCssVariables(resolvedState.tokens)}
-      inspectorEnabled={inspectorEnabled}
+      inspectorEnabled={editorMode && inspectorEnabled}
       onInspect={() => selectLayerFromTree('background', '[data-module-id="background"]')}
     >
-      {labMode && (
-        <div className="lab-runtime-badge">
-          <b>TEST LAB</b>
-          <span>renderer + data contracts + HVS + Inspector</span>
-          <code>src/content/rulers/labRulerPageData.ts</code>
-        </div>
-      )}
-
       <div
         className="core-site-surface"
-        data-inspector={inspectorEnabled ? 'on' : 'off'}
+        data-inspector={editorMode && inspectorEnabled ? 'on' : 'off'}
         data-composition={resolvedState.compositionAccent ?? 'calm'}
         data-image-treatment={resolvedState.imageTreatment ?? 'core'}
         data-map-treatment={resolvedState.mapTreatment ?? 'core'}
       >
-        <ModuleRegion id="header" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="core-header">
+        <ModuleRegion id="header" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="core-header">
           <div className="core-brand" data-element-id="header-brand" onClick={elementHandler('header-brand')}>ПРАВИТЕЛИ РОССИИ</div>
           <nav className="core-main-nav" aria-label="Основная навигация">
             {['Хронология', 'Династии', 'Карта эпох', 'События', 'Библиотека', 'О проекте'].map((item, index) => (
@@ -218,13 +211,13 @@ export function CoreDesignSystemSkeleton({
           </nav>
           <div className="core-utilities">
             <button data-element-id="header-search" onClick={elementHandler('header-search')}>Поиск ⌕</button>
-            <button data-element-id="header-hvs" onClick={elementHandler('header-hvs', cycleVisualState)} title="Тест исторического визуального состояния">Эпоха · {visualState.label}</button>
+            <button data-element-id="header-hvs" onClick={elementHandler('header-hvs', cycleVisualState)} title="Историческое визуальное состояние">Эпоха · {visualState.label}</button>
             <button data-element-id="header-menu" onClick={elementHandler('header-menu')}>Меню ☰</button>
           </div>
         </ModuleRegion>
 
         <div className="core-workspace">
-          <ModuleRegion id="historical-rail" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="historical-rail">
+          <ModuleRegion id="historical-rail" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="historical-rail">
             <div className="rail-controls">
               <button data-element-id="rail-control" onClick={elementHandler('rail-control')}>⌃</button>
               <button data-element-id="rail-control" onClick={elementHandler('rail-control')}>⌄</button>
@@ -234,11 +227,11 @@ export function CoreDesignSystemSkeleton({
               <span className="rail-axis" />
               {data.rail.map((item) => (
                 <article data-element-id="rail-item" onClick={elementHandler('rail-item')} className={`rail-item ${item.active ? 'active' : ''}`} key={item.id}>
-                  <div data-element-id="rail-portrait" onClick={elementHandler('rail-portrait')} className="rail-portrait">{item.portraitLabel ?? 'портрет'}</div>
+                  <div data-element-id="rail-portrait" onClick={elementHandler('rail-portrait')} className="rail-portrait">{item.portraitLabel ?? item.name.slice(0, 2)}</div>
                   <div>
                     <strong data-element-id="rail-name" onClick={elementHandler('rail-name')}>{item.name}</strong>
                     <span data-element-id="rail-dates" onClick={elementHandler('rail-dates')}>{item.years}</span>
-                    <small>{item.active ? 'chronology.activeAuthorityId' : item.id}</small>
+                    {editorMode && <small>{item.active ? 'activeAuthorityId' : item.id}</small>}
                   </div>
                 </article>
               ))}
@@ -248,23 +241,22 @@ export function CoreDesignSystemSkeleton({
           <main className="ruler-content">
             <ModuleRegion
               id="hero"
-              inspectorEnabled={inspectorEnabled}
+              inspectorEnabled={editorMode && inspectorEnabled}
               onInspect={openPassport}
               className={`core-hero ${heroStyles.heroCanvas}`}
               style={heroVariables}
             >
               <div className={`hero-art ${heroStyles.heroImage}`} data-element-id="hero-image" onClick={elementHandler('hero-image')}>
                 <span className={`hero-art-label ${heroStyles.imageLabel}`}>
-                  ЦЕЛЬНАЯ HERO-КАРТИНКА<br />
-                  <b>{data.hero.imageAssetId ?? 'hero.imageAssetId — пока нет approved asset'}</b>
-                  <em>отдельный файл → проверка в настоящем Hero → одобрение человеком</em>
+                  <b>{data.hero.imageFallbackLabel ?? data.hero.displayName}</b>
+                  {editorMode && <em>{data.hero.imageAssetId ? `Media asset: ${data.hero.imageAssetId}` : 'Media asset ещё не утверждён; public renderer использует чистый визуальный fallback.'}</em>}
                 </span>
                 <div className="hero-actions">
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>☆</button>
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>↗</button>
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>⛶</button>
                 </div>
-                <ModuleRegion id="key-events" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="key-events-card">
+                <ModuleRegion id="key-events" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="key-events-card">
                   <h3>Ключевые события</h3>
                   {data.hero.keyEvents.map((event) => (
                     <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={event.id}>
@@ -282,7 +274,7 @@ export function CoreDesignSystemSkeleton({
                 style={heroGradientStyle(inspectorTuning.gradient)}
                 aria-label="Полупрозрачный градиент Hero"
               >
-                <p className={heroStyles.gradientHint}>Градиент Hero · отдельный настраиваемый слой</p>
+                {editorMode && <p className={heroStyles.gradientHint}>Градиент Hero · настраиваемый слой</p>}
               </div>
 
               <div className={`hero-copy ${heroStyles.heroContent}`}>
@@ -299,16 +291,16 @@ export function CoreDesignSystemSkeleton({
               </div>
             </ModuleRegion>
 
-            <ModuleRegion id="page-tabs" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="page-tabs">
+            <ModuleRegion id="page-tabs" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="page-tabs">
               {data.tabs.filter((tab) => tab.enabled).map((tab) => (
                 <button data-element-id="page-tab" key={tab.id} className={activeTab === tab.label ? 'active' : ''} onClick={elementHandler('page-tab', () => setActiveTab(tab.label))}>{tab.label}</button>
               ))}
             </ModuleRegion>
 
             <div className="primary-content-row">
-              <ModuleRegion id="territory" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="territory-panel">
+              <ModuleRegion id="territory" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="territory-panel">
                 <h2>ТЕРРИТОРИЯ</h2>
-                <p data-element-id="territory-summary" onClick={elementHandler('territory-summary')}><b>Короткое объяснение:</b> {data.territory.summary}</p>
+                <p data-element-id="territory-summary" onClick={elementHandler('territory-summary')}>{data.territory.summary}</p>
                 <div className="territory-legend">
                   {data.territory.legend.map((item, index) => (
                     <div data-element-id="territory-legend-item" onClick={elementHandler('territory-legend-item')} key={item.id}>
@@ -319,15 +311,19 @@ export function CoreDesignSystemSkeleton({
                 <button data-element-id="territory-map-action" onClick={elementHandler('territory-map-action')} className="module-cta">Карта эпохи →</button>
               </ModuleRegion>
 
-              <ModuleRegion id="map" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="historical-map-panel">
+              <ModuleRegion id="map" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="historical-map-panel">
                 <div data-element-id="map-canvas" onClick={elementHandler('map-canvas')} className="map-canvas" style={{ transform: `scale(${mapScale})` }}>
-                  <svg viewBox="0 0 760 360" role="img" aria-label="Схема будущей исторической карты">
+                  <svg viewBox="0 0 760 360" role="img" aria-label={data.map.ariaLabel}>
                     <path data-element-id="map-boundary-layer" onClick={elementHandler('map-boundary-layer')} d="M120 190 L165 125 L245 98 L300 130 L365 86 L445 112 L510 82 L565 118 L635 104 L684 142 L666 202 L706 244 L634 271 L574 252 L530 284 L467 252 L414 300 L342 264 L286 293 L232 255 L173 267 L124 225 Z" />
                     <path data-element-id="map-change-layer" onClick={elementHandler('map-change-layer')} className="alt" d="M365 86 L445 112 L510 82 L565 118 L635 104 L684 142 L666 202 L598 199 L540 228 L487 205 L445 217 L405 177 Z" />
-                    <circle cx="385" cy="220" r="6" />
-                    <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x="400" y="225">Столица</text>
-                    <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x="245" y="155">Город / регион</text>
-                    <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x="565" y="160">Изменение границы</text>
+                    <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x="135" y="330">{data.map.primaryLabel}</text>
+                    <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x="430" y="48">{data.map.changeLabel}</text>
+                    {data.map.places.map((place) => (
+                      <g key={place.id}>
+                        {(place.kind === 'capital' || place.kind === 'city') && <circle cx={place.x} cy={place.y} r={place.kind === 'capital' ? 7 : 5} />}
+                        <text data-element-id="map-place-label" onClick={elementHandler('map-place-label')} x={place.x + 11} y={place.y + 5}>{place.label}</text>
+                      </g>
+                    ))}
                   </svg>
                 </div>
                 <div className="map-controls" data-element-id="map-controls" onClick={elementHandler('map-controls')}>
@@ -337,7 +333,7 @@ export function CoreDesignSystemSkeleton({
                 </div>
               </ModuleRegion>
 
-              <ModuleRegion id="facts" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="facts-panel">
+              <ModuleRegion id="facts" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="facts-panel">
                 <h2>ФАКТЫ</h2>
                 <div className="facts-list">
                   {data.facts.map((fact) => (
@@ -350,11 +346,11 @@ export function CoreDesignSystemSkeleton({
               </ModuleRegion>
             </div>
 
-            <ModuleRegion id="thematic-card" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="thematic-row">
+            <ModuleRegion id="thematic-card" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="thematic-row">
               {data.thematic.map((card) => <ThematicCard key={card.id} card={card} elementHandler={elementHandler} />)}
             </ModuleRegion>
 
-            <ModuleRegion id="reign-timeline" inspectorEnabled={inspectorEnabled} onInspect={openPassport} className="reign-timeline">
+            <ModuleRegion id="reign-timeline" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="reign-timeline">
               <article data-element-id="timeline-previous" onClick={elementHandler('timeline-previous')} className="adjacent-ruler">
                 <small>← Предыдущий правитель</small><strong>{data.timeline.previous?.name ?? '—'}</strong>
               </article>
@@ -382,17 +378,21 @@ export function CoreDesignSystemSkeleton({
         </div>
       </div>
 
-      <button className={`inspector-fab ${inspectorEnabled ? 'active' : ''}`} onClick={toggleInspector}>
-        {inspectorEnabled ? 'Паспорта: ВКЛ' : 'Проверить элементы'}
-      </button>
+      {editorMode && (
+        <>
+          <button className={`inspector-fab ${inspectorEnabled ? 'active' : ''}`} onClick={toggleInspector}>
+            {inspectorEnabled ? 'Паспорта: ВКЛ' : 'Проверить элементы'}
+          </button>
 
-      <CoreInspectorDrawer
-        selectedId={selectedId}
-        onClose={closeInspectorDrawer}
-        onSelectLayer={selectLayerFromTree}
-        tuning={inspectorTuning}
-        onTuningChange={setInspectorTuning}
-      />
+          <CoreInspectorDrawer
+            selectedId={selectedId}
+            onClose={closeInspectorDrawer}
+            onSelectLayer={selectLayerFromTree}
+            tuning={inspectorTuning}
+            onTuningChange={setInspectorTuning}
+          />
+        </>
+      )}
     </BackgroundModule>
   );
 }

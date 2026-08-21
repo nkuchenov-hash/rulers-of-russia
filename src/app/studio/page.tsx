@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function StudioPage() {
-  return <CoreDesignSystemSkeleton data={peterILabRulerPageData} labMode />;
+  return <CoreDesignSystemSkeleton data={peterILabRulerPageData} editorMode />;
 }
