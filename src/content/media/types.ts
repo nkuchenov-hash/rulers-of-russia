@@ -23,7 +23,7 @@ export interface MediaSafeZone {
 
 export interface MediaAsset {
   id: MediaAssetId;
-  kind: 'hero-background' | 'hero-portrait' | 'thematic-image' | 'document' | 'map-texture';
+  kind: 'hero-image' | 'thematic-image' | 'document' | 'map-texture';
   filePath: string;
   origin: MediaOrigin;
   reviewStatus: MediaReviewStatus;
