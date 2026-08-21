@@ -1,0 +1,161 @@
+/*
+ * Shared layout contract for the ruler page.
+ * Structural siblings consume one shared container. Changing one size must
+ * reflow its siblings instead of overlapping them.
+ */
+
+.core-header {
+  display: flex;
+  align-items: stretch;
+}
+
+.core-brand {
+  width: 280px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.core-main-nav {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: auto hidden;
+}
+
+.core-utilities {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.core-workspace {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.historical-rail {
+  width: 280px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 70%;
+}
+
+.ruler-content {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Vertical modules remain in normal document flow: changing a module height
+   pushes everything below it instead of drawing over the next module. */
+.ruler-content > .core-module {
+  width: 100%;
+  max-width: 100%;
+}
+
+.primary-content-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.primary-content-row > .core-module {
+  min-width: 0;
+  max-width: 100%;
+  flex-shrink: 1;
+}
+
+.territory-panel {
+  width: 300px;
+  flex: 0 1 auto;
+}
+
+.historical-map-panel {
+  flex: 1 1 480px;
+  width: auto;
+}
+
+.facts-panel {
+  width: 360px;
+  flex: 0 1 auto;
+}
+
+.thematic-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.thematic-row > .thematic-card {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.reign-timeline {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.reign-timeline > .adjacent-ruler {
+  width: 210px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.reign-timeline-center {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Studio applies explicit dimensions inline. These structural safeguards keep
+   requested sizes inside the shared layout and expose the actual resolved size. */
+[data-inspector="on"] .core-workspace > *,
+[data-inspector="on"] .primary-content-row > *,
+[data-inspector="on"] .thematic-row > *,
+[data-inspector="on"] .reign-timeline > * {
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .core-header {
+    flex-wrap: wrap;
+  }
+
+  .core-brand {
+    flex: 0 0 auto;
+  }
+
+  .core-main-nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .core-workspace {
+    flex-direction: column;
+  }
+
+  .historical-rail {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .primary-content-row,
+  .thematic-row,
+  .reign-timeline {
+    flex-wrap: wrap;
+  }
+
+  .primary-content-row > .core-module,
+  .thematic-row > .thematic-card,
+  .reign-timeline > * {
+    flex: 1 1 100%;
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
