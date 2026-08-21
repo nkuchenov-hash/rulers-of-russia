@@ -12,6 +12,7 @@
   width: 100% !important;
   height: 100% !important;
   min-width: 0 !important;
+  min-height: 0 !important;
   z-index: 0;
   overflow: hidden;
   background:
@@ -40,6 +41,7 @@
 
 .heroImage :global(.key-events-card) {
   width: var(--hero-events-width, 320px) !important;
+  max-width: calc(100% - 40px);
 }
 
 .heroImage :global(.key-event) {
@@ -84,7 +86,7 @@
   border: 1px dashed color-mix(in srgb, var(--text-primary) 35%, transparent);
   background: color-mix(in srgb, var(--surface-elevated) 72%, transparent);
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 16pt;
   letter-spacing: .07em;
   text-transform: uppercase;
   opacity: 0;
@@ -105,7 +107,9 @@
   position: relative !important;
   z-index: 3 !important;
   width: min(58%, 900px);
-  min-height: 560px;
+  min-height: inherit;
+  max-height: 100%;
+  overflow: hidden;
   padding: 56px 64px 38px 58px !important;
   display: flex !important;
   flex-direction: column;
@@ -131,8 +135,7 @@
 }
 
 @media (min-width: 1650px) {
-  .heroCanvas,
-  .heroContent {
+  .heroCanvas {
     min-height: 610px;
   }
 
@@ -154,10 +157,6 @@
     min-height: 760px;
   }
 
-  .heroImage {
-    min-height: 760px !important;
-  }
-
   .gradientPanel {
     width: 100% !important;
     height: 72%;
@@ -168,7 +167,7 @@
 
   .heroContent {
     width: 100%;
-    min-height: 760px;
+    min-height: inherit;
     justify-content: flex-start;
     padding: 50px 28px 32px !important;
   }
