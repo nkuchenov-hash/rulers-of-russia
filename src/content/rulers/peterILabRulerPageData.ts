@@ -2,6 +2,7 @@ import { assertCompleteRulerPageData } from './validateCompleteRulerPageData';
 import type { RulerPageData } from './pageModel';
 
 const peterIData = {
+  structureRevision: 2,
   id: 'peter-i',
   slug: 'peter-i',
   visualStateKey: 'imperial',
@@ -20,7 +21,7 @@ const peterIData = {
     displayName: 'ПЁТР I',
     summary: 'Первый российский император: создал регулярную армию и флот, перестроил государственное управление, основал Санкт-Петербург и добился выхода России к Балтийскому морю.',
     imageAssetId: null,
-    imageFallbackLabel: 'Парадный образ Петра I · hero-art ожидает утверждённый исторический asset',
+    imageFallbackLabel: 'Пётр I · море, флот и новая имперская столица',
     meta: [
       { id: 'context', label: 'ДИНАСТИЯ', value: 'Романовы' },
       { id: 'status', label: 'СТАТУС', value: 'Царь · с 1721 император' },
