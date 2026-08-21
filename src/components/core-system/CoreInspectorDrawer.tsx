@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import {
   corePassports,
   type CoreInspectableId
@@ -156,7 +156,7 @@ function SettingsPanel({
   const patchGradient = (partial: Partial<HeroGradientSettings>) =>
     patch({ gradient: { ...tuning.gradient, ...partial } });
 
-  let controls: React.ReactNode = null;
+  let controls: ReactNode = null;
 
   if (selectedId === 'hero-image') {
     controls = (
