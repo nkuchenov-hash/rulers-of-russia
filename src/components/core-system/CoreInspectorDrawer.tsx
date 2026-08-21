@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   corePassports,
-  type CoreInspectableId
+  type CoreInspectableId,
+  type CoreModuleId
 } from '@/modules/core/inspectorPassports';
 import {
   inspectorTrees,
-  owningModuleFor,
   type InspectorTreeNode
 } from '@/modules/core/inspectorStructure';
 import {
@@ -44,6 +44,35 @@ export const defaultInspectorTuning: InspectorTuning = {
   heroActionSize: 40
 };
 
+const pageModuleOrder: CoreModuleId[] = [
+  'background',
+  'header',
+  'historical-rail',
+  'hero',
+  'page-tabs',
+  'territory',
+  'map',
+  'facts',
+  'thematic-card',
+  'reign-timeline'
+];
+
+const pageTree: InspectorTreeNode = {
+  label: 'Страница правителя',
+  children: pageModuleOrder.map((moduleId) => inspectorTrees[moduleId])
+};
+
+function treeKey(node: InspectorTreeNode, depth: number) {
+  return `${depth}:${node.label}:${node.targetSelector ?? ''}`;
+}
+
+function initialExpandedLayers() {
+  const keys = new Set<string>();
+  keys.add(treeKey(pageTree, 0));
+  pageTree.children?.forEach((node) => keys.add(treeKey(node, 1)));
+  return keys;
+}
+
 function LayerTree({
   node,
   selectedId,
@@ -59,7 +88,7 @@ function LayerTree({
   onToggle: (key: string) => void;
   onSelect: (id: CoreInspectableId, targetSelector?: string) => void;
 }) {
-  const key = `${depth}:${node.label}:${node.targetSelector ?? ''}`;
+  const key = treeKey(node, depth);
   const hasChildren = Boolean(node.children?.length);
   const isOpen = hasChildren ? expanded.has(key) : false;
   const isActive = node.id === selectedId;
@@ -69,10 +98,10 @@ function LayerTree({
       <button
         type="button"
         className={`${styles.treeRow} ${isActive ? styles.active : ''} ${!node.id ? styles.group : ''}`}
-        style={{ paddingLeft: 8 + depth * 18 }}
+        style={{ paddingLeft: 8 + depth * 14 }}
         onClick={() => {
           if (node.id) onSelect(node.id, node.targetSelector);
-          else if (hasChildren) onToggle(key);
+          if (hasChildren) onToggle(key);
         }}
       >
         <span
@@ -90,7 +119,7 @@ function LayerTree({
       </button>
 
       {hasChildren && isOpen && (
-        <div className={styles.children} style={{ marginLeft: 17 + depth * 18 }}>
+        <div className={styles.children}>
           {node.children!.map((child, index) => (
             <LayerTree
               key={`${key}:${index}:${child.label}`}
@@ -207,10 +236,13 @@ function SettingsPanel({
 
   return (
     <section className={styles.settingsPanel}>
-      <h3>Настройки элемента</h3>
+      <div className={styles.panelSectionHead}>
+        <h3>Настройки</h3>
+        <span>выбранный элемент</span>
+      </div>
       {controls ?? (
         <p className={styles.readOnlyNote}>
-          У этого элемента сейчас нет свободной визуальной ручки: его значение или поведение задаётся данными и правилами модуля. Здесь всё равно остаётся его отдельный паспорт; когда для элемента появятся допустимые настройки, controls подключаются именно сюда, а не создаются в обход системы.
+          У этого элемента нет свободной визуальной настройки. Его значение или поведение задаётся данными и правилами модуля.
         </p>
       )}
     </section>
@@ -230,86 +262,78 @@ export function CoreInspectorDrawer({
   tuning: InspectorTuning;
   onTuningChange: (next: InspectorTuning) => void;
 }) {
-  const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
-  const passport = selectedId ? corePassports[selectedId] : null;
-  const moduleId = selectedId ? owningModuleFor(selectedId) : null;
-  const tree = moduleId ? inspectorTrees[moduleId] : null;
+  const [expanded, setExpanded] = useState<Set<string>>(initialExpandedLayers);
 
-  const initialExpansion = useMemo(() => {
-    if (!tree) return [] as string[];
-    const keys: string[] = [];
-    const walk = (current: InspectorTreeNode, depth: number) => {
-      if (current.children?.length) {
-        keys.push(`${depth}:${current.label}:${current.targetSelector ?? ''}`);
-        current.children.forEach((child) => walk(child, depth + 1));
-      }
-    };
-    walk(tree, 0);
-    return keys;
-  }, [tree]);
+  if (!selectedId) return null;
 
-  if (!passport || !tree || !selectedId) return null;
+  const passport = corePassports[selectedId];
+  if (!passport) return null;
 
-  const activeId = selectedId as CoreInspectableId;
-  const effectiveExpanded = expanded.size === 0 ? new Set(initialExpansion) : expanded;
   const sections: Array<[string, string[]]> = [
-    ['Какими средствами собирается', passport.tools],
-    ['Какие данные использует', passport.data],
-    ['Откуда берутся данные', passport.sources],
-    ['Как работает по шагам', passport.flow],
-    ['Что делает пользователь', passport.interactions],
-    ['Если данных нет или что-то не прошло проверку', passport.fallback],
-    ['Как ведёт себя на разных экранах', passport.responsive],
-    ['Что может менять историческая эпоха', passport.hvs]
+    ['Как работает', passport.flow],
+    ['Данные', passport.data],
+    ['Откуда берётся', passport.sources],
+    ['Действия пользователя', passport.interactions],
+    ['Если данных нет', passport.fallback],
+    ['Адаптивность', passport.responsive],
+    ['Что может менять эпоха', passport.hvs],
+    ['Чем собирается', passport.tools]
   ];
 
   function toggle(key: string) {
-    const next = new Set(effectiveExpanded);
+    const next = new Set(expanded);
     if (next.has(key)) next.delete(key);
     else next.add(key);
     setExpanded(next);
   }
 
   return (
-    <aside className="inspector-drawer" aria-label={`Паспорт: ${passport.label}`}>
-      <header className="inspector-head">
-        <div>
-          <small>{passport.kind === 'module' ? 'ПАСПОРТ МОДУЛЯ' : 'ПАСПОРТ ЭЛЕМЕНТА'}</small>
-          {passport.parent && <span className="inspector-parent">Внутри: {passport.parent}</span>}
-          <h2>{passport.label}</h2>
-          <p><b>Что это:</b> {passport.what}</p>
-          <p><b>Где находится:</b> {passport.where}</p>
-        </div>
-        <button onClick={onClose} aria-label="Закрыть">×</button>
-      </header>
-
-      <section className={styles.structurePanel}>
-        <div className={styles.structureHead}>
-          <h3>Состав блока</h3>
-          <span>как Layers в Figma</span>
-        </div>
-        <div className={styles.tree}>
+    <>
+      <aside className="inspector-layers-panel" aria-label="Слои страницы">
+        <header className="inspector-layers-head">
+          <div>
+            <small>СТРУКТУРА СТРАНИЦЫ</small>
+            <h2>Слои</h2>
+          </div>
+        </header>
+        <div className={styles.layersTreeScroll}>
           <LayerTree
-            node={tree}
-            selectedId={activeId}
+            node={pageTree}
+            selectedId={selectedId}
             depth={0}
-            expanded={effectiveExpanded}
+            expanded={expanded}
             onToggle={toggle}
             onSelect={onSelectLayer}
           />
         </div>
-      </section>
+      </aside>
 
-      <SettingsPanel selectedId={activeId} tuning={tuning} onChange={onTuningChange} />
+      <aside className="inspector-properties-panel" aria-label={`Свойства: ${passport.label}`}>
+        <header className="inspector-properties-head">
+          <div>
+            <small>{passport.kind === 'module' ? 'МОДУЛЬ' : 'ЭЛЕМЕНТ'}</small>
+            {passport.parent && <span className="inspector-parent">{passport.parent}</span>}
+            <h2>{passport.label}</h2>
+          </div>
+          <button onClick={onClose} aria-label="Закрыть Inspector">×</button>
+        </header>
 
-      <div className="inspector-body">
-        {sections.map(([title, values]) => (
-          <section key={title}>
-            <h3>{title}</h3>
-            <ol>{values.map((value) => <li key={value}>{value}</li>)}</ol>
-          </section>
-        ))}
-      </div>
-    </aside>
+        <SettingsPanel selectedId={selectedId} tuning={tuning} onChange={onTuningChange} />
+
+        <section className="inspector-properties-summary">
+          <p><b>Что это</b>{passport.what}</p>
+          <p><b>Где находится</b>{passport.where}</p>
+        </section>
+
+        <div className="inspector-properties-body">
+          {sections.map(([title, values]) => (
+            <section key={title}>
+              <h3>{title}</h3>
+              <ol>{values.map((value) => <li key={value}>{value}</li>)}</ol>
+            </section>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 }
