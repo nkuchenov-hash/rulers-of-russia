@@ -270,48 +270,45 @@ export function CoreInspectorDrawer({
   }
 
   return (
-    <>
-      <button className="inspector-backdrop" aria-label="Закрыть паспорт" onClick={onClose} />
-      <aside className="inspector-drawer" aria-label={`Паспорт: ${passport.label}`}>
-        <header className="inspector-head">
-          <div>
-            <small>{passport.kind === 'module' ? 'ПАСПОРТ МОДУЛЯ' : 'ПАСПОРТ ЭЛЕМЕНТА'}</small>
-            {passport.parent && <span className="inspector-parent">Внутри: {passport.parent}</span>}
-            <h2>{passport.label}</h2>
-            <p><b>Что это:</b> {passport.what}</p>
-            <p><b>Где находится:</b> {passport.where}</p>
-          </div>
-          <button onClick={onClose} aria-label="Закрыть">×</button>
-        </header>
-
-        <section className={styles.structurePanel}>
-          <div className={styles.structureHead}>
-            <h3>Состав блока</h3>
-            <span>как Layers в Figma</span>
-          </div>
-          <div className={styles.tree}>
-            <LayerTree
-              node={tree}
-              selectedId={selectedId}
-              depth={0}
-              expanded={effectiveExpanded}
-              onToggle={toggle}
-              onSelect={onSelectLayer}
-            />
-          </div>
-        </section>
-
-        <SettingsPanel selectedId={selectedId} tuning={tuning} onChange={onTuningChange} />
-
-        <div className="inspector-body">
-          {sections.map(([title, values]) => (
-            <section key={title}>
-              <h3>{title}</h3>
-              <ol>{values.map((value) => <li key={value}>{value}</li>)}</ol>
-            </section>
-          ))}
+    <aside className="inspector-drawer" aria-label={`Паспорт: ${passport.label}`}>
+      <header className="inspector-head">
+        <div>
+          <small>{passport.kind === 'module' ? 'ПАСПОРТ МОДУЛЯ' : 'ПАСПОРТ ЭЛЕМЕНТА'}</small>
+          {passport.parent && <span className="inspector-parent">Внутри: {passport.parent}</span>}
+          <h2>{passport.label}</h2>
+          <p><b>Что это:</b> {passport.what}</p>
+          <p><b>Где находится:</b> {passport.where}</p>
         </div>
-      </aside>
-    </>
+        <button onClick={onClose} aria-label="Закрыть">×</button>
+      </header>
+
+      <section className={styles.structurePanel}>
+        <div className={styles.structureHead}>
+          <h3>Состав блока</h3>
+          <span>как Layers в Figma</span>
+        </div>
+        <div className={styles.tree}>
+          <LayerTree
+            node={tree}
+            selectedId={selectedId}
+            depth={0}
+            expanded={effectiveExpanded}
+            onToggle={toggle}
+            onSelect={onSelectLayer}
+          />
+        </div>
+      </section>
+
+      <SettingsPanel selectedId={selectedId} tuning={tuning} onChange={onTuningChange} />
+
+      <div className="inspector-body">
+        {sections.map(([title, values]) => (
+          <section key={title}>
+            <h3>{title}</h3>
+            <ol>{values.map((value) => <li key={value}>{value}</li>)}</ol>
+          </section>
+        ))}
+      </div>
+    </aside>
   );
 }
