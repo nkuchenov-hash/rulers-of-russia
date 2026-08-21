@@ -1,11 +1,14 @@
 import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
-import { peterILabRulerPageData } from '@/content/rulers/peterILabRulerPageData';
+import { assertGenericStudioData } from '@/content/rulers/assertGenericStudioData';
+import { labRulerPageData } from '@/content/rulers/labRulerPageData';
 
 export const metadata = {
-  title: 'Редактор страницы — Правители России',
-  description: 'Редактор той же страницы сайта: слои слева, живая страница по центру, свойства справа.'
+  title: 'Редактор структуры — Правители России',
+  description: 'Generic-редактор структуры страницы: слои слева, нейтральный renderer по центру, свойства справа.'
 };
 
+const studioData = assertGenericStudioData(labRulerPageData);
+
 export default function StudioPage() {
-  return <CoreDesignSystemSkeleton data={peterILabRulerPageData} editorMode />;
+  return <CoreDesignSystemSkeleton data={studioData} editorMode />;
 }
