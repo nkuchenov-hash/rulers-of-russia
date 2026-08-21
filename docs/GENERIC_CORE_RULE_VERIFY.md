@@ -1,1 +1,0 @@
-Temporary verification note: Core remains generic; Peter I is injected only into Test Lab data.
