@@ -1,92 +1,203 @@
-/* Core Inspector is a development/editor tool. It must never obscure the page being inspected. */
-.core-site-surface[data-inspector='on'] [data-element-id] {
-  cursor: help;
+/* Core Inspector is a development/editor tool. */
+:root {
+  --inspector-left-width: 280px;
+  --inspector-right-width: 380px;
 }
 
-/* A nested element wins over its parent module when hovered. */
+.core-site-surface[data-inspector='on'] [data-element-id] {
+  cursor: default;
+}
+
 .core-site-surface[data-inspector='on'] .core-module.is-inspectable:hover {
   outline: none;
 }
+
 .core-site-surface[data-inspector='on'] .core-module.is-inspectable:hover:not(:has([data-element-id]:hover)) {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid #5aa9e6;
   outline-offset: -2px;
   z-index: 12;
 }
+
 .core-site-surface[data-inspector='on'] [data-element-id]:hover {
-  outline: 2px solid #d7ad62;
+  outline: 2px solid #5aa9e6;
   outline-offset: 2px;
   position: relative;
   z-index: 18;
 }
+
 .core-site-surface[data-inspector='on'] svg [data-element-id]:hover {
   outline: none;
-  stroke: #d7ad62;
+  stroke: #5aa9e6;
   stroke-width: 4;
 }
+
 .core-site-surface[data-inspector='on'] svg text[data-element-id]:hover {
   stroke: none;
-  fill: #d7ad62;
+  fill: #5aa9e6;
   font-weight: 700;
 }
 
-/* The passport is a side inspector, not a modal. The page remains clickable while it is open. */
-.inspector-backdrop {
-  pointer-events: none !important;
-  background: transparent !important;
+/* Figma-like editor workspace: layers left, live canvas center, properties right. */
+.background-module.is-inspectable {
+  padding-left: calc(var(--inspector-left-width) + 24px);
+  padding-right: calc(var(--inspector-right-width) + 24px);
+  overflow-x: auto;
 }
-.inspector-drawer {
-  width: min(600px, 94vw);
+
+.background-module.is-inspectable .core-site-surface {
+  width: max(1280px, calc(100vw - var(--inspector-left-width) - var(--inspector-right-width) - 72px));
+  max-width: none;
 }
-.inspector-head {
-  padding: 28px 30px 24px;
+
+.inspector-layers-panel,
+.inspector-properties-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 95;
+  background: #1e1e1e;
+  color: #e5e5e5;
+  border-color: #363636;
+  box-shadow: 0 0 24px rgba(0, 0, 0, .18);
 }
-.inspector-head > div {
-  min-width: 0;
+
+.inspector-layers-panel {
+  left: 0;
+  width: var(--inspector-left-width);
+  border-right: 1px solid #363636;
 }
-.inspector-head small {
+
+.inspector-properties-panel {
+  right: 0;
+  width: var(--inspector-right-width);
+  border-left: 1px solid #363636;
+  overflow-y: auto;
+}
+
+.inspector-layers-head,
+.inspector-properties-head {
+  min-height: 68px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #363636;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #1e1e1e;
+}
+
+.inspector-layers-head small,
+.inspector-properties-head small {
   display: block;
-  font-size: 11px;
+  color: #8c8c8c;
+  font-size: 9px;
+  letter-spacing: .08em;
 }
+
+.inspector-layers-head h2,
+.inspector-properties-head h2 {
+  margin: 2px 0 0;
+  font: 600 14px/1.2 var(--body-font);
+  color: #f2f2f2;
+}
+
+.inspector-properties-head h2 {
+  font-size: 15px;
+}
+
 .inspector-parent {
   display: block;
-  margin-top: 6px;
-  color: #9f978a;
-  font-size: 12px;
+  margin-top: 3px;
+  color: #8f8f8f;
+  font-size: 10px;
 }
-.inspector-head h2 {
-  margin-top: 10px;
-  font-size: 34px;
+
+.inspector-properties-head > button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #bdbdbd;
+  cursor: pointer;
+  font-size: 18px;
 }
-.inspector-head p {
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 1.55;
+
+.inspector-properties-head > button:hover {
+  background: #2c2c2c;
+  color: #fff;
 }
-.inspector-head p b {
-  color: #eee7da;
+
+.inspector-properties-summary {
+  padding: 14px 16px 15px;
+  border-bottom: 1px solid #363636;
+  background: #1e1e1e;
 }
-.inspector-body {
-  padding: 0 30px 44px;
+
+.inspector-properties-summary p {
+  margin: 0 0 11px;
+  color: #bdbdbd;
+  font-size: 11px;
+  line-height: 1.5;
 }
-.inspector-body > section {
-  padding: 20px 0;
+
+.inspector-properties-summary p:last-child {
+  margin-bottom: 0;
 }
-.inspector-body h3 {
-  font-size: 12px;
+
+.inspector-properties-summary b {
+  display: block;
+  margin-bottom: 3px;
+  color: #f0f0f0;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.inspector-properties-body {
+  padding: 0 16px 36px;
+}
+
+.inspector-properties-body > section {
+  padding: 15px 0;
+  border-bottom: 1px solid #363636;
+}
+
+.inspector-properties-body h3 {
+  margin: 0 0 8px;
+  color: #f0f0f0;
+  font-size: 11px;
   line-height: 1.35;
-  text-transform: none;
-  letter-spacing: .04em;
+  font-weight: 600;
 }
-.inspector-body ol {
+
+.inspector-properties-body ol {
   margin: 0;
-  padding-left: 22px;
+  padding-left: 18px;
 }
-.inspector-body li {
-  margin: 7px 0;
-  padding-left: 4px;
-  color: #d7d0c5;
-  font-size: 14px;
-  line-height: 1.55;
+
+.inspector-properties-body li {
+  margin: 5px 0;
+  padding-left: 2px;
+  color: #aeb4b7;
+  font-size: 11px;
+  line-height: 1.48;
+}
+
+/* Inspector toggle becomes a canvas tool, not a floating property drawer trigger. */
+.inspector-fab {
+  left: calc(var(--inspector-left-width) + 18px) !important;
+  right: auto !important;
+  bottom: 18px !important;
+  z-index: 100 !important;
+  border-radius: 5px !important;
+  background: #1e1e1e !important;
+  border-color: #4a4a4a !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .24) !important;
+}
+
+.inspector-fab.active {
+  border-color: #5aa9e6 !important;
+  color: #dff1ff !important;
 }
 
 .hero-art-label em {
@@ -100,13 +211,43 @@
   opacity: .82;
 }
 
-@media (max-width: 900px) {
-  .inspector-drawer {
-    width: min(520px, 96vw);
+@media (max-width: 1200px) {
+  :root {
+    --inspector-left-width: 240px;
+    --inspector-right-width: 330px;
   }
-  .inspector-head,
-  .inspector-body {
-    padding-left: 22px;
-    padding-right: 22px;
+
+  .background-module.is-inspectable .core-site-surface {
+    width: 1180px;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --inspector-left-width: 210px;
+    --inspector-right-width: 300px;
+  }
+
+  .background-module.is-inspectable {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .inspector-layers-panel,
+  .inspector-properties-panel {
+    width: min(88vw, 340px);
+  }
+
+  .inspector-properties-panel {
+    display: none;
+  }
+
+  .background-module.is-inspectable .core-site-surface {
+    width: 1120px;
+    margin-left: calc(min(88vw, 340px) + 12px);
+  }
+
+  .inspector-fab {
+    left: 14px !important;
   }
 }
