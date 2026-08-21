@@ -1,11 +1,11 @@
 import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
-import { labRulerPageData } from '@/content/rulers/labRulerPageData';
+import { peterILabRulerPageData } from '@/content/rulers/peterILabRulerPageData';
 
 export const metadata = {
-  title: 'Test Lab — Правители России',
-  description: 'Живая тестовая страница Core Design System, data contracts, HVS и Inspector.'
+  title: 'Test Lab — Пётр I — Правители России',
+  description: 'Живая тестовая страница Core Design System, data contracts, HVS и Inspector на данных Петра I.'
 };
 
 export default function LabPage() {
-  return <CoreDesignSystemSkeleton data={labRulerPageData} labMode />;
+  return <CoreDesignSystemSkeleton data={peterILabRulerPageData} labMode />;
 }
