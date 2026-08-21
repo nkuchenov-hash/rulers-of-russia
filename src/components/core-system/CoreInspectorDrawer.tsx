@@ -248,8 +248,9 @@ export function CoreInspectorDrawer({
     return keys;
   }, [tree]);
 
-  if (!passport || !tree) return null;
+  if (!passport || !tree || !selectedId) return null;
 
+  const activeId = selectedId as CoreInspectableId;
   const effectiveExpanded = expanded.size === 0 ? new Set(initialExpansion) : expanded;
   const sections: Array<[string, string[]]> = [
     ['Какими средствами собирается', passport.tools],
@@ -290,7 +291,7 @@ export function CoreInspectorDrawer({
         <div className={styles.tree}>
           <LayerTree
             node={tree}
-            selectedId={selectedId}
+            selectedId={activeId}
             depth={0}
             expanded={effectiveExpanded}
             onToggle={toggle}
@@ -299,7 +300,7 @@ export function CoreInspectorDrawer({
         </div>
       </section>
 
-      <SettingsPanel selectedId={selectedId} tuning={tuning} onChange={onTuningChange} />
+      <SettingsPanel selectedId={activeId} tuning={tuning} onChange={onTuningChange} />
 
       <div className="inspector-body">
         {sections.map(([title, values]) => (
