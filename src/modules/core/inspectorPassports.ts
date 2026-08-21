@@ -7,8 +7,26 @@ import {
 import { heroImageProductionFlow } from '@/modules/hero/heroVisualContract';
 
 export type { CoreModuleId };
-export type CoreInspectableId = BaseCoreInspectableId | 'hero-gradient';
+export type CoreInspectableId = BaseCoreInspectableId | 'hero-gradient' | 'rail-active-item';
 export type ExtendedCorePassport = Omit<CorePassport, 'id'> & { id: CoreInspectableId };
+
+const activeRailPassport: ExtendedCorePassport = {
+  id: 'rail-active-item',
+  kind: 'element',
+  parent: 'Левая историческая шкала',
+  label: 'Текущий правитель',
+  what: 'Отдельная активная карточка текущего правителя. Это самостоятельное состояние и самостоятельный настраиваемый элемент, а не обычная карточка списка с косметическим классом active.',
+  where: 'Внутри Historical Rail на вертикальной оси; всегда обозначает правителя, чья страница сейчас открыта.',
+  structure: ['Увеличенный портрет', 'Имя', 'Годы правления', 'Активный маркер на оси', 'Отдельные ширина и высота карточки'],
+  tools: ['AuthorityItem active variant', 'Chronology activeAuthorityId', 'Inspector size controls', 'Historical Visual State'],
+  data: ['chronology.activeAuthorityId', 'authority.shortName', 'authority.reign.*', 'authority.railPortraitAssetId'],
+  sources: ['Chronology Graph', 'Authority Registry', 'Media Registry'],
+  flow: ['Chronology определяет activeAuthorityId.', 'Rail находит соответствующий узел.', 'Для него рендерится отдельный active variant.', 'Размер active-карточки берётся из настроек компонента, а не из объёма контента.'],
+  interactions: ['Клик по карточке открывает/подтверждает текущего правителя.', 'В Studio карточка выбирается отдельно от обычных соседних карточек.'],
+  fallback: ['Без портрета остаются имя, даты и активный маркер.', 'Контент не имеет права менять заданные размеры карточки.'],
+  responsive: ['Desktop: отдельная заметная карточка внутри rail.', 'Mobile: превращается в активный элемент горизонтального контекстного списка/drawer.'],
+  hvs: ['Эпоха может менять материал, акцент и обработку портрета.', 'Геометрия active-карточки остаётся настройкой компонента.']
+};
 
 const heroPassport: ExtendedCorePassport = {
   id: 'hero',
@@ -65,6 +83,7 @@ const heroGradientPassport: ExtendedCorePassport = {
 
 export const corePassports: Record<CoreInspectableId, ExtendedCorePassport> = {
   ...(baseCorePassports as unknown as Record<BaseCoreInspectableId, ExtendedCorePassport>),
+  'rail-active-item': activeRailPassport,
   hero: heroPassport,
   'hero-image': heroImagePassport,
   'hero-gradient': heroGradientPassport

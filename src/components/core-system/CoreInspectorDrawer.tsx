@@ -38,6 +38,8 @@ export interface InspectorTuning {
   keyEventsWidth: number;
   keyEventFontSize: number;
   heroActionSize: number;
+  railActiveWidth: number;
+  railActiveHeight: number;
   thematicCardSizes: Record<string, ThematicCardSize>;
 }
 
@@ -47,12 +49,14 @@ export const defaultInspectorTuning: InspectorTuning = {
   heroImageY: 50,
   heroDatesSize: 22,
   heroNameSize: 104,
-  heroSummarySize: 17,
+  heroSummarySize: 22,
   heroSummaryWidth: 620,
-  heroMetaSize: 13,
+  heroMetaSize: 22,
   keyEventsWidth: 320,
-  keyEventFontSize: 12,
+  keyEventFontSize: 22,
   heroActionSize: 40,
+  railActiveWidth: 228,
+  railActiveHeight: 112,
   thematicCardSizes: {
     reforms: { ...defaultThematicCardSize },
     conflicts: { ...defaultThematicCardSize },
@@ -232,23 +236,30 @@ function SettingsPanel({
         <RangeSetting label="Мягкость края" value={tuning.gradient.edgeSoftnessPercent} min={0} max={30} suffix="%" onChange={(value) => patchGradient({ edgeSoftnessPercent: value })} />
       </>
     );
+  } else if (selectedId === 'rail-active-item') {
+    controls = (
+      <>
+        <RangeSetting label="Ширина карточки" value={tuning.railActiveWidth} min={180} max={252} suffix="px" onChange={(value) => patch({ railActiveWidth: value })} />
+        <RangeSetting label="Высота карточки" value={tuning.railActiveHeight} min={96} max={180} suffix="px" onChange={(value) => patch({ railActiveHeight: value })} />
+      </>
+    );
   } else if (selectedId === 'hero-dates') {
-    controls = <RangeSetting label="Размер текста" value={tuning.heroDatesSize} min={14} max={32} suffix="px" onChange={(value) => patch({ heroDatesSize: value })} />;
+    controls = <RangeSetting label="Размер текста" value={tuning.heroDatesSize} min={22} max={36} suffix="px" onChange={(value) => patch({ heroDatesSize: value })} />;
   } else if (selectedId === 'hero-name') {
     controls = <RangeSetting label="Размер имени" value={tuning.heroNameSize} min={72} max={132} suffix="px" onChange={(value) => patch({ heroNameSize: value })} />;
   } else if (selectedId === 'hero-summary') {
     controls = (
       <>
-        <RangeSetting label="Размер текста" value={tuning.heroSummarySize} min={13} max={24} suffix="px" onChange={(value) => patch({ heroSummarySize: value })} />
+        <RangeSetting label="Размер текста" value={tuning.heroSummarySize} min={22} max={32} suffix="px" onChange={(value) => patch({ heroSummarySize: value })} />
         <RangeSetting label="Максимальная ширина" value={tuning.heroSummaryWidth} min={360} max={760} suffix="px" onChange={(value) => patch({ heroSummaryWidth: value })} />
       </>
     );
   } else if (selectedId === 'hero-meta-item') {
-    controls = <RangeSetting label="Размер значения" value={tuning.heroMetaSize} min={10} max={18} suffix="px" onChange={(value) => patch({ heroMetaSize: value })} />;
+    controls = <RangeSetting label="Размер значения" value={tuning.heroMetaSize} min={22} max={30} suffix="px" onChange={(value) => patch({ heroMetaSize: value })} />;
   } else if (selectedId === 'key-events') {
     controls = <RangeSetting label="Ширина карточки" value={tuning.keyEventsWidth} min={260} max={430} suffix="px" onChange={(value) => patch({ keyEventsWidth: value })} />;
   } else if (selectedId === 'key-event-row') {
-    controls = <RangeSetting label="Размер строки" value={tuning.keyEventFontSize} min={10} max={17} suffix="px" onChange={(value) => patch({ keyEventFontSize: value })} />;
+    controls = <RangeSetting label="Размер строки" value={tuning.keyEventFontSize} min={22} max={30} suffix="px" onChange={(value) => patch({ keyEventFontSize: value })} />;
   } else if (selectedId === 'hero-action') {
     controls = <RangeSetting label="Размер кнопки" value={tuning.heroActionSize} min={32} max={56} suffix="px" onChange={(value) => patch({ heroActionSize: value })} />;
   } else if (selectedId === 'thematic-card' && selectedThematicCardId) {
