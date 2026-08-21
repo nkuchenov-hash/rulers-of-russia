@@ -48,8 +48,8 @@ export function heroGradientStyle(settings: HeroGradientSettings): CSSProperties
     background: `linear-gradient(${direction}, ${stops})`,
     backdropFilter: settings.blurPx > 0 ? `blur(${settings.blurPx}px)` : undefined,
     WebkitBackdropFilter: settings.blurPx > 0 ? `blur(${settings.blurPx}px)` : undefined,
-    ['--hero-gradient-edge-softness' as string]: `${settings.edgeSoftnessPercent}%`
-  };
+    '--hero-gradient-edge-softness': `${settings.edgeSoftnessPercent}%`
+  } as CSSProperties;
 }
 
 export const heroImageProductionFlow = [
