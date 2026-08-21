@@ -3,7 +3,7 @@ name: Deploy live site to GitHub Pages
 on:
   push:
     branches:
-      - core-system-interactive-page
+      - main
   workflow_dispatch:
 
 permissions:
