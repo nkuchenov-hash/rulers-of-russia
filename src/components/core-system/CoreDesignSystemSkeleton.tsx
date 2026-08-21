@@ -276,7 +276,18 @@ export function CoreDesignSystemSkeleton({
             <div className="rail-list">
               <span className="rail-axis" />
               {data.rail.map((item) => (
-                <article data-element-id="rail-item" onClick={elementHandler('rail-item')} className={`rail-item ${item.active ? 'active' : ''}`} key={item.id}>
+                <article
+                  data-element-id={item.active ? 'rail-active-item' : 'rail-item'}
+                  onClick={elementHandler(item.active ? 'rail-active-item' : 'rail-item')}
+                  className={`rail-item ${item.active ? 'active' : ''}`}
+                  style={item.active ? {
+                    width: `${inspectorTuning.railActiveWidth}px`,
+                    height: `${inspectorTuning.railActiveHeight}px`,
+                    minHeight: `${inspectorTuning.railActiveHeight}px`,
+                    maxWidth: '100%'
+                  } : undefined}
+                  key={item.id}
+                >
                   <div data-element-id="rail-portrait" onClick={elementHandler('rail-portrait')} className="rail-portrait">{item.portraitLabel ?? item.name.slice(0, 2)}</div>
                   <div>
                     <strong data-element-id="rail-name" onClick={elementHandler('rail-name')}>{item.name}</strong>
