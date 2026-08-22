@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "dataset": "Rulers of Russia historical world boundary archive",
+  "runtime_external_dependency": false,
+  "resolution": "For every selected year, use the most recent historical snapshot at or before that year.",
+  "editable": true,
+  "source": {
+    "name": "Historical Basemaps",
+    "repository": "aourednik/historical-basemaps",
+    "pinned_commit": "62d8f1a03a71f2d3ff17f2d166f7553f256bce68",
+    "license_note": "Preserve upstream attribution/license metadata when redistributing or editing source-derived geometry."
+  },
+  "min_year": 800,
+  "max_year": 2010,
+  "snapshots": [
+    {
+      "year": 800,
+      "file": "snapshots/800.geojson",
+      "upstream_file": "world_800.geojson",
+      "entities": 117
+    },
+    {
+      "year": 900,
+      "file": "snapshots/900.geojson",
+      "upstream_file": "world_900.geojson",
+      "entities": 135
+    },
+    {
+      "year": 1000,
+      "file": "snapshots/1000.geojson",
+      "upstream_file": "world_1000.geojson",
+      "entities": 129
+    },
+    {
+      "year": 1100,
+      "file": "snapshots/1100.geojson",
+      "upstream_file": "world_1100.geojson",
+      "entities": 139
+    },
+    {
+      "year": 1200,
+      "file": "snapshots/1200.geojson",
+      "upstream_file": "world_1200.geojson",
+      "entities": 129
+    },
+    {
+      "year": 1279,
+      "file": "snapshots/1279.geojson",
+      "upstream_file": "world_1279.geojson",
+      "entities": 113
+    },
+    {
+      "year": 1300,
+      "file": "snapshots/1300.geojson",
+      "upstream_file": "world_1300.geojson",
+      "entities": 113
+    },
+    {
+      "year": 1400,
+      "file": "snapshots/1400.geojson",
+      "upstream_file": "world_1400.geojson",
+      "entities": 115
+    },
+    {
+      "year": 1492,
+      "file": "snapshots/1492.geojson",
+      "upstream_file": "world_1492.geojson",
+      "entities": 1307
+    },
+    {
+      "year": 1500,
+      "file": "snapshots/1500.geojson",
+      "upstream_file": "world_1500.geojson",
+      "entities": 139
+    },
+    {
+      "year": 1530,
+      "file": "snapshots/1530.geojson",
+      "upstream_file": "world_1530.geojson",
+      "entities": 269
+    },
+    {
+      "year": 1600,
+      "file": "snapshots/1600.geojson",
+      "upstream_file": "world_1600.geojson",
+      "entities": 638
+    },
+    {
+      "year": 1650,
+      "file": "snapshots/1650.geojson",
+      "upstream_file": "world_1650.geojson",
+      "entities": 593
+    },
+    {
+      "year": 1700,
+      "file": "snapshots/1700.geojson",
+      "upstream_file": "world_1700.geojson",
+      "entities": 584
+    },
+    {
+      "year": 1715,
+      "file": "snapshots/1715.geojson",
+      "upstream_file": "world_1715.geojson",
+      "entities": 600
+    },
+    {
+      "year": 1783,
+      "file": "snapshots/1783.geojson",
+      "upstream_file": "world_1783.geojson",
+      "entities": 549
+    },
+    {
+      "year": 1800,
+      "file": "snapshots/1800.geojson",
+      "upstream_file": "world_1800.geojson",
+      "entities": 546
+    },
+    {
+      "year": 1815,
+      "file": "snapshots/1815.geojson",
+      "upstream_file": "world_1815.geojson",
+      "entities": 313
+    },
+    {
+      "year": 1880,
+      "file": "snapshots/1880.geojson",
+      "upstream_file": "world_1880.geojson",
+      "entities": 169
+    },
+    {
+      "year": 1900,
+      "file": "snapshots/1900.geojson",
+      "upstream_file": "world_1900.geojson",
+      "entities": 165
+    },
+    {
+      "year": 1914,
+      "file": "snapshots/1914.geojson",
+      "upstream_file": "world_1914.geojson",
+      "entities": 142
+    },
+    {
+      "year": 1920,
+      "file": "snapshots/1920.geojson",
+      "upstream_file": "world_1920.geojson",
+      "entities": 163
+    },
+    {
+      "year": 1930,
+      "file": "snapshots/1930.geojson",
+      "upstream_file": "world_1930.geojson",
+      "entities": 161
+    },
+    {
+      "year": 1938,
+      "file": "snapshots/1938.geojson",
+      "upstream_file": "world_1938.geojson",
+      "entities": 171
+    },
+    {
+      "year": 1945,
+      "file": "snapshots/1945.geojson",
+      "upstream_file": "world_1945.geojson",
+      "entities": 183
+    },
+    {
+      "year": 1960,
+      "file": "snapshots/1960.geojson",
+      "upstream_file": "world_1960.geojson",
+      "entities": 157
+    },
+    {
+      "year": 1994,
+      "file": "snapshots/1994.geojson",
+      "upstream_file": "world_1994.geojson",
+      "entities": 193
+    },
+    {
+      "year": 2000,
+      "file": "snapshots/2000.geojson",
+      "upstream_file": "world_2000.geojson",
+      "entities": 193
+    },
+    {
+      "year": 2010,
+      "file": "snapshots/2010.geojson",
+      "upstream_file": "world_2010.geojson",
+      "entities": 193
+    }
+  ]
+}
