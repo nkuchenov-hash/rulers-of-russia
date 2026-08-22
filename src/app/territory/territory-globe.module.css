@@ -14,8 +14,7 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(circle at 50% 43%, rgba(39, 78, 88, .19), transparent 34%),
-    radial-gradient(circle at 18% 16%, rgba(139, 115, 67, .055), transparent 28%),
+    radial-gradient(circle at 50% 43%, rgba(39, 78, 88, .10), transparent 30%),
     linear-gradient(180deg, #061116 0%, #02090d 56%, #02070a 100%);
 }
 
@@ -30,7 +29,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: .58;
+  opacity: .42;
   background-image:
     radial-gradient(circle at 12% 22%, rgba(232,224,201,.25) 0 .7px, transparent .8px),
     radial-gradient(circle at 78% 18%, rgba(232,224,201,.16) 0 .6px, transparent .7px),
@@ -54,17 +53,18 @@
 .globeInteractive:active { cursor: grabbing; }
 .mapInteractive { cursor: default; }
 
-.atmosphereOuter {
-  fill: none;
-  stroke: rgba(124, 194, 205, .47);
-  stroke-width: 20;
-  opacity: .65;
-  pointer-events: none;
+/* No atmospheric/bloom layers at all. */
+.atmosphereOuter,
+.sphereShade,
+.territoryGlow,
+.territoryBorderHalo {
+  display: none;
 }
 
 .ocean {
-  stroke: rgba(197, 214, 206, .2);
-  stroke-width: 1.2;
+  fill: #07191f;
+  stroke: rgba(201, 213, 205, .34);
+  stroke-width: .7;
 }
 
 .mapOcean {
@@ -75,71 +75,52 @@
 
 .graticule {
   fill: none;
-  stroke: rgba(225, 217, 194, .09);
-  stroke-width: .72;
+  stroke: rgba(220, 216, 198, .055);
+  stroke-width: .34;
   pointer-events: none;
 }
 
 .country {
-  fill: #596861;
-  fill-opacity: .78;
+  fill: #596a67;
+  fill-opacity: 1;
   stroke: none;
-  transition: fill .18s ease, fill-opacity .18s ease;
+  transition: none;
 }
 
 .country:hover {
-  fill: #6b7c73;
-  fill-opacity: .9;
+  fill: #657672;
+  fill-opacity: 1;
 }
 
 .countryBorder {
   fill: none;
-  stroke: rgba(232, 223, 199, .22);
-  stroke-width: .78;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-
-.territoryGlow {
-  fill: rgba(225, 199, 136, .2);
-  stroke: rgba(247, 223, 165, .54);
-  stroke-width: 5;
+  stroke: rgba(224, 220, 203, .30);
+  stroke-width: .48;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
 .territoryFill {
-  fill-opacity: .94;
+  fill: #4f6868 !important;
+  fill-opacity: 1;
   stroke: none;
-  pointer-events: none;
-}
-
-.territoryBorderHalo {
-  fill: none;
-  stroke: rgba(249, 233, 195, .75);
-  stroke-width: 5.6;
-  opacity: .48;
-  vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
 .territoryBorder {
   fill: none;
-  stroke: #e7c778;
-  stroke-width: 2.1;
+  stroke: #d7ba70;
+  stroke-width: .78;
+  opacity: .94;
   vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-
-.sphereShade,
-.rim {
   pointer-events: none;
 }
 
 .rim {
   fill: none;
-  stroke: rgba(205, 227, 221, .38);
-  stroke-width: 1.35;
+  stroke: rgba(206, 220, 213, .34);
+  stroke-width: .72;
+  pointer-events: none;
 }
 
 .topbar {
@@ -214,8 +195,7 @@
   padding: 3px;
   border: 1px solid rgba(226, 213, 185, .18);
   border-radius: 999px;
-  background: rgba(8, 17, 20, .76);
-  backdrop-filter: blur(14px);
+  background: rgba(8, 17, 20, .92);
 }
 
 .segmented button,
@@ -242,8 +222,7 @@
 
 .controlButton {
   border: 1px solid rgba(226, 213, 185, .18);
-  background: rgba(8, 17, 20, .72);
-  backdrop-filter: blur(14px);
+  background: rgba(8, 17, 20, .92);
 }
 
 .story {
@@ -317,11 +296,10 @@
   height: 44px;
   border: 1px solid rgba(224, 213, 188, .18);
   border-radius: 50%;
-  background: rgba(7, 16, 19, .72);
+  background: rgba(7, 16, 19, .92);
   color: rgba(240, 231, 211, .78);
   font: 500 20px/1 Georgia, serif;
   cursor: pointer;
-  backdrop-filter: blur(12px);
 }
 
 .mapTools button:hover,
@@ -372,12 +350,12 @@
 
 .legendRussia {
   border: 1px solid #dcbf77;
-  background: #9d9368;
+  background: #4f6868;
 }
 
 .legendWorld {
   border: 1px solid rgba(225, 217, 194, .16);
-  background: #596861;
+  background: #596a67;
 }
 
 .legendBorder {
@@ -394,9 +372,8 @@
   padding: 12px 16px 11px;
   border: 1px solid rgba(231, 218, 188, .13);
   border-radius: 15px;
-  background: rgba(4, 12, 15, .83);
+  background: rgba(4, 12, 15, .96);
   box-shadow: 0 -16px 48px rgba(0,0,0,.18);
-  backdrop-filter: blur(18px);
 }
 
 .timelineTop {
@@ -643,6 +620,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 7px;
+  }
+
+  .territoryBorder {
+    stroke-width: .62;
   }
 }
 
