@@ -1,3 +1,4 @@
+# One-shot bootstrap trigger. Delete this script immediately after archive materialization.
 import json
 import tempfile
 import urllib.request
