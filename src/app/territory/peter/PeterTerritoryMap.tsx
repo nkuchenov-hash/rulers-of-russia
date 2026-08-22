@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import maplibregl, { type FilterSpecification, type Map } from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
+import type { FilterSpecification, Map } from 'maplibre-gl';
 import {
   constrainFilterByDateRange,
   dateRangeFromISODate,
