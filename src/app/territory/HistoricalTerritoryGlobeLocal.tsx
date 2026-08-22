@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   geoArea,
+  geoCentroid,
+  geoDistance,
   geoGraticule10,
   geoNaturalEarth1,
   geoOrthographic,
@@ -16,6 +18,7 @@ import {
   TERRITORY_MIN_YEAR,
   territoryPeriodAt
 } from './territoryChronology';
+import { TERRITORY_PLACES } from './territoryPlaces';
 import styles from './territory-globe.module.css';
 
 type ViewMode = 'globe' | 'map';
@@ -39,6 +42,7 @@ type WorldIndex = {
 const sphere = { type: 'Sphere' } as const;
 const graticule = geoGraticule10();
 const TWO_PI = Math.PI * 2;
+const COUNTRY_PALETTE = ['#434b43', '#4d4a43', '#3e4d4f', '#544842', '#455247', '#4b4650', '#4c5141', '#3e4a45'];
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -79,17 +83,10 @@ function reverseRing(ring: Position[]) {
 
 function normalizePolygonWinding(feature: AnyFeature): AnyFeature {
   if (feature.geometry.type !== 'Polygon' && feature.geometry.type !== 'MultiPolygon') return feature;
-
-  // d3-geo interprets spherical ring winding. Some historical sources contain
-  // opposite winding, which makes a polygon mean "everything except this state".
-  // If a feature covers more than a hemisphere, reverse all rings once.
   if (geoArea(feature as never) <= TWO_PI) return feature;
 
   if (feature.geometry.type === 'Polygon') {
-    const geometry: Polygon = {
-      type: 'Polygon',
-      coordinates: feature.geometry.coordinates.map(reverseRing)
-    };
+    const geometry: Polygon = { type: 'Polygon', coordinates: feature.geometry.coordinates.map(reverseRing) };
     return { ...feature, geometry };
   }
 
@@ -102,6 +99,20 @@ function normalizePolygonWinding(feature: AnyFeature): AnyFeature {
 
 function normalizeCollection(collection: AnyCollection): AnyCollection {
   return { ...collection, features: collection.features.map(normalizePolygonWinding) };
+}
+
+function featureName(feature: AnyFeature) {
+  const props = feature.properties ?? {};
+  const candidates = [props.NAME, props.name, props.NAME_LONG, props.ADMIN, props.SUBJECTO, props.entity, props.country, props.polity];
+  const value = candidates.find((item) => typeof item === 'string' && item.trim());
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function colorForFeature(feature: AnyFeature, index: number) {
+  const name = featureName(feature);
+  let hash = index + 17;
+  for (let i = 0; i < name.length; i += 1) hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+  return COUNTRY_PALETTE[Math.abs(hash) % COUNTRY_PALETTE.length];
 }
 
 function useHistoricalData(year: number, polityId: string) {
@@ -138,8 +149,7 @@ function useHistoricalData(year: number, polityId: string) {
     const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
     const snapshots = [...worldIndex.snapshots].sort((a, b) => a.year - b.year);
     const snapshot = [...snapshots].reverse().find((item) => item.year <= year) ?? snapshots[0];
-    const key = snapshot.file;
-    const cached = worldCache.current.get(key);
+    const cached = worldCache.current.get(snapshot.file);
     if (cached) {
       setWorld(cached);
       setWorldSnapshotYear(snapshot.year);
@@ -147,18 +157,17 @@ function useHistoricalData(year: number, polityId: string) {
     }
 
     const controller = new AbortController();
-    fetch(`${base}/data/territory/world-history/${snapshot.file}`, {
-      signal: controller.signal,
-      cache: 'force-cache'
-    }).then(async (response) => {
-      if (!response.ok) throw new Error(`world snapshot ${response.status}`);
-      const collection = normalizeCollection(await response.json() as AnyCollection);
-      worldCache.current.set(key, collection);
-      if (!controller.signal.aborted) {
-        setWorld(collection);
-        setWorldSnapshotYear(snapshot.year);
-      }
-    }).catch(() => undefined);
+    fetch(`${base}/data/territory/world-history/${snapshot.file}`, { signal: controller.signal, cache: 'force-cache' })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`world snapshot ${response.status}`);
+        const collection = normalizeCollection(await response.json() as AnyCollection);
+        worldCache.current.set(snapshot.file, collection);
+        if (!controller.signal.aborted) {
+          setWorld(collection);
+          setWorldSnapshotYear(snapshot.year);
+        }
+      })
+      .catch(() => undefined);
     return () => controller.abort();
   }, [worldIndex, year]);
 
@@ -188,7 +197,7 @@ function useHistoricalData(year: number, polityId: string) {
     return () => controller.abort();
   }, [polityId, russiaManifest]);
 
-  return { world, worldSnapshotYear, russia, worldIndex, russiaManifest };
+  return { world, worldSnapshotYear, russia, worldIndex };
 }
 
 export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR }: { initialYear?: number }) {
@@ -202,7 +211,7 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
   const [year, setYear] = useState(clamp(initialYear, TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR));
   const [viewMode, setViewMode] = useState<ViewMode>('globe');
   const [rotation, setRotation] = useState<Rotation>([-64, -48, 0]);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(1.28);
   const [fullscreen, setFullscreen] = useState(false);
   const [showReferenceBorders, setShowReferenceBorders] = useState(true);
 
@@ -246,7 +255,45 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
   const spherePath = path(sphere as never) ?? '';
   const graticulePath = path(graticule as never) ?? '';
   const russiaPath = russiaFeatures.length ? path(russiaCollection as never) : null;
-  const zoomBounds = viewMode === 'globe' ? [.72, 2.75] as const : [.68, 2.2] as const;
+  const zoomBounds = viewMode === 'globe' ? [.82, 3.15] as const : [.68, 2.4] as const;
+
+  const countryLabels = useMemo(() => {
+    if (!world) return [] as Array<{ name: string; x: number; y: number; size: number }>;
+    return world.features.flatMap((feature) => {
+      const name = featureName(feature);
+      if (!name) return [];
+      const bounds = path.bounds(feature as never);
+      const width = Math.abs(bounds[1][0] - bounds[0][0]);
+      const height = Math.abs(bounds[1][1] - bounds[0][1]);
+      const area = width * height;
+      if (!Number.isFinite(area) || area < (portrait ? 850 : 1350)) return [];
+      const centroid = geoCentroid(feature as never);
+      if (viewMode === 'globe' && geoDistance(centroid, [-rotation[0], -rotation[1]]) > Math.PI / 2) return [];
+      const point = projection(centroid);
+      if (!point) return [];
+      return [{ name, x: point[0], y: point[1], size: clamp(Math.sqrt(area) / 9, 10, portrait ? 17 : 20) }];
+    });
+  }, [path, portrait, projection, rotation, viewMode, world]);
+
+  const placeLabels = useMemo(() => {
+    const center: [number, number] = [-rotation[0], -rotation[1]];
+    return TERRITORY_PLACES.flatMap((place) => {
+      if ((place.from ?? TERRITORY_MIN_YEAR) > year || (place.to ?? TERRITORY_MAX_YEAR) < year) return [];
+      if (place.kind === 'regional' && zoom < 1.18) return [];
+      if (viewMode === 'globe' && geoDistance([place.lon, place.lat], center) > Math.PI / 2) return [];
+      const point = projection([place.lon, place.lat]);
+      if (!point) return [];
+      return [{ ...place, x: point[0], y: point[1] }];
+    });
+  }, [projection, rotation, viewMode, year, zoom]);
+
+  const russiaLabel = useMemo(() => {
+    if (!russiaFeatures.length) return null;
+    const centroid = geoCentroid(russiaCollection as never);
+    if (viewMode === 'globe' && geoDistance(centroid, [-rotation[0], -rotation[1]]) > Math.PI / 2) return null;
+    const point = projection(centroid);
+    return point ? { x: point[0], y: point[1] } : null;
+  }, [projection, rotation, russiaCollection, russiaFeatures.length, viewMode]);
 
   const stopInertia = useCallback(() => {
     if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
@@ -257,7 +304,7 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
     stopInertia();
     const [lon, lat] = period.focus;
     setRotation([-lon, -lat, 0]);
-    setZoom(viewMode === 'globe' ? 1 : .96);
+    setZoom(viewMode === 'globe' ? 1.28 : 1.06);
   }, [period.focus, stopInertia, viewMode]);
 
   useEffect(() => { focusRussia(); }, [period.polityId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -297,7 +344,7 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
     if (!drag.active || viewMode !== 'globe') return;
     const dx = event.clientX - drag.x;
     const dy = event.clientY - drag.y;
-    const sensitivity = .24 / zoom;
+    const sensitivity = .22 / zoom;
     const next: Rotation = [drag.rotation[0] + dx * sensitivity, clamp(drag.rotation[1] - dy * sensitivity, -78, 78), 0];
     const dt = Math.max(8, performance.now() - drag.time);
     drag.vx = (dx * sensitivity) / dt;
@@ -355,7 +402,7 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
       <section ref={sceneRef} className={styles.scene}>
         <div className={styles.space} aria-hidden="true" />
         <svg
-          className={`${styles.globe} ${viewMode === 'globe' ? styles.globeInteractive : styles.mapInteractive}`}
+          className={`${styles.globe} ${viewMode === 'globe' ? styles.globeInteractive : styles.mapInteractive} premiumHistoricalGlobe`}
           viewBox={`0 0 ${viewport.width} ${viewport.height}`}
           role="img"
           aria-label={`Исторические границы мира: ${year} год`}
@@ -363,11 +410,25 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
           onPointerMove={pointerMove}
           onPointerUp={pointerUp}
           onPointerCancel={pointerUp}
-          onWheel={(event) => { event.preventDefault(); changeZoom(event.deltaY > 0 ? -.09 : .09); }}
+          onWheel={(event) => { event.preventDefault(); changeZoom(event.deltaY > 0 ? -.1 : .1); }}
         >
-          <clipPath id="historicalSphereClip"><path d={spherePath} /></clipPath>
-          <path d={spherePath} className={viewMode === 'globe' ? styles.ocean : styles.mapOcean} />
+          <defs>
+            <clipPath id="historicalSphereClip"><path d={spherePath} /></clipPath>
+            <linearGradient id="historicalOcean" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#0b2028" />
+              <stop offset="48%" stopColor="#071820" />
+              <stop offset="100%" stopColor="#031017" />
+            </linearGradient>
+            <pattern id="cartographicGrain" width="14" height="14" patternUnits="userSpaceOnUse">
+              <path d="M0 3L14 1M0 10L14 8" stroke="rgba(235,220,181,.035)" strokeWidth=".55" />
+              <circle cx="3" cy="6" r=".45" fill="rgba(241,225,185,.06)" />
+              <circle cx="11" cy="12" r=".35" fill="rgba(0,0,0,.12)" />
+            </pattern>
+          </defs>
+
+          <path d={spherePath} fill={viewMode === 'globe' ? 'url(#historicalOcean)' : undefined} className={viewMode === 'globe' ? styles.ocean : styles.mapOcean} />
           <path d={graticulePath} className={styles.graticule} />
+
           <g clipPath={viewMode === 'globe' ? 'url(#historicalSphereClip)' : undefined}>
             {(world?.features ?? []).map((feature, index) => {
               const d = path(feature as never);
@@ -376,15 +437,40 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
                 <path
                   key={index}
                   d={d}
-                  className={styles.country}
-                  style={{ stroke: showReferenceBorders ? 'rgba(224,220,203,.28)' : 'none', strokeWidth: .46, vectorEffect: 'non-scaling-stroke' }}
+                  className={`${styles.country} premiumCountry`}
+                  fill={colorForFeature(feature, index)}
+                  style={{ stroke: showReferenceBorders ? 'rgba(223,213,190,.42)' : 'none', strokeWidth: .52, vectorEffect: 'non-scaling-stroke' }}
                 />
               );
             })}
-            {russiaPath && <path d={russiaPath} className={styles.territoryFill} />}
+
+            {russiaPath && <path d={russiaPath} className={`${styles.territoryFill} premiumRussia`} />}
             {russiaPath && <path d={russiaPath} className={styles.territoryBorder} />}
+            <path d={spherePath} fill="url(#cartographicGrain)" className="cartographicTexture" />
+
+            <g className="countryLabels" aria-hidden="true">
+              {countryLabels.map((label, index) => (
+                <text key={`${label.name}-${index}`} x={label.x} y={label.y} className="countryLabel" style={{ fontSize: label.size }} textAnchor="middle">
+                  {label.name}
+                </text>
+              ))}
+            </g>
+
+            {russiaLabel && (
+              <text x={russiaLabel.x} y={russiaLabel.y} className="russiaMapLabel" textAnchor="middle">{period.label}</text>
+            )}
+
+            <g className="placeLabels" aria-hidden="true">
+              {placeLabels.map((place) => (
+                <g key={`${place.name}-${place.lon}-${place.lat}`} transform={`translate(${place.x} ${place.y})`}>
+                  {place.kind === 'capital' ? <path className="capitalStar" d="M0-5.4 1.55-1.7 5.55-1.7 2.35.7 3.55 4.7 0 2.35-3.55 4.7-2.35.7-5.55-1.7-1.55-1.7Z" /> : <circle className="cityDot" r="2.25" />}
+                  <text className={place.kind === 'capital' ? 'capitalLabel' : 'cityLabel'} x={place.kind === 'capital' ? 8 : 6} y="4">{place.name}</text>
+                </g>
+              ))}
+            </g>
           </g>
-          {viewMode === 'globe' && <path d={spherePath} className={styles.rim} />}
+
+          {viewMode === 'globe' && <path d={spherePath} className={`${styles.rim} premiumRim`} />}
         </svg>
 
         <header className={styles.topbar}>
@@ -405,14 +491,19 @@ export function HistoricalTerritoryGlobeLocal({ initialYear = TERRITORY_MAX_YEAR
         <aside className={styles.story}>
           <div className={styles.eyebrow}>{period.era}</div>
           <div className={styles.storyRow}><h1>{period.label}</h1><span className={styles.storyYear}>{year}</span></div>
-          <p>Мировые границы берутся из локального исторического архива. Для {year} года используется срез {worldSnapshotYear ?? '—'} года.</p>
-          <div className={styles.source}>локальный архив · historical world boundaries</div>
+          <p>Исторический мировой срез {worldSnapshotYear ?? '—'} года · локальная проектная база границ и подписей.</p>
+          <div className={styles.source}>исторические границы · локальный архив проекта</div>
         </aside>
 
         <div className={styles.mapTools}>
           <button onClick={() => changeZoom(.14)} aria-label="Приблизить">+</button>
           <button onClick={() => changeZoom(-.14)} aria-label="Отдалить">−</button>
           <button onClick={() => setShowReferenceBorders((value) => !value)} className={showReferenceBorders ? styles.toolActive : ''} aria-label="Границы государств">◎</button>
+        </div>
+
+        <div className="mapLegend" aria-hidden="true">
+          <span><b className="legendStar">★</b> столицы государств</span>
+          <span><b className="legendDot">•</b> крупные и региональные центры</span>
         </div>
 
         <section className={styles.timeline} aria-label="Хронология территории России">
