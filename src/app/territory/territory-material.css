@@ -1,66 +1,80 @@
 /* Territory rendering overrides.
-   Keep the globe crisp: no large SVG glow filters, no foggy bloom,
-   and a single restrained historical border. */
+   Keep the globe crisp: no bloom, no milky overlay, no atmospheric fog. */
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) {
-  stop-color: #4d7780;
+  stop-color: #456f79;
 }
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) {
-  stop-color: #315964;
+  stop-color: #294f5a;
 }
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) {
-  stop-color: #203f49;
+  stop-color: #173741;
 }
 
 svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
-  fill-opacity: .78;
+  fill-opacity: .82;
 }
 
-/* The blurred atmosphere was producing the cyan haze visible on mobile
-   and forcing an expensive full-surface SVG filter on every rotation. */
+/* Remove both expensive blur layers completely. */
 svg[aria-label^="Территория:"] path[filter="url(#atmosphereGlow)"],
 svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"] {
-  display: none;
+  display: none !important;
 }
 
-/* Remove the oversized halo layer. The actual border remains below. */
+/* The white/grey full-sphere shade was the remaining 'fog' seen on mobile. */
+svg[aria-label^="Территория:"] path[fill="url(#shadeGradient)"] {
+  display: none !important;
+}
+
+/* Make the ocean itself darker and clearer instead of compensating with haze. */
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(1) {
+  stop-color: #153a45;
+}
+
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(2) {
+  stop-color: #0b2832;
+}
+
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(3) {
+  stop-color: #051820;
+}
+
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(4) {
+  stop-color: #01070a;
+}
+
+/* No halo around historical territory. */
 svg[aria-label^="Территория:"] [class*="territoryBorderHalo"] {
-  display: none;
+  display: none !important;
 }
 
-/* Historical boundary: crisp and subordinate to the territory itself. */
+/* Historical boundary: a single precise line. */
 svg[aria-label^="Территория:"] [class*="territoryBorder"] {
-  stroke: #d9bb70;
-  stroke-width: 1.15px;
-  opacity: .92;
+  stroke: #d5b96f;
+  stroke-width: 1px;
+  opacity: .9;
   vector-effect: non-scaling-stroke;
 }
 
-/* World reference lines should never compete with the state border. */
+/* Reference geography is deliberately quieter. */
 svg[aria-label^="Территория:"] [class*="countryBorder"] {
-  stroke: rgba(232, 223, 199, .14);
-  stroke-width: .55px;
+  stroke: rgba(232, 223, 199, .10);
+  stroke-width: .45px;
 }
 
 svg[aria-label^="Территория:"] [class*="graticule"] {
-  stroke: rgba(225, 217, 194, .055);
-  stroke-width: .55px;
-}
-
-/* Reduce the milky highlight across the face of the globe. */
-svg[aria-label^="Территория:"] [class*="sphereShade"] {
-  opacity: .55;
+  stroke: rgba(225, 217, 194, .035);
+  stroke-width: .45px;
 }
 
 svg[aria-label^="Территория:"] [class*="rim"] {
-  stroke: rgba(205, 227, 221, .26);
-  stroke-width: 1px;
+  stroke: rgba(205, 227, 221, .22);
+  stroke-width: .8px;
 }
 
-/* Backdrop blur is especially expensive while the SVG beneath it is moving.
-   Opaque translucent surfaces retain the look without re-blurring every frame. */
+/* Do not re-blur moving SVG content underneath UI chrome. */
 [class*="territory-globe"] [class*="segmented"],
 [class*="territory-globe"] [class*="controlButton"],
 [class*="territory-globe"] [class*="mapTools"] button,
@@ -71,10 +85,10 @@ svg[aria-label^="Территория:"] [class*="rim"] {
 
 @media (max-width: 980px) {
   svg[aria-label^="Территория:"] [class*="territoryBorder"] {
-    stroke-width: .95px;
+    stroke-width: .8px;
   }
 
   svg[aria-label^="Территория:"] [class*="countryBorder"] {
-    stroke-width: .45px;
+    stroke-width: .35px;
   }
 }
