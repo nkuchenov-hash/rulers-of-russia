@@ -3,7 +3,7 @@ import path from 'node:path';
 import osmtogeojson from 'osmtogeojson';
 
 const OVERPASS = 'https://overpass-api.openhistoricalmap.org/api/interpreter';
-const OUT_DIR = path.resolve('src/historical-state/data/territory/ohm');
+const OUT_DIR = path.resolve('public/data/territory/ohm');
 
 const POLITIES = [
   {
@@ -183,7 +183,7 @@ for (const polity of POLITIES) {
     manifest.push({
       polity_id: polity.id,
       label: polity.label,
-      file: `./ohm/${polity.id}.geojson`,
+      file: `./${polity.id}.geojson`,
       features: geojson.features.length,
       status: geojson.features.length ? 'imported' : 'missing-upstream'
     });
