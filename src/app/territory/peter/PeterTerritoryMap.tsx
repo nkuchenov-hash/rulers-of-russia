@@ -234,7 +234,7 @@ export function PeterTerritoryMap() {
     });
 
     mapRef.current = map;
-    map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'right');
+    map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-right');
 
     map.on('load', () => {
       filterByDate(map, `${year}-12-31`);
