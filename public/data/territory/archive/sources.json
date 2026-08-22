@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "capture:ohm",
+      "kind": "one-time-geometry-capture",
+      "name": "OpenHistoricalMap",
+      "captured_at": "2026-08-22",
+      "runtime_dependency": false,
+      "authoritative": false,
+      "notes": "Retained only as provenance for the initial geometry capture. The project never queries this source at runtime."
+    }
+  ]
+}

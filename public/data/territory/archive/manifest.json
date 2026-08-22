@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "dataset": "Rulers of Russia Territory Archive",
+  "runtime_owner": "project",
+  "runtime_external_dependencies": [],
+  "policy": {
+    "modern_territory": "Russian Federation law",
+    "historical_review": "Russian legal acts, treaties, atlases and scholarly historical sources",
+    "capture_sources_are_not_authoritative": true
+  },
+  "polities": [
+    {
+      "polity_id": "kievan-rus",
+      "label": "Древнерусское государство / Киевская Русь",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "novgorodian-land",
+      "label": "Новгородская земля",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "novgorod-republic",
+      "label": "Новгородская республика",
+      "file": "novgorod-republic.geojson",
+      "features": 4,
+      "status": "source-captured-unreviewed"
+    },
+    {
+      "polity_id": "grand-vladimir",
+      "label": "Великое княжество Владимирское",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "grand-moscow",
+      "label": "Великое княжество Московское",
+      "file": "grand-moscow.geojson",
+      "features": 9,
+      "status": "source-captured-unreviewed"
+    },
+    {
+      "polity_id": "russian-tsardom",
+      "label": "Русское царство",
+      "file": "russian-tsardom.geojson",
+      "features": 8,
+      "status": "source-captured-unreviewed"
+    },
+    {
+      "polity_id": "russian-empire",
+      "label": "Российская империя",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "russian-republic",
+      "label": "Российская республика",
+      "file": "russian-republic.geojson",
+      "features": 1,
+      "status": "source-captured-unreviewed"
+    },
+    {
+      "polity_id": "rsfsr",
+      "label": "РСФСР",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "ussr",
+      "label": "СССР",
+      "file": null,
+      "features": 0,
+      "status": "needs-research"
+    },
+    {
+      "polity_id": "russian-federation",
+      "label": "Российская Федерация",
+      "file": "russian-federation.geojson",
+      "features": 3,
+      "status": "source-captured-unreviewed",
+      "modern_override_required": true
+    }
+  ]
+}
