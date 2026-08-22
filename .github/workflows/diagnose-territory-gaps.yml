@@ -1,0 +1,63 @@
+name: Diagnose territory bootstrap gaps
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/diagnose-territory-gaps.yml
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Inspect Cliopatria candidates
+        shell: python
+        run: |
+          import json, tempfile, urllib.request, zipfile
+          from pathlib import Path
+
+          url = 'https://raw.githubusercontent.com/Seshat-Global-History-Databank/cliopatria/main/cliopatria.geojson.zip'
+          with tempfile.TemporaryDirectory() as tmp:
+              tmp = Path(tmp)
+              zpath = tmp / 'data.zip'
+              urllib.request.urlretrieve(url, zpath)
+              with zipfile.ZipFile(zpath) as zf:
+                  candidates = [n for n in zf.namelist() if n.lower().endswith('.geojson')]
+                  name = candidates[0]
+                  zf.extract(name, tmp)
+              data = json.loads((tmp / name).read_text('utf-8'))
+
+          def value(p, *keys):
+              for k in keys:
+                  if p.get(k) not in (None, ''):
+                      return p[k]
+              return None
+
+          print('PROPERTY KEYS:', sorted((data['features'][0].get('properties') or {}).keys()))
+          print('\n--- 1917–1922 Russia/Soviet candidates ---')
+          for f in data.get('features', []):
+              p = f.get('properties') or {}
+              n = str(value(p, 'Name', 'name') or '')
+              wd = str(value(p, 'Wikidata', 'wikidata', 'WikidataID') or '')
+              fy = value(p, 'FromYear', 'fromyear', 'from_year')
+              ty = value(p, 'ToYear', 'toyear', 'to_year')
+              try:
+                  overlap = int(fy) <= 1922 and int(ty) >= 1917
+              except Exception:
+                  overlap = False
+              if overlap and any(k in n.lower() for k in ('russ', 'soviet', 'bolshev')):
+                  print(n, '|', wd, '|', fy, ty, '|', value(p, 'SeshatID', 'seshatid'))
+
+          print('\n--- 800–900 Rus/Novgorod candidates ---')
+          for f in data.get('features', []):
+              p = f.get('properties') or {}
+              n = str(value(p, 'Name', 'name') or '')
+              wd = str(value(p, 'Wikidata', 'wikidata', 'WikidataID') or '')
+              fy = value(p, 'FromYear', 'fromyear', 'from_year')
+              ty = value(p, 'ToYear', 'toyear', 'to_year')
+              try:
+                  overlap = int(fy) <= 900 and int(ty) >= 800
+              except Exception:
+                  overlap = False
+              if overlap and any(k in n.lower() for k in ('rus', 'novgor', 'slav')):
+                  print(n, '|', wd, '|', fy, ty, '|', value(p, 'SeshatID', 'seshatid'))
