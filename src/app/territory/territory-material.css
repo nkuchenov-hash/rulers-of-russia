@@ -1,80 +1,88 @@
 /* Territory rendering overrides.
-   Keep the globe crisp: no bloom, no milky overlay, no atmospheric fog. */
+   The globe must stay crisp on mobile: no bloom, no milky shade,
+   no atmosphere wash and no expensive backdrop blur while rotating. */
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) {
-  stop-color: #456f79;
+  stop-color: #31535b;
 }
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) {
-  stop-color: #294f5a;
+  stop-color: #27464f;
 }
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) {
-  stop-color: #173741;
+  stop-color: #1d3942;
 }
 
 svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
-  fill-opacity: .82;
+  fill-opacity: .88;
 }
 
-/* Remove both expensive blur layers completely. */
+/* Kill every decorative haze layer even though the component still defines them. */
 svg[aria-label^="Территория:"] path[filter="url(#atmosphereGlow)"],
-svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"] {
+svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"],
+svg[aria-label^="Территория:"] [class*="atmosphereOuter"],
+svg[aria-label^="Территория:"] [class*="sphereShade"],
+svg[aria-label^="Территория:"] [class*="territoryGlow"],
+svg[aria-label^="Территория:"] [class*="territoryBorderHalo"] {
   display: none !important;
+  opacity: 0 !important;
+  filter: none !important;
 }
 
-/* The white/grey full-sphere shade was the remaining 'fog' seen on mobile. */
-svg[aria-label^="Территория:"] path[fill="url(#shadeGradient)"] {
-  display: none !important;
-}
-
-/* Make the ocean itself darker and clearer instead of compensating with haze. */
+/* Remove the bright cyan centre wash from the ocean gradient itself. */
 svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(1) {
-  stop-color: #153a45;
+  stop-color: #123039;
 }
 
 svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(2) {
-  stop-color: #0b2832;
+  stop-color: #0d2831;
 }
 
 svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(3) {
-  stop-color: #051820;
+  stop-color: #081c24;
 }
 
 svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(4) {
-  stop-color: #01070a;
+  stop-color: #041117;
 }
 
-/* No halo around historical territory. */
-svg[aria-label^="Территория:"] [class*="territoryBorderHalo"] {
-  display: none !important;
+svg[aria-label^="Территория:"] [class*="ocean"] {
+  stroke: rgba(205, 220, 215, .22);
+  stroke-width: .8px;
 }
 
-/* Historical boundary: a single precise line. */
+/* Countries remain readable but no longer merge into one grey-green veil. */
+svg[aria-label^="Территория:"] [class*="country"] {
+  fill: #38515a;
+  fill-opacity: .72;
+  transition: none;
+}
+
+/* Historical boundary: one thin line only. */
 svg[aria-label^="Территория:"] [class*="territoryBorder"] {
-  stroke: #d5b96f;
-  stroke-width: 1px;
-  opacity: .9;
+  stroke: #d9bb70;
+  stroke-width: .9px;
+  opacity: .95;
   vector-effect: non-scaling-stroke;
 }
 
-/* Reference geography is deliberately quieter. */
 svg[aria-label^="Территория:"] [class*="countryBorder"] {
-  stroke: rgba(232, 223, 199, .10);
-  stroke-width: .45px;
+  stroke: rgba(232, 223, 199, .11);
+  stroke-width: .4px;
 }
 
 svg[aria-label^="Территория:"] [class*="graticule"] {
   stroke: rgba(225, 217, 194, .035);
-  stroke-width: .45px;
+  stroke-width: .4px;
 }
 
 svg[aria-label^="Территория:"] [class*="rim"] {
-  stroke: rgba(205, 227, 221, .22);
+  stroke: rgba(205, 227, 221, .24);
   stroke-width: .8px;
 }
 
-/* Do not re-blur moving SVG content underneath UI chrome. */
+/* Do not re-blur moving content below controls on mobile. */
 [class*="territory-globe"] [class*="segmented"],
 [class*="territory-globe"] [class*="controlButton"],
 [class*="territory-globe"] [class*="mapTools"] button,
@@ -85,10 +93,14 @@ svg[aria-label^="Территория:"] [class*="rim"] {
 
 @media (max-width: 980px) {
   svg[aria-label^="Территория:"] [class*="territoryBorder"] {
-    stroke-width: .8px;
+    stroke-width: .72px;
   }
 
   svg[aria-label^="Территория:"] [class*="countryBorder"] {
-    stroke-width: .35px;
+    stroke-width: .32px;
+  }
+
+  svg[aria-label^="Территория:"] [class*="graticule"] {
+    stroke-width: .3px;
   }
 }
