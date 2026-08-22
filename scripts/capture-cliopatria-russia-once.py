@@ -108,7 +108,11 @@ with tempfile.TemporaryDirectory() as tmp:
     print(f"Downloading one-time source capture: {SOURCE_URL}")
     urllib.request.urlretrieve(SOURCE_URL, archive_path)
     with zipfile.ZipFile(archive_path) as zf:
-        geojson_name = next(name for name in zf.namelist() if name.endswith("cliopatria.geojson"))
+        candidates = [name for name in zf.namelist() if name.lower().endswith(".geojson")]
+        if not candidates:
+            raise RuntimeError(f"No GeoJSON found in archive; entries: {zf.namelist()[:20]}")
+        geojson_name = candidates[0]
+        print(f"Using archive member: {geojson_name}")
         zf.extract(geojson_name, tmp)
     dataset = json.loads((tmp / geojson_name).read_text("utf-8"))
 
