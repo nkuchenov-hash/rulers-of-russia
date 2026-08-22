@@ -1,27 +1,67 @@
-/* Mobile Studio: zero-radius contract.
-   No rounded UI is allowed anywhere on the phone canvas or Studio shell. */
+/* Mobile Studio: absolute zero-radius contract.
+   No rounded UI is allowed anywhere in the Studio page at phone width. */
 @media (max-width: 900px) {
-  .core-site-surface,
-  .core-site-surface *,
-  .core-site-surface *::before,
-  .core-site-surface *::after,
-  .inspector-mobile-nav,
-  .inspector-mobile-nav *,
-  .inspector-layers-panel,
-  .inspector-layers-panel *,
-  .inspector-properties-panel,
-  .inspector-properties-panel *,
-  .studio-element-controls-host,
-  .studio-element-controls-host * {
+  html,
+  body,
+  body *,
+  body *::before,
+  body *::after {
     border-radius: 0 !important;
   }
 
-  /* Remove the soft card treatment introduced by the mobile reference. */
+  /* Also remove any pill/card softness that may survive from component styles. */
+  button,
+  input,
+  select,
+  textarea,
+  a,
+  [role="button"],
+  [data-module-id],
+  [data-element-id],
+  [data-card-id],
+  .core-site-surface,
+  .core-module,
+  .hero-actions,
+  .hero-actions button,
+  .key-events-card,
+  .page-tabs,
+  .page-tabs button,
+  .territory-panel,
+  .historical-map-panel,
+  .map-canvas,
+  .map-controls,
+  .map-controls button,
+  .facts-panel,
+  .fact-row,
+  .thematic-row,
+  .thematic-card,
+  .thematic-card > button,
+  .media-zone,
+  .relationship-diagram,
+  .relationship-diagram b,
+  .reign-timeline,
+  .adjacent-ruler,
+  .inspector-mobile-nav,
+  .inspector-mobile-nav button,
+  .inspector-layers-panel,
+  .inspector-properties-panel,
+  .inspector-layers-head,
+  .inspector-properties-head,
+  .inspector-layers-head button,
+  .inspector-properties-head button,
+  .studio-element-controls-host,
+  .inspector-fab {
+    border-radius: 0 !important;
+  }
+
   .core-site-surface [data-module-id="key-events"],
   .core-site-surface [data-module-id="page-tabs"],
   .core-site-surface .thematic-card,
   .core-site-surface .adjacent-ruler,
-  .core-site-surface .map-canvas {
+  .core-site-surface .map-canvas,
+  .inspector-mobile-nav,
+  .inspector-layers-panel,
+  .inspector-properties-panel {
     box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
