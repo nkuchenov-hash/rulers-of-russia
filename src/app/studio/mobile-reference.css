@@ -1,19 +1,20 @@
-/* Mobile Studio page contract.
-   Mobile keeps the same visual grammar as desktop: square/flat surfaces, border-led
-   hierarchy, no app-card rounding or floating glass. The phone changes composition,
-   not the product's visual language. Loaded after studio.css intentionally. */
-
+/* Mobile Studio contract: one source of truth. No rounded corners anywhere. */
 @media (max-width: 900px) {
-  html,
-  body {
+  html, body, body *, body *::before, body *::after {
+    border-radius: 0 !important;
+    border-start-start-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+    border-end-start-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+  }
+
+  html, body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden !important;
   }
 
-  body {
-    background: var(--page-bg) !important;
-  }
+  body { background: var(--page-bg) !important; }
 
   .background-module,
   .core-site-surface,
@@ -38,19 +39,12 @@
     overflow: hidden !important;
   }
 
-  /* The mobile ruler page starts with the ruler. Desktop chrome/rail are editor context,
-     not part of the phone page composition. */
   .core-header,
-  .historical-rail {
-    display: none !important;
-  }
+  .historical-rail { display: none !important; }
 
   .core-workspace,
-  .ruler-content {
-    display: block !important;
-  }
+  .ruler-content { display: block !important; }
 
-  /* ---------- HERO ---------- */
   .core-site-surface [data-module-id="hero"] {
     position: relative !important;
     display: block !important;
@@ -58,10 +52,9 @@
     height: 720px !important;
     min-height: 720px !important;
     max-height: 720px !important;
+    overflow: hidden !important;
     border: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    overflow: hidden !important;
     background: var(--surface-elevated) !important;
   }
 
@@ -70,27 +63,6 @@
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
-    border-radius: 0 !important;
-  }
-
-  .core-site-surface [data-module-id="hero"] [data-element-id="hero-image"]::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    pointer-events: none !important;
-    background:
-      linear-gradient(90deg,
-        color-mix(in srgb, var(--ambient-deep) 72%, transparent) 0%,
-        color-mix(in srgb, var(--ambient-deep) 42%, transparent) 44%,
-        transparent 77%),
-      linear-gradient(180deg,
-        color-mix(in srgb, var(--ambient-deep) 10%, transparent) 0%,
-        transparent 48%,
-        color-mix(in srgb, var(--ambient-deep) 70%, transparent) 100%) !important;
   }
 
   .core-site-surface [data-module-id="hero"] [data-element-id="hero-gradient"] {
@@ -98,13 +70,8 @@
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    border-radius: 0 !important;
-    background: linear-gradient(180deg,
-      transparent 0%,
-      transparent 48%,
-      color-mix(in srgb, var(--ambient-deep) 78%, transparent) 100%) !important;
+    background: linear-gradient(180deg, transparent 0%, transparent 48%, color-mix(in srgb,var(--ambient-deep) 78%,transparent) 100%) !important;
     backdrop-filter: none !important;
-    pointer-events: none !important;
   }
 
   .core-site-surface [data-module-id="hero"] .hero-copy {
@@ -112,47 +79,33 @@
     z-index: 5 !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important;
     width: min(76%, 390px) !important;
     max-width: min(76%, 390px) !important;
     min-height: 0 !important;
-    height: auto !important;
     padding: 78px 20px 0 22px !important;
     background: transparent !important;
-    overflow: visible !important;
   }
 
   .core-site-surface [data-module-id="hero"] [data-element-id="hero-name"] {
     order: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
     margin: 0 !important;
-    font-size: clamp(38pt, 12vw, 50pt) !important;
+    font-size: clamp(38pt,12vw,50pt) !important;
     line-height: .92 !important;
-    letter-spacing: -.025em !important;
     white-space: normal !important;
-    word-break: normal !important;
     overflow-wrap: normal !important;
-    hyphens: none !important;
   }
 
   .core-site-surface [data-module-id="hero"] [data-element-id="hero-dates"] {
     order: 2 !important;
     margin: 12px 0 0 !important;
     font-size: 16pt !important;
-    line-height: 1.25 !important;
   }
 
   .core-site-surface [data-module-id="hero"] [data-element-id="hero-summary"] {
     order: 3 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
     margin: 22px 0 0 !important;
     font-size: 16pt !important;
     line-height: 1.45 !important;
-    overflow-wrap: normal !important;
   }
 
   .core-site-surface [data-module-id="hero"] .hero-meta,
@@ -161,42 +114,32 @@
     display: none !important;
   }
 
-  /* Existing hero actions stay compact and circular because they are icon controls,
-     not content cards. */
   .core-site-surface [data-module-id="hero"] .hero-actions {
     position: absolute !important;
     top: 16px !important;
     left: 16px !important;
     right: 16px !important;
-    bottom: auto !important;
     z-index: 12 !important;
     display: flex !important;
     justify-content: space-between !important;
-    pointer-events: none !important;
   }
 
   .core-site-surface [data-module-id="hero"] .hero-actions button,
-  .core-site-surface [data-module-id="hero"] [data-element-id="hero-action"] {
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-action"],
+  .core-site-surface .map-controls button {
     width: 44px !important;
     min-width: 44px !important;
     height: 44px !important;
     min-height: 44px !important;
     padding: 0 !important;
-    border-radius: 50% !important;
-    border: 1px solid color-mix(in srgb, white 48%, transparent) !important;
-    background: color-mix(in srgb, var(--ambient-deep) 50%, transparent) !important;
-    color: white !important;
-    font-size: 18pt !important;
+    border: 1px solid var(--border-emphasis) !important;
+    background: var(--surface-elevated) !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
-    pointer-events: auto !important;
   }
 
-  .core-site-surface [data-module-id="hero"] .hero-actions button:nth-child(2) {
-    display: none !important;
-  }
+  .core-site-surface [data-module-id="hero"] .hero-actions button:nth-child(2) { display: none !important; }
 
-  /* Key events: a flat bordered plate reserved at the bottom of Hero. No overlap with copy. */
   .core-site-surface [data-module-id="hero"] [data-module-id="key-events"] {
     position: absolute !important;
     left: 0 !important;
@@ -204,17 +147,14 @@
     bottom: 0 !important;
     z-index: 10 !important;
     width: 100% !important;
-    max-width: 100% !important;
     height: 250px !important;
     min-height: 250px !important;
     max-height: 250px !important;
-    margin: 0 !important;
     padding: 18px 20px !important;
     overflow: hidden !important;
     border: 0 !important;
     border-top: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    background: color-mix(in srgb, var(--surface-elevated) 94%, var(--ambient-deep)) !important;
+    background: color-mix(in srgb,var(--surface-elevated) 94%,var(--ambient-deep)) !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
   }
@@ -222,294 +162,117 @@
   .core-site-surface [data-module-id="key-events"] h3 {
     margin: 0 0 8px !important;
     font-size: 18pt !important;
-    line-height: 1.15 !important;
   }
 
   .core-site-surface [data-module-id="key-events"] [data-element-id="key-event-row"] {
     display: grid !important;
-    grid-template-columns: 64px minmax(0, 1fr) !important;
+    grid-template-columns: 64px minmax(0,1fr) !important;
     gap: 10px !important;
-    margin: 0 !important;
     padding: 7px 0 !important;
     border-top: 1px solid var(--border-emphasis) !important;
     font-size: 16pt !important;
-    line-height: 1.24 !important;
   }
 
-  .core-site-surface [data-module-id="key-events"] [data-element-id="key-event-row"] b,
   .core-site-surface [data-module-id="key-events"] [data-element-id="key-events-all"] {
     font-size: 16pt !important;
   }
 
-  .core-site-surface [data-module-id="key-events"] [data-element-id="key-events-all"] {
-    margin-top: 6px !important;
-    padding: 6px 0 !important;
-  }
-
-  /* ---------- SECTION NAV ----------
-     Flat strip directly under Hero, same border grammar as desktop tabs. */
   .core-site-surface [data-module-id="page-tabs"] {
     position: sticky !important;
     top: 0 !important;
     z-index: 28 !important;
     display: flex !important;
     width: 100% !important;
-    max-width: 100% !important;
     height: 64px !important;
     min-height: 64px !important;
     max-height: 64px !important;
-    gap: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: auto !important;
-    overflow-y: hidden !important;
     border: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
     background: var(--surface-elevated) !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
-    scrollbar-width: none !important;
-  }
-
-  .core-site-surface [data-module-id="page-tabs"]::-webkit-scrollbar {
-    display: none !important;
   }
 
   .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
     flex: 0 0 auto !important;
-    width: auto !important;
     min-width: 130px !important;
     height: 64px !important;
-    min-height: 64px !important;
     padding: 0 18px !important;
     border: 0 !important;
     border-right: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
     font-size: 16pt !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0 !important;
     text-transform: none !important;
     white-space: nowrap !important;
   }
 
-  /* ---------- MAIN STACK ---------- */
   .core-site-surface .primary-content-row {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
+  }
+
+  .core-site-surface [data-module-id="territory"],
+  .core-site-surface [data-module-id="facts"],
+  .core-site-surface [data-module-id="map"],
+  .core-site-surface .thematic-card,
+  .core-site-surface [data-module-id="reign-timeline"],
+  .core-site-surface .adjacent-ruler {
+    width: 100% !important;
     max-width: 100% !important;
-    min-height: 0 !important;
-    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
   }
 
   .core-site-surface [data-module-id="territory"],
   .core-site-surface [data-module-id="facts"] {
-    position: relative !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
     padding: 24px 20px 78px !important;
     border: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
-
-  .core-site-surface [data-module-id="territory"] h2,
-  .core-site-surface [data-module-id="facts"] h2,
-  .core-site-surface .thematic-card h2,
-  .core-site-surface .reign-timeline h2 {
-    margin-top: 0 !important;
-    font-size: 24pt !important;
-    line-height: 1.1 !important;
-  }
-
-  .core-site-surface [data-module-id="territory"] p,
-  .core-site-surface .territory-legend > div,
-  .core-site-surface .fact-row,
-  .core-site-surface .fact-row strong,
-  .core-site-surface .thematic-card p,
-  .core-site-surface .thematic-card li,
-  .core-site-surface .adjacent-ruler small,
-  .core-site-surface .adjacent-ruler strong,
-  .core-site-surface .timeline-events > div,
-  .core-site-surface .timeline-events b {
-    font-size: 16pt !important;
-    line-height: 1.4 !important;
-  }
-
-  .core-site-surface .territory-legend {
-    gap: 12px !important;
-  }
-
-  .core-site-surface .fact-row {
-    grid-template-columns: 22px minmax(0, .9fr) minmax(0, 1.2fr) !important;
-    gap: 10px !important;
-    padding: 12px 0 !important;
-  }
-
-  .core-site-surface .module-cta,
-  .core-site-surface .thematic-card > button {
-    left: 20px !important;
-    bottom: 20px !important;
-    min-height: 44px !important;
-    padding: 8px 14px !important;
-    border-radius: 0 !important;
-    font-size: 16pt !important;
   }
 
   .core-site-surface [data-module-id="map"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
     min-height: 420px !important;
-    max-height: none !important;
     padding: 10px !important;
-    border: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
   }
 
   .core-site-surface .map-canvas {
     width: 100% !important;
     height: 400px !important;
     min-height: 400px !important;
-    max-height: 400px !important;
-    border-radius: 0 !important;
   }
 
-  .core-site-surface .map-controls button {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
-    font-size: 16pt !important;
-  }
+  .core-site-surface [data-module-id="thematic-card"] { display: block !important; }
 
-  /* ---------- THEMATIC MODULES ---------- */
-  .core-site-surface [data-module-id="thematic-card"] {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    border: 0 !important;
-  }
-
-  .core-site-surface [data-module-id="thematic-card"] .thematic-card {
-    position: relative !important;
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 280px !important;
-    max-height: none !important;
-    margin: 0 !important;
+  .core-site-surface .thematic-card {
+    min-height: 270px !important;
     padding: 24px 20px 72px !important;
-    border: 0 !important;
+    border-right: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    overflow: hidden !important;
   }
 
-  .core-site-surface .media-zone,
-  .core-site-surface .relationship-diagram,
-  .core-site-surface .relationship-diagram b {
-    border-radius: 0 !important;
-  }
-
-  /* ---------- REIGN TIMELINE ---------- */
   .core-site-surface [data-module-id="reign-timeline"] {
     display: flex !important;
     flex-direction: column !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    gap: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
+    padding: 24px 20px 32px !important;
   }
 
   .core-site-surface .reign-timeline-center {
     order: -1 !important;
-    width: 100% !important;
-    padding: 24px 20px !important;
     overflow: visible !important;
-    border-bottom: 1px solid var(--border-emphasis) !important;
-  }
-
-  .core-site-surface .timeline-axis {
-    display: none !important;
   }
 
   .core-site-surface .timeline-events {
-    display: block !important;
     min-width: 0 !important;
-    width: 100% !important;
+    display: block !important;
   }
 
   .core-site-surface .timeline-events > div {
-    display: grid !important;
-    grid-template-columns: 86px minmax(0, 1fr) !important;
-    gap: 14px !important;
     padding: 12px 0 !important;
-    border-top: 1px solid var(--border-emphasis) !important;
-  }
-
-  .core-site-surface .adjacent-ruler {
-    width: 100% !important;
-    min-height: 88px !important;
-    margin: 0 !important;
-    padding: 18px 20px !important;
-    border: 0 !important;
     border-bottom: 1px solid var(--border-emphasis) !important;
-    border-radius: 0 !important;
-    text-align: left !important;
-  }
-
-  /* Remove accidental app-like rounding from every content surface in Studio mobile. */
-  .core-site-surface section,
-  .core-site-surface article,
-  .core-site-surface .key-events-card,
-  .core-site-surface .page-tabs,
-  .core-site-surface .thematic-card,
-  .core-site-surface .territory-panel,
-  .core-site-surface .facts-panel,
-  .core-site-surface .historical-map-panel,
-  .core-site-surface .map-canvas,
-  .core-site-surface .adjacent-ruler {
-    border-radius: 0 !important;
-  }
-}
-
-@media (max-width: 430px) {
-  .core-site-surface [data-module-id="hero"] {
-    height: 700px !important;
-    min-height: 700px !important;
-    max-height: 700px !important;
-  }
-
-  .core-site-surface [data-module-id="hero"] .hero-copy {
-    width: min(79%, 330px) !important;
-    max-width: min(79%, 330px) !important;
-    padding-left: 18px !important;
-    padding-right: 14px !important;
-  }
-
-  .core-site-surface [data-module-id="hero"] [data-element-id="hero-name"] {
-    font-size: clamp(36pt, 12vw, 46pt) !important;
-  }
-
-  .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
-    min-width: 122px !important;
-    padding-inline: 16px !important;
+    font-size: 16pt !important;
   }
 }
