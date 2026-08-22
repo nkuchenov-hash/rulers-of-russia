@@ -6,7 +6,6 @@ import {
   geoNaturalEarth1,
   geoOrthographic,
   geoPath,
-  geoCentroid,
   type GeoProjection
 } from 'd3-geo';
 import { feature as topoFeature } from 'topojson-client';
@@ -24,6 +23,7 @@ type ViewMode = 'globe' | 'map';
 type Rotation = [number, number, number];
 type TerritoryFeature = Feature<Geometry, Record<string, unknown>>;
 type TerritoryCollection = FeatureCollection<Geometry, Record<string, unknown>>;
+type Point = { x: number; y: number };
 
 type ImportManifest = {
   generated_at?: string;
@@ -37,11 +37,6 @@ type ImportManifest = {
     status: string;
   }>;
 };
-
-const VIEW_W = 1600;
-const VIEW_H = 900;
-const GLOBE_CENTER: [number, number] = [1020, 420];
-const MAP_CENTER: [number, number] = [860, 420];
 
 const countries = topoFeature(
   countriesTopo as never,
@@ -74,7 +69,9 @@ function isFeatureValid(feature: TerritoryFeature, year: number) {
 }
 
 function chooseTerritoryFeatures(collection: TerritoryCollection | undefined, year: number) {
-  if (!collection?.features.length) return { features: [] as TerritoryFeature[], exact: false, snapshotYear: null as number | null };
+  if (!collection?.features.length) {
+    return { features: [] as TerritoryFeature[], exact: false, snapshotYear: null as number | null };
+  }
 
   const exact = collection.features.filter((feature) => isFeatureValid(feature, year));
   if (exact.length) {
@@ -91,7 +88,10 @@ function chooseTerritoryFeatures(collection: TerritoryCollection | undefined, ye
     .filter((item): item is { feature: TerritoryFeature; start: number } => item.start !== null && item.start <= year)
     .sort((a, b) => b.start - a.start);
 
-  if (!previous.length) return { features: [] as TerritoryFeature[], exact: false, snapshotYear: null as number | null };
+  if (!previous.length) {
+    return { features: [] as TerritoryFeature[], exact: false, snapshotYear: null as number | null };
+  }
+
   const snapshotYear = previous[0].start;
   return {
     features: previous.filter((item) => item.start === snapshotYear).map((item) => item.feature),
@@ -108,6 +108,10 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+function distance(a: Point, b: Point) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
 function useTerritoryData() {
   const [collections, setCollections] = useState<Record<string, TerritoryCollection>>({});
   const [manifest, setManifest] = useState<ImportManifest | null>(null);
@@ -120,22 +124,33 @@ function useTerritoryData() {
 
     async function load() {
       try {
-        const manifestResponse = await fetch(`${root}/manifest.json`, { signal: controller.signal, cache: 'no-store' });
+        const manifestResponse = await fetch(`${root}/manifest.json`, {
+          signal: controller.signal,
+          cache: 'no-store'
+        });
         if (!manifestResponse.ok) throw new Error(`manifest ${manifestResponse.status}`);
+
         const nextManifest = (await manifestResponse.json()) as ImportManifest;
         setManifest(nextManifest);
 
         const entries = (nextManifest.polities ?? []).filter((item) => item.file && item.features > 0);
         const loaded = await Promise.all(
           entries.map(async (item) => {
-            const response = await fetch(`${root}/${item.polity_id}.geojson`, { signal: controller.signal, cache: 'force-cache' });
+            const response = await fetch(`${root}/${item.polity_id}.geojson`, {
+              signal: controller.signal,
+              cache: 'force-cache'
+            });
             if (!response.ok) return null;
             return [item.polity_id, (await response.json()) as TerritoryCollection] as const;
           })
         );
 
         if (controller.signal.aborted) return;
-        setCollections(Object.fromEntries(loaded.filter((item): item is readonly [string, TerritoryCollection] => Boolean(item))));
+        setCollections(
+          Object.fromEntries(
+            loaded.filter((item): item is readonly [string, TerritoryCollection] => Boolean(item))
+          )
+        );
         setStatus('ready');
       } catch {
         if (!controller.signal.aborted) setStatus('missing');
@@ -149,7 +164,7 @@ function useTerritoryData() {
   return { collections, manifest, status };
 }
 
-export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?: number }) {
+export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: { initialYear?: number }) {
   const sceneRef = useRef<HTMLElement | null>(null);
   const dragRef = useRef<{
     active: boolean;
@@ -160,8 +175,11 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
     vx: number;
     vy: number;
   }>({ active: false, x: 0, y: 0, rotation: [-64, -48, 0], time: 0, vx: 0, vy: 0 });
+  const pointersRef = useRef<Map<number, Point>>(new Map());
+  const pinchRef = useRef<{ distance: number; zoom: number } | null>(null);
   const inertiaRef = useRef<number | null>(null);
 
+  const [viewport, setViewport] = useState({ width: 1600, height: 900 });
   const [year, setYear] = useState(clamp(initialYear, TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR));
   const [viewMode, setViewMode] = useState<ViewMode>('globe');
   const [rotation, setRotation] = useState<Rotation>([-64, -48, 0]);
@@ -173,6 +191,23 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   const { collections, manifest, status } = useTerritoryData();
   const period = territoryPeriodAt(year);
   const selected = chooseTerritoryFeatures(collections[period.polityId], year);
+  const portrait = viewport.height > viewport.width * 1.08;
+
+  useEffect(() => {
+    const node = sceneRef.current;
+    if (!node) return;
+
+    const updateSize = () => {
+      const rect = node.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) return;
+      setViewport({ width: Math.round(rect.width), height: Math.round(rect.height) });
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const snapshotYears = useMemo(() => {
     const years = new Set<number>(POLITY_TRANSITION_YEARS);
@@ -187,20 +222,30 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   }, [collections]);
 
   const projection = useMemo<GeoProjection>(() => {
+    const { width, height } = viewport;
+
     if (viewMode === 'map') {
+      const mapScale = Math.min(width / 5.85, height / 3.35) * zoom;
       return geoNaturalEarth1()
-        .translate(MAP_CENTER)
-        .scale(265 * zoom)
+        .translate([width / 2, height * (portrait ? 0.44 : 0.49)])
+        .scale(mapScale)
         .precision(0.25);
     }
 
+    const radius = portrait
+      ? Math.min(width * 0.455, height * 0.315)
+      : Math.min(width * 0.305, height * 0.425);
+
     return geoOrthographic()
-      .translate(GLOBE_CENTER)
-      .scale(350 * zoom)
+      .translate([
+        width * (portrait ? 0.5 : 0.62),
+        height * (portrait ? 0.435 : 0.49)
+      ])
+      .scale(radius * zoom)
       .rotate(rotation)
       .clipAngle(90)
       .precision(0.2);
-  }, [rotation, viewMode, zoom]);
+  }, [portrait, rotation, viewMode, viewport, zoom]);
 
   const path = useMemo(() => geoPath(projection), [projection]);
   const territoryCollection = useMemo(() => collectionFor(selected.features), [selected.features]);
@@ -212,6 +257,8 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
     if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
     inertiaRef.current = null;
   }, []);
+
+  const zoomBounds = viewMode === 'globe' ? [0.72, 2.75] as const : [0.68, 2.2] as const;
 
   const focusRussia = useCallback(() => {
     stopInertia();
@@ -233,9 +280,18 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   useEffect(() => () => stopInertia(), [stopInertia]);
 
   function beginDrag(event: React.PointerEvent<SVGSVGElement>) {
-    if (viewMode !== 'globe') return;
     stopInertia();
     event.currentTarget.setPointerCapture(event.pointerId);
+    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    const pointers = [...pointersRef.current.values()];
+    if (pointers.length >= 2) {
+      pinchRef.current = { distance: distance(pointers[0], pointers[1]), zoom };
+      dragRef.current.active = false;
+      return;
+    }
+
+    if (viewMode !== 'globe') return;
     dragRef.current = {
       active: true,
       x: event.clientX,
@@ -248,13 +304,27 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   }
 
   function moveDrag(event: React.PointerEvent<SVGSVGElement>) {
+    if (!pointersRef.current.has(event.pointerId)) return;
+    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    const pointers = [...pointersRef.current.values()];
+    if (pointers.length >= 2) {
+      const currentDistance = distance(pointers[0], pointers[1]);
+      if (!pinchRef.current) {
+        pinchRef.current = { distance: currentDistance, zoom };
+      }
+      const ratio = currentDistance / Math.max(24, pinchRef.current.distance);
+      setZoom(clamp(pinchRef.current.zoom * ratio, zoomBounds[0], zoomBounds[1]));
+      return;
+    }
+
     const drag = dragRef.current;
     if (!drag.active || viewMode !== 'globe') return;
 
     const now = performance.now();
     const dx = event.clientX - drag.x;
     const dy = event.clientY - drag.y;
-    const sensitivity = 0.22 / zoom;
+    const sensitivity = 0.24 / zoom;
     const next: Rotation = [
       drag.rotation[0] + dx * sensitivity,
       clamp(drag.rotation[1] - dy * sensitivity, -78, 78),
@@ -262,17 +332,42 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
     ];
 
     const dt = Math.max(8, now - drag.time);
-    drag.vx = ((event.clientX - drag.x) * sensitivity) / dt;
-    drag.vy = (-(event.clientY - drag.y) * sensitivity) / dt;
+    drag.vx = (dx * sensitivity) / dt;
+    drag.vy = (-dy * sensitivity) / dt;
     setRotation(next);
   }
 
   function endDrag(event: React.PointerEvent<SVGSVGElement>) {
-    const drag = dragRef.current;
-    if (!drag.active || viewMode !== 'globe') return;
-    drag.active = false;
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    const hadTwoPointers = pointersRef.current.size >= 2;
+    pointersRef.current.delete(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
 
+    if (pointersRef.current.size < 2) pinchRef.current = null;
+
+    const remaining = [...pointersRef.current.values()];
+    if (remaining.length === 1 && viewMode === 'globe') {
+      const point = remaining[0];
+      dragRef.current = {
+        active: true,
+        x: point.x,
+        y: point.y,
+        rotation,
+        time: performance.now(),
+        vx: 0,
+        vy: 0
+      };
+      return;
+    }
+
+    const drag = dragRef.current;
+    if (!drag.active || viewMode !== 'globe' || hadTwoPointers) {
+      dragRef.current.active = false;
+      return;
+    }
+
+    drag.active = false;
     let vx = drag.vx * 16;
     let vy = drag.vy * 16;
     const animate = () => {
@@ -289,12 +384,12 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   }
 
   function changeZoom(delta: number) {
-    setZoom((value) => clamp(value + delta, viewMode === 'globe' ? 0.72 : 0.68, viewMode === 'globe' ? 2.4 : 2));
+    setZoom((value) => clamp(value + delta, zoomBounds[0], zoomBounds[1]));
   }
 
   function wheelZoom(event: React.WheelEvent<SVGSVGElement>) {
     event.preventDefault();
-    changeZoom(event.deltaY > 0 ? -0.08 : 0.08);
+    changeZoom(event.deltaY > 0 ? -0.09 : 0.09);
   }
 
   async function toggleFullscreen() {
@@ -308,15 +403,17 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
   }
 
   function jumpSnapshot(direction: -1 | 1) {
-    const candidates = direction > 0 ? snapshotYears.filter((value) => value > year) : snapshotYears.filter((value) => value < year).reverse();
+    const candidates = direction > 0
+      ? snapshotYears.filter((value) => value > year)
+      : snapshotYears.filter((value) => value < year).reverse();
     if (candidates.length) setYearSafe(candidates[0]);
   }
 
   const sourceLabel = status === 'ready'
-    ? `локальный кэш · ${manifest?.source ?? 'historical data'}`
+    ? `локальный исторический архив · ${manifest?.source ?? 'данные проекта'}`
     : status === 'loading'
-      ? 'подключаем локальные исторические данные'
-      : 'базовый глобус · исторические полигоны ещё не импортированы';
+      ? 'подключаем локальный исторический архив'
+      : 'исторический контур для периода ещё не добавлен в локальный архив';
 
   return (
     <main className={styles.page}>
@@ -325,7 +422,8 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
 
         <svg
           className={`${styles.globe} ${viewMode === 'globe' ? styles.globeInteractive : styles.mapInteractive}`}
-          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+          viewBox={`0 0 ${viewport.width} ${viewport.height}`}
+          preserveAspectRatio="xMidYMid meet"
           role="img"
           aria-label={`Территория: ${period.label}, ${year} год`}
           onPointerDown={beginDrag}
@@ -335,25 +433,25 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
           onWheel={wheelZoom}
         >
           <defs>
-            <radialGradient id="oceanGradient" cx="35%" cy="28%" r="72%">
-              <stop offset="0%" stopColor="#183945" />
-              <stop offset="52%" stopColor="#0c252e" />
-              <stop offset="86%" stopColor="#07161d" />
-              <stop offset="100%" stopColor="#030a0e" />
+            <radialGradient id="oceanGradient" cx="34%" cy="27%" r="74%">
+              <stop offset="0%" stopColor="#214955" />
+              <stop offset="46%" stopColor="#12313a" />
+              <stop offset="82%" stopColor="#071a21" />
+              <stop offset="100%" stopColor="#02080b" />
             </radialGradient>
-            <radialGradient id="shadeGradient" cx="39%" cy="32%" r="68%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.07" />
-              <stop offset="52%" stopColor="#07151a" stopOpacity="0" />
-              <stop offset="88%" stopColor="#010508" stopOpacity="0.46" />
-              <stop offset="100%" stopColor="#000000" stopOpacity="0.74" />
+            <radialGradient id="shadeGradient" cx="38%" cy="31%" r="70%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.095" />
+              <stop offset="49%" stopColor="#07151a" stopOpacity="0" />
+              <stop offset="86%" stopColor="#010508" stopOpacity="0.42" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0.72" />
             </radialGradient>
             <linearGradient id="russiaGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#d7c08a" />
-              <stop offset="42%" stopColor="#aa9b67" />
-              <stop offset="100%" stopColor="#69765c" />
+              <stop offset="0%" stopColor="#e0c98e" />
+              <stop offset="46%" stopColor="#b9a46f" />
+              <stop offset="100%" stopColor="#778061" />
             </linearGradient>
             <filter id="atmosphereGlow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="15" />
+              <feGaussianBlur stdDeviation="14" />
             </filter>
             <filter id="territoryGlow" x="-25%" y="-25%" width="150%" height="150%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
@@ -375,7 +473,6 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
           )}
 
           {viewMode === 'map' && <path d={spherePath} className={styles.mapOcean} />}
-
           <path d={graticulePath} className={styles.graticule} />
 
           <g clipPath={viewMode === 'globe' ? 'url(#sphereClip)' : undefined}>
@@ -396,7 +493,9 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
 
             {showReferenceBorders && countries.features.map((country, index) => {
               const d = path(country as never);
-              return d ? <path key={`border-${country.id ?? index}`} d={d} className={styles.countryBorder} /> : null;
+              return d
+                ? <path key={`border-${country.id ?? index}`} d={d} className={styles.countryBorder} />
+                : null;
             })}
 
             {territoryPath && (
@@ -434,23 +533,29 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
 
         <aside className={styles.story}>
           <div className={styles.eyebrow}>{period.era}</div>
-          <div className={styles.year}>{year}</div>
-          <h1>{period.label}</h1>
-          <div className={styles.rule} />
+          <div className={styles.storyRow}>
+            <h1>{period.label}</h1>
+            <span className={styles.storyYear}>{year}</span>
+          </div>
           <p>
             {selected.features.length
               ? selected.exact
-                ? 'Граница по датированному историческому снапшоту.'
-                : `Показан ближайший доступный снапшот ${selected.snapshotYear ?? '—'} года.`
-              : 'Исторический слой для этого периода ещё импортируется; географический глобус работает независимо.'}
+                ? 'Граница соответствует датированному историческому срезу.'
+                : `Используется ближайший доступный срез ${selected.snapshotYear ?? '—'} года.`
+              : 'Географическая сцена работает независимо; исторический контур подключается из локального архива.'}
           </p>
           <div className={styles.source}>{sourceLabel}</div>
         </aside>
 
         <div className={styles.mapTools}>
-          <button onClick={() => changeZoom(0.12)} aria-label="Приблизить">+</button>
-          <button onClick={() => changeZoom(-0.12)} aria-label="Отдалить">−</button>
-          <button onClick={() => setShowReferenceBorders((value) => !value)} className={showReferenceBorders ? styles.toolActive : ''} title="Контуры стран">◎</button>
+          <button onClick={() => changeZoom(0.14)} aria-label="Приблизить">+</button>
+          <button onClick={() => changeZoom(-0.14)} aria-label="Отдалить">−</button>
+          <button
+            onClick={() => setShowReferenceBorders((value) => !value)}
+            className={showReferenceBorders ? styles.toolActive : ''}
+            title="Контуры стран"
+            aria-label="Показать или скрыть границы стран"
+          >◎</button>
         </div>
 
         {hoveredCountry && <div className={styles.countryTip}>{hoveredCountry}</div>}
@@ -486,7 +591,12 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
               />
               <div className={styles.marks} aria-hidden="true">
                 {snapshotYears.map((value) => (
-                  <i key={value} style={{ left: `${((value - TERRITORY_MIN_YEAR) / (TERRITORY_MAX_YEAR - TERRITORY_MIN_YEAR)) * 100}%` }} />
+                  <i
+                    key={value}
+                    style={{
+                      left: `${((value - TERRITORY_MIN_YEAR) / (TERRITORY_MAX_YEAR - TERRITORY_MIN_YEAR)) * 100}%`
+                    }}
+                  />
                 ))}
               </div>
             </div>
@@ -494,7 +604,11 @@ export function HistoricalTerritoryGlobe({ initialYear = 1721 }: { initialYear?:
           </div>
         </section>
 
-        <div className={styles.dragHint}>{viewMode === 'globe' ? 'Тяните глобус · колесо — масштаб' : 'Колесо — масштаб · переключитесь на глобус для вращения'}</div>
+        <div className={styles.dragHint}>
+          {viewMode === 'globe'
+            ? 'Тяните глобус · щипок или колесо — масштаб'
+            : 'Щипок или колесо — масштаб'}
+        </div>
       </section>
     </main>
   );
