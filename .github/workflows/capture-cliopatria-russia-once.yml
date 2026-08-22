@@ -1,0 +1,48 @@
+name: One-time territory archive bootstrap
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/capture-cliopatria-russia-once.py
+      - .github/workflows/capture-cliopatria-russia-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install geometry tools
+        run: pip install shapely==2.1.1
+
+      - name: Capture missing historical snapshots once
+        run: python scripts/capture-cliopatria-russia-once.py
+
+      - name: Show resulting manifest
+        run: cat public/data/territory/archive/manifest.json
+
+      - name: Commit project-owned archive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/territory/archive
+          if git diff --cached --quiet; then
+            echo "No archive changes"
+          else
+            git commit -m "Fill missing historical territory snapshots"
+            git push origin HEAD:main
+          fi
