@@ -25,16 +25,18 @@ type TerritoryFeature = Feature<Geometry, Record<string, unknown>>;
 type TerritoryCollection = FeatureCollection<Geometry, Record<string, unknown>>;
 type Point = { x: number; y: number };
 
-type ImportManifest = {
-  generated_at?: string;
-  source?: string;
-  runtime_dependency?: boolean;
+type ArchiveManifest = {
+  schema_version?: number;
+  dataset?: string;
+  runtime_owner?: string;
+  runtime_external_dependencies?: string[];
   polities?: Array<{
     polity_id: string;
     label: string;
     file: string | null;
     features: number;
     status: string;
+    modern_override_required?: boolean;
   }>;
 };
 
@@ -114,13 +116,13 @@ function distance(a: Point, b: Point) {
 
 function useTerritoryData() {
   const [collections, setCollections] = useState<Record<string, TerritoryCollection>>({});
-  const [manifest, setManifest] = useState<ImportManifest | null>(null);
+  const [manifest, setManifest] = useState<ArchiveManifest | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'missing'>('loading');
 
   useEffect(() => {
     const controller = new AbortController();
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-    const root = `${basePath}/data/territory/ohm`;
+    const root = `${basePath}/data/territory/archive`;
 
     async function load() {
       try {
@@ -130,13 +132,15 @@ function useTerritoryData() {
         });
         if (!manifestResponse.ok) throw new Error(`manifest ${manifestResponse.status}`);
 
-        const nextManifest = (await manifestResponse.json()) as ImportManifest;
+        const nextManifest = (await manifestResponse.json()) as ArchiveManifest;
         setManifest(nextManifest);
 
-        const entries = (nextManifest.polities ?? []).filter((item) => item.file && item.features > 0);
+        const entries = (nextManifest.polities ?? []).filter(
+          (item): item is typeof item & { file: string } => Boolean(item.file && item.features > 0)
+        );
         const loaded = await Promise.all(
           entries.map(async (item) => {
-            const response = await fetch(`${root}/${item.polity_id}.geojson`, {
+            const response = await fetch(`${root}/${item.file}`, {
               signal: controller.signal,
               cache: 'force-cache'
             });
@@ -410,10 +414,10 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
   }
 
   const sourceLabel = status === 'ready'
-    ? `локальный исторический архив · ${manifest?.source ?? 'данные проекта'}`
+    ? `архив проекта · ${manifest?.dataset ?? 'границы России'}`
     : status === 'loading'
-      ? 'подключаем локальный исторический архив'
-      : 'исторический контур для периода ещё не добавлен в локальный архив';
+      ? 'подключаем архив проекта'
+      : 'исторический контур для периода ещё не добавлен в архив проекта';
 
   return (
     <main className={styles.page}>
@@ -542,7 +546,7 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
               ? selected.exact
                 ? 'Граница соответствует датированному историческому срезу.'
                 : `Используется ближайший доступный срез ${selected.snapshotYear ?? '—'} года.`
-              : 'Географическая сцена работает независимо; исторический контур подключается из локального архива.'}
+              : 'Географическая сцена работает независимо; исторический контур подключается из архива проекта.'}
           </p>
           <div className={styles.source}>{sourceLabel}</div>
         </aside>
