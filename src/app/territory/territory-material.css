@@ -1,60 +1,83 @@
-/* Territory rendering overrides.
-   Keep selectors tied to explicit SVG attributes so unrelated globe layers
-   can never inherit territory styling. */
+/* Territory rendering: crisp, dark globe with no fog/bloom layers. */
 
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(1) { stop-color: #153842; }
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(2) { stop-color: #0e2d36; }
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(3) { stop-color: #081d25; }
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(4) { stop-color: #031014; }
-
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) { stop-color: #456d75; }
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) { stop-color: #315760; }
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) { stop-color: #24434c; }
-
-/* Remove the actual haze sources, not classes that merely contain similar names. */
+/* Remove every decorative wash explicitly rendered by the SVG. */
 svg[aria-label^="Территория:"] path[filter="url(#atmosphereGlow)"],
 svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"],
 svg[aria-label^="Территория:"] path[fill="url(#shadeGradient)"] {
   display: none !important;
+  filter: none !important;
+  opacity: 0 !important;
 }
 
-/* Ocean stays dark teal and clean. */
+/* Do not use the radial ocean gradient at all: it reads as a cyan fog layer. */
 svg[aria-label^="Территория:"] path[fill="url(#oceanGradient)"] {
-  stroke: rgba(205, 220, 215, .22);
-  stroke-width: .8px;
+  fill: #07191f !important;
+  stroke: rgba(201, 213, 205, .34);
+  stroke-width: .7px;
 }
 
-/* Territory fill only — never touch the sphere or country layers. */
-svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
-  fill-opacity: .82;
+/* Make land masses opaque enough to read as geography, not as a translucent veil. */
+svg[aria-label^="Территория:"] path[class*="country__"] {
+  fill: #294149 !important;
+  fill-opacity: 1 !important;
   stroke: none;
+  transition: none !important;
 }
 
-/* In the component the halo is immediately after the territory fill;
-   remove it, then style only the following real border. */
+svg[aria-label^="Территория:"] path[class*="countryBorder__"] {
+  fill: none !important;
+  stroke: rgba(220, 216, 198, .12) !important;
+  stroke-width: .36px !important;
+  opacity: 1 !important;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The state itself is a darker material, with one restrained brass edge. */
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) { stop-color: #345862; }
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) { stop-color: #294b55; }
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) { stop-color: #203f48; }
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
+  fill-opacity: 1 !important;
+  stroke: none !important;
+}
+
+/* Halo immediately follows the territory fill in the component. */
 svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path {
   display: none !important;
 }
 
+/* Actual boundary follows the halo. */
 svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
-  fill: none;
-  stroke: #d7ba70;
-  stroke-width: .9px;
-  opacity: .92;
+  display: block !important;
+  fill: none !important;
+  stroke: #d2b56a !important;
+  stroke-width: .78px !important;
+  opacity: .92 !important;
   vector-effect: non-scaling-stroke;
 }
 
-/* Moving SVG beneath blurred chrome was expensive on mobile. */
-@media (max-width: 980px) {
-  svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
-    stroke-width: .72px;
-  }
+svg[aria-label^="Территория:"] path[class*="graticule__"] {
+  stroke: rgba(220, 216, 198, .025) !important;
+  stroke-width: .28px !important;
+}
 
+svg[aria-label^="Территория:"] path[class*="rim__"] {
+  stroke: rgba(206, 220, 213, .28) !important;
+  stroke-width: .7px !important;
+}
+
+/* Blurring chrome over a moving full-screen SVG hurts mobile performance. */
+@media (max-width: 980px) {
   .segmented,
   .controlButton,
   .mapTools button,
   .timeline {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
+  }
+
+  svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
+    stroke-width: .62px !important;
   }
 }
