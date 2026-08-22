@@ -1,0 +1,16 @@
+.sourceWarning {
+  position: absolute;
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  max-width: min(640px, calc(100% - 32px));
+  padding: 10px 14px;
+  border: 1px solid rgba(223, 188, 120, .45);
+  background: rgba(18, 31, 36, .86);
+  color: #eadfca;
+  font: 600 12px/1.4 Inter, system-ui, sans-serif;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
