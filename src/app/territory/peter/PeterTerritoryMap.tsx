@@ -3,11 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import type { FilterSpecification, Map } from 'maplibre-gl';
-import {
-  constrainFilterByDateRange,
-  dateRangeFromISODate,
-  filterByDate
-} from '@openhistoricalmap/maplibre-gl-dates';
+import { constrainFilterByDateRange, dateRangeFromISODate } from '@openhistoricalmap/maplibre-gl-dates';
+import { LOCAL_GLOBE_STYLE } from './map-style';
 import styles from './territory-map.module.css';
 
 type Projection = 'globe' | 'mercator';
@@ -22,8 +19,8 @@ type BoundaryState = {
 
 const MIN_YEAR = 1682;
 const MAX_YEAR = 1725;
-const OHM_STYLE = 'https://www.openhistoricalmap.org/map-styles/main/main.json';
 const OHM_ADMIN_TILES = 'https://vtiles.openhistoricalmap.org/maps/ohm_admin/{z}/{x}/{y}.pbf';
+const WORLD_LAND = 'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@ca96624a/geojson/ne_110m_land.geojson';
 
 const BOUNDARY_STATES: BoundaryState[] = [
   { year: 1682, title: 'Исходная территория', note: 'Граница Русского царства в начале правления Петра I', delta: 'none' },
@@ -76,6 +73,40 @@ function historicalFilter(year: number): FilterSpecification {
   );
 }
 
+function addVisualBase(map: Map) {
+  if (!map.getSource('world-land')) {
+    map.addSource('world-land', {
+      type: 'geojson',
+      data: WORLD_LAND
+    });
+  }
+
+  if (!map.getLayer('world-land-fill')) {
+    map.addLayer({
+      id: 'world-land-fill',
+      type: 'fill',
+      source: 'world-land',
+      paint: {
+        'fill-color': '#59645d',
+        'fill-opacity': 0.72
+      }
+    });
+  }
+
+  if (!map.getLayer('world-land-edge')) {
+    map.addLayer({
+      id: 'world-land-edge',
+      type: 'line',
+      source: 'world-land',
+      paint: {
+        'line-color': '#899189',
+        'line-width': 0.55,
+        'line-opacity': 0.42
+      }
+    });
+  }
+}
+
 function addTerritoryLayers(map: Map) {
   if (!map.getSource('ohm-admin')) {
     map.addSource('ohm-admin', {
@@ -85,15 +116,13 @@ function addTerritoryLayers(map: Map) {
     });
   }
 
-  const firstSymbol = map.getStyle().layers.find((layer) => layer.type === 'symbol')?.id;
-
   map.addLayer({
     id: 'russia-loss',
     type: 'fill',
     source: 'ohm-admin',
     'source-layer': 'boundaries',
     paint: { 'fill-color': '#b86655', 'fill-opacity': 0 }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-current',
@@ -101,7 +130,7 @@ function addTerritoryLayers(map: Map) {
     source: 'ohm-admin',
     'source-layer': 'boundaries',
     paint: { 'fill-color': '#6f8169', 'fill-opacity': 0.68 }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-gain',
@@ -109,7 +138,7 @@ function addTerritoryLayers(map: Map) {
     source: 'ohm-admin',
     'source-layer': 'boundaries',
     paint: { 'fill-color': '#d0ac61', 'fill-opacity': 0 }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-previous-cover',
@@ -117,7 +146,7 @@ function addTerritoryLayers(map: Map) {
     source: 'ohm-admin',
     'source-layer': 'boundaries',
     paint: { 'fill-color': '#6f8169', 'fill-opacity': 0 }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-previous-border',
@@ -130,7 +159,7 @@ function addTerritoryLayers(map: Map) {
       'line-opacity': 0,
       'line-dasharray': [3, 2]
     }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-border-halo',
@@ -142,7 +171,7 @@ function addTerritoryLayers(map: Map) {
       'line-width': ['interpolate', ['linear'], ['zoom'], 2, 4.2, 7, 8],
       'line-opacity': 0.6
     }
-  }, firstSymbol);
+  });
 
   map.addLayer({
     id: 'russia-border',
@@ -154,14 +183,13 @@ function addTerritoryLayers(map: Map) {
       'line-width': ['interpolate', ['linear'], ['zoom'], 2, 2.4, 7, 4.8],
       'line-opacity': 1
     }
-  }, firstSymbol);
+  });
 }
 
 function applyTerritoryState(map: Map, year: number) {
   const exact = exactState(year);
   const current = historicalFilter(year);
-  const previousYear = previousStateYear(year);
-  const previous = historicalFilter(previousYear);
+  const previous = historicalFilter(previousStateYear(year));
 
   map.setFilter('russia-current', current);
   map.setFilter('russia-gain', current);
@@ -189,22 +217,6 @@ function applyTerritoryState(map: Map, year: number) {
   }
 }
 
-function softenBaseMap(map: Map) {
-  for (const layer of map.getStyle().layers) {
-    try {
-      if (layer.type === 'symbol') {
-        map.setPaintProperty(layer.id, 'text-opacity', 0.54);
-        map.setPaintProperty(layer.id, 'icon-opacity', 0.45);
-      }
-      if (layer.type === 'line' && !layer.id.startsWith('russia-')) {
-        map.setPaintProperty(layer.id, 'line-opacity', 0.42);
-      }
-    } catch {
-      // Some source-driven styles do not expose every property at runtime.
-    }
-  }
-}
-
 export function PeterTerritoryMap() {
   const mapNodeRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLElement | null>(null);
@@ -214,6 +226,7 @@ export function PeterTerritoryMap() {
   const [year, setYear] = useState(1721);
   const [projection, setProjection] = useState<Projection>('globe');
   const [ready, setReady] = useState(false);
+  const [sourceIssue, setSourceIssue] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -225,7 +238,7 @@ export function PeterTerritoryMap() {
 
     const map = new maplibregl.Map({
       container: mapNodeRef.current,
-      style: OHM_STYLE,
+      style: LOCAL_GLOBE_STYLE,
       center: [56, 58],
       zoom: 2.35,
       pitch: 0,
@@ -236,12 +249,18 @@ export function PeterTerritoryMap() {
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-right');
 
+    map.on('error', (event) => {
+      const message = String(event.error?.message ?? '');
+      if (message.includes('openhistoricalmap') || message.includes('ohm_admin') || message.includes('vtiles')) {
+        setSourceIssue(true);
+      }
+    });
+
     map.on('load', () => {
-      filterByDate(map, `${year}-12-31`);
-      softenBaseMap(map);
+      map.setProjection({ type: 'globe' });
+      addVisualBase(map);
       addTerritoryLayers(map);
       applyTerritoryState(map, year);
-      map.setProjection({ type: 'globe' });
       setReady(true);
     });
 
@@ -254,7 +273,6 @@ export function PeterTerritoryMap() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    filterByDate(map, `${year}-12-31`);
     applyTerritoryState(map, year);
   }, [year, ready]);
 
@@ -316,7 +334,8 @@ export function PeterTerritoryMap() {
         <div className={styles.vignette} aria-hidden="true" />
         <div className={styles.grain} aria-hidden="true" />
 
-        {!ready && <div className={styles.loading}>Строим историческую поверхность…</div>}
+        {!ready && <div className={styles.loading}>Запускаем глобус…</div>}
+        {ready && sourceIssue && <div className={styles.sourceWarning}>Глобус работает, но исторический слой границ сейчас недоступен. Повторная загрузка произойдёт при обновлении страницы.</div>}
 
         <header className={styles.topbar}>
           <div className={styles.identity}>
