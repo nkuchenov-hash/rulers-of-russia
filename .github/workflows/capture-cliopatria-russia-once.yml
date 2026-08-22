@@ -1,6 +1,10 @@
 name: One-time territory archive bootstrap
 
 on:
+  pull_request:
+    paths:
+      - scripts/capture-cliopatria-russia-once.py
+      - .github/workflows/capture-cliopatria-russia-once.yml
   push:
     branches:
       - main
@@ -18,8 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -35,7 +37,15 @@ jobs:
       - name: Show resulting manifest
         run: cat public/data/territory/archive/manifest.json
 
+      - name: Upload captured archive for verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: territory-bootstrap-preview
+          path: public/data/territory/archive
+          if-no-files-found: error
+
       - name: Commit project-owned archive
+        if: github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
