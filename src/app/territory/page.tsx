@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function TerritoryPage() {
-  return <HistoricalTerritoryGlobe initialYear={1721} />;
+  return <HistoricalTerritoryGlobe initialYear={2026} />;
 }
