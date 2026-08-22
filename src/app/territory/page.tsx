@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { HistoricalTerritoryGlobeLocal } from './HistoricalTerritoryGlobeLocal';
+import './territory-premium.css';
 
 export const metadata: Metadata = {
   title: 'Исторический глобус России | Правители России',
