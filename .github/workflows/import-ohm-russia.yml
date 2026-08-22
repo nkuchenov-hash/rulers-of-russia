@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - feature/peter-histography-globe
+      - main
     paths:
       - scripts/import-ohm-russia.mjs
       - .github/workflows/import-ohm-russia.yml
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: feature/peter-histography-globe
+          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -42,5 +42,5 @@ jobs:
             echo "No imported data changes"
           else
             git commit -m "Cache OHM historical Russia territory data"
-            git push origin HEAD:feature/peter-histography-globe
+            git push origin HEAD:main
           fi
