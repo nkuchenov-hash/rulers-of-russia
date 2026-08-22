@@ -1,0 +1,24 @@
+/* Territory material overrides: the state remains part of the globe material.
+   Brass is reserved for borders and temporal change accents, never full-area fill. */
+
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) {
+  stop-color: #4d7780;
+}
+
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) {
+  stop-color: #315964;
+}
+
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) {
+  stop-color: #203f49;
+}
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
+  fill-opacity: .82;
+}
+
+svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"] {
+  fill: rgba(74, 128, 139, .12);
+  stroke: rgba(220, 196, 135, .26);
+  stroke-width: 3;
+}
