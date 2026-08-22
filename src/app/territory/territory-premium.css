@@ -1,0 +1,166 @@
+.premiumHistoricalGlobe {
+  shape-rendering: geometricPrecision;
+  text-rendering: optimizeLegibility;
+}
+
+.premiumCountry {
+  transition: none !important;
+}
+
+.premiumRussia {
+  fill: #314b32 !important;
+  stroke: none !important;
+}
+
+.cartographicTexture {
+  pointer-events: none;
+  opacity: .72;
+}
+
+.premiumRim {
+  stroke: rgba(226, 207, 156, .5) !important;
+  stroke-width: .8px !important;
+}
+
+.countryLabels,
+.placeLabels {
+  pointer-events: none;
+}
+
+.countryLabel {
+  fill: rgba(244, 235, 215, .84);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: .01em;
+  paint-order: stroke fill;
+  stroke: rgba(3, 11, 14, .88);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.russiaMapLabel {
+  fill: #f3ead2;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 400;
+  paint-order: stroke fill;
+  stroke: rgba(8, 18, 12, .92);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.capitalStar {
+  fill: #ead6a0;
+  stroke: rgba(14, 22, 19, .9);
+  stroke-width: .7px;
+}
+
+.cityDot {
+  fill: #efe6ce;
+  stroke: rgba(8, 16, 18, .9);
+  stroke-width: .7px;
+}
+
+.capitalLabel,
+.cityLabel {
+  fill: rgba(247, 239, 221, .93);
+  font-family: Georgia, "Times New Roman", serif;
+  paint-order: stroke fill;
+  stroke: rgba(3, 10, 13, .9);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.capitalLabel {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cityLabel {
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.mapLegend {
+  position: absolute;
+  z-index: 9;
+  left: 26px;
+  bottom: 146px;
+  display: grid;
+  gap: 7px;
+  padding: 11px 13px;
+  border: 1px solid rgba(220, 190, 121, .28);
+  border-radius: 12px;
+  color: rgba(239, 230, 210, .76);
+  background: rgba(3, 11, 14, .9);
+  font: 11px/1.2 Georgia, "Times New Roman", serif;
+  pointer-events: none;
+}
+
+.mapLegend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendStar {
+  color: #ead6a0;
+  font-size: 14px;
+}
+
+.legendDot {
+  width: 13px;
+  color: #efe6ce;
+  font-size: 18px;
+  line-height: 10px;
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .countryLabel {
+    stroke-width: 2.4px;
+  }
+
+  .russiaMapLabel {
+    font-size: 17px;
+    stroke-width: 3px;
+  }
+
+  .capitalLabel {
+    font-size: 10px;
+  }
+
+  .cityLabel {
+    font-size: 9px;
+  }
+
+  .mapLegend {
+    left: 12px;
+    bottom: 118px;
+    padding: 8px 9px;
+    gap: 5px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 560px) {
+  .countryLabel {
+    stroke-width: 2px;
+  }
+
+  .russiaMapLabel {
+    font-size: 15px;
+  }
+
+  .capitalLabel {
+    font-size: 9px;
+  }
+
+  .cityLabel {
+    font-size: 8px;
+  }
+
+  .mapLegend {
+    display: none;
+  }
+}
