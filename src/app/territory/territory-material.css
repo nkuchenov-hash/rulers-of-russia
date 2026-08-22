@@ -1,106 +1,60 @@
 /* Territory rendering overrides.
-   The globe must stay crisp on mobile: no bloom, no milky shade,
-   no atmosphere wash and no expensive backdrop blur while rotating. */
+   Keep selectors tied to explicit SVG attributes so unrelated globe layers
+   can never inherit territory styling. */
 
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) {
-  stop-color: #31535b;
-}
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(1) { stop-color: #153842; }
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(2) { stop-color: #0e2d36; }
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(3) { stop-color: #081d25; }
+svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(4) { stop-color: #031014; }
 
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) {
-  stop-color: #27464f;
-}
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) { stop-color: #456d75; }
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(2) { stop-color: #315760; }
+svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) { stop-color: #24434c; }
 
-svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) {
-  stop-color: #1d3942;
-}
-
-svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
-  fill-opacity: .88;
-}
-
-/* Kill every decorative haze layer even though the component still defines them. */
+/* Remove the actual haze sources, not classes that merely contain similar names. */
 svg[aria-label^="Территория:"] path[filter="url(#atmosphereGlow)"],
 svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"],
-svg[aria-label^="Территория:"] [class*="atmosphereOuter"],
-svg[aria-label^="Территория:"] [class*="sphereShade"],
-svg[aria-label^="Территория:"] [class*="territoryGlow"],
-svg[aria-label^="Территория:"] [class*="territoryBorderHalo"] {
+svg[aria-label^="Территория:"] path[fill="url(#shadeGradient)"] {
   display: none !important;
-  opacity: 0 !important;
-  filter: none !important;
 }
 
-/* Remove the bright cyan centre wash from the ocean gradient itself. */
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(1) {
-  stop-color: #123039;
-}
-
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(2) {
-  stop-color: #0d2831;
-}
-
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(3) {
-  stop-color: #081c24;
-}
-
-svg[aria-label^="Территория:"] #oceanGradient stop:nth-child(4) {
-  stop-color: #041117;
-}
-
-svg[aria-label^="Территория:"] [class*="ocean"] {
+/* Ocean stays dark teal and clean. */
+svg[aria-label^="Территория:"] path[fill="url(#oceanGradient)"] {
   stroke: rgba(205, 220, 215, .22);
   stroke-width: .8px;
 }
 
-/* Countries remain readable but no longer merge into one grey-green veil. */
-svg[aria-label^="Территория:"] [class*="country"] {
-  fill: #38515a;
-  fill-opacity: .72;
-  transition: none;
+/* Territory fill only — never touch the sphere or country layers. */
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
+  fill-opacity: .82;
+  stroke: none;
 }
 
-/* Historical boundary: one thin line only. */
-svg[aria-label^="Территория:"] [class*="territoryBorder"] {
-  stroke: #d9bb70;
+/* In the component the halo is immediately after the territory fill;
+   remove it, then style only the following real border. */
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path {
+  display: none !important;
+}
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
+  fill: none;
+  stroke: #d7ba70;
   stroke-width: .9px;
-  opacity: .95;
+  opacity: .92;
   vector-effect: non-scaling-stroke;
 }
 
-svg[aria-label^="Территория:"] [class*="countryBorder"] {
-  stroke: rgba(232, 223, 199, .11);
-  stroke-width: .4px;
-}
-
-svg[aria-label^="Территория:"] [class*="graticule"] {
-  stroke: rgba(225, 217, 194, .035);
-  stroke-width: .4px;
-}
-
-svg[aria-label^="Территория:"] [class*="rim"] {
-  stroke: rgba(205, 227, 221, .24);
-  stroke-width: .8px;
-}
-
-/* Do not re-blur moving content below controls on mobile. */
-[class*="territory-globe"] [class*="segmented"],
-[class*="territory-globe"] [class*="controlButton"],
-[class*="territory-globe"] [class*="mapTools"] button,
-[class*="territory-globe"] [class*="timeline"] {
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
+/* Moving SVG beneath blurred chrome was expensive on mobile. */
 @media (max-width: 980px) {
-  svg[aria-label^="Территория:"] [class*="territoryBorder"] {
+  svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
     stroke-width: .72px;
   }
 
-  svg[aria-label^="Территория:"] [class*="countryBorder"] {
-    stroke-width: .32px;
-  }
-
-  svg[aria-label^="Территория:"] [class*="graticule"] {
-    stroke-width: .3px;
+  .segmented,
+  .controlButton,
+  .mapTools button,
+  .timeline {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 }
