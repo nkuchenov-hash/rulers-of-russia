@@ -9,6 +9,13 @@ on:
       - scripts/import-ohm-russia.mjs
       - .github/workflows/import-ohm-russia.yml
       - package.json
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/import-ohm-russia.mjs
+      - .github/workflows/import-ohm-russia.yml
+      - package.json
 
 permissions:
   contents: write
@@ -20,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -33,7 +40,18 @@ jobs:
       - name: Import historical Russia polygons from OHM
         run: npm run import:ohm:russia
 
+      - name: Show import manifest
+        run: cat public/data/territory/ohm/manifest.json
+
+      - name: Upload imported territory cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: ohm-russia-territory-cache
+          path: public/data/territory/ohm
+          if-no-files-found: error
+
       - name: Commit imported snapshot cache
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
