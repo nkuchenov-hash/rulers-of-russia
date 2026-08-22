@@ -1,0 +1,44 @@
+name: Materialize project territory archive
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/materialize-territory-archive.yml
+      - scripts/materialize-territory-archive.py
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download one-time source capture
+        uses: actions/download-artifact@v4
+        with:
+          name: ohm-russia-territory-cache
+          path: /tmp/territory-source
+          github-token: ${{ github.token }}
+          run-id: 32569491505
+
+      - name: Prepare geometry tools
+        run: pip install shapely
+
+      - name: Materialize project-owned archive
+        run: python scripts/materialize-territory-archive.py /tmp/territory-source
+
+      - name: Commit archive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/territory/archive
+          git commit -m "Materialize project-owned territory archive"
+          git push origin HEAD:main
