@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { HistoricalTerritoryGlobeLocal } from './HistoricalTerritoryGlobeLocal';
-import './territory-premium.css';
+import { HistoricalTerritoryGlobePremium } from './HistoricalTerritoryGlobePremium';
+import './territory-premium-v2.css';
 
 export const metadata: Metadata = {
   title: 'Исторический глобус России | Правители России',
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function TerritoryPage() {
-  return <HistoricalTerritoryGlobeLocal initialYear={2026} />;
+  return <HistoricalTerritoryGlobePremium initialYear={2026} />;
 }
