@@ -1,0 +1,18 @@
+/* Historical globe material correction.
+   Preserve the cool globe palette after territory geometry loads.
+   Brass remains an outline/accent, never a full-area fill. */
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
+  fill: #46656a !important;
+  fill-opacity: .88 !important;
+}
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path {
+  stroke: rgba(231, 199, 120, .42) !important;
+  opacity: .42 !important;
+}
+
+svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] + path + path {
+  stroke: #d7b76d !important;
+  stroke-width: 1.45 !important;
+}
