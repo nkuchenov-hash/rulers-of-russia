@@ -306,6 +306,8 @@ function SettingsPanel({
   );
 }
 
+type MobileInspectorPane = 'canvas' | 'layers' | 'passport';
+
 export function CoreInspectorDrawer({
   selectedId,
   selectedThematicCardId,
@@ -322,6 +324,7 @@ export function CoreInspectorDrawer({
   onTuningChange: (next: InspectorTuning) => void;
 }) {
   const [expanded, setExpanded] = useState<Set<string>>(initialExpandedLayers);
+  const [mobilePane, setMobilePane] = useState<MobileInspectorPane>('canvas');
 
   if (!selectedId) return null;
 
@@ -346,14 +349,20 @@ export function CoreInspectorDrawer({
     setExpanded(next);
   }
 
+  function selectLayer(id: CoreInspectableId, targetSelector?: string) {
+    onSelectLayer(id, targetSelector);
+    setMobilePane('passport');
+  }
+
   return (
     <>
-      <aside className="inspector-layers-panel" aria-label="Слои страницы">
+      <aside className={`inspector-layers-panel ${mobilePane === 'layers' ? 'is-mobile-visible' : ''}`} aria-label="Слои страницы">
         <header className="inspector-layers-head">
           <div>
             <small>СТРУКТУРА СТРАНИЦЫ</small>
             <h2>Слои</h2>
           </div>
+          <button className="inspector-mobile-canvas-close" type="button" onClick={() => setMobilePane('canvas')} aria-label="Вернуться к макету">×</button>
         </header>
         <div className={styles.layersTreeScroll}>
           <LayerTree
@@ -362,19 +371,20 @@ export function CoreInspectorDrawer({
             depth={0}
             expanded={expanded}
             onToggle={toggle}
-            onSelect={onSelectLayer}
+            onSelect={selectLayer}
           />
         </div>
       </aside>
 
-      <aside className="inspector-properties-panel" aria-label={`Свойства: ${passport.label}`}>
+      <aside className={`inspector-properties-panel ${mobilePane === 'passport' ? 'is-mobile-visible' : ''}`} aria-label={`Свойства: ${passport.label}`}>
         <header className="inspector-properties-head">
           <div>
             <small>{passport.kind === 'module' ? 'МОДУЛЬ' : 'ЭЛЕМЕНТ'}</small>
             {passport.parent && <span className="inspector-parent">{passport.parent}</span>}
             <h2>{passport.label}{selectedId === 'thematic-card' && selectedThematicCardId ? ` · ${selectedThematicCardId}` : ''}</h2>
           </div>
-          <button onClick={onClose} aria-label="Закрыть Inspector">×</button>
+          <button className="inspector-desktop-close" onClick={onClose} aria-label="Закрыть Inspector">×</button>
+          <button className="inspector-mobile-canvas-close" onClick={() => setMobilePane('canvas')} aria-label="Вернуться к макету">×</button>
         </header>
 
         <SettingsPanel
@@ -398,6 +408,21 @@ export function CoreInspectorDrawer({
           ))}
         </div>
       </aside>
+
+      <nav className="inspector-mobile-nav" aria-label="Режим Studio">
+        <button type="button" className={mobilePane === 'canvas' ? 'active' : ''} onClick={() => setMobilePane('canvas')}>
+          <span aria-hidden="true">▣</span>
+          <b>Макет</b>
+        </button>
+        <button type="button" className={mobilePane === 'layers' ? 'active' : ''} onClick={() => setMobilePane('layers')}>
+          <span aria-hidden="true">☷</span>
+          <b>Слои</b>
+        </button>
+        <button type="button" className={mobilePane === 'passport' ? 'active' : ''} onClick={() => setMobilePane('passport')}>
+          <span aria-hidden="true">▤</span>
+          <b>Паспорт</b>
+        </button>
+      </nav>
     </>
   );
 }
