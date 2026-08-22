@@ -1,4 +1,14 @@
 .premiumTerritoryScene{background:radial-gradient(circle at 50% 42%,rgba(20,53,61,.12),transparent 36%),linear-gradient(180deg,#041015 0%,#02080b 72%,#010609 100%)}
 .premiumCountryLabels,.premiumPlaceLabels{pointer-events:none}.premiumCountryLabel,.premiumRussiaLabel,.premiumCapitalLabel,.premiumCityLabel{font-family:Georgia,"Times New Roman",serif;paint-order:stroke fill;stroke:rgba(4,13,17,.72);stroke-linejoin:round}.premiumCountryLabel{fill:rgba(238,228,207,.82);stroke-width:1.8px;letter-spacing:.01em}.premiumRussiaLabel{fill:#f4ead3;font-size:20px;stroke:rgba(19,35,25,.82);stroke-width:2.6px}.premiumCapitalStar{fill:#ecd398;stroke:#17211e;stroke-width:.65px}.premiumCityDot{fill:#f3e8cf;stroke:#17211e;stroke-width:.65px}.premiumCapitalLabel{fill:#fff2d7;font-size:12px;font-weight:600;stroke-width:1.8px}.premiumCityLabel{fill:rgba(241,232,213,.88);font-size:10px;stroke-width:1.5px}.premiumLegend{position:absolute;z-index:9;left:24px;bottom:145px;display:grid;gap:6px;padding:10px 12px;border:1px solid rgba(218,185,108,.3);border-radius:11px;background:rgba(3,11,14,.9);color:#e9dfca;font:11px/1.25 Georgia,"Times New Roman",serif;pointer-events:none}
 @media(max-width:980px){.premiumCountryLabel{stroke-width:1.5px}.premiumRussiaLabel{font-size:18px;stroke-width:2.2px}.premiumCapitalLabel{font-size:11px;stroke-width:1.5px}.premiumCityLabel{font-size:10px;stroke-width:1.3px}.premiumLegend{left:12px;bottom:116px;font-size:10px}}
-@media(max-width:560px){.premiumCountryLabel{font-size:12px!important;fill:rgba(241,232,212,.72);stroke-width:1.25px}.premiumRussiaLabel{font-size:16px;stroke-width:1.8px}.premiumPlaceLabels>g:has(.premiumCityDot){display:none}.premiumCapitalLabel{font-size:11px;stroke-width:1.25px}.premiumCapitalStar{transform:scale(.8)}.premiumCityLabel{display:none}.premiumLegend{display:none}}
+@media(max-width:560px){
+  .premiumCountryLabel{font-size:10px!important;fill:rgba(241,232,212,.76);stroke-width:.9px}
+  .premiumCountryLabels>text:nth-child(n+7){display:none}
+  .premiumRussiaLabel{font-size:14px!important;stroke-width:1.25px}
+  .premiumPlaceLabels>g:nth-child(n+5){display:none}
+  .premiumPlaceLabels>g:has(.premiumCityDot){display:none}
+  .premiumCapitalLabel{font-size:10px!important;font-weight:500;stroke-width:.9px}
+  .premiumCapitalStar{transform:scale(.72)}
+  .premiumCityLabel{display:none}
+  .premiumLegend{display:none}
+}
