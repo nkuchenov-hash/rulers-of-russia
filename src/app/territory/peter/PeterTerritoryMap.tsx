@@ -245,7 +245,6 @@ export function PeterTerritoryMap() {
       style: OHM_STYLE,
       center: initialCamera.center,
       zoom: initialCamera.zoom,
-      projection: { type: 'globe' },
       attributionControl: false
     });
 
@@ -254,6 +253,7 @@ export function PeterTerritoryMap() {
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
 
     map.on('load', () => {
+      map.setProjection({ type: 'globe' });
       filterByDate(map, '1721-12-31');
       addTerritoryLayers(map);
       applyTerritoryState(map, 1721, 'gain');
