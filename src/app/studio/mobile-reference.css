@@ -1,0 +1,422 @@
+/* Approved mobile composition for Studio.
+   Visual DNA: full-bleed ruler hero, large readable identity, compact floating section nav,
+   stacked achievement cards, then the rest of the page in a strict single-column rhythm. */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  .background-module,
+  .core-site-surface,
+  .core-workspace,
+  .ruler-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  .background-module {
+    padding: 0 !important;
+    min-height: 100dvh !important;
+    background: var(--page-bg) !important;
+  }
+
+  .core-site-surface {
+    padding: 0 0 88px !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow-x: clip !important;
+  }
+
+  /* On phone the public page starts with the ruler, not desktop site chrome. */
+  .core-header,
+  .historical-rail {
+    display: none !important;
+  }
+
+  .core-workspace {
+    display: block !important;
+  }
+
+  /* HERO */
+  .core-site-surface [data-module-id="hero"] {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 780px !important;
+    min-height: 780px !important;
+    max-height: 780px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    background: var(--surface-elevated) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-image"] {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    opacity: 1 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-image"]::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--ambient-deep) 78%, transparent) 0%, color-mix(in srgb, var(--ambient-deep) 45%, transparent) 45%, transparent 76%),
+      linear-gradient(180deg, color-mix(in srgb, var(--ambient-deep) 18%, transparent) 0%, transparent 38%, color-mix(in srgb, var(--ambient-deep) 72%, transparent) 100%) !important;
+    pointer-events: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-gradient"] {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, transparent 0%, transparent 52%, color-mix(in srgb, var(--ambient-deep) 82%, transparent) 100%) !important;
+    backdrop-filter: none !important;
+    pointer-events: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    position: relative !important;
+    z-index: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    width: min(72%, 360px) !important;
+    max-width: min(72%, 360px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 92px 20px 0 22px !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-dates"] {
+    order: 2 !important;
+    margin: 10px 0 0 !important;
+    font-size: 16pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-name"] {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: clamp(34pt, 12vw, 46pt) !important;
+    line-height: .93 !important;
+    letter-spacing: -.025em !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-summary"] {
+    order: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 24px 0 0 !important;
+    font-size: 16pt !important;
+    line-height: 1.45 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta {
+    order: 4 !important;
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-art-label,
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-image"] > span {
+    display: none !important;
+  }
+
+  /* Back/share affordances using the existing hero action controls. */
+  .core-site-surface [data-module-id="hero"] .hero-actions {
+    position: absolute !important;
+    top: 18px !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: auto !important;
+    z-index: 12 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    pointer-events: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-actions button,
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-action"] {
+    width: 46px !important;
+    min-width: 46px !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--ambient-deep) 52%, transparent) !important;
+    border: 1px solid color-mix(in srgb, white 42%, transparent) !important;
+    color: white !important;
+    font-size: 18pt !important;
+    pointer-events: auto !important;
+    backdrop-filter: blur(10px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-actions button:nth-child(2) {
+    display: none !important;
+  }
+
+  /* Key events become the first content card, anchored low in hero with guaranteed space. */
+  .core-site-surface [data-module-id="hero"] [data-module-id="key-events"] {
+    position: absolute !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: 18px !important;
+    z-index: 10 !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 270px !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    overflow: hidden !important;
+    border-radius: 18px !important;
+    border: 1px solid color-mix(in srgb, var(--border-emphasis) 82%, transparent) !important;
+    background: color-mix(in srgb, var(--surface-elevated) 91%, transparent) !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.22) !important;
+    backdrop-filter: blur(14px) !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] h3 {
+    margin: 0 0 10px !important;
+    font-size: 18pt !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] [data-element-id="key-event-row"] {
+    display: grid !important;
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 8px 0 !important;
+    border-top: 1px solid color-mix(in srgb, var(--border-emphasis) 55%, transparent) !important;
+    font-size: 16pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] [data-element-id="key-event-row"] b {
+    font-size: 16pt !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] [data-element-id="key-events-all"] {
+    margin-top: 8px !important;
+    padding: 7px 0 !important;
+    font-size: 16pt !important;
+  }
+
+  /* Four-section mobile navigation, visually detached from the hero like the reference. */
+  .core-site-surface [data-module-id="page-tabs"] {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 28 !important;
+    width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(94px, 1fr) !important;
+    gap: 0 !important;
+    margin: 10px !important;
+    padding: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border: 1px solid var(--border-emphasis) !important;
+    border-radius: 17px !important;
+    background: color-mix(in srgb, var(--surface-elevated) 96%, transparent) !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,.12) !important;
+    scrollbar-width: none !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"]::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
+    width: auto !important;
+    min-width: 94px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    padding: 0 10px !important;
+    border-right: 1px solid color-mix(in srgb, var(--border-emphasis) 65%, transparent) !important;
+    font-size: 16pt !important;
+    line-height: 1.1 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+  }
+
+  /* Everything below the hero is one readable stack. */
+  .core-site-surface .primary-content-row,
+  .core-site-surface [data-module-id="thematic-card"],
+  .core-site-surface [data-module-id="reign-timeline"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .core-site-surface .primary-content-row {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"],
+  .core-site-surface [data-module-id="facts"] {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 26px 18px 80px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] h2,
+  .core-site-surface [data-module-id="facts"] h2,
+  .core-site-surface .thematic-card h2,
+  .core-site-surface .reign-timeline h2 {
+    font-size: 24pt !important;
+    line-height: 1.08 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] p,
+  .core-site-surface .territory-legend > div,
+  .core-site-surface .fact-row,
+  .core-site-surface .fact-row strong,
+  .core-site-surface .thematic-card p,
+  .core-site-surface .thematic-card li,
+  .core-site-surface .adjacent-ruler small,
+  .core-site-surface .adjacent-ruler strong,
+  .core-site-surface .timeline-events > div,
+  .core-site-surface .timeline-events b {
+    font-size: 16pt !important;
+    line-height: 1.4 !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 430px !important;
+    max-height: none !important;
+    padding: 12px !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface .map-canvas {
+    width: 100% !important;
+    min-height: 405px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface .thematic-card {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    height: auto !important;
+    min-height: 260px !important;
+    max-height: none !important;
+    margin: 12px !important;
+    padding: 22px 18px 76px !important;
+    border: 1px solid var(--border-emphasis) !important;
+    border-radius: 18px !important;
+    background: var(--surface-elevated) !important;
+    overflow: hidden !important;
+  }
+
+  .core-site-surface .thematic-card + .thematic-card {
+    margin-top: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 28px 18px 36px !important;
+  }
+
+  .core-site-surface .reign-timeline-center {
+    order: -1 !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .core-site-surface .timeline-axis {
+    display: none !important;
+  }
+
+  .core-site-surface .timeline-events {
+    display: block !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface .timeline-events > div {
+    position: relative !important;
+    padding: 12px 0 12px 24px !important;
+    border-left: 2px solid var(--accent-primary) !important;
+  }
+
+  .core-site-surface .timeline-events > div::before {
+    content: "" !important;
+    position: absolute !important;
+    left: -6px !important;
+    top: 20px !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    background: var(--accent-primary) !important;
+  }
+
+  .core-site-surface .adjacent-ruler {
+    width: 100% !important;
+    min-height: 78px !important;
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .core-site-surface [data-module-id="hero"] {
+    height: 820px !important;
+    min-height: 820px !important;
+    max-height: 820px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    width: 76% !important;
+    max-width: 76% !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-name"] {
+    font-size: clamp(32pt, 11.5vw, 42pt) !important;
+  }
+}
