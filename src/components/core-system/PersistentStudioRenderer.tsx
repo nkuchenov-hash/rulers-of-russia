@@ -53,6 +53,7 @@ export function PersistentStudioRenderer({ data }: { data: RulerPageData }) {
       <StudioElementControls />
       <button
         type="button"
+        className="studio-reset-button"
         onClick={() => {
           window.localStorage.removeItem(STUDIO_TUNING_STORAGE_KEY);
           window.localStorage.removeItem(STUDIO_LAYOUT_STORAGE_KEY);
