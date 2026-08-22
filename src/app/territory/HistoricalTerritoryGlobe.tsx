@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  geoArea,
   geoGraticule10,
   geoNaturalEarth1,
   geoOrthographic,
@@ -26,17 +27,11 @@ type TerritoryCollection = FeatureCollection<Geometry, Record<string, unknown>>;
 type Point = { x: number; y: number };
 
 type ArchiveManifest = {
-  schema_version?: number;
   dataset?: string;
-  runtime_owner?: string;
-  runtime_external_dependencies?: string[];
   polities?: Array<{
     polity_id: string;
-    label: string;
     file: string | null;
     features: number;
-    status: string;
-    modern_override_required?: boolean;
   }>;
 };
 
@@ -100,6 +95,31 @@ function chooseTerritoryFeatures(collection: TerritoryCollection | undefined, ye
     exact: false,
     snapshotYear
   };
+}
+
+/*
+ * d3-geo treats a polygon with the opposite spherical winding as the complement
+ * of that polygon. Some archive snapshots use the opposite winding, which used
+ * to make the historical fill cover almost the entire sphere and look like fog.
+ * Normalize only polygons whose spherical area is larger than a hemisphere.
+ */
+function normalizeTerritoryFeature(feature: TerritoryFeature): TerritoryFeature {
+  if (geoArea(feature as never) <= Math.PI * 2) return feature;
+
+  const geometry = feature.geometry as Geometry & { coordinates?: unknown };
+  if (geometry.type === 'Polygon') {
+    const coordinates = (geometry.coordinates as number[][][]).map((ring) => [...ring].reverse());
+    return { ...feature, geometry: { ...geometry, coordinates } as Geometry };
+  }
+
+  if (geometry.type === 'MultiPolygon') {
+    const coordinates = (geometry.coordinates as number[][][][]).map((polygon) =>
+      polygon.map((ring) => [...ring].reverse())
+    );
+    return { ...feature, geometry: { ...geometry, coordinates } as Geometry };
+  }
+
+  return feature;
 }
 
 function collectionFor(features: TerritoryFeature[]): TerritoryCollection {
@@ -194,7 +214,14 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
 
   const { collections, manifest, status } = useTerritoryData();
   const period = territoryPeriodAt(year);
-  const selected = chooseTerritoryFeatures(collections[period.polityId], year);
+  const selected = useMemo(
+    () => chooseTerritoryFeatures(collections[period.polityId], year),
+    [collections, period.polityId, year]
+  );
+  const normalizedFeatures = useMemo(
+    () => selected.features.map(normalizeTerritoryFeature),
+    [selected.features]
+  );
   const portrait = viewport.height > viewport.width * 1.08;
 
   useEffect(() => {
@@ -233,7 +260,7 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
       return geoNaturalEarth1()
         .translate([width / 2, height * (portrait ? 0.44 : 0.49)])
         .scale(mapScale)
-        .precision(0.25);
+        .precision(portrait ? 0.45 : 0.3);
     }
 
     const radius = portrait
@@ -248,12 +275,12 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
       .scale(radius * zoom)
       .rotate(rotation)
       .clipAngle(90)
-      .precision(0.2);
+      .precision(portrait ? 0.45 : 0.3);
   }, [portrait, rotation, viewMode, viewport, zoom]);
 
   const path = useMemo(() => geoPath(projection), [projection]);
-  const territoryCollection = useMemo(() => collectionFor(selected.features), [selected.features]);
-  const territoryPath = selected.features.length ? path(territoryCollection) : null;
+  const territoryCollection = useMemo(() => collectionFor(normalizedFeatures), [normalizedFeatures]);
+  const territoryPath = normalizedFeatures.length ? path(territoryCollection) : null;
   const spherePath = path(sphere as never) ?? '';
   const graticulePath = path(graticule as never) ?? '';
 
@@ -314,9 +341,7 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
     const pointers = [...pointersRef.current.values()];
     if (pointers.length >= 2) {
       const currentDistance = distance(pointers[0], pointers[1]);
-      if (!pinchRef.current) {
-        pinchRef.current = { distance: currentDistance, zoom };
-      }
+      if (!pinchRef.current) pinchRef.current = { distance: currentDistance, zoom };
       const ratio = currentDistance / Math.max(24, pinchRef.current.distance);
       setZoom(clamp(pinchRef.current.zoom * ratio, zoomBounds[0], zoomBounds[1]));
       return;
@@ -437,45 +462,17 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
           onWheel={wheelZoom}
         >
           <defs>
-            <radialGradient id="oceanGradient" cx="34%" cy="27%" r="74%">
-              <stop offset="0%" stopColor="#214955" />
-              <stop offset="46%" stopColor="#12313a" />
-              <stop offset="82%" stopColor="#071a21" />
-              <stop offset="100%" stopColor="#02080b" />
-            </radialGradient>
-            <radialGradient id="shadeGradient" cx="38%" cy="31%" r="70%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.095" />
-              <stop offset="49%" stopColor="#07151a" stopOpacity="0" />
-              <stop offset="86%" stopColor="#010508" stopOpacity="0.42" />
-              <stop offset="100%" stopColor="#000000" stopOpacity="0.72" />
-            </radialGradient>
             <linearGradient id="russiaGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#e0c98e" />
-              <stop offset="46%" stopColor="#b9a46f" />
-              <stop offset="100%" stopColor="#778061" />
+              <stop offset="0%" stopColor="#5f7a78" />
+              <stop offset="50%" stopColor="#4f6868" />
+              <stop offset="100%" stopColor="#405b5d" />
             </linearGradient>
-            <filter id="atmosphereGlow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="14" />
-            </filter>
-            <filter id="territoryGlow" x="-25%" y="-25%" width="150%" height="150%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
             <clipPath id="sphereClip">
               <path d={spherePath} />
             </clipPath>
           </defs>
 
-          {viewMode === 'globe' && (
-            <>
-              <path d={spherePath} className={styles.atmosphereOuter} filter="url(#atmosphereGlow)" />
-              <path d={spherePath} fill="url(#oceanGradient)" className={styles.ocean} />
-            </>
-          )}
-
+          {viewMode === 'globe' && <path d={spherePath} className={styles.ocean} />}
           {viewMode === 'map' && <path d={spherePath} className={styles.mapOcean} />}
           <path d={graticulePath} className={styles.graticule} />
 
@@ -504,15 +501,12 @@ export function HistoricalTerritoryGlobe({ initialYear = TERRITORY_MAX_YEAR }: {
 
             {territoryPath && (
               <>
-                <path d={territoryPath} className={styles.territoryGlow} filter="url(#territoryGlow)" />
                 <path d={territoryPath} fill="url(#russiaGradient)" className={styles.territoryFill} />
-                <path d={territoryPath} className={styles.territoryBorderHalo} />
                 <path d={territoryPath} className={styles.territoryBorder} />
               </>
             )}
           </g>
 
-          {viewMode === 'globe' && <path d={spherePath} fill="url(#shadeGradient)" className={styles.sphereShade} />}
           {viewMode === 'globe' && <path d={spherePath} className={styles.rim} />}
         </svg>
 
