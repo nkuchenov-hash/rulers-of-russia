@@ -1,5 +1,6 @@
-/* Territory material overrides: the state remains part of the globe material.
-   Brass is reserved for borders and temporal change accents, never full-area fill. */
+/* Territory rendering overrides.
+   Keep the globe crisp: no large SVG glow filters, no foggy bloom,
+   and a single restrained historical border. */
 
 svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(1) {
   stop-color: #4d7780;
@@ -14,11 +15,66 @@ svg[aria-label^="Территория:"] #russiaGradient stop:nth-child(3) {
 }
 
 svg[aria-label^="Территория:"] path[fill="url(#russiaGradient)"] {
-  fill-opacity: .82;
+  fill-opacity: .78;
 }
 
+/* The blurred atmosphere was producing the cyan haze visible on mobile
+   and forcing an expensive full-surface SVG filter on every rotation. */
+svg[aria-label^="Территория:"] path[filter="url(#atmosphereGlow)"],
 svg[aria-label^="Территория:"] path[filter="url(#territoryGlow)"] {
-  fill: rgba(74, 128, 139, .12);
-  stroke: rgba(220, 196, 135, .26);
-  stroke-width: 3;
+  display: none;
+}
+
+/* Remove the oversized halo layer. The actual border remains below. */
+svg[aria-label^="Территория:"] [class*="territoryBorderHalo"] {
+  display: none;
+}
+
+/* Historical boundary: crisp and subordinate to the territory itself. */
+svg[aria-label^="Территория:"] [class*="territoryBorder"] {
+  stroke: #d9bb70;
+  stroke-width: 1.15px;
+  opacity: .92;
+  vector-effect: non-scaling-stroke;
+}
+
+/* World reference lines should never compete with the state border. */
+svg[aria-label^="Территория:"] [class*="countryBorder"] {
+  stroke: rgba(232, 223, 199, .14);
+  stroke-width: .55px;
+}
+
+svg[aria-label^="Территория:"] [class*="graticule"] {
+  stroke: rgba(225, 217, 194, .055);
+  stroke-width: .55px;
+}
+
+/* Reduce the milky highlight across the face of the globe. */
+svg[aria-label^="Территория:"] [class*="sphereShade"] {
+  opacity: .55;
+}
+
+svg[aria-label^="Территория:"] [class*="rim"] {
+  stroke: rgba(205, 227, 221, .26);
+  stroke-width: 1px;
+}
+
+/* Backdrop blur is especially expensive while the SVG beneath it is moving.
+   Opaque translucent surfaces retain the look without re-blurring every frame. */
+[class*="territory-globe"] [class*="segmented"],
+[class*="territory-globe"] [class*="controlButton"],
+[class*="territory-globe"] [class*="mapTools"] button,
+[class*="territory-globe"] [class*="timeline"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+@media (max-width: 980px) {
+  svg[aria-label^="Территория:"] [class*="territoryBorder"] {
+    stroke-width: .95px;
+  }
+
+  svg[aria-label^="Территория:"] [class*="countryBorder"] {
+    stroke-width: .45px;
+  }
 }
