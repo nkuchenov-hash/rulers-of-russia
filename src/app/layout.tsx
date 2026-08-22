@@ -1,3 +1,4 @@
+import 'maplibre-gl/dist/maplibre-gl.css';
 import './globals.css';
 import './layout-contract.css';
 import './site-min-font.css';
