@@ -6,6 +6,7 @@ export function LabStudioSwitch({ mode }: { mode: 'lab' | 'studio' }) {
 
   return (
     <Link
+      className="lab-studio-switch"
       href={href}
       aria-label={mode === 'studio' ? 'Открыть Lab' : 'Вернуться в Studio'}
       style={{
