@@ -1,0 +1,44 @@
+/* Mobile Studio keeps the same sharp-edged visual grammar as the desktop site.
+   Rounded containers from the mobile reference are intentionally neutralized. */
+@media (max-width: 900px) {
+  .core-site-surface [data-module-id="key-events"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface [data-module-id="territory"],
+  .core-site-surface [data-module-id="map"],
+  .core-site-surface [data-module-id="facts"],
+  .core-site-surface [data-module-id="thematic-card"],
+  .core-site-surface [data-card-id],
+  .core-site-surface .thematic-card,
+  .core-site-surface .adjacent-ruler,
+  .core-site-surface .map-canvas,
+  .core-site-surface .module-cta,
+  .core-site-surface .thematic-card > button,
+  .core-site-surface [data-element-id="page-tab"],
+  .core-site-surface [data-element-id="key-event-row"],
+  .core-site-surface [data-element-id="fact-row"],
+  .core-site-surface [data-element-id="territory-legend-item"] {
+    border-radius: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface .thematic-card,
+  .core-site-surface .adjacent-ruler,
+  .core-site-surface .map-canvas {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  /* Roundness is retained only where the desktop language already uses a circle:
+     compact icon controls, map controls and portrait medallions. */
+}
