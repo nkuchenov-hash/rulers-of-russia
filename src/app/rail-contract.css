@@ -1,0 +1,56 @@
+/* Active ruler is a dedicated rail composition. Keep it stable at any rail width. */
+.rail-item {
+  min-width: 0;
+}
+
+.rail-item > div:last-child {
+  min-width: 0;
+}
+
+.rail-item strong {
+  line-height: 1.12;
+  overflow-wrap: break-word;
+}
+
+.rail-item span {
+  line-height: 1.22;
+}
+
+/* Studio previously exposed internal ids inside the visual card. They are not UI. */
+.rail-item small {
+  display: none !important;
+}
+
+.rail-item.active {
+  grid-template-columns: clamp(44px, 25%, 56px) minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 10px 10px 14px;
+  overflow: hidden;
+}
+
+.rail-item.active .rail-portrait {
+  width: 100%;
+  max-width: 56px;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.rail-item.active strong,
+.rail-item.active span {
+  max-width: 100%;
+}
+
+.rail-item.active strong {
+  margin: 0;
+  line-height: 1.08;
+}
+
+.rail-item.active span {
+  margin-top: 5px;
+  line-height: 1.18;
+}

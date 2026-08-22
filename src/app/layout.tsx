@@ -1,6 +1,7 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './globals.css';
 import './layout-contract.css';
+import './rail-contract.css';
 import './site-min-font.css';
 import './inspector.css';
 import type { ReactNode } from 'react';
