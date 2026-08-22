@@ -12,9 +12,10 @@
     {
       "polity_id": "kievan-rus",
       "label": "Древнерусское государство / Киевская Русь",
-      "file": null,
-      "features": 0,
-      "status": "needs-research"
+      "file": "kievan-rus.geojson",
+      "features": 16,
+      "status": "source-captured-unreviewed",
+      "bootstrap_source": "cliopatria-v0.2.0"
     },
     {
       "polity_id": "novgorodian-land",
@@ -33,9 +34,10 @@
     {
       "polity_id": "grand-vladimir",
       "label": "Великое княжество Владимирское",
-      "file": null,
-      "features": 0,
-      "status": "needs-research"
+      "file": "grand-vladimir.geojson",
+      "features": 17,
+      "status": "source-captured-unreviewed",
+      "bootstrap_source": "cliopatria-v0.2.0"
     },
     {
       "polity_id": "grand-moscow",
@@ -54,9 +56,10 @@
     {
       "polity_id": "russian-empire",
       "label": "Российская империя",
-      "file": null,
-      "features": 0,
-      "status": "needs-research"
+      "file": "russian-empire.geojson",
+      "features": 65,
+      "status": "source-captured-unreviewed",
+      "bootstrap_source": "cliopatria-v0.2.0"
     },
     {
       "polity_id": "russian-republic",
@@ -75,9 +78,10 @@
     {
       "polity_id": "ussr",
       "label": "СССР",
-      "file": null,
-      "features": 0,
-      "status": "needs-research"
+      "file": "ussr.geojson",
+      "features": 26,
+      "status": "source-captured-unreviewed",
+      "bootstrap_source": "cliopatria-v0.2.0"
     },
     {
       "polity_id": "russian-federation",
@@ -87,5 +91,6 @@
       "status": "source-captured-unreviewed",
       "modern_override_required": true
     }
-  ]
+  ],
+  "bootstrap_complete": false
 }

@@ -9,6 +9,19 @@
       "runtime_dependency": false,
       "authoritative": false,
       "notes": "Retained only as provenance for the initial geometry capture. The project never queries this source at runtime."
+    },
+    {
+      "id": "capture:cliopatria-v0.2.0",
+      "kind": "one-time-secondary-geometry-capture",
+      "name": "Cliopatria / Seshat Global History Databank",
+      "version": "v0.2.0-compatible main snapshot",
+      "captured_at": "2026-08-22",
+      "runtime_dependency": false,
+      "authoritative": false,
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_repository": "https://github.com/Seshat-Global-History-Databank/cliopatria",
+      "notes": "Used once to fill gaps in the initial project archive. Geometry was simplified and must be verified against project historical sources before verified status."
     }
   ]
 }
