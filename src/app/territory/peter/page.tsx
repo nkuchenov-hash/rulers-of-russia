@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { PeterTerritoryMap } from './PeterTerritoryMap';
+import { HistoricalTerritoryGlobe } from '../HistoricalTerritoryGlobe';
 
 export const metadata: Metadata = {
-  title: 'Петровская эпоха — границы по годам | Правители России',
-  description: 'Интерактивная историческая карта границ России в 1682–1725 годах.'
+  title: 'Петровская эпоха — исторический глобус | Правители России',
+  description: 'Интерактивная историческая карта территории России в Петровскую эпоху.'
 };
 
 export default function PeterTerritoryPage() {
-  return <PeterTerritoryMap />;
+  return <HistoricalTerritoryGlobe initialYear={1721} />;
 }
