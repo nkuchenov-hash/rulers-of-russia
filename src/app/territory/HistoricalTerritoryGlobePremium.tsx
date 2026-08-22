@@ -198,7 +198,7 @@ export function HistoricalTerritoryGlobePremium({ initialYear = TERRITORY_MAX_YE
   const [year, setYear] = useState(clamp(initialYear, TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR));
   const [viewMode, setViewMode] = useState<ViewMode>('globe');
   const [rotation, setRotation] = useState<Rotation>([-64, -48, 0]);
-  const [zoom, setZoom] = useState(1.28);
+  const [zoom, setZoom] = useState(1.45);
   const [fullscreen, setFullscreen] = useState(false);
   const [showBorders, setShowBorders] = useState(true);
 
@@ -300,7 +300,7 @@ export function HistoricalTerritoryGlobePremium({ initialYear = TERRITORY_MAX_YE
     stopInertia();
     const [lon, lat] = period.focus;
     setRotation([-lon, -lat, 0]);
-    setZoom(viewMode === 'globe' ? 1.28 : 1.05);
+    setZoom(viewMode === 'globe' ? 1.45 : 1.15);
   }, [period.focus, stopInertia, viewMode]);
 
   useEffect(() => { focusRussia(); }, [period.polityId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -311,7 +311,7 @@ export function HistoricalTerritoryGlobePremium({ initialYear = TERRITORY_MAX_YE
     return () => document.removeEventListener('fullscreenchange', handler);
   }, []);
 
-  const zoomBounds = viewMode === 'globe' ? [.88, 3.4] as const : [.72, 2.6] as const;
+  const zoomBounds = viewMode === 'globe' ? [.88, 9] as const : [.72, 7] as const;
   function pointerDown(e: React.PointerEvent<SVGSVGElement>) {
     stopInertia(); e.currentTarget.setPointerCapture(e.pointerId); pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     const values = [...pointers.current.values()];
@@ -357,7 +357,7 @@ export function HistoricalTerritoryGlobePremium({ initialYear = TERRITORY_MAX_YE
     <main className={`${styles.page} premiumTerritoryPage`}>
       <section ref={sceneRef} className={`${styles.scene} premiumTerritoryScene`}>
         <div className={styles.space} aria-hidden="true" />
-        <svg className={`${styles.globe} ${viewMode === 'globe' ? styles.globeInteractive : styles.mapInteractive}`} viewBox={`0 0 ${viewport.width} ${viewport.height}`} role="img" aria-label={`Исторические границы мира: ${year} год`} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onWheel={(e) => { e.preventDefault(); changeZoom(e.deltaY > 0 ? -.11 : .11); }}>
+        <svg className={`${styles.globe} ${viewMode === 'globe' ? styles.globeInteractive : styles.mapInteractive}`} viewBox={`0 0 ${viewport.width} ${viewport.height}`} role="img" aria-label={`Исторические границы мира: ${year} год`} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onWheel={(e) => { e.preventDefault(); changeZoom(e.deltaY > 0 ? -.25 : .25); }}>
           <defs>
             <clipPath id="premiumSphereClip"><path d={spherePath} /></clipPath>
             <linearGradient id="premiumOcean" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#102c38" /><stop offset="48%" stopColor="#071b24" /><stop offset="100%" stopColor="#021017" /></linearGradient>
@@ -379,7 +379,7 @@ export function HistoricalTerritoryGlobePremium({ initialYear = TERRITORY_MAX_YE
 
         <header className={styles.topbar}><div className={styles.brand}><span className={styles.brandSymbol}>Р</span><div><strong>Правители России</strong><span>Исторический глобус</span></div></div><div className={styles.topControls}><div className={styles.segmented}><button className={viewMode === 'globe' ? styles.active : ''} onClick={() => setViewMode('globe')}>Глобус</button><button className={viewMode === 'map' ? styles.active : ''} onClick={() => setViewMode('map')}>Карта</button></div><button className={styles.controlButton} onClick={focusRussia}>К России</button><button className={styles.controlButton} onClick={toggleFullscreen}>{fullscreen ? 'Свернуть' : 'На весь экран'}</button></div></header>
         <aside className={styles.story}><div className={styles.eyebrow}>{period.era}</div><div className={styles.storyRow}><h1>{period.label}</h1><span className={styles.storyYear}>{year}</span></div><p>Исторический мировой срез {worldYear ?? '—'} года · локальная проектная база границ, подписей и городов.</p></aside>
-        <div className={styles.mapTools}><button onClick={() => changeZoom(.16)} aria-label="Приблизить">+</button><button onClick={() => changeZoom(-.16)} aria-label="Отдалить">−</button><button onClick={() => setShowBorders((v) => !v)} className={showBorders ? styles.toolActive : ''} aria-label="Границы государств">◎</button></div>
+        <div className={styles.mapTools}><button onClick={() => changeZoom(.4)} aria-label="Приблизить">+</button><button onClick={() => changeZoom(-.4)} aria-label="Отдалить">−</button><button onClick={() => setShowBorders((v) => !v)} className={showBorders ? styles.toolActive : ''} aria-label="Границы государств">◎</button></div>
         <section className={styles.timeline} aria-label="Хронология территории России"><div className={styles.timelineTop}><button onClick={() => jumpSnapshot(-1)} aria-label="Предыдущее изменение">‹</button><div><strong>{period.shortLabel}</strong><span>{TERRITORY_MIN_YEAR} — {TERRITORY_MAX_YEAR}</span></div><div className={styles.timelineCurrent}>{year}</div><button onClick={() => jumpSnapshot(1)} aria-label="Следующее изменение">›</button></div><div className={styles.rangeRow}><span>{TERRITORY_MIN_YEAR}</span><div className={styles.rangeTrack}><input type="range" min={TERRITORY_MIN_YEAR} max={TERRITORY_MAX_YEAR} step={1} value={year} onChange={(e) => setYearSafe(Number(e.target.value))} aria-label="Год исторической карты" /><div className={styles.marks} aria-hidden="true">{snapshots.map((value) => <i key={value} style={{ left: `${((value - TERRITORY_MIN_YEAR) / (TERRITORY_MAX_YEAR - TERRITORY_MIN_YEAR)) * 100}%` }} />)}</div></div><span>{TERRITORY_MAX_YEAR}</span></div></section>
       </section>
     </main>
