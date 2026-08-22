@@ -36,6 +36,11 @@ jobs:
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
 
+      - name: Write deploy marker
+        run: |
+          mkdir -p public
+          printf '{"sha":"%s","run_id":"%s","built_at":"%s"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > public/deploy.json
+
       - name: Typecheck
         run: npm run typecheck
 
