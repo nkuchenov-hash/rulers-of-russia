@@ -5,6 +5,7 @@ import osmtogeojson from 'osmtogeojson';
 const OVERPASS = 'https://overpass-api.openhistoricalmap.org/api/interpreter';
 const OUT_DIR = path.resolve('public/data/territory/ohm');
 const IMPORTED_AT = new Date().toISOString();
+const REQUEST_TIMEOUT_MS = 30000;
 
 const POLITIES = [
   { id: 'kievan-rus', label: 'Древнерусское государство / Киевская Русь', wikidata: ['Q1108445'], names: ['Kievan Rus', "Kievan Rus'", 'Kyivan Rus', "Kyivan Rus'", 'Киевская Русь', 'Древнерусское государство'] },
@@ -27,7 +28,7 @@ function escapeRegex(value) {
 function makeQuery(polities) {
   const wikidata = [...new Set(polities.flatMap((polity) => polity.wikidata))].map(escapeRegex).join('|');
   const names = [...new Set(polities.flatMap((polity) => polity.names))].map(escapeRegex).join('|');
-  return `[out:json][timeout:120];\n(\nrelation["boundary"="administrative"]["wikidata"~"^(${wikidata})$"];\nrelation["boundary"="administrative"]["name"~"^(${names})$",i];\n);\nout body geom;`;
+  return `[out:json][timeout:25];\n(\nrelation["boundary"="administrative"]["wikidata"~"^(${wikidata})$"];\nrelation["boundary"="administrative"]["name"~"^(${names})$",i];\n);\nout body geom;`;
 }
 
 async function requestBatch(polities) {
@@ -35,9 +36,10 @@ async function requestBatch(polities) {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      'user-agent': 'rulers-of-russia-territory-import/2.0'
+      'user-agent': 'rulers-of-russia-territory-import/2.1'
     },
-    body: new URLSearchParams({ data: makeQuery(polities) })
+    body: new URLSearchParams({ data: makeQuery(polities) }),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
   });
   if (!response.ok) throw new Error(`OHM Overpass ${response.status} ${response.statusText}`);
   return response.json();
@@ -52,12 +54,16 @@ async function requestWithSplit(polities, errors) {
       errors.set(polities[0].id, String(error));
       return [];
     }
+
     const middle = Math.ceil(polities.length / 2);
-    console.warn(`Batch of ${polities.length} failed; retrying as ${middle}+${polities.length - middle}`);
-    return [
-      ...(await requestWithSplit(polities.slice(0, middle), errors)),
-      ...(await requestWithSplit(polities.slice(middle), errors))
-    ];
+    const left = polities.slice(0, middle);
+    const right = polities.slice(middle);
+    console.warn(`Batch of ${polities.length} failed; retrying in parallel as ${left.length}+${right.length}`);
+    const [leftResponses, rightResponses] = await Promise.all([
+      requestWithSplit(left, errors),
+      requestWithSplit(right, errors)
+    ]);
+    return [...leftResponses, ...rightResponses];
   }
 }
 
@@ -69,9 +75,12 @@ function tagsOf(feature) {
 function matchPolity(feature) {
   const tags = tagsOf(feature);
   const wikidata = String(tags.wikidata ?? '');
-  const names = [tags.name, tags['name:en'], tags['name:ru']].filter(Boolean).map((value) => String(value).toLocaleLowerCase('ru'));
+  const names = [tags.name, tags['name:en'], tags['name:ru']]
+    .filter(Boolean)
+    .map((value) => String(value).toLocaleLowerCase('ru'));
   return POLITIES.find((polity) =>
-    polity.wikidata.includes(wikidata) || polity.names.some((candidate) => names.includes(candidate.toLocaleLowerCase('ru')))
+    polity.wikidata.includes(wikidata) ||
+    polity.names.some((candidate) => names.includes(candidate.toLocaleLowerCase('ru')))
   );
 }
 
@@ -166,7 +175,14 @@ for (const polity of POLITIES) {
 
 await fs.writeFile(
   path.join(OUT_DIR, 'manifest.json'),
-  `${JSON.stringify({ generated_at: IMPORTED_AT, source: 'OpenHistoricalMap', runtime_dependency: false, endpoint: OVERPASS, polities: manifest }, null, 2)}\n`,
+  `${JSON.stringify({
+    generated_at: IMPORTED_AT,
+    source: 'OpenHistoricalMap',
+    runtime_dependency: false,
+    endpoint: OVERPASS,
+    request_timeout_ms: REQUEST_TIMEOUT_MS,
+    polities: manifest
+  }, null, 2)}\n`,
   'utf8'
 );
 
