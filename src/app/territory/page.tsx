@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import { HistoricalTerritoryGlobe } from './HistoricalTerritoryGlobe';
-import './territory-material.css';
+import { HistoricalTerritoryGlobeLocal } from './HistoricalTerritoryGlobeLocal';
 
 export const metadata: Metadata = {
   title: 'Исторический глобус России | Правители России',
-  description: 'Интерактивная хронология территории России от ранней Руси до современности.'
+  description: 'Интерактивная хронология территории России и исторических границ мира.'
 };
 
 export default function TerritoryPage() {
-  return <HistoricalTerritoryGlobe initialYear={2026} />;
+  return <HistoricalTerritoryGlobeLocal initialYear={2026} />;
 }
