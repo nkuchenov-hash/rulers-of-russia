@@ -337,7 +337,30 @@ export function PeterTerritoryMap() {
         <div className={styles.vignette} aria-hidden="true" />
         <div className={styles.grain} aria-hidden="true" />
 
-        {!ready && <div className={styles.loading}>Запускаем глобус…</div>}
+        {!ready && (
+          <div
+            className={styles.loading}
+            style={{
+              inset: 'auto',
+              top: 86,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'block',
+              placeItems: 'initial',
+              width: 'auto',
+              height: 'auto',
+              padding: '9px 13px',
+              border: '1px solid rgba(235,222,193,.2)',
+              borderRadius: 999,
+              background: 'rgba(7,27,37,.78)',
+              backdropFilter: 'blur(12px)',
+              pointerEvents: 'none',
+              zIndex: 6
+            }}
+          >
+            Запускаем глобус…
+          </div>
+        )}
         {ready && (sourceIssue || engineIssue) && (
           <div style={{ position: 'absolute', top: 78, left: '50%', transform: 'translateX(-50%)', zIndex: 12, maxWidth: 'min(760px, calc(100% - 32px))', padding: '10px 14px', border: '1px solid rgba(223,188,120,.45)', background: 'rgba(18,31,36,.9)', color: '#eadfca', borderRadius: 999, backdropFilter: 'blur(10px)', textAlign: 'center', fontSize: 12, fontWeight: 600 }}>
             {engineIssue ?? 'Исторический слой границ сейчас недоступен. Хронология и глобус продолжают работать.'}
