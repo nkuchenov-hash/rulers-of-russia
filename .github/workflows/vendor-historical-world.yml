@@ -1,4 +1,4 @@
-name: Vendor historical world archive
+name: Vendor historical world boundary archive
 
 on:
   push:
@@ -13,15 +13,24 @@ permissions:
 
 jobs:
   vendor:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - name: Download pinned historical world snapshots
         run: node scripts/sync-historical-world.mjs
+
       - name: Commit project-owned archive
+        shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
