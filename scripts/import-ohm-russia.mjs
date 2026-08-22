@@ -1,3 +1,4 @@
+// Bootstrap source cache: this file is intentionally touched after the importer workflow exists on main.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import osmtogeojson from 'osmtogeojson';
