@@ -1,4 +1,3 @@
-import 'maplibre-gl/dist/maplibre-gl.css';
 import './globals.css';
 import './layout-contract.css';
 import './rail-contract.css';
