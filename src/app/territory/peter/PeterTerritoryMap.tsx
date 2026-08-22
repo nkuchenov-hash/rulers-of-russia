@@ -195,6 +195,7 @@ export function PeterTerritoryMap() {
   const [projection, setProjection] = useState<Projection>('globe');
   const [ready, setReady] = useState(false);
   const [sourceIssue, setSourceIssue] = useState(false);
+  const [engineIssue, setEngineIssue] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -204,55 +205,91 @@ export function PeterTerritoryMap() {
   useEffect(() => {
     if (!mapNodeRef.current || mapRef.current) return;
 
-    const map = new maplibregl.Map({
-      container: mapNodeRef.current,
-      style: LOCAL_GLOBE_STYLE,
-      center: [56, 58],
-      zoom: 2.35,
-      pitch: 0,
-      bearing: 0,
-      attributionControl: false
-    });
-
-    mapRef.current = map;
-    map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-right');
-
-    map.on('error', (event) => {
-      const message = String(event.error?.message ?? '');
-      if (message.includes('openhistoricalmap') || message.includes('ohm_admin') || message.includes('vtiles')) {
-        setSourceIssue(true);
-      }
-    });
-
-    map.on('load', () => {
-      map.setProjection({ type: 'globe' });
-      addVisualBase(map);
-      addTerritoryLayers(map);
-      applyTerritoryState(map, year);
+    let map: Map | null = null;
+    const startupGuard = window.setTimeout(() => {
       setReady(true);
-    });
+      setEngineIssue((current) => current ?? 'Глобус не ответил вовремя. Хронология остаётся доступной.');
+    }, 1800);
+
+    try {
+      map = new maplibregl.Map({
+        container: mapNodeRef.current,
+        style: LOCAL_GLOBE_STYLE,
+        center: [56, 58],
+        zoom: 2.35,
+        pitch: 0,
+        bearing: 0,
+        attributionControl: false
+      });
+
+      mapRef.current = map;
+      map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-right');
+
+      map.on('error', (event) => {
+        const message = String(event.error?.message ?? '');
+        if (message.includes('openhistoricalmap') || message.includes('ohm_admin') || message.includes('vtiles')) {
+          setSourceIssue(true);
+        }
+      });
+
+      map.on('load', () => {
+        window.clearTimeout(startupGuard);
+        setReady(true);
+
+        try {
+          map?.setProjection({ type: 'globe' });
+          if (map) addVisualBase(map);
+        } catch (error) {
+          setEngineIssue(`Базовая сцена запущена с ограничениями: ${error instanceof Error ? error.message : 'ошибка визуального слоя'}`);
+        }
+
+        try {
+          if (map) {
+            addTerritoryLayers(map);
+            applyTerritoryState(map, year);
+          }
+        } catch (error) {
+          setSourceIssue(true);
+          setEngineIssue((current) => current ?? `Исторический слой не загрузился: ${error instanceof Error ? error.message : 'ошибка слоя'}`);
+        }
+      });
+    } catch (error) {
+      window.clearTimeout(startupGuard);
+      setReady(true);
+      setEngineIssue(`WebGL-сцена не запустилась: ${error instanceof Error ? error.message : 'неизвестная ошибка'}`);
+    }
 
     return () => {
-      map.remove();
+      window.clearTimeout(startupGuard);
+      map?.remove();
       mapRef.current = null;
     };
   }, []);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !ready) return;
-    applyTerritoryState(map, year);
+    if (!map || !ready || !map.getLayer('russia-current')) return;
+    try {
+      applyTerritoryState(map, year);
+    } catch (error) {
+      setSourceIssue(true);
+      setEngineIssue((current) => current ?? `Не удалось обновить границу: ${error instanceof Error ? error.message : 'ошибка слоя'}`);
+    }
   }, [year, ready]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    map.setProjection({ type: projection });
-    map.easeTo({
-      center: projection === 'globe' ? [56, 58] : [58, 57],
-      zoom: projection === 'globe' ? 2.35 : 2.7,
-      duration: 950
-    });
+    try {
+      map.setProjection({ type: projection });
+      map.easeTo({
+        center: projection === 'globe' ? [56, 58] : [58, 57],
+        zoom: projection === 'globe' ? 2.35 : 2.7,
+        duration: 950
+      });
+    } catch (error) {
+      setEngineIssue((current) => current ?? `Не удалось переключить проекцию: ${error instanceof Error ? error.message : 'ошибка движка'}`);
+    }
   }, [projection, ready]);
 
   useEffect(() => {
@@ -294,16 +331,16 @@ export function PeterTerritoryMap() {
   }
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} data-territory-build="runtime-fallback-20260822">
       <section ref={sceneRef} className={styles.scene}>
         <div ref={mapNodeRef} className={styles.map} aria-label="Интерактивная карта территории России Петровской эпохи" />
         <div className={styles.vignette} aria-hidden="true" />
         <div className={styles.grain} aria-hidden="true" />
 
         {!ready && <div className={styles.loading}>Запускаем глобус…</div>}
-        {ready && sourceIssue && (
-          <div style={{ position: 'absolute', top: 78, left: '50%', transform: 'translateX(-50%)', zIndex: 12, maxWidth: 'min(640px, calc(100% - 32px))', padding: '10px 14px', border: '1px solid rgba(223,188,120,.45)', background: 'rgba(18,31,36,.86)', color: '#eadfca', borderRadius: 999, backdropFilter: 'blur(10px)', textAlign: 'center', fontSize: 12, fontWeight: 600 }}>
-            Глобус работает, но исторический слой границ сейчас недоступен. Повторная загрузка произойдёт при обновлении страницы.
+        {ready && (sourceIssue || engineIssue) && (
+          <div style={{ position: 'absolute', top: 78, left: '50%', transform: 'translateX(-50%)', zIndex: 12, maxWidth: 'min(760px, calc(100% - 32px))', padding: '10px 14px', border: '1px solid rgba(223,188,120,.45)', background: 'rgba(18,31,36,.9)', color: '#eadfca', borderRadius: 999, backdropFilter: 'blur(10px)', textAlign: 'center', fontSize: 12, fontWeight: 600 }}>
+            {engineIssue ?? 'Исторический слой границ сейчас недоступен. Хронология и глобус продолжают работать.'}
           </div>
         )}
 
