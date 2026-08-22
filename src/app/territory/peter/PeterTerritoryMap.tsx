@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
-import type { FilterSpecification, Map } from 'maplibre-gl';
+import type { FilterSpecification, Map, StyleSpecification } from 'maplibre-gl';
 import { constrainFilterByDateRange, dateRangeFromISODate } from '@openhistoricalmap/maplibre-gl-dates';
-import { LOCAL_GLOBE_STYLE } from './map-style';
 import styles from './territory-map.module.css';
 
 type Projection = 'globe' | 'mercator';
@@ -21,6 +20,18 @@ const MIN_YEAR = 1682;
 const MAX_YEAR = 1725;
 const OHM_ADMIN_TILES = 'https://vtiles.openhistoricalmap.org/maps/ohm_admin/{z}/{x}/{y}.pbf';
 const WORLD_LAND = 'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@ca96624a/geojson/ne_110m_land.geojson';
+const LOCAL_GLOBE_STYLE: StyleSpecification = {
+  version: 8,
+  name: 'Rulers of Russia · Historical Globe Base',
+  sources: {},
+  layers: [
+    {
+      id: 'ocean',
+      type: 'background',
+      paint: { 'background-color': '#071a22' }
+    }
+  ]
+};
 
 const BOUNDARY_STATES: BoundaryState[] = [
   { year: 1682, title: 'Исходная территория', note: 'Граница Русского царства в начале правления Петра I', delta: 'none' },
@@ -75,34 +86,22 @@ function historicalFilter(year: number): FilterSpecification {
 
 function addVisualBase(map: Map) {
   if (!map.getSource('world-land')) {
-    map.addSource('world-land', {
-      type: 'geojson',
-      data: WORLD_LAND
-    });
+    map.addSource('world-land', { type: 'geojson', data: WORLD_LAND });
   }
-
   if (!map.getLayer('world-land-fill')) {
     map.addLayer({
       id: 'world-land-fill',
       type: 'fill',
       source: 'world-land',
-      paint: {
-        'fill-color': '#59645d',
-        'fill-opacity': 0.72
-      }
+      paint: { 'fill-color': '#59645d', 'fill-opacity': 0.72 }
     });
   }
-
   if (!map.getLayer('world-land-edge')) {
     map.addLayer({
       id: 'world-land-edge',
       type: 'line',
       source: 'world-land',
-      paint: {
-        'line-color': '#899189',
-        'line-width': 0.55,
-        'line-opacity': 0.42
-      }
+      paint: { 'line-color': '#899189', 'line-width': 0.55, 'line-opacity': 0.42 }
     });
   }
 }
@@ -116,38 +115,10 @@ function addTerritoryLayers(map: Map) {
     });
   }
 
-  map.addLayer({
-    id: 'russia-loss',
-    type: 'fill',
-    source: 'ohm-admin',
-    'source-layer': 'boundaries',
-    paint: { 'fill-color': '#b86655', 'fill-opacity': 0 }
-  });
-
-  map.addLayer({
-    id: 'russia-current',
-    type: 'fill',
-    source: 'ohm-admin',
-    'source-layer': 'boundaries',
-    paint: { 'fill-color': '#6f8169', 'fill-opacity': 0.68 }
-  });
-
-  map.addLayer({
-    id: 'russia-gain',
-    type: 'fill',
-    source: 'ohm-admin',
-    'source-layer': 'boundaries',
-    paint: { 'fill-color': '#d0ac61', 'fill-opacity': 0 }
-  });
-
-  map.addLayer({
-    id: 'russia-previous-cover',
-    type: 'fill',
-    source: 'ohm-admin',
-    'source-layer': 'boundaries',
-    paint: { 'fill-color': '#6f8169', 'fill-opacity': 0 }
-  });
-
+  map.addLayer({ id: 'russia-loss', type: 'fill', source: 'ohm-admin', 'source-layer': 'boundaries', paint: { 'fill-color': '#b86655', 'fill-opacity': 0 } });
+  map.addLayer({ id: 'russia-current', type: 'fill', source: 'ohm-admin', 'source-layer': 'boundaries', paint: { 'fill-color': '#6f8169', 'fill-opacity': 0.68 } });
+  map.addLayer({ id: 'russia-gain', type: 'fill', source: 'ohm-admin', 'source-layer': 'boundaries', paint: { 'fill-color': '#d0ac61', 'fill-opacity': 0 } });
+  map.addLayer({ id: 'russia-previous-cover', type: 'fill', source: 'ohm-admin', 'source-layer': 'boundaries', paint: { 'fill-color': '#6f8169', 'fill-opacity': 0 } });
   map.addLayer({
     id: 'russia-previous-border',
     type: 'line',
@@ -160,7 +131,6 @@ function addTerritoryLayers(map: Map) {
       'line-dasharray': [3, 2]
     }
   });
-
   map.addLayer({
     id: 'russia-border-halo',
     type: 'line',
@@ -172,7 +142,6 @@ function addTerritoryLayers(map: Map) {
       'line-opacity': 0.6
     }
   });
-
   map.addLayer({
     id: 'russia-border',
     type: 'line',
@@ -210,7 +179,6 @@ function applyTerritoryState(map: Map, year: number) {
     map.setPaintProperty('russia-gain', 'fill-opacity', 0.9);
     map.setPaintProperty('russia-previous-cover', 'fill-opacity', 0.82);
   }
-
   if (exact?.delta === 'loss') {
     map.setPaintProperty('russia-loss', 'fill-opacity', 0.82);
     map.setPaintProperty('russia-current', 'fill-opacity', 0.88);
@@ -293,7 +261,6 @@ export function PeterTerritoryMap() {
       playTimerRef.current = null;
       return;
     }
-
     playTimerRef.current = window.setInterval(() => {
       setYear((current) => {
         if (current >= MAX_YEAR) {
@@ -303,7 +270,6 @@ export function PeterTerritoryMap() {
         return current + 1;
       });
     }, 520);
-
     return () => {
       if (playTimerRef.current) window.clearInterval(playTimerRef.current);
       playTimerRef.current = null;
@@ -335,7 +301,11 @@ export function PeterTerritoryMap() {
         <div className={styles.grain} aria-hidden="true" />
 
         {!ready && <div className={styles.loading}>Запускаем глобус…</div>}
-        {ready && sourceIssue && <div className={styles.sourceWarning}>Глобус работает, но исторический слой границ сейчас недоступен. Повторная загрузка произойдёт при обновлении страницы.</div>}
+        {ready && sourceIssue && (
+          <div style={{ position: 'absolute', top: 78, left: '50%', transform: 'translateX(-50%)', zIndex: 12, maxWidth: 'min(640px, calc(100% - 32px))', padding: '10px 14px', border: '1px solid rgba(223,188,120,.45)', background: 'rgba(18,31,36,.86)', color: '#eadfca', borderRadius: 999, backdropFilter: 'blur(10px)', textAlign: 'center', fontSize: 12, fontWeight: 600 }}>
+            Глобус работает, но исторический слой границ сейчас недоступен. Повторная загрузка произойдёт при обновлении страницы.
+          </div>
+        )}
 
         <header className={styles.topbar}>
           <div className={styles.identity}>
@@ -379,15 +349,7 @@ export function PeterTerritoryMap() {
 
           <div className={styles.rangeWrap}>
             <span>{MIN_YEAR}</span>
-            <input
-              type="range"
-              min={MIN_YEAR}
-              max={MAX_YEAR}
-              step={1}
-              value={year}
-              onChange={(event) => jumpToYear(Number(event.target.value))}
-              aria-label="Год"
-            />
+            <input type="range" min={MIN_YEAR} max={MAX_YEAR} step={1} value={year} onChange={(event) => jumpToYear(Number(event.target.value))} aria-label="Год" />
             <span>{MAX_YEAR}</span>
           </div>
 
@@ -396,13 +358,7 @@ export function PeterTerritoryMap() {
               const left = ((state.year - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100;
               const selected = state.year === year;
               return (
-                <button
-                  key={state.year}
-                  style={{ left: `${left}%` }}
-                  className={`${styles.milestone} ${selected ? styles.milestoneActive : ''}`}
-                  onClick={() => jumpToYear(state.year)}
-                  title={`${state.year}: ${state.title}`}
-                >
+                <button key={state.year} style={{ left: `${left}%` }} className={`${styles.milestone} ${selected ? styles.milestoneActive : ''}`} onClick={() => jumpToYear(state.year)} title={`${state.year}: ${state.title}`}>
                   <i />
                   <span>{state.year}</span>
                 </button>
