@@ -1,0 +1,3 @@
+renderer=HistoricalTerritoryGlobeWebGLV7
+city_lod=country-only-at-deep-zoom
+surface=8k-earth
