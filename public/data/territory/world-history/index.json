@@ -10,6 +10,10 @@
     "pinned_commit": "62d8f1a03a71f2d3ff17f2d166f7553f256bce68",
     "license_note": "Preserve upstream attribution/license metadata when redistributing or editing source-derived geometry."
   },
+  "terrain": {
+    "normal_map": "terrain/earth_normal_2048.jpg",
+    "source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg"
+  },
   "min_year": 800,
   "max_year": 2010,
   "snapshots": [
