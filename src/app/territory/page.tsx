@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { HistoricalTerritoryGlobePremium } from './HistoricalTerritoryGlobePremium';
+import { HistoricalTerritoryGlobeCanvas } from './HistoricalTerritoryGlobeCanvas';
 import './territory-premium-v2.css';
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function TerritoryPage() {
-  return <HistoricalTerritoryGlobePremium initialYear={2026} />;
+  return <HistoricalTerritoryGlobeCanvas initialYear={2026} />;
 }
