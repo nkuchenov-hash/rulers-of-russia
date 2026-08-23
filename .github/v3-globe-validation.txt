@@ -1,0 +1,1 @@
+Validate adaptive high-resolution globe and zoom city layer.
