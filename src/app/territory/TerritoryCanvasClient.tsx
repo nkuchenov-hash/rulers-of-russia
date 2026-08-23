@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryGlobe = dynamic(
-  () => import('./HistoricalTerritoryGlobeWebGLV4').then((m) => m.HistoricalTerritoryGlobeWebGLV4),
+  () => import('./HistoricalTerritoryGlobeWebGLV5').then((m) => m.HistoricalTerritoryGlobeWebGLV5),
   { ssr: false }
 );
 
