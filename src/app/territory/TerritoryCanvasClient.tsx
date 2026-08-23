@@ -2,11 +2,11 @@
 
 import dynamic from 'next/dynamic';
 
-const HistoricalTerritoryGlobeCanvas = dynamic(
-  () => import('./HistoricalTerritoryGlobeCanvasV2').then((m) => m.HistoricalTerritoryGlobeCanvasV2),
+const HistoricalTerritoryGlobe = dynamic(
+  () => import('./HistoricalTerritoryGlobePremium').then((m) => m.HistoricalTerritoryGlobePremium),
   { ssr: false }
 );
 
 export function TerritoryCanvasClient() {
-  return <HistoricalTerritoryGlobeCanvas initialYear={2026} />;
+  return <HistoricalTerritoryGlobe initialYear={2026} />;
 }
