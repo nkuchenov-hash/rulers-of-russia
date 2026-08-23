@@ -1,3 +1,3 @@
 'use client';
 
-export { HistoricalTerritoryGlobeLocal as HistoricalTerritoryGlobe } from './HistoricalTerritoryGlobeLocal';
+export { HistoricalTerritoryGlobeWebGLV7 as HistoricalTerritoryGlobe } from './HistoricalTerritoryGlobeWebGLV7';
