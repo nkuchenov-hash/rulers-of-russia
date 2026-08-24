@@ -3,7 +3,7 @@ name: Deploy live site to GitHub Pages
 on:
   workflow_run:
     workflows:
-      - Validate rulers site
+      - Validate merged main
     types: [completed]
   workflow_dispatch:
 
@@ -13,38 +13,29 @@ permissions:
   id-token: write
 
 concurrency:
-  group: rulers-pages-${{ github.event.workflow_run.head_sha || github.sha }}
+  group: rulers-pages-${{ github.event.workflow_run.id || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event == 'pull_request')
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Resolve validated revision
-        id: revision
-        shell: bash
-        env:
-          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
-          MANUAL_SHA: ${{ github.sha }}
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
-            echo "sha=$MANUAL_SHA" >> "$GITHUB_OUTPUT"
-          else
-            echo "sha=$VALIDATED_SHA" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Checkout validated revision
+      - name: Checkout validated main
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.revision.outputs.sha }}
+          ref: main
           fetch-depth: 0
+
+      - name: Resolve deployed revision
+        id: revision
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -73,9 +64,10 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Verify deploy marker in artifact
+      - name: Verify territory route and deploy marker
         run: |
           test -f out/deploy.json
+          test -f out/territory/index.html
           cat out/deploy.json
 
       - name: Upload Pages artifact
