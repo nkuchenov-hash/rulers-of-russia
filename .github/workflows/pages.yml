@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - main
+  pull_request_target:
+    types: [closed]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -20,10 +24,13 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'pull_request_target' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request_target' && 'main' || github.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -37,9 +44,11 @@ jobs:
         run: node scripts/sync-historical-world.mjs
 
       - name: Write deploy marker
+        env:
+          DEPLOY_SHA: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
         run: |
           mkdir -p public
-          printf '{"sha":"%s","run_id":"%s","built_at":"%s"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > public/deploy.json
+          printf '{"sha":"%s","run_id":"%s","built_at":"%s"}\n' "$DEPLOY_SHA" "$GITHUB_RUN_ID" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > public/deploy.json
 
       - name: Typecheck
         run: npm run typecheck
@@ -61,7 +70,7 @@ jobs:
           path: ./out
 
   deploy:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -76,12 +85,13 @@ jobs:
         uses: actions/github-script@v7
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          DEPLOY_SHA: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const path = '.github/pages-last-success.json';
             const body = JSON.stringify({
-              sha: context.sha,
+              sha: process.env.DEPLOY_SHA,
               run_id: context.runId,
               deployed_at: new Date().toISOString(),
               page_url: process.env.PAGE_URL
@@ -102,7 +112,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               path,
-              message: `[skip ci] Record Pages deploy ${context.sha.slice(0, 12)}`,
+              message: `[skip ci] Record Pages deploy ${process.env.DEPLOY_SHA.slice(0, 12)}`,
               content: Buffer.from(body).toString('base64'),
               branch: 'main',
               sha: existingSha
