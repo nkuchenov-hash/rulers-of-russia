@@ -1,1 +1,2 @@
 Trigger trusted Pages deploy with isolated concurrency groups.
+Synchronize event 2026-08-24T09:05Z.
