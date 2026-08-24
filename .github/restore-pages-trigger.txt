@@ -1,0 +1,1 @@
+Restore the original Pages deployment path after reverting pages.yml.
