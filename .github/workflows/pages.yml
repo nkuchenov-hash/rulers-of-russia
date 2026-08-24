@@ -133,6 +133,7 @@ jobs:
         shell: bash
         env:
           DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           VERIFIED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -148,5 +149,3 @@ jobs:
           git branch -M pages-status
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin pages-status
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
