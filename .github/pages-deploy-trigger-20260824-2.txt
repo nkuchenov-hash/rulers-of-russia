@@ -1,0 +1,1 @@
+Trigger trusted Pages deploy with isolated concurrency groups.
