@@ -1,7 +1,7 @@
 name: Validate merged main
 
 on:
-  pull_request_target:
+  pull_request:
     types: [closed]
     branches:
       - main
@@ -25,6 +25,17 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Confirm merged revision is present on main
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          git fetch origin main
+          git merge-base --is-ancestor "$MERGE_SHA" origin/main
+          echo "Merged SHA: $MERGE_SHA"
+          echo "Current main: $(git rev-parse HEAD)"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -41,3 +52,6 @@ jobs:
 
       - name: Build static site
         run: npm run build
+
+      - name: Verify territory route exists
+        run: test -f out/territory/index.html
