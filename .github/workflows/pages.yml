@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -105,3 +105,48 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live Pages endpoints
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ steps.revision.outputs.sha }}
+        run: |
+          set -euo pipefail
+          BASE='https://nkuchenov-hash.github.io/rulers-of-russia'
+          for attempt in $(seq 1 30); do
+            if curl -fsSL "$BASE/territory/" -o /tmp/territory.html && \
+               curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json; then
+              LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
+              if [ "$LIVE_SHA" = "$EXPECTED_SHA" ]; then
+                echo "Live territory page confirmed for $LIVE_SHA"
+                exit 0
+              fi
+            fi
+            echo "Waiting for live Pages propagation ($attempt/30)..."
+            sleep 10
+          done
+          echo 'Live Pages verification failed.'
+          exit 1
+
+      - name: Publish live verification marker
+        if: success()
+        shell: bash
+        env:
+          DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
+        run: |
+          set -euo pipefail
+          VERIFIED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          rm -rf /tmp/pages-status
+          mkdir -p /tmp/pages-status
+          cd /tmp/pages-status
+          git init
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          printf '{"sha":"%s","run_id":"%s","verified_at":"%s","territory_url":"https://nkuchenov-hash.github.io/rulers-of-russia/territory/"}\n' "$DEPLOY_SHA" "$GITHUB_RUN_ID" "$VERIFIED_AT" > status.json
+          git add status.json
+          git commit -m "Record verified live Pages deployment"
+          git branch -M pages-status
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin pages-status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
