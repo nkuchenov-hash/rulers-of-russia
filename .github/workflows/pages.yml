@@ -3,7 +3,7 @@ name: Deploy live site to GitHub Pages
 on:
   workflow_run:
     workflows:
-      - Validate merged main
+      - Validate rulers site
     types: [completed]
   workflow_dispatch:
 
@@ -26,11 +26,38 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout validated main
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Wait until validated PR revision is present in main
+        if: github.event_name == 'workflow_run'
+        shell: bash
+        env:
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            git fetch origin main --prune
+            if git merge-base --is-ancestor "$VALIDATED_SHA" origin/main; then
+              git checkout --detach origin/main
+              echo "Validated SHA $VALIDATED_SHA is now contained in main."
+              exit 0
+            fi
+            echo "Waiting for validated SHA $VALIDATED_SHA to reach main ($attempt/60)..."
+            sleep 10
+          done
+          echo "Validated SHA $VALIDATED_SHA did not reach main within 10 minutes."
+          exit 1
+
+      - name: Ensure manual deploy uses current main
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          git fetch origin main --prune
+          git checkout --detach origin/main
 
       - name: Resolve deployed revision
         id: revision
