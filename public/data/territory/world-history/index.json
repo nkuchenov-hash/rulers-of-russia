@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": "Rulers of Russia historical world boundary archive",
   "runtime_external_dependency": false,
   "resolution": "For every selected year, use the most recent historical snapshot at or before that year.",
@@ -11,8 +11,15 @@
     "license_note": "Preserve upstream attribution/license metadata when redistributing or editing source-derived geometry."
   },
   "terrain": {
+    "surface_map": "terrain/earth_surface_2048.jpg",
+    "surface_source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg",
     "normal_map": "terrain/earth_normal_2048.jpg",
-    "source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg"
+    "normal_source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg"
+  },
+  "hydrography": {
+    "rivers": "hydro/rivers_50m.geojson",
+    "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_50m_rivers_lake_centerlines.geojson",
+    "dataset": "Natural Earth 1:50m rivers and lake centerlines"
   },
   "min_year": 800,
   "max_year": 2010,
