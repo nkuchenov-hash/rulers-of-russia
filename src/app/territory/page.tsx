@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { TerritoryCanvasClient } from './TerritoryCanvasClient';
 import './territory-premium-v2.css';
 
