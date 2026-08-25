@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "dataset": "Rulers of Russia historical world boundary archive",
   "runtime_external_dependency": false,
   "resolution": "For every selected year, use the most recent historical snapshot at or before that year.",
@@ -20,6 +20,11 @@
     "rivers": "hydro/rivers_50m.geojson",
     "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_50m_rivers_lake_centerlines.geojson",
     "dataset": "Natural Earth 1:50m rivers and lake centerlines"
+  },
+  "modern_world": {
+    "countries": "cultural/countries_50m.geojson",
+    "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_50m_admin_0_countries.geojson",
+    "dataset": "Natural Earth 1:50m admin-0 countries"
   },
   "min_year": 800,
   "max_year": 2010,
