@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryMap = dynamic(
-  () => import('./HistoricalTerritoryMapLibreV13').then((module) => module.HistoricalTerritoryMapLibreV13),
+  () => import('./HistoricalTerritoryMapLibreV14').then((module) => module.HistoricalTerritoryMapLibreV14),
   {ssr:false},
 );
 
