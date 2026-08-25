@@ -22,11 +22,18 @@ const PALETTE=[
 type ViewMode='relief'|'states';
 type ProjectionMode='globe'|'map';
 type Point=[number,number];
-type MarkerEntry={marker:Marker;element:HTMLDivElement;rank:number;kind:'country'|'capital'|'regional'};
+type MarkerEntry={marker:Marker;element:HTMLDivElement;rank:number;kind:'country'|'capital'|'regional';coords:Point};
 
 const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
 const yearPart=(value:unknown)=>{const match=String(value??'').match(/-?\d{3,4}/);return match?Number(match[0]):null;};
 const normalizeLon=(lon:number)=>{let value=lon;while(value>180)value-=360;while(value<-180)value+=360;return value;};
+const rad=(value:number)=>value*Math.PI/180;
+
+function isFrontHemisphere(center:Point,point:Point){
+  const lat1=rad(center[1]),lat2=rad(point[1]),deltaLon=rad(point[0]-center[0]);
+  const cosine=Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(deltaLon);
+  return cosine>-0.02;
+}
 
 function unwrapRing(ring:any[]):Point[]{
   if(!Array.isArray(ring)||!ring.length)return[];
@@ -188,20 +195,11 @@ function baseStyle():any{
 }
 
 function styleMarker(element:HTMLDivElement,kind:MarkerEntry['kind']){
-  element.style.pointerEvents='none';
-  element.style.userSelect='none';
-  element.style.whiteSpace='nowrap';
-  element.style.fontFamily='Inter,Arial,sans-serif';
-  element.style.textShadow='0 2px 2px #050a0a,0 0 5px #050a0a,0 0 8px #050a0a';
-  element.style.zIndex='20';
-  element.style.transition='opacity 100ms ease';
-  if(kind==='country'){
-    element.style.color='#dfb86d';element.style.fontWeight='750';element.style.fontSize='14px';element.style.letterSpacing='.035em';
-  }else if(kind==='capital'){
-    element.style.color='#efbd4e';element.style.fontWeight='800';element.style.fontSize='15px';
-  }else{
-    element.style.color='#8fc1c0';element.style.fontWeight='650';element.style.fontSize='14px';
-  }
+  element.style.pointerEvents='none';element.style.userSelect='none';element.style.whiteSpace='nowrap';element.style.fontFamily='Inter,Arial,sans-serif';
+  element.style.textShadow='0 2px 2px #050a0a,0 0 5px #050a0a,0 0 8px #050a0a';element.style.zIndex='20';element.style.transition='opacity 100ms ease';
+  if(kind==='country'){element.style.color='#dfb86d';element.style.fontWeight='750';element.style.fontSize='14px';element.style.letterSpacing='.035em';}
+  else if(kind==='capital'){element.style.color='#efbd4e';element.style.fontWeight='800';element.style.fontSize='15px';}
+  else{element.style.color='#8fc1c0';element.style.fontWeight='650';element.style.fontSize='14px';}
 }
 
 export function HistoricalTerritoryMapLibreV18({initialYear=TERRITORY_MAX_YEAR}:{initialYear?:number}){
@@ -239,13 +237,10 @@ export function HistoricalTerritoryMapLibreV18({initialYear=TERRITORY_MAX_YEAR}:
   },[manifest,period.polityId]);
 
   const updateMarkerVisibility=useCallback(()=>{
-    const map=mapRef.current;if(!map)return;const z=map.getZoom();
+    const map=mapRef.current;if(!map)return;const z=map.getZoom();const center=map.getCenter();const centerPoint:Point=[center.lng,center.lat];
     const countryLimit=z<3.55?60:z<4.8?110:190;
-    for(const item of countryMarkers.current)item.element.style.display=item.rank<countryLimit?'block':'none';
-    for(const item of placeMarkers.current){
-      const show=item.kind==='capital'?z>=3.65:z>=4.95;
-      item.element.style.display=show?'block':'none';
-    }
+    for(const item of countryMarkers.current){const show=item.rank<countryLimit&&isFrontHemisphere(centerPoint,item.coords);item.element.style.display=show?'block':'none';}
+    for(const item of placeMarkers.current){const zoomVisible=item.kind==='capital'?z>=3.65:z>=4.95;const show=zoomVisible&&isFrontHemisphere(centerPoint,item.coords);item.element.style.display=show?'block':'none';}
   },[]);
 
   useEffect(()=>{
@@ -253,53 +248,29 @@ export function HistoricalTerritoryMapLibreV18({initialYear=TERRITORY_MAX_YEAR}:
     const map=new MapLibreMap({container:host,style:baseStyle(),center:initial.focus,zoom:window.innerWidth<=720?2.35:3.08,minZoom:1.05,maxZoom:12,pitch:0,bearing:0,attributionControl:false,renderWorldCopies:false,canvasContextAttributes:{antialias:true}});
     mapRef.current=map;map.scrollZoom.setWheelZoomRate(1/460);map.dragRotate.disable();map.touchZoomRotate.disableRotation();
     map.on('style.load',()=>{if(!alive)return;map.setProjection({type:'globe'});map.setTerrain({source:'dem',exaggeration:0.82});map.resize();setReady(true);});
-    map.on('zoom',updateMarkerVisibility);
+    map.on('zoom',updateMarkerVisibility);map.on('move',updateMarkerVisibility);
     const onFullscreen=()=>{setFullscreen(Boolean(document.fullscreenElement));requestAnimationFrame(()=>map.resize());};document.addEventListener('fullscreenchange',onFullscreen);
     return()=>{alive=false;document.removeEventListener('fullscreenchange',onFullscreen);countryMarkers.current.forEach(i=>i.marker.remove());placeMarkers.current.forEach(i=>i.marker.remove());map.remove();mapRef.current=null;};
   },[initialYear,updateMarkerVisibility]);
 
   useEffect(()=>{
     const map=mapRef.current;if(!map||!ready)return;
-    (map.getSource('world')as any)?.setData(worldFill(world));
-    (map.getSource('worldBorders')as any)?.setData(borderLines(world));
+    (map.getSource('world')as any)?.setData(worldFill(world));(map.getSource('worldBorders')as any)?.setData(borderLines(world));
     countryMarkers.current.forEach(i=>i.marker.remove());countryMarkers.current=[];
-    countryAnchors(world).forEach((item:any,rank:number)=>{
-      const element=document.createElement('div');element.textContent=item.name;styleMarker(element,'country');
-      const marker=new Marker({element,anchor:'center',occludedOpacity:0}).setLngLat(item.centroid).addTo(map);
-      countryMarkers.current.push({marker,element,rank,kind:'country'});
-    });
+    countryAnchors(world).forEach((item:any,rank:number)=>{const element=document.createElement('div');element.textContent=item.name;styleMarker(element,'country');const coords=item.centroid as Point;const marker=new Marker({element,anchor:'center'}).setLngLat(coords).addTo(map);countryMarkers.current.push({marker,element,rank,kind:'country',coords});});
     updateMarkerVisibility();
   },[world,ready,updateMarkerVisibility]);
-  useEffect(()=>{
-    const map=mapRef.current;if(!map||!ready)return;
-    const collection={type:'FeatureCollection',features:russiaFeatures.map((f:any)=>({...f,geometry:rewindGeometry(f.geometry)}))};
-    (map.getSource('russia')as any)?.setData(collection);
-    (map.getSource('russiaBorders')as any)?.setData(borderLines({type:'FeatureCollection',features:russiaFeatures}));
-  },[russiaFeatures,ready]);
+  useEffect(()=>{const map=mapRef.current;if(!map||!ready)return;const collection={type:'FeatureCollection',features:russiaFeatures.map((f:any)=>({...f,geometry:rewindGeometry(f.geometry)}))};(map.getSource('russia')as any)?.setData(collection);(map.getSource('russiaBorders')as any)?.setData(borderLines({type:'FeatureCollection',features:russiaFeatures}));},[russiaFeatures,ready]);
   useEffect(()=>{const map=mapRef.current;if(!map||!ready)return;(map.getSource('rivers')as any)?.setData(riversForMap(rivers));},[rivers,ready]);
   useEffect(()=>{
     const map=mapRef.current;if(!map||!ready)return;placeMarkers.current.forEach(i=>i.marker.remove());placeMarkers.current=[];
-    activePlaces.forEach((place,index)=>{
-      const element=document.createElement('div');element.textContent=place.kind==='capital'?`★ ${place.name}`:`• ${place.name}`;styleMarker(element,place.kind);
-      const marker=new Marker({element,anchor:'left',occludedOpacity:0}).setLngLat([place.lon,place.lat]).addTo(map);
-      placeMarkers.current.push({marker,element,rank:index,kind:place.kind});
-    });
-    updateMarkerVisibility();
+    activePlaces.forEach((place,index)=>{const element=document.createElement('div');element.textContent=place.kind==='capital'?`★ ${place.name}`:`• ${place.name}`;styleMarker(element,place.kind);const coords:Point=[place.lon,place.lat];const marker=new Marker({element,anchor:'left'}).setLngLat(coords).addTo(map);placeMarkers.current.push({marker,element,rank:index,kind:place.kind,coords});});updateMarkerVisibility();
   },[activePlaces,ready,updateMarkerVisibility]);
 
   useEffect(()=>{
     const map=mapRef.current;if(!map||!ready)return;
-    if(mode==='states'){
-      map.setPaintProperty('world-fill','fill-opacity',0.96);
-      map.setPaintProperty('russia-fill','fill-opacity',0.98);
-      map.setPaintProperty('terrain-shade','hillshade-exaggeration',0.24);
-      map.setTerrain({source:'dem',exaggeration:0.48});
-    }else{
-      map.setPaintProperty('world-fill','fill-opacity',0.76);
-      map.setPaintProperty('russia-fill','fill-opacity',0.82);
-      map.setPaintProperty('terrain-shade','hillshade-exaggeration',0.46);
-      map.setTerrain({source:'dem',exaggeration:0.82});
-    }
+    if(mode==='states'){map.setPaintProperty('world-fill','fill-opacity',0.96);map.setPaintProperty('russia-fill','fill-opacity',0.98);map.setPaintProperty('terrain-shade','hillshade-exaggeration',0.24);map.setTerrain({source:'dem',exaggeration:0.48});}
+    else{map.setPaintProperty('world-fill','fill-opacity',0.76);map.setPaintProperty('russia-fill','fill-opacity',0.82);map.setPaintProperty('terrain-shade','hillshade-exaggeration',0.46);map.setTerrain({source:'dem',exaggeration:0.82});}
   },[mode,ready]);
   useEffect(()=>{const map=mapRef.current;if(!map||!ready)return;map.setProjection({type:projection==='globe'?'globe':'mercator'});map.easeTo({pitch:0,bearing:0,duration:260});},[projection,ready]);
 
@@ -315,8 +286,7 @@ export function HistoricalTerritoryMapLibreV18({initialYear=TERRITORY_MAX_YEAR}:
   return <main className={styles.page}><section ref={sceneRef} className={styles.scene}>
     <div className={styles.space}/><div ref={hostRef} className={`${styles.globeHost} ${styles.mapLibreHost}`}/>
     <header className={styles.topbar}><div className={styles.brand}><span>Р</span><strong>Правители<br/>России</strong></div><div className={styles.topActions}><div className={styles.modeGroup}>
-      <button className={mode==='relief'?styles.active:''} onClick={()=>setMode('relief')}>Рельеф</button>
-      <button className={mode==='states'?styles.active:''} onClick={()=>setMode('states')}>Государства</button>
+      <button className={mode==='relief'?styles.active:''} onClick={()=>setMode('relief')}>Рельеф</button><button className={mode==='states'?styles.active:''} onClick={()=>setMode('states')}>Государства</button>
     </div><button className={styles.projectionToggle} onClick={()=>setProjection(v=>v==='globe'?'map':'globe')}>{projection==='globe'?'Карта':'Глобус'}</button><button onClick={toggleFullscreen}>{fullscreen?'Свернуть':'На весь экран'}</button></div></header>
     <aside className={styles.story}><small>{period.era}</small><div><h1>{period.label}</h1><b>{year}</b></div><p>Исторический мировой срез {worldYear??'—'} года · цветные государства, постоянные границы, DEM-рельеф и гидрография</p></aside>
     <div className={styles.zoomTools}><button onClick={()=>zoom(.85)}>+</button><button onClick={()=>zoom(-.85)}>−</button><button onClick={focusRussia}>◎</button></div>
