@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
@@ -7,7 +7,10 @@ const SOURCE_ROOT = `https://raw.githubusercontent.com/aourednik/historical-base
 const OUT_ROOT = path.join(process.cwd(), 'public', 'data', 'territory', 'world-history');
 const SNAPSHOT_ROOT = path.join(OUT_ROOT, 'snapshots');
 const TERRAIN_ROOT = path.join(process.cwd(), 'public', 'data', 'territory', 'terrain');
+const HYDRO_ROOT = path.join(process.cwd(), 'public', 'data', 'territory', 'hydro');
 const TERRAIN_NORMAL_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg';
+const TERRAIN_SURFACE_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
+const RIVERS_URL = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_50m_rivers_lake_centerlines.geojson';
 const MIN_YEAR = 800;
 const MAX_YEAR = 2026;
 
@@ -23,14 +26,28 @@ async function fetchBytes(url) {
   return Buffer.from(await response.arrayBuffer());
 }
 
+async function ensureBytes(target, url) {
+  if (!existsSync(target)) await writeFile(target, await fetchBytes(url));
+}
+
+async function ensureText(target, url) {
+  if (!existsSync(target)) await writeFile(target, await fetchText(url), 'utf8');
+}
+
 async function main() {
   await mkdir(SNAPSHOT_ROOT, { recursive: true });
   await mkdir(TERRAIN_ROOT, { recursive: true });
+  await mkdir(HYDRO_ROOT, { recursive: true });
 
-  const terrainPath = path.join(TERRAIN_ROOT, 'earth_normal_2048.jpg');
-  if (!existsSync(terrainPath)) {
-    await writeFile(terrainPath, await fetchBytes(TERRAIN_NORMAL_URL));
-  }
+  const terrainNormalPath = path.join(TERRAIN_ROOT, 'earth_normal_2048.jpg');
+  const terrainSurfacePath = path.join(TERRAIN_ROOT, 'earth_surface_2048.jpg');
+  const riversPath = path.join(HYDRO_ROOT, 'rivers_50m.geojson');
+
+  await Promise.all([
+    ensureBytes(terrainNormalPath, TERRAIN_NORMAL_URL),
+    ensureBytes(terrainSurfacePath, TERRAIN_SURFACE_URL),
+    ensureText(riversPath, RIVERS_URL)
+  ]);
 
   const upstreamIndex = JSON.parse(await fetchText(`${SOURCE_ROOT}/index.json`));
   const rows = (upstreamIndex.years ?? [])
@@ -60,7 +77,7 @@ async function main() {
   }
 
   const index = {
-    schema_version: 1,
+    schema_version: 2,
     dataset: 'Rulers of Russia historical world boundary archive',
     runtime_external_dependency: false,
     resolution: 'For every selected year, use the most recent historical snapshot at or before that year.',
@@ -72,8 +89,15 @@ async function main() {
       license_note: 'Preserve upstream attribution/license metadata when redistributing or editing source-derived geometry.'
     },
     terrain: {
+      surface_map: 'terrain/earth_surface_2048.jpg',
+      surface_source: TERRAIN_SURFACE_URL,
       normal_map: 'terrain/earth_normal_2048.jpg',
-      source: TERRAIN_NORMAL_URL
+      normal_source: TERRAIN_NORMAL_URL
+    },
+    hydrography: {
+      rivers: 'hydro/rivers_50m.geojson',
+      source: RIVERS_URL,
+      dataset: 'Natural Earth 1:50m rivers and lake centerlines'
     },
     min_year: snapshots[0].year,
     max_year: snapshots[snapshots.length - 1].year,
@@ -81,7 +105,7 @@ async function main() {
   };
 
   await writeFile(path.join(OUT_ROOT, 'index.json'), `${JSON.stringify(index, null, 2)}\n`, 'utf8');
-  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}).`);
+  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}); terrain and rivers vendored locally.`);
 }
 
 main().catch((error) => {
