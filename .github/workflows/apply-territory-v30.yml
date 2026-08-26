@@ -1,0 +1,66 @@
+name: Apply territory V30 runtime stability
+
+on:
+  push:
+    branches:
+      - territory-v30-stable-texture-memory
+    paths:
+      - scripts/apply-territory-v30.py
+      - .github/workflows/apply-territory-v30.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-territory-v30
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: territory-v30-stable-texture-memory
+          fetch-depth: 0
+
+      - name: Detect materialized V30
+        id: detect
+        shell: bash
+        run: |
+          if grep -q 'raw.generateMipmaps=false' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx && \
+             ! grep -q 'earth_relief_12288.webp' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx; then
+            echo 'done=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'done=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply V30 patch
+        if: steps.detect.outputs.done != 'true'
+        run: python scripts/apply-territory-v30.py
+
+      - name: Verify V30 runtime rules
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q 'earth_relief_4096.webp' "$R"
+          grep -q 'earth_relief_8192.webp' "$R"
+          grep -q 'raw.generateMipmaps=false' "$R"
+          ! grep -q 'earth_relief_12288.webp' "$R"
+          ! grep -q 'earth_relief_16380.webp' "$R"
+          ! grep -q "element.style.display='none'" "$R"
+
+      - name: Commit materialized V30
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m 'Stabilize globe texture memory and label visibility'
+          git push
