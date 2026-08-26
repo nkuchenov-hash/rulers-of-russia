@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1721-nystad-russia",
+      "eventId": "evt-1721-nystad-peace",
+      "polityId": "russian-tsardom",
+      "effectiveDate": {
+        "original": "30 августа 1721 г.",
+        "normalized": "1721-09-10",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-nystad-1721-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-nystad-1721-ebid"],
+        "derivationNote": "Do not use a modern historical atlas as canonical geometry. Extract the territorial clauses, locate any contemporary Russian/official cartographic evidence, then georeference the resulting boundary."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1812-bucharest-russia",
+      "eventId": "evt-1812-bucharest-peace",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "16 мая 1812 г.",
+        "normalized": "1812-05-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-bucharest-1812-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-bucharest-1812-ebid"],
+        "derivationNote": "Use the treaty text and Rosarchiv treaty collection; georeference only after the legal boundary description and period cartographic evidence agree."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1920-rsfsr-fer-border",
+      "eventId": "evt-1920-rsfsr-fer-border-treaty",
+      "polityId": "rsfsr",
+      "effectiveDate": {
+        "original": "15-30 декабря 1920 г.",
+        "normalized": "1920-12-15",
+        "normalizedEnd": "1920-12-30",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid"],
+        "derivationNote": "The date range is not precise enough for automatic month/day materialization until the effective article/protocol is reviewed."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
