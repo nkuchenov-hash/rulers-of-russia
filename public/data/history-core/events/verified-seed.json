@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1721-nystad-peace",
+      "title": "Ништадтский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "30 августа 1721 г.",
+        "normalized": "1721-09-10",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "Мирный договор России и Швеции, завершивший Северную войну и закрепивший территориальные изменения.",
+      "evidenceDocumentIds": ["doc-nystad-1721-ebid"],
+      "territoryChangeIds": ["territory-1721-nystad-russia"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1812-bucharest-peace",
+      "title": "Бухарестский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "16 мая 1812 г.",
+        "normalized": "1812-05-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Мирный договор Российской и Османской империй, завершивший русско-турецкую войну 1806-1812 гг. и содержавший территориальные условия.",
+      "evidenceDocumentIds": ["doc-bucharest-1812-ebid"],
+      "territoryChangeIds": ["territory-1812-bucharest-russia"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1920-rsfsr-fer-border-treaty",
+      "title": "Договор о границах РСФСР с Дальневосточной Республикой",
+      "kind": "treaty",
+      "date": {
+        "original": "15-30 декабря 1920 г.",
+        "normalized": "1920-12-15",
+        "normalizedEnd": "1920-12-30",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["rsfsr", "far-eastern-republic"],
+      "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid"],
+      "territoryChangeIds": ["territory-1920-rsfsr-fer-border"],
+      "reviewStatus": "source-verified",
+      "notes": "Exact effective day inside the documented date range remains to be established before month/day-level boundary materialization."
+    }
+  ]
+}
