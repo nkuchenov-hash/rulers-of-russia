@@ -14,6 +14,8 @@ const TERRAIN_NORMAL_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/de
 const TERRAIN_SURFACE_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
 const TERRAIN_SURFACE_8K_URL = 'https://svs.gsfc.nasa.gov/vis/a000000/a003600/a003615/flat_earth_Largest_still.0330.jpg';
 const TERRAIN_SURFACE_21K_URL = 'https://assets.science.nasa.gov/content/dam/science/esd/eo/images/bmng/bmng-topography/july/world.topo.200407.3x21600x10800.jpg';
+const TERRAIN_LOD500_C1_URL = 'https://assets.science.nasa.gov/content/dam/science/esd/eo/images/bmng/bmng-topography/july/world.topo.200407.3x21600x21600.C1.jpg';
+const TERRAIN_LOD500_D1_URL = 'https://assets.science.nasa.gov/content/dam/science/esd/eo/images/bmng/bmng-topography/july/world.topo.200407.3x21600x21600.D1.jpg';
 const NATURAL_EARTH_COMMIT = 'ca96624a';
 const RIVERS_URL = `https://raw.githubusercontent.com/nvkelso/natural-earth-vector/${NATURAL_EARTH_COMMIT}/geojson/ne_50m_rivers_lake_centerlines.geojson`;
 const COUNTRIES_URL = `https://raw.githubusercontent.com/nvkelso/natural-earth-vector/${NATURAL_EARTH_COMMIT}/geojson/ne_50m_admin_0_countries.geojson`;
@@ -57,6 +59,8 @@ async function main() {
   const terrainSurfacePath = path.join(TERRAIN_ROOT, 'earth_surface_2048.jpg');
   const terrainSurface8kPath = path.join(TERRAIN_ROOT, 'earth_surface_8192.jpg');
   const terrainSurface21kPath = path.join(TERRAIN_ROOT, 'earth_surface_21600.jpg');
+  const terrainLod500C1Path = path.join(TERRAIN_ROOT, 'lod500_C1.jpg');
+  const terrainLod500D1Path = path.join(TERRAIN_ROOT, 'lod500_D1.jpg');
   const riversPath = path.join(HYDRO_ROOT, 'rivers_50m.geojson');
   const countriesPath = path.join(CULTURAL_ROOT, 'countries_50m.geojson');
 
@@ -65,6 +69,8 @@ async function main() {
     ensureBytes(terrainSurfacePath, TERRAIN_SURFACE_URL),
     ensureBytes(terrainSurface8kPath, TERRAIN_SURFACE_8K_URL),
     ensureBytes(terrainSurface21kPath, TERRAIN_SURFACE_21K_URL),
+    ensureBytes(terrainLod500C1Path, TERRAIN_LOD500_C1_URL),
+    ensureBytes(terrainLod500D1Path, TERRAIN_LOD500_D1_URL),
     ensureText(riversPath, RIVERS_URL),
     normalizeGeoJsonFile(countriesPath, COUNTRIES_URL)
   ]);
@@ -91,7 +97,7 @@ async function main() {
   }
 
   const index = {
-    schema_version: 4,
+    schema_version: 5,
     dataset: 'Rulers of Russia historical world boundary archive',
     runtime_external_dependency: false,
     resolution: 'For every selected year, use the most recent historical snapshot at or before that year.',
@@ -107,7 +113,13 @@ async function main() {
       surface_source: TERRAIN_SURFACE_URL,
       high_res_surface_map: 'terrain/earth_surface_8192.jpg',
       high_res_surface_source: TERRAIN_SURFACE_8K_URL,
-      high_res_credit: 'NASA/Goddard Space Flight Center Scientific Visualization Studio; Blue Marble Next Generation data courtesy NASA/GSFC and NASA Earth Observatory.',
+      close_surface_map: 'terrain/earth_surface_21600.jpg',
+      close_surface_source: TERRAIN_SURFACE_21K_URL,
+      lod500_c1_map: 'terrain/lod500_C1.jpg',
+      lod500_c1_source: TERRAIN_LOD500_C1_URL,
+      lod500_d1_map: 'terrain/lod500_D1.jpg',
+      lod500_d1_source: TERRAIN_LOD500_D1_URL,
+      high_res_credit: 'NASA Earth Observatory Blue Marble Next Generation; 500 m full-resolution topographic quadrants used for close Eurasia zoom.',
       normal_map: 'terrain/earth_normal_2048.jpg',
       normal_source: TERRAIN_NORMAL_URL
     },
@@ -127,7 +139,7 @@ async function main() {
   };
 
   await writeFile(path.join(OUT_ROOT, 'index.json'), `${JSON.stringify(index, null, 2)}\n`, 'utf8');
-  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}); normalized polygons, 8K terrain, rivers and modern countries vendored locally.`);
+  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}); 500m Eurasia terrain LOD, normalized polygons, rivers and modern countries vendored locally.`);
 }
 
 main().catch((error) => {
