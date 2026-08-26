@@ -73,6 +73,7 @@ jobs:
                   (4096, 2048, 84, 'earth_relief_4096.webp'),
                   (8192, 4096, 88, 'earth_relief_8192.webp'),
                   (12288, 6144, 90, 'earth_relief_12288.webp'),
+                  (16384, 8192, 91, 'earth_relief_16384.webp'),
               ]
               for width, height, quality, name in levels:
                   resized = image.resize((width, height), Image.Resampling.LANCZOS)
@@ -88,13 +89,15 @@ jobs:
           for f in \
             public/data/territory/terrain/earth_relief_4096.webp \
             public/data/territory/terrain/earth_relief_8192.webp \
-            public/data/territory/terrain/earth_relief_12288.webp; do
+            public/data/territory/terrain/earth_relief_12288.webp \
+            public/data/territory/terrain/earth_relief_16384.webp; do
             test -s "$f"
             ls -lh "$f"
           done
           test "$(stat -c%s public/data/territory/terrain/earth_relief_4096.webp)" -lt 12000000
           test "$(stat -c%s public/data/territory/terrain/earth_relief_8192.webp)" -lt 45000000
           test "$(stat -c%s public/data/territory/terrain/earth_relief_12288.webp)" -lt 95000000
+          test "$(stat -c%s public/data/territory/terrain/earth_relief_16384.webp)" -lt 140000000
 
       - name: Commit project-owned relief textures
         shell: bash
@@ -104,7 +107,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/data/territory/terrain/earth_relief_4096.webp \
                   public/data/territory/terrain/earth_relief_8192.webp \
-                  public/data/territory/terrain/earth_relief_12288.webp
+                  public/data/territory/terrain/earth_relief_12288.webp \
+                  public/data/territory/terrain/earth_relief_16384.webp
           if git diff --cached --quiet; then
             echo 'V25 relief textures already current.'
             exit 0
