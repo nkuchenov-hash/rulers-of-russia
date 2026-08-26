@@ -24,10 +24,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Checkout
+      - name: Checkout proposed revision
+        if: github.event_name != 'workflow_run'
+        uses: actions/checkout@v4
+
+      - name: Checkout deployed main
+        if: github.event_name == 'workflow_run'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_run' && 'main' || '' }}
+          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@v4
