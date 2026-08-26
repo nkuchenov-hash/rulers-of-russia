@@ -1,6 +1,7 @@
 'use client';
 
 import './histographyOrbitPatch.js';
+import './globeWeightAndCityTuning.js';
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryMap = dynamic(
