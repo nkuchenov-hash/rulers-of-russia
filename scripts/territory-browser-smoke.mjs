@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-const url = process.env.TERRITORY_SMOKE_URL || 'http://127.0.0.1:4173/territory/';
+const url = process.env.TERRITORY_SMOKE_URL || 'http://127.0.0.1:4173/rulers-of-russia/territory/';
 const browser = await chromium.launch({
   headless: true,
   args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist']
@@ -22,7 +22,7 @@ try {
     const canvas = document.querySelector('canvas');
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200);
   }, null, { timeout: 30000 });
-  await page.waitForTimeout(3500);
+  await page.waitForTimeout(4500);
 
   const state = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
@@ -40,7 +40,6 @@ try {
   }
   if (pageErrors.length) throw new Error(`Browser pageerror:\n${pageErrors.join('\n---\n')}`);
 
-  // Ignore harmless browser-extension/network console chatter, but fail on JS/runtime signatures.
   const fatalConsole = consoleErrors.filter(x => /ReferenceError|TypeError|SyntaxError|Uncaught|WebGL context lost|out of memory/i.test(x));
   if (fatalConsole.length) throw new Error(`Fatal browser console errors:\n${fatalConsole.join('\n---\n')}`);
 
