@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "dataset": "Rulers of Russia History Core research queue",
+  "status": "active",
+  "rules": [
+    "A boundary change is not production-ready until its effective date and geometry are both source-backed.",
+    "Search Russian archival/original and official documentary sources first.",
+    "A modern retrospective map may suggest where to research but cannot establish canonical geometry.",
+    "Signing, ratification, entry into force, demarcation and actual transfer of control are separate dates when documents distinguish them.",
+    "Do not invent day or month precision.",
+    "For periods without a documented linear border, model a frontier/control/tributary zone and expose uncertainty."
+  ],
+  "phases": [
+    {
+      "id": "phase-rf-1991-present",
+      "period": "1991-present",
+      "priority": 1,
+      "goal": "Legal boundary chronology of the Russian Federation with separate de-facto/control/claim tracks where required.",
+      "primaryRepositories": ["pravo-international", "rosarchiv-search-gis", "ebid-historyrussia"],
+      "documentFamilies": ["international treaties", "federal laws and ratification acts", "border delimitation and demarcation agreements", "official maps/coordinate annexes"],
+      "status": "queued"
+    },
+    {
+      "id": "phase-ussr-1922-1991",
+      "period": "1922-1991",
+      "priority": 2,
+      "goal": "External USSR boundary changes plus union-republic changes that later affected the Russian Federation; keep wartime front lines separate.",
+      "primaryRepositories": ["ebid-historyrussia", "rosarchiv-online", "rosarchiv-search-gis"],
+      "documentFamilies": ["Документы внешней политики СССР", "treaties and protocols", "Supreme Soviet acts", "border commissions", "military/topographic maps"],
+      "status": "queued"
+    },
+    {
+      "id": "phase-revolution-1917-1922",
+      "period": "1917-1922",
+      "priority": 3,
+      "goal": "Separate legal claims, effective control, fronts and recognized borders during revolution and civil war.",
+      "primaryRepositories": ["ebid-historyrussia", "rosarchiv-online", "rosarchiv-search-gis"],
+      "documentFamilies": ["decrees", "peace treaties", "border treaties", "armistices", "government acts", "military maps"],
+      "status": "queued"
+    },
+    {
+      "id": "phase-empire-1721-1917",
+      "period": "1721-1917",
+      "priority": 4,
+      "goal": "Event-sourced external boundary chronology of the Russian Empire down to exact effective date where documents permit.",
+      "primaryRepositories": ["prlib-pszri", "neb-pszri", "ebid-historyrussia", "rosarchiv-online", "rosarchiv-search-gis", "nlr-russia-maps", "rsl-map-library", "prlib-map-atlases"],
+      "documentFamilies": ["ПСЗРИ", "international treaties", "ratifications", "demarcation protocols", "AVPRI diplomatic files", "Military Topographic Depot / General Staff maps"],
+      "status": "in-research",
+      "seedEventIds": ["evt-1812-bucharest-peace"]
+    },
+    {
+      "id": "phase-tsardom-1547-1721",
+      "period": "1547-1721",
+      "priority": 5,
+      "goal": "Treaty- and act-based chronology of the Russian Tsardom; represent weakly delimited frontier areas as zones.",
+      "primaryRepositories": ["neb-sgdd", "neb-acts-moscow", "prlib-pszri", "neb-pszri", "prlib-psrl", "neb-psrl", "rosarchiv-search-gis"],
+      "documentFamilies": ["state charters", "international treaties", "Muscovite acts", "early PSZRI acts", "chronicles", "contemporary plans/maps"],
+      "status": "in-research",
+      "seedEventIds": ["evt-1721-nystad-peace"]
+    },
+    {
+      "id": "phase-muscovy-1263-1547",
+      "period": "1263-1547",
+      "priority": 6,
+      "goal": "Reconstruct documented acquisitions, dependencies and frontier zones without projecting a modern state-border concept backward.",
+      "primaryRepositories": ["neb-sgdd", "neb-acts-moscow", "prlib-psrl", "neb-psrl", "rosarchiv-search-gis"],
+      "documentFamilies": ["grand-princely charters", "treaties", "spiritual/testament charters", "chronicles", "land records"],
+      "status": "queued"
+    },
+    {
+      "id": "phase-medieval-rus-862-1263",
+      "period": "862-1263",
+      "priority": 7,
+      "goal": "Build a source-critical territorial model of lands, tribute, dynastic control and frontier zones; avoid false precise polygons.",
+      "primaryRepositories": ["prlib-psrl", "neb-psrl", "neb-sgdd", "rosarchiv-search-gis"],
+      "documentFamilies": ["chronicles", "charters", "treaties", "archaeographic documentary editions"],
+      "status": "queued",
+      "precisionPolicy": "Month-level state is only produced where documentary dating actually supports month/day precision; otherwise the UI must show the uncertainty/range."
+    }
+  ]
+}
