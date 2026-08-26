@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-nystad-1721-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Ништадтский мирный договор между Россией и Швецией 30 августа 1721 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/335720-nishtadtskiy-mirnyy-dogovor-mezhdu-rossiey-i-shvetsiey-30-avgusta-1721-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "30 августа 1721 г.",
+        "normalized": "1721-09-10",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Original Russian date retained; normalized Gregorian equivalent is 10 September 1721."
+      },
+      "authority": ["Российское государство / Пётр I", "Шведское королевство / Фредрик I"],
+      "publicationCitation": "ЭБИД: Ништадтский мирный договор между Россией и Швецией 30 августа 1721 г.",
+      "notes": "Use treaty articles as the legal basis. Geometry still requires treaty boundary wording and/or a contemporary map to be georeferenced."
+    },
+    {
+      "id": "doc-bucharest-1812-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "1812 г. мая 16. — Бухарестский мирный договор",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/511807-1812-g-maya-16-locale-nil-buharestskiy-mirnyy-dogovor",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "16 мая 1812 г.",
+        "normalized": "1812-05-28",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Rosarchiv identifies the date as 16(28) May 1812."
+      },
+      "authority": ["Русское правительство", "Османское правительство"],
+      "publicationCitation": "Полное собрание законов Российской империи, т. XXXII, стр. 316-322, № 23110",
+      "pagesOrFolios": "ПСЗРИ, т. XXXII, стр. 316-322",
+      "notes": "Rosarchiv also maintains a digitized archival-document project devoted to the treaty and negotiations."
+    },
+    {
+      "id": "doc-rsfsr-fer-border-1920-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Договор о границах Российской Социалистической Федеративной Советской Республики с Дальневосточной Республикой. 15-30 декабря 1920 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/284339-dogovor-o-granitsah-rossiyskoy-sotsialisticheskoy-federativnoy-sovetskoy-respubliki-s-dalnevostochnoy-respublikoy-15-30-dekabrya-1920-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "15-30 декабря 1920 г.",
+        "normalized": "1920-12-15",
+        "normalizedEnd": "1920-12-30",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство РСФСР", "Правительство Дальневосточной Республики"],
+      "publicationCitation": "Документы внешней политики СССР. Т. III. 1 июля 1920 г.-18 марта 1921 г. — М.: Госполитиздат, 1959.",
+      "notes": "The event is source-located, but month/day effectiveness and exact geometry must be resolved from the full treaty text and related implementation documents before production use."
+    }
+  ]
+}
