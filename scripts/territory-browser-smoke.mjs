@@ -48,11 +48,17 @@ try {
   }
 
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
+
+  await zoomIn.click();
+  await page.waitForTimeout(250);
+  if (await page.evaluate(visibleLabelWithPrefix, '★')) {
+    throw new Error('Capital labels appeared too early after the first zoom step');
+  }
+
   await zoomIn.click();
   await page.waitForTimeout(250);
   await page.waitForFunction(visibleLabelWithPrefix, '★', { timeout: 5000 });
 
-  await zoomIn.click();
   await zoomIn.click();
   await page.waitForTimeout(250);
   await page.waitForFunction(visibleLabelWithPrefix, '•', { timeout: 5000 });
