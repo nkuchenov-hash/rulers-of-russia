@@ -7,6 +7,10 @@ on:
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
+  workflow_run:
+    workflows:
+      - Deploy live site to GitHub Pages
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -14,11 +18,16 @@ permissions:
 
 jobs:
   browser-smoke:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || '' }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -29,6 +38,7 @@ jobs:
         run: npm install
 
       - name: Prepare local historical world archive
+        if: github.event_name != 'workflow_run'
         run: node scripts/sync-historical-world.mjs
 
       - name: Install Playwright Chromium
@@ -37,9 +47,11 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Build production-layout static site
+        if: github.event_name != 'workflow_run'
         run: npm run build
 
       - name: Start basePath-aware static server
+        if: github.event_name != 'workflow_run'
         run: |
           node scripts/serve-territory-smoke.mjs > /tmp/territory-serve.log 2>&1 &
           echo $! > /tmp/territory-serve.pid
@@ -53,8 +65,10 @@ jobs:
           exit 1
 
       - name: Execute territory in Chromium
+        env:
+          TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?smoke={0}', github.run_id) || '' }}
         run: node scripts/territory-browser-smoke.mjs
 
       - name: Show server log on failure
-        if: failure()
+        if: failure() && github.event_name != 'workflow_run'
         run: cat /tmp/territory-serve.log || true
