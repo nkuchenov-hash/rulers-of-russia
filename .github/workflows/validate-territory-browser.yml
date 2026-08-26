@@ -1,6 +1,14 @@
 name: Validate territory in Chromium
 
 on:
+  push:
+    branches:
+      - territory-v31-restore-stable-single-surface
+    paths:
+      - 'src/app/territory/**'
+      - 'scripts/territory-browser-smoke.mjs'
+      - 'scripts/serve-territory-smoke.mjs'
+      - '.github/workflows/validate-territory-browser.yml'
   pull_request:
     paths:
       - 'src/app/territory/**'
