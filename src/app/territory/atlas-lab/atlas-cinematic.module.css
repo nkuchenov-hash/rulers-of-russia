@@ -1,0 +1,47 @@
+.scope{
+  position:relative;
+  width:100%;
+  height:100svh;
+  overflow:hidden;
+  background:#010609;
+  isolation:isolate;
+}
+
+.scope::before{
+  content:'';
+  position:absolute;
+  z-index:3;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 34% 48% at 84% 9%,rgba(255,194,111,.14) 0%,rgba(255,177,78,.055) 34%,transparent 67%),
+    radial-gradient(ellipse 47% 54% at 63% -7%,rgba(145,211,226,.09) 0%,rgba(91,151,171,.035) 40%,transparent 72%);
+  mix-blend-mode:screen;
+}
+
+.scope::after{
+  content:'';
+  position:absolute;
+  z-index:4;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(116deg,rgba(0,4,7,.26) 0%,rgba(0,4,7,.04) 48%,rgba(255,190,103,.025) 78%,rgba(255,211,148,.055) 100%),
+    radial-gradient(circle at 50% 46%,transparent 48%,rgba(0,3,6,.18) 86%,rgba(0,2,4,.42) 122%);
+}
+
+.scope canvas{
+  filter:saturate(.84) contrast(1.22) brightness(.97)!important;
+}
+
+@media(max-width:720px){
+  .scope::before{
+    background:
+      radial-gradient(ellipse 52% 38% at 87% 13%,rgba(255,194,111,.11) 0%,rgba(255,177,78,.035) 35%,transparent 70%),
+      radial-gradient(ellipse 62% 44% at 70% -4%,rgba(145,211,226,.07) 0%,transparent 72%);
+  }
+
+  .scope canvas{
+    filter:saturate(.82) contrast(1.18) brightness(.96)!important;
+  }
+}
