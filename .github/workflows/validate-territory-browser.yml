@@ -1,0 +1,61 @@
+name: Validate territory in Chromium
+
+on:
+  pull_request:
+    paths:
+      - 'src/app/territory/**'
+      - 'scripts/territory-browser-smoke.mjs'
+      - '.github/workflows/validate-territory-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Prepare local historical world archive
+        run: node scripts/sync-historical-world.mjs
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Build local static site without GitHub basePath
+        env:
+          GITHUB_ACTIONS: 'false'
+        run: npm run build
+
+      - name: Start static server
+        run: |
+          npx --yes serve@14 out -l 4173 > /tmp/territory-serve.log 2>&1 &
+          echo $! > /tmp/territory-serve.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/territory/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/territory-serve.log
+          exit 1
+
+      - name: Execute territory in Chromium
+        run: node scripts/territory-browser-smoke.mjs
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/territory-serve.log || true
