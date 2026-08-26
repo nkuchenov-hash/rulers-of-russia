@@ -2,6 +2,7 @@
 
 import './histographyOrbitPatch.js';
 import './globeWeightAndCityTuning.js';
+import './countryLabelGrounding.js';
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryMap = dynamic(
