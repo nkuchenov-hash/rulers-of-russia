@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "dataset": "Rulers of Russia historical world boundary archive",
   "runtime_external_dependency": false,
   "resolution": "For every selected year, use the most recent historical snapshot at or before that year.",
@@ -13,6 +13,9 @@
   "terrain": {
     "surface_map": "terrain/earth_surface_2048.jpg",
     "surface_source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg",
+    "high_res_surface_map": "terrain/earth_surface_8192.jpg",
+    "high_res_surface_source": "https://svs.gsfc.nasa.gov/vis/a000000/a003600/a003615/flat_earth_Largest_still.0330.jpg",
+    "high_res_credit": "NASA/Goddard Space Flight Center Scientific Visualization Studio; Blue Marble Next Generation data courtesy NASA/GSFC and NASA Earth Observatory.",
     "normal_map": "terrain/earth_normal_2048.jpg",
     "normal_source": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg"
   },
