@@ -1,0 +1,83 @@
+name: Apply territory V26 surface quality and borders
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/apply-territory-v26.yml
+      - scripts/apply-territory-v26.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-territory-v26
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install image tooling
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Build 16K clean relief asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/relief-v26
+          curl -fL --retry 3 --retry-delay 2 --connect-timeout 20 \
+            'https://naturalearth.s3.amazonaws.com/10m_raster/HYP_HR_SR_W.zip' \
+            -o /tmp/HYP_HR_SR_W.zip
+          unzip -j /tmp/HYP_HR_SR_W.zip '*HYP_HR_SR_W.tif' -d /tmp/relief-v26
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          Image.MAX_IMAGE_PIXELS = None
+          src = Path('/tmp/relief-v26/HYP_HR_SR_W.tif')
+          out = Path('public/data/territory/terrain/earth_relief_16380.webp')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          with Image.open(src) as image:
+              image = image.convert('RGB')
+              resized = image.resize((16380, 8190), Image.Resampling.LANCZOS)
+              resized.save(out, 'WEBP', quality=91, method=6, exact=True)
+              resized.close()
+          print(out, out.stat().st_size)
+          PY
+          test -s public/data/territory/terrain/earth_relief_16380.webp
+          test "$(stat -c%s public/data/territory/terrain/earth_relief_16380.webp)" -lt 25000000
+
+      - name: Apply V26 renderer patch
+        run: python scripts/apply-territory-v26.py
+
+      - name: Verify no floating or duplicate Russian border configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          R='src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx'
+          grep -q 'earth_relief_16380.webp' "$R"
+          grep -q 'buildPolygonSegments(features,radius=1.0002)' "$R"
+          grep -q 'buildRiverBuckets(collection,radius=1.00028)' "$R"
+          grep -q 'world.features.filter(f=>!isRussianWorldFeature(f))' "$R"
+          grep -q 'buildPolygonSegments(russiaFeatures,1.00022)' "$R"
+          grep -q 'opacity:.46' "$R"
+          test -s public/data/territory/terrain/earth_relief_16380.webp
+
+      - name: Commit V26
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Improve close globe texture and surface-bound borders'
+          git push
