@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import '../histographyOrbitPatch.js';
+import '../globeWeightAndCityTuning.js';
 import { HistoricalTerritoryGlobeWebGLV21 } from '../HistoricalTerritoryGlobeWebGLV21';
 import currentStyles from '../territory-webgl.module.css';
 import {
