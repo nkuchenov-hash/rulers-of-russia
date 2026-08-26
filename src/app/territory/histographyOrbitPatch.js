@@ -5,7 +5,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 const PATCH_FLAG = Symbol.for('rulers-of-russia.histography-orbit-v2-heavy');
-const CITY_PATCH_FLAG = Symbol.for('rulers-of-russia.city-label-lod-v2');
+const CITY_PATCH_FLAG = Symbol.for('rulers-of-russia.city-label-lod-v3');
 const states = new WeakMap();
 const proto = OrbitControls.prototype;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -224,39 +224,57 @@ if (!proto[PATCH_FLAG]) {
   proto[PATCH_FLAG] = true;
 }
 
+function applyCityLod(scene, camera) {
+  const distance = camera.position.length();
+  const capitalGate = 2.02;
+  const regionalGate = 1.42;
+  const cityParents = new Set();
+  const cx = camera.position.x;
+  const cy = camera.position.y;
+  const cz = camera.position.z;
+  const mobile = typeof window !== 'undefined' && window.innerWidth <= 720;
+
+  scene.traverse((object) => {
+    if (object?.userData?.kind !== 'city' || !object.userData.place) return;
+    if (object.parent) cityParents.add(object.parent);
+    const p = object.userData.place;
+    const px = object.position.x;
+    const py = object.position.y;
+    const pz = object.position.z;
+    const pLength = Math.max(0.0001, Math.hypot(px, py, pz));
+    const facing = (px * cx + py * cy + pz * cz) / (pLength * Math.max(distance, 0.0001));
+    const horizon = Math.min(0.985, 1 / Math.max(distance, 1.001) + 0.012);
+    const nearEnough = p.kind === 'capital' ? distance <= capitalGate : distance <= regionalGate;
+    object.visible = nearEnough && facing > horizon;
+    if (object.element) {
+      object.element.style.fontSize = mobile ? '16px' : (p.kind === 'capital' ? '15px' : '14px');
+      object.element.style.opacity = p.kind === 'capital' ? '0.96' : '0.9';
+    }
+  });
+
+  for (const parent of cityParents) parent.visible = distance <= capitalGate;
+}
+
 const css2dProto = CSS2DRenderer.prototype;
 if (!css2dProto[CITY_PATCH_FLAG]) {
-  const originalRender = css2dProto.render;
-  css2dProto.render = function patchedCityRender(scene, camera) {
-    const distance = camera.position.length();
-    const capitalGate = 2.02;
-    const regionalGate = 1.42;
-    const cityParents = new Set();
-    const cx = camera.position.x;
-    const cy = camera.position.y;
-    const cz = camera.position.z;
-    const mobile = typeof window !== 'undefined' && window.innerWidth <= 720;
-
-    scene.traverse((object) => {
-      if (object?.userData?.kind !== 'city' || !object.userData.place) return;
-      if (object.parent) cityParents.add(object.parent);
-      const p = object.userData.place;
-      const px = object.position.x;
-      const py = object.position.y;
-      const pz = object.position.z;
-      const pLength = Math.max(0.0001, Math.hypot(px, py, pz));
-      const facing = (px * cx + py * cy + pz * cz) / (pLength * Math.max(distance, 0.0001));
-      const horizon = Math.min(0.985, 1 / Math.max(distance, 1.001) + 0.012);
-      const nearEnough = p.kind === 'capital' ? distance <= capitalGate : distance <= regionalGate;
-      object.visible = nearEnough && facing > horizon;
-      if (object.element) {
-        object.element.style.fontSize = mobile ? '16px' : (p.kind === 'capital' ? '15px' : '14px');
-        object.element.style.opacity = p.kind === 'capital' ? '0.96' : '0.9';
-      }
-    });
-
-    for (const parent of cityParents) parent.visible = distance <= capitalGate;
-    return originalRender.call(this, scene, camera);
-  };
+  const renderByInstance = new WeakMap();
+  Object.defineProperty(css2dProto, 'render', {
+    configurable: true,
+    get() {
+      return renderByInstance.get(this);
+    },
+    set(originalRender) {
+      const wrapped = function patchedCityRender(scene, camera) {
+        applyCityLod(scene, camera);
+        return originalRender.call(this, scene, camera);
+      };
+      renderByInstance.set(this, wrapped);
+      Object.defineProperty(this, 'render', {
+        configurable: true,
+        writable: true,
+        value: wrapped,
+      });
+    },
+  });
   css2dProto[CITY_PATCH_FLAG] = true;
 }
