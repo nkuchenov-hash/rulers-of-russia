@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "dataset": "Rulers of Russia History Core source registry",
+  "policy": {
+    "canonical_perspective": "Russian archival, official documentary and contemporary cartographic record",
+    "canonical_fact_requires_primary_evidence": true,
+    "canonical_boundary_requires_primary_evidence": true,
+    "secondary_interpretation_cannot_create_a_boundary_by_itself": true,
+    "third_party_historical_maps_are_bootstrap_only": true,
+    "preserve_original_date_and_calendar": true,
+    "do_not_invent_month_or_day_precision": true
+  },
+  "sources": [
+    {
+      "id": "prlib-pszri",
+      "title": "Полное собрание законов Российской империи",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/section/681951",
+      "tier": "A2-official-document-publication",
+      "coverage": "1649-1913",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Use the act text, number, date and attached plans/maps where present."
+    },
+    {
+      "id": "neb-pszri",
+      "title": "Полное собрание законов Российской Империи",
+      "institution": "Национальная электронная библиотека / РГБ / РНБ",
+      "url": "https://rusneb.ru/collections/1195_pszri/",
+      "tier": "A2-official-document-publication",
+      "coverage": "1649-1913; 239 digitized volumes in the collection",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    },
+    {
+      "id": "prlib-psrl",
+      "title": "Полное собрание русских летописей",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/section/689013",
+      "tier": "A2-official-document-publication",
+      "coverage": "Early Rus and medieval Russian lands",
+      "canonicalUse": ["event", "interpretation"],
+      "notes": "Chronicle evidence must retain source-specific uncertainty; it cannot be converted into a modern precise border without additional documentary/cartographic evidence."
+    },
+    {
+      "id": "neb-psrl",
+      "title": "Русские летописи / Полное собрание русских летописей",
+      "institution": "Национальная электронная библиотека / РГБ",
+      "url": "https://rusneb.ru/collections/520_russkie_letopisi/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Medieval Russian chronicles",
+      "canonicalUse": ["event", "interpretation"]
+    },
+    {
+      "id": "neb-sgdd",
+      "title": "Собрание государственных грамот и договоров, хранящихся в Государственной коллегии иностранных дел",
+      "institution": "Национальная электронная библиотека / РГБ",
+      "url": "https://rusneb.ru/catalog/000199_000009_007509292/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Medieval and Muscovite state charters and treaties; collection published 1813-1894",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    },
+    {
+      "id": "neb-acts-moscow",
+      "title": "Акты Московского государства, изданные Императорской Академией наук",
+      "institution": "Национальная электронная библиотека / РГБ",
+      "url": "https://rusneb.ru/catalog/000199_000009_003961373/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Muscovite state documentary record",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    },
+    {
+      "id": "ebid-historyrussia",
+      "title": "Электронная библиотека исторических документов",
+      "institution": "Российское историческое общество / Фонд «История Отечества» / Государственная публичная историческая библиотека России",
+      "url": "https://docs.historyrussia.org/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Large indexed corpus of published Russian historical documents, including treaties and Documents of Foreign Policy of the USSR",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Prefer entries that reproduce archival documents or authoritative documentary publications and retain archive/publication metadata."
+    },
+    {
+      "id": "rosarchiv-online",
+      "title": "Онлайн-проекты и электронные коллекции документов",
+      "institution": "Федеральное архивное агентство (Росархив)",
+      "url": "https://archives.gov.ru/on-line-project.shtml",
+      "tier": "A1-archival-original",
+      "coverage": "Thematic digitized collections from federal archives, including treaty-related projects",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"]
+    },
+    {
+      "id": "rosarchiv-search-gis",
+      "title": "Поиск Росархива / ГИС удаленного использования архивных документов",
+      "institution": "Федеральное архивное агентство (Росархив)",
+      "url": "https://archives.gov.ru/search",
+      "tier": "A1-archival-original",
+      "coverage": "Federal archive finding aids and digitized archival copies",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"]
+    },
+    {
+      "id": "nlr-russia-maps",
+      "title": "Россия на картах: из фондов отдела картографии РНБ",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/ex_map/Russia/",
+      "tier": "A3-contemporary-official-map",
+      "coverage": "Russian cartography from the 16th century onward; especially strong for 18th-19th century state maps",
+      "canonicalUse": ["boundary-geometry", "interpretation"],
+      "notes": "Only contemporary or official-period maps can establish geometry; later retrospective historical maps are interpretation aids only."
+    },
+    {
+      "id": "rsl-map-library",
+      "title": "Электронная библиотека РГБ — картографические материалы",
+      "institution": "Российская государственная библиотека",
+      "url": "https://www.ldiss.rsl.ru/electroniclibrary",
+      "tier": "A3-contemporary-official-map",
+      "coverage": "Digitized cartographic materials and catalogued historical maps",
+      "canonicalUse": ["boundary-geometry", "interpretation"],
+      "notes": "Evaluate each map by creator, date and official status before canonical use."
+    },
+    {
+      "id": "prlib-map-atlases",
+      "title": "Digitized Russian Empire maps and atlases",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/397246",
+      "tier": "A3-contemporary-official-map",
+      "coverage": "Historical Russian maps and atlases",
+      "canonicalUse": ["boundary-geometry", "interpretation"]
+    },
+    {
+      "id": "pravo-international",
+      "title": "Международные договоры Российской Федерации — официальное опубликование",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/documents/block/international",
+      "tier": "A2-official-document-publication",
+      "coverage": "Russian Federation international treaties and entry-into-force metadata",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    }
+  ]
+}
