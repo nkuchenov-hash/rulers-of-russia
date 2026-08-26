@@ -13,6 +13,14 @@ page.on('console', message => {
   if (message.type() === 'error') consoleErrors.push(message.text());
 });
 
+const visibleLabelWithPrefix = prefix => [...document.querySelectorAll('div')].some(el => {
+  const text = el.textContent?.trim() || '';
+  if (!text.startsWith(prefix)) return false;
+  const style = getComputedStyle(el);
+  const rect = el.getBoundingClientRect();
+  return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
+});
+
 try {
   const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   if (!response || !response.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
@@ -38,6 +46,17 @@ try {
   if (!state.buttons.includes('Рельеф') || !state.buttons.includes('Государства')) {
     throw new Error(`Territory controls missing: ${JSON.stringify(state.buttons)}`);
   }
+
+  const zoomIn = page.getByRole('button', { name: '+', exact: true });
+  await zoomIn.click();
+  await page.waitForTimeout(250);
+  await page.waitForFunction(visibleLabelWithPrefix, '★', { timeout: 5000 });
+
+  await zoomIn.click();
+  await zoomIn.click();
+  await page.waitForTimeout(250);
+  await page.waitForFunction(visibleLabelWithPrefix, '•', { timeout: 5000 });
+
   if (pageErrors.length) throw new Error(`Browser pageerror:\n${pageErrors.join('\n---\n')}`);
 
   const fatalConsole = consoleErrors.filter(x => /ReferenceError|TypeError|SyntaxError|Uncaught|WebGL context lost|out of memory/i.test(x));
