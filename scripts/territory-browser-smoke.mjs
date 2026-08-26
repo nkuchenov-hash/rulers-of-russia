@@ -1,0 +1,50 @@
+import { chromium } from 'playwright';
+
+const url = process.env.TERRITORY_SMOKE_URL || 'http://127.0.0.1:4173/territory/';
+const browser = await chromium.launch({
+  headless: true,
+  args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist']
+});
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+const pageErrors = [];
+const consoleErrors = [];
+page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
+page.on('console', message => {
+  if (message.type() === 'error') consoleErrors.push(message.text());
+});
+
+try {
+  const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  if (!response || !response.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
+
+  await page.waitForFunction(() => document.body?.innerText?.includes('Рельеф'), null, { timeout: 20000 });
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('canvas');
+    return Boolean(canvas && canvas.width > 300 && canvas.height > 200);
+  }, null, { timeout: 30000 });
+  await page.waitForTimeout(3500);
+
+  const state = await page.evaluate(() => {
+    const canvas = document.querySelector('canvas');
+    const buttons = [...document.querySelectorAll('button')].map(x => x.textContent?.trim()).filter(Boolean);
+    return {
+      canvas: canvas ? { width: canvas.width, height: canvas.height } : null,
+      buttons,
+      bodyText: document.body?.innerText?.slice(0, 600) || ''
+    };
+  });
+
+  if (!state.canvas) throw new Error('WebGL canvas did not mount');
+  if (!state.buttons.includes('Рельеф') || !state.buttons.includes('Государства')) {
+    throw new Error(`Territory controls missing: ${JSON.stringify(state.buttons)}`);
+  }
+  if (pageErrors.length) throw new Error(`Browser pageerror:\n${pageErrors.join('\n---\n')}`);
+
+  // Ignore harmless browser-extension/network console chatter, but fail on JS/runtime signatures.
+  const fatalConsole = consoleErrors.filter(x => /ReferenceError|TypeError|SyntaxError|Uncaught|WebGL context lost|out of memory/i.test(x));
+  if (fatalConsole.length) throw new Error(`Fatal browser console errors:\n${fatalConsole.join('\n---\n')}`);
+
+  console.log('Territory browser smoke passed:', JSON.stringify(state));
+} finally {
+  await browser.close();
+}
