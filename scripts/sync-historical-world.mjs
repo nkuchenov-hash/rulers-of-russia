@@ -12,6 +12,7 @@ const HYDRO_ROOT = path.join(process.cwd(), 'public', 'data', 'territory', 'hydr
 const CULTURAL_ROOT = path.join(process.cwd(), 'public', 'data', 'territory', 'cultural');
 const TERRAIN_NORMAL_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg';
 const TERRAIN_SURFACE_URL = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg';
+const TERRAIN_SURFACE_8K_URL = 'https://svs.gsfc.nasa.gov/vis/a000000/a003600/a003615/flat_earth_Largest_still.0330.jpg';
 const NATURAL_EARTH_COMMIT = 'ca96624a';
 const RIVERS_URL = `https://raw.githubusercontent.com/nvkelso/natural-earth-vector/${NATURAL_EARTH_COMMIT}/geojson/ne_50m_rivers_lake_centerlines.geojson`;
 const COUNTRIES_URL = `https://raw.githubusercontent.com/nvkelso/natural-earth-vector/${NATURAL_EARTH_COMMIT}/geojson/ne_50m_admin_0_countries.geojson`;
@@ -53,12 +54,14 @@ async function main() {
 
   const terrainNormalPath = path.join(TERRAIN_ROOT, 'earth_normal_2048.jpg');
   const terrainSurfacePath = path.join(TERRAIN_ROOT, 'earth_surface_2048.jpg');
+  const terrainSurface8kPath = path.join(TERRAIN_ROOT, 'earth_surface_8192.jpg');
   const riversPath = path.join(HYDRO_ROOT, 'rivers_50m.geojson');
   const countriesPath = path.join(CULTURAL_ROOT, 'countries_50m.geojson');
 
   await Promise.all([
     ensureBytes(terrainNormalPath, TERRAIN_NORMAL_URL),
     ensureBytes(terrainSurfacePath, TERRAIN_SURFACE_URL),
+    ensureBytes(terrainSurface8kPath, TERRAIN_SURFACE_8K_URL),
     ensureText(riversPath, RIVERS_URL),
     normalizeGeoJsonFile(countriesPath, COUNTRIES_URL)
   ]);
@@ -85,7 +88,7 @@ async function main() {
   }
 
   const index = {
-    schema_version: 3,
+    schema_version: 4,
     dataset: 'Rulers of Russia historical world boundary archive',
     runtime_external_dependency: false,
     resolution: 'For every selected year, use the most recent historical snapshot at or before that year.',
@@ -99,6 +102,9 @@ async function main() {
     terrain: {
       surface_map: 'terrain/earth_surface_2048.jpg',
       surface_source: TERRAIN_SURFACE_URL,
+      high_res_surface_map: 'terrain/earth_surface_8192.jpg',
+      high_res_surface_source: TERRAIN_SURFACE_8K_URL,
+      high_res_credit: 'NASA/Goddard Space Flight Center Scientific Visualization Studio; Blue Marble Next Generation data courtesy NASA/GSFC and NASA Earth Observatory.',
       normal_map: 'terrain/earth_normal_2048.jpg',
       normal_source: TERRAIN_NORMAL_URL
     },
@@ -118,7 +124,7 @@ async function main() {
   };
 
   await writeFile(path.join(OUT_ROOT, 'index.json'), `${JSON.stringify(index, null, 2)}\n`, 'utf8');
-  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}); normalized polygons, terrain, rivers and modern countries vendored locally.`);
+  console.log(`Historical world archive ready: ${snapshots.length} snapshots (${index.min_year}..${index.max_year}); normalized polygons, 8K terrain, rivers and modern countries vendored locally.`);
 }
 
 main().catch((error) => {
