@@ -1,0 +1,68 @@
+name: Apply territory V24 exact occlusion patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-territory-v24-occlusion.yml'
+      - 'src/app/territory/terrainQuadrantLod.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Replace approximate horizon with analytic sphere occlusion
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx')
+          s=p.read_text()
+
+          anchor="function latLonVector(lat,lon,r=1){const p=lat*Math.PI/180,l=lon*Math.PI/180;return new THREE.Vector3(Math.cos(p)*Math.cos(l),Math.sin(p),-Math.cos(p)*Math.sin(l)).multiplyScalar(r)}"
+          helper="""function labelVisibleFromCamera(point,cameraPosition,radius=1.007){const vx=point.x-cameraPosition.x,vy=point.y-cameraPosition.y,vz=point.z-cameraPosition.z,targetDistance=Math.hypot(vx,vy,vz);if(targetDistance<=0)return true;const dx=vx/targetDistance,dy=vy/targetDistance,dz=vz/targetDistance,b=cameraPosition.x*dx+cameraPosition.y*dy+cameraPosition.z*dz,c=cameraPosition.lengthSq()-radius*radius,disc=b*b-c;if(disc<=0)return true;const hit=-b-Math.sqrt(disc);return!(hit>0&&hit<targetDistance-.004)}"""
+          if helper not in s:
+              if anchor not in s: raise SystemExit('latLonVector anchor missing')
+              s=s.replace(anchor,anchor+'\n'+helper,1)
+
+          s=s.replace('const horizonDot=clamp(1/d+.018,0,.995);','',1)
+          old_country="const show=objDir.dot(camDir)>horizonDot&&obj.userData.area>=countryMin;"
+          new_country="const show=labelVisibleFromCamera(obj.position,camera.position,1.007)&&obj.userData.area>=countryMin;"
+          if old_country in s:s=s.replace(old_country,new_country,1)
+
+          old_city="const front=objDir.dot(camDir)>Math.min(.998,horizonDot+.006);"
+          new_city="const front=labelVisibleFromCamera(obj.position,camera.position,1.009);"
+          if old_city in s:s=s.replace(old_city,new_city,1)
+
+          if 'horizonDot' in s: raise SystemExit('old horizon logic still present')
+          if new_country not in s or new_city not in s: raise SystemExit('analytic occlusion patch missing')
+          p.write_text(s)
+
+      - name: Verify exact occlusion and native crop LOD
+        run: |
+          grep -q "function labelVisibleFromCamera" src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q "labelVisibleFromCamera(obj.position,camera.position,1.007)" src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q "createImageBitmap(blob,crop.sx,crop.sy,crop.cropPx,crop.cropPx)" src/app/territory/terrainQuadrantLod.js
+          ! grep -q "resizeWidth" src/app/territory/terrainQuadrantLod.js
+
+      - name: Commit V24 renderer patch
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          if git diff --cached --quiet; then
+            echo 'V24 renderer already patched.'
+            exit 0
+          fi
+          git commit -m 'Use exact sphere occlusion for map labels'
+          git push
