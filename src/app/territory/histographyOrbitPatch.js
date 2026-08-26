@@ -278,3 +278,38 @@ if (!css2dProto[CITY_PATCH_FLAG]) {
   });
   css2dProto[CITY_PATCH_FLAG] = true;
 }
+
+const MATERIAL_PATCH_FLAG = Symbol.for('rulers-of-russia.single-surface-relief-v1');
+const materialProto = THREE.MeshStandardMaterial.prototype;
+if (!materialProto[MATERIAL_PATCH_FLAG]) {
+  const inheritedOnBeforeCompile = materialProto.onBeforeCompile;
+  const hookByInstance = new WeakMap();
+  Object.defineProperty(materialProto, 'onBeforeCompile', {
+    configurable: true,
+    get() {
+      return hookByInstance.get(this) ?? inheritedOnBeforeCompile;
+    },
+    set(originalHook) {
+      const wrapped = function enhancedReliefShader(shader, renderer) {
+        originalHook.call(this, shader, renderer);
+        const terrainMarker = 'float terrainLuma=dot(diffuseColor.rgb,vec3(0.299,0.587,0.114));';
+        if (!shader.fragmentShader.includes(terrainMarker)) return;
+        shader.fragmentShader = shader.fragmentShader.replace(
+          terrainMarker,
+          `vec3 reliefSourceRGB=diffuseColor.rgb;\n${terrainMarker}`,
+        );
+        shader.fragmentShader = shader.fragmentShader.replace(
+          'diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));',
+          `vec3 sourceChroma=reliefSourceRGB-vec3(terrainLuma);\nvec3 sourceDetailed=clamp(vec3(terrainLuma)+sourceChroma*0.92,vec3(0.0),vec3(1.0));\nsourceDetailed=clamp((sourceDetailed-vec3(0.5))*1.10+vec3(0.5),vec3(0.0),vec3(1.0));\nfloat terrainSlope=clamp(fwidth(terrainLuma)*8.0,0.0,0.11);\nvec3 landDetailed=mix(diffuseColor.rgb,sourceDetailed,0.64);\nlandDetailed*=1.0-terrainSlope*0.55;\nvec3 waterSource=clamp(reliefSourceRGB*vec3(0.78,0.96,1.08),vec3(0.0),vec3(1.0));\nvec3 waterDetailed=mix(diffuseColor.rgb,waterSource,0.54);\ndiffuseColor.rgb=mix(landDetailed,waterDetailed,waterMask);\ndiffuseColor.rgb=clamp(diffuseColor.rgb,vec3(0.012),vec3(0.82));`,
+        );
+      };
+      hookByInstance.set(this, wrapped);
+      Object.defineProperty(this, 'onBeforeCompile', {
+        configurable: true,
+        writable: true,
+        value: wrapped,
+      });
+    },
+  });
+  materialProto[MATERIAL_PATCH_FLAG] = true;
+}
