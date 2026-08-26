@@ -2,8 +2,10 @@
 
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
-const PATCH_FLAG = Symbol.for('rulers-of-russia.histography-orbit-v1');
+const PATCH_FLAG = Symbol.for('rulers-of-russia.histography-orbit-v2-heavy');
+const CITY_PATCH_FLAG = Symbol.for('rulers-of-russia.city-label-lod-v2');
 const states = new WeakMap();
 const proto = OrbitControls.prototype;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -51,8 +53,8 @@ function startInertia(controls, state) {
     const dt = Math.min(34, Math.max(8, now - previous));
     previous = now;
     const frameScale = dt / 16.6667;
-    const close = clamp((state.spherical.radius - controls.minDistance) / 0.8, 0, 1);
-    const decay = Math.pow(0.84 + close * 0.075, frameScale);
+    const distanceFactor = clamp((state.spherical.radius - controls.minDistance) / 1.25, 0, 1);
+    const decay = Math.pow(0.972 + distanceFactor * 0.016, frameScale);
 
     state.spherical.theta += state.velocityTheta * frameScale;
     state.spherical.phi += state.velocityPhi * frameScale;
@@ -61,7 +63,7 @@ function startInertia(controls, state) {
     applySpherical(controls, state);
     dispatchChange(controls);
 
-    if (Math.abs(state.velocityTheta) + Math.abs(state.velocityPhi) < 0.000025) {
+    if (Math.abs(state.velocityTheta) + Math.abs(state.velocityPhi) < 0.000008) {
       state.raf = null;
       return;
     }
@@ -116,16 +118,18 @@ function connectPatched() {
     state.lastT = now;
 
     const radius = state.spherical.radius;
-    const zoomFactor = clamp((radius - this.minDistance) / 1.15, 0, 1);
-    const speedFactor = clamp(this.rotateSpeed / 0.68, 0.13, 1.15);
-    const radiansPerPixel = (0.00042 + 0.0025 * zoomFactor) * speedFactor;
+    const zoomFactor = clamp((radius - this.minDistance) / 1.25, 0, 1);
+    const speedFactor = clamp(this.rotateSpeed / 0.68, 0.16, 1.0);
+    const radiansPerPixel = (0.00022 + 0.00162 * zoomFactor) * speedFactor;
     const dTheta = -dx * radiansPerPixel;
     const dPhi = -dy * radiansPerPixel;
+    const instantTheta = clamp(dTheta * (16.6667 / dt), -0.034, 0.034);
+    const instantPhi = clamp(dPhi * (16.6667 / dt), -0.028, 0.028);
 
     state.spherical.theta += dTheta;
     state.spherical.phi += dPhi;
-    state.velocityTheta = dTheta * (16.6667 / dt);
-    state.velocityPhi = dPhi * (16.6667 / dt);
+    state.velocityTheta = state.velocityTheta * 0.56 + instantTheta * 0.44;
+    state.velocityPhi = state.velocityPhi * 0.56 + instantPhi * 0.44;
     applySpherical(this, state);
     dispatchChange(this);
     event.preventDefault();
@@ -135,7 +139,7 @@ function connectPatched() {
     if (state.pointerId !== event.pointerId) return;
     state.pointerId = null;
     try { dom.releasePointerCapture?.(event.pointerId); } catch {}
-    if (Math.abs(state.velocityTheta) + Math.abs(state.velocityPhi) > 0.00004) startInertia(this, state);
+    if (Math.abs(state.velocityTheta) + Math.abs(state.velocityPhi) > 0.000018) startInertia(this, state);
     event.preventDefault();
   };
 
@@ -218,4 +222,41 @@ if (!proto[PATCH_FLAG]) {
   proto.dispose = disconnectPatched;
   proto.update = updatePatched;
   proto[PATCH_FLAG] = true;
+}
+
+const css2dProto = CSS2DRenderer.prototype;
+if (!css2dProto[CITY_PATCH_FLAG]) {
+  const originalRender = css2dProto.render;
+  css2dProto.render = function patchedCityRender(scene, camera) {
+    const distance = camera.position.length();
+    const capitalGate = 2.02;
+    const regionalGate = 1.42;
+    const cityParents = new Set();
+    const cx = camera.position.x;
+    const cy = camera.position.y;
+    const cz = camera.position.z;
+    const mobile = typeof window !== 'undefined' && window.innerWidth <= 720;
+
+    scene.traverse((object) => {
+      if (object?.userData?.kind !== 'city' || !object.userData.place) return;
+      if (object.parent) cityParents.add(object.parent);
+      const p = object.userData.place;
+      const px = object.position.x;
+      const py = object.position.y;
+      const pz = object.position.z;
+      const pLength = Math.max(0.0001, Math.hypot(px, py, pz));
+      const facing = (px * cx + py * cy + pz * cz) / (pLength * Math.max(distance, 0.0001));
+      const horizon = Math.min(0.985, 1 / Math.max(distance, 1.001) + 0.012);
+      const nearEnough = p.kind === 'capital' ? distance <= capitalGate : distance <= regionalGate;
+      object.visible = nearEnough && facing > horizon;
+      if (object.element) {
+        object.element.style.fontSize = mobile ? '16px' : (p.kind === 'capital' ? '15px' : '14px');
+        object.element.style.opacity = p.kind === 'capital' ? '0.96' : '0.9';
+      }
+    });
+
+    for (const parent of cityParents) parent.visible = distance <= capitalGate;
+    return originalRender.call(this, scene, camera);
+  };
+  css2dProto[CITY_PATCH_FLAG] = true;
 }
