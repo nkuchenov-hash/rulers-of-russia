@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/app/territory/**'
       - 'scripts/territory-browser-smoke.mjs'
+      - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   workflow_dispatch:
 
@@ -35,17 +36,15 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Build local static site without GitHub basePath
-        env:
-          GITHUB_ACTIONS: 'false'
+      - name: Build production-layout static site
         run: npm run build
 
-      - name: Start static server
+      - name: Start basePath-aware static server
         run: |
-          npx --yes serve@14 out -l 4173 > /tmp/territory-serve.log 2>&1 &
+          node scripts/serve-territory-smoke.mjs > /tmp/territory-serve.log 2>&1 &
           echo $! > /tmp/territory-serve.pid
           for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4173/territory/ >/dev/null; then
+            if curl -fsS http://127.0.0.1:4173/rulers-of-russia/territory/ >/dev/null; then
               exit 0
             fi
             sleep 1
