@@ -1,0 +1,68 @@
+name: Apply territory V31 stable single-surface renderer
+
+on:
+  push:
+    branches:
+      - territory-v31-restore-stable-single-surface
+    paths:
+      - scripts/apply-territory-v31.py
+      - .github/workflows/apply-territory-v31.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-territory-v31
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: territory-v31-restore-stable-single-surface
+          fetch-depth: 0
+
+      - name: Detect materialized V31
+        id: detect
+        shell: bash
+        run: |
+          if grep -q 'terrain-v31-stable-relief' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx && \
+             grep -q 'adaptiveControlSpeed' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx && \
+             ! grep -q 'etopo30s/' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx; then
+            echo 'done=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'done=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply V31 patch
+        if: steps.detect.outputs.done != 'true'
+        run: python scripts/apply-territory-v31.py
+
+      - name: Verify V31 runtime rules
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q 'earth_relief_16380.webp' "$R"
+          grep -q 'adaptiveControlSpeed' "$R"
+          grep -q 'timelineWheelRef' "$R"
+          grep -q 'canonicalSegmentKey' "$R"
+          ! grep -q 'etopo30s/' "$R"
+          ! grep -q 'DETAIL_RELIEF_TILES' "$R"
+          ! grep -q 'detailGroup' "$R"
+
+      - name: Commit materialized V31
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m 'Restore stable single-surface globe with safe interaction fixes'
+          git push
