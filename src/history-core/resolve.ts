@@ -1,23 +1,26 @@
 import type {
   HistoricalDate,
-  HistorySource,
+  HistoryDocument,
   TerritorySnapshot,
   TerritoryTrack,
 } from './types';
 
-const PRIMARY_TIERS = new Set<HistorySource['tier']>([
+const PRIMARY_TIERS = new Set<HistoryDocument['tier']>([
   'A1-archival-original',
   'A2-official-document-publication',
   'A3-contemporary-official-map',
 ]);
 
-export function isPrimaryHistorySource(source: HistorySource): boolean {
-  return PRIMARY_TIERS.has(source.tier);
+export function isPrimaryHistoryDocument(document: HistoryDocument): boolean {
+  return PRIMARY_TIERS.has(document.tier);
 }
 
-export function hasCanonicalPrimaryEvidence(sourceIds: string[], sources: HistorySource[]): boolean {
-  const wanted = new Set(sourceIds);
-  return sources.some(source => wanted.has(source.id) && isPrimaryHistorySource(source));
+export function hasCanonicalPrimaryEvidence(
+  evidenceDocumentIds: string[],
+  documents: HistoryDocument[],
+): boolean {
+  const wanted = new Set(evidenceDocumentIds);
+  return documents.some(document => wanted.has(document.id) && isPrimaryHistoryDocument(document));
 }
 
 /**
