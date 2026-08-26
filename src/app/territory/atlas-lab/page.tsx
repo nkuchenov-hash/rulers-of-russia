@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { AtlasLabCinematicClient } from './AtlasLabCinematicClient';
+import { AtlasLabClient } from './AtlasLabClient';
 
 export const metadata: Metadata = {
   title: 'Atlas Lab | Правители России',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AtlasLabPage() {
-  return <AtlasLabCinematicClient />;
+  return <AtlasLabClient />;
 }
