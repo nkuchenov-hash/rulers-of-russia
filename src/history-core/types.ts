@@ -19,6 +19,7 @@ export type HistorySourceTier =
   | 'B1-russian-academic-interpretation'
   | 'C-bootstrap-only';
 
+/** Search/discovery collection or repository. Canonical records never cite this alone. */
 export type HistorySource = {
   id: string;
   title: string;
@@ -27,8 +28,24 @@ export type HistorySource = {
   tier: HistorySourceTier;
   coverage?: string;
   notes?: string;
-  /** Canonical facts require at least one A1/A2/A3 source. */
   canonicalUse: Array<'event' | 'legal-basis' | 'boundary-date' | 'boundary-geometry' | 'interpretation'>;
+};
+
+/** Concrete document, archival unit, official publication item or period map cited by a fact. */
+export type HistoryDocument = {
+  id: string;
+  sourceCollectionId: string;
+  title: string;
+  institution: string;
+  url: string;
+  tier: Exclude<HistorySourceTier, 'C-bootstrap-only'>;
+  documentType: 'archival-document' | 'law' | 'treaty' | 'charter' | 'chronicle' | 'official-map' | 'documentary-publication' | 'other';
+  date?: HistoricalDate;
+  authority?: string[];
+  archiveCitation?: string;
+  publicationCitation?: string;
+  pagesOrFolios?: string;
+  notes?: string;
 };
 
 export type HistoryEventKind =
@@ -66,7 +83,8 @@ export type HistoryEvent = {
   rulerIds?: string[];
   placeIds?: string[];
   summary?: string;
-  sourceIds: string[];
+  /** Must point to concrete entries in documents.json, not collection-level sources. */
+  evidenceDocumentIds: string[];
   territoryChangeIds?: string[];
   reviewStatus: HistoryReviewStatus;
   notes?: string;
@@ -101,7 +119,7 @@ export type TerritoryOperation =
 export type TerritoryGeometryEvidence = {
   method: 'document-map' | 'contemporary-official-map' | 'derived-from-boundary-text' | 'uncertain-zone' | 'not-yet-georeferenced';
   file?: string;
-  sourceIds: string[];
+  evidenceDocumentIds: string[];
   derivationNote?: string;
   uncertaintyMeters?: number;
 };
@@ -114,7 +132,7 @@ export type TerritoryChange = {
   track: TerritoryTrack;
   territorialModel: TerritoryModel;
   operation: TerritoryOperation;
-  sourceIds: string[];
+  evidenceDocumentIds: string[];
   geometry: TerritoryGeometryEvidence;
   resultSnapshotId?: string;
   reviewStatus: HistoryReviewStatus;
@@ -129,7 +147,7 @@ export type TerritorySnapshot = {
   track: TerritoryTrack;
   territorialModel: TerritoryModel;
   geometryFile: string;
-  sourceIds: string[];
+  evidenceDocumentIds: string[];
   derivedFromChangeIds: string[];
   reviewStatus: Extract<HistoryReviewStatus, 'source-verified' | 'geometry-verified'>;
   confidence: 'low' | 'medium' | 'high';
