@@ -21,6 +21,12 @@ const visibleLabelWithPrefix = prefix => [...document.querySelectorAll('div')].s
   return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
 });
 
+const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-label="true"]')].some(el => {
+  const style = getComputedStyle(el);
+  const rect = el.getBoundingClientRect();
+  return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
+});
+
 try {
   const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   if (!response || !response.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
@@ -31,6 +37,7 @@ try {
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200);
   }, null, { timeout: 30000 });
   await page.waitForTimeout(4500);
+  await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
 
   const state = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
