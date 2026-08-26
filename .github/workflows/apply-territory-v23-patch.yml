@@ -1,0 +1,76 @@
+name: Apply territory V23 horizon and 500m LOD patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-territory-v23-patch.yml'
+      - 'src/app/territory/terrainQuadrantLod.js'
+      - 'scripts/sync-historical-world.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch perspective horizon and terrain LOD
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx')
+          s=p.read_text()
+
+          old="import styles from './territory-webgl.module.css';"
+          new="import styles from './territory-webgl.module.css';\nimport {createTerrainQuadrantLod} from './terrainQuadrantLod';"
+          if old in s and "terrainQuadrantLod" not in s:
+              s=s.replace(old,new,1)
+
+          old="countryLabelsRef.current=countryGroup;cityLabelsRef.current=cityGroup;"
+          new="countryLabelsRef.current=countryGroup;cityLabelsRef.current=cityGroup;const terrainLod=createTerrainQuadrantLod({scene,renderer,base});"
+          if old in s and "const terrainLod=createTerrainQuadrantLod" not in s:
+              s=s.replace(old,new,1)
+
+          old="const updateDynamic=()=>{const d=camera.position.length();if(d<1.32)loadCloseSurface();camDir.copy(camera.position).normalize();const countryMin="
+          new="const updateDynamic=()=>{const d=camera.position.length();terrainLod.update(camera,d);camDir.copy(camera.position).normalize();const horizonDot=clamp(1/d+.018,0,.995);const countryMin="
+          if old in s:
+              s=s.replace(old,new,1)
+
+          s=s.replace("const show=objDir.dot(camDir)>.61&&obj.userData.area>=countryMin;","const show=objDir.dot(camDir)>horizonDot&&obj.userData.area>=countryMin;",1)
+          s=s.replace("const front=objDir.dot(camDir)>.78;","const front=objDir.dot(camDir)>Math.min(.998,horizonDot+.006);",1)
+
+          old="geometry.dispose();overlayGeometry.dispose();"
+          new="terrainLod.dispose();geometry.dispose();overlayGeometry.dispose();"
+          if old in s and "terrainLod.dispose();geometry.dispose()" not in s:
+              s=s.replace(old,new,1)
+
+          p.write_text(s)
+
+      - name: Verify patch markers
+        run: |
+          grep -q "createTerrainQuadrantLod" src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q "horizonDot=clamp(1/d+.018" src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q "terrainLod.update(camera,d)" src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q "lod500_C1.jpg" scripts/sync-historical-world.mjs
+          grep -q "lod500_D1.jpg" scripts/sync-historical-world.mjs
+
+      - name: Commit V23 patch
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          if git diff --cached --quiet; then
+            echo 'V23 renderer already patched.'
+            exit 0
+          fi
+          git commit -m 'Fix globe horizon occlusion and add 500m terrain LOD'
+          git push
