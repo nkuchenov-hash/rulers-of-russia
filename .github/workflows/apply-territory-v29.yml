@@ -1,0 +1,63 @@
+name: Apply territory V29 single-surface globe
+
+on:
+  push:
+    branches:
+      - territory-v29-remove-regional-lod
+      - main
+    paths:
+      - scripts/apply-territory-v29.py
+      - .github/workflows/apply-territory-v29.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Detect materialized V29
+        id: detect
+        shell: bash
+        run: |
+          if ! grep -q 'updateDetailTerrain' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx; then
+            echo 'done=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'done=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply V29 patch
+        if: steps.detect.outputs.done != 'true'
+        run: python scripts/apply-territory-v29.py
+
+      - name: Verify single-surface renderer
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          ! grep -q 'updateDetailTerrain' "$R"
+          ! grep -q 'DETAIL_RELIEF_TILES' "$R"
+          ! grep -q '/etopo30s/' "$R"
+          ! grep -q 'detailGroup' "$R"
+          grep -q 'adaptiveControlSpeed' "$R"
+          grep -q 'Колесо мыши — 1 год' "$R"
+
+      - name: Commit materialized V29
+        if: steps.detect.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m 'Remove regional relief overlay mesh'
+          git push
