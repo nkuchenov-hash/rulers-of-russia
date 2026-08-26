@@ -1,5 +1,6 @@
 'use client';
 
+import './histographyOrbitPatch';
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryMap = dynamic(
