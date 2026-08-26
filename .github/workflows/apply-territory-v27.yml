@@ -69,12 +69,14 @@ jobs:
 
           make_tile() {
             local lon0="$1" lon1="$2" lat0="$3" lat1="$4" id="$5"
-            local dem="$tmp/${id}.tif" color="$tmp/${id}_color.tif" hill="$tmp/${id}_hill.tif" soft="$tmp/${id}_soft.png" final="$out/${id}.webp"
+            local raw="$tmp/${id}.nc" dem="$tmp/${id}.tif" color="$tmp/${id}_color.tif" hill="$tmp/${id}_hill.tif" soft="$tmp/${id}_soft.png" final="$out/${id}.webp"
             echo "Building ${id}: lon ${lon0}..${lon1}, lat ${lat0}..${lat1}"
             curl --fail --location --retry 4 --retry-delay 4 --connect-timeout 30 --max-time 900 \
               --get --data-urlencode "z[(${lat0}):1:(${lat1})][(${lon0}):1:(${lon1})]" \
-              'https://oceanwatch.pifsc.noaa.gov/erddap/griddap/ETOPO_2022_v1_30s.tif' \
-              --output "$dem"
+              'https://oceanwatch.pifsc.noaa.gov/erddap/griddap/ETOPO_2022_v1_30s.nc' \
+              --output "$raw"
+            gdalinfo "$raw" >/dev/null
+            gdal_translate -of GTiff "NETCDF:${raw}:z" "$dem"
             gdalinfo "$dem" >/dev/null
             gdaldem color-relief "$dem" "$tmp/colors.txt" "$color" -alpha
             gdaldem hillshade "$dem" "$hill" -s 111120 -az 315 -alt 42 -compute_edges
