@@ -1,0 +1,129 @@
+name: Apply territory V27 ETOPO detail and single borders
+
+on:
+  push:
+    branches:
+      - territory-v27-etopo-lod-single-borders
+      - main
+    paths:
+      - .github/workflows/apply-territory-v27.yml
+      - scripts/apply-territory-v27.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-detail:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Skip if V27 is already materialized
+        id: state
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -q 'DETAIL_RELIEF_TILES' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx \
+             && [ "$(find public/data/territory/terrain/etopo30s -maxdepth 1 -name '*.webp' 2>/dev/null | wc -l)" -eq 10 ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install terrain tooling
+        if: steps.state.outputs.ready != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gdal-bin imagemagick
+
+      - name: Generate 30 arc-second ETOPO regional relief tiles
+        if: steps.state.outputs.ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          out='public/data/territory/terrain/etopo30s'
+          tmp="$(mktemp -d)"
+          mkdir -p "$out"
+          cat > "$tmp/colors.txt" <<'EOF'
+          -11000 7 25 30
+          -5000 9 34 40
+          -500 12 45 51
+          -1 16 55 59
+          0 42 64 48
+          200 67 88 57
+          800 91 103 64
+          1500 113 101 66
+          2500 100 84 61
+          4000 89 74 60
+          6000 111 99 80
+          9000 142 131 105
+          nv 7 25 30
+          EOF
+
+          make_tile() {
+            local lon0="$1" lon1="$2" lat0="$3" lat1="$4" id="$5"
+            local raw="$tmp/${id}.nc" dem="$tmp/${id}.tif" color="$tmp/${id}_color.tif" hill="$tmp/${id}_hill.tif" soft="$tmp/${id}_soft.png" final="$out/${id}.webp"
+            echo "Building ${id}: lon ${lon0}..${lon1}, lat ${lat0}..${lat1}"
+            curl --fail --location --retry 4 --retry-delay 4 --connect-timeout 30 --max-time 900 \
+              --get --data-urlencode "z[(${lat0}):1:(${lat1})][(${lon0}):1:(${lon1})]" \
+              'https://oceanwatch.pifsc.noaa.gov/erddap/griddap/ETOPO_2022_v1_30s.nc' \
+              --output "$raw"
+            gdalinfo "$raw" >/dev/null
+            gdal_translate -of GTiff "NETCDF:${raw}:z" "$dem"
+            gdalinfo "$dem" >/dev/null
+            gdaldem color-relief "$dem" "$tmp/colors.txt" "$color" -alpha
+            gdaldem hillshade "$dem" "$hill" -s 111120 -az 315 -alt 42 -compute_edges
+            convert "$hill" -colorspace Gray -function Polynomial '0.68,0.32' "$soft"
+            convert "$color" "$soft" -compose Multiply -composite -define webp:method=6 -quality 90 "$final"
+            identify "$final"
+          }
+
+          make_tile 0 45 30 60 000_045_30_60
+          make_tile 45 90 30 60 045_090_30_60
+          make_tile 90 135 30 60 090_135_30_60
+          make_tile 135 180 30 60 135_180_30_60
+          make_tile 180 225 30 60 180_225_30_60
+          make_tile 0 45 60 85 000_045_60_85
+          make_tile 45 90 60 85 045_090_60_85
+          make_tile 90 135 60 85 090_135_60_85
+          make_tile 135 180 60 85 135_180_60_85
+          make_tile 180 225 60 85 180_225_60_85
+
+      - name: Apply V27 renderer patch
+        if: steps.state.outputs.ready != 'true'
+        run: python scripts/apply-territory-v27.py
+
+      - name: Verify V27 assets and geometry rules
+        if: steps.state.outputs.ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find public/data/territory/terrain/etopo30s -maxdepth 1 -name '*.webp' | wc -l)" -eq 10
+          grep -q 'DETAIL_RELIEF_TILES' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q 'buildPolygonSegments(worldBorderFeatures,1.00012,russiaFeatures)' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q 'canonicalSegmentKey' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          grep -q 'nearBoundary' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          ! grep -q 'buildPolygonSegments(worldBorderFeatures,1.0002)' src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          du -h public/data/territory/terrain/etopo30s/*.webp
+
+      - name: Commit V27 generated relief and renderer
+        if: steps.state.outputs.ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx public/data/territory/terrain/etopo30s
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Add ETOPO close relief and single shared borders'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
