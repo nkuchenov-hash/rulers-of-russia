@@ -1,0 +1,113 @@
+name: Vendor V25 high-resolution relief textures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vendor-terrain-relief-v25.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-territory-relief-v25
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install image tooling
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Download Natural Earth hypsometric shaded relief
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/relief-src
+          urls=(
+            'https://naturalearth.s3.amazonaws.com/10m_raster/HYP_HR_SR_W.zip'
+            'https://naciscdn.org/naturalearth/10m/raster/HYP_HR_SR_W.zip'
+            'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/raster/HYP_HR_SR_W.zip'
+          )
+          ok=0
+          for url in "${urls[@]}"; do
+            echo "Trying $url"
+            if curl -fL --retry 3 --retry-delay 2 --connect-timeout 20 "$url" -o /tmp/HYP_HR_SR_W.zip; then
+              ok=1
+              break
+            fi
+          done
+          if [ "$ok" != 1 ]; then
+            echo 'Unable to download Natural Earth HYP_HR_SR_W.'
+            exit 1
+          fi
+          unzip -j /tmp/HYP_HR_SR_W.zip '*HYP_HR_SR_W.tif' -d /tmp/relief-src
+          test -f /tmp/relief-src/HYP_HR_SR_W.tif
+          ls -lh /tmp/relief-src/HYP_HR_SR_W.tif
+
+      - name: Build fast progressive WebP relief textures
+        shell: python
+        run: |
+          from pathlib import Path
+          from PIL import Image
+
+          Image.MAX_IMAGE_PIXELS = None
+          src = Path('/tmp/relief-src/HYP_HR_SR_W.tif')
+          out = Path('public/data/territory/terrain')
+          out.mkdir(parents=True, exist_ok=True)
+
+          with Image.open(src) as image:
+              image = image.convert('RGB')
+              print('source', image.size)
+              levels = [
+                  (4096, 2048, 84, 'earth_relief_4096.webp'),
+                  (8192, 4096, 88, 'earth_relief_8192.webp'),
+                  (12288, 6144, 90, 'earth_relief_12288.webp'),
+              ]
+              for width, height, quality, name in levels:
+                  resized = image.resize((width, height), Image.Resampling.LANCZOS)
+                  target = out / name
+                  resized.save(target, 'WEBP', quality=quality, method=6, exact=True)
+                  print(target, target.stat().st_size)
+                  resized.close()
+
+      - name: Verify generated assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in \
+            public/data/territory/terrain/earth_relief_4096.webp \
+            public/data/territory/terrain/earth_relief_8192.webp \
+            public/data/territory/terrain/earth_relief_12288.webp; do
+            test -s "$f"
+            ls -lh "$f"
+          done
+          test "$(stat -c%s public/data/territory/terrain/earth_relief_4096.webp)" -lt 12000000
+          test "$(stat -c%s public/data/territory/terrain/earth_relief_8192.webp)" -lt 45000000
+          test "$(stat -c%s public/data/territory/terrain/earth_relief_12288.webp)" -lt 95000000
+
+      - name: Commit project-owned relief textures
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/territory/terrain/earth_relief_4096.webp \
+                  public/data/territory/terrain/earth_relief_8192.webp \
+                  public/data/territory/terrain/earth_relief_12288.webp
+          if git diff --cached --quiet; then
+            echo 'V25 relief textures already current.'
+            exit 0
+          fi
+          git commit -m 'Vendor high-resolution Natural Earth relief textures'
+          git push
