@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-orekhovo-1323-prlib",
+      "sourceCollectionId": "prlib-medieval-acts",
+      "title": "Ореховецкий мирный договор со Швецией 1323 г. — документы № 38–39 в издании «Грамоты Великого Новгорода и Пскова»",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина / Издательство Академии наук СССР",
+      "url": "https://www.prlib.ru/item/330304",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "12 августа 1323 г.",
+        "normalized": "1323-08-12",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "The documentary date is retained as 12 August 1323; no proleptic Gregorian conversion is imposed for the medieval record."
+      },
+      "authority": ["Новгородская земля / великий князь Юрий Данилович", "Шведское королевство / Магнус Эрикссон"],
+      "publicationCitation": "Грамоты Великого Новгорода и Пскова. М.; Л.: Издательство Академии наук СССР, 1949. № 38–39.",
+      "pagesOrFolios": "С. 67–70; сканы 71–74",
+      "notes": "The treaty text enumerates boundary landmarks. Geometry must be reconstructed segment-by-segment from those landmarks and later boundary descriptions, preserving uncertainty where landmarks are unresolved."
+    },
+    {
+      "id": "doc-pruth-1711-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Прутский мирный договор. 12 июля 1711 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/337038-iyulya-12-locale-nil-prutskiy-mirnyy-dogovor",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "12 июля 1711 г.",
+        "normalized": "1711-07-23",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Old Style date retained; Gregorian equivalent is 23 July 1711."
+      },
+      "authority": ["Русское царство / Пётр I", "Османская империя"],
+      "archiveCitation": "АВПР, ф. Трактаты, 1711, № 138, л. 1–2; ЦГАДА, Сношения с Турцией, оп. 1, 1711, № 8, л. 4–6 об.",
+      "publicationCitation": "Письма и бумаги императора Петра Великого. Т. 11, вып. 1. М.: Изд-во АН СССР, 1962.",
+      "notes": "Primary treaty text with archival references; territorial clauses include the Azov/fortification settlement and require precise spatial extraction before replay."
+    },
+    {
+      "id": "doc-adrianople-1713-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Адрианопольский мирный договор России с Османской империей. 13 июня 1713 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/338045-iyunya-13-locale-nil-adrianopolskiy-mirnyy-dogovor-rossii-s-osmanskoy-imperiey",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "13 июня 1713 г.",
+        "normalized": "1713-06-24",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Old Style date retained; Gregorian equivalent is 24 June 1713."
+      },
+      "authority": ["Правительство России", "Правительство Османской империи"],
+      "archiveCitation": "ЦГАДА, Сношения с Турцией, оп. 1, 1713, № 14, л. 25–39; другие копии перечислены в ЭБИД.",
+      "publicationCitation": "ПСЗРИ, т. V, № 2687, с. 36–43; Письма и бумаги императора Петра Великого. Т. 13, вып. 1. М.: Наука, 1992.",
+      "notes": "Follow-up peace settlement to the Pruth treaty. Boundary consequences must be reconciled with the 1711 text and implementation records."
+    },
+    {
+      "id": "doc-petersburg-japan-1875-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Трактат между Россией и Японией, заключённый в Петербурге 25 апреля (7 мая) 1875 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/510054-iz-traktata-zaklyuchennogo-mezhdu-rossiey-i-yaponiey-v-peterburge-25-aprelya-7-maya-1875-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "25 апреля 1875 г.",
+        "normalized": "1875-05-07",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Японская империя"],
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб., 1891. С. 292–299.",
+      "notes": "Treaty exchanged Russian rights in the Kuril chain for Japanese renunciation of rights to Sakhalin; model as separate cession and recognition/acquisition operations."
+    },
+    {
+      "id": "doc-san-stefano-1878-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Сан-Стефанский прелиминарный мирный договор. 19 февраля (3 марта) 1878 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/136105-san-stefanskiy-preliminarnyy-mirnyy-dogovor-19-fevralya-3-marta-1878-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "19 февраля 1878 г.",
+        "normalized": "1878-03-03",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя"],
+      "publicationCitation": "Сборник договоров России с другими государствами. 1856–1917. М.: Госполитиздат, 1952. С. 159–174.",
+      "notes": "Preliminary peace settlement. Its territorial provisions must not be treated as the final 1878 border without modeling the later Berlin Treaty and the interval/effectiveness question."
+    },
+    {
+      "id": "doc-berlin-1878-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Берлинский трактат. 1 (13) июля 1878 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/136106",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "1 июля 1878 г.",
+        "normalized": "1878-07-13",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя", "участники Берлинского конгресса"],
+      "publicationCitation": "Мартенс Ф. Собрание трактатов и конвенций, заключенных Россиею с иностранными державами. Т. VIII. СПб., 1888. С. 639–675.",
+      "notes": "Article 58 records Ottoman cession to Russia in Asia, including Ardahan, Kars and Batum. Final geometry requires treaty boundary clauses and contemporary demarcation/cartography."
+    },
+    {
+      "id": "doc-portsmouth-1905-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Портсмутский мирный договор между Россией и Японией. 23 августа (5 сентября) 1905 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/136118-mirnyy-dogovor-zaklyuchennyy-mezhdu-rossiey-i-yaponiey-v-portsmute-23-avgusta-5-sentyabrya-1905-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "23 августа 1905 г.",
+        "normalized": "1905-09-05",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Правительство России", "Правительство Японии"],
+      "publicationCitation": "Сборник действующих трактатов, конвенций и соглашений, заключенных Россией с другими государствами. Т. II. Изд. 2. СПб., 1906. С. 667–672.",
+      "notes": "Primary legal anchor for the post-war territorial settlement including the southern Sakhalin cession; demarcation geometry requires article-level extraction and boundary protocol/cartography."
+    }
+  ]
+}
