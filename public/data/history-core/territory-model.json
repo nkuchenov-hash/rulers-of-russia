@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "dataset": "Rulers of Russia replayable territory model",
+  "policy": {
+    "snapshots_are_generated": true,
+    "manual_snapshot_editing_forbidden": true,
+    "monthly_state_is_latest_verified_change_at_or_before_month_end": true,
+    "unverified_changes_do_not_mutate_production_geometry": true
+  },
+  "changeFiles": [
+    "territory-changes/research-seed.json"
+  ],
+  "baseStates": [],
+  "fragments": []
+}
