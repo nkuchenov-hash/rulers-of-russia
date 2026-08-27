@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-2022-dnr-russian-law",
+      "title": "Принятие Донецкой Народной Республики в Российскую Федерацию по российскому законодательству",
+      "kind": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["russian-federation"],
+      "summary": "Изменение российского правового территориального контура согласно Федеральному конституционному закону № 5-ФКЗ.",
+      "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"],
+      "territoryChangeIds": ["territory-2022-dnr-russian-legal"],
+      "reviewStatus": "source-verified",
+      "notes": "Applies only to russian-legal-border; international recognition and de-facto control are separate tracks."
+    },
+    {
+      "id": "evt-2022-lnr-russian-law",
+      "title": "Принятие Луганской Народной Республики в Российскую Федерацию по российскому законодательству",
+      "kind": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["russian-federation"],
+      "summary": "Изменение российского правового территориального контура согласно Федеральному конституционному закону № 6-ФКЗ.",
+      "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"],
+      "territoryChangeIds": ["territory-2022-lnr-russian-legal"],
+      "reviewStatus": "source-verified",
+      "notes": "Applies only to russian-legal-border; international recognition and de-facto control are separate tracks."
+    },
+    {
+      "id": "evt-2022-zaporozhye-russian-law",
+      "title": "Принятие Запорожской области в Российскую Федерацию по российскому законодательству",
+      "kind": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["russian-federation"],
+      "summary": "Изменение российского правового территориального контура согласно Федеральному конституционному закону № 7-ФКЗ.",
+      "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"],
+      "territoryChangeIds": ["territory-2022-zaporozhye-russian-legal"],
+      "reviewStatus": "source-verified",
+      "notes": "Applies only to russian-legal-border; international recognition and de-facto control are separate tracks."
+    },
+    {
+      "id": "evt-2022-kherson-russian-law",
+      "title": "Принятие Херсонской области в Российскую Федерацию по российскому законодательству",
+      "kind": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["russian-federation"],
+      "summary": "Изменение российского правового территориального контура согласно Федеральному конституционному закону № 8-ФКЗ.",
+      "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"],
+      "territoryChangeIds": ["territory-2022-kherson-russian-legal"],
+      "reviewStatus": "source-verified",
+      "notes": "Applies only to russian-legal-border; international recognition and de-facto control are separate tracks."
+    }
+  ]
+}
