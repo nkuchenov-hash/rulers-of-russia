@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-turkey-continental-shelf-1978",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение между Правительством Турецкой Республики и Правительством СССР о разграничении континентального шельфа в Чёрном море",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%201247/v1247.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "23 июня 1978 г.",
+        "normalized": "1978-06-23",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Турецкой Республики"],
+      "publicationCitation": "UNTS Vol. 1247, I-20344, pp. 137-146; authentic Russian and Turkish texts; entered into force 15 May 1981.",
+      "notes": "Article 1 directly lists the coordinate chain through 43°20′43″ N, 32°00′00″ E. The westward segment toward 43°26′59″ N, 31°20′48″ E is expressly left for later settlement and is therefore excluded from verified geometry. Article 2 states that the coordinates are in the coordinate systems of attached charts Nos. 500 (1977) and 501 (1976)."
+    },
+    {
+      "id": "doc-ussr-turkey-eez-notes-1986-1987",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Обмен нотами, составляющими соглашение о разграничении экономической зоны СССР и Турции в Чёрном море",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%201460/v1460.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "23 декабря 1986 г. — 6 февраля 1987 г.",
+        "normalized": "1987-02-06",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "The Soviet confirming note of 6 February 1987 completed the exchange and the agreement entered into force that day."
+      },
+      "authority": ["Правительство СССР", "Правительство Турецкой Республики"],
+      "publicationCitation": "UNTS Vol. 1460, I-24690, pp. 135 ff.; entered into force 6 February 1987.",
+      "notes": "The Soviet Russian-language note explicitly confirms that the continental-shelf boundary established by the 23 June 1978 Agreement also constitutes the boundary of the Soviet and Turkish economic zones."
+    }
+  ]
+}
