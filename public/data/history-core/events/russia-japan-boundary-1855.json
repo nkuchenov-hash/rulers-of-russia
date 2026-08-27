@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1855-shimoda-treaty",
+      "title": "Симодский трактат России и Японии",
+      "kind": "treaty",
+      "date": {
+        "original": "26 января 1855 г.",
+        "normalized": "1855-02-07",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Первый российско-японский договор определил государственную границу в Курильской гряде и оставил Сахалин неразделённой зоной.",
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "territoryChangeIds": ["territory-1856-shimoda-kuril-boundary", "territory-1856-shimoda-sakhalin-undivided"],
+      "reviewStatus": "source-verified",
+      "notes": "Treaty signed 7 February 1855 Gregorian. Territorial changes are dated to the reported entry into force on 7 December 1856 and remain research-required until the ratification/exchange evidence is attached."
+    }
+  ]
+}
