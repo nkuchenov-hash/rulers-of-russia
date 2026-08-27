@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-turkey-continental-shelf-1981",
+        "track": "maritime-jurisdiction",
+        "sourceGeometry": "direct treaty coordinates",
+        "segmentMeaning": "continental shelf delimitation; from 1987 also EEZ delimitation",
+        "coordinateSystemNote": "Coordinates are preserved exactly in the treaty chart coordinate system. No datum shift is silently applied.",
+        "note": "The treaty expressly leaves the further westward segment from 43°20′43″ N, 32°00′00″ E toward 43°26′59″ N, 31°20′48″ E unsettled; that gap is not drawn."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [41.27583333333333, 41.594722222222224],
+          [40.6925, 41.95],
+          [40.43333333333333, 42.03111111111111],
+          [39.82694444444445, 42.13916666666667],
+          [39.00361111111111, 42.3375],
+          [38.53611111111111, 42.42444444444444],
+          [36.845, 43.18194444444444],
+          [36.1825, 43.43444444444444],
+          [35.50694444444444, 43.43555555555555],
+          [34.21944444444445, 43.18805555555555],
+          [33.61555555555556, 43.197222222222216],
+          [32.0, 43.34527777777778]
+        ]
+      }
+    }
+  ]
+}
