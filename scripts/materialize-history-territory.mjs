@@ -1,0 +1,192 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import polygonClipping from 'polygon-clipping';
+
+const root = process.cwd();
+const dataRoot = path.join(root, 'public', 'data', 'history-core');
+const modelFile = path.join(dataRoot, 'territory-model.json');
+const outRoot = path.join(dataRoot, 'generated', 'territory');
+const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
+
+if (!fs.existsSync(modelFile)) throw new Error('Missing public/data/history-core/territory-model.json');
+const model = readJson(modelFile);
+fs.rmSync(outRoot, {recursive: true, force: true});
+fs.mkdirSync(outRoot, {recursive: true});
+
+const fragments = new Map((model.fragments ?? []).map(x => [x.id, x]));
+const baseStates = model.baseStates ?? [];
+const changes = [];
+for (const relative of model.changeFiles ?? []) {
+  const file = path.join(dataRoot, relative);
+  if (!fs.existsSync(file)) throw new Error(`Missing territory change file: ${relative}`);
+  changes.push(...(readJson(file).territoryChanges ?? []));
+}
+
+const preciseDateKey = date => {
+  if (!date?.normalized) return null;
+  if (date.precision === 'day' && /^\d{4}-\d{2}-\d{2}$/.test(date.normalized)) return date.normalized;
+  if (date.precision === 'month' && /^\d{4}-\d{2}$/.test(date.normalized)) return `${date.normalized}-01`;
+  return null;
+};
+
+const toMultiPolygon = geometry => {
+  if (!geometry) return [];
+  if (geometry.type === 'Polygon') return [geometry.coordinates];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates;
+  throw new Error(`Unsupported territory geometry: ${geometry.type}`);
+};
+
+const loadFragmentGeometry = fragment => {
+  const file = path.join(dataRoot, fragment.geometryFile);
+  if (!fs.existsSync(file)) throw new Error(`Missing geometry file for ${fragment.id}: ${fragment.geometryFile}`);
+  const payload = readJson(file);
+  const features = payload.type === 'FeatureCollection' ? payload.features : payload.type === 'Feature' ? [payload] : [];
+  let merged = [];
+  for (const feature of features) {
+    const mp = toMultiPolygon(feature.geometry);
+    if (!mp.length) continue;
+    merged = merged.length ? polygonClipping.union(merged, mp) : mp;
+  }
+  return merged;
+};
+
+const geometryCache = new Map();
+const geometryFor = id => {
+  if (geometryCache.has(id)) return geometryCache.get(id);
+  const fragment = fragments.get(id);
+  if (!fragment) throw new Error(`Unknown territory fragment: ${id}`);
+  if (fragment.reviewStatus !== 'geometry-verified') throw new Error(`Fragment ${id} is not geometry-verified`);
+  const geometry = loadFragmentGeometry(fragment);
+  geometryCache.set(id, geometry);
+  return geometry;
+};
+
+const inferAction = change => {
+  if (change.geometryAction) return change.geometryAction;
+  if (['acquire', 'unite', 'occupy'].includes(change.operation)) return 'add';
+  if (['cede', 'separate', 'withdraw'].includes(change.operation)) return 'remove';
+  if (change.operation === 'replace-state') return 'replace';
+  return 'metadata-only';
+};
+
+const confidenceRank = {low: 0, medium: 1, high: 2};
+const minConfidence = ids => {
+  let value = 'high';
+  for (const id of ids) {
+    const fragment = fragments.get(id);
+    if (fragment && confidenceRank[fragment.confidence] < confidenceRank[value]) value = fragment.confidence;
+  }
+  return value;
+};
+
+const states = new Map();
+const snapshots = [];
+const warnings = [];
+const keyOf = item => `${item.polityId}::${item.track}`;
+
+for (const base of baseStates) {
+  const dateKey = preciseDateKey(base.effectiveDate);
+  if (!dateKey) { warnings.push(`Base ${base.id} skipped: date is not month/day precise`); continue; }
+  const areaIds = (base.geometryFragmentIds ?? []).filter(id => fragments.get(id)?.role === 'territory-area');
+  let geometry = [];
+  for (const id of areaIds) geometry = geometry.length ? polygonClipping.union(geometry, geometryFor(id)) : geometryFor(id);
+  states.set(keyOf(base), {
+    polityId: base.polityId,
+    track: base.track,
+    territorialModel: base.territorialModel,
+    geometry,
+    activeFragmentIds: new Set(base.geometryFragmentIds ?? []),
+    evidenceDocumentIds: new Set(base.evidenceDocumentIds ?? []),
+    derivedFromChangeIds: [],
+    date: base.effectiveDate,
+    dateKey,
+  });
+}
+
+const sortedChanges = [...changes].sort((a, b) => (preciseDateKey(a.effectiveDate) ?? '9999').localeCompare(preciseDateKey(b.effectiveDate) ?? '9999'));
+for (const change of sortedChanges) {
+  if (change.reviewStatus !== 'geometry-verified') continue;
+  const dateKey = preciseDateKey(change.effectiveDate);
+  if (!dateKey) { warnings.push(`Change ${change.id} skipped: date is not month/day precise`); continue; }
+  const stateKey = keyOf(change);
+  const state = states.get(stateKey);
+  if (!state) { warnings.push(`Change ${change.id} skipped: no verified base state for ${stateKey}`); continue; }
+  const action = inferAction(change);
+  const ids = change.geometryFragmentIds ?? [];
+  const areaIds = ids.filter(id => fragments.get(id)?.role === 'territory-area');
+  let delta = [];
+  for (const id of areaIds) delta = delta.length ? polygonClipping.union(delta, geometryFor(id)) : geometryFor(id);
+
+  if (action === 'replace') state.geometry = delta;
+  if (action === 'add' && delta.length) state.geometry = state.geometry.length ? polygonClipping.union(state.geometry, delta) : delta;
+  if (action === 'remove' && delta.length && state.geometry.length) state.geometry = polygonClipping.difference(state.geometry, delta);
+
+  for (const id of ids) state.activeFragmentIds.add(id);
+  for (const id of change.evidenceDocumentIds ?? []) state.evidenceDocumentIds.add(id);
+  state.derivedFromChangeIds.push(change.id);
+  state.territorialModel = change.territorialModel;
+  state.date = change.effectiveDate;
+  state.dateKey = dateKey;
+
+  const safeId = `${change.polityId}-${change.track}-${dateKey}`.replace(/[^a-zA-Z0-9._-]+/g, '-');
+  const geometryFile = `${safeId}.geojson`;
+  const uncertaintyFile = `${safeId}.uncertainty.geojson`;
+  const uncertainIds = [...state.activeFragmentIds].filter(id => {
+    const fragment = fragments.get(id);
+    return fragment && fragment.role !== 'territory-area';
+  });
+
+  fs.writeFileSync(path.join(outRoot, geometryFile), JSON.stringify({
+    type: 'FeatureCollection',
+    features: state.geometry.length ? [{
+      type: 'Feature',
+      properties: {polityId: state.polityId, track: state.track, generated: true},
+      geometry: {type: 'MultiPolygon', coordinates: state.geometry},
+    }] : [],
+  }));
+
+  const uncertaintyFeatures = [];
+  for (const id of uncertainIds) {
+    const fragment = fragments.get(id);
+    const file = path.join(dataRoot, fragment.geometryFile);
+    if (!fs.existsSync(file)) continue;
+    const payload = readJson(file);
+    const sourceFeatures = payload.type === 'FeatureCollection' ? payload.features : payload.type === 'Feature' ? [payload] : [];
+    for (const feature of sourceFeatures) uncertaintyFeatures.push({
+      ...feature,
+      properties: {
+        ...(feature.properties ?? {}),
+        historyFragmentId: id,
+        role: fragment.role,
+        confidence: fragment.confidence,
+        uncertaintyMeters: fragment.uncertaintyMeters ?? null,
+      },
+    });
+  }
+  fs.writeFileSync(path.join(outRoot, uncertaintyFile), JSON.stringify({type: 'FeatureCollection', features: uncertaintyFeatures}));
+
+  snapshots.push({
+    id: safeId,
+    polityId: state.polityId,
+    effectiveDate: state.date,
+    track: state.track,
+    territorialModel: state.territorialModel,
+    geometryFile: `generated/territory/${geometryFile}`,
+    uncertaintyGeometryFile: `generated/territory/${uncertaintyFile}`,
+    evidenceDocumentIds: [...state.evidenceDocumentIds],
+    derivedFromChangeIds: [...state.derivedFromChangeIds],
+    reviewStatus: 'geometry-verified',
+    confidence: minConfidence([...state.activeFragmentIds]),
+    generated: true,
+  });
+}
+
+const index = {
+  schema_version: 1,
+  generated_at: new Date().toISOString(),
+  generator: 'scripts/materialize-history-territory.mjs',
+  snapshots,
+  warnings,
+};
+fs.writeFileSync(path.join(outRoot, 'index.json'), JSON.stringify(index, null, 2));
+console.log(`History territory materialized: ${snapshots.length} snapshots, ${warnings.length} warnings.`);
