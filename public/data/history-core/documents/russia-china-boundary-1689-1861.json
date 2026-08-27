@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-nerchinsk-1689-mfa",
+      "sourceCollectionId": "prlib-russia-china-treaties",
+      "title": "Нерчинский договор России с Китаем 27 августа 1689 г. — в «Сборнике договоров России с Китаем. 1689–1881 гг.»",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442818",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "27 августа 1689 г.",
+        "normalized": "1689-09-06",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Russian Old Style date; Presidential Library gives 27 August (6 September) 1689."
+      },
+      "authority": ["Русское царство", "Империя Цин"],
+      "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
+      "notes": "First Russian-Chinese treaty. The contemporary delimitation was incomplete: the source record notes unclear geographic landmarks, lack of sufficiently accurate maps and absence of demarcation. Geometry must therefore preserve a broad uncertainty corridor."
+    },
+    {
+      "id": "doc-kyakhta-1727-mfa",
+      "sourceCollectionId": "prlib-russia-china-treaties",
+      "title": "Кяхтинский русско-китайский договор 21 октября 1727 г. — в «Сборнике договоров России с Китаем. 1689–1881 гг.»",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442818",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "21 октября 1727 г.",
+        "normalized": "1727-11-01",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Presidential Library gives 21 October (1 November) 1727."
+      },
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
+      "notes": "The Kyakhta treaty incorporated the Burin boundary settlement. Presidential Library records that geodetic survey was performed and the entire new Russian-Chinese border was mapped, making this a priority candidate for high-confidence georeferencing."
+    },
+    {
+      "id": "doc-aigun-1858-mfa",
+      "sourceCollectionId": "prlib-russia-china-treaties",
+      "title": "Айгунский договор России с Китаем 16 мая 1858 г. — в «Сборнике договоров России с Китаем. 1689–1881 гг.»",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442818",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "16 мая 1858 г.",
+        "normalized": "1858-05-28",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Presidential Library gives 16 (28) May 1858."
+      },
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
+      "notes": "The treaty assigned the left bank of the Amur from the Argun to its mouth to Russia, left the Ussuri-to-sea area in joint possession pending delimitation, and was approved by the Qing emperor on 2(14) June and ratified by Russia on 8(20) June 1858."
+    },
+    {
+      "id": "doc-peking-1860-mfa",
+      "sourceCollectionId": "prlib-russia-china-treaties",
+      "title": "Пекинский дополнительный договор России с Китаем 2 ноября 1860 г. — в «Сборнике договоров России с Китаем. 1689–1881 гг.»",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442818",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "2 ноября 1860 г.",
+        "normalized": "1860-11-14",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Presidential Library gives 2 (14) November 1860."
+      },
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
+      "notes": "The treaty finally defined the eastern boundary, including the Amur/Ussuri/Sungacha/Lake Khanka and further watershed line, and had an eastern-boundary map attached."
+    },
+    {
+      "id": "doc-ussuri-map-exchange-1861-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Протокол о размене картами и разграничении в Уссурийском крае 16 июня 1861 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "other",
+      "date": {
+        "original": "16 июня 1861 г.",
+        "normalized": "1861-06-28",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Presidential Library identifies 16 (28) June 1861 as the protocol date."
+      },
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "The protocol was attached to the Peking Treaty as an integral part and records exchange of maps and delimitation in the Ussuri region; priority evidence for geometry verification."
+    }
+  ]
+}
