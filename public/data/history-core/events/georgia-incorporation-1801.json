@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1801-georgia-paul-manifest",
+      "title": "Обнародование манифеста Павла I о присоединении Грузинского царства",
+      "kind": "law",
+      "date": {
+        "original": "18 января 1801 г.",
+        "normalized": "1801-01-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Публичный российский правовой рубеж непосредственного включения Картли-Кахетинского царства после договорного протектората 1783 года.",
+      "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "territoryChangeIds": ["territory-1801-georgia-incorporation-russian-law"],
+      "reviewStatus": "source-verified",
+      "notes": "The project distinguishes this territorial/legal milestone from the 1783 protectorate and from the September 1801 administrative reorganization."
+    },
+    {
+      "id": "evt-1801-georgia-alexander-administration",
+      "title": "Манифест Александра I об учреждении внутреннего управления Грузии",
+      "kind": "law",
+      "date": {
+        "original": "12 сентября 1801 г.",
+        "normalized": "1801-09-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Учреждение непосредственной системы внутреннего управления уже включённой в Российскую империю Грузии.",
+      "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "territoryChangeIds": ["territory-1801-georgia-direct-administration"],
+      "reviewStatus": "source-verified",
+      "notes": "Administrative-state change only; it must not add the same territory to the external border a second time."
+    }
+  ]
+}
