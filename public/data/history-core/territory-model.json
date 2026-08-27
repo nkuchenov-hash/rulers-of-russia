@@ -24,6 +24,7 @@
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
+    "territory-changes/lithuania-maritime-2003.json",
     "territory-changes/norway-varanger-2008.json",
     "territory-changes/norway-delimitation-2011.json"
   ],
@@ -41,6 +42,18 @@
       "confidence": "high",
       "effectiveTo": "2008-07-08",
       "derivationNote": "The 1957 line is rendered in the official WGS84 recalculation supplied by the 2007 bilateral settlement because the Russian ratification record expressly states that its point positions and the inherited line remained unchanged. Only the inherited portion through point 4 is used."
+    },
+    {
+      "id": "frag-rf-lithuania-maritime-2003-p1-p3",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-lithuania-maritime-2003-p1-p3.geojson",
+      "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997", "doc-rf-lithuania-ratification-70fz-2003"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "derivationNote": "Direct WGS84 coordinate transcription from the bilateral treaty. The source requires loxodromic segments and gives the coordinates priority over the appended maps; rendering densification follows rhumb lines in Mercator space."
     },
     {
       "id": "frag-rf-norway-varanger-2008-p1-p6",
