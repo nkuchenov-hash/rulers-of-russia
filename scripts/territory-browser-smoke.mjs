@@ -45,6 +45,7 @@ try {
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('реконструкция · достоверность'), null, { timeout: 8000 });
+  await page.waitForFunction(() => document.body?.innerText?.includes('проверенных участков 1'), null, { timeout: 8000 });
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
 
@@ -54,7 +55,7 @@ try {
     return {
       canvas: canvas ? { width: canvas.width, height: canvas.height } : null,
       buttons,
-      bodyText: document.body?.innerText?.slice(0, 800) || ''
+      bodyText: document.body?.innerText?.slice(0, 900) || ''
     };
   });
 
@@ -65,11 +66,18 @@ try {
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/month-index.json'))) {
     throw new Error(`Globe did not request History Core month index: ${JSON.stringify(historyRequests)}`);
   }
-  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/') && !requestUrl.endsWith('/month-index.json'))) {
-    throw new Error(`Globe did not request month-resolved History Core geometry: ${JSON.stringify(historyRequests)}`);
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/verified-boundaries.json'))) {
+    throw new Error(`Globe did not request verified History Core boundary index: ${JSON.stringify(historyRequests)}`);
+  }
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-norway-delimitation-2011-p1-p8.geojson'))) {
+    throw new Error(`Globe did not request Norway geometry-verified boundary fragment: ${JSON.stringify(historyRequests)}`);
+  }
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/') && !requestUrl.endsWith('/month-index.json') && !requestUrl.endsWith('/verified-boundaries.json'))) {
+    throw new Error(`Globe did not request month-resolved History Core territory geometry: ${JSON.stringify(historyRequests)}`);
   }
   await monthSelect.selectOption('2');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 2026-02'), null, { timeout: 8000 });
+  await page.waitForFunction(() => document.body?.innerText?.includes('проверенных участков 1'), null, { timeout: 8000 });
 
   const eraSelect = page.getByLabel('Быстрый переход к эпохе');
   if (await eraSelect.count() !== 1) throw new Error('Era selector missing');
