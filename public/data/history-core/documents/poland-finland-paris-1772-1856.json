@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-polish-partitions-prlib-chronology",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Подписана декларация России и Австрии о третьем разделе Польши",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/history/618914",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "documentary-publication",
+      "date": {
+        "original": "1772–1795",
+        "normalized": "1772",
+        "normalizedEnd": "1795",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "notes": "Institutional chronology for discovery/cross-checking: first partition 1772; second partition 23 Jan (3 Feb) 1793; Russian-Austrian declaration 23 Dec 1794 (3 Jan 1795); tripartite third-partition convention 13 (24) Oct 1795. It cannot by itself promote boundary geometry."
+    },
+    {
+      "id": "doc-grodno-partition-treaty-1793-prlib",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Трактат между Российской империей и Речью Посполитой, заключенный и подписанный в Гродне 11/22 июля 1793 года",
+      "institution": "Императорская типография / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/811556",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "11/22 июля 1793 г.",
+        "normalized": "1793-07-22",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "The official printing gives both Old Style and New Style dates."
+      },
+      "authority": ["Российская империя / Екатерина II", "Речь Посполитая / Станислав Август"],
+      "publicationCitation": "Россия. Договоры. Трактат... заключенный и подписанный в Гродне июля 11/22 дня 1793 года. Санкт-Петербург: Императорская типография, 1793. С. 3–21.",
+      "pagesOrFolios": "С. 3–21",
+      "notes": "Concrete official treaty printing for the Russian-Polish settlement after the second partition."
+    },
+    {
+      "id": "doc-final-partition-convention-1797-prlib",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Конвенция об окончательном разделе Польши между Россией, Пруссией и Австрией. 15/26 января 1797 года",
+      "institution": "Императорская типография / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/420849",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "15/26 января 1797 г.",
+        "normalized": "1797-01-26",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Пруссия", "Австрия"],
+      "publicationCitation": "Конвенция... об окончательном разделе Польши... В Санкт-Петербурге: Императорская типография, 1797. 22 с.",
+      "pagesOrFolios": "С. 1–22; акт отречения Станислава Августа от 14/25 ноября 1795 г. — с. 20–22",
+      "notes": "Official final partition settlement. It is distinct from the 13/24 October 1795 tripartite convention and the 1795 abdication."
+    },
+    {
+      "id": "doc-fredrikshamn-treaty-1809-prlib",
+      "sourceCollectionId": "prlib-russia-sweden-collection",
+      "title": "Фридрихсгамский мирный договор России и Швеции. 5/17 сентября 1809 года",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/section/909041",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "5/17 сентября 1809 г.",
+        "normalized": "1809-09-17",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Шведское королевство"],
+      "pagesOrFolios": "Сканы 141–156 в коллекции «Россия – Швеция»",
+      "notes": "The collection explicitly identifies scans 141–156 as the Fredrikshamn treaty. The treaty entered into force upon exchange of ratifications on 1/13 October 1809."
+    },
+    {
+      "id": "doc-finland-historical-boundary-maps-1909-rgia",
+      "sourceCollectionId": "prlib-rgia-archival-files",
+      "title": "Финляндия с показанием государственных границ России и Швеции в разное время и Выборгская губерния. Карты с объяснительной запиской",
+      "institution": "РГИА / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/794588",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "official-map",
+      "date": {
+        "original": "1909",
+        "normalized": "1909",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "archiveCitation": "РГИА. Ф. 1 Б. Оп. 1. Д. 15966.",
+      "pagesOrFolios": "6 листов",
+      "notes": "Official retrospective historical boundary maps prepared for the Finnish-law commission. Useful for reconstruction/cross-checking but not a contemporary 1809 A3 boundary source."
+    },
+    {
+      "id": "doc-paris-bessarabia-1856-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Относящиеся к Бессарабии и Молдавскому княжеству условия Парижского трактата. 18 (30) марта 1856 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/519856-vinogradov-v-n-i-dr-bessarabiya-na-perekrestke-evropeyskoy-diplomatii?view=list",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "18 (30) марта 1856 г.",
+        "normalized": "1856-03-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя", "Франция", "Великобритания", "Сардиния", "Австрия", "Пруссия"],
+      "publicationCitation": "Документ «Относящиеся к Бессарабии и Молдавскому княжеству условия Парижского трактата», опубликован в документальном корпусе ЭБИД.",
+      "notes": "Contains the treaty provisions requiring Russia to cede the Danube mouths and part of Southern Bessarabia to the Moldavian principality."
+    },
+    {
+      "id": "doc-bessarabia-boundary-implementation-1856-rgia",
+      "sourceCollectionId": "prlib-rgia-archival-files",
+      "title": "Докладные записки и рапорт Н. П. Игнатьева об определении границы России в Бессарабии по Парижскому договору",
+      "institution": "Российский государственный исторический архив / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/1721299",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "1856",
+        "normalized": "1856",
+        "precision": "year",
+        "calendar": "julian"
+      },
+      "archiveCitation": "РГИА. Ф. 1561. Оп. 1. Д. 31. 34 л. Каталог отмечает документы как копии.",
+      "pagesOrFolios": "34 л.",
+      "notes": "Direct archival evidence of boundary implementation/determination after the Paris treaty. Exact folios and any attached spatial descriptions must be extracted before geometry verification."
+    }
+  ]
+}
