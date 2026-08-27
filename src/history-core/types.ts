@@ -116,12 +116,51 @@ export type TerritoryOperation =
   | 'withdraw'
   | 'status-change';
 
+export type TerritoryGeometryRole =
+  | 'territory-area'
+  | 'boundary-corridor'
+  | 'frontier-zone'
+  | 'control-zone';
+
+export type TerritoryGeometryAction = 'add' | 'remove' | 'replace' | 'metadata-only';
+
 export type TerritoryGeometryEvidence = {
   method: 'document-map' | 'contemporary-official-map' | 'derived-from-boundary-text' | 'uncertain-zone' | 'not-yet-georeferenced';
   file?: string;
   evidenceDocumentIds: string[];
   derivationNote?: string;
   uncertaintyMeters?: number;
+};
+
+/**
+ * Small editable evidence-backed piece of geography. Production snapshots are generated from these
+ * fragments plus dated TerritoryChange operations; they are not edited by hand.
+ */
+export type TerritoryGeometryFragment = {
+  id: string;
+  polityId: string;
+  track: TerritoryTrack;
+  role: TerritoryGeometryRole;
+  territorialModel: TerritoryModel;
+  geometryFile: string;
+  evidenceDocumentIds: string[];
+  reviewStatus: Extract<HistoryReviewStatus, 'source-verified' | 'geometry-verified'>;
+  confidence: 'low' | 'medium' | 'high';
+  uncertaintyMeters?: number;
+  derivationNote?: string;
+};
+
+/** First verified state from which later changes can be replayed. */
+export type TerritoryBaseState = {
+  id: string;
+  polityId: string;
+  effectiveDate: HistoricalDate;
+  track: TerritoryTrack;
+  territorialModel: TerritoryModel;
+  geometryFragmentIds: string[];
+  evidenceDocumentIds: string[];
+  reviewStatus: 'geometry-verified';
+  notes?: string;
 };
 
 export type TerritoryChange = {
@@ -132,6 +171,10 @@ export type TerritoryChange = {
   track: TerritoryTrack;
   territorialModel: TerritoryModel;
   operation: TerritoryOperation;
+  /** Explicit spatial action. This controls automatic replay/materialization. */
+  geometryAction?: TerritoryGeometryAction;
+  /** Evidence-backed geometry pieces affected by this change. */
+  geometryFragmentIds?: string[];
   evidenceDocumentIds: string[];
   geometry: TerritoryGeometryEvidence;
   resultSnapshotId?: string;
@@ -139,6 +182,7 @@ export type TerritoryChange = {
   notes?: string;
 };
 
+/** Generated artifact. Never edit manually. */
 export type TerritorySnapshot = {
   id: string;
   polityId: string;
@@ -147,6 +191,8 @@ export type TerritorySnapshot = {
   track: TerritoryTrack;
   territorialModel: TerritoryModel;
   geometryFile: string;
+  /** Optional generated overlays for uncertain/frontier evidence. */
+  uncertaintyGeometryFile?: string;
   evidenceDocumentIds: string[];
   derivedFromChangeIds: string[];
   reviewStatus: Extract<HistoryReviewStatus, 'source-verified' | 'geometry-verified'>;
