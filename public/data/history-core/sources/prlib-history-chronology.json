@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "prlib-history-chronology",
+      "title": "Историческая хроника Президентской библиотеки",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/history",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Chronology essays linked to Presidential Library collections and archival/documentary references",
+      "canonicalUse": ["event", "interpretation"],
+      "notes": "Discovery and date-cross-check source only. A chronology page may guide research but cannot by itself promote boundary geometry to geometry-verified; canonical boundary mutations still require A1/A2/A3 evidence."
+    }
+  ]
+}
