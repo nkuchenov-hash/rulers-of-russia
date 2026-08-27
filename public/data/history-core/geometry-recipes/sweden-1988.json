@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-sweden-maritime-1988-a1-a17",
+      "fragmentId": "frag-ussr-sweden-maritime-1988-a1-a17",
+      "output": "geometry/ussr-sweden-maritime-1988-a1-a17.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "Soviet coordinate system of naval chart No. 1150 (1987)",
+      "interpolation": "rhumb",
+      "stepsPerSegment": 8,
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "points": [[20.476366666667,58.7806],[20.441666666667,58.483333333333],[20.373533333333,58.2],[20.413833333333,57.911516666667],[20.23415,57.733333333333],[20.064583333333,57.563333333333],[20.0345,57.445283333333],[19.89125,57.236533333333],[19.67,56.966666666667],[19.5275,56.75],[19.416666666667,56.583333333333],[19.35,56.45],[19.225,56.25],[19.0934,56.04055],[19.080183333333,55.98105],[19.0664,55.955],[18.945283333333,55.891366666667]],
+      "note": "Article 1 requires loxodromes. Article 2 declares Swedish RT38 and Soviet chart-coordinate systems equally valid; the Soviet coordinates are preserved here without a silent WGS84 transform."
+    }
+  ]
+}
