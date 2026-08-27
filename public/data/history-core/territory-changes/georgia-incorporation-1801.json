@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1801-georgia-incorporation-russian-law",
+      "eventId": "evt-1801-georgia-paul-manifest",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "18 января 1801 г.",
+        "normalized": "1801-01-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+        "derivationNote": "Replace the 1783 protectorate status with incorporated territory only after the contemporaneous territorial extent of Kartli-Kakheti is reconstructed from period administrative/cartographic evidence. Do not infer modern Georgian borders."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1801-georgia-direct-administration",
+      "eventId": "evt-1801-georgia-alexander-administration",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "12 сентября 1801 г.",
+        "normalized": "1801-09-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "internal-administrative",
+      "territorialModel": "mixed",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri"],
+        "derivationNote": "Administrative change only. It must never duplicate external-territory acquisition."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
