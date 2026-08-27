@@ -5,13 +5,17 @@ const root = process.cwd();
 const publicRoot = path.join(root, 'public');
 const dataRoot = path.join(publicRoot, 'data', 'history-core');
 const coverageFile = path.join(dataRoot, 'coverage-periods.json');
+const documentsFile = path.join(dataRoot, 'documents.json');
 const territoryIndexFile = path.join(dataRoot, 'generated', 'territory', 'index.json');
 const outputDir = path.join(dataRoot, 'generated');
 const outputFile = path.join(outputDir, 'month-index.json');
 const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
 if (!fs.existsSync(coverageFile)) throw new Error('Missing public/data/history-core/coverage-periods.json');
+if (!fs.existsSync(documentsFile)) throw new Error('Missing public/data/history-core/documents.json');
 const coverage = readJson(coverageFile);
+const documents = readJson(documentsFile).documents ?? [];
+const documentIds = new Set(documents.map(item => item.id));
 const verified = fs.existsSync(territoryIndexFile) ? readJson(territoryIndexFile) : {snapshots: []};
 const periods = coverage.periods ?? [];
 const snapshots = (verified.snapshots ?? []).filter(item => item.reviewStatus === 'geometry-verified');
@@ -48,6 +52,15 @@ for (const period of periods) {
   if (period.startMonth > period.endMonth) throw new Error(`Coverage ${period.id} has reversed dates`);
   if (!period.polityId || !period.track || !period.territorialModel || !period.fallbackGeometryFile) {
     throw new Error(`Coverage ${period.id} is structurally incomplete`);
+  }
+  if (period.status !== 'reconstruction-provisional' || period.bootstrapGeometry !== true) {
+    throw new Error(`Coverage ${period.id} must be explicitly marked reconstruction-provisional/bootstrapGeometry=true`);
+  }
+  if (!Array.isArray(period.evidenceDocumentIds) || period.evidenceDocumentIds.length === 0) {
+    throw new Error(`Coverage ${period.id} has no documentary anchors`);
+  }
+  for (const id of period.evidenceDocumentIds) {
+    if (!documentIds.has(id)) throw new Error(`Coverage ${period.id} references unknown document ${id}`);
   }
   const fallbackFile = path.join(publicRoot, period.fallbackGeometryFile);
   if (!fs.existsSync(fallbackFile)) throw new Error(`Coverage ${period.id} fallback geometry missing: ${period.fallbackGeometryFile}`);
