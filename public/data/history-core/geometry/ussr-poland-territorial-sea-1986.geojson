@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-poland-territorial-sea-1986",
+        "track": "russian-legal-border",
+        "sourceGeometry": "direct treaty coordinates",
+        "segmentMeaning": "state boundary through territorial sea",
+        "note": "Article 1 coordinate-defined straight segment only."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [19.641933333333334, 54.457952777777784],
+          [19.40611111111111, 54.60416666666667]
+        ]
+      }
+    }
+  ]
+}
