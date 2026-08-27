@@ -1,0 +1,27 @@
+name: Apply History Core datum UI once
+
+on:
+  push:
+    paths:
+      - 'scripts/patch-history-datum-ui.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply datum-aware verified-boundary UI patch
+        run: python scripts/patch-history-datum-ui.py
+      - name: Commit renderer changes
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m "Expose source datum confidence on territory globe"
+          git push origin HEAD:main
