@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-2003-rf-lithuania-maritime-delimitation",
+      "eventId": "evt-2003-rf-lithuania-maritime-effective",
+      "polityId": "russian-federation",
+      "effectiveDate": {
+        "original": "12 августа 2003 г.",
+        "normalized": "2003-08-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-rf-lithuania-maritime-2003-p1-p3"],
+      "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997", "doc-rf-lithuania-ratification-70fz-2003"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/rf-lithuania-maritime-2003-p1-p3.geojson",
+        "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997"],
+        "derivationNote": "Treaty Articles 1-2 directly provide three WGS84 points, prescribe straight rhumb-line segments (loxodromes), and state that coordinates prevail over the appended maps. Rendering densification follows the rhumb line in Mercator space and does not alter source points."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Verified maritime EEZ/continental-shelf delimitation fragment; not a full Russian Federation area boundary."
+    }
+  ]
+}
