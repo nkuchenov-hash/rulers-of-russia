@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'scripts/patch-verified-boundary-overlay.py'
-      - '.github/workflows/apply-verified-boundary-overlay-once.yml'
+      - 'scripts/trigger-verified-boundary.txt'
 
 permissions:
   contents: write
