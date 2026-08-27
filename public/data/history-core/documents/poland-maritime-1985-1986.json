@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-poland-maritime-1985",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Договор между СССР и Польской Народной Республикой о разграничении территориального моря, экономической зоны, зоны морского рыболовства и континентального шельфа в Балтийском море",
+      "institution": "United Nations Division for Ocean Affairs and the Law of the Sea / United Nations Treaty Series",
+      "url": "https://www.un.org/depts/los/LEGISLATIONANDTREATIES/STATEFILES/POL.htm",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "17 июля 1985 г.",
+        "normalized": "1985-07-17",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["СССР", "Польская Народная Республика"],
+      "publicationCitation": "United Nations registration I-57784; entry into force 13 March 1986. Russian treaty text corroborated by the Soviet/Russian legal-document corpus.",
+      "notes": "Article 1 supplies the coordinate-defined territorial-sea segment. Article 2 supplies the separate economic-zone/fisheries/continental-shelf line through points A-D. The two legal objects are stored in separate History Core tracks."
+    },
+    {
+      "id": "doc-ussr-poland-maritime-tripoint-1989",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение между правительствами Швеции, ПНР и СССР об общей точке разграничения их морских пространств в Балтийском море",
+      "institution": "United Nations Division for Ocean Affairs and the Law of the Sea",
+      "url": "https://www.un.org/depts/los/LEGISLATIONANDTREATIES/PDFFILES/TREATIES/SWE-POL-RUS1989MB.PDF",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "30 июня 1989 г.",
+        "normalized": "1989-06-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство ПНР", "Правительство Королевства Швеция"],
+      "publicationCitation": "UN maritime delimitation treaty publication; agreement entered into force 10 May 1990.",
+      "notes": "Article 1 independently identifies point D of the 1985 Soviet-Polish line as 55°51′00″ N, 18°56′12″ E and establishes the later common tripoint. Used here as coordinate corroboration, not to retroactively replace the 1985 treaty."
+    }
+  ]
+}
