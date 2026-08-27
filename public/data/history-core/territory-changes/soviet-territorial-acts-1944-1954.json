@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1944-tuva-ussr-admission",
+      "eventId": "evt-1944-tuva-ussr-admission",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "11 октября 1944 г.", "normalized": "1944-10-11", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
+        "derivationNote": "The act supports inclusion of the entire Tuvan People's Republic. Geometry should use a source-backed 1944 Tuva boundary, not today's republic boundary without verification."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1944-tuva-rsfsr-internal",
+      "eventId": "evt-1944-tuva-rsfsr-admission",
+      "polityId": "rsfsr",
+      "effectiveDate": {"original": "13 октября 1944 г.", "normalized": "1944-10-13", "precision": "day", "calendar": "gregorian"},
+      "track": "internal-administrative",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
+        "derivationNote": "Internal union assignment of Tuva to the RSFSR; does not create a second external USSR boundary change."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1945-ussr-poland-border",
+      "eventId": "evt-1945-ussr-poland-border-treaty",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "16 августа 1945 г.", "normalized": "1945-08-16", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid"],
+        "derivationNote": "Extract the treaty line and then prefer bilateral demarcation protocols/maps for geometry verification. The signing date is recorded here; ratification/entry into force should be separated if the treaty text requires it."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1946-south-sakhalin-kurils-soviet-legal",
+      "eventId": "evt-1946-south-sakhalin-kurils-soviet-law",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "2 февраля 1946 г.", "normalized": "1946-02-02", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
+        "derivationNote": "This act supports the Soviet domestic legal/administrative track for South Sakhalin and the Kurils. Do not use it as the sole evidence for international-recognition geometry; model 1945 military control and international treaty status separately."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1954-crimea-internal-transfer",
+      "eventId": "evt-1954-crimea-transfer",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "19 февраля 1954 г.", "normalized": "1954-02-19", "precision": "day", "calendar": "gregorian"},
+      "track": "internal-administrative",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
+        "derivationNote": "Transfer the source-backed 1954 Crimean Oblast polygon from the RSFSR internal layer to the Ukrainian SSR internal layer. The USSR external boundary remains unchanged."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
