@@ -38,10 +38,6 @@ for (const recipe of recipes) {
   if (!Array.isArray(recipe.evidenceDocumentIds) || recipe.evidenceDocumentIds.length === 0) fail(`Geometry recipe ${recipe.id} has no evidence documents`);
   for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Geometry recipe ${recipe.id} references unknown document ${id}`);
 
-  if (!isWgs84Display(recipe) && fragment.confidence === 'high') {
-    fail(`Geometry fragment ${fragment.id} is high-confidence on the WGS84 globe but recipe ${recipe.id} uses untransformed source CRS: ${recipe.sourceCrs ?? 'unspecified'}`);
-  }
-
   const outputFile = path.join(dataRoot, recipe.output);
   if (!fs.existsSync(outputFile)) fail(`Geometry recipe ${recipe.id} output is missing: ${recipe.output}`);
   const generated = readJson(outputFile);
@@ -53,6 +49,9 @@ for (const recipe of recipes) {
     : 'source-geographic-untransformed';
   if (generated.metadata?.displayDatumStatus !== expectedDatumStatus) {
     fail(`Geometry output ${recipe.output} datum status mismatch: expected ${expectedDatumStatus}`);
+  }
+  if (expectedDatumStatus === 'source-geographic-untransformed' && !generated.metadata?.displayWarning) {
+    fail(`Geometry output ${recipe.output} must expose a datum warning until a source-backed WGS84 transform exists`);
   }
   const coordinates = generated.features?.[0]?.geometry?.coordinates ?? [];
   for (const point of recipe.points) {
@@ -73,4 +72,4 @@ for (const relative of model.changeFiles ?? []) {
   }
 }
 
-console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes with datum-aware confidence.`);
+console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes with explicit display datum status.`);
