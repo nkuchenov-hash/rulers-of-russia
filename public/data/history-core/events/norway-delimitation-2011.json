@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-2011-rf-norway-delimitation-effective",
+      "title": "Вступление в силу договора России и Норвегии о разграничении морских пространств",
+      "kind": "treaty",
+      "date": {
+        "original": "7 июля 2011 г.",
+        "normalized": "2011-07-07",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-federation"],
+      "summary": "С 7 июля 2011 года вступил в силу договор, юридически определивший линию разграничения морских пространств между Российской Федерацией и Королевством Норвегия в Баренцевом море и Северном Ледовитом океане.",
+      "evidenceDocumentIds": [
+        "doc-rf-norway-delimitation-2010",
+        "doc-rf-norway-ratification-57fz-2011",
+        "doc-rf-norway-entry-force-2011"
+      ],
+      "territoryChangeIds": ["chg-2011-rf-norway-delimitation"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The verified geometry currently covers treaty Article 1 points 1–8. The final extension beyond point 8 is deliberately excluded rather than inferred."
+    }
+  ]
+}
