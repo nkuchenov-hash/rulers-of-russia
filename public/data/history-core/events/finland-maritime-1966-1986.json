@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1966-ussr-finland-gulf-effective",
+      "title": "Вступление в силу соглашения СССР и Финляндии о морской границе и шельфе в Финском заливе",
+      "kind": "treaty",
+      "date": {
+        "original": "25 мая 1966 г.",
+        "normalized": "1966-05-25",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Соглашение установило координатно заданную морскую государственную границу северо-восточнее Гогланда и отдельные линии рыболовной/иной морской юрисдикции, одновременно являвшиеся границей континентального шельфа.",
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+      "territoryChangeIds": ["chg-1966-ussr-finland-sea-frontier", "chg-1966-ussr-finland-maritime-jurisdiction"],
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "evt-1968-ussr-finland-shelf-effective",
+      "title": "Вступление в силу соглашения СССР и Финляндии о продолжении границы континентального шельфа",
+      "kind": "treaty",
+      "date": {
+        "original": "15 марта 1968 г.",
+        "normalized": "1968-03-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Линия континентального шельфа была продолжена на запад от конечной точки линии 1965 года четырьмя координатно заданными точками.",
+      "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+      "territoryChangeIds": ["chg-1968-ussr-finland-shelf-extension"],
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "evt-1980-ussr-finland-fishing-effective",
+      "title": "Вступление в силу соглашения СССР и Финляндии о рыболовной юрисдикции",
+      "kind": "treaty",
+      "date": {
+        "original": "9 июля 1980 г.",
+        "normalized": "1980-07-09",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Соглашение распространило рыболовную юрисдикцию на ранее установленные линии 1965 и 1967 годов и добавило координатно заданный западный участок в системе советской карты №1150 1976 года.",
+      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+      "territoryChangeIds": ["chg-1980-ussr-finland-fishing-status", "chg-1980-ussr-finland-fishing-extension"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The 1980 chart explicitly gives a different coordinate representation for the 1967 terminal point; both source systems are preserved rather than silently conflated."
+    },
+    {
+      "id": "evt-1986-ussr-finland-eez-effective",
+      "title": "Вступление в силу соглашения СССР и Финляндии об экономической зоне, рыболовной зоне и шельфе",
+      "kind": "treaty",
+      "date": {
+        "original": "24 ноября 1986 г.",
+        "normalized": "1986-11-24",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Соглашение закрепило ранее установленные линиями 1965, 1967 и 1980 годов границы одновременно как границы экономической зоны, рыболовной зоны и континентального шельфа.",
+      "evidenceDocumentIds": ["doc-ussr-finland-eez-1985", "doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+      "territoryChangeIds": ["chg-1986-ussr-finland-eez-status"],
+      "reviewStatus": "source-verified",
+      "notes": "No duplicate geometry is created because Article 1 expressly reuses the existing treaty lines."
+    }
+  ]
+}
