@@ -1,6 +1,61 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "documents": [
+    {
+      "id": "doc-pvl-laurentian-1926",
+      "sourceCollectionId": "prlib-psrl",
+      "title": "Полное собрание русских летописей. Т. 1. Лаврентьевская летопись. Вып. 1. Повесть временных лет",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/1933363",
+      "tier": "A2-official-document-publication",
+      "documentType": "chronicle",
+      "date": {
+        "original": "1926",
+        "normalized": "1926",
+        "precision": "year",
+        "calendar": "gregorian",
+        "note": "Publication date. Individual chronicle entries retain their own source dating and uncertainty in event records."
+      },
+      "publicationCitation": "ПСРЛ. Т. 1. Лаврентьевская летопись. Вып. 1. Повесть временных лет. Л., 1926.",
+      "notes": "Canonical documentary publication for early-Rus chronology. Chronicle narratives do not by themselves justify a modern thin boundary line."
+    },
+    {
+      "id": "doc-sgdd-vol1-1813",
+      "sourceCollectionId": "neb-sgdd",
+      "title": "Собрание государственных грамот и договоров, хранящихся в Государственной коллегии иностранных дел. Часть 1",
+      "institution": "Национальная электронная библиотека / Российская государственная библиотека",
+      "url": "https://rusneb.ru/catalog/000199_000009_007509292/",
+      "tier": "A2-official-document-publication",
+      "documentType": "documentary-publication",
+      "date": {
+        "original": "1813",
+        "normalized": "1813",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Собрание государственных грамот и договоров, хранящихся в Государственной коллегии иностранных дел. Ч. 1. Москва, 1813.",
+      "notes": "Contains medieval and Muscovite charters and treaties. Each historical fact should cite the specific item/page as research progresses."
+    },
+    {
+      "id": "doc-stolbovo-1617-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "1616 декабря 25 — 1617 февраля 27. Царские грамоты в Великий Новгород о мирных переговорах и заключении Столбовского мира со шведами",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/345402-1616-dekabrya-25-locale-nil-1617-fevralya-27-tsarskie-gramoty-v-velikiy-novgorod-o-mirnyh-peregovorah-i-zaklyuchenii-stolbovskogo-mira-s-shvedami-i-o-vozvraschenii-novagoroda-pod-rossiyskuyu-derzhavu",
+      "tier": "A2-official-document-publication",
+      "documentType": "archival-document",
+      "date": {
+        "original": "25 декабря 1616 — 27 февраля 1617 г.",
+        "normalized": "1617-01-04",
+        "normalizedEnd": "1617-03-09",
+        "precision": "range",
+        "calendar": "julian",
+        "note": "Document group spans several Old Style dates; normalized endpoints are Gregorian equivalents."
+      },
+      "authority": ["Русское царство / Михаил Фёдорович"],
+      "publicationCitation": "Акты исторические, собранные и изданные Археографической комиссией. Т. III.",
+      "notes": "Primary-document publication for negotiations and conclusion of the Stolbovo peace. Exact boundary geometry requires the treaty/mezhевание record and cartographic reconstruction."
+    },
     {
       "id": "doc-nystad-1721-ebid",
       "sourceCollectionId": "ebid-historyrussia",
@@ -19,6 +74,25 @@
       "authority": ["Российское государство / Пётр I", "Шведское королевство / Фредрик I"],
       "publicationCitation": "ЭБИД: Ништадтский мирный договор между Россией и Швецией 30 августа 1721 г.",
       "notes": "Use treaty articles as the legal basis. Geometry still requires treaty boundary wording and/or a contemporary map to be georeferenced."
+    },
+    {
+      "id": "doc-kucuk-1774-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Кючук-Кайнарджийский мирный договор 1774 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/520000",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "1774 г.",
+        "normalized": "1774",
+        "precision": "year",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя"],
+      "publicationCitation": "Полное собрание законов Российской империи. Т. XIX. № 14164.",
+      "pagesOrFolios": "ПСЗРИ, т. XIX, с. 962-963",
+      "notes": "Concrete documentary publication located; exact signing/effective date and spatial clauses must be represented in a dedicated event before geometry mutation."
     },
     {
       "id": "doc-bucharest-1812-ebid",
@@ -41,6 +115,62 @@
       "notes": "Rosarchiv also maintains a digitized archival-document project devoted to the treaty and negotiations."
     },
     {
+      "id": "doc-rights-peoples-1917-rgaspi",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Декларация прав народов России. 2 ноября 1917 г.",
+      "institution": "Электронная библиотека исторических документов / РГАСПИ",
+      "url": "https://docs.historyrussia.org/ru/nodes/73421-deklaratsiya-prav-narodov-rossii-2-noyabrya-1917-g",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "2 ноября 1917 г.",
+        "normalized": "1917-11-15",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Old Style date; normalized Gregorian equivalent is 15 November 1917."
+      },
+      "archiveCitation": "РГАСПИ. Ф. 2. Оп. 1. Д. 24219. Л. 1-2. Подлинник, машинопись, автографы подписей.",
+      "authority": ["Совет Народных Комиссаров"],
+      "notes": "Important primary evidence for the national-territorial transition after October 1917; it is not itself a complete border map."
+    },
+    {
+      "id": "doc-brest-1918-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Мирный договор в Брест-Литовске. 3 марта 1918 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/111841",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "3 марта 1918 г.",
+        "normalized": "1918-03-03",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Российская Советская Федеративная Социалистическая Республика", "Германия и союзные с ней державы"],
+      "publicationCitation": "Документы внешней политики СССР. Т. I.",
+      "notes": "Legal territorial clauses are source-backed; geometry awaits dedicated extraction/georeferencing."
+    },
+    {
+      "id": "doc-tartu-finland-1920-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Мирный договор между Российской Социалистической Федеративной Советской Республикой и Финляндской Республикой. 14 октября 1920 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/464855-mirnyy-dogovor-mezhdu-rossiyskoy-sotsialisticheskoy-federativnoy-sovetskoy-respublikoy-i-finlyandskoy-respublikoy-14-oktyabrya-1920-g",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "14 октября 1920 г.",
+        "normalized": "1920-10-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "archiveCitation": "АВП РФ. Ф. 3а. Оп. 1. П. 2. Д. 13.",
+      "publicationCitation": "Документы внешней политики СССР. Т. III. С. 208-272; СУ РСФСР 1921. № 71. Ст. 573.",
+      "authority": ["РСФСР", "Финляндская Республика"],
+      "notes": "Suitable legal basis for a high-confidence border reconstruction once treaty spatial clauses and maps are georeferenced."
+    },
+    {
       "id": "doc-rsfsr-fer-border-1920-ebid",
       "sourceCollectionId": "ebid-historyrussia",
       "title": "Договор о границах Российской Социалистической Федеративной Советской Республики с Дальневосточной Республикой. 15-30 декабря 1920 г.",
@@ -57,7 +187,111 @@
       },
       "authority": ["Правительство РСФСР", "Правительство Дальневосточной Республики"],
       "publicationCitation": "Документы внешней политики СССР. Т. III. 1 июля 1920 г.-18 марта 1921 г. — М.: Госполитиздат, 1959.",
-      "notes": "The event is source-located, but month/day effectiveness and exact geometry must be resolved from the full treaty text and related implementation documents before production use."
+      "notes": "The event is source-located, but month/day effectiveness and exact geometry must be resolved from the full treaty text and related implementation documents before verified replay."
+    },
+    {
+      "id": "doc-riga-1921-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Мирный договор между РСФСР и УССР, с одной стороны, и Польшей — с другой. 18 марта 1921 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/136134",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "18 марта 1921 г.",
+        "normalized": "1921-03-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["РСФСР", "Украинская ССР", "Польская Республика"],
+      "notes": "Canonical documentary basis for the treaty border; boundary geometry remains a separate georeferencing task."
+    },
+    {
+      "id": "doc-ussr-formation-1922-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Договор об образовании Союза Советских Социалистических Республик. Москва, 30 декабря 1922 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/138379-dogovor-ob-obrazovanii-soyuza-sovetskih-sotsialisticheskih-respublik-moskva-30-dekabrya-1922-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "30 декабря 1922 г.",
+        "normalized": "1922-12-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["РСФСР", "Украинская ССР", "Белорусская ССР", "ЗСФСР"],
+      "publicationCitation": "Известия ВЦИК. 31 декабря 1922 г. № 293.",
+      "notes": "Establishes the Union polity; external and internal union-republic boundaries remain distinct tracks."
+    },
+    {
+      "id": "doc-moscow-finland-1940-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Мирный договор между Союзом Советских Социалистических Республик и Финляндской Республикой. 12 марта 1940 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/105900-mirnyy-dogovor-mezhdu-soyuzom-sovetskih-sotsialisticheskih-respublik-i-finlyandskoy-respublikoy-12-marta-1940-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "12 марта 1940 г.",
+        "normalized": "1940-03-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["СССР", "Финляндская Республика"],
+      "notes": "Treaty and attached boundary materials should drive the eventual verified geometry."
+    },
+    {
+      "id": "doc-zakarpattia-1945-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Договор между СССР и Чехословацкой Республикой о Закарпатской Украине. 29 июня 1945 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/383388-dogovor-mezhdu-soyuzom-sovetskih-sotsialisticheskih-respublik-i-chehoslovatskoy-respublikoy-o-zakarpatskoy-ukraine-29-iyunya-1945-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "29 июня 1945 г.",
+        "normalized": "1945-06-29",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["СССР", "Чехословацкая Республика"],
+      "notes": "Documentary basis for the territorial transfer; exact legal effective date and geometry should be separated if later instruments differ."
+    },
+    {
+      "id": "doc-belovezha-1991-rosarchiv",
+      "sourceCollectionId": "rosarchiv-online",
+      "title": "Соглашение о создании Содружества Независимых Государств. 8 декабря 1991 г.",
+      "institution": "Федеральное архивное агентство / Государственный архив Российской Федерации",
+      "url": "https://projects.rusarchives.ru/statehood/10-12-soglashenie-sng.shtml",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "8 декабря 1991 г.",
+        "normalized": "1991-12-08",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "archiveCitation": "ГАРФ. Ф. 10026. Оп. 4. Д. 1303. Л. 1-5. Фотокопия, автографы подписей.",
+      "authority": ["РСФСР", "Республика Беларусь", "Украина"],
+      "notes": "Primary archival evidence for the dissolution transition. Subsequent ratification and 21/26 December instruments must be separate events when exact legal timing is required."
+    },
+    {
+      "id": "doc-crimea-2014-6fkz-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Федеральный конституционный закон от 21.03.2014 № 6-ФКЗ",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/Document/View/0001201403210014",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "21 марта 2014 г.",
+        "normalized": "2014-03-21",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Российская Федерация"],
+      "notes": "Canonical only for the project's russian-legal-border track. International recognition and de-facto-control are separate tracks and must not be inferred from this law."
     }
   ]
 }
