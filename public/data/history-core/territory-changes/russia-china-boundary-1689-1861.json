@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1689-nerchinsk-delimitation",
+      "eventId": "evt-1689-nerchinsk-treaty",
+      "polityId": "russian-tsardom",
+      "effectiveDate": {
+        "original": "27 августа 1689 г.",
+        "normalized": "1689-09-06",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-nerchinsk-1689-mfa"],
+      "geometry": {
+        "method": "uncertain-zone",
+        "evidenceDocumentIds": ["doc-nerchinsk-1689-mfa"],
+        "derivationNote": "Do not draw a single exact line. Presidential Library notes that the eastern section was only generally outlined, source-language versions differed, landmarks were ambiguous, accurate maps were unavailable and physical demarcation was not performed. Reconstruct identifiable river/watershed segments and represent unresolved portions as a broad uncertainty corridor."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1727-kyakhta-demarcation",
+      "eventId": "evt-1727-kyakhta-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "21 октября 1727 г.",
+        "normalized": "1727-11-01",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-kyakhta-1727-mfa"],
+      "geometry": {
+        "method": "contemporary-official-map",
+        "evidenceDocumentIds": ["doc-kyakhta-1727-mfa"],
+        "derivationNote": "The documentary record states that a geodetic survey was undertaken and the entire new boundary was mapped. Locate the actual 1727 survey/cartographic sheets and georeference them before promoting this change to geometry-verified."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1858-aigun-amur-left-bank",
+      "eventId": "evt-1858-aigun-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "утверждение и ратификация в июне 1858 г.",
+        "normalized": "1858-06",
+        "precision": "month",
+        "calendar": "gregorian",
+        "note": "Qing approval: 14 June 1858 Gregorian; Russian ratification: 20 June 1858 Gregorian. Exact legal effectiveness within the month remains under review."
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+        "derivationNote": "Treaty text supports the Amur river boundary: left/northern bank from the Argun to the mouth assigned to Russia. Use period hydrography and treaty maps where available; river-channel uncertainty must be represented at the appropriate historical resolution."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1858-aigun-ussuri-joint-status",
+      "eventId": "evt-1858-aigun-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "утверждение и ратификация в июне 1858 г.",
+        "normalized": "1858-06",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "track": "claim",
+      "territorialModel": "mixed",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+        "derivationNote": "The area between the Ussuri and the sea was declared joint possession pending later delimitation. Render it as overlapping/joint legal status, not as uncontested Russian sovereign territory, until superseded by the Peking settlement."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1860-peking-ussuri-acquisition",
+      "eventId": "evt-1860-peking-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "2 ноября 1860 г.",
+        "normalized": "1860-11-14",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-peking-1860-mfa"],
+      "geometry": {
+        "method": "document-map",
+        "evidenceDocumentIds": ["doc-peking-1860-mfa"],
+        "derivationNote": "The treaty text specifies the line through the Amur, Ussuri, Sungacha, Lake Khanka, Belenkhe/Tur and the mountain watershed toward the Tumen, and a map of the eastern boundary was attached. Acquire the treaty map scan and georeference the boundary before geometry verification."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1861-ussuri-map-demarcation",
+      "eventId": "evt-1861-ussuri-map-exchange",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "16 июня 1861 г.",
+        "normalized": "1861-06-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-peking-1860-mfa"],
+      "geometry": {
+        "method": "document-map",
+        "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-peking-1860-mfa"],
+        "derivationNote": "Use the exchanged boundary maps and protocol as the preferred geometry authority for the Ussuri sector. This change should supersede less precise treaty-text reconstruction when the map sheets are georeferenced."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
