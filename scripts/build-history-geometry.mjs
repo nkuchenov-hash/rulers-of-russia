@@ -18,8 +18,10 @@ const seenOutputs = new Set();
 
 const finitePoint = point => Array.isArray(point) && point.length === 2 && point.every(Number.isFinite)
   && point[0] >= -180 && point[0] <= 180 && point[1] >= -90 && point[1] <= 90;
-
 const samePoint = (a, b, eps = 1e-10) => Math.abs(a[0] - b[0]) <= eps && Math.abs(a[1] - b[1]) <= eps;
+const displayDatumStatus = recipe => /\bWGS\s*-?\s*84\b/i.test(String(recipe.sourceCrs ?? ''))
+  ? 'wgs84-or-official-wgs84-recalculation'
+  : 'source-geographic-untransformed';
 
 function geodesicSegment(a, b, steps) {
   const interp = geoInterpolate(a, b);
@@ -37,7 +39,7 @@ const invMercY = y => deg(2 * Math.atan(Math.exp(y)) - Math.PI / 2);
 function rhumbSegment(a, b, steps) {
   let lonA = a[0];
   let lonB = b[0];
-  let delta = lonB - lonA;
+  const delta = lonB - lonA;
   if (delta > 180) lonB -= 360;
   if (delta < -180) lonB += 360;
   const yA = mercY(a[1]);
@@ -89,6 +91,7 @@ for (const recipe of recipes) {
     assert(coordinates.some(point => samePoint(point, sourcePoint, 1e-8)), `Generated ${recipe.id} lost a treaty source point ${JSON.stringify(sourcePoint)}`);
   }
 
+  const datumStatus = displayDatumStatus(recipe);
   const outputFile = path.join(dataRoot, recipe.output);
   fs.mkdirSync(path.dirname(outputFile), { recursive: true });
   const payload = {
@@ -99,6 +102,10 @@ for (const recipe of recipes) {
       fragmentId: recipe.fragmentId,
       generatedFromSourceCoordinates: true,
       sourceCrs: recipe.sourceCrs ?? 'unspecified',
+      displayDatumStatus: datumStatus,
+      displayWarning: datumStatus === 'source-geographic-untransformed'
+        ? 'Source longitude/latitude values are retained literally for provenance. Their exact placement on a WGS84 globe remains medium-confidence until a source-backed datum transformation is registered.'
+        : null,
       interpolation: recipe.interpolation,
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       sourcePointCount: recipe.points.length,
@@ -112,6 +119,7 @@ for (const recipe of recipes) {
         history_core_status: 'geometry-verified',
         source_points: recipe.points,
         source_crs: recipe.sourceCrs ?? 'unspecified',
+        display_datum_status: datumStatus,
         interpolation: recipe.interpolation,
         evidence_document_ids: recipe.evidenceDocumentIds,
         note: recipe.note ?? null
