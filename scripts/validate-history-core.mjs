@@ -15,11 +15,14 @@ const warn = message => warnings.push(message);
 
 const sourcesFile = path.join(dataRoot, 'sources.json');
 const documentsFile = path.join(dataRoot, 'documents.json');
+const territoryModelFile = path.join(dataRoot, 'territory-model.json');
 if (!fs.existsSync(sourcesFile)) fail('Missing history-core sources.json');
 if (!fs.existsSync(documentsFile)) fail('Missing history-core documents.json');
+if (!fs.existsSync(territoryModelFile)) fail('Missing history-core territory-model.json');
 
 const sourcesPayload = fs.existsSync(sourcesFile) ? readJson(sourcesFile) : {sources: []};
 const documentsPayload = fs.existsSync(documentsFile) ? readJson(documentsFile) : {documents: []};
+const territoryModel = fs.existsSync(territoryModelFile) ? readJson(territoryModelFile) : {fragments: [], baseStates: [], changeFiles: []};
 const sources = sourcesPayload.sources ?? [];
 const documents = documentsPayload.documents ?? [];
 const sourceById = new Map(sources.map(item => [item.id, item]));
@@ -69,7 +72,27 @@ function validateEvidence(ownerLabel, ids, requirePrimary = true) {
   if (requirePrimary && !primary) fail(`${ownerLabel} has no A1/A2/A3 primary evidence`);
 }
 
+function validatePreciseDate(ownerLabel, date) {
+  if (!date) { fail(`${ownerLabel} has no date`); return false; }
+  if (date.precision === 'day') {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date.normalized ?? '')) {
+      fail(`${ownerLabel} claims day precision without YYYY-MM-DD normalized date`);
+      return false;
+    }
+    return true;
+  }
+  if (date.precision === 'month') {
+    if (!/^\d{4}-\d{2}$/.test(date.normalized ?? '')) {
+      fail(`${ownerLabel} claims month precision without YYYY-MM normalized date`);
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+
 const eventFiles = listJsonFiles(path.join(dataRoot, 'events'));
+const eventIds = new Set();
 for (const file of eventFiles) {
   const payload = readJson(file);
   for (const event of payload.events ?? []) {
@@ -78,21 +101,57 @@ for (const file of eventFiles) {
       fail(`${label} is structurally incomplete`);
       continue;
     }
+    if (eventIds.has(event.id)) fail(`Duplicate event id ${event.id}`);
+    eventIds.add(event.id);
     if (event.sourceIds) fail(`${label} uses obsolete collection-level sourceIds; cite evidenceDocumentIds instead`);
     if (event.reviewStatus === 'source-verified' || event.reviewStatus === 'geometry-verified') {
       validateEvidence(label, event.evidenceDocumentIds, true);
     }
-    if (event.date.precision === 'day' && !/^\d{4}-\d{2}-\d{2}$/.test(event.date.normalized ?? '')) {
-      fail(`${label} claims day precision without YYYY-MM-DD normalized date`);
-    }
-    if (event.date.precision === 'month' && !/^\d{4}-\d{2}$/.test(event.date.normalized ?? '')) {
-      fail(`${label} claims month precision without YYYY-MM normalized date`);
-    }
+    if (event.date.precision === 'day' || event.date.precision === 'month') validatePreciseDate(label, event.date);
   }
+}
+
+const fragmentById = new Map();
+for (const fragment of territoryModel.fragments ?? []) {
+  const label = `Territory fragment ${fragment.id ?? '<missing id>'}`;
+  if (!fragment.id || !fragment.polityId || !fragment.track || !fragment.role || !fragment.territorialModel || !fragment.geometryFile || !fragment.reviewStatus || !fragment.confidence) {
+    fail(`${label} is structurally incomplete`);
+    continue;
+  }
+  if (fragmentById.has(fragment.id)) fail(`Duplicate territory fragment id ${fragment.id}`);
+  fragmentById.set(fragment.id, fragment);
+  validateEvidence(label, fragment.evidenceDocumentIds, fragment.reviewStatus === 'geometry-verified');
+  if (fragment.reviewStatus === 'geometry-verified') {
+    const file = path.join(dataRoot, fragment.geometryFile);
+    if (!fs.existsSync(file)) fail(`${label} geometry file does not exist: ${fragment.geometryFile}`);
+  }
+}
+
+for (const base of territoryModel.baseStates ?? []) {
+  const label = `Territory base ${base.id ?? '<missing id>'}`;
+  if (!base.id || !base.polityId || !base.track || !base.territorialModel || base.reviewStatus !== 'geometry-verified') {
+    fail(`${label} is structurally incomplete or not geometry-verified`);
+    continue;
+  }
+  validateEvidence(label, base.evidenceDocumentIds, true);
+  if (!validatePreciseDate(label, base.effectiveDate)) fail(`${label} must have day/month precision for deterministic replay`);
+  if (!Array.isArray(base.geometryFragmentIds) || base.geometryFragmentIds.length === 0) fail(`${label} has no geometryFragmentIds`);
+  for (const id of base.geometryFragmentIds ?? []) {
+    const fragment = fragmentById.get(id);
+    if (!fragment) fail(`${label} references unknown fragment ${id}`);
+    else if (fragment.reviewStatus !== 'geometry-verified') fail(`${label} references unverified fragment ${id}`);
+  }
+}
+
+const declaredChangeFiles = new Set(territoryModel.changeFiles ?? []);
+for (const relative of declaredChangeFiles) {
+  if (!fs.existsSync(path.join(dataRoot, relative))) fail(`Territory model references missing change file ${relative}`);
 }
 
 const changeFiles = listJsonFiles(path.join(dataRoot, 'territory-changes'));
 for (const file of changeFiles) {
+  const relative = path.relative(dataRoot, file).replaceAll('\\', '/');
+  if (!declaredChangeFiles.has(relative)) warn(`Territory change file ${relative} exists but is not replayed by territory-model.json`);
   const payload = readJson(file);
   for (const change of payload.territoryChanges ?? []) {
     const label = `Territory change ${change.id ?? '<missing id>'}`;
@@ -100,12 +159,22 @@ for (const file of changeFiles) {
       fail(`${label} is structurally incomplete`);
       continue;
     }
+    if (!eventIds.has(change.eventId)) fail(`${label} references unknown event ${change.eventId}`);
     if (change.sourceIds) fail(`${label} uses obsolete collection-level sourceIds; cite evidenceDocumentIds instead`);
     validateEvidence(label, change.evidenceDocumentIds, change.reviewStatus !== 'research-required');
     validateEvidence(`${label} geometry`, change.geometry.evidenceDocumentIds, change.reviewStatus === 'geometry-verified');
     if (change.reviewStatus === 'geometry-verified') {
-      if (!change.geometry.file) fail(`${label} is geometry-verified but has no geometry file`);
+      validatePreciseDate(label, change.effectiveDate);
       if (change.geometry.method === 'not-yet-georeferenced') fail(`${label} cannot be geometry-verified while not-yet-georeferenced`);
+      const action = change.geometryAction ?? (['acquire', 'unite', 'occupy'].includes(change.operation) ? 'add' : ['cede', 'separate', 'withdraw'].includes(change.operation) ? 'remove' : change.operation === 'replace-state' ? 'replace' : 'metadata-only');
+      if (action !== 'metadata-only' && (!Array.isArray(change.geometryFragmentIds) || change.geometryFragmentIds.length === 0)) {
+        fail(`${label} mutates geometry but has no geometryFragmentIds`);
+      }
+      for (const id of change.geometryFragmentIds ?? []) {
+        const fragment = fragmentById.get(id);
+        if (!fragment) fail(`${label} references unknown fragment ${id}`);
+        else if (fragment.reviewStatus !== 'geometry-verified') fail(`${label} references unverified fragment ${id}`);
+      }
     }
     if (change.effectiveDate.precision === 'year' || change.effectiveDate.precision === 'circa' || change.effectiveDate.precision === 'range') {
       warn(`${label} cannot generate an exact monthly transition until date precision is resolved`);
@@ -138,4 +207,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`History Core validation passed: ${sources.length} source collections, ${documents.length} concrete documents, ${eventFiles.length} event files, ${changeFiles.length} territory-change files.`);
+console.log(`History Core validation passed: ${sources.length} source collections, ${documents.length} concrete documents, ${eventFiles.length} event files, ${changeFiles.length} territory-change files, ${fragmentById.size} geometry fragments.`);
