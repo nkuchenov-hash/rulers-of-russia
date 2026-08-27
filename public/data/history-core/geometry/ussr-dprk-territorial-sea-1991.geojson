@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-dprk-territorial-sea-1991",
+        "track": "russian-legal-border",
+        "sourceGeometry": "direct treaty coordinates",
+        "segmentMeaning": "state boundary through territorial sea",
+        "note": "Only the straight sea segment explicitly fixed by coordinates is encoded. The Tumen river segment is not inferred here."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [130.69698888888888, 42.29287222222222],
+          [130.88333333333333, 42.15]
+        ]
+      }
+    }
+  ]
+}
