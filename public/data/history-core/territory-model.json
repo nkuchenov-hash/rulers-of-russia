@@ -23,11 +23,25 @@
     "territory-changes/central-asia-1868-1876.json",
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
+    "territory-changes/norway-varanger-1958.json",
     "territory-changes/norway-varanger-2008.json",
     "territory-changes/norway-delimitation-2011.json"
   ],
   "baseStates": [],
   "fragments": [
+    {
+      "id": "frag-ussr-norway-varanger-1958-p1-p4",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-norway-varanger-1958-p1-p4.geojson",
+      "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "2008-07-08",
+      "derivationNote": "The 1957 line is rendered in the official WGS84 recalculation supplied by the 2007 bilateral settlement because the Russian ratification record expressly states that its point positions and the inherited line remained unchanged. Only the inherited portion through point 4 is used."
+    },
     {
       "id": "frag-rf-norway-varanger-2008-p1-p6",
       "polityId": "russian-federation",
