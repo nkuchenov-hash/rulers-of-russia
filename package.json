@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "validate:history": "node scripts/validate-history-core.mjs",
     "materialize:history-territory": "node scripts/materialize-history-territory.mjs",
-    "materialize:history": "npm run materialize:history-territory && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs"
+    "materialize:history-boundaries": "node scripts/build-history-boundary-index.mjs",
+    "materialize:history": "npm run materialize:history-territory && npm run materialize:history-boundaries && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs"
   },
   "dependencies": {
     "@mapbox/geojson-rewind": "0.5.2",
