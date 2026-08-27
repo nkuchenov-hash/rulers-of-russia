@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "rg-official-law-publication",
+      "title": "Официальные публикации федеральных законов и международных договоров",
+      "institution": "Российская газета",
+      "url": "https://rg.ru/documents/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Federal laws, ratification laws and published treaty texts of the Russian Federation",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Use exact document pages and the authoritative treaty text/coordinate description."
+    },
+    {
+      "id": "mid-rf-treaty-notices",
+      "title": "Сообщения МИД России о международных договорах и вступлении их в силу",
+      "institution": "Министерство иностранных дел Российской Федерации",
+      "url": "https://mid.ru/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official treaty notices, exchanges of instruments and entry-into-force information",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    }
+  ]
+}
