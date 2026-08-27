@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-2008-rf-norway-varanger-delimitation",
+      "eventId": "evt-2008-rf-norway-varanger-effective",
+      "polityId": "russian-federation",
+      "effectiveDate": {
+        "original": "9 июля 2008 г.",
+        "normalized": "2008-07-09",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-rf-norway-varanger-2008-p1-p6"],
+      "evidenceDocumentIds": ["doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/rf-norway-varanger-2008-p1-p6.geojson",
+        "evidenceDocumentIds": ["doc-rf-norway-varanger-2007"],
+        "derivationNote": "Agreement Article 2 directly lists six WGS84 points and states that the line consists of geodetic segments connecting them. The GeoJSON retains the exact source points and densifies only the rendering of those segments."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Verified maritime boundary fragment; it does not imply that the complete Russian Federation area polygon has been geometry-verified."
+    }
+  ]
+}
