@@ -10,6 +10,7 @@ const listJson = dir => fs.existsSync(dir)
 const flatten = (files, key) => files.flatMap(file => readJson(file)[key] ?? []);
 const fail = message => { throw new Error(message); };
 const samePoint = (a, b, eps = 1e-8) => Array.isArray(a) && Array.isArray(b) && Math.abs(a[0] - b[0]) <= eps && Math.abs(a[1] - b[1]) <= eps;
+const isWgs84Display = recipe => /\bWGS\s*-?\s*84\b/i.test(String(recipe.sourceCrs ?? ''));
 
 const model = readJson(path.join(dataRoot, 'territory-model.json'));
 const fragments = new Map((model.fragments ?? []).map(fragment => [fragment.id, fragment]));
@@ -37,11 +38,21 @@ for (const recipe of recipes) {
   if (!Array.isArray(recipe.evidenceDocumentIds) || recipe.evidenceDocumentIds.length === 0) fail(`Geometry recipe ${recipe.id} has no evidence documents`);
   for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Geometry recipe ${recipe.id} references unknown document ${id}`);
 
+  if (!isWgs84Display(recipe) && fragment.confidence === 'high') {
+    fail(`Geometry fragment ${fragment.id} is high-confidence on the WGS84 globe but recipe ${recipe.id} uses untransformed source CRS: ${recipe.sourceCrs ?? 'unspecified'}`);
+  }
+
   const outputFile = path.join(dataRoot, recipe.output);
   if (!fs.existsSync(outputFile)) fail(`Geometry recipe ${recipe.id} output is missing: ${recipe.output}`);
   const generated = readJson(outputFile);
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromSourceCoordinates !== true) {
     fail(`Geometry output ${recipe.output} is not marked as generated from recipe ${recipe.id}`);
+  }
+  const expectedDatumStatus = isWgs84Display(recipe)
+    ? 'wgs84-or-official-wgs84-recalculation'
+    : 'source-geographic-untransformed';
+  if (generated.metadata?.displayDatumStatus !== expectedDatumStatus) {
+    fail(`Geometry output ${recipe.output} datum status mismatch: expected ${expectedDatumStatus}`);
   }
   const coordinates = generated.features?.[0]?.geometry?.coordinates ?? [];
   for (const point of recipe.points) {
@@ -62,4 +73,4 @@ for (const relative of model.changeFiles ?? []) {
   }
 }
 
-console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes.`);
+console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes with datum-aware confidence.`);
