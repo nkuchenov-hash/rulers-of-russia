@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-bukhara-1868-prlib-chronology",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Бухарское ханство — договорный переход в вассальную зависимость от России в 1868 году",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/node/1155766",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "documentary-publication",
+      "date": {"original": "23 июня (5 июля) 1868 г.", "normalized": "1868-07-05", "precision": "day", "calendar": "julian"},
+      "notes": "Institutional chronology states that the 23 June/5 July 1868 peace treaty made Bukhara a Russian vassal and that territories acquired from Bukhara in 1868–1870 formed the Zeravshan district. Primary treaty/administrative acts still need exact A1/A2 indexing."
+    },
+    {
+      "id": "doc-kaufman-central-asia-rgia-inventory",
+      "sourceCollectionId": "prlib-rgia-archival-files",
+      "title": "Материалы к истории рода Кауфманов; служебные документы К. П. фон Кауфмана по Туркестанскому краю",
+      "institution": "РГИА / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/1796741",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {"original": "XIX век", "normalized": "1867", "normalizedEnd": "1882", "precision": "range", "calendar": "gregorian"},
+      "archiveCitation": "РГИА. Ф. 954. Оп. 1. В описи, в частности, Д. 113 — воззвание жителям Самарканда о правах и обязанностях в связи с присоединением к России.",
+      "notes": "Archival inventory/source locator. Specific delo/folios must be opened before using individual assertions as geometry-verified evidence."
+    },
+    {
+      "id": "doc-khiva-1873-prlib-chronology",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Заключён Гендемианский мирный договор между Россией и Хивой",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/node/619484",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "documentary-publication",
+      "date": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "notes": "Institutional chronology states two different territorial statuses: Khiva became a Russian vassal, while the khanate's right-bank Amu Darya lands passed directly to Russia. Primary treaty text must be indexed before source-verified promotion."
+    },
+    {
+      "id": "doc-kokand-1876-prlib-administrative",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Ферганская область — образование из присоединённого Кокандского ханства",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/node/1155766",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "documentary-publication",
+      "date": {"original": "19 февраля (2 марта) 1876 г.", "normalized": "1876-03-02", "precision": "day", "calendar": "julian"},
+      "notes": "Institutional chronology identifies the Highest Order of Alexander II by which the territory of the Kokand Khanate entered Russia and was reorganized as Fergana Oblast. Exact PSZRI/archival act number remains to be indexed."
+    },
+    {
+      "id": "doc-fergana-map-1876-general-staff",
+      "sourceCollectionId": "rsl-map-library",
+      "title": "Карта Ферганской области (бывшее Коканское ханство) и сопредельных частей Туркестанского края",
+      "institution": "Азиатская часть Главного штаба / Российская государственная библиотека / НЭБ",
+      "url": "https://kp.rusneb.ru/item/material/karta-ferganskoy-oblasti-byvshee-kokanskoe-hanstvo-i-sopredelnyh-chastey-turkestanskago-kraya",
+      "tier": "A3-contemporary-official-map",
+      "documentType": "official-map",
+      "date": {"original": "1876", "normalized": "1876", "precision": "year", "calendar": "gregorian"},
+      "authority": ["Азиатская часть Главного штаба Российской империи"],
+      "archiveCitation": "РГБ. Шифр Ко 8/IX-3.",
+      "notes": "Scale 1:840,000; compiled by Lt. Col. M. G. Lyusilin from Asian Department of General Staff information. High-priority geometry-verification candidate for the newly formed Fergana Oblast."
+    }
+  ]
+}
