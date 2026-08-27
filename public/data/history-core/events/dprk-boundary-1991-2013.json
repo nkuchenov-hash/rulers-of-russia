@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1991-ussr-dprk-border-regime-effective",
+      "title": "Вступление в силу договора СССР и КНДР о режиме государственной границы",
+      "kind": "treaty",
+      "date": {
+        "original": "27 ноября 1991 г.",
+        "normalized": "1991-11-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Договор о режиме советско-корейской государственной границы вступил в силу; для морского участка он фиксирует координатно определённую прямую линию от устья Туманной до внешней границы территориальных вод.",
+      "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+      "territoryChangeIds": ["chg-1991-ussr-dprk-territorial-sea"],
+      "reviewStatus": "geometry-verified",
+      "notes": "Verified geometry is deliberately limited to the coordinate-defined territorial-sea segment."
+    },
+    {
+      "id": "evt-2013-rf-dprk-border-regime-effective",
+      "title": "Вступление в силу договора России и КНДР о режиме государственной границы",
+      "kind": "treaty",
+      "date": {
+        "original": "22 сентября 2013 г.",
+        "normalized": "2013-09-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-federation"],
+      "summary": "Современный российско-корейский договор вступил в силу и прямо сохранил советско-корейский протокол демаркации 1990 года среди действующих документов государственной границы.",
+      "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+      "territoryChangeIds": ["chg-2013-rf-dprk-territorial-sea"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The verified overlay uses only the inherited coordinate-defined territorial-sea segment."
+    }
+  ]
+}
