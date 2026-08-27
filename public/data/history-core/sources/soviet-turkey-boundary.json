@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "soviet-treaty-collection",
+      "title": "Сборник действующих договоров, соглашений и конвенций, заключённых СССР с иностранными государствами",
+      "institution": "Министерство иностранных дел СССР",
+      "url": "https://lawlibrary.ru/izdanie6357.html",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official Soviet treaty collection; issue 31 contains agreements entering into force during 1975",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "The web URL is a catalogue/access record. Canonical citation remains the official Soviet publication, including issue/item/page."
+    },
+    {
+      "id": "icj-official-case-record",
+      "title": "Official case records and annexes published by the International Court of Justice",
+      "institution": "International Court of Justice",
+      "url": "https://www.icj-cij.org/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Officially published pleadings, annexes and documentary reproductions submitted in ICJ proceedings",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Use only where the official ICJ record reproduces or identifies a concrete bilateral boundary instrument; retain the underlying treaty/protocol identity in the concrete document record."
+    },
+    {
+      "id": "usdos-limits-in-seas",
+      "title": "Limits in the Seas",
+      "institution": "Office of the Geographer, U.S. Department of State",
+      "url": "https://2021-2025.state.gov/limits-in-the-seas/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Government technical studies reproducing and analysing international maritime-boundary instruments",
+      "canonicalUse": ["boundary-geometry", "interpretation"],
+      "notes": "Corroboration/technical transcription only. It cannot establish a Russian canonical boundary by itself; pair it with the underlying Soviet/Russian treaty or demarcation record."
+    }
+  ]
+}
