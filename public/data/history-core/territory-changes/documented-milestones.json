@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1617-stolbovo-russia",
+      "eventId": "evt-1617-stolbovo-peace",
+      "polityId": "russian-tsardom",
+      "effectiveDate": {"original": "27 февраля 1617 г.", "normalized": "1617-03-09", "precision": "day", "calendar": "julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "cede",
+      "evidenceDocumentIds": ["doc-stolbovo-1617-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-stolbovo-1617-ebid"],
+        "derivationNote": "Locate and georeference the treaty/mezhевание description before promoting this record to geometry-verified."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1918-brest-rsfsr",
+      "eventId": "evt-1918-brest-peace",
+      "polityId": "rsfsr",
+      "effectiveDate": {"original": "3 марта 1918 г.", "normalized": "1918-03-03", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "cede",
+      "evidenceDocumentIds": ["doc-brest-1918-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-brest-1918-ebid"],
+        "derivationNote": "Treaty territorial articles are verified; exact polygon/line reconstruction is pending."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1920-tartu-finland-rsfsr",
+      "eventId": "evt-1920-tartu-finland",
+      "polityId": "rsfsr",
+      "effectiveDate": {"original": "14 октября 1920 г.", "normalized": "1920-10-14", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
+        "derivationNote": "Extract treaty boundary clauses and attached/implementation cartography; then create verified geometry fragments."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1921-riga-rsfsr",
+      "eventId": "evt-1921-riga-peace",
+      "polityId": "rsfsr",
+      "effectiveDate": {"original": "18 марта 1921 г.", "normalized": "1921-03-18", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-riga-1921-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-riga-1921-ebid"],
+        "derivationNote": "Promote only after the border description and period cartographic evidence are georeferenced."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1940-moscow-finland-ussr",
+      "eventId": "evt-1940-moscow-finland-peace",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "12 марта 1940 г.", "normalized": "1940-03-12", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
+        "derivationNote": "Use treaty and attached boundary materials for verified spatial reconstruction."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1945-zakarpattia-ussr",
+      "eventId": "evt-1945-zakarpattia",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "29 июня 1945 г.", "normalized": "1945-06-29", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-zakarpattia-1945-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-zakarpattia-1945-ebid"],
+        "derivationNote": "The transfer is document-backed; geometry and exact implementation/effective timing require attached and subsequent instruments."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1991-belovezha-ussr",
+      "eventId": "evt-1991-belovezha",
+      "polityId": "ussr",
+      "effectiveDate": {"original": "8 декабря 1991 г.", "normalized": "1991-12-08", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "separate",
+      "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
+        "derivationNote": "This is one legal transition milestone; ratifications and later December instruments must determine the exact state-switch timing in the final replay model."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-2014-crimea-russian-legal",
+      "eventId": "evt-2014-crimea-russian-law",
+      "polityId": "russian-federation",
+      "effectiveDate": {"original": "21 марта 2014 г.", "normalized": "2014-03-21", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
+        "derivationNote": "Russian-law territorial status is verified for this track. Exact polygon source and separate international-recognition/de-facto tracks must be represented independently."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "Do not use this record as a claim about international recognition."
+    }
+  ]
+}
