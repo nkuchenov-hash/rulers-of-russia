@@ -7,13 +7,15 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "validate:history": "node scripts/validate-history-core.mjs"
+    "validate:history": "node scripts/validate-history-core.mjs",
+    "materialize:history-territory": "node scripts/materialize-history-territory.mjs"
   },
   "dependencies": {
     "@mapbox/geojson-rewind": "0.5.2",
     "d3-geo": "3.1.1",
     "maplibre-gl": "^6.0.0",
     "next": "16.3.1",
+    "polygon-clipping": "^0.15.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "three": "^0.180.0",
