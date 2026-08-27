@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-norway-varanger-protocol-1957",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Протокол-описание прохождения линии государственной морской границы между СССР и Норвегией в Варангер-фьорде, демаркированной в 1957 году",
+      "institution": "Союз Советских Социалистических Республик / Королевство Норвегия; United Nations",
+      "url": "https://www.un.org/depts/los/LEGISLATIONANDTREATIES/PDFFILES/publications/E.91.V.11.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "29 ноября 1957 г.",
+        "normalized": "1957-11-29",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Союз Советских Социалистических Республик", "Королевство Норвегия"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 312, registration No. 4523; protocol entered into force 17 March 1958.",
+      "notes": "The protocol describes the demarcated maritime frontier and provides coordinates in the Pulkovo 1932 system. The later 2007 Russian-Norwegian agreement officially recalculated the inherited line in WGS84 while stating that the position of the points and the 1957 line remained unchanged."
+    }
+  ]
+}
