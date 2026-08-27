@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-andrusovo-smolensk-implementation-1667-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Указная память о ведании Смоленска и других возвращённых по Андрусовскому миру от Польши городов в Малороссийском приказе. 18 июня 1667 г.",
+      "institution": "Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/346559-1667-iyunya-18-ukaznaya-pamyat-o-vedanii-smolenska-i-drugih-vozvraschennyh-po-andrusovskomu-miru-ot-polshi-gorodov-v-malorossiyskom-prikaze",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "18 июня 1667 г.",
+        "normalized": "1667-06-28",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Old Style date retained; Gregorian equivalent is 28 June 1667."
+      },
+      "authority": ["Русское царство"],
+      "archiveCitation": "Московский главный архив Министерства иностранных дел Российской империи.",
+      "publicationCitation": "Дополнения к актам историческим, собранные и изданные Археографическою комиссиею. Т. 5. СПб.: Тип. Эдуарда Праца, 1853.",
+      "notes": "Implementation evidence that Smolensk and other towns returned under the Andrusovo settlement were placed into Russian administrative jurisdiction. This does not substitute for the treaty text when reconstructing the complete legal border."
+    }
+  ]
+}
