@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 
 const root = process.cwd();
 const publicRoot = path.join(root, 'public');
@@ -8,6 +9,7 @@ const coverageFile = path.join(dataRoot, 'coverage-periods.json');
 const documentsFile = path.join(dataRoot, 'documents.json');
 const territoryIndexFile = path.join(dataRoot, 'generated', 'territory', 'index.json');
 const outputDir = path.join(dataRoot, 'generated');
+const provisionalDir = path.join(outputDir, 'provisional');
 const outputFile = path.join(outputDir, 'month-index.json');
 const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
@@ -19,6 +21,9 @@ const documentIds = new Set(documents.map(item => item.id));
 const verified = fs.existsSync(territoryIndexFile) ? readJson(territoryIndexFile) : {snapshots: []};
 const periods = coverage.periods ?? [];
 const snapshots = (verified.snapshots ?? []).filter(item => item.reviewStatus === 'geometry-verified');
+
+fs.rmSync(provisionalDir, {recursive: true, force: true});
+fs.mkdirSync(provisionalDir, {recursive: true});
 
 const assertMonth = (value, label) => {
   if (!/^\d{4}-\d{2}$/.test(value ?? '')) throw new Error(`${label} is not YYYY-MM: ${value}`);
@@ -34,6 +39,7 @@ const nextMonth = value => {
 };
 
 const monthEndKey = value => `${value}-31`;
+const monthStartKey = value => `${value}-01`;
 const normalizedSnapshotKey = snapshot => {
   const value = snapshot.effectiveDate?.normalized;
   if (!value) return null;
@@ -42,9 +48,102 @@ const normalizedSnapshotKey = snapshot => {
   return null;
 };
 
+const normalizeBoundaryDate = (value, side) => {
+  if (value === null || value === undefined || value === '') return side === 'start' ? '0000-01-01' : '9999-12-31';
+  const text = String(value);
+  let match = text.match(/(-?\d{3,4})-(\d{2})-(\d{2})/);
+  if (match) return `${String(Number(match[1])).padStart(4, '0')}-${match[2]}-${match[3]}`;
+  match = text.match(/(-?\d{3,4})-(\d{2})/);
+  if (match) return `${String(Number(match[1])).padStart(4, '0')}-${match[2]}-${side === 'start' ? '01' : '31'}`;
+  match = text.match(/-?\d{3,4}/);
+  if (match) return `${String(Number(match[0])).padStart(4, '0')}-${side === 'start' ? '01-01' : '12-31'}`;
+  return side === 'start' ? '0000-01-01' : '9999-12-31';
+};
+
 assertMonth(coverage.minMonth, 'minMonth');
 assertMonth(coverage.maxMonth, 'maxMonth');
 if (coverage.minMonth > coverage.maxMonth) throw new Error('History coverage minMonth is after maxMonth');
+
+const fallbackCache = new Map();
+const provisionalOutputCache = new Map();
+const loadFallback = period => {
+  if (fallbackCache.has(period.fallbackGeometryFile)) return fallbackCache.get(period.fallbackGeometryFile);
+  const file = path.join(publicRoot, period.fallbackGeometryFile);
+  const payload = readJson(file);
+  const features = payload.type === 'FeatureCollection' ? (payload.features ?? []) : payload.type === 'Feature' ? [payload] : [];
+  if (!features.length) throw new Error(`Coverage ${period.id} fallback geometry has no features`);
+  const record = {payload, features};
+  fallbackCache.set(period.fallbackGeometryFile, record);
+  return record;
+};
+
+const selectFallbackFeatures = (period, month) => {
+  const {features} = loadFallback(period);
+  const start = monthStartKey(month);
+  const end = monthEndKey(month);
+  const validIndices = [];
+  for (let i = 0; i < features.length; i += 1) {
+    const properties = features[i]?.properties ?? {};
+    const featureStart = normalizeBoundaryDate(properties.start_date, 'start');
+    const featureEnd = normalizeBoundaryDate(properties.end_date, 'end');
+    if (featureStart <= end && featureEnd >= start) validIndices.push(i);
+  }
+  if (validIndices.length) return validIndices;
+
+  let latestStart = null;
+  for (let i = 0; i < features.length; i += 1) {
+    const featureStart = normalizeBoundaryDate(features[i]?.properties?.start_date, 'start');
+    if (featureStart <= end && (latestStart === null || featureStart > latestStart)) latestStart = featureStart;
+  }
+  if (latestStart !== null) {
+    const indices = [];
+    for (let i = 0; i < features.length; i += 1) {
+      if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === latestStart) indices.push(i);
+    }
+    if (indices.length) return indices;
+  }
+  throw new Error(`Coverage ${period.id} cannot resolve provisional geometry for ${month}`);
+};
+
+const materializeProvisional = (period, month) => {
+  const source = loadFallback(period);
+  const indices = selectFallbackFeatures(period, month);
+  const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}`;
+  const cached = provisionalOutputCache.get(selectionKey);
+  if (cached) return cached;
+
+  const hash = createHash('sha1').update(selectionKey).digest('hex').slice(0, 12);
+  const fileName = `${period.polityId}-${hash}.geojson`;
+  const relativeFile = `data/history-core/generated/provisional/${fileName}`;
+  const selected = indices.map(index => source.features[index]);
+  const output = {
+    type: 'FeatureCollection',
+    metadata: {
+      dataset: 'Rulers of Russia provisional History Core geometry',
+      coveragePeriodId: period.id,
+      polityId: period.polityId,
+      status: 'reconstruction-provisional',
+      confidence: period.confidence,
+      bootstrapGeometry: true,
+      sourceFile: period.fallbackGeometryFile,
+      selectedFeatureIndices: indices,
+      warning: 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
+    },
+    features: selected.map(feature => ({
+      ...feature,
+      properties: {
+        ...(feature.properties ?? {}),
+        history_core_status: 'reconstruction-provisional',
+        history_core_confidence: period.confidence,
+        history_core_coverage_period_id: period.id,
+      },
+    })),
+  };
+  fs.writeFileSync(path.join(provisionalDir, fileName), JSON.stringify(output));
+  const result = {geometryFile: relativeFile, provisionalStateId: `provisional-${period.polityId}-${hash}`};
+  provisionalOutputCache.set(selectionKey, result);
+  return result;
+};
 
 for (const period of periods) {
   assertMonth(period.startMonth, `Coverage ${period.id} startMonth`);
@@ -64,6 +163,7 @@ for (const period of periods) {
   }
   const fallbackFile = path.join(publicRoot, period.fallbackGeometryFile);
   if (!fs.existsSync(fallbackFile)) throw new Error(`Coverage ${period.id} fallback geometry missing: ${period.fallbackGeometryFile}`);
+  loadFallback(period);
 }
 
 const verifiedByPolityTrack = new Map();
@@ -114,19 +214,21 @@ while (cursor <= coverage.maxMonth) {
     });
     coverageCounts.set('geometry-verified', (coverageCounts.get('geometry-verified') ?? 0) + 1);
   } else {
+    const provisional = materializeProvisional(period, cursor);
     months.push({
       month: cursor,
       polityId: period.polityId,
       label: period.label,
       track: period.track,
       territorialModel: period.territorialModel,
-      geometryFile: period.fallbackGeometryFile,
+      geometryFile: provisional.geometryFile,
       uncertaintyGeometryFile: null,
       status: period.status,
       confidence: period.confidence,
       evidenceDocumentIds: period.evidenceDocumentIds ?? [],
       bootstrapGeometry: true,
       snapshotId: null,
+      provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
       coveragePeriodId: period.id,
       notes: period.notes ?? null,
@@ -146,19 +248,23 @@ if (months.length !== expectedCount) throw new Error(`Month index count ${months
 if (coverage.minMonth === '0862-01' && coverage.maxMonth === '2026-12' && months.length !== 13980) {
   throw new Error(`Full Russian-history coverage must contain 13980 months, got ${months.length}`);
 }
+for (const item of months) {
+  if (!fs.existsSync(path.join(publicRoot, item.geometryFile))) throw new Error(`Month ${item.month} points to missing geometry ${item.geometryFile}`);
+}
 
 fs.mkdirSync(outputDir, {recursive: true});
 const output = {
-  schema_version: 1,
+  schema_version: 2,
   dataset: 'Rulers of Russia month-resolved historical territory index',
   generated_at: new Date().toISOString(),
   minMonth: coverage.minMonth,
   maxMonth: coverage.maxMonth,
   monthCount: months.length,
   complete: true,
-  resolutionRule: 'Use latest geometry-verified History Core state at month end; otherwise use explicitly provisional coverage geometry.',
+  provisionalStateCount: provisionalOutputCache.size,
+  resolutionRule: 'Use latest geometry-verified History Core state at month end; otherwise materialize an unambiguous, explicitly provisional state from the dated bootstrap archive.',
   statusCounts: Object.fromEntries([...coverageCounts.entries()].sort()),
   months,
 };
 fs.writeFileSync(outputFile, JSON.stringify(output));
-console.log(`History month index generated: ${months.length} months (${coverage.minMonth}..${coverage.maxMonth}), no gaps.`);
+console.log(`History month index generated: ${months.length} months (${coverage.minMonth}..${coverage.maxMonth}), ${provisionalOutputCache.size} provisional geometry states, no gaps.`);
