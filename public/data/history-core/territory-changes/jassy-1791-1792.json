@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1792-jassy-dniester-border",
+      "eventId": "evt-1792-jassy-ratifications-exchanged",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "29 января 1792 г.",
+        "normalized": "1792-02-09",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Working legal effectiveness is tied to the exchange of ratifications explicitly recorded in the official 1792 treaty printing."
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+        "derivationNote": "Article III makes the Dniester the interstate boundary, with lands on its left bank in Russian possession and lands on its right bank returned to the Ottoman Porte. Reconstruct the newly confirmed Russian territory east/left of the Dniester against the preceding legal state; do not include Bessarabia on the right bank, which the treaty explicitly returned. Use contemporary hydrography and official maps to resolve the river course at 1792 resolution."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1792-jassy-crimea-kuban-recognition",
+      "eventId": "evt-1792-jassy-ratifications-exchanged",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "29 января 1792 г.",
+        "normalized": "1792-02-09",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "recognize",
+      "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+        "derivationNote": "Treat this as recognition/confirmation of earlier Russian possession of Crimea and Kuban, not as a fresh February 1792 acquisition polygon. It should alter provenance/status metadata of the existing geometry once the earlier 1783 legal changes are modeled."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
