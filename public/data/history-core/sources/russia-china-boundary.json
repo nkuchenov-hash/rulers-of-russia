@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "prlib-russia-china-treaties",
+      "title": "Сборник договоров России с Китаем. 1689–1881 гг.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442818",
+      "tier": "A2-official-document-publication",
+      "coverage": "1689–1881",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Official 1889 Ministry of Foreign Affairs documentary edition, 271 pages, multilingual treaty texts. Use treaty text and attached/related demarcation materials for canonical border reconstruction."
+    },
+    {
+      "id": "prlib-russia-china-boundary-agreements",
+      "title": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "coverage": "1860–1899; publication 1914",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Specialized 1914 documentary supplement devoted to delimitation, correction of borders and frontier affairs; use for post-1860 demarcation and geometry refinement."
+    }
+  ]
+}
