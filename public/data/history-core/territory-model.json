@@ -28,6 +28,7 @@
     "territory-changes/turkey-territorial-sea-1975.json",
     "territory-changes/turkey-maritime-jurisdiction-1981-1987.json",
     "territory-changes/poland-maritime-1986.json",
+    "territory-changes/sweden-maritime-1988.json",
     "territory-changes/dprk-boundary-1991-2013.json",
     "territory-changes/lithuania-maritime-2003.json",
     "territory-changes/norway-varanger-2008.json",
@@ -151,6 +152,19 @@
       "confidence": "high",
       "effectiveTo": "1991-12-31",
       "derivationNote": "Article 2 direct coordinate transcription through points A-D; point D is independently corroborated by the 1989 USSR-Poland-Sweden tripoint agreement."
+    },
+    {
+      "id": "frag-ussr-sweden-maritime-1988-a1-a17",
+      "polityId": "ussr",
+      "track": "maritime-jurisdiction",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-sweden-maritime-1988-a1-a17.geojson",
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Treaty Article 1 requires loxodromes through A1-A17. The source publishes Swedish RT38 and Soviet chart No. 1150 coordinate sets as equally valid; the History Core recipe retains the Soviet set without asserting an unsourced WGS84 datum transformation."
     },
     {
       "id": "frag-ussr-dprk-territorial-sea-1991",
