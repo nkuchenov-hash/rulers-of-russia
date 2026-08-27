@@ -11,7 +11,7 @@
         "precision": "day",
         "calendar": "gregorian"
       },
-      "track": "russian-legal-border",
+      "track": "maritime-jurisdiction",
       "territorialModel": "linear-border",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
@@ -28,7 +28,7 @@
         "derivationNote": "Treaty Article 1 provides WGS 84 points 1–8 and states that the delimitation line consists of geodesic segments joining them. The GeoJSON preserves those source points and densifies only the geodesic rendering between them. The treaty's terminal extension beyond point 8 is omitted until its outer-shelf endpoint is independently resolved."
       },
       "reviewStatus": "geometry-verified",
-      "notes": "Verified boundary fragment, not a claim that the entire Russian Federation polygon is geometry-verified."
+      "notes": "Verified EEZ/continental-shelf delimitation fragment. It is maritime jurisdiction, not a claim that the entire Russian Federation territorial polygon is geometry-verified."
     }
   ]
 }
