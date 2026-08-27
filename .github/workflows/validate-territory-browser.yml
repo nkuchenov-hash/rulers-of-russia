@@ -7,12 +7,14 @@ on:
     paths:
       - 'src/app/territory/**'
       - 'scripts/territory-browser-smoke.mjs'
+      - 'scripts/territory-history-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   pull_request:
     paths:
       - 'src/app/territory/**'
       - 'scripts/territory-browser-smoke.mjs'
+      - 'scripts/territory-history-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   workflow_run:
@@ -77,10 +79,15 @@ jobs:
           cat /tmp/territory-serve.log
           exit 1
 
-      - name: Execute territory in Chromium
+      - name: Execute current territory in Chromium
         env:
           TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?smoke={0}', github.run_id) || '' }}
         run: node scripts/territory-browser-smoke.mjs
+
+      - name: Execute historical 1988 territory in Chromium
+        env:
+          TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?history_smoke={0}', github.run_id) || '' }}
+        run: node scripts/territory-history-smoke.mjs
 
       - name: Show server log on failure
         if: failure() && github.event_name != 'workflow_run'
