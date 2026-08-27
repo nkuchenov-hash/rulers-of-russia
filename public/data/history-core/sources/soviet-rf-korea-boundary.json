@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "rf-official-treaty-publications-retrospective",
+      "title": "Официальные публикации международных договоров СССР в российских официальных изданиях",
+      "institution": "Собрание законодательства Российской Федерации / Бюллетень международных договоров",
+      "url": "https://publication.pravo.gov.ru/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Soviet treaties subsequently published in official Russian treaty and legislation collections",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Concrete records must cite the exact official SZ RF/BMD publication. A legal database URL may be retained only as an access mirror, not as the authority replacing the official publication."
+    },
+    {
+      "id": "prlib-modern-international-treaties",
+      "title": "Международные договоры Российской Федерации в фонде Президентской библиотеки",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Digitized official texts of modern Russian international treaties and entry-into-force metadata",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"]
+    }
+  ]
+}
