@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1975-ussr-turkey-territorial-sea-effective",
+      "title": "Вступление в силу советско-турецкого протокола о морской государственной границе",
+      "kind": "treaty",
+      "date": {
+        "original": "27 марта 1975 г.",
+        "normalized": "1975-03-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "После обмена ратификационными грамотами вступил в силу протокол, установивший морской участок государственной границы СССР и Турции в Чёрном море по азимуту 290° до внешнего 12-мильного предела территориальных вод.",
+      "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-ratification-5261-1973", "doc-ussr-turkey-demarcation-description-1980"],
+      "territoryChangeIds": ["chg-1975-ussr-turkey-territorial-sea"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The legal line became effective in 1975; the exact terminal coordinates used for rendering are from the later bilateral demarcation-description protocol, which implements that same treaty line."
+    }
+  ]
+}
