@@ -19,6 +19,16 @@
       "tier": "A2-official-document-publication",
       "coverage": "Official treaty notices, exchanges of instruments and entry-into-force information",
       "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"]
+    },
+    {
+      "id": "un-treaty-series",
+      "title": "United Nations Treaty Series and UN Division for Ocean Affairs and the Law of the Sea treaty publications",
+      "institution": "United Nations",
+      "url": "https://treaties.un.org/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Registered international treaties, authentic texts, entry-into-force metadata and law-of-the-sea delimitation publications",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Use as official registered treaty publication and geometry corroboration. For Russian canonical tracks, retain Russian authentic text and Russian ratification/publication evidence where available."
     }
   ]
 }
