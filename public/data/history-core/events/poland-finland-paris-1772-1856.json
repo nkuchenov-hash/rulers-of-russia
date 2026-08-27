@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1772-first-partition-poland",
+      "title": "Первый раздел Речи Посполитой",
+      "kind": "treaty",
+      "date": {"original": "1772 г.", "normalized": "1772", "precision": "year", "calendar": "gregorian"},
+      "polityIds": ["russian-empire"],
+      "summary": "В результате первого раздела к Российской империи перешли польская Ливония и часть белорусских земель.",
+      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "territoryChangeIds": ["territory-1772-first-partition-russia"],
+      "reviewStatus": "source-located",
+      "notes": "Exact Russian treaty/declaration date and A1/A2 text still must be indexed before source-verified promotion."
+    },
+    {
+      "id": "evt-1793-second-partition-control",
+      "title": "Второй раздел Речи Посполитой — межгосударственный раздел",
+      "kind": "treaty",
+      "date": {"original": "23 января (3 февраля) 1793 г.", "normalized": "1793-02-03", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Пруссия осуществили второй раздел; к России переходили значительные литовские, белорусские, волынские и подольские земли.",
+      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "territoryChangeIds": ["territory-1793-second-partition-de-facto"],
+      "reviewStatus": "source-located",
+      "notes": "Separated from the later Grodno treaty with the Polish Commonwealth."
+    },
+    {
+      "id": "evt-1793-grodno-treaty",
+      "title": "Гродненский трактат России и Речи Посполитой",
+      "kind": "treaty",
+      "date": {"original": "11/22 июля 1793 г.", "normalized": "1793-07-22", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Официальный российско-польский договорный акт, закрепивший территориальное урегулирование после второго раздела.",
+      "evidenceDocumentIds": ["doc-grodno-partition-treaty-1793-prlib"],
+      "territoryChangeIds": ["territory-1793-grodno-russian-legal-border"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1795-third-partition-convention",
+      "title": "Трёхсторонняя конвенция о третьем разделе Речи Посполитой",
+      "kind": "treaty",
+      "date": {"original": "13 (24) октября 1795 г.", "normalized": "1795-10-24", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Россия, Пруссия и Австрия взаимно гарантировали владения, полученные при третьем разделе Речи Посполитой.",
+      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "territoryChangeIds": ["territory-1795-third-partition-russian-control"],
+      "reviewStatus": "source-located",
+      "notes": "The exact primary printing of the 1795 convention remains to be indexed; the 1797 final convention is separately source-verified."
+    },
+    {
+      "id": "evt-1797-final-partition-convention",
+      "title": "Окончательная конвенция о разделе Польши",
+      "kind": "treaty",
+      "date": {"original": "15/26 января 1797 г.", "normalized": "1797-01-26", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Финальное межгосударственное договорное оформление раздела Польши Россией, Пруссией и Австрией.",
+      "evidenceDocumentIds": ["doc-final-partition-convention-1797-prlib"],
+      "territoryChangeIds": ["territory-1797-final-partition-legal-settlement"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1809-fredrikshamn-signing",
+      "title": "Подписание Фридрихсгамского мирного договора",
+      "kind": "treaty",
+      "date": {"original": "5 (17) сентября 1809 г.", "normalized": "1809-09-17", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Швеция подписали мирный договор о переходе Финляндии, включая Аландские острова, к Российской империи.",
+      "evidenceDocumentIds": ["doc-fredrikshamn-treaty-1809-prlib"],
+      "reviewStatus": "source-verified",
+      "notes": "Signing is not used as the effective border date because the treaty itself entered into force upon exchange of ratifications."
+    },
+    {
+      "id": "evt-1809-fredrikshamn-ratification",
+      "title": "Вступление Фридрихсгамского мира в силу",
+      "kind": "ratification",
+      "date": {"original": "1 (13) октября 1809 г.", "normalized": "1809-10-13", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Обмен ратификационными грамотами в Санкт-Петербурге ввёл Фридрихсгамский договор в силу.",
+      "evidenceDocumentIds": ["doc-fredrikshamn-treaty-1809-prlib"],
+      "territoryChangeIds": ["territory-1809-finland-effective"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1856-paris-peace",
+      "title": "Парижский мирный трактат",
+      "kind": "treaty",
+      "date": {"original": "18 (30) марта 1856 г.", "normalized": "1856-03-30", "precision": "day", "calendar": "julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Россия уступала Молдавскому княжеству устье Дуная и часть Южной Бессарабии; отдельные архивные документы фиксируют последующее определение границы.",
+      "evidenceDocumentIds": ["doc-paris-bessarabia-1856-ebid", "doc-bessarabia-boundary-implementation-1856-rgia"],
+      "territoryChangeIds": ["territory-1856-southern-bessarabia-cession"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
