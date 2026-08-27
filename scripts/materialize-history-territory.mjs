@@ -6,6 +6,8 @@ const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
 const modelFile = path.join(dataRoot, 'territory-model.json');
 const outRoot = path.join(dataRoot, 'generated', 'territory');
+const legacyArchiveRoot = path.join(root, 'public', 'data', 'territory', 'archive');
+const legacyManifestFile = path.join(legacyArchiveRoot, 'manifest.json');
 const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
 if (!fs.existsSync(modelFile)) throw new Error('Missing public/data/history-core/territory-model.json');
@@ -189,4 +191,59 @@ const index = {
   warnings,
 };
 fs.writeFileSync(path.join(outRoot, 'index.json'), JSON.stringify(index, null, 2));
+
+// Compatibility bridge for the current year-based globe. The canonical generated index above keeps
+// exact month/day transitions; the legacy renderer receives the latest verified state within each year.
+if (fs.existsSync(legacyManifestFile)) {
+  const manifest = readJson(legacyManifestFile);
+  const byPolity = new Map();
+  for (const snapshot of snapshots) {
+    if (snapshot.track !== 'russian-legal-border') continue;
+    const year = Number(snapshot.effectiveDate?.normalized?.slice(0, 4));
+    if (!Number.isFinite(year)) continue;
+    const list = byPolity.get(snapshot.polityId) ?? [];
+    list.push({...snapshot, year});
+    byPolity.set(snapshot.polityId, list);
+  }
+
+  for (const [polityId, list] of byPolity) {
+    list.sort((a, b) => a.effectiveDate.normalized.localeCompare(b.effectiveDate.normalized));
+    const latestPerYear = new Map();
+    for (const item of list) latestPerYear.set(item.year, item);
+    const timeline = [...latestPerYear.values()].sort((a, b) => a.year - b.year);
+    const features = timeline.map((item, index) => {
+      const payload = readJson(path.join(dataRoot, item.geometryFile));
+      const geometry = payload.features?.[0]?.geometry;
+      if (!geometry) return null;
+      const next = timeline[index + 1];
+      return {
+        type: 'Feature',
+        properties: {
+          name: polityId,
+          polity_id: polityId,
+          start_date: `${item.year}-01-01`,
+          end_date: next ? `${next.year - 1}-12-31` : null,
+          history_core_generated: true,
+          history_core_effective_date: item.effectiveDate.normalized,
+          history_core_confidence: item.confidence,
+          history_core_snapshot_id: item.id,
+        },
+        geometry,
+      };
+    }).filter(Boolean);
+    if (!features.length) continue;
+
+    const bridgeFile = `history-core-${polityId}.geojson`;
+    fs.writeFileSync(path.join(legacyArchiveRoot, bridgeFile), JSON.stringify({type: 'FeatureCollection', features}));
+    const entry = (manifest.polities ?? []).find(x => x.polity_id === polityId);
+    if (entry) {
+      entry.file = bridgeFile;
+      entry.features = features.length;
+      entry.status = 'verified-history-core-generated';
+      entry.history_core_generated = true;
+    }
+  }
+  fs.writeFileSync(legacyManifestFile, JSON.stringify(manifest, null, 2));
+}
+
 console.log(`History territory materialized: ${snapshots.length} snapshots, ${warnings.length} warnings.`);
