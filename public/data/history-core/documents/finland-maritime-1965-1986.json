@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-finland-gulf-1965",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение СССР и Финляндии о границах морских вод и континентального шельфа в Финском заливе",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/publication/UNTS/Volume%20566/v566.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "20 мая 1965 г.",
+        "normalized": "1965-05-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Финляндской Республики"],
+      "publicationCitation": "UNTS Vol. 566, I-8238, pp. 31 ff.; authentic Russian and Finnish texts; entered into force 25 May 1966.",
+      "notes": "Article 1 directly defines the Soviet-Finnish sea frontier by three coordinate points and straight segments. Articles 2-3 define fishing/other-zone median lines; Article 6 makes those lines the continental-shelf boundary. Article 4 states that all coordinates use the systems of Soviet charts Nos. 400, 403 and 404 (1964)."
+    },
+    {
+      "id": "doc-ussr-finland-gulf-demarcation-1967",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Описательный протокол о прохождении демаркированной в 1967 году морской границы СССР и Финляндии северо-восточнее Гогланда",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/No%20Volume/8238/A-8238-08000002805e6e27.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "1967 г.",
+        "normalized": "1967",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Смешанная советско-финляндская комиссия по демаркации морской границы"],
+      "publicationCitation": "UN Treaty Series, A-8238 descriptive protocol on the maritime boundary demarcated in 1967.",
+      "notes": "Confirms boundary markers Nos. 14, 15 and 16 at the three treaty coordinates; gives straight-line courses and measured distances of 4,396 m and 9,428 m between the markers. Coordinates conform to Soviet chart No. 403 (1964)."
+    },
+    {
+      "id": "doc-ussr-finland-shelf-1967",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение СССР и Финляндии о границе континентального шельфа в северо-восточной части Балтийского моря",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20640/v640.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "5 мая 1967 г.",
+        "normalized": "1967-05-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Финляндской Республики"],
+      "publicationCitation": "UNTS Vol. 640, I-9157, pp. 111 ff.; entered into force 15 March 1968.",
+      "notes": "Article 1 continues the 1965 shelf line west from 59°32.0′ N, 23°10.0′ E through 59°25.2′ N, 22°45.5′ E and 59°23.1′ N, 22°10.3′ E to 59°19.0′ N, 21°47.0′ E. Article 2 states that coordinates use Soviet chart No. 444 (17 July 1965)."
+    },
+    {
+      "id": "doc-ussr-finland-fishing-1980",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение СССР и Финляндии о разграничении районов юрисдикции в области рыболовства",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%201227/v1227.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "25 февраля 1980 г.",
+        "normalized": "1980-02-25",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Финляндской Республики"],
+      "publicationCitation": "UNTS Vol. 1227, I-19806, pp. 3 ff.; entered into force 9 July 1980.",
+      "notes": "Article 1 adopts the 1965 and 1967 lines for fishing jurisdiction. Article 2 adds a westward coordinate-defined segment in the coordinate system of Soviet naval chart No. 1150 (1976); the 1967 endpoint 59°19′00″ N, 21°47′00″ E is expressly stated to correspond to 59°18′07″ N, 21°46′07″ E in the newer chart system, demonstrating a source-datum shift that must not be silently erased."
+    },
+    {
+      "id": "doc-ussr-finland-eez-1985",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение СССР и Финляндии о разграничении экономической зоны, рыболовной зоны и континентального шельфа",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%201457/v1457.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "5 февраля 1985 г.",
+        "normalized": "1985-02-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Финляндской Республики"],
+      "publicationCitation": "UNTS Vol. 1457, I-24645, pp. 257 ff.; entered into force 24 November 1986.",
+      "notes": "Article 1 expressly reuses the lines designated in the 1965, 1967 and 1980 agreements as the boundary of the economic zone, fishing zone and continental shelf; therefore it changes legal status without inventing a new geometry."
+    }
+  ]
+}
