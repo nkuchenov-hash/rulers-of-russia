@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-dnr-2022-5fkz-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Федеральный конституционный закон от 04.10.2022 № 5-ФКЗ",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/document/0001202210050005",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Российская Федерация"],
+      "publicationCitation": "Федеральный конституционный закон от 04.10.2022 № 5-ФКЗ «О принятии в Российскую Федерацию Донецкой Народной Республики и образовании в составе Российской Федерации нового субъекта - Донецкой Народной Республики».",
+      "notes": "Canonical only for russian-legal-border. It does not establish international recognition or de-facto control for the project."
+    },
+    {
+      "id": "doc-lnr-2022-6fkz-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Федеральный конституционный закон от 04.10.2022 № 6-ФКЗ",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/document/0001202210050006",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Российская Федерация"],
+      "publicationCitation": "Федеральный конституционный закон от 04.10.2022 № 6-ФКЗ «О принятии в Российскую Федерацию Луганской Народной Республики и образовании в составе Российской Федерации нового субъекта - Луганской Народной Республики».",
+      "notes": "Canonical only for russian-legal-border. It does not establish international recognition or de-facto control for the project."
+    },
+    {
+      "id": "doc-zaporozhye-2022-7fkz-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Федеральный конституционный закон от 04.10.2022 № 7-ФКЗ",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/document/0001202210050007",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Российская Федерация"],
+      "publicationCitation": "Федеральный конституционный закон от 04.10.2022 № 7-ФКЗ «О принятии в Российскую Федерацию Запорожской области и образовании в составе Российской Федерации нового субъекта - Запорожской области».",
+      "notes": "Canonical only for russian-legal-border. It does not establish international recognition or de-facto control for the project."
+    },
+    {
+      "id": "doc-kherson-2022-8fkz-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Федеральный конституционный закон от 04.10.2022 № 8-ФКЗ",
+      "institution": "Официальный интернет-портал правовой информации",
+      "url": "https://publication.pravo.gov.ru/document/0001202210050008",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Российская Федерация"],
+      "publicationCitation": "Федеральный конституционный закон от 04.10.2022 № 8-ФКЗ «О принятии в Российскую Федерацию Херсонской области и образовании в составе Российской Федерации нового субъекта - Херсонской области».",
+      "notes": "Canonical only for russian-legal-border. It does not establish international recognition or de-facto control for the project."
+    }
+  ]
+}
