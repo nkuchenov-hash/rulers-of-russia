@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-gulistan-1813-mfa-border-collection",
+      "sourceCollectionId": "prlib-mfa-border-treaties-1891",
+      "title": "Гюлистанский мирный трактат России с Персией. 12 октября 1813 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/442959",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "12 октября 1813 г.",
+        "normalized": "1813-10-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Персия"],
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
+      "notes": "Official MFA treaty corpus. Presidential Library chronology confirms the signing date and territorial recognition; exact treaty pages in the 1891 volume remain to be page-indexed."
+    },
+    {
+      "id": "doc-turkmenchay-1828-mfa-border-collection",
+      "sourceCollectionId": "prlib-mfa-border-treaties-1891",
+      "title": "Туркманчайский мирный трактат России с Персией. 10 февраля 1828 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/442959",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "10 февраля 1828 г.",
+        "normalized": "1828-02-22",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Персия"],
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
+      "notes": "Primary legal basis for the new Russo-Persian boundary; use together with the 1828 Military Topographic Depot map."
+    },
+    {
+      "id": "doc-turkmenchay-boundary-map-1828-rnb",
+      "sourceCollectionId": "nlr-russia-maps",
+      "title": "Генеральная карта земель, между Черным и Каспийским морями лежащих, с означением новой границы России с Персиею",
+      "institution": "Военно-топографическое депо / Российская национальная библиотека / НЭБ",
+      "url": "https://kp.rusneb.ru/item/material/generalnaya-karta-zemel-mezhdu-chernym-i-kaspiyskim-moryami-lezhashchih-s-oznacheniem-novoy-granicy-rossii-s-persieyu",
+      "tier": "A3-contemporary-official-map",
+      "documentType": "official-map",
+      "date": {
+        "original": "1828",
+        "normalized": "1828",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Военно-топографическое депо Российской империи"],
+      "archiveCitation": "РНБ. Шифр хранения К 2-Кав 2/15.",
+      "notes": "Contemporary official map explicitly depicting the new Russian-Persian boundary after the Treaty of Turkmenchay. High-priority candidate for georeferencing and promotion to geometry-verified."
+    },
+    {
+      "id": "doc-adrianople-1829-mfa-border-collection",
+      "sourceCollectionId": "prlib-mfa-border-treaties-1891",
+      "title": "Адрианопольский мирный договор России с Османской империей. 2 сентября 1829 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/442959",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "2 сентября 1829 г.",
+        "normalized": "1829-09-14",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя"],
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
+      "notes": "Territorial clauses include the Danube mouth islands, eastern Black Sea coast and Akhalkalaki/Akhaltsikhe districts."
+    },
+    {
+      "id": "doc-alaska-cession-1867-prlib-chronology",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Подписан договор о продаже Россией полуострова Аляска Соединённым Штатам Америки",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/history/619131",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "documentary-publication",
+      "date": {
+        "original": "18 марта 1867 г.",
+        "normalized": "1867-03-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Соединённые Штаты Америки"],
+      "notes": "Authoritative institutional chronology confirms signing, ratification milestones and official transfer on 6 (18) October 1867. It remains B1 until the treaty/transfer protocol is indexed from an A1/A2 Russian documentary publication."
+    }
+  ]
+}
