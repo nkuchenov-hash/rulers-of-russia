@@ -24,6 +24,7 @@
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
+    "territory-changes/turkey-territorial-sea-1975.json",
     "territory-changes/poland-maritime-1986.json",
     "territory-changes/dprk-boundary-1991-2013.json",
     "territory-changes/lithuania-maritime-2003.json",
@@ -44,6 +45,19 @@
       "confidence": "high",
       "effectiveTo": "2008-07-08",
       "derivationNote": "The 1957 line is rendered in the official WGS84 recalculation supplied by the 2007 bilateral settlement because the Russian ratification record expressly states that its point positions and the inherited line remained unchanged. Only the inherited portion through point 4 is used."
+    },
+    {
+      "id": "frag-ussr-turkey-territorial-sea-1975",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-turkey-territorial-sea-1975.geojson",
+      "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-demarcation-description-1980"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "The 1973 treaty fixes the legal line and the 1980 bilateral protocol-description fixes the demarcated terminal coordinates. The fragment belongs only to the USSR polity; the adjacent post-Soviet coast is Georgian, not Russian."
     },
     {
       "id": "frag-ussr-poland-territorial-sea-1986",
