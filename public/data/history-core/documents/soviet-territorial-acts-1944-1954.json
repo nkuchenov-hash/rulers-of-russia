@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-tuva-ussr-1944-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "О принятии Тувинской Народной Республики в состав СССР. Указ Президиума Верховного Совета СССР. 11 октября 1944 г.",
+      "institution": "Президиум Верховного Совета СССР / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/521380-o-prinyatii-tuvinskoy-narodnoy-respubliki-v-sostav-soyuza-sovetskih-sotsialisticheskih-respublik-ukaz-prezidiuma-verhovnogo-soveta-sssr-11-oktyabrya-1944-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "11 октября 1944 г.", "normalized": "1944-10-11", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Президиум Верховного Совета СССР"],
+      "publicationCitation": "Сборник Законов СССР и Указов Президиума Верховного Совета СССР 1938–1956. Госюриздат, 1956. С. 46.",
+      "notes": "Union-level legal act accepting the Tuvan People's Republic into the USSR."
+    },
+    {
+      "id": "doc-tuva-rsfsr-1944-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "О принятии Тувинской народной республики в состав РСФСР. Указ Президиума Верховного Совета РСФСР. 13 октября 1944 г.",
+      "institution": "Президиум Верховного Совета РСФСР / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/372053-o-prinyatii-tuvinskoy-narodnoy-respubliki-v-sostav-rsfsr-ukaz-prezidiuma-verhovnogo-soveta-rsfsr-13-oktyabrya-1944-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "13 октября 1944 г.", "normalized": "1944-10-13", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Президиум Верховного Совета РСФСР"],
+      "publicationCitation": "Хронологическое собрание законов, указов Президиума Верховного Совета и постановлений Правительства РСФСР. Т. 3. 1940–1947. М.: Госюриздат, 1958.",
+      "notes": "RSFSR-level act assigning Tuva within the union's internal administrative structure."
+    },
+    {
+      "id": "doc-ussr-poland-border-1945-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Договор между СССР и Польской Республикой о советско-польской государственной границе. 16 августа 1945 г.",
+      "institution": "Правительство СССР / Правительство Польской Республики / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/383455-dogovor-mezhdu-soyuzom-sovetskih-sotsialisticheskih-respublik-i-polskoy-respublikoy-o-sovetsko-polskoy-gosudarstvennoy-granitse-sostavlen-v-moskve-16-avgusta-1945-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original": "16 августа 1945 г.", "normalized": "1945-08-16", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Правительство СССР", "Правительство Польской Республики"],
+      "publicationCitation": "Внешняя политика СССР. Т. V (июнь 1941 – сентябрь 1945): сб. док. М., 1947; публикация о подписании — Правда № 196 (9967), 17 августа 1945 г.",
+      "notes": "Direct treaty anchor for the post-war Soviet-Polish state border. Boundary geometry should be derived from the treaty description and demarcation maps/protocols."
+    },
+    {
+      "id": "doc-south-sakhalin-kurils-1946-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "О национализации земли и хозяйственных объектов южной части острова Сахалина и Курильских островов. Указ Президиума Верховного Совета СССР. 2 февраля 1946 г.",
+      "institution": "Президиум Верховного Совета СССР / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/521382-o-natsionalizatsii-zemli-bankov-promyshlennyh-i-kommunalnyh-predpriyatiy-zheleznodorozhnogo-i-vodnogo-transporta-i-sredstv-svyazi-yuzhnoy-chasti-ostrova-sahalina-i-kurilskih-ostrovov-ukaz-prezidiuma-verhovnogo-soveta-sssr-moskva-2-fevralya-1946-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "2 февраля 1946 г.", "normalized": "1946-02-02", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Президиум Верховного Совета СССР"],
+      "notes": "Evidence for Soviet domestic legal and administrative treatment of South Sakhalin and the Kuril Islands after the 1945 occupation. It is not by itself a substitute for international-treaty status and must remain separate from international-recognition and de-facto-control tracks."
+    },
+    {
+      "id": "doc-crimea-transfer-1954-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "О передаче Крымской области из состава РСФСР в состав УССР. Указ Президиума Верховного Совета СССР. 19 февраля 1954 г.",
+      "institution": "Президиум Верховного Совета СССР / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/521406-o-peredache-krymskoy-oblasti-iz-sostava-rsfsr-v-sostav-ussr-ukaz-prezidiuma-verhovnogo-soveta-sssr-moskva-19-fevralya-1954-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {"original": "19 февраля 1954 г.", "normalized": "1954-02-19", "precision": "day", "calendar": "gregorian"},
+      "authority": ["Президиум Верховного Совета СССР"],
+      "publicationCitation": "Ведомости Верховного Совета СССР, 1954, № 4, ст. 64.",
+      "notes": "Internal transfer from the RSFSR to the Ukrainian SSR; this does not alter the external USSR state border but is essential to later republic-boundary inheritance."
+    }
+  ]
+}
