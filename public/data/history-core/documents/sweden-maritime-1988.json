@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-sweden-maritime-1988",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Соглашение СССР и Швеции о разграничении континентального шельфа, шведской рыболовной зоны и советской экономической зоны в Балтийском море",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%201557/volume-1557-I-27075-Other.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "18 апреля 1988 г.",
+        "normalized": "1988-04-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Королевства Швеция"],
+      "publicationCitation": "UNTS Vol. 1557, I-27075, pp. 275 ff.; authentic Swedish and Russian texts; provisionally effective 16 May 1988 and definitively effective 22 June 1988.",
+      "notes": "Article 1 requires straight rhumb-line (loxodrome) segments joining Article 2 points A1-A17. Article 2 publishes both Swedish RT38/chart coordinates and Soviet chart No. 1150 coordinates and declares the two systems equally valid. The History Core recipe uses the Soviet system literally; no silent conversion to WGS84 is asserted."
+    }
+  ]
+}
