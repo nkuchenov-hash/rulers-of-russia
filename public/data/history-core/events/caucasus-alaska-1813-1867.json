@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1813-gulistan-peace",
+      "title": "Гюлистанский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "12 октября 1813 г.",
+        "normalized": "1813-10-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Персия признала переход к России Дагестана, Грузии и ряда владений Восточного Закавказья; вопрос точной даты полного вступления договора в силу требует отдельной фиксации миссии 1818 года.",
+      "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection"],
+      "territoryChangeIds": ["territory-1813-gulistan-russian-legal-basis"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1828-turkmenchay-peace",
+      "title": "Туркманчайский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "10 февраля 1828 г.",
+        "normalized": "1828-02-22",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Новый русско-персидский договорный рубеж; к России переходили Эриванское и Нахичеванское ханства, а граница получила современную ей официальную картографическую фиксацию.",
+      "evidenceDocumentIds": ["doc-turkmenchay-1828-mfa-border-collection", "doc-turkmenchay-boundary-map-1828-rnb"],
+      "territoryChangeIds": ["territory-1828-turkmenchay-russian-legal-border"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1829-adrianople-peace",
+      "title": "Адрианопольский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "2 сентября 1829 г.",
+        "normalized": "1829-09-14",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Османская империя закрепила ряд территориальных уступок России на Дунае и Кавказе и признала ранее состоявшиеся присоединения в Закавказье.",
+      "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection"],
+      "territoryChangeIds": ["territory-1829-adrianople-russian-legal-border"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1867-alaska-cession-signing",
+      "title": "Подписание договора об уступке российских владений в Северной Америке США",
+      "kind": "treaty",
+      "date": {
+        "original": "18 марта 1867 г.",
+        "normalized": "1867-03-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Подписание договора об уступке Русской Америки; само подписание не используется как момент исчезновения территории с карты России.",
+      "evidenceDocumentIds": ["doc-alaska-cession-1867-prlib-chronology"],
+      "reviewStatus": "source-located",
+      "notes": "Promote to source-verified after A1/A2 Russian treaty text is indexed."
+    },
+    {
+      "id": "evt-1867-alaska-transfer",
+      "title": "Официальная передача Аляски Соединённым Штатам",
+      "kind": "transfer",
+      "date": {
+        "original": "6 октября 1867 г.",
+        "normalized": "1867-10-18",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Фактический момент официальной передачи российских североамериканских владений Соединённым Штатам.",
+      "evidenceDocumentIds": ["doc-alaska-cession-1867-prlib-chronology"],
+      "territoryChangeIds": ["territory-1867-alaska-transfer-out"],
+      "reviewStatus": "source-located",
+      "notes": "The chronology date is strong, but canonical promotion requires the Russian treaty/transfer protocol."
+    }
+  ]
+}
