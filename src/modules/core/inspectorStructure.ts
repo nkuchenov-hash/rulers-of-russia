@@ -86,20 +86,21 @@ export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
     node('Обзор', 'page-tab', '.page-tabs button:nth-child(1)'),
     node('Территория', 'page-tab', '.page-tabs button:nth-child(2)'),
     node('Реформы', 'page-tab', '.page-tabs button:nth-child(3)'),
-    node('Конфликты', 'page-tab', '.page-tabs button:nth-child(4)'),
-    node('Наследие', 'page-tab', '.page-tabs button:nth-child(5)'),
-    node('Материалы', 'page-tab', '.page-tabs button:nth-child(6)')
+    node('Экономика', 'page-tab', '.page-tabs button:nth-child(4)'),
+    node('Войны и дипломатия', 'page-tab', '.page-tabs button:nth-child(5)'),
+    node('Культура', 'page-tab', '.page-tabs button:nth-child(6)'),
+    node('Личность', 'page-tab', '.page-tabs button:nth-child(7)')
   ]),
 
-  territory: node('Территория', 'territory', '[data-module-id="territory"]', [
-    node('Короткое объяснение', 'territory-summary', '[data-element-id="territory-summary"]'),
-    node('Легенда карты', undefined, undefined, [
-      node('Исходная территория', 'territory-legend-item', '.territory-legend > div:nth-child(1)'),
-      node('Присоединённые земли', 'territory-legend-item', '.territory-legend > div:nth-child(2)'),
-      node('Граница к концу правления', 'territory-legend-item', '.territory-legend > div:nth-child(3)'),
-      node('Зависимые / спорные территории', 'territory-legend-item', '.territory-legend > div:nth-child(4)')
+  territory: node('Карта правления', 'territory', '[data-module-id="territory"]', [
+    node('Что показывает карта', 'territory-summary', '[data-element-id="territory-summary"]'),
+    node('Слои карты', undefined, undefined, [
+      node('Границы', 'territory-legend-item', '.territory-legend > div:nth-child(1)'),
+      node('Войны и походы', 'territory-legend-item', '.territory-legend > div:nth-child(2)'),
+      node('Инфраструктура', 'territory-legend-item', '.territory-legend > div:nth-child(3)'),
+      node('Города и центры', 'territory-legend-item', '.territory-legend > div:nth-child(4)')
     ]),
-    node('Карта эпохи', 'territory-map-action', '[data-element-id="territory-map-action"]')
+    node('Открыть карту эпохи', 'territory-map-action', '[data-element-id="territory-map-action"]')
   ]),
 
   map: node('Историческая карта', 'map', '[data-module-id="map"]', [
@@ -110,23 +111,26 @@ export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
     node('Управление картой', 'map-controls', '[data-element-id="map-controls"]')
   ]),
 
-  facts: node('Факты', 'facts', '[data-module-id="facts"]', [
-    node('Строка факта ×7', 'fact-row', '[data-element-id="fact-row"]'),
-    node('Все факты', 'facts-all', '[data-element-id="facts-all"]')
+  facts: node('Начало → конец правления', 'facts', '[data-module-id="facts"]', [
+    node('Сравниваемый показатель ×3–6', 'fact-row', '[data-element-id="fact-row"]')
   ]),
 
-  'thematic-card': node('Тематические карточки', 'thematic-card', '[data-module-id="thematic-card"]', [
-    node('Карточка 1', 'thematic-card', '.thematic-card:nth-child(1)', thematicCardChildren(1)),
-    node('Карточка 2', 'thematic-card', '.thematic-card:nth-child(2)', thematicCardChildren(2)),
-    node('Карточка 3', 'thematic-card', '.thematic-card:nth-child(3)', thematicCardChildren(3)),
-    node('Карточка 4', 'thematic-card', '.thematic-card:nth-child(4)', thematicCardChildren(4))
+  'thematic-card': node('Ключевые события и явления правления', 'thematic-card', '[data-module-id="thematic-card"]', [
+    node('Событие / явление 1', 'thematic-card', '.thematic-card:nth-child(1)', thematicCardChildren(1)),
+    node('Событие / явление 2', 'thematic-card', '.thematic-card:nth-child(2)', thematicCardChildren(2)),
+    node('Событие / явление 3', 'thematic-card', '.thematic-card:nth-child(3)', thematicCardChildren(3)),
+    node('Событие / явление 4', 'thematic-card', '.thematic-card:nth-child(4)', thematicCardChildren(4)),
+    node('Событие / явление 5', 'thematic-card', '.thematic-card:nth-child(5)', thematicCardChildren(5)),
+    node('Событие / явление 6', 'thematic-card', '.thematic-card:nth-child(6)', thematicCardChildren(6)),
+    node('Событие / явление 7', 'thematic-card', '.thematic-card:nth-child(7)', thematicCardChildren(7)),
+    node('Событие / явление 8', 'thematic-card', '.thematic-card:nth-child(8)', thematicCardChildren(8))
   ]),
 
   'reign-timeline': node('Хронология правления', 'reign-timeline', '[data-module-id="reign-timeline"]', [
     node('Предыдущий правитель', 'timeline-previous', '[data-element-id="timeline-previous"]'),
     node('Заголовок', 'timeline-title', '[data-element-id="timeline-title"]'),
     node('Ось времени', 'timeline-axis', '[data-element-id="timeline-axis"]'),
-    node('Событие ×6', 'timeline-event', '[data-element-id="timeline-event"]', [
+    node('События хронологии', 'timeline-event', '[data-element-id="timeline-event"]', [
       node('Дата события', 'timeline-event-date', '[data-element-id="timeline-event-date"]')
     ]),
     node('Следующий правитель', 'timeline-next', '[data-element-id="timeline-next"]')
