@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1792-jassy-treaty-signing",
+      "title": "Подписание Ясского мирного договора",
+      "kind": "treaty",
+      "date": {
+        "original": "29 декабря 1791 г.",
+        "normalized": "1792-01-09",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Османская империя подписали Ясский мирный договор. Договор подтверждал российское владение Крымом и Кубанью и устанавливал русско-османскую границу по Днестру.",
+      "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+      "reviewStatus": "source-verified",
+      "notes": "No territory mutation is replayed at signature solely from this event because the same official treaty printing separately records exchange of ratifications on 29 January 1792 Old Style."
+    },
+    {
+      "id": "evt-1792-jassy-ratifications-exchanged",
+      "title": "Обмен ратификациями Ясского мирного договора",
+      "kind": "treaty",
+      "date": {
+        "original": "29 января 1792 г.",
+        "normalized": "1792-02-09",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "В Яссах состоялся обмен взаимными государственными ратификациями мирного договора; этот документально зафиксированный рубеж используется как рабочая effective-date точка для юридического изменения границы до обнаружения более специального исполнительного акта.",
+      "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
+      "territoryChangeIds": ["territory-1792-jassy-dniester-border", "territory-1792-jassy-crimea-kuban-recognition"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
