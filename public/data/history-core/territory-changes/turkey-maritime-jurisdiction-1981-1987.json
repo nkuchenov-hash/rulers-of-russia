@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1981-ussr-turkey-continental-shelf",
+      "eventId": "evt-1981-ussr-turkey-shelf-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "15 мая 1981 г.",
+        "normalized": "1981-05-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-turkey-continental-shelf-1981"],
+      "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-turkey-continental-shelf-1981.geojson",
+        "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978"],
+        "derivationNote": "Article 1 directly lists the coordinate chain through 43°20′43″ N, 32°00′00″ E. The treaty expressly leaves the further westward segment unsettled, so the verified geometry stops at the last agreed point."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Continental-shelf delimitation only; this is not state territory."
+    },
+    {
+      "id": "chg-1987-ussr-turkey-eez-status",
+      "eventId": "evt-1987-ussr-turkey-eez-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "6 февраля 1987 г.",
+        "normalized": "1987-02-06",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-turkey-eez-notes-1986-1987", "doc-ussr-turkey-continental-shelf-1978"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-turkey-continental-shelf-1981.geojson",
+        "evidenceDocumentIds": ["doc-ussr-turkey-eez-notes-1986-1987", "doc-ussr-turkey-continental-shelf-1978"],
+        "derivationNote": "The 1987 exchange of notes expressly reuses the already established continental-shelf line as the economic-zone boundary; no new geometry is created."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "Changes legal meaning of the existing verified line without adding a second overlay."
+    }
+  ]
+}
