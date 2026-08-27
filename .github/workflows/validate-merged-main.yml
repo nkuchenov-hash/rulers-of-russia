@@ -50,6 +50,9 @@ jobs:
       - name: Validate History Core provenance
         run: npm run validate:history
 
+      - name: Materialize verified historical territory
+        run: npm run materialize:history-territory
+
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
 
