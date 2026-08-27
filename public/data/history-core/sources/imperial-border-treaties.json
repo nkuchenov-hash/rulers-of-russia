@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "prlib-mfa-border-treaties-1891",
+      "title": "Сборник пограничных договоров, заключенных Россией с соседними государствами",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / РГБ",
+      "url": "https://www.prlib.ru/item/442959",
+      "tier": "A2-official-document-publication",
+      "coverage": "Imperial Russian border treaties through 1891",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Official 1891 Ministry of Foreign Affairs edition: XII + 346 pages and 18 map sheets, with treaty texts in Russian and counterpart languages. Priority corpus for treaty clauses and contemporary boundary maps."
+    },
+    {
+      "id": "prlib-imperial-official-treaty-printings",
+      "title": "Официальные печатные издания международных договоров Российской империи в фонде Президентской библиотеки",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/810853",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official imperial treaty printings and related documentary items",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Registry entry anchored by the 1792 Imperial Printing House edition of the Treaty of Jassy; individual documents must retain their exact item URL and publication metadata."
+    }
+  ]
+}
