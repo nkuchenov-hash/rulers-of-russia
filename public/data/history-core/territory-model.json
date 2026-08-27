@@ -24,6 +24,7 @@
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
+    "territory-changes/dprk-boundary-1991-2013.json",
     "territory-changes/lithuania-maritime-2003.json",
     "territory-changes/norway-varanger-2008.json",
     "territory-changes/norway-delimitation-2011.json"
@@ -42,6 +43,19 @@
       "confidence": "high",
       "effectiveTo": "2008-07-08",
       "derivationNote": "The 1957 line is rendered in the official WGS84 recalculation supplied by the 2007 bilateral settlement because the Russian ratification record expressly states that its point positions and the inherited line remained unchanged. Only the inherited portion through point 4 is used."
+    },
+    {
+      "id": "frag-ussr-dprk-territorial-sea-1991",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-dprk-territorial-sea-1991.geojson",
+      "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Direct transcription of the two coordinates defining the straight state-boundary segment through the territorial sea. The river centerline is deliberately excluded."
     },
     {
       "id": "frag-rf-lithuania-maritime-2003-p1-p3",
@@ -78,6 +92,18 @@
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "Direct coordinate transcription from treaty Article 1 points 1–8 in WGS 84; geodesic densification is used only for rendering. No terminal point beyond point 8 has been inferred."
+    },
+    {
+      "id": "frag-rf-dprk-territorial-sea-2013",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-dprk-territorial-sea-2013.geojson",
+      "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "derivationNote": "The 2012 RF-DPRK treaty expressly retains the 1990 demarcation protocol. The exact coordinate-defined territorial-sea segment is carried into the current Russian state-border overlay without inferring the river geometry."
     }
   ]
 }
