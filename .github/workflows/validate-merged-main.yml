@@ -50,8 +50,11 @@ jobs:
       - name: Validate History Core provenance
         run: npm run validate:history
 
-      - name: Materialize verified historical territory
-        run: npm run materialize:history-territory
+      - name: Materialize complete historical territory timeline
+        run: npm run materialize:history
+
+      - name: Verify complete month coverage
+        run: node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('public/data/history-core/generated/month-index.json','utf8'));if(!x.complete||x.monthCount!==13980)throw new Error('History month coverage incomplete: '+x.monthCount);console.log('History coverage:',x.minMonth,'..',x.maxMonth,x.monthCount,'months');"
 
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
