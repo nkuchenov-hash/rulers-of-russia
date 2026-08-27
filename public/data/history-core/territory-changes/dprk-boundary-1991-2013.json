@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1991-ussr-dprk-territorial-sea",
+      "eventId": "evt-1991-ussr-dprk-border-regime-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "27 ноября 1991 г.",
+        "normalized": "1991-11-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-dprk-territorial-sea-1991"],
+      "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-dprk-territorial-sea-1991.geojson",
+        "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+        "derivationNote": "Direct transcription of the Tumen-mouth coordinate 42°17′34.34″ N, 130°41′49.16″ E and territorial-water endpoint 42°09′ N, 130°53′ E. The source specifies a straight line between them."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Only the sea segment is verified; no river-centerline geometry is inferred."
+    },
+    {
+      "id": "chg-2013-rf-dprk-territorial-sea",
+      "eventId": "evt-2013-rf-dprk-border-regime-effective",
+      "polityId": "russian-federation",
+      "effectiveDate": {
+        "original": "22 сентября 2013 г.",
+        "normalized": "2013-09-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "recognize",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-rf-dprk-territorial-sea-2013"],
+      "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/rf-dprk-territorial-sea-2013.geojson",
+        "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+        "derivationNote": "The 2012 RF-DPRK treaty retains the 1990 demarcation protocol as an operative boundary document. The rendered segment therefore preserves the exact 1990 treaty coordinates without redrawing the river section."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Conservative activation begins with the modern RF-DPRK treaty's entry into force rather than silently assuming successor continuity for every intervening month."
+    }
+  ]
+}
