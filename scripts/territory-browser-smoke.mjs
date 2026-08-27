@@ -32,6 +32,11 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
   return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
 });
 
+const waitForCurrentVerifiedTracks = async () => {
+  await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 1'), null, { timeout: 8000 });
+  await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 2'), null, { timeout: 8000 });
+};
+
 try {
   const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   if (!response || !response.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
@@ -45,7 +50,7 @@ try {
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('реконструкция · достоверность'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('проверенных участков 3'), null, { timeout: 8000 });
+  await waitForCurrentVerifiedTracks();
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
 
@@ -55,7 +60,7 @@ try {
     return {
       canvas: canvas ? { width: canvas.width, height: canvas.height } : null,
       buttons,
-      bodyText: document.body?.innerText?.slice(0, 900) || ''
+      bodyText: document.body?.innerText?.slice(0, 1000) || ''
     };
   });
 
@@ -70,20 +75,20 @@ try {
     throw new Error(`Globe did not request verified History Core boundary index: ${JSON.stringify(historyRequests)}`);
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-lithuania-maritime-2003-p1-p3.geojson'))) {
-    throw new Error(`Globe did not request Lithuania geometry-verified boundary fragment: ${JSON.stringify(historyRequests)}`);
+    throw new Error(`Globe did not request Lithuania maritime-jurisdiction fragment: ${JSON.stringify(historyRequests)}`);
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-norway-varanger-2008-p1-p6.geojson'))) {
-    throw new Error(`Globe did not request Varangerfjord geometry-verified boundary fragment: ${JSON.stringify(historyRequests)}`);
+    throw new Error(`Globe did not request Varangerfjord state-border fragment: ${JSON.stringify(historyRequests)}`);
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-norway-delimitation-2011-p1-p8.geojson'))) {
-    throw new Error(`Globe did not request Barents geometry-verified boundary fragment: ${JSON.stringify(historyRequests)}`);
+    throw new Error(`Globe did not request Barents maritime-jurisdiction fragment: ${JSON.stringify(historyRequests)}`);
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/') && !requestUrl.endsWith('/month-index.json') && !requestUrl.endsWith('/verified-boundaries.json'))) {
     throw new Error(`Globe did not request month-resolved History Core territory geometry: ${JSON.stringify(historyRequests)}`);
   }
   await monthSelect.selectOption('2');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 2026-02'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('проверенных участков 3'), null, { timeout: 8000 });
+  await waitForCurrentVerifiedTracks();
 
   const eraSelect = page.getByLabel('Быстрый переход к эпохе');
   if (await eraSelect.count() !== 1) throw new Error('Era selector missing');
