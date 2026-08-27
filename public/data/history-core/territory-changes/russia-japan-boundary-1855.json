@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1856-shimoda-kuril-boundary",
+      "eventId": "evt-1855-shimoda-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "25 ноября 1856 г.",
+        "normalized": "1856-12-07",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Entry-into-force date is stated by Presidential Library institutional chronology; ratification/exchange documentation must be attached before geometry verification."
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+        "derivationNote": "Reconstruct the Kuril boundary from the treaty clause placing the border between Iturup and Urup. Use island coastlines appropriate to the period; the maritime line should not be expanded into a modern EEZ-style boundary."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1856-shimoda-sakhalin-undivided",
+      "eventId": "evt-1855-shimoda-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "25 ноября 1856 г.",
+        "normalized": "1856-12-07",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "claim",
+      "territorialModel": "mixed",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+        "derivationNote": "Render Sakhalin as undivided/shared legal status under the treaty rather than assigning the whole island to either state. This state is superseded by the 1875 Petersburg settlement."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
