@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1981-ussr-turkey-shelf-effective",
+      "title": "Вступление в силу соглашения СССР и Турции о разграничении континентального шельфа",
+      "kind": "treaty",
+      "date": {
+        "original": "15 мая 1981 г.",
+        "normalized": "1981-05-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Вступила в силу координатно заданная линия разграничения континентального шельфа СССР и Турции в Чёрном море; западный незавершённый участок договор прямо оставил для будущих переговоров.",
+      "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978"],
+      "territoryChangeIds": ["chg-1981-ussr-turkey-continental-shelf"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The line is maritime jurisdiction, not state territory."
+    },
+    {
+      "id": "evt-1987-ussr-turkey-eez-effective",
+      "title": "Линия советско-турецкого континентального шельфа стала также границей экономических зон",
+      "kind": "treaty",
+      "date": {
+        "original": "6 февраля 1987 г.",
+        "normalized": "1987-02-06",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Обмен нотами закрепил, что уже установленная линия континентального шельфа одновременно является границей экономических зон СССР и Турции.",
+      "evidenceDocumentIds": ["doc-ussr-turkey-eez-notes-1986-1987", "doc-ussr-turkey-continental-shelf-1978"],
+      "territoryChangeIds": ["chg-1987-ussr-turkey-eez-status"],
+      "reviewStatus": "source-verified",
+      "notes": "No second geometry overlay is created because the 1987 agreement expressly reuses the existing 1981 line."
+    }
+  ]
+}
