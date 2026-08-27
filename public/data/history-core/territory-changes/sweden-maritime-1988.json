@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1988-ussr-sweden-maritime-provisional",
+      "eventId": "evt-1988-ussr-sweden-maritime-provisional",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "16 мая 1988 г.",
+        "normalized": "1988-05-16",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-sweden-maritime-1988-a1-a17"],
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-sweden-maritime-1988-a1-a17.geojson",
+        "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+        "derivationNote": "Articles 1-2 define the line as loxodromes through points A1-A17. The source publishes equally valid Swedish and Soviet coordinate systems; the recipe uses the Soviet chart No. 1150 coordinate set without inventing a WGS84 transform."
+      },
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "chg-1988-ussr-sweden-maritime-definitive",
+      "eventId": "evt-1988-ussr-sweden-maritime-definitive",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "22 июня 1988 г.",
+        "normalized": "1988-06-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-sweden-maritime-1988-a1-a17.geojson",
+        "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+        "derivationNote": "The same provisionally active line became definitively effective after exchange of ratification notices; no new geometry is introduced."
+      },
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
