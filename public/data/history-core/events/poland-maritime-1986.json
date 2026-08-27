@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1986-ussr-poland-maritime-effective",
+      "title": "Вступление в силу советско-польского договора о разграничении морских пространств",
+      "kind": "treaty",
+      "date": {
+        "original": "13 марта 1986 г.",
+        "normalized": "1986-03-13",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Договор 1985 года вступил в силу и одновременно установил координатно заданный участок государственной границы в территориальном море и отдельную линию экономической зоны, рыболовной зоны и континентального шельфа.",
+      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985", "doc-ussr-poland-maritime-tripoint-1989"],
+      "territoryChangeIds": ["chg-1986-ussr-poland-territorial-sea", "chg-1986-ussr-poland-maritime-jurisdiction"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The two legal lines are separate History Core tracks even though they derive from the same treaty."
+    }
+  ]
+}
