@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1667-smolensk-implementation",
+      "eventId": "evt-1667-smolensk-russian-administration",
+      "polityId": "russian-tsardom",
+      "effectiveDate": {
+        "original": "18 июня 1667 г.",
+        "normalized": "1667-06-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "de-facto-control",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
+        "derivationNote": "Use this act to establish the implementation date for Russian administration of Smolensk and specifically named returned towns. The complete Andrusovo legal boundary must be reconstructed from the treaty and related boundary acts separately."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
