@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-turkey-territorial-sea-1973",
+      "sourceCollectionId": "soviet-treaty-collection",
+      "title": "Протокол между Правительством СССР и Правительством Турецкой Республики об определении линии морской границы между советскими и турецкими территориальными водами на Чёрном море",
+      "institution": "Министерство иностранных дел СССР / Сборник действующих договоров СССР",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20990/volume-990-I-14475-English.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "17 апреля 1973 г.",
+        "normalized": "1973-04-17",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Турецкой Республики"],
+      "publicationCitation": "Сборник действующих договоров, соглашений и конвенций, заключённых СССР с иностранными государствами. Вып. 31. № 2296. С. 62; UNTS Vol. 990, I-14475.",
+      "notes": "Article 1 establishes a 290-degree azimuth from the terminal point of the land boundary to the common outer 12-nautical-mile territorial-sea limit. UNTS records entry into force on 27 March 1975 by exchange of instruments in Moscow."
+    },
+    {
+      "id": "doc-ussr-turkey-ratification-5261-1973",
+      "sourceCollectionId": "rf-official-treaty-publications-retrospective",
+      "title": "Указ Президиума Верховного Совета СССР от 27 декабря 1973 г. № 5261-VIII о ратификации советско-турецкого протокола о морской границе",
+      "institution": "Президиум Верховного Совета СССР / Ведомости Верховного Совета СССР",
+      "url": "https://base.garant.ru/72266086/",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "27 декабря 1973 г.",
+        "normalized": "1973-12-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Президиум Верховного Совета СССР"],
+      "publicationCitation": "Ведомости Верховного Совета СССР. 9 января 1974 г. № 2. Ст. 51.",
+      "notes": "The access URL is a legal mirror; the canonical citation is the official Soviet gazette publication."
+    },
+    {
+      "id": "doc-ussr-turkey-demarcation-description-1980",
+      "sourceCollectionId": "icj-official-case-record",
+      "title": "Protocol-Description of the Course of the Soviet-Turkish Sea Boundary Line between the Territorial Seas of the USSR and Turkey",
+      "institution": "Bilateral Soviet-Turkish boundary commission / reproduced in official ICJ case annexes",
+      "url": "https://www.icj-cij.org/index.php/node/142467",
+      "tier": "A2-official-document-publication",
+      "documentType": "documentary-publication",
+      "date": {
+        "original": "11 сентября 1980 г.",
+        "normalized": "1980-09-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство Турецкой Республики"],
+      "publicationCitation": "Protocol-Description, Tbilisi, 11 September 1980; identified in official ICJ case records and reproduced/analysed in Limits in the Seas No. 109.",
+      "notes": "The documentary record fixes the initial sea-boundary point at 41°31′18.39″ N, 41°32′55.06″ E; the demarcated endpoint is 41°35′43.41″ N, 41°16′40.88″ E. Limits in the Seas No. 109 is retained only as technical corroboration of the protocol transcription."
+    }
+  ]
+}
