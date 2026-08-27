@@ -92,6 +92,8 @@ export type HistoryEvent = {
 
 export type TerritoryTrack =
   | 'russian-legal-border'
+  /** EEZ / continental-shelf / other maritime delimitation that is jurisdiction, not state territory. */
+  | 'maritime-jurisdiction'
   | 'de-facto-control'
   | 'front-line'
   | 'internal-administrative'
