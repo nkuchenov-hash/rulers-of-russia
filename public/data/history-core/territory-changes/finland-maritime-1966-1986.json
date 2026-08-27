@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1966-ussr-finland-sea-frontier",
+      "eventId": "evt-1966-ussr-finland-gulf-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "25 мая 1966 г.",
+        "normalized": "1966-05-25",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-finland-sea-frontier-1966"],
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-finland-sea-frontier-1966.geojson",
+        "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+        "derivationNote": "Article 1 gives three points connected by straight segments. The 1967 descriptive protocol confirms the same points as boundary markers Nos. 14, 15 and 16 and records physical demarcation."
+      },
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "chg-1966-ussr-finland-maritime-jurisdiction",
+      "eventId": "evt-1966-ussr-finland-gulf-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "25 мая 1966 г.",
+        "normalized": "1966-05-25",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-finland-maritime-jurisdiction-1966"],
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-finland-maritime-jurisdiction-1966.geojson",
+        "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965"],
+        "derivationNote": "Articles 2 and 3 directly list the median-line points; Article 6 states that these lines constitute the continental-shelf boundary."
+      },
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "chg-1968-ussr-finland-shelf-extension",
+      "eventId": "evt-1968-ussr-finland-shelf-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "15 марта 1968 г.",
+        "normalized": "1968-03-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-finland-shelf-extension-1968"],
+      "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-finland-shelf-extension-1968.geojson",
+        "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+        "derivationNote": "Article 1 gives the continuation from the 1965 terminal point through two intermediate points to 59°19.0′ N, 21°47.0′ E."
+      },
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "chg-1980-ussr-finland-fishing-status",
+      "eventId": "evt-1980-ussr-finland-fishing-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "9 июля 1980 г.",
+        "normalized": "1980-07-09",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+        "derivationNote": "Article 1 makes the already established 1965 and 1967 boundaries also delimit fishing jurisdiction; no duplicate line is materialized."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "chg-1980-ussr-finland-fishing-extension",
+      "eventId": "evt-1980-ussr-finland-fishing-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "9 июля 1980 г.",
+        "normalized": "1980-07-09",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-finland-fishing-extension-1980"],
+      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-finland-fishing-extension-1980.geojson",
+        "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980"],
+        "derivationNote": "Article 2 gives the 1967 endpoint in chart No. 1150 coordinates as 59°18′07″ N, 21°46′07″ E and continues west through 59°11′05″ N, 21°11′03″ E. This chart-system representation is kept separate from the 1967 source coordinates rather than silently datum-shifted."
+      },
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "chg-1986-ussr-finland-eez-status",
+      "eventId": "evt-1986-ussr-finland-eez-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "24 ноября 1986 г.",
+        "normalized": "1986-11-24",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-finland-eez-1985", "doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-ussr-finland-eez-1985", "doc-ussr-finland-fishing-1980", "doc-ussr-finland-gulf-1965", "doc-ussr-finland-shelf-1967"],
+        "derivationNote": "Article 1 expressly designates the lines established in the 1965, 1967 and 1980 agreements as the common boundary of the economic zone, fishing zone and continental shelf."
+      },
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
