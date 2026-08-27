@@ -15,18 +15,25 @@ const warn = message => warnings.push(message);
 
 const sourcesFile = path.join(dataRoot, 'sources.json');
 const documentsFile = path.join(dataRoot, 'documents.json');
+const documentsDir = path.join(dataRoot, 'documents');
 const territoryModelFile = path.join(dataRoot, 'territory-model.json');
 if (!fs.existsSync(sourcesFile)) fail('Missing history-core sources.json');
 if (!fs.existsSync(documentsFile)) fail('Missing history-core documents.json');
 if (!fs.existsSync(territoryModelFile)) fail('Missing history-core territory-model.json');
 
 const sourcesPayload = fs.existsSync(sourcesFile) ? readJson(sourcesFile) : {sources: []};
-const documentsPayload = fs.existsSync(documentsFile) ? readJson(documentsFile) : {documents: []};
+const rootDocumentsPayload = fs.existsSync(documentsFile) ? readJson(documentsFile) : {documents: []};
+const documentFiles = listJsonFiles(documentsDir);
+const documents = [...(rootDocumentsPayload.documents ?? [])];
+for (const file of documentFiles) documents.push(...(readJson(file).documents ?? []));
 const territoryModel = fs.existsSync(territoryModelFile) ? readJson(territoryModelFile) : {fragments: [], baseStates: [], changeFiles: []};
 const sources = sourcesPayload.sources ?? [];
-const documents = documentsPayload.documents ?? [];
 const sourceById = new Map(sources.map(item => [item.id, item]));
-const documentById = new Map(documents.map(item => [item.id, item]));
+const documentById = new Map();
+for (const document of documents) {
+  if (documentById.has(document.id)) fail(`Duplicate concrete document id ${document.id}`);
+  documentById.set(document.id, document);
+}
 const primaryTiers = new Set([
   'A1-archival-original',
   'A2-official-document-publication',
@@ -149,6 +156,7 @@ for (const relative of declaredChangeFiles) {
 }
 
 const changeFiles = listJsonFiles(path.join(dataRoot, 'territory-changes'));
+const changeIds = new Set();
 for (const file of changeFiles) {
   const relative = path.relative(dataRoot, file).replaceAll('\\', '/');
   if (!declaredChangeFiles.has(relative)) warn(`Territory change file ${relative} exists but is not replayed by territory-model.json`);
@@ -159,6 +167,8 @@ for (const file of changeFiles) {
       fail(`${label} is structurally incomplete`);
       continue;
     }
+    if (changeIds.has(change.id)) fail(`Duplicate territory change id ${change.id}`);
+    changeIds.add(change.id);
     if (!eventIds.has(change.eventId)) fail(`${label} references unknown event ${change.eventId}`);
     if (change.sourceIds) fail(`${label} uses obsolete collection-level sourceIds; cite evidenceDocumentIds instead`);
     validateEvidence(label, change.evidenceDocumentIds, change.reviewStatus !== 'research-required');
@@ -207,4 +217,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`History Core validation passed: ${sources.length} source collections, ${documents.length} concrete documents, ${eventFiles.length} event files, ${changeFiles.length} territory-change files, ${fragmentById.size} geometry fragments.`);
+console.log(`History Core validation passed: ${sources.length} source collections, ${documents.length} concrete documents across ${1 + documentFiles.length} document files, ${eventFiles.length} event files, ${changeFiles.length} territory-change files, ${fragmentById.size} geometry fragments.`);
