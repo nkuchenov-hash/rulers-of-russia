@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-2008-rf-norway-varanger-effective",
+      "title": "Вступление в силу соглашения России и Норвегии о разграничении морских пространств в районе Варангер-фьорда",
+      "kind": "treaty",
+      "date": {
+        "original": "9 июля 2008 г.",
+        "normalized": "2008-07-09",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-federation"],
+      "summary": "С 9 июля 2008 года действует шеститочечная WGS84 линия разграничения морских пространств России и Норвегии в районе Варангер-фьорда.",
+      "evidenceDocumentIds": ["doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "territoryChangeIds": ["chg-2008-rf-norway-varanger-delimitation"],
+      "reviewStatus": "geometry-verified",
+      "notes": "Point 6 is exactly the point used as point 1 of the 2010 treaty line that became effective in 2011."
+    }
+  ]
+}
