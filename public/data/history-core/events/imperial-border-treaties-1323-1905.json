@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1323-orekhovo-peace",
+      "title": "Ореховецкий мир между Новгородом и Швецией",
+      "kind": "treaty",
+      "date": {
+        "original": "12 августа 1323 г.",
+        "normalized": "1323-08-12",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["novgorodian-land"],
+      "summary": "Договор впервые официально разграничил территории Новгородской земли и Шведского королевства и перечислил пограничные ориентиры от Карельского перешейка к северу.",
+      "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
+      "territoryChangeIds": ["territory-1323-orekhovo-demarcation"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1711-pruth-peace",
+      "title": "Прутский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "12 июля 1711 г.",
+        "normalized": "1711-07-23",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "Русско-османский мир после Прутского похода с территориальными и фортификационными обязательствами России, включая Азовский узел.",
+      "evidenceDocumentIds": ["doc-pruth-1711-ebid"],
+      "territoryChangeIds": ["territory-1711-pruth-azov-settlement"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1713-adrianople-peace",
+      "title": "Адрианопольский мирный договор 1713 года",
+      "kind": "treaty",
+      "date": {
+        "original": "13 июня 1713 г.",
+        "normalized": "1713-06-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "Новый русско-османский договор, уточнивший послепрутское урегулирование и требующий сопоставления с Прутским договором и межевыми материалами.",
+      "evidenceDocumentIds": ["doc-adrianople-1713-ebid"],
+      "territoryChangeIds": ["territory-1713-adrianople-settlement"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1875-petersburg-japan-treaty",
+      "title": "Петербургский договор России и Японии",
+      "kind": "treaty",
+      "date": {
+        "original": "25 апреля 1875 г.",
+        "normalized": "1875-05-07",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Япония урегулировали статус Сахалина и Курильских островов: японская сторона отказалась от прав на Сахалин, Россия уступила Японии Курильскую гряду, указанную договором.",
+      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid"],
+      "territoryChangeIds": ["territory-1875-petersburg-sakhalin", "territory-1875-petersburg-kurils"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1878-san-stefano-preliminary-peace",
+      "title": "Сан-Стефанский прелиминарный мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "19 февраля 1878 г.",
+        "normalized": "1878-03-03",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Предварительный русско-османский мир с территориальными положениями, вскоре пересмотренными Берлинским трактатом; в месячной хронологии должен моделироваться отдельно от финального урегулирования.",
+      "evidenceDocumentIds": ["doc-san-stefano-1878-ebid"],
+      "territoryChangeIds": ["territory-1878-san-stefano-preliminary"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1878-berlin-treaty",
+      "title": "Берлинский трактат",
+      "kind": "treaty",
+      "date": {
+        "original": "1 июля 1878 г.",
+        "normalized": "1878-07-13",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Берлинский трактат пересмотрел Сан-Стефанское урегулирование; статья 58 закрепляла уступку России Ардагана, Карса и Батума с прилегающими территориями.",
+      "evidenceDocumentIds": ["doc-berlin-1878-ebid"],
+      "territoryChangeIds": ["territory-1878-berlin-caucasus"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1905-portsmouth-peace",
+      "title": "Портсмутский мирный договор",
+      "kind": "treaty",
+      "date": {
+        "original": "23 августа 1905 г.",
+        "normalized": "1905-09-05",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Мирный договор завершил русско-японскую войну и включал территориальное урегулирование, в том числе уступку Японии южной части Сахалина.",
+      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid"],
+      "territoryChangeIds": ["territory-1905-portsmouth-south-sakhalin"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
