@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1958-ussr-norway-varanger-protocol-effective",
+      "title": "Вступление в силу протокола демаркации морской границы СССР и Норвегии в Варангер-фьорде",
+      "kind": "treaty",
+      "date": {
+        "original": "17 марта 1958 г.",
+        "normalized": "1958-03-17",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Вступил в силу протокол-описание демаркированной в 1957 году советско-норвежской морской границы. Для отображения используется позднейший официальный пересчет неизменившейся линии в WGS84.",
+      "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "territoryChangeIds": ["chg-1958-ussr-norway-varanger-demarcation"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The geometry is not a private datum conversion: the later bilateral agreement officially recalculated the inherited line in WGS84 and expressly preserved its position."
+    }
+  ]
+}
