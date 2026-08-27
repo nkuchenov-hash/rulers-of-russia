@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-norway-varanger-1958-p1-p4",
+      "fragmentId": "frag-ussr-norway-varanger-1958-p1-p4",
+      "output": "geometry/ussr-norway-varanger-1958-p1-p4.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "WGS84 official 2007 recalculation of unchanged 1957 line",
+      "interpolation": "geodesic",
+      "stepsPerSegment": 8,
+      "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "points": [[30.81765278,69.79483889],[31.10432778,69.97930278],[31.4448,70.09967778],[31.50539722,70.12088889]],
+      "note": "Only inherited points 1-4 are used."
+    },
+    {
+      "id": "recipe-ussr-turkey-territorial-sea-1975",
+      "fragmentId": "frag-ussr-turkey-territorial-sea-1975",
+      "output": "geometry/ussr-turkey-territorial-sea-1975.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "demarcation protocol coordinates",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-demarcation-description-1980"],
+      "points": [[41.548627777777774,41.521775],[41.27802222222222,41.59539166666667]]
+    },
+    {
+      "id": "recipe-ussr-turkey-continental-shelf-1981",
+      "fragmentId": "frag-ussr-turkey-continental-shelf-1981",
+      "output": "geometry/ussr-turkey-continental-shelf-1981.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "coordinate systems of treaty charts Nos. 500 (1977) and 501 (1976)",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978", "doc-ussr-turkey-eez-notes-1986-1987"],
+      "points": [[41.27583333333333,41.594722222222224],[40.6925,41.95],[40.43333333333333,42.03111111111111],[39.82694444444445,42.13916666666667],[39.00361111111111,42.3375],[38.53611111111111,42.42444444444444],[36.845,43.18194444444444],[36.1825,43.43444444444444],[35.50694444444444,43.43555555555555],[34.21944444444445,43.18805555555555],[33.61555555555556,43.197222222222216],[32.0,43.34527777777778]],
+      "note": "The expressly unsettled westward segment is omitted."
+    },
+    {
+      "id": "recipe-ussr-poland-territorial-sea-1986",
+      "fragmentId": "frag-ussr-poland-territorial-sea-1986",
+      "output": "geometry/ussr-poland-territorial-sea-1986.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "treaty coordinates",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985"],
+      "points": [[19.641933333333334,54.457952777777784],[19.40611111111111,54.60416666666667]]
+    },
+    {
+      "id": "recipe-ussr-poland-maritime-jurisdiction-1986",
+      "fragmentId": "frag-ussr-poland-maritime-jurisdiction-1986",
+      "output": "geometry/ussr-poland-maritime-jurisdiction-1986.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "treaty coordinates",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985", "doc-ussr-poland-maritime-tripoint-1989"],
+      "points": [[19.40611111111111,54.60416666666667],[19.315,54.67],[19.345,54.815],[19.063333333333333,55.34133333333333],[18.936666666666667,55.85]]
+    },
+    {
+      "id": "recipe-ussr-dprk-territorial-sea-1991",
+      "fragmentId": "frag-ussr-dprk-territorial-sea-1991",
+      "output": "geometry/ussr-dprk-territorial-sea-1991.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "treaty coordinates",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+      "points": [[130.69698888888888,42.29287222222222],[130.88333333333333,42.15]]
+    },
+    {
+      "id": "recipe-rf-lithuania-maritime-2003-p1-p3",
+      "fragmentId": "frag-rf-lithuania-maritime-2003-p1-p3",
+      "output": "geometry/rf-lithuania-maritime-2003-p1-p3.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "WGS84",
+      "interpolation": "rhumb",
+      "stepsPerSegment": 12,
+      "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997", "doc-rf-lithuania-ratification-70fz-2003"],
+      "points": [[20.65378333333333,55.384],[19.92443333333333,55.63625],[19.04675,55.92366666666667]]
+    },
+    {
+      "id": "recipe-rf-norway-varanger-2008-p1-p6",
+      "fragmentId": "frag-rf-norway-varanger-2008-p1-p6",
+      "output": "geometry/rf-norway-varanger-2008-p1-p6.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "WGS84",
+      "interpolation": "geodesic",
+      "stepsPerSegment": 8,
+      "evidenceDocumentIds": ["doc-rf-norway-varanger-2007"],
+      "points": [[30.81765278,69.79483889],[31.10432778,69.97930278],[31.4448,70.09967778],[31.50539722,70.12088889],[31.77599167,70.19768889],[32.07305556,70.27470833]]
+    },
+    {
+      "id": "recipe-rf-norway-delimitation-2011-p1-p8",
+      "fragmentId": "frag-rf-norway-delimitation-2011-p1-p8",
+      "output": "geometry/rf-norway-delimitation-2011-p1-p8.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "WGS 84 (G1150, epoch 2001.0)",
+      "interpolation": "geodesic",
+      "stepsPerSegment": 18,
+      "evidenceDocumentIds": ["doc-rf-norway-delimitation-2010"],
+      "points": [[32.07305556,70.27470833],[37.0,73.68634722],[37.0,75.19472222],[38.0,75.80020556],[38.0,78.62486111],[34.99888889,79.28465833],[35.00008056,83.35194444],[32.06426667,84.69463056]],
+      "note": "The terminal extension beyond treaty point 8 remains omitted."
+    },
+    {
+      "id": "recipe-rf-dprk-territorial-sea-2013",
+      "fragmentId": "frag-rf-dprk-territorial-sea-2013",
+      "output": "geometry/rf-dprk-territorial-sea-2013.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "1990 demarcation retained by 2012 RF-DPRK treaty",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+      "points": [[130.69698888888888,42.29287222222222],[130.88333333333333,42.15]]
+    }
+  ]
+}
