@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-georgia-accession-council-1800-1801-rgia",
+      "sourceCollectionId": "rosarchiv-search-gis",
+      "title": "О присоединении Грузии к России. Материалы Непременного (Государственного) Совета, 1800–1801 гг.",
+      "institution": "Российский государственный исторический архив / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/879845",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "1800–1801 гг.",
+        "normalized": "1800-01-01",
+        "normalizedEnd": "1801-12-31",
+        "precision": "range",
+        "calendar": "julian"
+      },
+      "authority": ["Непременный / Государственный Совет Российской империи"],
+      "archiveCitation": "РГИА. Ф. 1147. Оп. 1. Д. 266. 134 л.",
+      "notes": "Archival file explicitly titled 'О присоединении Грузии к России' and containing protocols for 1801. It documents the decision process and is used together with the published imperial manifestos for exact legal milestones."
+    },
+    {
+      "id": "doc-georgia-paul-manifest-1801-pszri",
+      "sourceCollectionId": "prlib-pszri",
+      "title": "Манифест Павла I о присоединении Грузинского царства к России, обнародованный 18 января 1801 г.",
+      "institution": "Российская империя / Полное собрание законов Российской империи / Президентская библиотека",
+      "url": "https://www.prlib.ru/node/618993",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "18 января 1801 г. (обнародование)",
+        "normalized": "1801-01-30",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "The manifesto was prepared/signed in December 1800 and publicly promulgated in St Petersburg on 18 (30) January 1801; the public legal milestone is stored here."
+      },
+      "authority": ["Российская империя / Павел I"],
+      "publicationCitation": "ПСЗРИ. Собрание I. Т. XXVI. № 19721. С. 502–503.",
+      "notes": "The official Presidential Library chronology identifies this manifesto as the act by which Kartli and Kakheti were called the Georgian Kingdom and incorporated into Russia."
+    },
+    {
+      "id": "doc-georgia-alexander-manifest-1801-pszri",
+      "sourceCollectionId": "prlib-pszri",
+      "title": "Манифест Александра I к грузинскому народу об учреждении внутреннего управления Грузии. 12 сентября 1801 г.",
+      "institution": "Российская империя / Полное собрание законов Российской империи / РГИА",
+      "url": "https://www.prlib.ru/node/618993",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "12 сентября 1801 г.",
+        "normalized": "1801-09-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя / Александр I"],
+      "archiveCitation": "РГИА (ЦГИА), ф. 1329, оп. 1, № 242, л. 40–44, подлинник (citation preserved in documentary publication).",
+      "publicationCitation": "ПСЗРИ. Собрание I. Т. XXVI. № 20007. С. 782–783.",
+      "notes": "The manifesto states that Alexander I found the Georgian Kingdom already incorporated and established direct internal administration. Use this as an administrative-state milestone, not a second territorial acquisition."
+    }
+  ]
+}
