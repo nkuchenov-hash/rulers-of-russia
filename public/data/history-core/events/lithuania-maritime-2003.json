@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-2003-rf-lithuania-maritime-effective",
+      "title": "Вступление в силу договора России и Литвы о разграничении исключительной экономической зоны и континентального шельфа",
+      "kind": "treaty",
+      "date": {
+        "original": "12 августа 2003 г.",
+        "normalized": "2003-08-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-federation"],
+      "summary": "Вступила в силу координатно заданная российско-литовская линия разграничения исключительных экономических зон и континентального шельфа в Балтийском море.",
+      "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997", "doc-rf-lithuania-ratification-70fz-2003"],
+      "territoryChangeIds": ["chg-2003-rf-lithuania-maritime-delimitation"],
+      "reviewStatus": "geometry-verified",
+      "notes": "The treaty explicitly requires rhumb-line segments between the three WGS84 points and gives coordinates priority over the chart."
+    }
+  ]
+}
