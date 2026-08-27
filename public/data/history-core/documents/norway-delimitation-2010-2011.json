@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-rf-norway-delimitation-2010",
+      "sourceCollectionId": "rg-official-law-publication",
+      "title": "Договор между Российской Федерацией и Королевством Норвегия о разграничении морских пространств и сотрудничестве в Баренцевом море и Северном Ледовитом океане",
+      "institution": "Российская Федерация / Королевство Норвегия; официальная публикация",
+      "url": "https://rg.ru/documents/2011/04/08/rf-norvegiya-dok.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "15 сентября 2010 г.",
+        "normalized": "2010-09-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Российская Федерация", "Королевство Норвегия"],
+      "publicationCitation": "Собрание законодательства Российской Федерации. 11 июля 2011 г. № 28. Ст. 3997; Бюллетень международных договоров. 2011. № 12. С. 79–85.",
+      "notes": "Article 1 defines the maritime delimitation line as geodesic segments through eight WGS 84 coordinate points. The coordinate description has priority over the illustrative map. The terminal extension beyond point 8 depends on the outer continental-shelf endpoints and is not digitized in the present fragment."
+    },
+    {
+      "id": "doc-rf-norway-ratification-57fz-2011",
+      "sourceCollectionId": "rg-official-law-publication",
+      "title": "Федеральный закон от 5 апреля 2011 г. № 57-ФЗ о ратификации российско-норвежского договора о разграничении морских пространств",
+      "institution": "Российская Федерация",
+      "url": "https://rg.ru/documents/2011/04/08/rf-norvegiya-dok.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "5 апреля 2011 г.",
+        "normalized": "2011-04-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Президент Российской Федерации", "Федеральное Собрание Российской Федерации"],
+      "publicationCitation": "Федеральный закон от 05.04.2011 № 57-ФЗ.",
+      "notes": "The law ratifies the treaty and also gives coordinate-defined boundaries for the treaty's Special Area."
+    },
+    {
+      "id": "doc-rf-norway-entry-force-2011",
+      "sourceCollectionId": "mid-rf-treaty-notices",
+      "title": "Сообщение о вступлении в силу российско-норвежского договора о разграничении морских пространств",
+      "institution": "Министерство иностранных дел Российской Федерации",
+      "url": "https://base.garant.ru/2571152/",
+      "tier": "A2-official-document-publication",
+      "documentType": "documentary-publication",
+      "date": {
+        "original": "7 июля 2011 г.",
+        "normalized": "2011-07-07",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Министерство иностранных дел Российской Федерации"],
+      "publicationCitation": "Сообщение МИД России от 20 июня 2011 г.; договор вступил в силу 7 июля 2011 г.",
+      "notes": "Treaty article 8 provides entry into force on the 30th day after exchange of ratification instruments; the instruments were exchanged on 7 June 2011."
+    }
+  ]
+}
