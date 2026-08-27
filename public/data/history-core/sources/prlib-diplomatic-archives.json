@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "prlib-russia-sweden-collection",
+      "title": "Россия – Швеция: из истории взаимоотношений",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/section/909041",
+      "tier": "A2-official-document-publication",
+      "coverage": "Russian-Swedish documentary and cartographic materials, including the 1809 Fredrikshamn treaty scans and later boundary materials",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "The collection identifies the Fredrikshamn peace treaty as scans 141-156 and an additional 1817 act as scans 157-170. Individual document records must preserve exact scan ranges."
+    },
+    {
+      "id": "prlib-rgia-archival-files",
+      "title": "Цифровые копии и описания дел Российского государственного исторического архива в Президентской библиотеке",
+      "institution": "Российский государственный исторический архив / Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/collections/467115",
+      "tier": "A1-archival-original",
+      "coverage": "Digitized or catalogued RGIA archival files used for imperial territorial administration and boundary implementation",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Each canonical record must cite its concrete RGIA fond/opis/delo/folios and exact President Library item URL. Copies are marked as copies where the catalog says so."
+    }
+  ]
+}
