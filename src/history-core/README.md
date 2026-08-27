@@ -8,16 +8,34 @@ A canonical fact is not accepted because a modern map or historian says so. It m
 
 Russian archival and official documentary evidence is the canonical frame for the project. Russian academic scholarship may help interpret a difficult document or georeference a textual boundary, but secondary interpretation cannot create a canonical event or boundary by itself.
 
-## Why the database is event-sourced
+## Event-sourced territory
 
-We do **not** store one independent border map for every month. We store:
+We do **not** hand-author one independent border map for every month. Humans edit only evidence and changes:
 
-1. dated historical events;
-2. primary-source evidence for each event;
-3. territorial changes caused by the event;
-4. source-backed boundary snapshots at actual change dates.
+1. concrete historical documents;
+2. dated historical events;
+3. territorial changes caused by those events;
+4. small source-backed geometry fragments;
+5. verified base states from which changes can be replayed.
 
-A view for any day or month resolves the latest verified territorial state effective at that date. Months without a border change reuse the previous state. This produces month-level history without inventing thousands of duplicate maps.
+`npm run materialize:history-territory` replays all `geometry-verified` changes and generates every downstream state. If one date, document, confidence value or geometry fragment changes, later states are rebuilt automatically.
+
+## Automatic map integration
+
+The materializer emits the canonical month/day-capable index at:
+
+`public/data/history-core/generated/territory/index.json`
+
+It also emits generated GeoJSON states and uncertainty layers. For the current year-based globe it creates compatibility GeoJSON and automatically switches the matching polity entry in `public/data/territory/archive/manifest.json` to History Core output during build.
+
+Therefore:
+
+- a polity with verified History Core geometry uses it automatically;
+- a polity not yet reconstructed continues to use the legacy bootstrap temporarily;
+- no renderer code needs to be edited when research changes a border;
+- month-aware consumers use the generated History Core index directly.
+
+Generated snapshots are build artifacts. **Never repair a generated snapshot manually.** Fix the source document/event/change/fragment and rebuild.
 
 ## Date integrity
 
@@ -27,17 +45,26 @@ A view for any day or month resolves the latest verified territorial state effec
 - Never invent a month or day when the source supports only a year or range.
 - Store signing, ratification, entry-into-force and actual implementation dates separately when they differ.
 
+Only day/month-precise verified changes are eligible for deterministic monthly replay. A year-only or unresolved range remains research data and cannot silently move a production border.
+
 ## Territory is not always a modern line
 
-For early and medieval Rus, a thin modern border line is often historically false. The schema supports:
+For early and medieval Rus, a thin modern border line is often historically false. Geometry fragments can be:
 
-- `linear-border` — a documented/demarcated line;
-- `frontier-zone` — a documented borderland with uncertain width;
-- `sphere-of-control` — political/military control without a modern state line;
-- `tributary-zone` — tribute/dependency relationships;
-- `mixed` — combinations of the above.
+- `territory-area` — reconstructed included territory;
+- `boundary-corridor` — uncertain location of a boundary line;
+- `frontier-zone` — historically fuzzy borderland;
+- `control-zone` — de-facto/sphere-of-control evidence.
 
-Uncertainty must be visible in the data and eventually in the map UI.
+The territorial model can be:
+
+- `linear-border`;
+- `frontier-zone`;
+- `sphere-of-control`;
+- `tributary-zone`;
+- `mixed`.
+
+Each fragment carries confidence and may carry `uncertaintyMeters`. The materializer copies those into generated uncertainty layers so the map can style uncertainty from data instead of hard-coded visual guesses.
 
 ## Separate territorial tracks
 
@@ -49,7 +76,16 @@ Do not collapse unlike concepts into one polygon:
 - `internal-administrative` — guberniya/oblast/republic/internal boundary;
 - `claim` — a claim that is not the same as effective control or a treaty border.
 
-This prevents conquest, occupation, armistice lines and final treaty borders from being silently treated as the same thing.
+## Geometry operations
+
+Every verified territorial change has a spatial action:
+
+- `add` — union an acquired fragment with current territory;
+- `remove` — subtract a ceded/separated fragment;
+- `replace` — replace the whole state from verified fragments;
+- `metadata-only` — documentary change that does not itself alter area.
+
+The generator uses polygon boolean operations. `acquire`, `cede`, `unite`, `separate`, `occupy`, `withdraw` and `replace-state` have default actions, but `geometryAction` can be stated explicitly when the historical case requires it.
 
 ## Source tiers
 
@@ -59,39 +95,31 @@ This prevents conquest, occupation, armistice lines and final treaty borders fro
 - **B1 Russian academic interpretation** — can explain or georeference but cannot establish the canonical fact alone.
 - **C bootstrap only** — third-party historical datasets/maps; useful for discovery and temporary visualization only.
 
-Canonical event/boundary records require at least one A1/A2/A3 source.
+Canonical event/boundary records require at least one A1/A2/A3 document.
 
-## Planned data layout
+## Editable data layout
 
-`public/data/history-core/sources.json` — source registry.
+- `public/data/history-core/sources.json` — discovery/source collections.
+- `public/data/history-core/documents.json` — concrete cited documents.
+- `public/data/history-core/events/*.json` — reusable historical events.
+- `public/data/history-core/territory-changes/*.json` — event-to-territory operations.
+- `public/data/history-core/territory-model.json` — replay graph: base states, geometry fragments and change files.
+- geometry files referenced by `territory-model.json` — small evidence-backed editable pieces.
 
-`public/data/history-core/events/*.json` — editable event records, eventually split by period/century for manageable reviews.
+Generated output lives under `public/data/history-core/generated/territory/` during build.
 
-`public/data/history-core/territory-changes/*.json` — event-to-boundary changes.
+## CI contract
 
-`public/data/history-core/territory-snapshots/*.geojson` — materialized source-backed geometry at actual change dates.
+Every main/deploy build runs:
 
-`public/data/history-core/month-index.json` — generated index from month -> effective snapshot IDs. It is build output, never manually authored.
+1. `npm run validate:history`;
+2. `npm run materialize:history-territory`;
+3. site typecheck/build.
 
-## Required fields for a canonical territorial change
+Validation rejects broken document references, unknown events/fragments, unverified geometry in verified states, missing geometry files, and geometry-mutating changes that have no verified fragments.
 
-- event ID;
-- original and normalized effective date with precision;
-- polity;
-- operation (`acquire`, `cede`, `demarcate`, etc.);
-- territorial model and track;
-- primary source IDs;
-- geometry method;
-- derivation note if a verbal treaty description was converted to geometry;
-- review status and uncertainty.
+This makes the dependency chain explicit:
 
-## Research order
-
-1. Build complete source registry and research queue.
-2. Replace current third-party Russian territory bootstrap with source-backed change events.
-3. Start with periods where primary documentation is dense and exact: 1649-present.
-4. Then 1229-1648 from charters, treaty books, acts and chronicles.
-5. Handle 862-1228 as documentary territorial models/zones rather than false precise borders.
-6. Link the same event IDs into ruler pages and the global timeline.
+**document → event → territory change → geometry fragment → replayed state → globe / ruler page / timeline.**
 
 The existing `src/historical-state` directory is a visual-state system. `History Core` is deliberately separate: it is factual provenance and chronology, not styling.
