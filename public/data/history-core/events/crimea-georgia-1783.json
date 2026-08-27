@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1783-crimea-manifest",
+      "title": "Манифест о принятии Крыма, Тамани и Кубанской стороны под Российскую державу",
+      "kind": "law",
+      "date": {
+        "original": "8 апреля 1783 г.",
+        "normalized": "1783-04-19",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Екатерина II подписала манифест о принятии Крымского полуострова, острова Тамана и всей Кубанской стороны под Российскую державу.",
+      "evidenceDocumentIds": ["doc-crimea-manifest-1783-pszri"],
+      "territoryChangeIds": ["territory-1783-crimea-taman-kuban-russian-law"],
+      "reviewStatus": "source-verified",
+      "notes": "Russian domestic legal act. International recognition is modeled separately through the later Constantinople act and the Treaty of Jassy."
+    },
+    {
+      "id": "evt-1783-georgievsk-treaty",
+      "title": "Георгиевский трактат с Картли-Кахетией",
+      "kind": "treaty",
+      "date": {
+        "original": "24 июля 1783 г.",
+        "normalized": "1783-08-04",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Договор установил российское покровительство и верховную власть в договорном отношении с Картли-Кахетинским царством, сохраняя его отдельную государственность.",
+      "evidenceDocumentIds": ["doc-georgievsk-1783-prlib"],
+      "territoryChangeIds": ["territory-1783-georgievsk-protectorate"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1784-constantinople-crimea-act",
+      "title": "Константинопольский акт России и Османской империи о мире, торговле и границах",
+      "kind": "treaty",
+      "date": {
+        "original": "28 декабря 1783 г.",
+        "normalized": "1784-01-08",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Российская и Османская империи заключили отдельный акт после российского манифеста 1783 года; он относится к международному урегулированию мира, торговли и границ и требует постатейного сопоставления с апрельским актом и Ясским миром.",
+      "evidenceDocumentIds": ["doc-constantinople-crimea-recognition-1783-prlib"],
+      "territoryChangeIds": ["territory-1784-constantinople-crimea-recognition"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
