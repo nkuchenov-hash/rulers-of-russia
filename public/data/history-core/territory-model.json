@@ -10,7 +10,8 @@
   },
   "changeFiles": [
     "territory-changes/research-seed.json",
-    "territory-changes/documented-milestones.json"
+    "territory-changes/documented-milestones.json",
+    "territory-changes/modern-2022.json"
   ],
   "baseStates": [],
   "fragments": []
