@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1944-tuva-ussr-admission",
+      "title": "Принятие Тувинской Народной Республики в состав СССР",
+      "kind": "union",
+      "date": {"original": "11 октября 1944 г.", "normalized": "1944-10-11", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "Указ Президиума Верховного Совета СССР оформил принятие Тувинской Народной Республики в состав СССР.",
+      "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
+      "territoryChangeIds": ["territory-1944-tuva-ussr-admission"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1944-tuva-rsfsr-admission",
+      "title": "Принятие Тувы в состав РСФСР",
+      "kind": "law",
+      "date": {"original": "13 октября 1944 г.", "normalized": "1944-10-13", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["ussr", "rsfsr"],
+      "summary": "Через два дня после союзного акта отдельный указ Президиума Верховного Совета РСФСР оформил включение Тувы во внутреннюю структуру РСФСР.",
+      "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
+      "territoryChangeIds": ["territory-1944-tuva-rsfsr-internal"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1945-ussr-poland-border-treaty",
+      "title": "Договор о советско-польской государственной границе",
+      "kind": "treaty",
+      "date": {"original": "16 августа 1945 г.", "normalized": "1945-08-16", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "СССР и Польская Республика подписали отдельный договор о государственной границе, ставший ключевым послевоенным юридическим рубежом на западной границе СССР.",
+      "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid"],
+      "territoryChangeIds": ["territory-1945-ussr-poland-border"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1946-south-sakhalin-kurils-soviet-law",
+      "title": "Советский правовой акт по Южному Сахалину и Курильским островам",
+      "kind": "law",
+      "date": {"original": "2 февраля 1946 г.", "normalized": "1946-02-02", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "Указ Президиума Верховного Совета СССР распространил советскую национализацию на землю и хозяйственные объекты Южного Сахалина и Курильских островов после военных событий 1945 года.",
+      "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
+      "territoryChangeIds": ["territory-1946-south-sakhalin-kurils-soviet-legal"],
+      "reviewStatus": "source-verified",
+      "notes": "This event establishes a Soviet domestic legal track, not an assertion that international recognition was identical. De-facto control and international treaty status remain separate tracks."
+    },
+    {
+      "id": "evt-1954-crimea-transfer",
+      "title": "Передача Крымской области из РСФСР в УССР",
+      "kind": "law",
+      "date": {"original": "19 февраля 1954 г.", "normalized": "1954-02-19", "precision": "day", "calendar": "gregorian"},
+      "polityIds": ["ussr", "rsfsr"],
+      "summary": "Указ Президиума Верховного Совета СССР передал Крымскую область из состава РСФСР в состав Украинской ССР.",
+      "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
+      "territoryChangeIds": ["territory-1954-crimea-internal-transfer"],
+      "reviewStatus": "source-verified",
+      "notes": "Internal-administrative change only; the external border of the USSR did not change."
+    }
+  ]
+}
