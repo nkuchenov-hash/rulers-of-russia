@@ -41,6 +41,16 @@
       "notes": "Chronicle evidence must retain source-specific uncertainty; it cannot be converted into a modern precise border without additional documentary/cartographic evidence."
     },
     {
+      "id": "prlib-medieval-acts",
+      "title": "Средневековые русские акты и грамоты в фонде Президентской библиотеки",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/330304",
+      "tier": "A2-official-document-publication",
+      "coverage": "Novgorod and Pskov charters and treaties, including the 1323 Orekhovets treaty text in the 1949 Academy of Sciences documentary edition",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Cite exact document numbers/pages/scans from the documentary edition. Geometry still requires explicit spatial reconstruction and uncertainty."
+    },
+    {
       "id": "neb-psrl",
       "title": "Русские летописи / Полное собрание русских летописей",
       "institution": "Национальная электронная библиотека / РГБ",
