@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1689-nerchinsk-treaty",
+      "title": "Нерчинский договор России с Китаем",
+      "kind": "treaty",
+      "date": {
+        "original": "27 августа 1689 г.",
+        "normalized": "1689-09-06",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "Первый договор России и империи Цин задал договорный рубеж в Приамурье, но описал значительную часть линии лишь в общих чертах.",
+      "evidenceDocumentIds": ["doc-nerchinsk-1689-mfa"],
+      "territoryChangeIds": ["territory-1689-nerchinsk-delimitation"],
+      "reviewStatus": "source-verified",
+      "notes": "The source record explicitly states that maps were insufficient, geographic landmarks were ambiguous and demarcation was not performed; geometry must remain uncertain."
+    },
+    {
+      "id": "evt-1727-kyakhta-treaty",
+      "title": "Кяхтинский русско-китайский договор",
+      "kind": "treaty",
+      "date": {
+        "original": "21 октября 1727 г.",
+        "normalized": "1727-11-01",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Кяхтинский договор закрепил границу, определённую Буринским договором; для её реализации была выполнена геодезическая съёмка и картографирована новая русско-китайская граница.",
+      "evidenceDocumentIds": ["doc-kyakhta-1727-mfa"],
+      "territoryChangeIds": ["territory-1727-kyakhta-demarcation"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1858-aigun-treaty",
+      "title": "Айгунский договор России с Китаем",
+      "kind": "treaty",
+      "date": {
+        "original": "16 мая 1858 г.",
+        "normalized": "1858-05-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Айгунский договор закрепил за Россией левобережье Амура от Аргуни до устья; пространство между Уссури и морем оставлялось в совместном владении до последующего разграничения.",
+      "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+      "territoryChangeIds": ["territory-1858-aigun-amur-left-bank", "territory-1858-aigun-ussuri-joint-status"],
+      "reviewStatus": "source-verified",
+      "notes": "Qing approval occurred 2(14) June and Russian ratification 8(20) June 1858; territory changes use month precision for June until exact legal effectiveness is established."
+    },
+    {
+      "id": "evt-1860-peking-treaty",
+      "title": "Пекинский дополнительный договор России с Китаем",
+      "kind": "treaty",
+      "date": {
+        "original": "2 ноября 1860 г.",
+        "normalized": "1860-11-14",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Пекинский договор подтвердил Айгунский договор и окончательно определил восточную границу, закрепив за Россией Уссурийский край; к договору прилагалась карта восточного участка границы.",
+      "evidenceDocumentIds": ["doc-peking-1860-mfa"],
+      "territoryChangeIds": ["territory-1860-peking-ussuri-acquisition"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1861-ussuri-map-exchange",
+      "title": "Размен картами и разграничение в Уссурийском крае",
+      "kind": "demarcation",
+      "date": {
+        "original": "16 июня 1861 г.",
+        "normalized": "1861-06-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Протокол к Пекинскому договору оформил размен картами и разграничение восточного русско-китайского рубежа в Уссурийском крае.",
+      "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-peking-1860-mfa"],
+      "territoryChangeIds": ["territory-1861-ussuri-map-demarcation"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
