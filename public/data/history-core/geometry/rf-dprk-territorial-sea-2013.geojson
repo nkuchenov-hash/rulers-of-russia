@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-rf-dprk-territorial-sea-2013",
+        "track": "russian-legal-border",
+        "sourceGeometry": "1990 demarcation retained by 2012 RF-DPRK treaty",
+        "segmentMeaning": "state boundary through territorial sea",
+        "note": "The 2012 treaty keeps the 1990 demarcation protocol as an operative boundary document. Only the coordinate-defined straight sea segment is encoded; the river segment is not inferred."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [130.69698888888888, 42.29287222222222],
+          [130.88333333333333, 42.15]
+        ]
+      }
+    }
+  ]
+}
