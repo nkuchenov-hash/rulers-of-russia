@@ -14,6 +14,7 @@ const fail = message => errors.push(message);
 const warn = message => warnings.push(message);
 
 const sourcesFile = path.join(dataRoot, 'sources.json');
+const sourcesDir = path.join(dataRoot, 'sources');
 const documentsFile = path.join(dataRoot, 'documents.json');
 const documentsDir = path.join(dataRoot, 'documents');
 const territoryModelFile = path.join(dataRoot, 'territory-model.json');
@@ -21,14 +22,21 @@ if (!fs.existsSync(sourcesFile)) fail('Missing history-core sources.json');
 if (!fs.existsSync(documentsFile)) fail('Missing history-core documents.json');
 if (!fs.existsSync(territoryModelFile)) fail('Missing history-core territory-model.json');
 
-const sourcesPayload = fs.existsSync(sourcesFile) ? readJson(sourcesFile) : {sources: []};
+const rootSourcesPayload = fs.existsSync(sourcesFile) ? readJson(sourcesFile) : {sources: []};
+const sourceFiles = listJsonFiles(sourcesDir);
+const sources = [...(rootSourcesPayload.sources ?? [])];
+for (const file of sourceFiles) sources.push(...(readJson(file).sources ?? []));
+const sourceById = new Map();
+for (const source of sources) {
+  if (sourceById.has(source.id)) fail(`Duplicate source collection id ${source.id}`);
+  sourceById.set(source.id, source);
+}
+
 const rootDocumentsPayload = fs.existsSync(documentsFile) ? readJson(documentsFile) : {documents: []};
 const documentFiles = listJsonFiles(documentsDir);
 const documents = [...(rootDocumentsPayload.documents ?? [])];
 for (const file of documentFiles) documents.push(...(readJson(file).documents ?? []));
 const territoryModel = fs.existsSync(territoryModelFile) ? readJson(territoryModelFile) : {fragments: [], baseStates: [], changeFiles: []};
-const sources = sourcesPayload.sources ?? [];
-const sourceById = new Map(sources.map(item => [item.id, item]));
 const documentById = new Map();
 for (const document of documents) {
   if (documentById.has(document.id)) fail(`Duplicate concrete document id ${document.id}`);
@@ -217,4 +225,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`History Core validation passed: ${sources.length} source collections, ${documents.length} concrete documents across ${1 + documentFiles.length} document files, ${eventFiles.length} event files, ${changeFiles.length} territory-change files, ${fragmentById.size} geometry fragments.`);
+console.log(`History Core validation passed: ${sources.length} source collections across ${1 + sourceFiles.length} source files, ${documents.length} concrete documents across ${1 + documentFiles.length} document files, ${eventFiles.length} event files, ${changeFiles.length} territory-change files, ${fragmentById.size} geometry fragments.`);
