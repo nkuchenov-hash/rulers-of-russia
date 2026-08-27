@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1975-ussr-turkey-territorial-sea",
+      "eventId": "evt-1975-ussr-turkey-territorial-sea-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "27 марта 1975 г.",
+        "normalized": "1975-03-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-turkey-territorial-sea-1975"],
+      "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-ratification-5261-1973", "doc-ussr-turkey-demarcation-description-1980"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-turkey-territorial-sea-1975.geojson",
+        "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-demarcation-description-1980"],
+        "derivationNote": "The 1973 protocol legally defines the boundary as the 290-degree line from the coastal land-boundary terminus to the common outer 12-nautical-mile limit. The later bilateral protocol-description fixes the demarcated endpoints at 41°31′18.39″ N, 41°32′55.06″ E and 41°35′43.41″ N, 41°16′40.88″ E."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Valid as a Soviet state-border fragment from treaty entry into force. It ends with the USSR polity and is not inherited by the Russian Federation because the adjacent Soviet coast became Georgian territory."
+    }
+  ]
+}
