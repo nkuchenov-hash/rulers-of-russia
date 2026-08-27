@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1868-bukhara-protectorate",
+      "eventId": "evt-1868-bukhara-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original": "23 июня (5 июля) 1868 г.", "normalized": "1868-07-05", "precision": "day", "calendar": "julian"},
+      "track": "claim",
+      "territorialModel": "sphere-of-control",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-kaufman-central-asia-rgia-inventory"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology"],
+        "derivationNote": "Bukhara must be rendered as a dependent/vassal sphere, not filled as core Russian territory. Exact treaty text and status terminology remain to be indexed."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1868-zeravshan-acquisition",
+      "eventId": "evt-1868-bukhara-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original": "1868–1870 гг.", "normalized": "1868", "normalizedEnd": "1870", "precision": "range", "calendar": "julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-kaufman-central-asia-rgia-inventory"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-kaufman-central-asia-rgia-inventory"],
+        "derivationNote": "The Zeravshan/Samarkand territories were acquired in stages during 1868–1870. Split into exact dated acts before deterministic month-level geometry replay."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1873-khiva-protectorate",
+      "eventId": "evt-1873-gandimyan-khiva",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "track": "claim",
+      "territorialModel": "sphere-of-control",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
+        "derivationNote": "Khiva remains a distinct dependent polity. It must not be merged into core Russian territory. Locate the primary treaty before promotion."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1873-amudarya-right-bank-acquisition",
+      "eventId": "evt-1873-gandimyan-khiva",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
+        "derivationNote": "Only the right-bank Amu Darya lands described by the treaty enter core Russian territory. Georeference after primary treaty clauses are indexed."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1876-kokand-fergana-acquisition",
+      "eventId": "evt-1876-kokand-annexation",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original": "19 февраля (2 марта) 1876 г.", "normalized": "1876-03-02", "precision": "day", "calendar": "julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
+      "geometry": {
+        "method": "contemporary-official-map",
+        "evidenceDocumentIds": ["doc-fergana-map-1876-general-staff"],
+        "derivationNote": "The 1876 General Staff Fergana map is a strong contemporary geometry source. Promote only after georeferencing and after the precise imperial legal act is indexed."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
