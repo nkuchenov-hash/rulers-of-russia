@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-2022-dnr-russian-legal",
+      "eventId": "evt-2022-dnr-russian-law",
+      "polityId": "russian-federation",
+      "effectiveDate": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"],
+      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "reviewStatus": "source-verified",
+      "notes": "Russian legal-border track only."
+    },
+    {
+      "id": "territory-2022-lnr-russian-legal",
+      "eventId": "evt-2022-lnr-russian-law",
+      "polityId": "russian-federation",
+      "effectiveDate": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"],
+      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "reviewStatus": "source-verified",
+      "notes": "Russian legal-border track only."
+    },
+    {
+      "id": "territory-2022-zaporozhye-russian-legal",
+      "eventId": "evt-2022-zaporozhye-russian-law",
+      "polityId": "russian-federation",
+      "effectiveDate": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"],
+      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "reviewStatus": "source-verified",
+      "notes": "Russian legal-border track only."
+    },
+    {
+      "id": "territory-2022-kherson-russian-legal",
+      "eventId": "evt-2022-kherson-russian-law",
+      "polityId": "russian-federation",
+      "effectiveDate": {"original": "4 октября 2022 г.", "normalized": "2022-10-04", "precision": "day", "calendar": "gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"],
+      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "reviewStatus": "source-verified",
+      "notes": "Russian legal-border track only."
+    }
+  ]
+}
