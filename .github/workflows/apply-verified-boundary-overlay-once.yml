@@ -1,0 +1,30 @@
+name: Apply verified boundary overlay renderer patch
+
+on:
+  push:
+    paths:
+      - 'scripts/patch-verified-boundary-overlay.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply verified boundary overlay patch
+        run: python scripts/patch-verified-boundary-overlay.py
+      - name: Commit renderer changes
+        run: |
+          if git diff --quiet; then
+            echo "No renderer changes required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m "Render verified History Core boundary overlays"
+          git push origin HEAD:main
