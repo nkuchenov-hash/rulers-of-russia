@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-shimoda-1855-avpri",
+      "sourceCollectionId": "prlib-avpri-russia-japan-treaties",
+      "title": "Трактат о торговле и границах между Россией и Японией (Симодский). 26 января / 7 февраля 1855 г.",
+      "institution": "Архив внешней политики Российской империи / Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/node/375717",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "26 января 1855 г.",
+        "normalized": "1855-02-07",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Presidential Library catalog gives 26 January / 7 February 1855."
+      },
+      "authority": ["Российская империя", "Япония"],
+      "archiveCitation": "АВП РИ. Фонд Санкт-Петербургский Главный архив, I-10. Оп. 28. Д. 528. Л. 1–4.",
+      "notes": "Printed archival copy includes the Senate decree and treaty text. Presidential Library institutional chronology states that the treaty entered into force 25 November (7 December) 1856; exact ratification/exchange evidence should be located before promoting the effective-date change to geometry-verified."
+    }
+  ]
+}
