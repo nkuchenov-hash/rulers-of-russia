@@ -22,8 +22,22 @@
     "territory-changes/poland-finland-paris-1772-1856.json",
     "territory-changes/central-asia-1868-1876.json",
     "territory-changes/soviet-territorial-acts-1944-1954.json",
-    "territory-changes/modern-2022.json"
+    "territory-changes/modern-2022.json",
+    "territory-changes/norway-delimitation-2011.json"
   ],
   "baseStates": [],
-  "fragments": []
+  "fragments": [
+    {
+      "id": "frag-rf-norway-delimitation-2011-p1-p8",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-norway-delimitation-2011-p1-p8.geojson",
+      "evidenceDocumentIds": ["doc-rf-norway-delimitation-2010"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "derivationNote": "Direct coordinate transcription from treaty Article 1 points 1–8 in WGS 84; geodesic densification is used only for rendering. No terminal point beyond point 8 has been inferred."
+    }
+  ]
 }
