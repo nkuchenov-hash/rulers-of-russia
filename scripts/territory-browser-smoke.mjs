@@ -8,6 +8,11 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const pageErrors = [];
 const consoleErrors = [];
+const historyRequests = [];
+page.on('request', request => {
+  const requestUrl = request.url();
+  if (requestUrl.includes('/data/history-core/')) historyRequests.push(requestUrl);
+});
 page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
 page.on('console', message => {
   if (message.type() === 'error') consoleErrors.push(message.text());
@@ -38,6 +43,9 @@ try {
   }, null, { timeout: 30000 });
   await page.waitForTimeout(4500);
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
+  await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
+  const monthSelect = page.getByLabel('Месяц');
+  if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
 
   const state = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
@@ -53,6 +61,14 @@ try {
   if (!state.buttons.includes('Рельеф') || !state.buttons.includes('Государства')) {
     throw new Error(`Territory controls missing: ${JSON.stringify(state.buttons)}`);
   }
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/month-index.json'))) {
+    throw new Error(`Globe did not request History Core month index: ${JSON.stringify(historyRequests)}`);
+  }
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/') && !requestUrl.endsWith('/month-index.json'))) {
+    throw new Error(`Globe did not request month-resolved History Core geometry: ${JSON.stringify(historyRequests)}`);
+  }
+  await monthSelect.selectOption('2');
+  await page.waitForFunction(() => document.body?.innerText?.includes('History Core 2026-02'), null, { timeout: 8000 });
 
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
 
