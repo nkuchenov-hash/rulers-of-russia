@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-jassy-1791-1792-imperial-print",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Трактат вечного мира и дружбы между Империей Всероссийской и Оттоманской Портой, заключённый в Яссах 29 декабря 1791 г. и подтверждённый ратификациями, размененными 29 января 1792 г.",
+      "institution": "Императорская типография / Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/810853",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "29 декабря 1791 г.",
+        "normalized": "1792-01-09",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Treaty signature date in Old Style; Gregorian equivalent is 9 January 1792. The same official printing states that mutual ratifications were exchanged in Jassy on 29 January 1792 Old Style (9 February 1792 Gregorian)."
+      },
+      "authority": ["Российская империя / Екатерина II", "Османская империя"],
+      "publicationCitation": "Трактат вечного мира и дружбы... [СПб.: Императорская типография, 1792]. 11 с.",
+      "notes": "Article III establishes the Dniester as the boundary: lands on the left bank remain under the Russian Empire and lands on the right bank, after return by Russia, under the Ottoman Porte. The official printing also records the later exchange of ratifications, which is treated separately as the effective legal milestone."
+    }
+  ]
+}
