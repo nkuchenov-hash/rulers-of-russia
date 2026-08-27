@@ -7,7 +7,8 @@
     "every_month_must_resolve": true,
     "bootstrap_geometry_is_provisional": true,
     "verified_history_core_overrides_bootstrap": true,
-    "coverage_periods_do_not_claim_geometry_verification": true
+    "coverage_periods_do_not_claim_geometry_verification": true,
+    "forward_proxy_requires_explicit_opt_in": true
   },
   "periods": [
     {
@@ -22,8 +23,9 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
+      "allowForwardProxy": true,
       "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
-      "notes": "Very rough visualization proxy only. The later Novgorod Republic capture is not asserted to equal the territory of 862-881; early Rus must be progressively reconstructed from chronicle, archaeology and documentary territorial evidence."
+      "notes": "Very rough visualization proxy only. The later Novgorod Republic capture is not asserted to equal the territory of 862-881; early Rus must be progressively reconstructed from chronicle, archaeology and documentary territorial evidence. allowForwardProxy is deliberately enabled only because no earlier dated bootstrap geometry exists; the generated state remains reconstruction-provisional and can never be promoted by this flag."
     },
     {
       "id": "coverage-0882-1124-kievan-rus",
@@ -112,8 +114,9 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
+      "allowForwardProxy": true,
       "evidenceDocumentIds": ["doc-rights-peoples-1917-rgaspi"],
-      "notes": "The single polity label is a territory-rendering shorthand for a year of rapid constitutional change. Political regime chronology is represented by events, not by pretending one legal form lasted the entire year."
+      "notes": "The single polity label is a territory-rendering shorthand for a year of rapid constitutional change. Political regime chronology is represented by events, not by pretending one legal form lasted the entire year. The captured republic geometry begins later in 1917, so allowForwardProxy is explicit for earlier 1917 months and remains non-canonical."
     },
     {
       "id": "coverage-1918-1921-rsfsr",
