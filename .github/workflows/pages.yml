@@ -73,6 +73,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Materialize verified source-coordinate geometry
+        run: npm run materialize:history-geometry
+
+      - name: Validate source-coordinate geometry recipes
+        run: npm run validate:history-geometry
+
       - name: Validate History Core provenance
         run: npm run validate:history
 
