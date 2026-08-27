@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-turkey-territorial-sea-1975",
+        "track": "russian-legal-border",
+        "sourceGeometry": "1973 treaty plus 1980 bilateral demarcation description",
+        "segmentMeaning": "state boundary through territorial sea",
+        "note": "The segment uses the demarcated terminal coordinates from the 1980 protocol-description. It represents the Soviet state border only and is not carried into the Russian Federation after 1991."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [41.548627777777774, 41.521775],
+          [41.27802222222222, 41.59539166666667]
+        ]
+      }
+    }
+  ]
+}
