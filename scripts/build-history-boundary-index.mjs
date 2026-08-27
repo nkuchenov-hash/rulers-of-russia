@@ -32,6 +32,11 @@ for (const relative of model.changeFiles ?? []) {
       if (!['boundary-corridor', 'frontier-zone', 'control-zone'].includes(fragment.role)) continue;
       const geometryFile = path.join(dataRoot, fragment.geometryFile);
       if (!fs.existsSync(geometryFile)) throw new Error(`Verified boundary fragment ${fragmentId} is missing ${fragment.geometryFile}`);
+      const geometry = readJson(geometryFile);
+      const displayDatumStatus = geometry.metadata?.displayDatumStatus ?? 'not-applicable-or-unknown';
+      const displayConfidence = displayDatumStatus === 'source-geographic-untransformed'
+        ? (fragment.confidence === 'low' ? 'low' : 'medium')
+        : fragment.confidence;
       entries.push({
         id: `${change.id}:${fragmentId}`,
         changeId: change.id,
@@ -45,7 +50,10 @@ for (const relative of model.changeFiles ?? []) {
         effectiveFrom,
         effectiveTo: fragment.effectiveTo ?? null,
         reviewStatus: 'geometry-verified',
-        confidence: fragment.confidence,
+        sourceConfidence: fragment.confidence,
+        displayConfidence,
+        displayDatumStatus,
+        displayWarning: geometry.metadata?.displayWarning ?? null,
         evidenceDocumentIds: [...new Set([...(fragment.evidenceDocumentIds ?? []), ...(change.evidenceDocumentIds ?? [])])],
         derivationNote: fragment.derivationNote ?? change.geometry?.derivationNote ?? null
       });
@@ -56,10 +64,11 @@ for (const relative of model.changeFiles ?? []) {
 entries.sort((a, b) => a.effectiveFrom.localeCompare(b.effectiveFrom) || a.id.localeCompare(b.id));
 fs.mkdirSync(path.dirname(outputFile), {recursive: true});
 fs.writeFileSync(outputFile, JSON.stringify({
-  schema_version: 1,
+  schema_version: 2,
   dataset: 'Rulers of Russia verified boundary overlays',
   generatedAt: new Date().toISOString(),
   resolutionRule: 'A verified overlay is active from effectiveFrom through effectiveTo inclusive; null effectiveTo means it remains active until superseded by a later source-backed model update.',
+  confidenceRule: 'sourceConfidence measures documentary/legal geometry confidence. displayConfidence additionally accounts for whether the source coordinate datum has a source-backed WGS84 placement.',
   count: entries.length,
   entries
 }, null, 2) + '\n');
