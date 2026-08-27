@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-dprk-border-regime-1990",
+      "sourceCollectionId": "rf-official-treaty-publications-retrospective",
+      "title": "Договор между Правительством СССР и Правительством КНДР о режиме советско-корейской государственной границы",
+      "institution": "Собрание законодательства Российской Федерации / Бюллетень международных договоров",
+      "url": "https://base.garant.ru/2541105/",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "3 сентября 1990 г.",
+        "normalized": "1990-09-03",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство СССР", "Правительство КНДР"],
+      "publicationCitation": "Собрание законодательства Российской Федерации. 1997. № 21. Ст. 2387; Бюллетень международных договоров. 1997. № 8. С. 12.",
+      "notes": "Access URL is a legal-database mirror of the officially published treaty. The treaty entered into force 27 November 1991. It gives the Tumen mouth point as 42°17′34.34″ N, 130°41′49.16″ E and the territorial-sea endpoint as 42°09′ N, 130°53′ E, joined by a straight line."
+    },
+    {
+      "id": "doc-rf-dprk-border-regime-2012",
+      "sourceCollectionId": "prlib-modern-international-treaties",
+      "title": "Договор между Правительством Российской Федерации и Правительством Корейской Народно-Демократической Республики о режиме российско-корейской государственной границы",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/1463351",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "5 июля 2012 г.",
+        "normalized": "2012-07-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Правительство Российской Федерации", "Правительство КНДР"],
+      "publicationCitation": "Официальный интернет-портал правовой информации, 23 октября 2013 г.; Бюллетень международных договоров. 2014. № 4.",
+      "notes": "Entered into force 22 September 2013. Article 3 expressly retains the 3 September 1990 Soviet-Korean demarcation protocol among the operative demarcation documents of the Russian-Korean state boundary."
+    }
+  ]
+}
