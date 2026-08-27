@@ -25,6 +25,7 @@
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
     "territory-changes/turkey-territorial-sea-1975.json",
+    "territory-changes/turkey-maritime-jurisdiction-1981-1987.json",
     "territory-changes/poland-maritime-1986.json",
     "territory-changes/dprk-boundary-1991-2013.json",
     "territory-changes/lithuania-maritime-2003.json",
@@ -58,6 +59,19 @@
       "confidence": "high",
       "effectiveTo": "1991-12-31",
       "derivationNote": "The 1973 treaty fixes the legal line and the 1980 bilateral protocol-description fixes the demarcated terminal coordinates. The fragment belongs only to the USSR polity; the adjacent post-Soviet coast is Georgian, not Russian."
+    },
+    {
+      "id": "frag-ussr-turkey-continental-shelf-1981",
+      "polityId": "ussr",
+      "track": "maritime-jurisdiction",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-turkey-continental-shelf-1981.geojson",
+      "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978", "doc-ussr-turkey-eez-notes-1986-1987"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Treaty-coordinate chain for the continental shelf effective 15 May 1981. The 1987 exchange of notes reuses the same line for the economic-zone boundary. The expressly unsettled westward segment is not drawn."
     },
     {
       "id": "frag-ussr-poland-territorial-sea-1986",
