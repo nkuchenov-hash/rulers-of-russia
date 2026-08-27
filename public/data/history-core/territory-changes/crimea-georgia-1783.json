@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1783-crimea-taman-kuban-russian-law",
+      "eventId": "evt-1783-crimea-manifest",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "8 апреля 1783 г.",
+        "normalized": "1783-04-19",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "acquire",
+      "evidenceDocumentIds": ["doc-crimea-manifest-1783-pszri"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-crimea-manifest-1783-pszri"],
+        "derivationNote": "The manifesto names the Crimean Peninsula, Taman island/peninsula and the Kuban side. Do not substitute modern Crimea/Krasnodar administrative polygons. Reconstruct the 1783 legal scope from the manifesto, the former Crimean Khanate/Kuban dependency record and contemporary official cartography; represent uncertain Kuban limits as a zone until resolved."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1783-georgievsk-protectorate",
+      "eventId": "evt-1783-georgievsk-treaty",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "24 июля 1783 г.",
+        "normalized": "1783-08-04",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "claim",
+      "territorialModel": "sphere-of-control",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-georgievsk-1783-prlib"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-georgievsk-1783-prlib"],
+        "derivationNote": "Represent Kartli-Kakheti as a protected/supreme-patronage sphere, not Russian sovereign territory. A period Kartli-Kakheti polygon is required for visualization; incorporation into the Empire occurs in later 1801 legal events and must be separate."
+      },
+      "reviewStatus": "research-required"
+    },
+    {
+      "id": "territory-1784-constantinople-crimea-recognition",
+      "eventId": "evt-1784-constantinople-crimea-act",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "28 декабря 1783 г.",
+        "normalized": "1784-01-08",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "recognize",
+      "evidenceDocumentIds": ["doc-constantinople-crimea-recognition-1783-prlib"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-constantinople-crimea-recognition-1783-prlib"],
+        "derivationNote": "This is a recognition/boundary-status layer over the April 1783 Russian legal acquisition, not a second acquisition. Review the complete two-page act article-by-article before assigning the exact territories whose international status it confirms."
+      },
+      "reviewStatus": "research-required"
+    }
+  ]
+}
