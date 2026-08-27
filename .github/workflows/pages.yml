@@ -76,8 +76,11 @@ jobs:
       - name: Validate History Core provenance
         run: npm run validate:history
 
-      - name: Materialize verified historical territory
-        run: npm run materialize:history-territory
+      - name: Materialize complete historical territory timeline
+        run: npm run materialize:history
+
+      - name: Verify complete month coverage
+        run: node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('public/data/history-core/generated/month-index.json','utf8'));if(!x.complete||x.monthCount!==13980)throw new Error('History month coverage incomplete: '+x.monthCount);console.log('History coverage:',x.minMonth,'..',x.maxMonth,x.monthCount,'months');"
 
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
@@ -104,8 +107,9 @@ jobs:
           test -f out/territory/index.html
           test -f out/territory/atlas-lab/index.html
           test -f out/data/history-core/generated/territory/index.json
+          test -f out/data/history-core/generated/month-index.json
+          node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('out/data/history-core/generated/month-index.json','utf8'));if(x.monthCount!==13980)process.exit(1);"
           cat out/deploy.json
-          cat out/data/history-core/generated/territory/index.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -127,10 +131,12 @@ jobs:
             if curl -fsSL "$BASE/territory/" -o /tmp/territory.html && \
                curl -fsSL "$BASE/territory/atlas-lab/" -o /tmp/atlas-lab.html && \
                curl -fsSL "$BASE/data/history-core/generated/territory/index.json" -o /tmp/history-territory.json && \
+               curl -fsSL "$BASE/data/history-core/generated/month-index.json" -o /tmp/month-index.json && \
                curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json; then
               LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
-              if [ "$LIVE_SHA" = "$EXPECTED_SHA" ]; then
-                echo "Live territory, History Core and Atlas Lab confirmed for $LIVE_SHA"
+              MONTH_COUNT="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/month-index.json','utf8'));process.stdout.write(String(x.monthCount||0))")"
+              if [ "$LIVE_SHA" = "$EXPECTED_SHA" ] && [ "$MONTH_COUNT" = "13980" ]; then
+                echo "Live territory, 13980-month History Core and Atlas Lab confirmed for $LIVE_SHA"
                 exit 0
               fi
             fi
