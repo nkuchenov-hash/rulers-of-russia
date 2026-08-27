@@ -33,7 +33,7 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
 });
 
 const waitForCurrentVerifiedTracks = async () => {
-  await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 1'), null, { timeout: 8000 });
+  await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 2'), null, { timeout: 8000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 2'), null, { timeout: 8000 });
 };
 
@@ -82,6 +82,9 @@ try {
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-norway-delimitation-2011-p1-p8.geojson'))) {
     throw new Error(`Globe did not request Barents maritime-jurisdiction fragment: ${JSON.stringify(historyRequests)}`);
+  }
+  if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/geometry/rf-dprk-territorial-sea-2013.geojson'))) {
+    throw new Error(`Globe did not request DPRK state-border fragment: ${JSON.stringify(historyRequests)}`);
   }
   if (!historyRequests.some(requestUrl => requestUrl.includes('/data/history-core/generated/') && !requestUrl.endsWith('/month-index.json') && !requestUrl.endsWith('/verified-boundaries.json'))) {
     throw new Error(`Globe did not request month-resolved History Core territory geometry: ${JSON.stringify(historyRequests)}`);
