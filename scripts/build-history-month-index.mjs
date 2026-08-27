@@ -88,7 +88,7 @@ const selectFallbackFeatures = (period, month) => {
     const featureEnd = normalizeBoundaryDate(properties.end_date, 'end');
     if (featureStart <= end && featureEnd >= start) validIndices.push(i);
   }
-  if (validIndices.length) return validIndices;
+  if (validIndices.length) return {indices: validIndices, forwardProxy: false};
 
   let latestStart = null;
   for (let i = 0; i < features.length; i += 1) {
@@ -100,15 +100,32 @@ const selectFallbackFeatures = (period, month) => {
     for (let i = 0; i < features.length; i += 1) {
       if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === latestStart) indices.push(i);
     }
-    if (indices.length) return indices;
+    if (indices.length) return {indices, forwardProxy: false};
   }
+
+  if (period.allowForwardProxy === true) {
+    let earliestStart = null;
+    for (let i = 0; i < features.length; i += 1) {
+      const featureStart = normalizeBoundaryDate(features[i]?.properties?.start_date, 'start');
+      if (earliestStart === null || featureStart < earliestStart) earliestStart = featureStart;
+    }
+    if (earliestStart !== null) {
+      const indices = [];
+      for (let i = 0; i < features.length; i += 1) {
+        if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === earliestStart) indices.push(i);
+      }
+      if (indices.length) return {indices, forwardProxy: true};
+    }
+  }
+
   throw new Error(`Coverage ${period.id} cannot resolve provisional geometry for ${month}`);
 };
 
 const materializeProvisional = (period, month) => {
   const source = loadFallback(period);
-  const indices = selectFallbackFeatures(period, month);
-  const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}`;
+  const selection = selectFallbackFeatures(period, month);
+  const {indices, forwardProxy} = selection;
+  const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}|forward:${forwardProxy}`;
   const cached = provisionalOutputCache.get(selectionKey);
   if (cached) return cached;
 
@@ -125,9 +142,12 @@ const materializeProvisional = (period, month) => {
       status: 'reconstruction-provisional',
       confidence: period.confidence,
       bootstrapGeometry: true,
+      forwardProxy,
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
-      warning: 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
+      warning: forwardProxy
+        ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
+        : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
     },
     features: selected.map(feature => ({
       ...feature,
@@ -135,12 +155,13 @@ const materializeProvisional = (period, month) => {
         ...(feature.properties ?? {}),
         history_core_status: 'reconstruction-provisional',
         history_core_confidence: period.confidence,
+        history_core_forward_proxy: forwardProxy,
         history_core_coverage_period_id: period.id,
       },
     })),
   };
   fs.writeFileSync(path.join(provisionalDir, fileName), JSON.stringify(output));
-  const result = {geometryFile: relativeFile, provisionalStateId: `provisional-${period.polityId}-${hash}`};
+  const result = {geometryFile: relativeFile, provisionalStateId: `provisional-${period.polityId}-${hash}`, forwardProxy};
   provisionalOutputCache.set(selectionKey, result);
   return result;
 };
@@ -227,6 +248,7 @@ while (cursor <= coverage.maxMonth) {
       confidence: period.confidence,
       evidenceDocumentIds: period.evidenceDocumentIds ?? [],
       bootstrapGeometry: true,
+      forwardProxy: provisional.forwardProxy,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
@@ -254,7 +276,7 @@ for (const item of months) {
 
 fs.mkdirSync(outputDir, {recursive: true});
 const output = {
-  schema_version: 2,
+  schema_version: 3,
   dataset: 'Rulers of Russia month-resolved historical territory index',
   generated_at: new Date().toISOString(),
   minMonth: coverage.minMonth,
@@ -262,9 +284,10 @@ const output = {
   monthCount: months.length,
   complete: true,
   provisionalStateCount: provisionalOutputCache.size,
-  resolutionRule: 'Use latest geometry-verified History Core state at month end; otherwise materialize an unambiguous, explicitly provisional state from the dated bootstrap archive.',
+  forwardProxyMonthCount: months.filter(item => item.forwardProxy === true).length,
+  resolutionRule: 'Use latest geometry-verified History Core state at month end; otherwise materialize an unambiguous, explicitly provisional state from the dated bootstrap archive. A later-dated proxy is permitted only when the coverage period explicitly opts in via allowForwardProxy and remains visibly non-canonical.',
   statusCounts: Object.fromEntries([...coverageCounts.entries()].sort()),
   months,
 };
 fs.writeFileSync(outputFile, JSON.stringify(output));
-console.log(`History month index generated: ${months.length} months (${coverage.minMonth}..${coverage.maxMonth}), ${provisionalOutputCache.size} provisional geometry states, no gaps.`);
+console.log(`History month index generated: ${months.length} months (${coverage.minMonth}..${coverage.maxMonth}), ${provisionalOutputCache.size} provisional geometry states, ${output.forwardProxyMonthCount} explicit forward-proxy months, no gaps.`);
