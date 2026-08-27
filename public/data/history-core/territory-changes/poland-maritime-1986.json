@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1986-ussr-poland-territorial-sea",
+      "eventId": "evt-1986-ussr-poland-maritime-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "13 марта 1986 г.",
+        "normalized": "1986-03-13",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-poland-territorial-sea-1986"],
+      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-poland-territorial-sea-1986.geojson",
+        "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985"],
+        "derivationNote": "Article 1 directly defines a straight segment from 54°27′28.63″ N, 19°38′30.96″ E to 54°36′15″ N, 19°24′22″ E."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "This is state boundary within the territorial sea, not the subsequent EEZ/shelf line."
+    },
+    {
+      "id": "chg-1986-ussr-poland-maritime-jurisdiction",
+      "eventId": "evt-1986-ussr-poland-maritime-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "13 марта 1986 г.",
+        "normalized": "1986-03-13",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "maritime-jurisdiction",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-poland-maritime-jurisdiction-1986"],
+      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985", "doc-ussr-poland-maritime-tripoint-1989"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-poland-maritime-jurisdiction-1986.geojson",
+        "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985", "doc-ussr-poland-maritime-tripoint-1989"],
+        "derivationNote": "Article 2 supplies the line from the territorial-sea endpoint through points A, B, C and D. The 1989 tripoint agreement independently confirms point D at 55°51′00″ N, 18°56′12″ E."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Economic-zone, fishery-zone and continental-shelf delimitation; stored separately from state territory."
+    }
+  ]
+}
