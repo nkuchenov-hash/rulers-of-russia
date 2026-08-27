@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-poland-maritime-jurisdiction-1986",
+        "track": "maritime-jurisdiction",
+        "sourceGeometry": "direct treaty coordinates",
+        "segmentMeaning": "economic zone, fisheries zone and continental shelf delimitation",
+        "note": "Article 2 points are encoded separately from the territorial-sea state boundary."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [19.40611111111111, 54.60416666666667],
+          [19.315, 54.67],
+          [19.345, 54.815],
+          [19.063333333333333, 55.34133333333333],
+          [18.936666666666667, 55.85]
+        ]
+      }
+    }
+  ]
+}
