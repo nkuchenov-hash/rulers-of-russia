@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1988-ussr-sweden-maritime-provisional",
+      "title": "Предварительное вступление в силу советско-шведской линии разграничения в Балтийском море",
+      "kind": "treaty",
+      "date": {
+        "original": "16 мая 1988 г.",
+        "normalized": "1988-05-16",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "С 16 мая 1988 года соглашение временно применяло координатно заданную линию A1-A17 между советской экономической зоной/континентальным шельфом и шведской рыболовной зоной/шельфом.",
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "territoryChangeIds": ["chg-1988-ussr-sweden-maritime-provisional"],
+      "reviewStatus": "geometry-verified"
+    },
+    {
+      "id": "evt-1988-ussr-sweden-maritime-definitive",
+      "title": "Окончательное вступление в силу советско-шведского соглашения о разграничении",
+      "kind": "treaty",
+      "date": {
+        "original": "22 июня 1988 г.",
+        "normalized": "1988-06-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "После обмена нотами о ратификации предварительно действовавшая линия стала окончательно действующей.",
+      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "territoryChangeIds": ["chg-1988-ussr-sweden-maritime-definitive"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
