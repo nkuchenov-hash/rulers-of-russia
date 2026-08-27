@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-finland-sea-frontier-1966",
+      "fragmentId": "frag-ussr-finland-sea-frontier-1966",
+      "output": "geometry/ussr-finland-sea-frontier-1966.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "Soviet chart No. 403 coordinate system (1964)",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+      "points": [[27.511944444444445,60.25972222222222],[27.46388888888889,60.22833333333333],[27.30027777777778,60.20527777777778]],
+      "note": "Three treaty points connected by straight segments; later physically demarcated as markers Nos. 14-16. Published source-chart coordinates are preserved without a silent datum transform."
+    },
+    {
+      "id": "recipe-ussr-finland-maritime-jurisdiction-1966",
+      "fragmentId": "frag-ussr-finland-maritime-jurisdiction-1966",
+      "output": "geometry/ussr-finland-maritime-jurisdiction-1966.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "Soviet charts Nos. 400, 403 and 404 coordinate systems (1964)",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965"],
+      "points": [[27.188333333333333,60.17666666666667],[26.965,60.17666666666667],[26.915,60.17333333333333],[26.798333333333332,60.14666666666667],[26.64,60.11333333333334],[26.543333333333333,60.10666666666667],[26.346666666666668,60.0],[26.218333333333334,59.99],[26.14,59.973333333333336],[25.975,59.86666666666667],[25.466666666666665,59.88166666666667],[25.176666666666666,59.89333333333333],[24.96,59.873333333333335],[24.828333333333333,59.846666666666664],[24.413333333333334,59.74166666666667],[23.913333333333334,59.623333333333335],[23.501666666666665,59.531666666666666],[23.166666666666668,59.53333333333333]],
+      "note": "Articles 2-3 source points. Article 6 makes the line the continental-shelf boundary. Published source-chart coordinates are preserved without a silent datum transform."
+    },
+    {
+      "id": "recipe-ussr-finland-shelf-extension-1968",
+      "fragmentId": "frag-ussr-finland-shelf-extension-1968",
+      "output": "geometry/ussr-finland-shelf-extension-1968.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "Soviet chart No. 444 coordinate system (17 July 1965)",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+      "points": [[23.166666666666668,59.53333333333333],[22.758333333333333,59.42],[22.171666666666667,59.385],[21.783333333333335,59.31666666666667]],
+      "note": "Direct Article 1 coordinate chain continuing the 1965 line westward."
+    },
+    {
+      "id": "recipe-ussr-finland-fishing-extension-1980",
+      "fragmentId": "frag-ussr-finland-fishing-extension-1980",
+      "output": "geometry/ussr-finland-fishing-extension-1980.geojson",
+      "track": "maritime-jurisdiction",
+      "sourceCrs": "Soviet naval chart No. 1150 coordinate system (1976)",
+      "interpolation": "source-vertices",
+      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980"],
+      "points": [[21.76861111111111,59.301944444444445],[21.184166666666666,59.18472222222222]],
+      "note": "Article 2 explicitly states that the 1967 terminal point 59°19′00″ N, 21°47′00″ E corresponds to 59°18′07″ N, 21°46′07″ E in chart No. 1150 and then runs west through 59°11′05″ N, 21°11′03″ E. The newer source-chart datum is preserved rather than silently merged with the 1967 coordinates."
+    }
+  ]
+}
