@@ -11,7 +11,7 @@
         "precision": "day",
         "calendar": "gregorian"
       },
-      "track": "russian-legal-border",
+      "track": "maritime-jurisdiction",
       "territorialModel": "linear-border",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
@@ -24,7 +24,7 @@
         "derivationNote": "Treaty Articles 1-2 directly provide three WGS84 points, prescribe straight rhumb-line segments (loxodromes), and state that coordinates prevail over the appended maps. Rendering densification follows the rhumb line in Mercator space and does not alter source points."
       },
       "reviewStatus": "geometry-verified",
-      "notes": "Verified maritime EEZ/continental-shelf delimitation fragment; not a full Russian Federation area boundary."
+      "notes": "Verified EEZ/continental-shelf delimitation fragment. It is maritime jurisdiction, not the territorial outline of the Russian Federation."
     }
   ]
 }
