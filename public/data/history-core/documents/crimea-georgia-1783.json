@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-crimea-manifest-1783-pszri",
+      "sourceCollectionId": "prlib-pszri",
+      "title": "О принятии полуострова Крымского, острова Тамана и всей Кубанской стороны под Российскую Державу. Манифест Екатерины II от 8 апреля 1783 г.",
+      "institution": "Правительствующий Сенат / Полное собрание законов Российской империи / РГБ",
+      "url": "https://search.rsl.ru/ru/record/01003365781",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "8 апреля 1783 г.",
+        "normalized": "1783-04-19",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя / Екатерина II"],
+      "publicationCitation": "ПСЗРИ. Собрание I. Т. XXI. № 15708. С. 897–898; отдельное сенатское печатное издание: СПб., 8 апреля 1783 г.",
+      "notes": "The RSL catalog identifies the official Senate printing and PSZ number 15708. Russian archival registry also preserves the signed original manifesto."
+    },
+    {
+      "id": "doc-constantinople-crimea-recognition-1783-prlib",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Акт, заключённый в Константинополе 28 декабря 1783 года между Российской империей и Оттоманской Портой о мире, торговле и границах обоих государств",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/810788",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "28 декабря 1783 г.",
+        "normalized": "1784-01-08",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя", "Османская империя"],
+      "publicationCitation": "Копия акта, заключенного в Константинополе 28 декабря 1783 года... [Б. м.: б. и., 1783]. 2 с.",
+      "notes": "A separate international treaty layer after the Russian April manifesto; use article-level review to determine precisely which recognition/boundary provisions it superseded or confirmed."
+    },
+    {
+      "id": "doc-georgievsk-1783-prlib",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Договор с Карталинским и Кахетинским царём Ираклием II о признании верховной власти и покровительства российских императоров, подписанный в Георгиевской крепости 24 июля 1783 г.",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/item/810789",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "24 июля 1783 г.",
+        "normalized": "1783-08-04",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя / Екатерина II", "Картли-Кахетинское царство / Ираклий II"],
+      "publicationCitation": "Договор... подписан в Георгиевской крепости, июля 24 дня 1783 г. Санкт-Петербург, 1784. 25 с. Текст параллельно на русском и грузинском языках.",
+      "notes": "This treaty establishes Russian protectorate/supreme-patronage relations over Kartli-Kakheti; it must not be represented as incorporation into the Russian Empire in 1783."
+    }
+  ]
+}
