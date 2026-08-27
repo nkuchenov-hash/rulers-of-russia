@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "prlib-avpri-russia-japan-treaties",
+      "title": "Российско-японские договоры и протоколы из Архива внешней политики Российской империи",
+      "institution": "Архив внешней политики Российской империи / Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/section/1347498",
+      "tier": "A1-archival-original",
+      "coverage": "19th–early 20th century Russian-Japanese treaty record",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Prefer individual AVPRI treaty files and protocols. The Shimoda treaty is available as a concrete archival document with fond/opis/delo citation."
+    }
+  ]
+}
