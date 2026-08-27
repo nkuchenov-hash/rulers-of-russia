@@ -1,0 +1,30 @@
+name: Apply History Core uncertainty renderer patch
+
+on:
+  push:
+    paths:
+      - 'scripts/patch-history-uncertainty.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply renderer patch
+        run: python scripts/patch-history-uncertainty.py
+      - name: Commit patch
+        run: |
+          if git diff --quiet; then
+            echo "No renderer changes required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx
+          git commit -m "Render History Core uncertainty on globe"
+          git push origin HEAD:main
