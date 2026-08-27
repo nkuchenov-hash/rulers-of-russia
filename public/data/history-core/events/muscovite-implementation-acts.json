@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1667-smolensk-russian-administration",
+      "title": "Введение Смоленска и возвращённых по Андрусовскому миру городов в русское управление",
+      "kind": "law",
+      "date": {
+        "original": "18 июня 1667 г.",
+        "normalized": "1667-06-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "Указная память фиксирует административное принятие Смоленска и других городов, возвращённых по Андрусовскому соглашению, в российское управление.",
+      "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
+      "territoryChangeIds": ["territory-1667-smolensk-implementation"],
+      "reviewStatus": "source-verified",
+      "notes": "This event intentionally records implementation, not the complete treaty boundary. The treaty signature/effectiveness event should remain distinct."
+    }
+  ]
+}
