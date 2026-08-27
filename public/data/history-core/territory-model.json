@@ -24,6 +24,7 @@
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
+    "territory-changes/finland-maritime-1966-1986.json",
     "territory-changes/turkey-territorial-sea-1975.json",
     "territory-changes/turkey-maritime-jurisdiction-1981-1987.json",
     "territory-changes/poland-maritime-1986.json",
@@ -48,6 +49,45 @@
       "derivationNote": "The 1957 line is rendered in the official WGS84 recalculation supplied by the 2007 bilateral settlement because the Russian ratification record expressly states that its point positions and the inherited line remained unchanged. Only the inherited portion through point 4 is used."
     },
     {
+      "id": "frag-ussr-finland-sea-frontier-1966",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-finland-sea-frontier-1966.geojson",
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Treaty-defined three-point straight sea frontier, physically demarcated in 1967 as markers Nos. 14-16. The legal geometry is verified; displayed coordinates remain in the published Soviet chart No. 403 coordinate system until an explicit datum transformation is sourced."
+    },
+    {
+      "id": "frag-ussr-finland-maritime-jurisdiction-1966",
+      "polityId": "ussr",
+      "track": "maritime-jurisdiction",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-finland-maritime-jurisdiction-1966.geojson",
+      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Articles 2-3 coordinate chain; Article 6 makes it the continental-shelf boundary. Legal geometry is verified, while coordinates remain in the treaty chart systems without an invented WGS84 transform."
+    },
+    {
+      "id": "frag-ussr-finland-shelf-extension-1968",
+      "polityId": "ussr",
+      "track": "maritime-jurisdiction",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-finland-shelf-extension-1968.geojson",
+      "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Direct treaty continuation of the continental-shelf line. Coordinates remain in Soviet chart No. 444 system until an explicit datum transformation is sourced."
+    },
+    {
       "id": "frag-ussr-turkey-territorial-sea-1975",
       "polityId": "ussr",
       "track": "russian-legal-border",
@@ -59,6 +99,19 @@
       "confidence": "high",
       "effectiveTo": "1991-12-31",
       "derivationNote": "The 1973 treaty fixes the legal line and the 1980 bilateral protocol-description fixes the demarcated terminal coordinates. The fragment belongs only to the USSR polity; the adjacent post-Soviet coast is Georgian, not Russian."
+    },
+    {
+      "id": "frag-ussr-finland-fishing-extension-1980",
+      "polityId": "ussr",
+      "track": "maritime-jurisdiction",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-finland-fishing-extension-1980.geojson",
+      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "Article 2 source-chart coordinates in Soviet naval chart No. 1150 (1976). The treaty itself records the datum-dependent coordinate representation of the prior 1967 endpoint; this fragment therefore remains separate and is not silently snapped to the 1967 line."
     },
     {
       "id": "frag-ussr-turkey-continental-shelf-1981",
