@@ -1,0 +1,258 @@
+/*
+ * Studio V3 — ruler page as a dashboard of the reign, not a biography.
+ * This stylesheet is Studio-only. Public ruler pages keep their current layout
+ * until the dashboard contract is promoted from the editor into production.
+ */
+
+/* The old Facts module is retained as an inspector-compatible shell, but in
+   Studio it now demonstrates a start/end comparison panel. */
+.core-site-surface [data-module-id="facts"] > h2 {
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+.core-site-surface [data-module-id="facts"] > h2::after {
+  content: 'НАЧАЛО → КОНЕЦ ПРАВЛЕНИЯ';
+  display: block;
+  font: 600 18px/1.05 var(--display-font);
+  letter-spacing: .035em;
+  color: var(--text-primary);
+}
+
+.core-site-surface [data-module-id="facts"] [data-element-id="facts-all"] {
+  display: none !important;
+}
+
+.core-site-surface [data-module-id="facts"] .fact-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.35fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-emphasis);
+}
+
+.core-site-surface [data-module-id="facts"] .fact-row > span {
+  display: none;
+}
+
+.core-site-surface [data-module-id="facts"] .fact-row label {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.core-site-surface [data-module-id="facts"] .fact-row strong {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* The old thematic module becomes one stable dashboard component:
+   3–4 events = one row; 5–8 = two rows; all cards are equal weight. */
+.core-site-surface [data-module-id="thematic-card"] {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+  padding: 16px !important;
+  overflow: visible !important;
+}
+
+.core-site-surface [data-module-id="thematic-card"]::before {
+  content: 'КЛЮЧЕВЫЕ СОБЫТИЯ И ЯВЛЕНИЯ ПРАВЛЕНИЯ';
+  grid-column: 1 / -1;
+  display: block;
+  margin: 0 0 2px;
+  font: 600 20px/1.05 var(--display-font);
+  letter-spacing: .035em;
+  color: var(--text-primary);
+}
+
+.core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(3):last-child),
+.core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(5):last-child),
+.core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(6):last-child) {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.core-site-surface [data-module-id="thematic-card"] .thematic-card h2 {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 5px !important;
+  font-size: 17px !important;
+  line-height: 1.04 !important;
+}
+
+.core-site-surface [data-module-id="thematic-card"] .thematic-card small {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.core-site-surface [data-module-id="thematic-card"] .thematic-card p {
+  position: relative;
+  z-index: 2;
+  max-width: 82%;
+  margin: 0;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.core-site-surface [data-module-id="thematic-card"] .thematic-card .media-zone {
+  position: absolute !important;
+  inset: auto 0 0 0 !important;
+  z-index: 1;
+  width: 100% !important;
+  max-width: none !important;
+  height: 48% !important;
+  min-height: 0 !important;
+  padding: 12px !important;
+  display: flex;
+  align-items: flex-end;
+  background:
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--surface-elevated) 86%, transparent)),
+    color-mix(in srgb, var(--surface-secondary) 88%, var(--accent-primary) 12%) !important;
+  color: color-mix(in srgb, var(--text-secondary) 75%, transparent) !important;
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+  pointer-events: none;
+}
+
+.core-site-surface [data-module-id="thematic-card"] .thematic-card button {
+  position: absolute !important;
+  right: 12px !important;
+  bottom: 12px !important;
+  z-index: 3;
+  min-height: 32px;
+  padding: 0 10px !important;
+  font-size: 10px !important;
+}
+
+@media (min-width: 901px) {
+  /* Map + comparison read as one dashboard band. The narrow territory panel
+     works as the map legend/filter rail rather than as a separate essay card. */
+  .core-site-surface .primary-content-row {
+    display: grid !important;
+    grid-template-columns: minmax(190px, .72fr) minmax(420px, 2.15fr) minmax(290px, 1.05fr) !important;
+    align-items: stretch !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    min-width: 0 !important;
+    padding: 18px 16px !important;
+    border-right: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2 {
+    font-size: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after {
+    content: 'КАРТА ПРАВЛЕНИЯ';
+    display: block;
+    font: 600 18px/1.05 var(--display-font);
+    letter-spacing: .035em;
+  }
+
+  .core-site-surface [data-module-id="territory"] > p {
+    margin: 8px 0 14px !important;
+    font-size: 11px !important;
+    line-height: 1.38 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend {
+    display: grid;
+    gap: 0;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend > div {
+    min-height: 36px;
+    padding: 8px 0;
+    border-top: 1px solid var(--border-emphasis);
+    font-size: 11px !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .module-cta {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    min-width: 0 !important;
+    border-left: 1px solid var(--border-emphasis) !important;
+    border-right: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    min-width: 0 !important;
+    padding: 18px 18px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .core-site-surface [data-module-id="facts"] > h2::after {
+    font-size: 24px;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) !important;
+    padding: 12px 0 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row label,
+  .core-site-surface [data-module-id="facts"] .fact-row strong {
+    font-size: 13px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    padding: 24px 20px 0 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]::before {
+    grid-column: 1;
+    margin-bottom: 14px;
+    font-size: 24px;
+    line-height: 1.05;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    width: 100% !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
+    padding: 20px 18px 58px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card h2 {
+    font-size: 22px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card p {
+    max-width: 92%;
+    font-size: 13px !important;
+  }
+}
