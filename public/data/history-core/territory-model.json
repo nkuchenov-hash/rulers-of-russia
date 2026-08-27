@@ -46,7 +46,7 @@
     {
       "id": "frag-rf-lithuania-maritime-2003-p1-p3",
       "polityId": "russian-federation",
-      "track": "russian-legal-border",
+      "track": "maritime-jurisdiction",
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-lithuania-maritime-2003-p1-p3.geojson",
@@ -70,7 +70,7 @@
     {
       "id": "frag-rf-norway-delimitation-2011-p1-p8",
       "polityId": "russian-federation",
-      "track": "russian-legal-border",
+      "track": "maritime-jurisdiction",
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-norway-delimitation-2011-p1-p8.geojson",
