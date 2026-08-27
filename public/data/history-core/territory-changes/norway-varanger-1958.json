@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "chg-1958-ussr-norway-varanger-demarcation",
+      "eventId": "evt-1958-ussr-norway-varanger-protocol-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "17 марта 1958 г.",
+        "normalized": "1958-03-17",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-ussr-norway-varanger-1958-p1-p4"],
+      "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/ussr-norway-varanger-1958-p1-p4.geojson",
+        "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+        "derivationNote": "The 1957 demarcation protocol defines the Soviet-Norwegian sea frontier. The 2007 bilateral agreement and its Russian ratification record recalculate the inherited line in WGS84 and expressly state that the positions and the 1957 line remain unchanged. Only the portion confirmed as inherited through point 4 is materialized for 1958-2008."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Superseded for rendering by the 2008 Varangerfjord agreement on 9 July 2008."
+    }
+  ]
+}
