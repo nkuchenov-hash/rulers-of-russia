@@ -23,10 +23,23 @@
     "territory-changes/central-asia-1868-1876.json",
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/modern-2022.json",
+    "territory-changes/norway-varanger-2008.json",
     "territory-changes/norway-delimitation-2011.json"
   ],
   "baseStates": [],
   "fragments": [
+    {
+      "id": "frag-rf-norway-varanger-2008-p1-p6",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-norway-varanger-2008-p1-p6.geojson",
+      "evidenceDocumentIds": ["doc-rf-norway-varanger-2007"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "derivationNote": "Direct coordinate transcription from the 2007 agreement Article 2 points 1–6 in WGS84; geodesic densification is used only for rendering. Point 6 joins the 2011 fragment exactly."
+    },
     {
       "id": "frag-rf-norway-delimitation-2011-p1-p8",
       "polityId": "russian-federation",
