@@ -73,6 +73,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Validate History Core provenance
+        run: npm run validate:history
+
+      - name: Materialize verified historical territory
+        run: npm run materialize:history-territory
+
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
 
@@ -92,12 +98,14 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Verify territory routes and deploy marker
+      - name: Verify territory routes, history materialization and deploy marker
         run: |
           test -f out/deploy.json
           test -f out/territory/index.html
           test -f out/territory/atlas-lab/index.html
+          test -f out/data/history-core/generated/territory/index.json
           cat out/deploy.json
+          cat out/data/history-core/generated/territory/index.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -118,10 +126,11 @@ jobs:
           for attempt in $(seq 1 30); do
             if curl -fsSL "$BASE/territory/" -o /tmp/territory.html && \
                curl -fsSL "$BASE/territory/atlas-lab/" -o /tmp/atlas-lab.html && \
+               curl -fsSL "$BASE/data/history-core/generated/territory/index.json" -o /tmp/history-territory.json && \
                curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json; then
               LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
               if [ "$LIVE_SHA" = "$EXPECTED_SHA" ]; then
-                echo "Live territory and Atlas Lab confirmed for $LIVE_SHA"
+                echo "Live territory, History Core and Atlas Lab confirmed for $LIVE_SHA"
                 exit 0
               fi
             fi
