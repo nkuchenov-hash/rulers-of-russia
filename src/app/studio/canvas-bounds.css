@@ -1,0 +1,43 @@
+/* Studio canvas contract.
+   The page itself is a bounded centered design surface. Reference-structure.css
+   may change internal module proportions, but must never turn Studio into a
+   100vw canvas. This is especially important when the browser is zoomed out or
+   the fixed Inspector panels are open: CSS viewport pixels can otherwise make
+   the ruler page several thousand pixels wide. */
+
+@media (min-width: 1101px) {
+  .background-module {
+    padding: 16px !important;
+  }
+
+  .core-site-surface {
+    --page-surface-width: min(1760px, calc(100vw - 32px)) !important;
+    width: var(--page-surface-width) !important;
+    max-width: 1760px !important;
+    margin: 0 auto 40px !important;
+    min-height: calc(100vh - 32px) !important;
+  }
+
+  .core-site-surface .ruler-content {
+    min-width: 0 !important;
+    max-width: calc(var(--page-surface-width) - var(--reference-rail-width, 244px)) !important;
+    overflow: hidden !important;
+  }
+
+  .core-site-surface [data-module-id="hero"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface .primary-content-row,
+  .core-site-surface [data-module-id="thematic-card"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* The chronology is the only ruler-content child allowed to expand back over
+     the rail; it expands only to the bounded page surface, never to 100vw. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    width: var(--page-surface-width) !important;
+    max-width: var(--page-surface-width) !important;
+    left: calc(100% - var(--page-surface-width)) !important;
+  }
+}
