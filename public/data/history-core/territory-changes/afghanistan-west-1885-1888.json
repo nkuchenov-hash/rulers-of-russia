@@ -12,16 +12,33 @@
         "calendar": "gregorian"
       },
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghanistan-ussr-western-boundary-ibs26-usdos"],
+      "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghan-frontier-hari-rud-oxus-1933-govindia", "doc-afghanistan-ussr-western-boundary-ibs26-usdos"],
       "geometry": {
-        "method": "protocols-maps-and-pillar-synopses-not-yet-fully-ingested",
-        "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
-        "derivationNote": "The complete approximately 630 km line was demarcated with 79 posts, but the complete pillar synopsis and all annex maps have not yet been transcribed into History Core. The 1887 protocol already proves that the legal geometry is heterogeneous: some portions are straight, others follow watersheds, the Kushk or Murghab thalweg, or locally demarcated routes. Do not replace the complete line with a modern Afghanistan boundary or with straight connections between the currently extracted controls."
+        "method": "structured-boundary-description-plus-maps-pending-full-digitization",
+        "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghan-frontier-hari-rud-oxus-1933-govindia"],
+        "routeSemantics": [
+          {"from":"pillar-19","to":"pillar-20","type":"straight","source":"Government of India completed description: east by south, about 7.75 miles on the map"},
+          {"from":"pillar-20","to":"pillar-21","type":"ridge-crest","source":"via long round-topped hill and crest to Ziarat-i-Khwaja Alam Dar"},
+          {"from":"pillar-21","to":"pillar-22","type":"straight","source":"straight down hill and across Kushk valley to west bank"},
+          {"from":"pillar-22","to":"pillar-23","type":"river-course","waterbody":"Kushk","source":"up the course of the Kushk to the next demarcated pillar"},
+          {"from":"pillar-23","to":"pillar-24","type":"demarcated-control-chain","source":"completed description and 1887 protocol; intermediate terrain controls/posts must be retained during digitization"},
+          {"from":"pillar-24","to":"pillar-29","type":"watershed","via":["pillar-26 Bandi Akhamar","pillar-27 point 3198","Kalari 2"],"source":"1887 St Petersburg protocol"},
+          {"from":"pillar-29","to":"pillar-30","type":"straight","source":"straight across Kashan valley"},
+          {"from":"pillar-30","to":"pillar-31","type":"watershed","watershed":"Sanicha","source":"1887 St Petersburg protocol"},
+          {"from":"pillar-31","to":"pillar-32","type":"watershed","watershed":"Kashan–Murghab","source":"1887 St Petersburg protocol"},
+          {"from":"pillar-32","to":"pillar-35","type":"straight","source":"straight to point on Murghab above Yaki-Yuz/Yaki-Yangi canal head"},
+          {"from":"pillar-35","to":"pillar-36","type":"thalweg","waterbody":"Murghab","source":"downstream along Murghab thalweg"},
+          {"from":"pillar-36","to":"pillar-65","type":"demarcated-1885-1886","source":"synopsis accepted as definitive by the 1887 protocol; exact post sequence remains a digitization dependency"},
+          {"from":"east-of-pillar-65","to":"point-D","type":"mapped-control-chain","via":["A","B","C","D"],"source":"1887 protocol Map No. 8; points defined relative to Imam Nazar, Kara-Tepe-Khurd-kak, Katabadji, Ali Kadim and Chahi wells"},
+          {"from":"point-D","to":"bosagha-khamiab-local-frontier","type":"straight","source":"1887 protocol"},
+          {"from":"bosagha-khamiab-local-frontier","to":"Oxus","type":"local-demarcated-boundary","source":"existing Bosagha–Khamiab local frontier retained subject to canal/land reservations specified by the protocol"}
+        ],
+        "derivationNote": "The line is now encoded as a source-derived sequence of segment semantics rather than an undifferentiated pending line. The official texts prove where the frontier is straight, follows ridge/watershed, follows a river course/thalweg, or relies on mapped/local-demarcation controls. This still does not justify a geometry-verified full polyline: mapped points A-D, the complete 1-19/36-66 pillar synopsis, the later eastern posts and terrain-following vertices must be digitized from the authoritative maps/descriptions before coordinate geometry is promoted."
       },
       "reviewStatus": "source-verified",
-      "notes": "Full legal/demarcated boundary is source-verified; complete geometry remains pending extraction of all 79 posts and annex map/segment semantics."
+      "notes": "Full legal/demarcated boundary and its segment grammar are source-verified. The seven explicit coordinate controls remain the only geometry-verified western subset until all terrain and mapped controls are digitized."
     },
     {
       "id": "territory-1888-afghan-west-known-controls",

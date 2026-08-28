@@ -32,6 +32,16 @@
       "notes": "UKTS record 9767 is dated 26 January 1888."
     },
     {
+      "id": "govindia-aitchison-afghan-frontier-1933",
+      "title": "A Collection of Treaties, Engagements and Sanads relating to India and neighbouring countries, vol. XIII, Afghanistan Appendix I",
+      "institution": "Government of India / India Office; British Library IOR/L/PS/20/G3/14",
+      "url": "https://www.qdl.qa/en/archive/81055/vdc_100000000884.0x0003bf",
+      "tier": "A2-official-document-publication",
+      "coverage": "1933 Government of India fifth edition reproducing the completed Description of the Afghan Frontier between the Hari Rud and the Oxus, including pillar-by-pillar route semantics",
+      "canonicalUse": ["legal-basis", "boundary-geometry", "interpretation", "display-validation"],
+      "notes": "Revised in 1930 and published in Delhi in 1933 by the Manager of Publications under Government of India authority. Appendix I begins on printed p. 251 / QDL image 494 and provides the completed frontier description. It is used as an official retrospective compilation of the commission route, not as a substitute for the original signed maps where exact terrain tracing is required."
+    },
+    {
       "id": "loc-afghan-boundary-demarcated-map-1888",
       "title": "Map illustrative of the Afghan Boundary Commission march and the frontier as proposed and actually demarcated",
       "institution": "Library of Congress Geography and Map Division",
