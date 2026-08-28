@@ -1,0 +1,644 @@
+/* Studio desktop composition matched to the approved reign-dashboard reference.
+   This is intentionally structural: proportions, band order, density and module
+   relationships. Historical visual-state tokens still own the actual palette. */
+
+@media (min-width: 1101px) {
+  .background-module {
+    padding: 2px !important;
+  }
+
+  .core-site-surface {
+    --reference-rail-width: 244px;
+    --page-surface-width: calc(100vw - 4px);
+    width: var(--page-surface-width) !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    min-height: calc(100vh - 4px) !important;
+    overflow: clip !important;
+  }
+
+  /* Header: thin global band, brand aligned exactly to the historical rail. */
+  .core-site-surface .core-header {
+    min-height: 50px !important;
+    height: 50px !important;
+    grid-template-columns: var(--reference-rail-width) minmax(0, 1fr) auto !important;
+  }
+
+  .core-site-surface .core-brand {
+    width: var(--reference-rail-width) !important;
+    min-width: var(--reference-rail-width) !important;
+    flex: 0 0 var(--reference-rail-width) !important;
+    padding: 0 22px !important;
+    font-size: 22px !important;
+    letter-spacing: .07em !important;
+  }
+
+  .core-site-surface .core-main-nav {
+    justify-content: flex-start !important;
+    gap: clamp(26px, 3.2vw, 52px) !important;
+    padding: 0 40px !important;
+  }
+
+  .core-site-surface .core-main-nav button,
+  .core-site-surface .core-utilities button {
+    font-size: 12px !important;
+  }
+
+  .core-site-surface .core-main-nav button.active::after {
+    bottom: 4px !important;
+    height: 2px !important;
+  }
+
+  .core-site-surface .core-utilities button {
+    padding: 0 15px !important;
+  }
+
+  /* Workspace: persistent narrow chronology rail + one uninterrupted ruler canvas. */
+  .core-site-surface .core-workspace {
+    grid-template-columns: var(--reference-rail-width) minmax(0, 1fr) !important;
+  }
+
+  .core-site-surface .historical-rail {
+    width: var(--reference-rail-width) !important;
+    min-width: var(--reference-rail-width) !important;
+    max-width: var(--reference-rail-width) !important;
+    flex: 0 0 var(--reference-rail-width) !important;
+  }
+
+  .core-site-surface .historical-rail > div {
+    top: 50px !important;
+  }
+
+  .core-site-surface .rail-controls {
+    height: 50px !important;
+    padding: 0 20px !important;
+  }
+
+  .core-site-surface .rail-controls button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .core-site-surface .rail-list {
+    top: 100px !important;
+    height: calc(100vh - 104px) !important;
+    padding: 0 12px 16px 34px !important;
+  }
+
+  .core-site-surface .rail-item,
+  .core-site-surface .rail-item.active {
+    grid-template-columns: 38px minmax(0, 1fr) !important;
+    gap: 9px !important;
+    min-height: 45px !important;
+    height: 45px !important;
+    max-height: 45px !important;
+    padding: 4px 3px 4px 12px !important;
+    align-items: center !important;
+  }
+
+  .core-site-surface .rail-item.active {
+    min-height: 58px !important;
+    height: 58px !important;
+    max-height: 58px !important;
+    padding: 5px 5px 5px 12px !important;
+  }
+
+  .core-site-surface .rail-portrait,
+  .core-site-surface .rail-item.active .rail-portrait {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    border-radius: 50% !important;
+    aspect-ratio: 1 !important;
+  }
+
+  .core-site-surface .rail-item strong {
+    font-size: 12px !important;
+    line-height: 1.04 !important;
+  }
+
+  .core-site-surface .rail-item span {
+    margin-top: 2px !important;
+    font-size: 10px !important;
+    line-height: 1.05 !important;
+  }
+
+  /* Hero: reference is a dashboard masthead, not a 540px editorial cover. */
+  .core-site-surface [data-module-id="hero"] {
+    min-height: 280px !important;
+    height: 280px !important;
+    max-height: 280px !important;
+    grid-template-columns: 47% 53% !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    padding: 30px 30px 22px 44px !important;
+    justify-content: flex-start !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-period {
+    margin: 0 0 4px !important;
+    font-size: 16px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] h1 {
+    margin: 4px 0 10px !important;
+    font-size: clamp(52px, 4.6vw, 76px) !important;
+    line-height: .9 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-summary {
+    max-width: 560px !important;
+    font-size: 13px !important;
+    line-height: 1.38 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    max-width: 650px !important;
+    margin-top: auto !important;
+    padding-top: 16px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta small {
+    font-size: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta strong {
+    margin-top: 3px !important;
+    font-size: 10px !important;
+  }
+
+  /* The approved quote rotator remains, but it occupies the compact secondary
+     slot rather than becoming a second hero. */
+  .core-site-surface [data-module-id="hero"] .key-events-card {
+    right: 18px !important;
+    bottom: 16px !important;
+    width: 310px !important;
+    max-width: 36% !important;
+    min-height: 92px !important;
+    padding: 12px 14px !important;
+    box-shadow: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .key-events-card h3 {
+    margin: 0 0 6px !important;
+    font-size: 12px !important;
+  }
+
+  /* Local ruler navigation directly touches Hero, exactly as in the reference. */
+  .core-site-surface [data-module-id="page-tabs"] {
+    position: relative !important;
+    top: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    gap: clamp(26px, 4vw, 68px) !important;
+    padding: 0 42px !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
+    font-size: 10px !important;
+    letter-spacing: .12em !important;
+  }
+
+  /* MAIN DASHBOARD BAND
+     Visually this is two modules: one large map module whose controls live in
+     its left gutter, plus one comparison module. Territory + map therefore
+     read as one joined panel even though they remain independently inspectable. */
+  .core-site-surface .primary-content-row {
+    display: grid !important;
+    grid-template-columns: 190px minmax(0, 1fr) 390px !important;
+    grid-template-rows: 318px !important;
+    min-height: 318px !important;
+    height: 318px !important;
+    gap: 0 !important;
+    padding: 8px 16px 0 !important;
+    border-bottom: 0 !important;
+    background: var(--surface-elevated) !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 310px !important;
+    min-height: 310px !important;
+    max-height: 310px !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    padding: 16px 12px 14px 16px !important;
+    border: 1px solid var(--border-emphasis) !important;
+    border-right: 0 !important;
+    background: var(--surface-primary) !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2 {
+    margin: 0 0 10px !important;
+    font-size: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after {
+    content: 'КАРТА ПРАВЛЕНИЯ';
+    display: block;
+    font: 600 16px/1 var(--display-font);
+    letter-spacing: .03em;
+  }
+
+  .core-site-surface [data-module-id="territory"] > p {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend {
+    gap: 0 !important;
+    margin: 8px 0 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend > div {
+    min-height: 40px !important;
+    padding: 10px 3px !important;
+    border-top: 1px solid var(--border-emphasis) !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .module-cta {
+    left: 16px !important;
+    right: 12px !important;
+    bottom: 14px !important;
+    width: auto !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    font-size: 10px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    padding: 8px !important;
+    border: 1px solid var(--border-emphasis) !important;
+    border-left: 0 !important;
+    background: var(--surface-primary) !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas {
+    min-height: 292px !important;
+    height: 292px !important;
+    border: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas text {
+    font-size: 11px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-controls {
+    right: 16px !important;
+    bottom: 16px !important;
+    gap: 5px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-controls button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    margin-left: 8px !important;
+    padding: 16px 16px 10px !important;
+    border: 1px solid var(--border-emphasis) !important;
+    background: var(--surface-primary) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] > h2 {
+    margin: 0 0 8px !important;
+    font-size: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] > h2::after {
+    content: 'НАЧАЛО → КОНЕЦ ПРАВЛЕНИЯ';
+    display: block;
+    font: 600 16px/1 var(--display-font);
+    letter-spacing: .03em;
+  }
+
+  .core-site-surface [data-module-id="facts"] [data-element-id="facts-all"] {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .facts-list {
+    display: grid !important;
+    grid-auto-rows: 42px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    display: grid !important;
+    grid-template-columns: minmax(90px, .9fr) minmax(0, 1.4fr) !important;
+    gap: 12px !important;
+    align-items: center !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row > span {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row label {
+    display: block !important;
+    margin: 0 !important;
+    color: var(--text-secondary) !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row strong {
+    display: block !important;
+    min-width: 0 !important;
+    color: var(--text-primary) !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  /* EVENTS
+     Reference density is compact landscape cards: four across, then the
+     remaining cards on a second line. Never poster-sized cards. */
+  .core-site-surface [data-module-id="thematic-card"] {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px 12px !important;
+    align-items: stretch !important;
+    padding: 6px 16px 10px !important;
+    overflow: visible !important;
+    background: var(--surface-elevated) !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]::before {
+    content: 'КЛЮЧЕВЫЕ СОБЫТИЯ И ЯВЛЕНИЯ ПРАВЛЕНИЯ';
+    grid-column: 1 / -1;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 28px !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    border: 0 !important;
+    color: var(--text-primary) !important;
+    font: 600 17px/1 var(--display-font) !important;
+    letter-spacing: .02em !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(3):last-child),
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(4):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(5):last-child),
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(6):last-child),
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(7):last-child),
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(8):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 108px !important;
+    min-height: 108px !important;
+    max-height: 108px !important;
+    margin: 0 !important;
+    padding: 14px 46px 12px 14px !important;
+    border: 1px solid var(--border-emphasis) !important;
+    background: var(--surface-primary) !important;
+    overflow: hidden !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card .media-zone {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--surface-primary) 96%, transparent) 0 42%, color-mix(in srgb, var(--surface-primary) 52%, transparent) 70%, transparent 100%),
+      repeating-linear-gradient(155deg, color-mix(in srgb, var(--text-primary) 7%, transparent) 0 1px, transparent 1px 8px),
+      color-mix(in srgb, var(--surface-secondary) 86%, var(--accent-primary) 14%) !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card h2,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card small,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card p {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card h2 {
+    margin: 0 0 4px !important;
+    max-width: 72% !important;
+    color: color-mix(in srgb, var(--accent-primary) 84%, var(--text-primary)) !important;
+    font: 700 15px/1.04 var(--display-font) !important;
+    letter-spacing: .005em !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card small {
+    display: block !important;
+    position: absolute !important;
+    left: 14px !important;
+    top: 8px !important;
+    transform: translateY(-100%) !important;
+    margin: 0 !important;
+    color: var(--accent-primary) !important;
+    font-size: 9px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card p {
+    display: -webkit-box !important;
+    max-width: 67% !important;
+    margin: 0 !important;
+    color: var(--text-secondary) !important;
+    font-size: 9px !important;
+    line-height: 1.22 !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card button {
+    position: absolute !important;
+    right: 10px !important;
+    left: auto !important;
+    bottom: 10px !important;
+    z-index: 3 !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-emphasis) !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--surface-elevated) 88%, transparent) !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    text-align: center !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card button::after {
+    content: '→';
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  /* BOTTOM CHRONOLOGY
+     Full page width, with a fixed title cell exactly where the left ruler rail
+     sits above it. */
+  .core-site-surface .ruler-content {
+    overflow: visible !important;
+  }
+
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    position: relative !important;
+    left: calc(-1 * var(--reference-rail-width)) !important;
+    width: var(--page-surface-width) !important;
+    max-width: none !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] {
+    display: grid !important;
+    grid-template-columns: var(--reference-rail-width) minmax(0, 1fr) 52px !important;
+    gap: 0 !important;
+    min-height: 122px !important;
+    height: 122px !important;
+    max-height: 122px !important;
+    padding: 0 !important;
+    background: var(--surface-elevated) !important;
+    border-top: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler:first-child {
+    position: relative !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 122px !important;
+    align-self: stretch !important;
+    margin: 0 !important;
+    padding: 18px 20px !important;
+    border: 0 !important;
+    border-right: 1px solid var(--border-emphasis) !important;
+    text-align: left !important;
+    background: var(--surface-elevated) !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler:first-child small,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler:first-child strong {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler:first-child::before {
+    content: 'ХРОНОЛОГИЯ\A ПРАВЛЕНИЯ';
+    display: block;
+    white-space: pre-line;
+    color: var(--text-primary);
+    font: 700 17px/1.08 var(--display-font);
+    letter-spacing: .03em;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler:first-child::after {
+    content: '←';
+    position: absolute;
+    left: 20px;
+    bottom: 12px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-emphasis);
+    border-radius: 50%;
+    font-size: 13px;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .reign-timeline-center {
+    min-width: 0 !important;
+    padding: 16px 26px 10px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .reign-timeline-center h2 {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-axis {
+    height: 2px !important;
+    margin: 28px 8px 20px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-axis i {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-axis i.edge {
+    width: 11px !important;
+    height: 11px !important;
+    border-width: 2px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events {
+    gap: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events > div {
+    min-width: 0 !important;
+    padding-right: 4px !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events b {
+    font-size: 9px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler.next {
+    position: relative !important;
+    width: 52px !important;
+    min-width: 52px !important;
+    height: 122px !important;
+    align-self: stretch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler.next small,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler.next strong {
+    display: none !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler.next::after {
+    content: '→';
+    position: absolute;
+    right: 12px;
+    top: 47px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-emphasis);
+    border-radius: 50%;
+    font-size: 13px;
+  }
+}
