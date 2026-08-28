@@ -92,8 +92,15 @@
   gap: 8px;
 }
 
+.dimensionControlSingle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .dimensionControl input,
 .dimensionControl select,
+.dimensionControlSingle input,
+.dimensionControlSingle select,
 .aiPanel textarea {
   width: 100%;
   box-sizing: border-box;
@@ -105,7 +112,9 @@
 }
 
 .dimensionControl input,
-.dimensionControl select {
+.dimensionControl select,
+.dimensionControlSingle input,
+.dimensionControlSingle select {
   min-height: 44px;
   padding: 6px 9px;
 }
