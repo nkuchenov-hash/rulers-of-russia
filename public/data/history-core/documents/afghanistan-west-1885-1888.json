@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-anglo-russian-afghan-boundary-protocol-1887-hmso",
+      "sourceCollectionId": "hmso-central-asia-no2-1887-afghan-boundary",
+      "title": "Protocol concerning completion of the delimitation of the north-west boundary of Afghanistan, with coordinate-bearing annex",
+      "institution": "British Foreign Office / Her Majesty's Stationery Office",
+      "url": "https://pahar.in/pahar/Books%20and%20Articles/Central%20Asia/1887%20Correspondence%20regarding%20the%20Affairs%20of%20Central%20Asia%20presented%20to%20Parliament%20s.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {
+        "original": "10/22 July 1887, St Petersburg",
+        "normalized": "1887-07-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
+      "publicationCitation": "Further Correspondence respecting the Affairs of Central Asia, Central Asia No. 2 (1887), presented to both Houses of Parliament by Command of Her Majesty, September 1887.",
+      "notes": "The protocol treats the already demarcated portions as definitive, confirms the existing synopsis for pillars 1-19 and 36-66, and gives a detailed replacement/continuation route through the unresolved middle and eastern sectors. It explicitly distinguishes straight lines, watershed lines and thalwegs.",
+      "coordinateSet": {
+        "crs": "Historical geographic latitude/longitude as published in the 1887 Anglo-Russian protocol; prime meridian/datum not independently registered in History Core",
+        "purpose": "verified trigonometric/control locations only; not a complete boundary polyline",
+        "points": [
+          {"id":"afghan-west-control-20","label":"Pillar 20 — Kara-Tepe trigonometrical station","coordinates":[62.25472222,35.29694444],"sourceDms":"35°17′49″ N, 62°15′17″ E"},
+          {"id":"afghan-west-control-24","label":"Pillar 24 — point 2925","coordinates":[62.46583333,35.28138889],"sourceDms":"35°16′53″ N, 62°27′57″ E"},
+          {"id":"afghan-west-control-26","label":"Pillar 26 — Bandi Akhamar / point 3017","coordinates":[62.59666667,35.23916667],"sourceDms":"35°14′21″ N, 62°35′48″ E"},
+          {"id":"afghan-west-control-27","label":"Pillar 27 — point 3198","coordinates":[62.68333333,35.24166667],"sourceDms":"35°14′30″ N, 62°41′00″ E"},
+          {"id":"afghan-west-control-kalari2","label":"Kalari 2 watershed control","coordinates":[62.78833333,35.30583333],"sourceDms":"35°18′21″ N, 62°47′18″ E"},
+          {"id":"afghan-west-control-30","label":"Pillar 30 — Tori-Sheikh trigonometrical station","coordinates":[62.99527778,35.41416667],"sourceDms":"35°24′51″ N, 62°59′43″ E"},
+          {"id":"afghan-west-control-32","label":"Pillar 32 — Kashan trigonometrical station","coordinates":[63.10111111,35.63694444],"sourceDms":"35°38′13″ N, 63°06′04″ E"}
+        ]
+      }
+    },
+    {
+      "id": "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official",
+      "sourceCollectionId": "russian-official-afghan-boundary-protocol-1887",
+      "title": "Official Russian/French publication of the 1887 north-west Afghan boundary protocol",
+      "institution": "Russian Empire official treaty/legal publication",
+      "url": "https://m.bigenc.ru/vault/2bb752edf165294aca45e8d13be83b41.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-publication",
+      "date": {
+        "original": "1887 publication",
+        "normalized": "1887",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire"],
+      "publicationCitation": "Russian/French official printed text, 1887, No. 467, pp. 465 ff.; digitized in the Great Russian Encyclopedia vault.",
+      "notes": "Used as an independent transcription check for the coordinate-bearing protocol. Its clean print resolves OCR corruption in the British scan: pillar 24 is 62°27′57″ E; Kalari 2 is 35°18′21″ N; Tori-Sheikh is 62°59′43″ E."
+    },
+    {
+      "id": "doc-afghan-northwest-final-protocol-1888-ukts",
+      "sourceCollectionId": "ukts-afghan-northwest-boundary-protocols-1888",
+      "title": "Protocols of the Commission instituted by the Protocol of July 22, 1887, for the Delimitation of the North-West Boundary of Afghanistan",
+      "institution": "United Kingdom Treaty Series",
+      "url": "https://www.bailii.org/uk/other/UKTS/1888/9767.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {
+        "original": "26 January 1888",
+        "normalized": "1888-01-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
+      "publicationCitation": "United Kingdom Treaty Series, UKTS 9767, 26 January 1888.",
+      "notes": "Final commission protocol date used conservatively for activation of the completed 1885-1888 demarcation package in History Core."
+    },
+    {
+      "id": "doc-afghanistan-ussr-western-boundary-ibs26-usdos",
+      "sourceCollectionId": "usdos-ibs26-afghanistan-ussr-1983",
+      "title": "IBS No. 26 historical account of the 1885-1888 western Afghan boundary demarcation",
+      "institution": "United States Department of State, Office of the Geographer, Bureau of Intelligence and Research",
+      "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/pdf/ibs026.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {
+        "original": "15 September 1983",
+        "normalized": "1983-09-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United States Department of State"],
+      "publicationCitation": "International Boundary Study No. 26 (Revised), Afghanistan–U.S.S.R. Boundary, September 15, 1983.",
+      "notes": "Records the 10 September 1885 London delimitation protocol and states that during the following three years the binational commission demarcated the western sector and erected 79 boundary posts. Used as continuity/context evidence, not as the source of the seven historical coordinate controls."
+    }
+  ]
+}
