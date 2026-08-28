@@ -20,6 +20,13 @@ export interface RulerKeyEvent {
   title: string;
 }
 
+export interface RulerQuote {
+  id: string;
+  text: string;
+  context?: string;
+  sourceLabel?: string;
+}
+
 export interface RulerPageTab {
   id: string;
   label: string;
@@ -97,6 +104,7 @@ export interface RulerPageData {
     imageFallbackLabel?: string;
     meta: RulerMetaItem[];
     keyEvents: RulerKeyEvent[];
+    quotes?: RulerQuote[];
   };
   tabs: RulerPageTab[];
   territory: {
