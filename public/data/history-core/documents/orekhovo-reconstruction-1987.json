@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-shaskolsky-orekhovo-boundary-1987",
+      "sourceCollectionId": "academic-russian-historical-geography",
+      "title": "И. П. Шаскольский. Борьба Руси за сохранение выхода к Балтийскому морю в XIV веке — раздел о границе Ореховецкого договора",
+      "institution": "АН СССР, Институт истории СССР, Ленинградское отделение / Наука",
+      "url": "https://djvu.online/file/6zuJA41K09yqA",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "other",
+      "date": {
+        "original": "1987",
+        "normalized": "1987",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["И. П. Шаскольский", "АН СССР, Институт истории СССР"],
+      "publicationCitation": "Шаскольский И. П. Борьба Руси за сохранение выхода к Балтийскому морю в XIV веке. Л.: Наука, 1987. Раздел об Ореховецкой границе, с. 126–141.",
+      "notes": "Interpretive aid only. The monograph synthesizes Russian, Swedish and Finnish research and explicitly distinguishes the comparatively well-localized southern section from the sparsely marked northern section. It does not replace the 1323 treaty as the legal source."
+    }
+  ]
+}
