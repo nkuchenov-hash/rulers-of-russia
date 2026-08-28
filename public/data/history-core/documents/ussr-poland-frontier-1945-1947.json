@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-poland-border-1945-unts",
+      "sourceCollectionId": "untc-ussr-poland-frontier-61",
+      "title": "Treaty between the Polish Republic and the Union of Soviet Socialist Republics concerning the Polish-Soviet State Frontier",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%2010/v10.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"16 August 1945","normalized":"1945-08-16","precision":"day","calendar":"gregorian"},
+      "authority": ["Polish Republic", "Union of Soviet Socialist Republics"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 10, No. 61, pp. 193 ff.",
+      "notes": "Article 1 adopts the Curzon line with specified deviations and an attached 1:500,000 map. Article 2 describes the frontier from near the source of the San, along the San median line, east of Przemysl, south of Rawa-Ruska, via the Solokia and Western Bug, Bialowieza sector and onward to the Lithuania-Poland-East Prussia tripoint. The treaty footnote and UNTC record state that it came into force on 5 February 1946 upon exchange of ratifications at Warsaw."
+    },
+    {
+      "id": "doc-ussr-poland-border-1945-eif-untc",
+      "sourceCollectionId": "untc-ussr-poland-frontier-61",
+      "title": "UN Treaty Collection registration record for the 1945 Polish-Soviet State Frontier Treaty",
+      "institution": "United Nations Treaty Collection",
+      "url": "https://treaties.un.org/Pages/showDetails.aspx?objid=0800000280164b0a",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-register",
+      "date": {"original":"5 February 1946 — entry into force","normalized":"1946-02-05","precision":"day","calendar":"gregorian"},
+      "authority": ["United Nations Treaty Collection"],
+      "publicationCitation": "UNTC registration No. 61.",
+      "notes": "Records entry into force on 5 February 1946 by exchange of instruments of ratification, in accordance with Article 4."
+    },
+    {
+      "id": "doc-ussr-poland-demarcation-1947-unts",
+      "sourceCollectionId": "unts-ussr-poland-frontier-regime-575",
+      "title": "Soviet-Polish frontier demarcation documents of 1946–1947, as identified by the 1948 frontier-régime agreement",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%2037/v37.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {"original":"30 April 1947","normalized":"1947-04-30","precision":"day","calendar":"gregorian"},
+      "authority": ["Mixed Polish-Soviet Commission for the Demarcation of the State Frontier"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 37, No. 575, Article 1 and Final Protocol.",
+      "notes": "The later bilateral agreement states that the frontier follows on the ground the line defined in the demarcation documents signed at Warsaw on 30 April 1947. The package consists of a descriptive protocol of the frontier line, maps, and protocols for the siting of individual frontier marks with sketches and photographs. It also records that the navigable Bug sector was defined as the middle of the river. The maps/marker protocols themselves remain a geometry-ingestion dependency."
+    }
+  ]
+}

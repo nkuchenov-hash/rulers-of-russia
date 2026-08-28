@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "untc-ussr-poland-frontier-61",
+      "title": "United Nations Treaty Series No. 61 — Polish-Soviet State Frontier",
+      "institution": "United Nations Treaty Collection / United Nations Treaty Series",
+      "url": "https://treaties.un.org/Pages/showDetails.aspx?objid=0800000280164b0a",
+      "tier": "A2-official-document-publication",
+      "coverage": "Treaty signed 16 August 1945, official entry-into-force chronology and treaty text",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-semantics"],
+      "notes": "UN registration No. 61 records entry into force on 5 February 1946 by exchange of instruments of ratification at Warsaw, in accordance with Article 4."
+    },
+    {
+      "id": "unts-ussr-poland-frontier-regime-575",
+      "title": "United Nations Treaty Series No. 575 — Régime on the Polish-Soviet State Frontier",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%2037/v37.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "1948 frontier-regime agreement and final protocol identifying the 1946–1947 demarcation documents",
+      "canonicalUse": ["boundary-geometry", "demarcation", "interpretation"],
+      "notes": "Article 1 states that the frontier shall follow on the ground the line defined in demarcation documents signed at Warsaw on 30 April 1947. The Final Protocol enumerates the descriptive protocol, maps and individual frontier-mark protocols/sketches/photos; for the navigable Bug sector the line was defined as the middle of the river."
+    }
+  ]
+}
