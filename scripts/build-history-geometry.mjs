@@ -83,6 +83,9 @@ for (const recipe of recipes) {
   seenOutputs.add(recipe.output);
   assert(['russian-legal-border', 'maritime-jurisdiction', 'de-facto-control', 'front-line', 'internal-administrative', 'claim'].includes(recipe.track), `Invalid track in ${recipe.id}`);
   assert(['geodesic', 'rhumb', 'source-vertices'].includes(recipe.interpolation), `Invalid interpolation in ${recipe.id}`);
+  const geometryType = recipe.geometryType ?? 'LineString';
+  assert(['LineString', 'MultiPoint'].includes(geometryType), `Invalid geometryType ${geometryType} in ${recipe.id}`);
+  if (geometryType === 'MultiPoint') assert(recipe.interpolation === 'source-vertices', `MultiPoint recipe ${recipe.id} must use source-vertices interpolation`);
   assert(Array.isArray(recipe.evidenceDocumentIds) && recipe.evidenceDocumentIds.length > 0, `Recipe ${recipe.id} has no evidence documents`);
   assert(Array.isArray(recipe.points) && recipe.points.length >= 2 && recipe.points.every(finitePoint), `Invalid source points in ${recipe.id}`);
 
@@ -107,6 +110,7 @@ for (const recipe of recipes) {
         ? 'Source longitude/latitude values are retained literally for provenance. Their exact placement on a WGS84 globe remains medium-confidence until a source-backed datum transformation is registered.'
         : null,
       interpolation: recipe.interpolation,
+      geometryType,
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       sourcePointCount: recipe.points.length,
       note: recipe.note ?? null
@@ -121,13 +125,14 @@ for (const recipe of recipes) {
         source_crs: recipe.sourceCrs ?? 'unspecified',
         display_datum_status: datumStatus,
         interpolation: recipe.interpolation,
+        geometry_type: geometryType,
         evidence_document_ids: recipe.evidenceDocumentIds,
         note: recipe.note ?? null
       },
-      geometry: { type: 'LineString', coordinates }
+      geometry: { type: geometryType, coordinates }
     }]
   };
   fs.writeFileSync(outputFile, JSON.stringify(payload, null, 2) + '\n');
 }
 
-console.log(`History geometry materialized from recipes: ${recipes.length} verified coordinate lines.`);
+console.log(`History geometry materialized from recipes: ${recipes.length} verified coordinate geometries.`);
