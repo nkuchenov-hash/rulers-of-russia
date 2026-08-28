@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-khiva-gandymyan-1873-imperial-mfa",
+      "sourceCollectionId": "rgo-russian-imperial-treaty-collection-1902",
+      "title": "Договор между Россией и Хивинским ханством, заключённый в Гандемияне 12 августа 1873 года",
+      "institution": "Министерство иностранных дел Российской империи",
+      "url": "https://elib.rgo.ru/handle/123456789/217153",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"12 августа 1873 г. (старый стиль)","normalized":"1873-08-24","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя / К. П. фон Кауфман", "Хивинское ханство / Сеид-Мухамед-Рахим-Богадур-хан"],
+      "publicationCitation": "Сборник действующих трактатов, конвенций и соглашений, заключенных Россией с другими государствами. Издано по распоряжению г. министра иностранных дел. 2-е изд. Т. I. СПб., 1902. С. 425–427.",
+      "notes": "Article 1 places the khan's external relations and military action under Russian authority. Article 2 defines the Russia-Khiva boundary along the Amu Darya from Kukertli downstream to its westernmost channel, along that channel to the Aral Sea, along the sea shore to Cape Urgu and then along the foot of the southern Ust-Urt chink by the so-called old channel of the Amu. Article 3 transfers all right-bank Amu Darya lands previously considered Khivan into Russian possession. The instrument states that the conditions were accepted for exact execution and permanent guidance by both parties on 12 August 1873 OS."
+    }
+  ]
+}
