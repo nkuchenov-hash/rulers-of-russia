@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "rgvia-kokand-annexation-1876",
+      "title": "Original imperial decree abolishing the Kokand Khanate and creating Fergana Oblast",
+      "institution": "Российский государственный военно-исторический архив / Полное собрание законов Российской империи",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/M.Asien/XVIII/1740-1760/Kirgis_russ/201-220/214.htm",
+      "tier": "A1-archival-original",
+      "coverage": "Alexander II's signed decree of 19 February 1876 OS incorporating the former Kokand Khanate and creating Fergana Oblast",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "territorial-status"],
+      "notes": "The documentary publication identifies the original exactly as РГВИА, Ф. ВУА, Д. 6886, Л. 30–31, Подлинник, and cross-cites PSZRI II, vol. 51, part 1, 1876, No. 55593, p. 139. The decree itself orders the newly occupied territory constituting the former Kokand Khanate to be annexed to the Empire and organized as Fergana Oblast."
+    }
+  ]
+}

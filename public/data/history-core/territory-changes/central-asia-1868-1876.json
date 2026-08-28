@@ -82,17 +82,18 @@
       "id": "territory-1876-kokand-fergana-acquisition",
       "eventId": "evt-1876-kokand-annexation",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"19 февраля (2 марта) 1876 г.","normalized":"1876-03-02","precision":"day","calendar":"julian"},
+      "effectiveDate": {"original":"19 февраля 1876 г. (старый стиль)","normalized":"1876-03-02","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
+      "evidenceDocumentIds": ["doc-kokand-annexation-decree-1876-rgvia", "doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
       "geometry": {
-        "method": "contemporary-official-map",
-        "evidenceDocumentIds": ["doc-fergana-map-1876-general-staff"],
-        "derivationNote": "The 1876 General Staff Fergana map is a strong contemporary geometry source. Promote only after georeferencing and after the precise imperial legal act is indexed."
+        "method": "contemporary-official-map-pending-georeference",
+        "evidenceDocumentIds": ["doc-kokand-annexation-decree-1876-rgvia", "doc-fergana-map-1876-general-staff"],
+        "derivationNote": "The RGVIA original/PSZRI decree source-verifies the legal inclusion of the territory constituting the former Kokand Khanate and creation of Fergana Oblast. The 1876 Asian Department of the General Staff map is the contemporary official geometry source, but the historical oblast/khanate boundary must be georeferenced and reconciled with adjacent treaty boundaries before polygon promotion."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legal territorial transition is source-verified; geometry remains dependent on the contemporary official map rather than a modern Fergana administrative outline."
     }
   ]
 }
