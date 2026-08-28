@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-anglo-russian-alaska-boundary-1825-frus",
+      "sourceCollectionId": "usdos-frus-anglo-russian-alaska-boundary",
+      "title": "Convention between Great Britain and Russia respecting the limits of their possessions on the north-west coast of America — Article III boundary text",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1890/d286",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "16/28 February 1825",
+        "normalized": "1825-02-28",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
+      "publicationCitation": "Foreign Relations of the United States, 1890, official diplomatic documentary publication reproducing the Anglo-Russian Convention of 1825.",
+      "notes": "Article III provides that after the boundary reaches the 141st degree of west longitude, the same meridian continues north to the Frozen Ocean. Article XII required a later exchange of ratifications, so the History Core does not use the signature date as the verified effective date of the overlay."
+    },
+    {
+      "id": "doc-anglo-russian-commerce-1843-continuity-frus",
+      "sourceCollectionId": "usdos-frus-anglo-russian-alaska-boundary",
+      "title": "Treaty of Commerce and Navigation between Great Britain and Russia, 1843 — continuation of the 1825 convention",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1890/d286",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "11 January 1843",
+        "normalized": "1843-01-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
+      "publicationCitation": "Foreign Relations of the United States, 1890, documentary discussion reproducing the clause by which the 1843 treaty continued the 1825 convention in force.",
+      "notes": "Used as direct documentary evidence that the 1825 boundary convention was expressly continued in force in 1843. The exact entry-into-force date is supplied independently by the government treaty-register record."
+    },
+    {
+      "id": "doc-anglo-russian-commerce-1843-eif-nzmfat",
+      "sourceCollectionId": "nzmfat-anglo-russian-commerce-1843",
+      "title": "Treaty of Commerce and Navigation between the United Kingdom and Russia — official treaty register chronology",
+      "institution": "New Zealand Ministry of Foreign Affairs and Trade",
+      "url": "https://www.treaties.mfat.govt.nz/search/details/t/901/3140",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-register",
+      "date": {
+        "original": "31 January 1843 — entry into force",
+        "normalized": "1843-01-31",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United Kingdom government treaty register"],
+      "publicationCitation": "New Zealand Treaties Online, Ministry of Foreign Affairs and Trade, record T/901/3140.",
+      "notes": "Government register records conclusion on 11 January 1843 and entry into force on 31 January 1843. The latter is used as the conservative exact activation date for the expressly continued 1825 boundary overlay."
+    },
+    {
+      "id": "doc-alaska-141st-meridian-survey-1906-usdos",
+      "sourceCollectionId": "usdos-frus-alaska-meridian-survey-1906",
+      "title": "Convention between the United States and Great Britain for the survey and marking of the 141st meridian boundary",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1906p1/d642",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "21 April 1906",
+        "normalized": "1906-04-21",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United States of America", "United Kingdom of Great Britain and Ireland"],
+      "publicationCitation": "Foreign Relations of the United States, 1906, Part I, convention for survey and marking of the Alaska–Canada boundary along the 141st meridian.",
+      "notes": "The convention states that locating the 141st meridian involves no question of treaty interpretation, only scientific determination and survey, and that the jointly marked line permanently defines the treaty meridian for international purposes."
+    },
+    {
+      "id": "doc-ibc-alaska-yukon-141st-section29",
+      "sourceCollectionId": "ibc-alaska-yukon-141st",
+      "title": "International Boundary Commission Section 29 — 141st Meridian",
+      "institution": "International Boundary Commission, Canada–United States",
+      "url": "https://www.internationalboundarycommission.org/en/maps-coordinates/maps/section-h.php",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {
+        "original": "1907–1913 joint survey period",
+        "normalized": "1913",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["International Boundary Commission, Canada–United States"],
+      "publicationCitation": "International Boundary Commission, Section 29 — 141st Meridian, official boundary mapping and survey-history page.",
+      "notes": "The Commission describes the Section 29 boundary as an approximately 1,045 km straight line following the 141st meridian between the Mount St. Elias sector and the Arctic Ocean. This validates that the deliberately conservative 61°–69° N clip lies wholly inside the meridian-defined sector; it is not used to substitute a modern shapefile for the treaty geometry."
+    }
+  ]
+}

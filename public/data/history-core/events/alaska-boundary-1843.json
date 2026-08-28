@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1843-anglo-russian-alaska-boundary-continuity",
+      "title": "Подтверждение действия англо-русской границы Русской Америки",
+      "kind": "treaty",
+      "date": {
+        "original": "31 января 1843 г. — вступление договора в силу",
+        "normalized": "1843-01-31",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Вступивший в силу торгово-навигационный договор 1843 года прямо сохранил действие англо-русской конвенции 1825 года, включая северный участок границы по 141° западной долготы.",
+      "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-anglo-russian-commerce-1843-continuity-frus", "doc-anglo-russian-commerce-1843-eif-nzmfat"],
+      "territoryChangeIds": ["territory-1843-anglo-russian-alaska-141w-confirmed"],
+      "reviewStatus": "source-verified",
+      "notes": "The overlay is activated conservatively from the independently verified 1843 entry-into-force date rather than retroactively assigning an unsourced 1825 ratification-exchange date."
+    }
+  ]
+}

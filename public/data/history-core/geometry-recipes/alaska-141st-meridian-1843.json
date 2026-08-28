@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-british-america-141w-1843",
+      "fragmentId": "frag-russian-empire-british-america-141w-1843",
+      "output": "geometry/russian-empire-british-america-141w-1843.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "Treaty-defined Greenwich astronomical longitude; no source-backed modern geodetic datum transformation registered",
+      "interpolation": "rhumb",
+      "stepsPerSegment": 32,
+      "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+      "points": [[-141.0,61.0],[-141.0,69.0]],
+      "pointSemantics": "conservative interior display clips on an exact treaty-defined meridian, not treaty endpoints",
+      "note": "The legal geometric rule is longitude 141° W continuing north. The 61° and 69° latitude values deliberately clip the line well inside the official 141st-meridian boundary sector, avoiding the southeastern terminal intersection and Arctic endpoint."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "usdos-frus-anglo-russian-alaska-boundary",
+      "title": "Foreign Relations documentary record of the Anglo-Russian Alaska boundary conventions",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1890/d286",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official U.S. documentary publication reproducing the 1825 Anglo-Russian boundary language and the 1843/1859 continuation clauses",
+      "canonicalUse": ["event", "legal-basis", "boundary-geometry", "interpretation"],
+      "notes": "The publication reproduces Article III of the 1825 convention: after the coastal mountain sector reaches 141 degrees west of Greenwich, that meridian continues north to the Frozen Ocean. It also records that the 1843 and 1859 Anglo-Russian commercial treaties expressly continued the 1825 convention in force."
+    },
+    {
+      "id": "nzmfat-anglo-russian-commerce-1843",
+      "title": "Treaty of Commerce and Navigation between the United Kingdom and Russia — treaty register record",
+      "institution": "New Zealand Ministry of Foreign Affairs and Trade",
+      "url": "https://www.treaties.mfat.govt.nz/search/details/t/901/3140",
+      "tier": "A2-official-government-register",
+      "coverage": "Government treaty-register chronology for the 1843 Anglo-Russian Treaty of Commerce and Navigation",
+      "canonicalUse": ["boundary-date", "legal-basis"],
+      "notes": "The official government register records conclusion on 11 January 1843 and entry into force on 31 January 1843. Used conservatively as the exact date from which this History Core overlay asserts the expressly continued 1825 boundary rule."
+    },
+    {
+      "id": "usdos-frus-alaska-meridian-survey-1906",
+      "title": "1906 Convention for surveying and marking the 141st meridian boundary",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1906p1/d642",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official convention confirming the 141st-meridian sector inherited from the 1825 Anglo-Russian and 1867 cession treaties",
+      "canonicalUse": ["boundary-geometry", "interpretation"],
+      "notes": "The convention states that locating the 141st meridian involves no treaty-interpretation question, only scientific determination and survey, and that the jointly marked line permanently defines the treaty meridian for international purposes."
+    },
+    {
+      "id": "ibc-alaska-yukon-141st",
+      "title": "Section 29 — 141st Meridian",
+      "institution": "International Boundary Commission, Canada–United States",
+      "url": "https://www.internationalboundarycommission.org/en/maps-coordinates/maps/section-h.php",
+      "tier": "A2-official-boundary-commission",
+      "coverage": "Official modern survey history and mapping of the 141st-meridian Alaska–Yukon boundary",
+      "canonicalUse": ["boundary-geometry", "display-validation"],
+      "notes": "The Commission identifies a 1,045 km straight-line boundary along the 141st Meridian from the Mount St. Elias sector to the Arctic Ocean, originally jointly surveyed in 1907–1913. Used to validate that the conservative 61–69 N interior clip lies wholly inside the treaty-defined meridian sector, not to replace the treaty as the legal source."
+    }
+  ]
+}
