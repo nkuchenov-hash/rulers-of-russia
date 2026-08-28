@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-crimea-manifest-1783-rusarchives-original",
+      "sourceCollectionId": "rusarchives-crimea-1783",
+      "title": "Манифест императрицы Екатерины II о присоединении Крыма и Кубани к России — архивный подлинник",
+      "institution": "Российский государственный исторический архив / Федеральное архивное агентство",
+      "url": "https://krym.rusarchives.ru/dokumenty/manifest-imperatricy-ekateriny-ii-o-prisoedinenii-kryma-i-kubani-k-rossii",
+      "tier": "A1-archival-original",
+      "documentType": "law",
+      "date": {"original":"8 апреля 1783 г. (старый стиль)","normalized":"1783-04-19","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя / Екатерина II"],
+      "archiveCitation": "РГИА. Ф. 1329. Оп. 1. Д. 153. Л. 294–296а. Подлинник. Подпись-автограф.",
+      "notes": "The original manifesto expressly resolves to take under Russian rule the Crimean Peninsula, Taman and the Kuban side. This source verifies the legal scope/status change; exact Kuban-side area geometry remains a separate historical-cartography problem."
+    },
+    {
+      "id": "doc-constantinople-crimea-1783-rusarchives-chronology",
+      "sourceCollectionId": "rusarchives-crimea-1783",
+      "title": "Федеральная архивная хронология Константинопольского акта 28 декабря 1783 года",
+      "institution": "Федеральное архивное агентство / российские федеральные архивы",
+      "url": "https://krym.rusarchives.ru/node/277",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-chronology",
+      "date": {"original":"28 декабря 1783 г. (старый стиль)","normalized":"1784-01-08","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Османская империя"],
+      "notes": "The official federal archival project states that signing the Constantinople Act marked Ottoman recognition of Crimea's accession to Russia and establishment of new borders between the two empires. Used with the separate official 1783 printed act already indexed in History Core."
+    }
+  ]
+}
