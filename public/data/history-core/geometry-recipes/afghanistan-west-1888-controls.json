@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-afghanistan-west-1888-controls",
+      "fragmentId": "frag-russian-empire-afghanistan-west-1888-controls",
+      "output": "geometry/russian-empire-afghanistan-west-1888-controls.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "Historical geographic latitude/longitude as published in the 1887 Anglo-Russian protocol; prime meridian/datum not independently registered in History Core",
+      "interpolation": "source-vertices",
+      "geometryType": "MultiPoint",
+      "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+      "points": [
+        [62.25472222,35.29694444],
+        [62.46583333,35.28138889],
+        [62.59666667,35.23916667],
+        [62.68333333,35.24166667],
+        [62.78833333,35.30583333],
+        [62.99527778,35.41416667],
+        [63.10111111,35.63694444]
+      ],
+      "pointSemantics": "published 1887 trigonometric/pillar controls: pillar 20, pillar 24, pillar 26, pillar 27, Kalari 2, pillar 30 and pillar 32",
+      "note": "These controls are only a verified subset of the final 79-post frontier network. The protocol explicitly assigns mixed segment types between the controls, including watersheds, straight lines and thalwegs; therefore MultiPoint is mandatory and no line interpolation is permitted."
+    }
+  ]
+}
