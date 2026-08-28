@@ -1,0 +1,267 @@
+/*
+ * STUDIO AUTO-LAYOUT CONTRACT
+ *
+ * Studio is not a fixed mockup. The reference styles provide DEFAULT visual
+ * proportions only. Every module remains a normal-flow layout item so a size
+ * change made in Inspector pushes/reflows its siblings instead of overlapping
+ * them. StudioElementControls writes explicit user overrides as inline
+ * !important declarations; those are intentionally allowed to beat these
+ * defaults.
+ */
+
+@media (min-width: 1101px) {
+  /* One bounded design canvas. Width belongs to the page surface, not to any
+     individual reference screenshot or browser zoom level. */
+  .background-module {
+    padding: 16px !important;
+  }
+
+  .core-site-surface {
+    --studio-canvas-max: 1760px;
+    --page-surface-width: min(var(--studio-canvas-max), calc(100vw - 32px));
+    --studio-rail-default: 244px;
+    width: var(--page-surface-width) !important;
+    max-width: var(--studio-canvas-max) !important;
+    min-width: 0 !important;
+    margin: 0 auto 40px !important;
+    overflow: visible !important;
+  }
+
+  /* Header and workspace are flex auto-layouts. A resized child consumes real
+     space and siblings receive the remaining space. */
+  .core-site-surface .core-header {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 50px !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface .core-brand {
+    width: var(--studio-rail-default) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 0 1 var(--studio-rail-default) !important;
+  }
+
+  .core-site-surface .core-main-nav {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface .core-utilities {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface .core-workspace {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface .historical-rail {
+    width: var(--studio-rail-default) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 0 1 var(--studio-rail-default) !important;
+  }
+
+  .core-site-surface .ruler-content {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: hidden !important;
+  }
+
+  /* Vertical page modules always stay in normal flow. Generic Inspector height
+     changes therefore move every module below them automatically. */
+  .core-site-surface .ruler-content > .core-module {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* HERO — 280px is only a default minimum. There is no fixed max-height.
+     Typography reads the Inspector variables instead of hard-coded reference
+     values, so its settings remain live. */
+  .core-site-surface [data-module-id="hero"] {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 280px !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-period {
+    font-size: var(--hero-dates-size, 16px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] h1 {
+    font-size: var(--hero-name-size, 76px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-summary {
+    max-width: var(--hero-summary-width, 560px) !important;
+    font-size: var(--hero-summary-size, 16px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta strong {
+    font-size: var(--hero-meta-size, 13px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .key-events-card {
+    width: var(--hero-events-width, 310px) !important;
+    max-width: min(520px, 46%) !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .key-event,
+  .core-site-surface [data-module-id="hero"] .quote-text {
+    font-size: var(--hero-event-font-size, 18px) !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-actions button {
+    width: var(--hero-action-size, 40px) !important;
+    height: var(--hero-action-size, 40px) !important;
+  }
+
+  /* Local navigation is another normal-flow band. */
+  .core-site-surface [data-module-id="page-tabs"] {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 36px !important;
+    max-height: none !important;
+  }
+
+  /* DASHBOARD ROW — flex is intentional. Width settings on Territory / Map /
+     comparison become true layout inputs; the other modules reflow around them.
+     Height is determined by content / tallest edited child. */
+  .core-site-surface .primary-content-row {
+    display: flex !important;
+    align-items: stretch !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    gap: 8px !important;
+    padding: 8px 16px 0 !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 310px !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    width: 190px !important;
+    flex: 0 1 190px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    width: auto !important;
+    flex: 1 1 520px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    width: 390px !important;
+    flex: 0 1 390px !important;
+    margin-left: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 292px !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .facts-list {
+    grid-auto-rows: minmax(42px, auto) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    height: auto !important;
+    min-height: 42px !important;
+    max-height: none !important;
+  }
+
+  /* EVENTS — one responsive auto-layout component. 3–4 items form one row;
+     5–8 form two rows. Cards remain equal by default, but any card can receive
+     its own width/height/order override from Inspector. */
+  .core-site-surface [data-module-id="thematic-card"] {
+    --studio-event-columns: 4;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    align-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    gap: 8px 12px !important;
+    padding: 6px 16px 10px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]::before {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(5):last-child),
+  .core-site-surface [data-module-id="thematic-card"]:has(> .thematic-card:nth-child(6):last-child) {
+    --studio-event-columns: 3;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    box-sizing: border-box;
+    width: calc((100% - (var(--studio-event-columns) - 1) * 12px) / var(--studio-event-columns)) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 128px !important;
+    max-height: none !important;
+    flex: 1 1 calc((100% - (var(--studio-event-columns) - 1) * 12px) / var(--studio-event-columns)) !important;
+  }
+
+  /* Timeline remains a page-wide auto-layout band. It is allowed to span the
+     rail, but never wider than the bounded design canvas. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    width: var(--page-surface-width) !important;
+    max-width: var(--page-surface-width) !important;
+    min-width: 0 !important;
+    left: calc(100% - var(--page-surface-width)) !important;
+    height: auto !important;
+    min-height: 112px !important;
+    max-height: none !important;
+  }
+}
+
+/* Tablet/mobile stay content-driven as well. Exact responsive composition can
+   differ, but no Studio size edit is allowed to be trapped by a fixed max box. */
+@media (max-width: 1100px) {
+  .core-site-surface [data-module-id="hero"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface .primary-content-row,
+  .core-site-surface [data-module-id="thematic-card"],
+  .core-site-surface [data-module-id="reign-timeline"] {
+    height: auto;
+    max-height: none;
+  }
+
+  .core-site-surface .primary-content-row {
+    align-items: stretch;
+  }
+}
