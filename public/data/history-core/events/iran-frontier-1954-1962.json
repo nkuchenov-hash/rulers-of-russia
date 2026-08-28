@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1954-ussr-iran-frontier-settlement-signing",
+      "title": "Подписание соглашения СССР–Иран об урегулировании пограничных вопросов",
+      "kind": "treaty",
+      "date": {
+        "original": "2 декабря 1954 г.",
+        "normalized": "1954-12-02",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "СССР и Иран подписали соглашение, которое урегулировало вопросы всей государственной границы, сохранило значительные участки линии по описанию 1829 года и отдельно изменило ряд участков.",
+      "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts"],
+      "reviewStatus": "source-verified",
+      "notes": "Signing does not mutate the replay; the agreement entered into force on 20 May 1955."
+    },
+    {
+      "id": "evt-1955-ussr-iran-frontier-settlement-effective",
+      "title": "Вступление в силу нового соглашения о советско-иранской границе",
+      "kind": "treaty",
+      "date": {
+        "original": "20 мая 1955 г.",
+        "normalized": "1955-05-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Соглашение 1954 года вступило в силу. С этой даты документально закреплена новая договорная линия, причём значительные закавказские участки прямо продолжают границу, описанную русско-персидской комиссией 18 января 1829 года, а несколько участков заменены новыми линиями.",
+      "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-frontier-settlement-eif-1955-untc"],
+      "territoryChangeIds": ["territory-1955-ussr-iran-frontier-settlement"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1957-ussr-iran-frontier-demarcation-package",
+      "title": "Подписание документов демаркации и редемаркации советско-иранской границы",
+      "kind": "demarcation",
+      "date": {
+        "original": "11 апреля 1957 г.",
+        "normalized": "1957-04-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Смешанная комиссия завершила пакет точной демаркации: карты и схемы геодезического определения пограничных знаков, протоколы и кроки, каталог координат знаков и перечень знаков. Сам каталог координат пока не найден в открытом доступе и не подменён реконструкцией.",
+      "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
+      "territoryChangeIds": ["territory-1957-ussr-iran-frontier-demarcation"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1957-ussr-iran-frontier-regime-signing",
+      "title": "Подписание договора о режиме советско-иранской границы",
+      "kind": "treaty",
+      "date": {
+        "original": "14 мая 1957 г.",
+        "normalized": "1957-05-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "СССР и Иран подписали договор о режиме границы, который прямо опирается на демаркационные документы 11 апреля 1957 года.",
+      "evidenceDocumentIds": ["doc-ussr-iran-frontier-regime-1957-unts"],
+      "reviewStatus": "source-verified",
+      "notes": "The treaty did not enter into force on signature."
+    },
+    {
+      "id": "evt-1962-ussr-iran-frontier-regime-effective",
+      "title": "Вступление в силу договора о режиме советско-иранской границы",
+      "kind": "treaty",
+      "date": {
+        "original": "20 декабря 1962 г.",
+        "normalized": "1962-12-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "После обмена ратификационными грамотами в Тегеране вступил в силу договор 1957 года о режиме границы и порядке урегулирования пограничных споров и инцидентов.",
+      "evidenceDocumentIds": ["doc-ussr-iran-frontier-regime-1957-unts", "doc-ussr-iran-frontier-regime-eif-1962-untc"],
+      "reviewStatus": "source-verified",
+      "notes": "This is a frontier-regime effective date, not a second territorial transfer."
+    }
+  ]
+}
