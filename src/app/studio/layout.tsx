@@ -4,6 +4,7 @@ import './reign-dashboard.css';
 import './quote-rotator.css';
 import './rail-precision.css';
 import './reference-structure.css';
+import './canvas-bounds.css';
 import type { ReactNode } from 'react';
 
 export default function StudioLayout({ children }: { children: ReactNode }) {
