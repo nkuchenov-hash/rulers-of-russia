@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "avpri-first-partition-1772-1773",
+      "title": "Russian-Polish first-partition acts, 1772–1773",
+      "institution": "Архив внешней политики Российской империи / official treaty publications",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/Polen/XVIII/1760-1780/Stegniy/1-20/1.phtml?id=10869",
+      "tier": "A1-archival-original",
+      "coverage": "Russian-Prussian partition convention, Russian annexation act and the 1773 Russia-Poland cession treaty",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-semantics"],
+      "notes": "The digital documentary publication identifies AVPRI archival originals and the Martens treaty publication. History Core uses the 1772 Russian act for unilateral incorporation chronology and the 1773 bilateral treaty separately for Polish cession/recognition."
+    },
+    {
+      "id": "imperial-russia-bukhara-treaty-publications",
+      "title": "Russian-Bukharan peace conditions and treaty publications, 1868",
+      "institution": "Russian imperial diplomatic/treaty publication tradition",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/M.Asien/XVI/1540-1560/Snos_ross_chiva_buchara/pril.phtml",
+      "tier": "A2-official-document-publication",
+      "coverage": "Kaufman's 1868 peace conditions and documentary treaty record governing Samarkand and the Zarafshan acquisition",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-semantics"],
+      "notes": "The published conditions explicitly place Samarkand and dependent settlements under the Russian Emperor and state that the Bukhara boundary would be fixed upon acceptance. Cross-checked against later Russian treaty collections and the RGIA Kaufman archival file already indexed in History Core."
+    }
+  ]
+}

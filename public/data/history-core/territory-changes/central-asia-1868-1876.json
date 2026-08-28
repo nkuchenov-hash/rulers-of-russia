@@ -5,15 +5,15 @@
       "id": "territory-1868-bukhara-protectorate",
       "eventId": "evt-1868-bukhara-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original": "23 июня (5 июля) 1868 г.", "normalized": "1868-07-05", "precision": "day", "calendar": "julian"},
+      "effectiveDate": {"original":"23 июня (5 июля) 1868 г.","normalized":"1868-07-05","precision":"day","calendar":"julian"},
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-kaufman-central-asia-rgia-inventory"],
+      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication", "doc-kaufman-central-asia-rgia-inventory"],
       "geometry": {
         "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology"],
-        "derivationNote": "Bukhara must be rendered as a dependent/vassal sphere, not filled as core Russian territory. Exact treaty text and status terminology remain to be indexed."
+        "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication"],
+        "derivationNote": "Bukhara must remain a distinct dependent polity rather than core Russian territory. The exact constitutional/protectorate characterization across the 1868 and 1873 treaty sequence remains under review; no area fill is promoted from this record."
       },
       "reviewStatus": "research-required"
     },
@@ -21,23 +21,29 @@
       "id": "territory-1868-zeravshan-acquisition",
       "eventId": "evt-1868-bukhara-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original": "1868–1870 гг.", "normalized": "1868", "normalizedEnd": "1870", "precision": "range", "calendar": "julian"},
+      "effectiveDate": {"original":"23 июня 1868 г. (старый стиль)","normalized":"1868-07-05","precision":"day","calendar":"julian","note":"This change is narrowed to the initial 1868 Samarkand/Zarafshan acquisition evidenced by the peace settlement. Later Penjikent and 1870–1871 upper-Zarafshan/Kashkadarya additions require separate dated acts."},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-kaufman-central-asia-rgia-inventory"],
+      "evidenceDocumentIds": ["doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia", "doc-kaufman-central-asia-rgia-inventory"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-kaufman-central-asia-rgia-inventory"],
-        "derivationNote": "The Zeravshan/Samarkand territories were acquired in stages during 1868–1870. Split into exact dated acts before deterministic month-level geometry replay."
+        "method": "source-verified-boundary-rule-period-map-pending",
+        "evidenceDocumentIds": ["doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia"],
+        "routeSemantics": [
+          {"type":"territorial-inclusion","area":"Samarkand and dependent settlements","source":"1868 peace conditions"},
+          {"type":"mountain-boundary","side":"south","feature":"Shahrisabz range","source":"peace conditions"},
+          {"type":"pending-commission-line","from":"Shahrisabz range","to":"Nuratau range","across":"Zarafshan valley","source":"peace conditions state this boundary was to be fixed precisely after acceptance"}
+        ],
+        "derivationNote": "The initial 1868 legal acquisition and its boundary grammar are source-verified. Exact polygon geometry still requires the subsequent boundary-fixing documentation and period survey/cartography. The former broad 1868–1870 range has been removed because it conflated later expansions with the initial acquisition."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Exact monthly transition resolved for the initial acquisition only. Later additions are not silently backdated to 5 July 1868."
     },
     {
       "id": "territory-1873-khiva-protectorate",
       "eventId": "evt-1873-gandimyan-khiva",
       "polityId": "russian-empire",
-      "effectiveDate": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "effectiveDate": {"original":"12 (24) августа 1873 г.","normalized":"1873-08-24","precision":"day","calendar":"julian"},
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
@@ -53,7 +59,7 @@
       "id": "territory-1873-amudarya-right-bank-acquisition",
       "eventId": "evt-1873-gandimyan-khiva",
       "polityId": "russian-empire",
-      "effectiveDate": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "effectiveDate": {"original":"12 (24) августа 1873 г.","normalized":"1873-08-24","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
@@ -69,7 +75,7 @@
       "id": "territory-1876-kokand-fergana-acquisition",
       "eventId": "evt-1876-kokand-annexation",
       "polityId": "russian-empire",
-      "effectiveDate": {"original": "19 февраля (2 марта) 1876 г.", "normalized": "1876-03-02", "precision": "day", "calendar": "julian"},
+      "effectiveDate": {"original":"19 февраля (2 марта) 1876 г.","normalized":"1876-03-02","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
