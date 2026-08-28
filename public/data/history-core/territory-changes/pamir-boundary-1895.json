@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1895-pamir-final-demarcation",
+      "eventId": "evt-1895-pamir-boundary-final-protocol",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "10 сентября 1895 г. — подписание заключительного протокола комиссии",
+        "normalized": "1895-09-10",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-pamir-1895-ten-protocols-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "geometry": {
+        "method": "signed-commission-map-and-boundary-description",
+        "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-pamir-1895-ten-protocols-bl-qdl"],
+        "derivationNote": "The signed Joint Commission map and official report verify the complete demarcated boundary and its segment semantics, but the full trace is not yet digitized. The report explicitly distinguishes watershed/crest/spur portions and a river portion following the middle of the Aksu stream. Therefore the twelve pillars and named geodetic controls must not be connected by arbitrary straight segments. The signed commission map is the canonical source for future source-backed tracing between control points."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "Legal line and final demarcation date are verified. Full line geometry remains intentionally below geometry-verified until the signed map and segment descriptions are digitized as the actual watershed/river route."
+    },
+    {
+      "id": "territory-1895-pamir-control-network",
+      "eventId": "evt-1895-pamir-boundary-final-protocol",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "10 сентября 1895 г. — подписание заключительного протокола комиссии",
+        "normalized": "1895-09-10",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "boundary-control-network",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-russian-empire-afghanistan-pamir-1895-controls"],
+      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "geometry": {
+        "method": "derived-from-boundary-control-points",
+        "file": "geometry/russian-empire-afghanistan-pamir-1895-controls.geojson",
+        "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+        "derivationNote": "Official U.S. Department of State IBS No. 26 publishes the WGS 72 realization of the control locations derived from the 1895 Pamir Boundary Commission network and later Indo-Russian recalculation. The generated geometry is deliberately MultiPoint, not LineString: it verifies the geodetic control network while making no claim that straight lines between the points reproduce the historical watershed, spur or river boundary."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verification applies to the published control locations only. It does not promote the unsimplified inter-pillar historical boundary trace."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-afghanistan-pamir-1895-controls",
+      "fragmentId": "frag-russian-empire-afghanistan-pamir-1895-controls",
+      "output": "geometry/russian-empire-afghanistan-pamir-1895-controls.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "World Geodetic System 1972 (WGS 72), official U.S. Department of State / Defense Mapping Agency realization",
+      "interpolation": "source-vertices",
+      "geometryType": "MultiPoint",
+      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "points": [
+        [73.77438889,37.44002778],
+        [73.76977778,37.41194444],
+        [73.77811111,37.34083333],
+        [74.22497222,37.37444444],
+        [74.49963889,37.4],
+        [74.50880556,37.39722222],
+        [74.52297222,37.40694444],
+        [74.54908333,37.39375],
+        [74.55905556,37.37166667],
+        [74.69238889,37.40969444],
+        [74.70541667,37.385],
+        [74.76986111,37.3625],
+        [74.79680556,37.35472222],
+        [74.80180556,37.35333333]
+      ],
+      "pointSemantics": "twelve demarcation pillars plus two named watershed controls published in WGS 72; points are geodetic controls and are not an inter-pillar boundary polyline",
+      "note": "The source reports the historical line as watershed/crest/spur segments and the middle of the Aksu stream. MultiPoint is mandatory here so no renderer or downstream process can infer straight historical boundary segments from the control network."
+    }
+  ]
+}

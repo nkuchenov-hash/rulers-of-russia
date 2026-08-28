@@ -21,6 +21,7 @@
     "territory-changes/caucasus-alaska-1813-1867.json",
     "territory-changes/poland-finland-paris-1772-1856.json",
     "territory-changes/central-asia-1868-1876.json",
+    "territory-changes/pamir-boundary-1895.json",
     "territory-changes/soviet-territorial-acts-1944-1954.json",
     "territory-changes/iran-frontier-1955-1957.json",
     "territory-changes/modern-2022.json",
@@ -253,6 +254,19 @@
       "confidence": "high",
       "effectiveTo": "1867-06-20",
       "derivationNote": "Article III of the 1825 Anglo-Russian convention fixes the northern continental boundary on the 141st degree of west longitude. The 1843 treaty expressly continued that convention in force. The verified overlay is deliberately clipped to 61°–69° N, safely inside the official meridian sector; the clip latitudes are not treaty endpoints. Source/legal geometry confidence is high, while display placement remains datum-aware until a documented modern geodetic transformation is registered."
+    },
+    {
+      "id": "frag-russian-empire-afghanistan-pamir-1895-controls",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "boundary-control-network",
+      "territorialModel": "boundary-control-network",
+      "geometryFile": "geometry/russian-empire-afghanistan-pamir-1895-controls.geojson",
+      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1917-03-15",
+      "derivationNote": "Official WGS 72 control locations for the 1895 Pamir demarcation network: twelve boundary pillars plus two named watershed controls. The fragment is intentionally MultiPoint and does not imply straight inter-pillar boundary geometry. The signed Joint Commission map and official report remain the source for the actual watershed/spur/Aksu route between these controls."
     }
   ]
 }

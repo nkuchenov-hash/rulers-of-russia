@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-pamir-boundary-commission-report-1897-govindia",
+      "sourceCollectionId": "govindia-pamir-boundary-report-1897",
+      "title": "Report on the Proceedings of the Pamir Boundary Commission",
+      "institution": "Government of India, Foreign Department / Office of the Superintendent of Government Printing, Calcutta",
+      "url": "https://pahar.in/pahar/Books%20and%20Articles/Afghanistan/1896%20Report%20on%20the%20Proceedings%20of%20the%20Pamir%20Boundary%20Commission%20by%20Gerard%20%26%20Holdich%20s.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-commission-report",
+      "date": {
+        "original": "1897 publication reporting the 1895 commission",
+        "normalized": "1897",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Government of India", "Pamir Boundary Commission"],
+      "publicationCitation": "M. G. Gerard, T. H. Holdich et al., Report on the Proceedings of the Pamir Boundary Commission, Calcutta: Office of the Superintendent of Government Printing, India, 1897.",
+      "notes": "The narrative states that pillars 1-2 were fixed on 28 July, pillar 3 on 5 August, the third protocol by 14 August, protocols 5-6 on 26 August, final pillars 9-12 agreed on 8 September, and the final protocol signed on 10 September 1895. The report explicitly describes different segment semantics: watersheds and spurs in the mountains and the middle of the Aksu stream for the river portion, so the pillar network must not be converted into a straight polyline."
+    },
+    {
+      "id": "doc-pamir-joint-commission-map-1895-bl-qdl",
+      "sourceCollectionId": "bl-qdl-pamir-joint-commission-map-1895",
+      "title": "Map of the country on both sides of the boundary line drawn by the Joint Commission for delimiting the Russian and Afghan territories on the Pamirs 1895",
+      "institution": "British Library, India Office Records and Private Papers",
+      "url": "https://www.qdl.qa/en/archive/81055/vdc_100070524442.0x000003",
+      "tier": "A3-contemporary-official-map",
+      "documentType": "official-boundary-map",
+      "date": {
+        "original": "April 1896 certified reduction of the signed 1895 original",
+        "normalized": "1896-04",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "authority": ["Joint Pamir Boundary Commission", "British Government / India Office"],
+      "publicationCitation": "British Library, India Office Records and Private Papers, Mss Eur F111/68, f 28; Qatar Digital Library.",
+      "notes": "Scale 1:253,440. The sheet states that it was reduced from the original map signed by the commissioners. Major-General John Charles Ardagh, Director of Military Intelligence, certified that it truly represents the original. The boundary is shown together with relief and hydrology and is the canonical map source for future tracing of the actual watershed/river route between verified control points."
+    },
+    {
+      "id": "doc-pamir-1895-ten-protocols-bl-qdl",
+      "sourceCollectionId": "bl-qdl-afghanistan-treaties-1933-pamir",
+      "title": "Official compilation note on the Pamir Boundary Commission settlement",
+      "institution": "British Library, India Office Records and Private Papers",
+      "url": "https://www.qdl.qa/archive/81055/vdc_100023947391.0x000026",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-compilation",
+      "date": {
+        "original": "1933 compilation describing the 1895 settlement",
+        "normalized": "1933",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Government of India / India Office"],
+      "publicationCitation": "A Collection of Treaties, Engagements and Sanads relating to India and neighbouring countries, Afghanistan section, British Library IOR/L/PS/20/G3/14.",
+      "notes": "Records that the Joint Commission settlement was embodied in ten protocols and that the Amir was furnished with the map signed by Gerard and Povalo-Scheikovski together with a description of the demarcated line."
+    },
+    {
+      "id": "doc-afghanistan-ussr-boundary-ibs26-usdos-1983",
+      "sourceCollectionId": "usdos-ibs26-afghanistan-ussr-1983",
+      "title": "International Boundary Study No. 26 (Revised) — Afghanistan–U.S.S.R. Boundary",
+      "institution": "United States Department of State, Office of the Geographer, Bureau of Intelligence and Research",
+      "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/pdf/ibs026.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {
+        "original": "15 September 1983",
+        "normalized": "1983-09-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United States Department of State"],
+      "publicationCitation": "International Boundary Study No. 26 (Revised), Afghanistan–U.S.S.R. Boundary, September 15, 1983.",
+      "notes": "The study states that the 218-km eastern Wakhan boundary was delimited by the 1895 Anglo-Russian Commission and demarcated at 12 points. It says the locations were recalculated during Indo-Russian triangulation in 1912-13 and corrected by the India Office Trigonometrical Survey in 1921, and publishes WGS 72 geographic values used by the U.S. Defense Mapping Agency. It further records that the 1958 Soviet-Afghan frontier treaty retained the 1895 Demarcation Protocols from Lake Zor-Kul to the China tripoint.",
+      "coordinateSet": {
+        "crs": "World Geodetic System 1972 (WGS 72), as published in IBS No. 26",
+        "purpose": "verified control locations; not a substitute for the watershed/river trace between them",
+        "points": [
+          {"id":"pamir-pillar-1","label":"Pillar 1 — Victoria Lake / Sari-Qul","coordinates":[73.77438889,37.44002778],"sourceDms":"37°26′24.1″ N, 73°46′27.8″ E"},
+          {"id":"pamir-pillar-2","label":"Pillar 2","coordinates":[73.76977778,37.41194444],"sourceDms":"37°24′43.0″ N, 73°46′11.2″ E"},
+          {"id":"pamir-la-concorde","label":"Peak La Concorde","coordinates":[73.77811111,37.34083333],"sourceDms":"37°20′27.0″ N, 73°46′41.2″ E","kind":"watershed-control"},
+          {"id":"pamir-pillar-3","label":"Pillar 3 — Benderski","coordinates":[74.22497222,37.37444444],"sourceDms":"37°22′28.0″ N, 74°13′29.9″ E"},
+          {"id":"pamir-pillar-4","label":"Pillar 4 — Urtabel","coordinates":[74.49963889,37.4],"sourceDms":"37°24′00.0″ N, 74°29′58.7″ E"},
+          {"id":"pamir-pillar-5","label":"Pillar 5","coordinates":[74.50880556,37.39722222],"sourceDms":"37°23′50.0″ N, 74°30′31.7″ E"},
+          {"id":"pamir-ganjabi","label":"Ganjabi peak","coordinates":[74.52297222,37.40694444],"sourceDms":"37°24′25.0″ N, 74°31′22.7″ E","kind":"watershed-control"},
+          {"id":"pamir-pillar-6","label":"Pillar 6","coordinates":[74.54908333,37.39375],"sourceDms":"37°23′37.5″ N, 74°32′56.7″ E"},
+          {"id":"pamir-pillar-7","label":"Pillar 7 — Aksu","coordinates":[74.55905556,37.37166667],"sourceDms":"37°22′18.0″ N, 74°33′32.6″ E"},
+          {"id":"pamir-pillar-8","label":"Pillar 8 — Aksu / Mihmanyol","coordinates":[74.69238889,37.40969444],"sourceDms":"37°24′34.9″ N, 74°41′32.6″ E"},
+          {"id":"pamir-pillar-9","label":"Pillar 9 — Mihmanyol","coordinates":[74.70541667,37.385],"sourceDms":"37°23′06.0″ N, 74°42′19.5″ E"},
+          {"id":"pamir-pillar-10","label":"Pillar 10 — Gerard spur","coordinates":[74.76986111,37.3625],"sourceDms":"37°21′45.0″ N, 74°46′11.5″ E"},
+          {"id":"pamir-pillar-11","label":"Pillar 11 — Taghramansu","coordinates":[74.79680556,37.35472222],"sourceDms":"37°21′17.0″ N, 74°47′48.5″ E"},
+          {"id":"pamir-pillar-12","label":"Pillar 12 — Taghramansu","coordinates":[74.80180556,37.35333333],"sourceDms":"37°21′12.0″ N, 74°48′06.5″ E"}
+        ]
+      }
+    }
+  ]
+}

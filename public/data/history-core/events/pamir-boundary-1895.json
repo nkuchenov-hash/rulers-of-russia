@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1895-anglo-russian-pamir-exchange-notes",
+      "title": "Англо-русское соглашение о разграничении сфер влияния на Памире",
+      "kind": "treaty",
+      "date": {
+        "original": "11 марта 1895 г.",
+        "normalized": "1895-03-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Обмен нотами Великобритании и России определил северную границу Ваханского коридора к востоку от озера Зоркуль/Сари-Куль и предусмотрел последующую демаркацию смешанной комиссией.",
+      "evidenceDocumentIds": ["doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "reviewStatus": "source-verified",
+      "notes": "The diplomatic delimitation preceded field demarcation. Production control geometry is attached to the commission's final protocol date, not to this initial exchange of notes."
+    },
+    {
+      "id": "evt-1895-pamir-boundary-final-protocol",
+      "title": "Завершение демаркации русско-афганской границы на Памире",
+      "kind": "demarcation",
+      "date": {
+        "original": "10 сентября 1895 г. — подписание заключительного протокола комиссии",
+        "normalized": "1895-09-10",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Совместная Памирская пограничная комиссия подписала заключительный протокол. Итоговое урегулирование было оформлено десятью протоколами; на местности были установлены двенадцать пограничных столбов, а подписанная комиссарами карта и описание линии закрепили демаркацию от района Зоркуля к китайской границе.",
+      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-pamir-1895-ten-protocols-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "territoryChangeIds": ["territory-1895-pamir-final-demarcation", "territory-1895-pamir-control-network"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1958-ussr-afghanistan-pamir-protocol-continuity",
+      "title": "Подтверждение протоколов Памирской демаркации 1895 года",
+      "kind": "treaty",
+      "date": {
+        "original": "18 января 1958 г. — подписание договора о режиме советско-афганской границы",
+        "normalized": "1958-01-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["ussr"],
+      "summary": "Договор о режиме советско-афганской границы прямо сохранил правило: участок от озера Зор-Куль до стыка границ СССР, Афганистана и КНР определяется в соответствии с демаркационными протоколами 1895 года.",
+      "evidenceDocumentIds": ["doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "reviewStatus": "source-verified",
+      "notes": "Signature date is recorded as a continuity event. The exact treaty entry-into-force date has not yet been independently indexed in History Core, so this event does not create a new replay transition."
+    }
+  ]
+}
