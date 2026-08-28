@@ -17,12 +17,12 @@
       "id": "evt-1873-gandimyan-khiva",
       "title": "Гендемианский мирный договор России с Хивой",
       "kind": "treaty",
-      "date": {"original":"12 (24) августа 1873 г.","normalized":"1873-08-24","precision":"day","calendar":"julian"},
+      "date": {"original":"12 августа 1873 г. (старый стиль)","normalized":"1873-08-24","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Хивинское ханство становилось зависимым от России, тогда как земли ханства по правому берегу Амударьи переходили непосредственно к Российской империи.",
-      "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
+      "summary": "Гендемианский договор поставил внешнюю политику Хивинского ханства под российский контроль и одновременно передал России правобережные земли Амударьи, задав новую договорную границу.",
+      "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa", "doc-khiva-1873-prlib-chronology"],
       "territoryChangeIds": ["territory-1873-khiva-protectorate", "territory-1873-amudarya-right-bank-acquisition"],
-      "reviewStatus": "source-located"
+      "reviewStatus": "source-verified"
     },
     {
       "id": "evt-1876-kokand-annexation",
