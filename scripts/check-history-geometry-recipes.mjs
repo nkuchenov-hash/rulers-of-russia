@@ -44,6 +44,10 @@ for (const recipe of recipes) {
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromSourceCoordinates !== true) {
     fail(`Geometry output ${recipe.output} is not marked as generated from recipe ${recipe.id}`);
   }
+  const expectedGeometryType = recipe.geometryType ?? 'LineString';
+  if (generated.features?.[0]?.geometry?.type !== expectedGeometryType || generated.metadata?.geometryType !== expectedGeometryType) {
+    fail(`Geometry output ${recipe.output} type mismatch: expected ${expectedGeometryType}`);
+  }
   const expectedDatumStatus = isWgs84Display(recipe)
     ? 'wgs84-or-official-wgs84-recalculation'
     : 'source-geographic-untransformed';
@@ -63,7 +67,7 @@ for (const relative of model.changeFiles ?? []) {
   const file = path.join(dataRoot, relative);
   for (const change of readJson(file).territoryChanges ?? []) {
     if (change.reviewStatus !== 'geometry-verified') continue;
-    if (change.geometry?.method !== 'derived-from-boundary-text') continue;
+    if (!['derived-from-boundary-text', 'derived-from-boundary-control-points'].includes(change.geometry?.method)) continue;
     for (const fragmentId of change.geometryFragmentIds ?? []) {
       if (!recipeByFragment.has(fragmentId)) {
         fail(`Coordinate-derived verified change ${change.id} uses fragment ${fragmentId} without a geometry recipe`);
@@ -72,4 +76,4 @@ for (const relative of model.changeFiles ?? []) {
   }
 }
 
-console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes with explicit display datum status.`);
+console.log(`History geometry recipe check passed: ${recipes.length} source-coordinate recipes with explicit geometry type and display datum status.`);
