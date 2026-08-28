@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "dataset": "Rulers of Russia History Core generated verified geometry",
+    "recipeId": "recipe-russian-empire-british-america-141w-1843",
+    "fragmentId": "frag-russian-empire-british-america-141w-1843",
+    "generatedFromSourceCoordinates": true,
+    "sourceCrs": "Treaty-defined Greenwich astronomical longitude; no source-backed modern geodetic datum transformation registered",
+    "displayDatumStatus": "source-geographic-untransformed",
+    "displayWarning": "The treaty legally fixes the boundary axis at 141 degrees west longitude, but its exact placement on a modern geodetic globe is shown with medium display confidence until a source-backed datum transformation is registered. The 61–69 N endpoints are conservative interior display clips, not treaty endpoints.",
+    "interpolation": "rhumb",
+    "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+    "sourcePointCount": 2,
+    "note": "Treaty-defined meridian rendered only over the conservative interior interval 61°–69° N. No southeastern panhandle or terminal intersection is inferred."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-russian-empire-british-america-141w-1843",
+        "track": "russian-legal-border",
+        "history_core_status": "geometry-verified",
+        "source_points": [[-141.0,61.0],[-141.0,69.0]],
+        "source_crs": "Treaty-defined Greenwich astronomical longitude; no source-backed modern geodetic datum transformation registered",
+        "display_datum_status": "source-geographic-untransformed",
+        "interpolation": "rhumb",
+        "evidence_document_ids": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+        "note": "61° and 69° N are conservative interior clips on the exact 141° W treaty meridian, not treaty endpoints."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-141.0,61.0],[-141.0,69.0]]
+      }
+    }
+  ]
+}
