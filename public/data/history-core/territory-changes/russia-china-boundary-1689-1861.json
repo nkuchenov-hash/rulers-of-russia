@@ -125,6 +125,108 @@
       },
       "reviewStatus": "source-verified",
       "notes": "This supersedes the vague 'research-required' state without asserting unsourced coordinate precision."
+    },
+    {
+      "id": "territory-1886-south-ussuri-revision-framework",
+      "eventId": "evt-1886-south-ussuri-general-revision",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"22 июня 1886 г.","normalized":"1886-07-04","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-south-ussuri-general-protocol-1886-mfa", "doc-ussuri-map-exchange-1861-mfa"],
+      "geometry": {
+        "method": "joint-revision-framework",
+        "evidenceDocumentIds": ["doc-south-ussuri-general-protocol-1886-mfa"],
+        "derivationNote": "The bilateral commission expressly found portions of the 1861 red-line map insufficiently carefully drawn and initiated re-checking, replacement of principal wooden markers with stone markers, new M/R/S markers and correction of disputed placements. This record opens the 1886 revision sequence but does not itself replace a specific sector geometry."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1886-south-ussuri-sector1",
+      "eventId": "evt-1886-south-ussuri-sector1-verified",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"26 июня 1886 г.","normalized":"1886-07-08","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa", "doc-south-ussuri-general-protocol-1886-mfa"],
+      "geometry": {
+        "method": "joint-verified-sector-map-pending-georeference",
+        "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa"],
+        "routeSemantics": [
+          {"from":"Tumen/Tumyn-ula sector","to":"Chang-ling astronomical point No. 8","type":"surveyed-demarcated-chain","source":"joint 1886 sector protocol and 1884 Russian survey plan"}
+        ],
+        "derivationNote": "The first sector was jointly investigated, checked against the 1884 survey and recorded on bilateral maps. Exact vertices remain a map/geodetic-control ingestion dependency."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1886-south-ussuri-sectors2-3-no",
+      "eventId": "evt-1886-south-ussuri-sectors2-3-no-verified",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+      "geometry": {
+        "method": "joint-verified-sector-description-pending-georeference",
+        "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+        "routeSemantics": [
+          {"from":"Chang-ling astronomical point No. 8","to":"marker R at Munguchai","type":"surveyed-demarcated-chain","length":"121 versts 497 sazhens","sector":2},
+          {"from":"marker P","to":"mouth of Usha-go/Hubtu","type":"watershed-and-terrain-chain","length":"96 versts 70 sazhens","sector":3},
+          {"from":"marker N","to":"marker O","type":"marker-position-correction","source":"separate 20 September correction protocol"}
+        ],
+        "derivationNote": "The 20 September package both verifies sectors 2 and 3 and explicitly corrects the placement of principal posts N and O. The corrected 1886 realization supersedes the uncorrected 1861 post positions for subsequent replay; exact coordinates remain dependent on the jointly checked maps/geodetic records."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1886-south-ussuri-sector6",
+      "eventId": "evt-1886-south-ussuri-sector6-verified",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"28 сентября 1886 г.","normalized":"1886-10-10","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
+      "geometry": {
+        "method": "joint-verified-sector-description-pending-georeference",
+        "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
+        "routeSemantics": [
+          {"from":"marker M","to":"Lake Khanka at Bai-lin-he mouth","type":"ridge-and-river-chain","length":"90 versts 45 sazhens"},
+          {"from":"marker L","to":"marker K","type":"measured-chain","length":"16 versts 451 sazhens"},
+          {"from":"marker L","to":"Bai-lin-he mouth at Lake Khanka","type":"measured-chain","length":"17 versts 75 sazhens"}
+        ],
+        "derivationNote": "The sixth sector was jointly checked and mapped in duplicate. The source contains measured distances and terrain rules but not yet a History Core coordinate realization; no straight interpolation is allowed except where the protocol explicitly says so."
+      },
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1886-south-ussuri-sectors4-5",
+      "eventId": "evt-1886-south-ussuri-sectors4-5-verified",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"3 октября 1886 г.","normalized":"1886-10-15","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
+      "geometry": {
+        "method": "joint-verified-bearing-distance-and-watershed-rules-pending-anchor-georeference",
+        "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
+        "routeSemantics": [
+          {"from":"mouth of Usha-go/Hubtu","to":"marker N","type":"straight-bearing-distance","bearing":"northwest 12°04′03″","length":"70 versts 254 sazhens","sector":4,"note":"The source explicitly states that the entire fourth sector follows one straight line."},
+          {"from":"marker N","to":"marker M","type":"watershed-ridge","length":"77 versts 250 sazhens","sector":5},
+          {"from":"marker M","to":"secondary marker 24","type":"measured-route-control","distance":"46 versts 440 sazhens","plannedMarkerYear":1887},
+          {"from":"secondary marker 24","to":"secondary marker 25","type":"measured-route-control","distance":"9 versts 100 sazhens","plannedMarkerYear":1887},
+          {"from":"secondary marker 26","to":"marker L","type":"measured-route-control","distance":"2 versts 300 sazhens","plannedMarkerYear":1887}
+        ],
+        "derivationNote": "The fourth sector provides unusually strong geometric structure: an explicitly straight segment with bilateral bearing and length. It remains below geometry-verified only because neither endpoint has yet been independently transformed into a registered modern display datum. Once a source-backed anchor for O or N is obtained, the historical rule can be materialized without tracing a modern border. The fifth sector remains terrain/watershed geometry and therefore needs mapped vertices."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "This closes the documented 1886 joint verification sequence through the final 3 October sector protocols while preserving the later physical construction of some secondary signs as a separate implementation detail."
     }
   ]
 }

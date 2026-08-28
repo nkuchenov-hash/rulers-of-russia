@@ -57,6 +57,61 @@
       "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-ussuri-boundary-description-1861-mfa", "doc-peking-1860-mfa"],
       "territoryChangeIds": ["territory-1861-ussuri-map-demarcation"],
       "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1886-south-ussuri-general-revision",
+      "title": "Совместное решение России и Китая о проверке и исправлении Южно-Уссурийской границы",
+      "kind": "demarcation",
+      "date": {"original":"22 июня 1886 г.","normalized":"1886-07-04","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Совместная комиссия признала, что красная линия на карте 1861 года в отдельных местах была проведена недостаточно внимательно, постановила заменить основные деревянные знаки каменными, добавить новые знаки и провести повторную проверку линии.",
+      "evidenceDocumentIds": ["doc-south-ussuri-general-protocol-1886-mfa", "doc-ussuri-map-exchange-1861-mfa"],
+      "territoryChangeIds": ["territory-1886-south-ussuri-revision-framework"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1886-south-ussuri-sector1-verified",
+      "title": "Проверка первого участка Южно-Уссурийской границы",
+      "kind": "demarcation",
+      "date": {"original":"26 июня 1886 г.","normalized":"1886-07-08","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Комиссия проверила первый участок от района Тумэнь-улы до астрономического пункта на перевале Чан-лин по съёмке 1884 года и закрепила его отдельным протоколом и картой.",
+      "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa", "doc-south-ussuri-general-protocol-1886-mfa"],
+      "territoryChangeIds": ["territory-1886-south-ussuri-sector1"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1886-south-ussuri-sectors2-3-no-verified",
+      "title": "Проверка второго и третьего участков и исправление знаков Н и О",
+      "kind": "demarcation",
+      "date": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Комиссия проверила второй и третий участки Южно-Уссурийской границы и отдельным протоколом исправила положение главных пограничных знаков Н и О.",
+      "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+      "territoryChangeIds": ["territory-1886-south-ussuri-sectors2-3-no"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1886-south-ussuri-sector6-verified",
+      "title": "Проверка шестого участка Южно-Уссурийской границы",
+      "kind": "demarcation",
+      "date": {"original":"28 сентября 1886 г.","normalized":"1886-10-10","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Комиссия проверила и нанесла на карты шестой участок от знака М до устья Бай-лин-хэ у озера Ханка, зафиксировав длины и маршрут линии.",
+      "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
+      "territoryChangeIds": ["territory-1886-south-ussuri-sector6"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1886-south-ussuri-sectors4-5-verified",
+      "title": "Завершение проверки четвёртого и пятого участков Южно-Уссурийской границы",
+      "kind": "demarcation",
+      "date": {"original":"3 октября 1886 г.","normalized":"1886-10-15","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Комиссия закрепила прямой четвёртый участок Ушагоу/Хубту–Н с измеренным направлением и длиной, проверила водораздельный участок Н–М и дополнила шестой участок будущими второстепенными знаками 24–26.",
+      "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
+      "territoryChangeIds": ["territory-1886-south-ussuri-sectors4-5"],
+      "reviewStatus": "source-verified"
     }
   ]
 }

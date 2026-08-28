@@ -78,6 +78,84 @@
       "authority": ["Российская империя", "Империя Цин"],
       "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914, с. 2–3; archival original АВПРИ, Ф. Трактаты, Оп. 3.1861, Д. 883, Л. 2–4.",
       "notes": "The description states: Ussuri and Sungacha are natural river boundaries; the line crosses Lake Khanka to the mouth of Belen-he/Tur; from there it follows a mountain watershed to the Hubitu/Hubtu, ascends that river to its source, then follows the watershed between Hunchun and the sea to the Tumen, ending 20 Chinese li above the river mouth. It specifies boundary posts E/I/K/L/N/O/P/T while expressly omitting posts along the natural river boundary except at defined termini."
+    },
+    {
+      "id": "doc-south-ussuri-general-protocol-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Общий протокол о постановке новых каменных и второстепенных пограничных знаков в Южно-Уссурийском крае 22 июня 1886 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"22 июня 1886 г.","normalized":"1886-07-04","precision":"day","calendar":"julian","note":"Russian diplomatic date treated as Old Style; Gregorian equivalent 4 July 1886."},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914; протокол совместной комиссии 1886 г.",
+      "notes": "The protocol explicitly states that parts of the red boundary line on the exchanged 1861 map had been drawn insufficiently carefully, orders replacement of surviving wooden E/I/K/L/N/O/P posts by stone markers, provides additional M/R/S markers and initiates joint checking/correction of the South-Ussuri line."
+    },
+    {
+      "id": "doc-south-ussuri-sector1-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Протокол о проверке первого участка русско-китайской границы в Южно-Уссурийском крае 26 июня 1886 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"26 июня 1886 г.","normalized":"1886-07-08","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "Joint verification of the first sector, from the Tumen/Tumyn-ula side to the Chang-ling pass astronomical control. The sector was checked against a Russian 1884 survey plan and recorded as a mapped bilateral boundary segment."
+    },
+    {
+      "id": "doc-south-ussuri-sectors2-3-no-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Протоколы 20 сентября 1886 г. о втором и третьем участках и исправлении постановки столбов Н и О",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "The joint commission separately verified the second and third sectors and executed an explicit correction of the positions of principal markers N and O. The second sector runs from astronomical control No. 8 at Chang-ling to marker R at Munguchai; the third continues through the watershed terrain toward the Hubtu/Usha-go sector."
+    },
+    {
+      "id": "doc-south-ussuri-sector6-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Протокол о проверке шестого участка русско-китайской границы в Южно-Уссурийском крае 28 сентября 1886 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"28 сентября 1886 г.","normalized":"1886-10-10","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "Jointly checked sixth sector from marker M to the mouth of Bai-lin-he at Lake Khanka, total stated length 90 versts 45 sazhens. The protocol records the final approach along Bai-lin-he and gives measured distances between L, K and the lake mouth."
+    },
+    {
+      "id": "doc-south-ussuri-sectors4-5-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Протоколы о проверке четвертого и пятого участков русско-китайской границы 3 октября 1886 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"3 октября 1886 г.","normalized":"1886-10-15","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "The fourth sector is defined as a straight line from the mouth of Usha-go/Hubtu to marker N, northwest under angle 12°04′03″, with stated total length 70 versts 254 sazhens. The fifth sector runs from N to M along the watershed ridge for 77 versts 250 sazhens. Both were jointly checked and mapped in duplicate."
+    },
+    {
+      "id": "doc-south-ussuri-sector6-supplement-1886-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Дополнительное постановление к шестому участку русско-китайской границы 3 октября 1886 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-protocol",
+      "date": {"original":"3 октября 1886 г.","normalized":"1886-10-15","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
+      "notes": "Supplement orders construction of secondary markers 24–26 in 1887 at measured distances from M, marker 24 and L, preserving the checked sixth-sector route rather than inventing an unconstrained line."
     }
   ]
 }
