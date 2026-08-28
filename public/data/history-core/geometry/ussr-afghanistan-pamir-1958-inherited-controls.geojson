@@ -1,0 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "dataset": "Rulers of Russia History Core generated verified geometry",
+    "recipeId": "recipe-ussr-afghanistan-pamir-1958-inherited-controls",
+    "fragmentId": "frag-ussr-afghanistan-pamir-1958-inherited-controls",
+    "generatedFromSourceCoordinates": true,
+    "sourceCrs": "World Geodetic System 1972 (WGS 72), official U.S. Department of State / Defense Mapping Agency realization",
+    "displayDatumStatus": "source-geographic-untransformed",
+    "displayWarning": "Source longitude/latitude values are retained literally for provenance. Their exact placement on a WGS84 globe remains medium-confidence until a source-backed datum transformation is registered.",
+    "interpolation": "source-vertices",
+    "geometryType": "MultiPoint",
+    "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+    "sourcePointCount": 14,
+    "note": "Inherited 1895 Pamir control locations carried into the Soviet-Afghan legal frontier by the 1958 treaty. This is a control network, not an inter-pillar boundary trace."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-ussr-afghanistan-pamir-1958-inherited-controls",
+        "track": "russian-legal-border",
+        "history_core_status": "geometry-verified",
+        "source_points": [[73.77438889,37.44002778],[73.76977778,37.41194444],[73.77811111,37.34083333],[74.22497222,37.37444444],[74.49963889,37.4],[74.50880556,37.39722222],[74.52297222,37.40694444],[74.54908333,37.39375],[74.55905556,37.37166667],[74.69238889,37.40969444],[74.70541667,37.385],[74.76986111,37.3625],[74.79680556,37.35472222],[74.80180556,37.35333333]],
+        "source_crs": "World Geodetic System 1972 (WGS 72), official U.S. Department of State / Defense Mapping Agency realization",
+        "display_datum_status": "source-geographic-untransformed",
+        "interpolation": "source-vertices",
+        "geometry_type": "MultiPoint",
+        "evidence_document_ids": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+        "note": "Verified inherited geodetic control locations only. No straight connection between points is asserted as the historical boundary."
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [[73.77438889,37.44002778],[73.76977778,37.41194444],[73.77811111,37.34083333],[74.22497222,37.37444444],[74.49963889,37.4],[74.50880556,37.39722222],[74.52297222,37.40694444],[74.54908333,37.39375],[74.55905556,37.37166667],[74.69238889,37.40969444],[74.70541667,37.385],[74.76986111,37.3625],[74.79680556,37.35472222],[74.80180556,37.35333333]]
+      }
+    }
+  ]
+}
