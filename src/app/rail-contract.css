@@ -15,12 +15,16 @@
   display: none;
 }
 
+/* Adjacent local segments deliberately overlap by 2px. Without this overlap,
+   the boundary between two ruler rows (especially the bordered active row)
+   can expose a 1–2px background seam and make one continuous timeline look
+   broken. */
 .rail-item::after {
   content: '';
   position: absolute;
   left: var(--rail-marker-x);
-  top: 0;
-  bottom: 0;
+  top: -2px;
+  bottom: -2px;
   width: 2px;
   background: var(--accent-primary);
   transform: translateX(-50%);
