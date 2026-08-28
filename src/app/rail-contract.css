@@ -41,6 +41,14 @@
   z-index: 3;
 }
 
+/* The active marker used to have a 5px surface-colored halo. That halo was
+   masking the connector and made the timeline look physically broken above
+   and below the current ruler. Keep the filled marker, but let the connector
+   meet its edge continuously. */
+.rail-item.active::before {
+  box-shadow: none;
+}
+
 .rail-item > * {
   position: relative;
   z-index: 1;
