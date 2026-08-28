@@ -36,10 +36,10 @@
       "title": "Map illustrative of the Afghan Boundary Commission march and the frontier as proposed and actually demarcated",
       "institution": "Library of Congress Geography and Map Division",
       "url": "https://www.loc.gov/item/76692168/",
-      "tier": "A3-contemporary-official-map",
-      "coverage": "Contemporary map showing the proposed and actually demarcated 1885-1888 north-west Afghan frontier",
-      "canonicalUse": ["boundary-geometry", "interpretation", "display-validation"],
-      "notes": "Library of Congress summary records that by January 1888 the commission had placed 79 boundary markers along approximately 630 km from the Du'l-Feqar sector to the Amu Darya."
+      "tier": "B2-contemporary-cartographic-reference",
+      "coverage": "Contemporary contextual map showing the proposed and actually demarcated 1885-1888 north-west Afghan frontier",
+      "canonicalUse": ["interpretation", "display-validation"],
+      "notes": "Useful contemporary cartographic context and Library of Congress catalog evidence for the commission route and completed frontier, but not treated as the canonical signed demarcation map and not used as evidence for geometry-verified fragments."
     }
   ]
 }
