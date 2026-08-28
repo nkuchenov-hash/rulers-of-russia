@@ -1,0 +1,66 @@
+/* Studio rail precision pass.
+   One horizontal coordinate is used for the top control, every chronology
+   marker and every vertical connector. */
+
+@media (min-width: 1101px) {
+  .core-site-surface .historical-rail {
+    --studio-rail-axis-x: 31px;
+  }
+
+  .core-site-surface .historical-rail .rail-controls {
+    padding-left: 14px !important;
+    padding-right: 18px !important;
+  }
+
+  .core-site-surface .historical-rail .rail-list {
+    padding-left: 38px !important;
+    padding-right: 14px !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item {
+    --rail-marker-x: -7px;
+    align-items: center !important;
+    overflow: visible !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item::before,
+  .core-site-surface .historical-rail .rail-item::after {
+    left: var(--rail-marker-x) !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item::before {
+    z-index: 4 !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item::after {
+    z-index: 0 !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item.active {
+    overflow: visible !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item.active > div:last-child {
+    overflow: hidden !important;
+  }
+
+  .core-site-surface .historical-rail .rail-portrait {
+    align-self: center !important;
+    justify-self: center !important;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .core-site-surface .historical-rail .rail-list {
+    padding-left: 38px !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item {
+    --rail-marker-x: -7px;
+    overflow: visible !important;
+  }
+
+  .core-site-surface .historical-rail .rail-item.active {
+    overflow: visible !important;
+  }
+}
