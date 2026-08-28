@@ -67,19 +67,14 @@ export const inspectorTrees: Record<CoreModuleId, InspectorTreeNode> = {
         node('Длительность правления', 'hero-meta-item', '.hero-meta > div:nth-child(4)')
       ])
     ]),
-    node('Ключевые события', 'key-events', '[data-module-id="key-events"]', [
-      node('Событие 1', 'key-event-row', '.key-event:nth-of-type(1)'),
-      node('Событие 2', 'key-event-row', '.key-event:nth-of-type(2)'),
-      node('Событие 3', 'key-event-row', '.key-event:nth-of-type(3)'),
-      node('Событие 4', 'key-event-row', '.key-event:nth-of-type(4)'),
-      node('Смотреть все', 'key-events-all', '[data-element-id="key-events-all"]')
+    node('Цитаты правителя', 'key-events', '[data-module-id="key-events"]', [
+      node('Текущая цитата', 'key-event-row', '[data-element-id="key-event-row"]')
     ]),
     node('Служебные действия', 'hero-action', '[data-element-id="hero-action"]')
   ]),
 
-  'key-events': node('Ключевые события', 'key-events', '[data-module-id="key-events"]', [
-    node('Строка события ×4', 'key-event-row', '[data-element-id="key-event-row"]'),
-    node('Смотреть все', 'key-events-all', '[data-element-id="key-events-all"]')
+  'key-events': node('Цитаты правителя', 'key-events', '[data-module-id="key-events"]', [
+    node('Текущая цитата', 'key-event-row', '[data-element-id="key-event-row"]')
   ]),
 
   'page-tabs': node('Навигация по странице', 'page-tabs', '[data-module-id="page-tabs"]', [
