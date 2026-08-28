@@ -1,10 +1,54 @@
-/* Active ruler is a dedicated rail composition. Keep it stable at any rail width. */
+/* Historical rail geometry contract.
+   The marker and the vertical connector must share one local axis so the rail
+   stays visually precise even when Studio changes rail width or item padding. */
 .rail-item {
+  --rail-marker-x: -7px;
+  position: relative;
   min-width: 0;
+  overflow: visible;
+}
+
+/* The old viewport-height axis drifted away from markers and continued far
+   below the final ruler. The rail is now built from item-local connector
+   segments, so every segment is guaranteed to pass through every marker. */
+.rail-axis {
+  display: none;
+}
+
+.rail-item::after {
+  content: '';
+  position: absolute;
+  left: var(--rail-marker-x);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-primary);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rail-item:first-of-type::after {
+  top: 50%;
+}
+
+.rail-item:last-of-type::after {
+  bottom: 50%;
+}
+
+.rail-item::before {
+  left: var(--rail-marker-x);
+  z-index: 3;
+}
+
+.rail-item > * {
+  position: relative;
+  z-index: 1;
 }
 
 .rail-item > div:last-child {
   min-width: 0;
+  overflow: hidden;
 }
 
 .rail-item strong {
@@ -21,6 +65,8 @@
   display: none !important;
 }
 
+/* Active ruler is a dedicated rail composition. The outer card must not clip
+   its marker; only the internal text column is clipped. */
 .rail-item.active {
   grid-template-columns: clamp(44px, 25%, 56px) minmax(0, 1fr);
   gap: 10px;
@@ -28,7 +74,7 @@
   width: 100%;
   max-width: 100%;
   padding: 10px 10px 10px 14px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .rail-item.active .rail-portrait {
@@ -53,4 +99,11 @@
 .rail-item.active span {
   margin-top: 5px;
   line-height: 1.18;
+}
+
+@media (max-width: 900px) {
+  /* Mobile rail is a horizontal swipe strip and has no vertical axis. */
+  .rail-item::after {
+    display: none;
+  }
 }
