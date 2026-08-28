@@ -5,17 +5,18 @@
       "id": "territory-1868-bukhara-protectorate",
       "eventId": "evt-1868-bukhara-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"23 июня (5 июля) 1868 г.","normalized":"1868-07-05","precision":"day","calendar":"julian"},
+      "effectiveDate": {"original":"23 июня 1868 г. (старый стиль)","normalized":"1868-07-05","precision":"day","calendar":"julian"},
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication", "doc-kaufman-central-asia-rgia-inventory"],
+      "evidenceDocumentIds": ["doc-bukhara-protection-supplement-1868-imperial-publication", "doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication"],
-        "derivationNote": "Bukhara must remain a distinct dependent polity rather than core Russian territory. The exact constitutional/protectorate characterization across the 1868 and 1873 treaty sequence remains under review; no area fill is promoted from this record."
+        "method": "source-verified-dependency-status",
+        "evidenceDocumentIds": ["doc-bukhara-protection-supplement-1868-imperial-publication", "doc-bukhara-peace-conditions-1868-imperial-publication"],
+        "derivationNote": "The 1868 secret supplement expressly frames the emir's obligations as a sign of his wish to acquire the protection of the Russian Emperor, while the peace terms leave Bukhara as a distinct polity. This verifies a Russian protection/dependency relationship on the claim/sphere-of-control track. It does not justify treating Bukhara as core Russian sovereign territory or asserting a geometry-bearing annexation."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legacy id retained for compatibility. `protectorate` here denotes the source-backed protection/dependency relationship recorded by the 1868 settlement; it is not a claim that a single treaty article created an ordinary territorial protectorate identical to direct Russian sovereignty."
     },
     {
       "id": "territory-1868-zeravshan-acquisition",
