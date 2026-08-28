@@ -11,6 +11,7 @@ import {
   type InspectorTuning,
   type ThematicCardSize
 } from '@/components/core-system/CoreInspectorDrawer';
+import { RulerQuoteRotator } from '@/components/core-system/RulerQuoteRotator';
 import { heroGradientStyle } from '@/modules/hero/heroVisualContract';
 import { labRulerPageData } from '@/content/rulers/labRulerPageData';
 import type { RulerPageData, ThematicCardData } from '@/content/rulers/pageModel';
@@ -149,6 +150,7 @@ export function CoreDesignSystemSkeleton({
     () => resolveHistoricalState({ layerIds: visualState.layerIds }),
     [visualState.layerIds]
   );
+  const heroQuotes = data.hero.quotes ?? [];
 
   const heroVariables = {
     '--hero-image-x': `${inspectorTuning.heroImageX}%`,
@@ -317,14 +319,28 @@ export function CoreDesignSystemSkeleton({
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>↗</button>
                   <button data-element-id="hero-action" onClick={elementHandler('hero-action')}>⛶</button>
                 </div>
-                <ModuleRegion id="key-events" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className="key-events-card">
-                  <h3>Ключевые события</h3>
-                  {data.hero.keyEvents.map((event) => (
-                    <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={event.id}>
-                      <b>{event.year}</b><span>{event.title}</span>
-                    </div>
-                  ))}
-                  <button data-element-id="key-events-all" onClick={elementHandler('key-events-all')}>Смотреть все →</button>
+                <ModuleRegion id="key-events" inspectorEnabled={editorMode && inspectorEnabled} onInspect={openPassport} className={`key-events-card ${heroQuotes.length ? 'quote-card' : ''}`}>
+                  {heroQuotes.length ? (
+                    <>
+                      <h3>Цитата правителя</h3>
+                      <RulerQuoteRotator
+                        quotes={heroQuotes}
+                        rotationSeconds={inspectorTuning.quoteRotationSeconds}
+                        inspectorEnabled={editorMode && inspectorEnabled}
+                        onInspectQuote={elementHandler('key-event-row')}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <h3>Ключевые события</h3>
+                      {data.hero.keyEvents.map((event) => (
+                        <div data-element-id="key-event-row" onClick={elementHandler('key-event-row')} className="key-event" key={event.id}>
+                          <b>{event.year}</b><span>{event.title}</span>
+                        </div>
+                      ))}
+                      <button data-element-id="key-events-all" onClick={elementHandler('key-events-all')}>Смотреть все →</button>
+                    </>
+                  )}
                 </ModuleRegion>
               </div>
 
