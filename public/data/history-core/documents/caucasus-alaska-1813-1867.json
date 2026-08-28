@@ -88,7 +88,61 @@
         "calendar": "julian"
       },
       "authority": ["Российская империя", "Соединённые Штаты Америки"],
-      "notes": "Authoritative institutional chronology confirms signing, ratification milestones and official transfer on 6 (18) October 1867. It remains B1 until the treaty/transfer protocol is indexed from an A1/A2 Russian documentary publication."
+      "notes": "Institutional chronology retained for Russian-language chronology and the 6 (18) October formal transfer ceremony. It is no longer the canonical legal-effect source for the cession itself."
+    },
+    {
+      "id": "doc-alaska-cession-1867-original-loc",
+      "sourceCollectionId": "loc-alaska-cession-originals",
+      "title": "Original of Treaty with Russia for Cession of Alaska",
+      "institution": "Library of Congress / United States National Archives and Records Administration",
+      "url": "https://www.loc.gov/item/2021671098/",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "30 March 1867",
+        "normalized": "1867-03-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United States of America"],
+      "publicationCitation": "Original bilingual English/French Treaty of Cession, National Archives and Records Administration; digital presentation by the Library of Congress.",
+      "notes": "Article I cedes all Russian territory and dominion in North America immediately upon exchange of ratifications and reproduces the eastern boundary established by the 1825 Anglo-Russian convention. Article IV makes the cession and right of immediate possession complete and absolute at that exchange without waiting for formal delivery."
+    },
+    {
+      "id": "doc-alaska-cession-1867-usdos-frus",
+      "sourceCollectionId": "usdos-frus-alaska-cession-1867",
+      "title": "Treaty concerning the Cession of the Russian Possessions in North America",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1867p1/d324",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "30 March 1867",
+        "normalized": "1867-03-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United States of America"],
+      "publicationCitation": "Papers Relating to Foreign Affairs, Accompanying the Annual Message of the President to the Second Session Fortieth Congress, Part I, pp. 387-392.",
+      "notes": "Official documentary publication used for article-level legal interpretation and the treaty's geographic boundary description."
+    },
+    {
+      "id": "doc-alaska-cession-ratification-exchange-1867-loc",
+      "sourceCollectionId": "loc-alaska-cession-originals",
+      "title": "Certificate of Exchange — Alaska Purchase Treaty",
+      "institution": "Library of Congress / United States National Archives and Records Administration",
+      "url": "https://www.loc.gov/resource/gdcwdl.wdl_16744/",
+      "tier": "A1-archival-original",
+      "documentType": "other",
+      "date": {
+        "original": "20 June 1867",
+        "normalized": "1867-06-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Russian Empire", "United States of America"],
+      "publicationCitation": "Certificate recording exchange of the instruments of ratification by William H. Seward and Eduard de Stoeckl at Washington, 20 June 1867; original resource at NARA, digital presentation by Library of Congress.",
+      "notes": "Canonical evidence for the moment at which Articles I and IV make the cession legally complete and confer the right of immediate possession."
     }
   ]
 }
