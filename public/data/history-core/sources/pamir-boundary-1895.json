@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "govindia-pamir-boundary-report-1897",
+      "title": "Report on the Proceedings of the Pamir Boundary Commission",
+      "institution": "Government of India, Foreign Department / Office of the Superintendent of Government Printing, Calcutta",
+      "url": "https://pahar.in/pahar/Books%20and%20Articles/Afghanistan/1896%20Report%20on%20the%20Proceedings%20of%20the%20Pamir%20Boundary%20Commission%20by%20Gerard%20%26%20Holdich%20s.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official commission report on the 1895 Pamir delimitation and demarcation, protocols, pillars, survey work and boundary descriptions",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "The official Government of India report records the sequence of pillar erection and protocol signatures, including agreement on final pillars 9-12 on 8 September 1895 and signature of the final protocol on 10 September 1895. It also distinguishes watershed, spur and river-course portions of the line."
+    },
+    {
+      "id": "bl-qdl-pamir-joint-commission-map-1895",
+      "title": "Map of the country on both sides of the boundary line drawn by the Joint Commission for delimiting the Russian and Afghan territories on the Pamirs 1895",
+      "institution": "British Library, India Office Records and Private Papers / Qatar Digital Library",
+      "url": "https://www.qdl.qa/en/archive/81055/vdc_100070524442.0x000003",
+      "tier": "A3-contemporary-official-map",
+      "coverage": "Contemporary signed Joint Commission boundary map, reduced from the commissioners' signed original and officially certified as a true representation",
+      "canonicalUse": ["boundary-geometry", "interpretation", "display-validation"],
+      "notes": "British Library Mss Eur F111/68, f 28. The map depicts the demarcated boundary, relief and hydrology; it bears the British and Russian commissioners' signatures. Major-General John Charles Ardagh certified that the reproduction truly represents the signed original."
+    },
+    {
+      "id": "usdos-ibs26-afghanistan-ussr-1983",
+      "title": "International Boundary Study No. 26 (Revised) — Afghanistan–U.S.S.R. Boundary",
+      "institution": "United States Department of State, Office of the Geographer, Bureau of Intelligence and Research",
+      "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/pdf/ibs026.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official U.S. boundary study consolidating treaty continuity, the 1895 Pamir protocols and four coordinate realizations for the eastern Wakhan pillars, including WGS 72",
+      "canonicalUse": ["legal-basis", "boundary-date", "boundary-geometry", "interpretation", "display-validation"],
+      "notes": "The study states that the 1958 Soviet-Afghan frontier treaty retained the 1895 Demarcation Protocols for the Zor-Kul-to-China sector. It publishes Pamir Boundary Commission 1895, Indian 1916, WGS 72 and Pulkovo 1942 coordinate values for the control pillars and explains the 1912-13/1921 recalculation history."
+    },
+    {
+      "id": "bl-qdl-afghanistan-treaties-1933-pamir",
+      "title": "A Collection of Treaties, Engagements and Sanads relating to India and neighbouring countries — Afghanistan section",
+      "institution": "British Library, India Office Records and Private Papers / Qatar Digital Library",
+      "url": "https://www.qdl.qa/archive/81055/vdc_100023947391.0x000026",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official documentary compilation recording the 1895 Pamir settlement as ten protocols and delivery to the Amir of the signed map and demarcated-line description",
+      "canonicalUse": ["legal-basis", "boundary-geometry", "interpretation"],
+      "notes": "The compilation records that the Joint Commission settlement was contained in ten protocols and that the Amir received copies of the map signed by Gerard and Povalo-Scheikovski together with a description of the demarcated line."
+    }
+  ]
+}
