@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "rgo-russian-imperial-treaty-collection-1902",
+      "title": "Сборник действующих трактатов, конвенций и соглашений, заключенных Россией с другими государствами. Том I, 2-е изд.",
+      "institution": "Министерство иностранных дел Российской империи / Библиотека Русского географического общества / Библиотека Администрации Президента РФ",
+      "url": "https://elib.rgo.ru/handle/123456789/217153",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official treaty collection issued by order of the Russian Minister of Foreign Affairs; includes the 1873 Russia-Khiva treaty",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-semantics"],
+      "notes": "The 1902 collection was issued by order of the Minister of Foreign Affairs. The 1873 Khiva treaty is cited in later diplomatic compilations to vol. I, pp. 425-427. The RGO digital record identifies the original as held by the Library of the Administration of the President of the Russian Federation."
+    }
+  ]
+}
