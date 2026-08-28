@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "loc-alaska-cession-originals",
+      "title": "Original treaty and exchange instruments for the 1867 cession of Russian possessions in North America",
+      "institution": "Library of Congress / United States National Archives and Records Administration",
+      "url": "https://www.loc.gov/item/2021671098/",
+      "tier": "A1-archival-original",
+      "coverage": "Original Treaty of Cession, imperial ratification and Certificate of Exchange for Alaska, 1867",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Library of Congress digital presentation of the original bilingual treaty and related ratification/exchange instruments; the Certificate of Exchange is dated 20 June 1867."
+    },
+    {
+      "id": "usdos-frus-alaska-cession-1867",
+      "title": "Treaty concerning the Cession of the Russian Possessions in North America — Foreign Relations of the United States",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1867p1/d324",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official U.S. publication of the 1867 Alaska cession treaty text and its legal boundary description",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Article I makes the cession effective immediately upon exchange of ratifications; Article IV states that cession and the right of immediate possession are complete and absolute at that exchange without waiting for formal delivery."
+    }
+  ]
+}
