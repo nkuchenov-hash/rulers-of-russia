@@ -1,0 +1,168 @@
+/* Studio-only Hero quote rotator. */
+
+.core-site-surface .key-events-card.quote-card {
+  width: var(--hero-events-width, 360px) !important;
+  min-height: 205px !important;
+  padding: 18px 20px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  background: color-mix(in srgb, var(--surface-elevated) 94%, transparent) !important;
+  border: 1px solid var(--border-emphasis) !important;
+  box-shadow: var(--shadow-character) !important;
+  overflow: hidden !important;
+}
+
+.core-site-surface .key-events-card.quote-card h3 {
+  margin: 0 0 10px !important;
+  color: var(--text-muted) !important;
+  font: 700 10px/1.1 var(--body-font) !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+
+.core-site-surface .ruler-quote-rotator {
+  position: relative;
+  min-height: 154px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.core-site-surface .ruler-quote-copy {
+  position: relative;
+  min-height: 112px;
+  padding-left: 24px;
+  animation: ruler-quote-enter .34s ease both;
+}
+
+.core-site-surface .ruler-quote-mark {
+  position: absolute;
+  left: 0;
+  top: -10px;
+  color: color-mix(in srgb, var(--accent-primary) 84%, var(--text-primary));
+  font: 700 42px/.9 var(--display-font);
+  opacity: .8;
+}
+
+.core-site-surface .ruler-quote-copy blockquote {
+  margin: 0;
+  color: var(--text-primary);
+  font: 500 var(--hero-event-font-size, 22px)/1.18 var(--display-font);
+  letter-spacing: -.01em;
+}
+
+.core-site-surface .ruler-quote-copy footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.core-site-surface .ruler-quote-copy cite {
+  font-style: normal;
+  color: var(--text-secondary);
+}
+
+.core-site-surface .ruler-quote-controls {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border-emphasis);
+}
+
+.core-site-surface .ruler-quote-controls > button {
+  width: 30px;
+  height: 26px;
+  min-width: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.core-site-surface .ruler-quote-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+
+.core-site-surface .ruler-quote-dots button {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+.core-site-surface .ruler-quote-dots button::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-emphasis);
+  transform: translate(-50%, -50%);
+  transition: width .16s ease, background .16s ease;
+}
+
+.core-site-surface .ruler-quote-dots button.active::after {
+  width: 16px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+}
+
+@keyframes ruler-quote-enter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .core-site-surface .ruler-quote-copy {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .core-site-surface [data-module-id="hero"] .key-events-card.quote-card {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 62px !important;
+    width: auto !important;
+    max-width: none !important;
+    min-height: 208px !important;
+    max-height: 230px !important;
+    padding: 16px 18px 12px !important;
+  }
+
+  .core-site-surface .ruler-quote-copy {
+    min-height: 122px;
+  }
+
+  .core-site-surface .ruler-quote-copy blockquote {
+    font-size: clamp(18px, 5.6vw, 24px) !important;
+    line-height: 1.18 !important;
+  }
+
+  .core-site-surface .ruler-quote-copy footer {
+    font-size: 11px;
+  }
+
+  .core-site-surface .ruler-quote-controls > button {
+    width: 36px;
+    min-width: 36px;
+    height: 32px;
+  }
+}
