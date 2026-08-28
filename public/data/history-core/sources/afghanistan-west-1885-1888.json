@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "hmso-central-asia-no2-1887-afghan-boundary",
+      "title": "Further Correspondence respecting the Affairs of Central Asia — Central Asia No. 2 (1887)",
+      "institution": "British Foreign Office / Her Majesty's Stationery Office",
+      "url": "https://pahar.in/pahar/Books%20and%20Articles/Central%20Asia/1887%20Correspondence%20regarding%20the%20Affairs%20of%20Central%20Asia%20presented%20to%20Parliament%20s.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "British Parliamentary command paper containing the 1885-1887 Anglo-Russian Afghan boundary correspondence, protocols, maps and coordinate-bearing annexes",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Presented to both Houses of Parliament by Command of Her Majesty in September 1887. The coordinate-bearing protocol annex defines trigonometric control points and explicitly distinguishes straight, watershed and thalweg segments."
+    },
+    {
+      "id": "russian-official-afghan-boundary-protocol-1887",
+      "title": "Russian official publication of the 1887 Anglo-Russian Afghan boundary protocol",
+      "institution": "Russian Empire official treaty/legal publication, digitized by Great Russian Encyclopedia",
+      "url": "https://m.bigenc.ru/vault/2bb752edf165294aca45e8d13be83b41.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "Parallel Russian/French publication of the 1887 boundary protocol and its coordinate-bearing frontier description",
+      "canonicalUse": ["legal-basis", "boundary-geometry", "interpretation"],
+      "notes": "Used to cross-check OCR-damaged coordinate values in the British parliamentary scan; the Russian text clearly prints 62°27′57″ for pillar 24, 35°18′21″ for Kalari 2, and 62°59′43″ for Tori-Sheikh."
+    },
+    {
+      "id": "ukts-afghan-northwest-boundary-protocols-1888",
+      "title": "Protocols of the Commission instituted by the Protocol of July 22, 1887, for the Delimitation of the North-West Boundary of Afghanistan",
+      "institution": "United Kingdom Treaty Series, digital legal archive copy via BAILII",
+      "url": "https://www.bailii.org/uk/other/UKTS/1888/9767.html",
+      "tier": "A2-official-document-publication",
+      "coverage": "Final Anglo-Russian commission protocols completing the north-west Afghan demarcation on 26 January 1888",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry"],
+      "notes": "UKTS record 9767 is dated 26 January 1888."
+    },
+    {
+      "id": "loc-afghan-boundary-demarcated-map-1888",
+      "title": "Map illustrative of the Afghan Boundary Commission march and the frontier as proposed and actually demarcated",
+      "institution": "Library of Congress Geography and Map Division",
+      "url": "https://www.loc.gov/item/76692168/",
+      "tier": "A3-contemporary-official-map",
+      "coverage": "Contemporary map showing the proposed and actually demarcated 1885-1888 north-west Afghan frontier",
+      "canonicalUse": ["boundary-geometry", "interpretation", "display-validation"],
+      "notes": "Library of Congress summary records that by January 1888 the commission had placed 79 boundary markers along approximately 630 km from the Du'l-Feqar sector to the Amu Darya."
+    }
+  ]
+}
