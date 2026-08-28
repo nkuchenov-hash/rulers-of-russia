@@ -1,0 +1,54 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "dataset": "Rulers of Russia History Core generated verified geometry",
+    "recipeId": "recipe-russian-empire-afghanistan-west-1888-controls",
+    "fragmentId": "frag-russian-empire-afghanistan-west-1888-controls",
+    "generatedFromSourceCoordinates": true,
+    "sourceCrs": "Historical geographic latitude/longitude as published in the 1887 Anglo-Russian protocol; prime meridian/datum not independently registered in History Core",
+    "displayDatumStatus": "source-geographic-untransformed",
+    "displayWarning": "Source longitude/latitude values are retained literally for provenance. Their exact placement on a WGS84 globe remains medium-confidence until a source-backed datum transformation is registered.",
+    "interpolation": "source-vertices",
+    "geometryType": "MultiPoint",
+    "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+    "sourcePointCount": 7,
+    "note": "Verified subset of the 1885-1888 north-west Afghan boundary control network. Mixed segment semantics forbid straight inter-point interpolation."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-russian-empire-afghanistan-west-1888-controls",
+        "track": "russian-legal-border",
+        "history_core_status": "geometry-verified",
+        "source_points": [
+          [62.25472222,35.29694444],
+          [62.46583333,35.28138889],
+          [62.59666667,35.23916667],
+          [62.68333333,35.24166667],
+          [62.78833333,35.30583333],
+          [62.99527778,35.41416667],
+          [63.10111111,35.63694444]
+        ],
+        "source_crs": "Historical geographic latitude/longitude as published in the 1887 Anglo-Russian protocol; prime meridian/datum not independently registered in History Core",
+        "display_datum_status": "source-geographic-untransformed",
+        "interpolation": "source-vertices",
+        "geometry_type": "MultiPoint",
+        "evidence_document_ids": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+        "note": "Pillars 20, 24, 26, 27, 30, 32 and Kalari 2 control. No straight boundary between controls is asserted."
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [
+          [62.25472222,35.29694444],
+          [62.46583333,35.28138889],
+          [62.59666667,35.23916667],
+          [62.68333333,35.24166667],
+          [62.78833333,35.30583333],
+          [62.99527778,35.41416667],
+          [63.10111111,35.63694444]
+        ]
+      }
+    }
+  ]
+}
