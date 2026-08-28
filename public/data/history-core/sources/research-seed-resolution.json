@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "fupress-nystad-ratification-chronology",
+      "title": "Сообщение о мирном договоре со Швецией в царских грамотах Петра I (1721) и Елизаветы I (1743)",
+      "institution": "Firenze University Press",
+      "url": "https://media.fupress.com/files/pdf/24/12874/33029",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Nystad treaty ratification and exchange chronology",
+      "canonicalUse": ["boundary-date", "interpretation"],
+      "notes": "Academic chronology records Russian and Swedish ratifications on 9/20 September 1721 and exchange of ratifications at Nystad on 19/30 September 1721. The treaty text itself remains the primary legal evidence."
+    },
+    {
+      "id": "cyberleninka-bucharest-1812-ratifications",
+      "title": "Бухарестский мир 1812 г. и сербский вопрос",
+      "institution": "Academic historical publication indexed by CyberLeninka",
+      "url": "https://cyberleninka.ru/article/n/buharestskiy-mir-1812-g-i-serbskiy-vopros/pdf",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Bucharest treaty ratification chronology",
+      "canonicalUse": ["boundary-date", "interpretation"],
+      "notes": "The study records exchange of ratification instruments at Bucharest on 2 (14) July 1812. The treaty text itself states that the peace act is completed by exchange of mutual ratifications."
+    },
+    {
+      "id": "dvp-ussr-rsfsr-fer-boundary-1920",
+      "title": "Документы внешней политики СССР — договор РСФСР с Дальневосточной Республикой о границах",
+      "institution": "Министерство иностранных дел СССР / официальное документальное издание",
+      "url": "https://m.bigenc.ru/vault/d20ee8e6d1574fd607880eeaf94aeb19.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "15–30 December 1920 RSFSR–Far Eastern Republic boundary treaty including entry-into-force clause and signatures",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Official documentary publication reproduces the treaty text, including the clause that it enters into force from the moment of signing and the two counterpart signature dates, Moscow 15 December and Chita 30 December 1920."
+    }
+  ]
+}
