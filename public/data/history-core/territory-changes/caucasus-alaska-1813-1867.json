@@ -66,24 +66,26 @@
     },
     {
       "id": "territory-1867-alaska-transfer-out",
-      "eventId": "evt-1867-alaska-transfer",
+      "eventId": "evt-1867-alaska-cession-effective",
       "polityId": "russian-empire",
       "effectiveDate": {
-        "original": "6 октября 1867 г.",
-        "normalized": "1867-10-18",
+        "original": "20 июня 1867 г. — обмен ратификациями",
+        "normalized": "1867-06-20",
         "precision": "day",
-        "calendar": "julian"
+        "calendar": "gregorian",
+        "note": "Articles I and IV make the cession and right of immediate possession complete and absolute upon exchange of ratifications. The later 18 October ceremony at Sitka is retained as a separate physical/formal-transfer event and does not drive the russian-legal-border replay."
       },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-alaska-cession-1867-prlib-chronology"],
+      "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus", "doc-alaska-cession-ratification-exchange-1867-loc"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-alaska-cession-1867-prlib-chronology"],
-        "derivationNote": "Do not mutate verified production geometry from this B1 evidence alone. Locate the Russian A1/A2 cession treaty and transfer protocol, then georeference the ceded Russian-American possessions as described."
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus"],
+        "derivationNote": "The treaty itself defines the ceded Russian possessions and reproduces the 1825 eastern boundary, including the 141st meridian sector. Do not promote a full cession polygon until the southeastern panhandle, islands, western Bering limit and historical coastlines are reconstructed from the treaty and authoritative cartography. The legal effective date is now verified independently of that remaining geometry work."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "research-required",
+      "notes": "Legacy change id retained for compatibility; semantically this change now represents legal cession on 20 June 1867, not the 18 October formal delivery ceremony."
     }
   ]
 }
