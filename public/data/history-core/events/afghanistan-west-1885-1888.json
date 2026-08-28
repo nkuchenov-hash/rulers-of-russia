@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1885-anglo-russian-afghan-west-delimitation",
+      "title": "Лондонский протокол о северо-западной границе Афганистана",
+      "kind": "treaty",
+      "date": {
+        "original": "29 августа / 10 сентября 1885 г.",
+        "normalized": "1885-09-10",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Великобритания согласовали основные правила проведения афганской границы от Гери-Руда к Оксу и поручили смешанной комиссии детально провести и закрепить линию на местности.",
+      "evidenceDocumentIds": ["doc-afghanistan-ussr-western-boundary-ibs26-usdos"],
+      "reviewStatus": "source-verified",
+      "notes": "Initial diplomatic delimitation only; the complete demarcation was not finished until 1888."
+    },
+    {
+      "id": "evt-1887-anglo-russian-afghan-west-revision",
+      "title": "Петербургский протокол о завершении северо-западной афганской границы",
+      "kind": "treaty",
+      "date": {
+        "original": "10/22 июля 1887 г.",
+        "normalized": "1887-07-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "После разногласий комиссии Россия и Великобритания согласовали исправления и недостающие участки линии. Приложение к протоколу закрепило ряд точных тригонометрических пунктов и отдельно определило прямые, водораздельные и речные участки.",
+      "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1888-afghan-west-final-demarcation",
+      "title": "Завершение демаркации северо-западной русско-афганской границы",
+      "kind": "demarcation",
+      "date": {
+        "original": "26 января 1888 г.",
+        "normalized": "1888-01-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Заключительными протоколами комиссия завершила демаркацию северо-западной афганской границы. В ходе работ 1885–1888 годов было установлено 79 пограничных знаков вдоль примерно 630 км линии.",
+      "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-afghanistan-ussr-western-boundary-ibs26-usdos", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso"],
+      "territoryChangeIds": ["territory-1888-afghan-west-final-demarcation", "territory-1888-afghan-west-known-controls"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
