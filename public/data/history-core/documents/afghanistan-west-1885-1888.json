@@ -9,12 +9,7 @@
       "url": "https://pahar.in/pahar/Books%20and%20Articles/Central%20Asia/1887%20Correspondence%20regarding%20the%20Affairs%20of%20Central%20Asia%20presented%20to%20Parliament%20s.pdf",
       "tier": "A2-official-document-publication",
       "documentType": "boundary-protocol",
-      "date": {
-        "original": "10/22 July 1887, St Petersburg",
-        "normalized": "1887-07-22",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"10/22 July 1887, St Petersburg","normalized":"1887-07-22","precision":"day","calendar":"gregorian"},
       "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
       "publicationCitation": "Further Correspondence respecting the Affairs of Central Asia, Central Asia No. 2 (1887), presented to both Houses of Parliament by Command of Her Majesty, September 1887.",
       "notes": "The protocol treats the already demarcated portions as definitive, confirms the existing synopsis for pillars 1-19 and 36-66, and gives a detailed replacement/continuation route through the unresolved middle and eastern sectors. It explicitly distinguishes straight lines, watershed lines and thalwegs.",
@@ -40,12 +35,7 @@
       "url": "https://m.bigenc.ru/vault/2bb752edf165294aca45e8d13be83b41.pdf",
       "tier": "A2-official-document-publication",
       "documentType": "official-treaty-publication",
-      "date": {
-        "original": "1887 publication",
-        "normalized": "1887",
-        "precision": "year",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"1887 publication","normalized":"1887","precision":"year","calendar":"gregorian"},
       "authority": ["Russian Empire"],
       "publicationCitation": "Russian/French official printed text, 1887, No. 467, pp. 465 ff.; digitized in the Great Russian Encyclopedia vault.",
       "notes": "Used as an independent transcription check for the coordinate-bearing protocol. Its clean print resolves OCR corruption in the British scan: pillar 24 is 62°27′57″ E; Kalari 2 is 35°18′21″ N; Tori-Sheikh is 62°59′43″ E."
@@ -58,15 +48,23 @@
       "url": "https://www.bailii.org/uk/other/UKTS/1888/9767.html",
       "tier": "A2-official-document-publication",
       "documentType": "boundary-protocol",
-      "date": {
-        "original": "26 January 1888",
-        "normalized": "1888-01-26",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"26 January 1888","normalized":"1888-01-26","precision":"day","calendar":"gregorian"},
       "authority": ["Russian Empire", "United Kingdom of Great Britain and Ireland"],
       "publicationCitation": "United Kingdom Treaty Series, UKTS 9767, 26 January 1888.",
       "notes": "Final commission protocol date used conservatively for activation of the completed 1885-1888 demarcation package in History Core."
+    },
+    {
+      "id": "doc-afghan-frontier-hari-rud-oxus-1933-govindia",
+      "sourceCollectionId": "govindia-aitchison-afghan-frontier-1933",
+      "title": "Description of the Afghan Frontier between the Hari Rud and the Oxus",
+      "institution": "Government of India / India Office",
+      "url": "https://www.qdl.qa/en/archive/81055/vdc_100023947392.0x00005f",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-description",
+      "date": {"original":"1933 official fifth edition; description relates to the completed 1888 demarcation","normalized":"1933","precision":"year","calendar":"gregorian"},
+      "authority": ["Government of India"],
+      "publicationCitation": "Aitchison, A Collection of Treaties, Engagements and Sanads relating to India and neighbouring countries, 5th ed., vol. XIII (Delhi, 1933), Afghanistan Appendix I, printed p. 251 ff.; British Library IOR/L/PS/20/G3/14.",
+      "notes": "The completed official description begins: pillar 19 to 20 is a straight east-by-south segment of about 7.75 miles; 20 proceeds via a round-topped hill and ridge crest to pillar 21 at Ziarat-i-Khwaja Alam Dar; 21 runs straight across the Kushk valley to pillar 22; 22 follows the Kushk upstream to pillar 23; 23 then proceeds by the demarcated hill/control chain toward pillar 24. The later route must continue to be ingested page-by-page; exact terrain tracing still requires the original maps where the text refers to mapped points."
     },
     {
       "id": "doc-afghanistan-ussr-western-boundary-ibs26-usdos",
@@ -76,12 +74,7 @@
       "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/pdf/ibs026.pdf",
       "tier": "A2-official-document-publication",
       "documentType": "official-boundary-study",
-      "date": {
-        "original": "15 September 1983",
-        "normalized": "1983-09-15",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"15 September 1983","normalized":"1983-09-15","precision":"day","calendar":"gregorian"},
       "authority": ["United States Department of State"],
       "publicationCitation": "International Boundary Study No. 26 (Revised), Afghanistan–U.S.S.R. Boundary, September 15, 1983.",
       "notes": "Records the 10 September 1885 London delimitation protocol and states that during the following three years the binational commission demarcated the western sector and erected 79 boundary posts. Used as continuity/context evidence, not as the source of the seven historical coordinate controls."
