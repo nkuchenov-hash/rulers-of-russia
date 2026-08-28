@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-first-partition-russian-incorporation-1772-pszri",
+      "sourceCollectionId": "avpri-first-partition-1772-1773",
+      "title": "О принятии под Российскую Державу уступленных от Польши провинций — именной указ № 13850",
+      "institution": "Российская империя / Полное собрание законов Российской империи",
+      "url": "https://constitutions.ru/?p=18827",
+      "tier": "A2-official-document-publication",
+      "documentType": "law",
+      "date": {
+        "original": "16 августа 1772 г. (старый стиль)",
+        "normalized": "1772-08-27",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "PSZRI No. 13850; 11-day conversion for the eighteenth century."
+      },
+      "authority": ["Российская империя / Екатерина II"],
+      "publicationCitation": "Полное собрание законов Российской империи, Собрание I, т. XIX (1770–1774), № 13850.",
+      "notes": "The act orders the designated Polish provinces to be taken into effective Russian possession, prescribes an oath, boundary posts and administration, and recites the new boundary using the Dvina, inter-voivodeship boundaries, a straight line toward the source of the Drut/Druec and the Dnieper. It is used for the unilateral Russian-law/effective-possession chronology, not as evidence of Polish consent."
+    },
+    {
+      "id": "doc-first-partition-russia-poland-treaty-1773-avpri",
+      "sourceCollectionId": "avpri-first-partition-1772-1773",
+      "title": "Трактат между Российской империей и Речью Посполитой об уступке земель первого раздела",
+      "institution": "Архив внешней политики Российской империи / official treaty publication",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/Polen/XVIII/1760-1780/Traktat_russ_poln_1773/text.phtml?id=13212",
+      "tier": "A1-archival-original",
+      "documentType": "treaty",
+      "date": {
+        "original": "7/18 сентября 1773 г.",
+        "normalized": "1773-09-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Российская империя", "Речь Посполитая"],
+      "archiveCitation": "АВПРИ; published in the Russian diplomatic treaty corpus. The digital documentary publication reproduces the treaty text.",
+      "notes": "Article II cedes to Russia the first-partition lands and restates the boundary: Dvina, the Vitebsk/Polotsk and three-voivodeship junction, a straight line toward the source of the Druec near Ordva, the Druec to the Dnieper, then the Dnieper while preserving the existing Kyiv district boundary. Article X requires commissioners to mark the boundary."
+    },
+    {
+      "id": "doc-bukhara-peace-conditions-1868-imperial-publication",
+      "sourceCollectionId": "imperial-russia-bukhara-treaty-publications",
+      "title": "Условия мира России с Бухарой и соглашение 1868 года",
+      "institution": "Russian imperial diplomatic publication",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/M.Asien/XVI/1540-1560/Snos_ross_chiva_buchara/pril.phtml",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "23 июня 1868 г. (старый стиль)",
+        "normalized": "1868-07-05",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": ["Российская империя / К. П. фон Кауфман", "Бухарский эмират / эмир Музаффар"],
+      "publicationCitation": "Russian imperial treaty/diplomatic publication; cross-referenced in later Сборник действующих трактатов and the Kaufman archival corpus.",
+      "notes": "The peace terms place Samarkand and its dependent settlements under the Russian Emperor and define the intended southern and Bukhara-facing boundary framework. History Core uses 5 July 1868 Gregorian as the precise transition for the initial Samarkand/Zarafshan acquisition represented by this change. Later 1870–1871 upper-Zarafshan/Kashkadarya additions are expressly excluded and require separate acts."
+    },
+    {
+      "id": "doc-samarkand-incorporation-proclamation-1868-rgia",
+      "sourceCollectionId": "prlib-rgia-archival-files",
+      "title": "Воззвание К. П. фон Кауфмана жителям Самарканда и окрестных кишлаков о правах и обязанностях в связи с присоединением к России",
+      "institution": "Российский государственный исторический архив / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/1905215",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {
+        "original": "1868",
+        "normalized": "1868",
+        "precision": "year",
+        "calendar": "julian"
+      },
+      "authority": ["К. П. фон Кауфман / Туркестанское генерал-губернаторство"],
+      "archiveCitation": "РГИА. Ф. 954. Оп. 1. Д. 113. 1 л.",
+      "notes": "Direct archival corroboration that Samarkand and surrounding kishlaks were treated as incorporated into Russia. Used with the dated peace instrument, not to manufacture a day not present in this archival catalogue record."
+    }
+  ]
+}
