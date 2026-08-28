@@ -39,6 +39,7 @@ export interface InspectorTuning {
   heroMetaSize: number;
   keyEventsWidth: number;
   keyEventFontSize: number;
+  quoteRotationSeconds: number;
   heroActionSize: number;
   railActiveWidth: number;
   railActiveHeight: number;
@@ -56,6 +57,7 @@ export const defaultInspectorTuning: InspectorTuning = {
   heroMetaSize: 22,
   keyEventsWidth: 320,
   keyEventFontSize: 22,
+  quoteRotationSeconds: 7,
   heroActionSize: 40,
   railActiveWidth: 228,
   railActiveHeight: 112,
@@ -269,9 +271,14 @@ function SettingsPanel({
   } else if (selectedId === 'hero-meta-item') {
     controls = <RangeSetting label="Размер значения" value={tuning.heroMetaSize} min={22} max={30} suffix="px" onChange={(value) => patch({ heroMetaSize: value })} />;
   } else if (selectedId === 'key-events') {
-    controls = <RangeSetting label="Ширина карточки" value={tuning.keyEventsWidth} min={260} max={430} suffix="px" onChange={(value) => patch({ keyEventsWidth: value })} />;
+    controls = (
+      <>
+        <RangeSetting label="Ширина модуля" value={tuning.keyEventsWidth} min={280} max={520} suffix="px" onChange={(value) => patch({ keyEventsWidth: value })} />
+        <RangeSetting label="Смена цитаты" value={tuning.quoteRotationSeconds} min={3} max={20} suffix=" сек" onChange={(value) => patch({ quoteRotationSeconds: value })} />
+      </>
+    );
   } else if (selectedId === 'key-event-row') {
-    controls = <RangeSetting label="Размер строки" value={tuning.keyEventFontSize} min={22} max={30} suffix="px" onChange={(value) => patch({ keyEventFontSize: value })} />;
+    controls = <RangeSetting label="Размер цитаты" value={tuning.keyEventFontSize} min={18} max={34} suffix="px" onChange={(value) => patch({ keyEventFontSize: value })} />;
   } else if (selectedId === 'hero-action') {
     controls = <RangeSetting label="Размер кнопки" value={tuning.heroActionSize} min={32} max={56} suffix="px" onChange={(value) => patch({ heroActionSize: value })} />;
   } else if (selectedId === 'thematic-card' && selectedThematicCardId) {
