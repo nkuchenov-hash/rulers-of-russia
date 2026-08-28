@@ -20,6 +20,16 @@
       "coverage": "Official U.S. publication of the 1867 Alaska cession treaty text and its legal boundary description",
       "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
       "notes": "Article I makes the cession effective immediately upon exchange of ratifications; Article IV states that cession and the right of immediate possession are complete and absolute at that exchange without waiting for formal delivery."
+    },
+    {
+      "id": "usdos-frus-alaska-transfer-1867",
+      "title": "Instructions for the formal transfer of Russian America at Sitka — Foreign Relations of the United States",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1867p1/d348",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official instructions governing the commissioners' formal delivery, public-property transfer and protocol at Sitka in October 1867",
+      "canonicalUse": ["event", "implementation", "interpretation"],
+      "notes": "The instructions direct Captain Pestchouroff to proceed to the formal transfer of the territory on arrival at Sitka, deliver military/public property and, together with the U.S. commissioner, draw up a protocol. This supports the 18 October 1867 physical/formal-transfer event while remaining distinct from the legal cession already complete on 20 June."
     }
   ]
 }
