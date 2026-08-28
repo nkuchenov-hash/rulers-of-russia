@@ -24,6 +24,7 @@
     "territory-changes/afghanistan-west-1885-1888.json",
     "territory-changes/pamir-boundary-1895.json",
     "territory-changes/soviet-territorial-acts-1944-1954.json",
+    "territory-changes/ussr-afghanistan-1947-1958.json",
     "territory-changes/iran-frontier-1955-1957.json",
     "territory-changes/modern-2022.json",
     "territory-changes/norway-varanger-1958.json",
@@ -281,6 +282,19 @@
       "confidence": "high",
       "effectiveTo": "1917-03-15",
       "derivationNote": "Seven coordinate-defined trigonometric/pillar controls extracted from the 1887 Anglo-Russian boundary protocol and cross-checked against the parallel Russian official publication. This is a verified MultiPoint subset of the 79-post frontier network and deliberately does not interpolate the mixed straight/watershed/thalweg line between controls."
+    },
+    {
+      "id": "frag-ussr-afghanistan-pamir-1958-inherited-controls",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "boundary-control-network",
+      "territorialModel": "boundary-control-network",
+      "geometryFile": "geometry/ussr-afghanistan-pamir-1958-inherited-controls.geojson",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1991-12-31",
+      "derivationNote": "The 1958 treaty expressly carries the Lake Zor-Kul–China sector forward under the 1895 demarcation protocols. IBS No. 26 publishes the official WGS 72 realization of that same control network. This fragment is intentionally MultiPoint and verifies inherited geodetic controls only; it does not infer straight inter-pillar boundary segments."
     }
   ]
 }

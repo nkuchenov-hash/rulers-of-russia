@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-afghanistan-frontier-1946-unts",
+      "sourceCollectionId": "unts-afghanistan-ussr-frontier-476-1946",
+      "title": "Frontier Agreement between Afghanistan and the USSR, with Protocol and exchange of notes",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%2031/v31.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "frontier-agreement",
+      "date": {"original":"13 June 1946","normalized":"1946-06-13","precision":"day","calendar":"gregorian"},
+      "authority": ["Union of Soviet Socialist Republics", "Afghanistan"],
+      "publicationCitation": "United Nations Treaty Series, vol. 31, No. 476, pp. 147–168.",
+      "notes": "Signed 13 June 1946; UNTS footnote records entry into force on 17 January 1947 by exchange of ratifications at Kabul. Article 1 establishes thalweg/principal-fairway/median rules on the Amu-Darya and Pyandzh and preserves Aral-Pagambar for the USSR and Urta-Tagai for Afghanistan. Article 2 requires a Mixed Commission to map Khamiab–Lake Sar-i-Kul, determine islands, establish posts where necessary, and produce a detailed description and map for government ratification. The Protocol terminates Articles 9 and 10 of the 1921 RSFSR-Afghanistan treaty. The exchange of notes requires Zulfikar–Khamiab re-demarcation from the 1885–1888 Anglo-Russian documents and maps."
+    },
+    {
+      "id": "doc-ussr-afghanistan-frontier-regime-1958-unts",
+      "sourceCollectionId": "unts-ussr-afghanistan-frontier-regime-4655-1958",
+      "title": "Treaty concerning the regime of the Soviet-Afghan State frontier",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20321/v321.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "frontier-regime-treaty",
+      "date": {"original":"18 January 1958","normalized":"1958-01-18","precision":"day","calendar":"gregorian"},
+      "authority": ["Union of Soviet Socialist Republics", "Afghanistan"],
+      "publicationCitation": "United Nations Treaty Series, vol. 321, No. 4655, pp. 165 ff.",
+      "notes": "Article 1 authoritatively identifies the Zulfikar–Zor-Kul line as determined by the 1946 Agreement plus demarcation and re-demarcation documents dated 29 September 1948; the re-demarcation documents were drafted on the basis of the 1885–1888 protocol. It separately states that Zor-Kul–China is determined by the 1895 demarcation protocols. UNTS records entry into force on 5 October 1958."
+    }
+  ]
+}

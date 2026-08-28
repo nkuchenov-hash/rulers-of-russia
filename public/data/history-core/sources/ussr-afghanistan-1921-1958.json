@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "unts-afghanistan-ussr-frontier-476-1946",
+      "title": "United Nations Treaty Series No. 476 — Afghanistan–USSR Frontier Agreement",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%2031/v31.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "Frontier Agreement signed at Moscow on 13 June 1946, Protocol, exchange of notes and official entry-into-force chronology",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "UNTS No. 476 records entry into force on 17 January 1947. Article 1 fixes the Amu-Darya and navigable Pyandzh frontier by thalweg, with principal-fairway and median-line fallbacks; Article 2 orders a Mixed Commission to map Khamiab–Lake Sar-i-Kul and compile a detailed description and boundary-post record; the exchange of notes orders Zulfikar–Khamiab re-demarcation on the 1885–1888 Anglo-Russian documents and maps."
+    },
+    {
+      "id": "unts-ussr-afghanistan-frontier-regime-4655-1958",
+      "title": "United Nations Treaty Series No. 4655 — Treaty concerning the regime of the Soviet-Afghan State frontier",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20321/v321.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "1958 Soviet-Afghan frontier-regime treaty, including authoritative identification of the 29 September 1948 demarcation/re-demarcation documents and continuity of the 1895 Pamir protocols",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "Article 1 states that Zulfikar–Lake Zor-Kul is determined by the 1946 Agreement and demarcation/re-demarcation documents dated 29 September 1948, with the re-demarcation based on the 1885–1888 protocol; Lake Zor-Kul–China is determined by the 1895 demarcation protocols. The treaty entered into force on 5 October 1958."
+    }
+  ]
+}
