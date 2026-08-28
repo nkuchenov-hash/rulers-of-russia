@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-nystad-ratification-exchange-1721-academic",
+      "sourceCollectionId": "fupress-nystad-ratification-chronology",
+      "title": "Chronology of Nystad treaty ratifications and exchange",
+      "institution": "Firenze University Press",
+      "url": "https://media.fupress.com/files/pdf/24/12874/33029",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "academic-study",
+      "date": {
+        "original": "19/30 September 1721 — exchange of ratifications",
+        "normalized": "1721-09-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Academic study of Peter I and Elizabeth I diplomatic correspondence; chronology cites exchange of Nystad ratifications on 19/30 September 1721.",
+      "notes": "Used only to establish the exchange date. Primary legal dependence remains Article 24 of the treaty, which required reciprocal exchange of ratifications at Nystad."
+    },
+    {
+      "id": "doc-bucharest-ratification-exchange-1812-academic",
+      "sourceCollectionId": "cyberleninka-bucharest-1812-ratifications",
+      "title": "Chronology of the 1812 Bucharest treaty ratification exchange",
+      "institution": "Academic historical publication",
+      "url": "https://cyberleninka.ru/article/n/buharestskiy-mir-1812-g-i-serbskiy-vopros/pdf",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "academic-study",
+      "date": {
+        "original": "2 (14) July 1812 — exchange of ratification instruments at Bucharest",
+        "normalized": "1812-07-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "V. P. Grachev, study of the Bucharest Peace of 1812 and the Serbian question.",
+      "notes": "Used to establish the exchange date. The primary treaty text states that the peace act is completed by exchange of mutual ratifications and repeatedly makes implementation periods run from that exchange."
+    },
+    {
+      "id": "doc-rsfsr-fer-border-1920-dvp",
+      "sourceCollectionId": "dvp-ussr-rsfsr-fer-boundary-1920",
+      "title": "Договор о границах РСФСР с Дальневосточной Республикой — официальный текст с оговоркой о вступлении в силу",
+      "institution": "Документы внешней политики СССР",
+      "url": "https://m.bigenc.ru/vault/d20ee8e6d1574fd607880eeaf94aeb19.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "15–30 December 1920; final counterpart signed at Chita 30 December",
+        "normalized": "1920-12-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["РСФСР", "Дальневосточная Республика"],
+      "publicationCitation": "Документы внешней политики СССР. Т. III. Договор о границах РСФСР с Дальневосточной Республикой.",
+      "notes": "The treaty states that it enters into force from the moment of signing. The RSFSR counterpart is signed in Moscow on 15 December and the FER counterpart in Chita on 30 December 1920; History Core therefore uses 30 December as the conservative bilateral effective date. The text also describes the boundary through the Selenga, Lake Baikal, historic guberniya/oblast boundaries, watersheds and the Sea of Okhotsk, and states that on rivers and lakes the boundary follows the middle of the navigable part."
+    }
+  ]
+}
