@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recon-orekhovo-1323-boundary",
+      "fragmentId": "frag-novgorod-sweden-orekhovo-1323-reconstruction",
+      "output": "geometry/reconstructions/novgorod-sweden-orekhovo-1323.geojson",
+      "polityId": "novgorodian-land",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "effectiveFrom": "1323-08-12",
+      "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
+      "interpretationDocumentIds": ["doc-shaskolsky-orekhovo-boundary-1987"],
+      "method": "documentary-landmark-reconstruction",
+      "notes": "This is a source-verified reconstruction overlay, not canonical exact geometry. Coordinates are modern locator points for historically identified landmarks/areas. They may be edited independently as research improves; generated geometry must rebuild from this recipe.",
+      "anchors": [
+        {
+          "id": "sestra-mouth",
+          "label": "Устье Сестры",
+          "treatyContext": "Начало границы у Сестры на Финском заливе",
+          "lon": 29.92924,
+          "lat": 60.086463,
+          "localizationConfidence": "high",
+          "uncertaintyClass": "narrow",
+          "locatorBasis": "Modern mouth area of the Sestra at Sestroretsk; treaty and later boundary descriptions identify the Sestra as the starting natural feature."
+        },
+        {
+          "id": "ilmee-cluster",
+          "label": "Илмее — кластер южных межевых ориентиров",
+          "treatyContext": "Район плотной последовательности ориентиров южного участка",
+          "lon": 29.367,
+          "lat": 61.299,
+          "localizationConfidence": "medium",
+          "uncertaintyClass": "medium",
+          "locatorBasis": "Modern Ilmee area used as a locator for the dense Pehkeensuo/Kangaslampi/Purnujärvi/Aitjärvi/Torsajärvi landscape discussed in historical-geography reconstruction; not itself a treaty point."
+        },
+        {
+          "id": "torsajarvi",
+          "label": "Торсаярви",
+          "treatyContext": "Локализуемый ориентир южной части границы",
+          "lon": 29.0393,
+          "lat": 61.4687,
+          "localizationConfidence": "medium",
+          "uncertaintyClass": "medium",
+          "locatorBasis": "Approximate modern Torsajärvi locator; retained as an interpretation anchor pending higher-precision historical georeferencing."
+        },
+        {
+          "id": "siitinselka",
+          "label": "Сиитинселькя / Жити",
+          "treatyContext": "Северная оконечность основной заселённой части новгородской территории в реконструкции",
+          "lon": 27.9333,
+          "lat": 62.2667,
+          "localizationConfidence": "medium",
+          "uncertaintyClass": "medium",
+          "locatorBasis": "Common scholarly identification of treaty Zhity/Siti with the Siitinselkä area south of Varkaus."
+        },
+        {
+          "id": "karjalankoski",
+          "label": "Карьяланкоски / Колимакоски",
+          "treatyContext": "Один из немногих ориентиров дальнего северного участка",
+          "lon": 28.29845,
+          "lat": 63.04679,
+          "localizationConfidence": "medium",
+          "uncertaintyClass": "broad",
+          "locatorBasis": "Scholarly identification of the treaty place-name with the Karjalankoski area; sparse surrounding documentary control points require broad uncertainty."
+        },
+        {
+          "id": "pyhajoki-mouth",
+          "label": "Пюхяйоки — вероятная Патоеки",
+          "treatyContext": "Предполагаемый конечный выход границы к Ботническому заливу",
+          "lon": 24.215,
+          "lat": 64.484,
+          "localizationConfidence": "low",
+          "uncertaintyClass": "broad",
+          "locatorBasis": "Shaskolsky considers the Pyhäjoki identification the most plausible among competing readings, but the endpoint remains historically debated."
+        }
+      ],
+      "segments": [
+        {"from": "sestra-mouth", "to": "ilmee-cluster", "confidence": "medium", "uncertaintyClass": "medium", "visualMode": "soft-corridor", "note": "Condensed display of the comparatively well-localized southern sequence; individual intermediate treaty landmarks remain to be geocoded."},
+        {"from": "ilmee-cluster", "to": "torsajarvi", "confidence": "medium", "uncertaintyClass": "medium", "visualMode": "soft-corridor"},
+        {"from": "torsajarvi", "to": "siitinselka", "confidence": "medium", "uncertaintyClass": "medium", "visualMode": "soft-corridor"},
+        {"from": "siitinselka", "to": "karjalankoski", "confidence": "low", "uncertaintyClass": "broad", "visualMode": "frontier-band", "note": "The treaty becomes much more sparsely marked north of the main settled territory."},
+        {"from": "karjalankoski", "to": "pyhajoki-mouth", "confidence": "low", "uncertaintyClass": "broad", "visualMode": "frontier-band", "note": "Very long sparsely documented section; endpoint identification itself remains debated. Do not render as an exact border."}
+      ]
+    }
+  ]
+}
