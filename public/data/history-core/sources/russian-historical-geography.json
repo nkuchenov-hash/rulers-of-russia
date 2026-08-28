@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "academic-russian-historical-geography",
+      "title": "Российская академическая историческая география и исследования исторических границ",
+      "institution": "Академия наук СССР / Российская академическая историческая школа",
+      "url": "https://djvu.online/file/6zuJA41K09yqA",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Interpretation and localization of medieval and early-modern Russian boundary descriptions",
+      "canonicalUse": ["interpretation"],
+      "notes": "Secondary scholarship may localize documentary landmarks and quantify uncertainty, but it cannot establish a canonical legal boundary without A1/A2/A3 documentary evidence."
+    }
+  ]
+}
