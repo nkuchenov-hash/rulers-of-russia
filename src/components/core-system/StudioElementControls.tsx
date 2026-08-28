@@ -7,6 +7,7 @@ import styles from '@/modules/core/StudioElementControls.module.css';
 const LAYOUT_STORAGE_KEY = 'rulers-of-russia:studio:element-layout:v1';
 
 type DimensionUnit = 'auto' | 'px' | '%';
+type AlignSelfValue = 'auto' | 'stretch' | 'flex-start' | 'center' | 'flex-end';
 
 type DimensionValue = {
   value: number;
@@ -16,6 +17,10 @@ type DimensionValue = {
 type ElementLayoutOverride = {
   width?: DimensionValue;
   height?: DimensionValue;
+  order?: number;
+  flexGrow?: number;
+  flexShrink?: number;
+  alignSelf?: AlignSelfValue;
 };
 
 type LayoutStore = Record<string, ElementLayoutOverride>;
@@ -26,6 +31,33 @@ type Size = {
 };
 
 type StylableElement = HTMLElement | SVGElement;
+
+type ManagedCssProperty =
+  | 'width'
+  | 'min-width'
+  | 'max-width'
+  | 'height'
+  | 'min-height'
+  | 'max-height'
+  | 'display'
+  | 'order'
+  | 'flex-grow'
+  | 'flex-shrink'
+  | 'align-self';
+
+const MANAGED_PROPERTIES: ManagedCssProperty[] = [
+  'width',
+  'min-width',
+  'max-width',
+  'height',
+  'min-height',
+  'max-height',
+  'display',
+  'order',
+  'flex-grow',
+  'flex-shrink',
+  'align-self'
+];
 
 function isStylableElement(value: Element | null): value is StylableElement {
   return value instanceof HTMLElement || value instanceof SVGElement;
@@ -104,34 +136,38 @@ function targetFromKey(key: string): StylableElement | null {
   return null;
 }
 
+function originalValueAttribute(property: ManagedCssProperty) {
+  return `data-studio-original-${property}`;
+}
+
+function originalPriorityAttribute(property: ManagedCssProperty) {
+  return `data-studio-original-${property}-priority`;
+}
+
 function rememberOriginalStyle(target: StylableElement) {
-  if (!target.hasAttribute('data-studio-original-width')) {
-    target.setAttribute('data-studio-original-width', target.style.width || '');
-    target.setAttribute('data-studio-original-height', target.style.height || '');
-    target.setAttribute('data-studio-original-min-height', target.style.minHeight || '');
-    target.setAttribute('data-studio-original-max-height', target.style.maxHeight || '');
-    target.setAttribute('data-studio-original-display', target.style.display || '');
+  for (const property of MANAGED_PROPERTIES) {
+    const valueAttribute = originalValueAttribute(property);
+    if (target.hasAttribute(valueAttribute)) continue;
+    target.setAttribute(valueAttribute, target.style.getPropertyValue(property));
+    target.setAttribute(originalPriorityAttribute(property), target.style.getPropertyPriority(property));
   }
 }
 
-function restoreStyle(target: StylableElement, property: 'width' | 'height') {
-  if (property === 'width') {
-    target.style.width = target.getAttribute('data-studio-original-width') ?? '';
-  } else {
-    target.style.height = target.getAttribute('data-studio-original-height') ?? '';
-    target.style.minHeight = target.getAttribute('data-studio-original-min-height') ?? '';
-    target.style.maxHeight = target.getAttribute('data-studio-original-max-height') ?? '';
-  }
+function restoreProperty(target: StylableElement, property: ManagedCssProperty) {
+  const original = target.getAttribute(originalValueAttribute(property)) ?? '';
+  const priority = target.getAttribute(originalPriorityAttribute(property)) ?? '';
+  target.style.removeProperty(property);
+  if (original) target.style.setProperty(property, original, priority);
 }
 
-function restoreDisplayWhenAutomatic(target: StylableElement) {
-  target.style.display = target.getAttribute('data-studio-original-display') ?? '';
+function setImportant(target: StylableElement, property: ManagedCssProperty, value: string) {
+  target.style.setProperty(property, value, 'important');
 }
 
 function ensureDimensionDisplay(target: StylableElement) {
   if (!(target instanceof HTMLElement)) return;
   if (window.getComputedStyle(target).display === 'inline') {
-    target.style.display = 'inline-block';
+    setImportant(target, 'display', 'inline-block');
   }
 }
 
@@ -139,7 +175,15 @@ function applyDimension(target: StylableElement, property: 'width' | 'height', s
   rememberOriginalStyle(target);
 
   if (!setting || setting.unit === 'auto') {
-    restoreStyle(target, property);
+    if (property === 'width') {
+      restoreProperty(target, 'width');
+      restoreProperty(target, 'min-width');
+      restoreProperty(target, 'max-width');
+    } else {
+      restoreProperty(target, 'height');
+      restoreProperty(target, 'min-height');
+      restoreProperty(target, 'max-height');
+    }
     return;
   }
 
@@ -147,18 +191,46 @@ function applyDimension(target: StylableElement, property: 'width' | 'height', s
   const cssValue = `${Math.max(0, setting.value)}${setting.unit}`;
 
   if (property === 'width') {
-    target.style.width = cssValue;
+    setImportant(target, 'width', cssValue);
+    setImportant(target, 'min-width', '0');
+    setImportant(target, 'max-width', 'none');
   } else {
-    target.style.height = cssValue;
-    target.style.minHeight = cssValue;
-    target.style.maxHeight = 'none';
+    setImportant(target, 'height', cssValue);
+    setImportant(target, 'min-height', cssValue);
+    setImportant(target, 'max-height', 'none');
   }
+}
+
+function applyLayoutProperties(target: StylableElement, override?: ElementLayoutOverride) {
+  rememberOriginalStyle(target);
+
+  if (override?.order === undefined) restoreProperty(target, 'order');
+  else setImportant(target, 'order', String(override.order));
+
+  if (override?.flexGrow === undefined) restoreProperty(target, 'flex-grow');
+  else setImportant(target, 'flex-grow', String(Math.max(0, override.flexGrow)));
+
+  if (override?.flexShrink === undefined) restoreProperty(target, 'flex-shrink');
+  else setImportant(target, 'flex-shrink', String(Math.max(0, override.flexShrink)));
+
+  if (!override?.alignSelf || override.alignSelf === 'auto') restoreProperty(target, 'align-self');
+  else setImportant(target, 'align-self', override.alignSelf);
+}
+
+function overrideIsEmpty(override: ElementLayoutOverride) {
+  return !override.width
+    && !override.height
+    && override.order === undefined
+    && override.flexGrow === undefined
+    && override.flexShrink === undefined
+    && (!override.alignSelf || override.alignSelf === 'auto');
 }
 
 function applyOverride(target: StylableElement, override?: ElementLayoutOverride) {
   applyDimension(target, 'width', override?.width);
   applyDimension(target, 'height', override?.height);
-  if (!override?.width && !override?.height) restoreDisplayWhenAutomatic(target);
+  applyLayoutProperties(target, override);
+  if (overrideIsEmpty(override ?? {})) restoreProperty(target, 'display');
 }
 
 function applyAllSavedOverrides() {
@@ -225,6 +297,58 @@ function DimensionRow({
   );
 }
 
+function OptionalNumberRow({
+  label,
+  value,
+  placeholder,
+  min,
+  step = 1,
+  onChange
+}: {
+  label: string;
+  value?: number;
+  placeholder: string;
+  min?: number;
+  step?: number;
+  onChange: (next?: number) => void;
+}) {
+  return (
+    <div className={styles.dimensionRow}>
+      <label>{label}</label>
+      <div className={styles.dimensionControlSingle}>
+        <input
+          type="number"
+          min={min}
+          step={step}
+          value={value ?? ''}
+          placeholder={placeholder}
+          onChange={(event) => {
+            const raw = event.target.value;
+            onChange(raw === '' ? undefined : Number(raw));
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function AlignRow({ value, onChange }: { value?: AlignSelfValue; onChange: (next?: AlignSelfValue) => void }) {
+  return (
+    <div className={styles.dimensionRow}>
+      <label>Align self</label>
+      <div className={styles.dimensionControlSingle}>
+        <select value={value ?? 'auto'} onChange={(event) => onChange(event.target.value as AlignSelfValue)}>
+          <option value="auto">auto</option>
+          <option value="stretch">stretch</option>
+          <option value="flex-start">start</option>
+          <option value="center">center</option>
+          <option value="flex-end">end</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+
 function convertLegacySlidersToNumbers(panel: Element) {
   panel.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach((input) => {
     input.type = 'number';
@@ -278,16 +402,12 @@ export function StudioElementControls() {
     resizeObserverRef.current.observe(target);
   }
 
-  function patchDimension(axis: 'width' | 'height', next: DimensionValue) {
+  function persistOverride(nextOverride: ElementLayoutOverride) {
     const target = targetRef.current;
     if (!target) return;
 
-    const nextOverride: ElementLayoutOverride = { ...override };
-    if (next.unit === 'auto') delete nextOverride[axis];
-    else nextOverride[axis] = next;
-
     const store = readStore();
-    if (!nextOverride.width && !nextOverride.height) delete store[key];
+    if (overrideIsEmpty(nextOverride)) delete store[key];
     else store[key] = nextOverride;
     writeStore(store);
 
@@ -296,7 +416,21 @@ export function StudioElementControls() {
     requestAnimationFrame(() => measure(target));
   }
 
-  function resetSize() {
+  function patchDimension(axis: 'width' | 'height', next: DimensionValue) {
+    const nextOverride: ElementLayoutOverride = { ...override };
+    if (next.unit === 'auto') delete nextOverride[axis];
+    else nextOverride[axis] = next;
+    persistOverride(nextOverride);
+  }
+
+  function patchLayout<K extends 'order' | 'flexGrow' | 'flexShrink' | 'alignSelf'>(keyName: K, next: ElementLayoutOverride[K] | undefined) {
+    const nextOverride: ElementLayoutOverride = { ...override };
+    if (next === undefined || next === 'auto') delete nextOverride[keyName];
+    else nextOverride[keyName] = next as never;
+    persistOverride(nextOverride);
+  }
+
+  function resetLayout() {
     const target = targetRef.current;
     if (!target) return;
 
@@ -398,15 +532,19 @@ export function StudioElementControls() {
       <section className={styles.sizePanel}>
         <div className={styles.sectionHead}>
           <div>
-            <span>РАЗМЕР ЭЛЕМЕНТА</span>
+            <span>AUTO-LAYOUT ЭЛЕМЕНТА</span>
             <h3>{name}</h3>
           </div>
-          <button type="button" onClick={resetSize}>Сбросить</button>
+          <button type="button" onClick={resetLayout}>Сбросить</button>
         </div>
         <div className={styles.actualSize}>Фактически: {actual.width} × {actual.height} px</div>
         <DimensionRow label="Width" actual={actual.width} setting={widthSetting} onChange={(next) => patchDimension('width', next)} />
         <DimensionRow label="Height" actual={actual.height} setting={heightSetting} onChange={(next) => patchDimension('height', next)} />
-        <p className={styles.layoutHint}>Размер применяется внутри текущей вёрстки. Строка «Фактически» показывает итог после ограничений родителя и layout.</p>
+        <OptionalNumberRow label="Order" value={override.order} placeholder="DOM" step={1} onChange={(next) => patchLayout('order', next)} />
+        <OptionalNumberRow label="Grow" value={override.flexGrow} placeholder="auto" min={0} step={0.1} onChange={(next) => patchLayout('flexGrow', next)} />
+        <OptionalNumberRow label="Shrink" value={override.flexShrink} placeholder="auto" min={0} step={0.1} onChange={(next) => patchLayout('flexShrink', next)} />
+        <AlignRow value={override.alignSelf} onChange={(next) => patchLayout('alignSelf', next)} />
+        <p className={styles.layoutHint}>Это не абсолютное позиционирование. Width/Height/Order/Grow/Shrink работают как параметры элемента внутри общего auto-layout; соседние блоки должны пересчитываться и сдвигаться автоматически. Order уже является тем же контрактом, который позже будет менять drag-and-drop.</p>
       </section>
 
       <section className={styles.aiPanel}>
@@ -419,7 +557,7 @@ export function StudioElementControls() {
         <textarea
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Например: сделай этот Hero ниже на 80 px и сохрани пропорции внутренних элементов"
+          placeholder="Например: сделай этот Hero ниже на 80 px и сохрани auto-layout страницы"
           rows={4}
         />
         <button type="button" disabled={!aiEndpointReady || aiBusy || !message.trim()} onClick={sendAiMessage}>
