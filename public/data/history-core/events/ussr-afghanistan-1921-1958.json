@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1921-rsfsr-afghanistan-treaty",
+      "title": "Подписание договора РСФСР–Афганистан 1921 года",
+      "kind": "treaty",
+      "date": {"original":"28 февраля 1921 г.","normalized":"1921-02-28","precision":"day","calendar":"gregorian"},
+      "polityIds": ["rsfsr"],
+      "summary": "РСФСР и Афганистан заключили договор, статьи 9 и 10 которого впоследствии были прямо признаны утратившими силу протоколом к пограничному соглашению 1946 года.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-1946-unts"],
+      "reviewStatus": "source-verified",
+      "notes": "History Core does not infer the substantive wording of Articles 9 and 10 from the 1946 reference alone; the exact 1921 text remains a document-retrieval dependency."
+    },
+    {
+      "id": "evt-1946-ussr-afghanistan-frontier-signing",
+      "title": "Подписание пограничного соглашения СССР–Афганистан",
+      "kind": "treaty",
+      "date": {"original":"13 июня 1946 г.","normalized":"1946-06-13","precision":"day","calendar":"gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "СССР и Афганистан согласовали правила прохождения границы по Амударье и Пянджу, будущую точную демаркацию Хамиаб–Зоркуль и редемаркацию Зульфикар–Хамиаб по материалам комиссии 1885–1888 годов.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-1946-unts"],
+      "reviewStatus": "source-verified",
+      "notes": "Signing did not yet activate the treaty; entry into force followed on 17 January 1947."
+    },
+    {
+      "id": "evt-1947-ussr-afghanistan-frontier-effective",
+      "title": "Вступление в силу пограничного соглашения СССР–Афганистан",
+      "kind": "treaty",
+      "date": {"original":"17 января 1947 г.","normalized":"1947-01-17","precision":"day","calendar":"gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "После обмена ратификационными грамотами вступили в силу правила тальвега и средней линии на Амударье и Пяндже и мандат смешанной комиссии на точную демаркацию.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-1946-unts"],
+      "territoryChangeIds": ["territory-1947-ussr-afghanistan-river-frontier"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1948-ussr-afghanistan-demarcation-package",
+      "title": "Документы демаркации и редемаркации советско-афганской границы",
+      "kind": "demarcation",
+      "date": {"original":"29 сентября 1948 г.","normalized":"1948-09-29","precision":"day","calendar":"gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "Позднейший договор 1958 года прямо фиксирует демаркационные и редемаркационные документы этой даты; редемаркация опиралась на протоколы 1885–1888 годов.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
+      "territoryChangeIds": ["territory-1948-ussr-afghanistan-demarcation-package"],
+      "reviewStatus": "source-verified",
+      "notes": "The 1948 documents themselves are not yet digitized in History Core; geometry remains below geometry-verified until their maps/descriptions are obtained."
+    },
+    {
+      "id": "evt-1958-ussr-afghanistan-frontier-regime-signing",
+      "title": "Подписание договора о режиме советско-афганской границы",
+      "kind": "treaty",
+      "date": {"original":"18 января 1958 г.","normalized":"1958-01-18","precision":"day","calendar":"gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "Договор свёл в одну юридическую цепочку соглашение 1946 года, документы 29 сентября 1948 года и протоколы Памирской демаркации 1895 года.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts"],
+      "reviewStatus": "source-verified",
+      "notes": "The treaty entered into force on 5 October 1958."
+    },
+    {
+      "id": "evt-1958-ussr-afghanistan-frontier-regime-effective",
+      "title": "Вступление в силу договора о режиме советско-афганской границы",
+      "kind": "treaty",
+      "date": {"original":"5 октября 1958 г.","normalized":"1958-10-05","precision":"day","calendar":"gregorian"},
+      "polityIds": ["ussr"],
+      "summary": "После обмена ратификационными грамотами договор вступил в силу и официально закрепил преемственность западной границы через документы 1948 года и памирского участка через протоколы 1895 года.",
+      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts"],
+      "territoryChangeIds": ["territory-1958-ussr-afghanistan-frontier-continuity", "territory-1958-ussr-afghanistan-pamir-controls"],
+      "reviewStatus": "source-verified"
+    }
+  ]
+}
