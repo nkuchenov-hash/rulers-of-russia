@@ -1,6 +1,6 @@
 /* Historical rail geometry contract.
-   The marker and the vertical connector must share one local axis so the rail
-   stays visually precise even when Studio changes rail width or item padding. */
+   The timeline is one physical vertical axis. Markers sit on that axis; ruler
+   cards must never manufacture their own connector segments. */
 .rail-item {
   --rail-marker-x: -7px;
   position: relative;
@@ -8,36 +8,48 @@
   overflow: visible;
 }
 
-/* The old viewport-height axis drifted away from markers and continued far
-   below the final ruler. The rail is now built from item-local connector
-   segments, so every segment is guaranteed to pass through every marker. */
+/* One continuous connector for the whole visible rail. The rail list starts
+   38px from the left and every marker sits 7px back from its item, therefore
+   the shared axis is exactly x=31px. */
 .rail-axis {
-  display: none;
+  display: block;
+  position: absolute;
+  left: 31px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-primary);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Adjacent local segments deliberately overlap by 2px. Without this overlap,
-   the boundary between two ruler rows (especially the bordered active row)
-   can expose a 1–2px background seam and make one continuous timeline look
-   broken. */
+/* Item pseudo-elements are no longer connector pieces. Only the first and
+   last items use ::after as a mask, trimming the single axis exactly to the
+   centre of the first/last marker without relying on viewport height or item
+   count. This removes all seams around the active ruler card. */
 .rail-item::after {
+  content: none;
+}
+
+.rail-item:first-of-type::after,
+.rail-item:last-of-type::after {
   content: '';
   position: absolute;
   left: var(--rail-marker-x);
-  top: -2px;
-  bottom: -2px;
-  width: 2px;
-  background: var(--accent-primary);
+  width: 6px;
+  height: 100vh;
+  background: var(--surface-elevated);
   transform: translateX(-50%);
   pointer-events: none;
   z-index: 0;
 }
 
 .rail-item:first-of-type::after {
-  top: 50%;
+  bottom: 50%;
 }
 
 .rail-item:last-of-type::after {
-  bottom: 50%;
+  top: 50%;
 }
 
 .rail-item::before {
@@ -45,10 +57,8 @@
   z-index: 3;
 }
 
-/* The active marker used to have a 5px surface-colored halo. That halo was
-   masking the connector and made the timeline look physically broken above
-   and below the current ruler. Keep the filled marker, but let the connector
-   meet its edge continuously. */
+/* The filled active marker sits directly on the same connector. No surface
+   halo: the line must meet the marker edge without a beige gap. */
 .rail-item.active::before {
   box-shadow: none;
 }
@@ -115,6 +125,7 @@
 
 @media (max-width: 900px) {
   /* Mobile rail is a horizontal swipe strip and has no vertical axis. */
+  .rail-axis,
   .rail-item::after {
     display: none;
   }
