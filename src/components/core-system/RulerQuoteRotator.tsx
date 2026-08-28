@@ -19,12 +19,12 @@ export function RulerQuoteRotator({
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (safeQuotes.length <= 1 || paused || inspectorEnabled) return;
+    if (safeQuotes.length <= 1 || paused) return;
     const interval = window.setInterval(() => {
       setActiveIndex((index) => (index + 1) % safeQuotes.length);
     }, Math.max(2, rotationSeconds) * 1000);
     return () => window.clearInterval(interval);
-  }, [safeQuotes.length, rotationSeconds, paused, inspectorEnabled]);
+  }, [safeQuotes.length, rotationSeconds, paused]);
 
   useEffect(() => {
     if (activeIndex >= safeQuotes.length) setActiveIndex(0);
@@ -38,6 +38,8 @@ export function RulerQuoteRotator({
     <div
       className="ruler-quote-rotator"
       data-element-id="key-event-row"
+      data-inspector-active={inspectorEnabled ? 'true' : 'false'}
+      aria-live={inspectorEnabled ? 'off' : 'polite'}
       onClick={onInspectQuote}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
