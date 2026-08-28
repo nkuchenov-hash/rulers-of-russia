@@ -28,13 +28,13 @@
       "id": "evt-1876-kokand-annexation",
       "title": "Упразднение Кокандского ханства и образование Ферганской области",
       "kind": "law",
-      "date": {"original":"19 февраля (2 марта) 1876 г.","normalized":"1876-03-02","precision":"day","calendar":"julian"},
+      "date": {"original":"19 февраля 1876 г. (старый стиль)","normalized":"1876-03-02","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Территория Кокандского ханства была непосредственно включена в Российскую империю и преобразована в Ферганскую область.",
-      "evidenceDocumentIds": ["doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
+      "summary": "Именной указ Александра II Правительствующему Сенату повелел присоединить к Российской империи территорию бывшего Кокандского ханства и образовать из неё Ферганскую область в составе Туркестанского генерал-губернаторства.",
+      "evidenceDocumentIds": ["doc-kokand-annexation-decree-1876-rgvia", "doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
       "territoryChangeIds": ["territory-1876-kokand-fergana-acquisition"],
-      "reviewStatus": "source-located",
-      "notes": "The contemporary General Staff map is A3, but the exact A1/A2 legal act still must be indexed before source-verified event promotion."
+      "reviewStatus": "source-verified",
+      "notes": "The legal act is anchored to the RGVIA original and PSZRI publication. The contemporary General Staff map remains the separate geometry-verification source."
     }
   ]
 }
