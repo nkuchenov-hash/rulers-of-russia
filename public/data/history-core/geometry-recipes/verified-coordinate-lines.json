@@ -107,6 +107,18 @@
       "interpolation": "source-vertices",
       "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
       "points": [[130.69698888888888,42.29287222222222],[130.88333333333333,42.15]]
+    },
+    {
+      "id": "recipe-russian-empire-japan-sakhalin-1905-50n",
+      "fragmentId": "frag-russian-empire-japan-sakhalin-1905-50n",
+      "output": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
+      "track": "russian-legal-border",
+      "sourceCrs": "historical Japanese Hydrographic Department geographic coordinates; no source-backed modern datum transformation registered",
+      "interpolation": "rhumb",
+      "stepsPerSegment": 32,
+      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+      "points": [[142.15694444444446,50.0],[143.99444444444444,50.0]],
+      "note": "Article IX supplies the 50° N legal parallel; the official 1940 Japanese statistical table supplies the western and eastern boundary longitudes. Historical source coordinates are preserved literally until a documented transformation is available."
     }
   ]
 }

@@ -20,6 +20,26 @@
       "coverage": "Official imperial treaty printings and related documentary items",
       "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
       "notes": "Registry entry anchored by the 1792 Imperial Printing House edition of the Treaty of Jassy; individual documents must retain their exact item URL and publication metadata."
+    },
+    {
+      "id": "usdos-international-boundary-studies",
+      "title": "International Boundary Studies — Office of the Geographer, United States Department of State",
+      "institution": "United States Department of State, Office of the Geographer",
+      "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official U.S. Department of State boundary studies and treaty chronology",
+      "canonicalUse": ["boundary-date", "legal-basis", "interpretation"],
+      "notes": "Digitized copies of official Department of State International Boundary Studies. Individual studies retain their own document URLs and publication dates."
+    },
+    {
+      "id": "ndl-japan-imperial-statistics",
+      "title": "大日本帝国統計年鑑 — official historical statistical tables",
+      "institution": "国立国会図書館 / 内閣統計局 / 海軍省水路部",
+      "url": "https://ndlsearch.ndl.go.jp/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official Japanese imperial statistical tables including Hydrographic Department boundary coordinates",
+      "canonicalUse": ["boundary-geometry", "boundary-date", "interpretation"],
+      "notes": "National Diet Library digital records preserve official statistical tables and explicitly identify the Hydrographic Department as the source of Sakhalin boundary endpoint coordinates."
     }
   ]
 }

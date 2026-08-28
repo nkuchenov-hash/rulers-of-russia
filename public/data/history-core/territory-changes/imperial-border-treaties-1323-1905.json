@@ -153,21 +153,26 @@
       "eventId": "evt-1905-portsmouth-peace",
       "polityId": "russian-empire",
       "effectiveDate": {
-        "original": "23 августа 1905 г.",
-        "normalized": "1905-09-05",
+        "original": "15 октября 1905 г. — вступление Портсмутского договора в силу",
+        "normalized": "1905-10-15",
         "precision": "day",
-        "calendar": "julian"
+        "calendar": "gregorian",
+        "note": "Signature was 23 August (5 September) 1905. Article XIV ties entry into force to the later ratification notification; U.S. Department of State International Boundary Study No. 17 records 15 October 1905 as the date the treaty came into force."
       },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid"],
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-russian-empire-japan-sakhalin-1905-50n"],
+      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-portsmouth-effective-1905-usdos-ibs17", "doc-sakhalin-border-endpoints-1940-ndl"],
       "geometry": {
         "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-portsmouth-1905-ebid"],
-        "derivationNote": "Extract the treaty latitude/boundary clause for southern Sakhalin and use the subsequent demarcation protocol/cartography to create the verified cession fragment."
+        "file": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
+        "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+        "derivationNote": "Article IX fixes 50° N as the legal limit of the ceded territory. The official Japanese 1940 statistical table, citing Hydrographic Department survey data, publishes the border endpoints as 142°09′25″ E and 143°59′40″ E. The line is generated as a rhumb/parallel segment retaining those historical source coordinates literally. No unsourced WGS84 datum transformation is applied."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "geometry-verified",
+      "notes": "This verifies the boundary line only. It does not promote the full South Sakhalin cession polygon or its coastline to geometry-verified status."
     }
   ]
 }

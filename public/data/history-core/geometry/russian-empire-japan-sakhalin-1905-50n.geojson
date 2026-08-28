@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "dataset": "Rulers of Russia History Core generated verified geometry",
+    "recipeId": "recipe-russian-empire-japan-sakhalin-1905-50n",
+    "fragmentId": "frag-russian-empire-japan-sakhalin-1905-50n",
+    "generatedFromSourceCoordinates": true,
+    "sourceCrs": "historical Japanese Hydrographic Department geographic coordinates; no source-backed modern datum transformation registered",
+    "displayDatumStatus": "source-geographic-untransformed",
+    "displayWarning": "Source longitude/latitude values are retained literally for provenance. Their exact placement on a WGS84 globe remains medium-confidence until a source-backed datum transformation is registered.",
+    "interpolation": "rhumb",
+    "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+    "sourcePointCount": 2,
+    "note": "Article IX supplies the 50° N legal parallel; the official 1940 Japanese statistical table supplies the western and eastern boundary longitudes. Historical source coordinates are preserved literally until a documented transformation is available."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "frag-russian-empire-japan-sakhalin-1905-50n",
+        "track": "russian-legal-border",
+        "history_core_status": "geometry-verified",
+        "source_points": [[142.15694444444446, 50.0], [143.99444444444444, 50.0]],
+        "source_crs": "historical Japanese Hydrographic Department geographic coordinates; no source-backed modern datum transformation registered",
+        "display_datum_status": "source-geographic-untransformed",
+        "interpolation": "rhumb",
+        "evidence_document_ids": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+        "note": "Article IX supplies the 50° N legal parallel; the official 1940 Japanese statistical table supplies the western and eastern boundary longitudes. Historical source coordinates are preserved literally until a documented transformation is available."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [142.15694444444446, 50.0],
+          [142.21436631944445, 50.0],
+          [142.27178819444447, 50.0],
+          [142.32921006944446, 50.0],
+          [142.38663194444445, 50.0],
+          [142.44405381944446, 50.0],
+          [142.50147569444445, 50.0],
+          [142.55889756944447, 50.0],
+          [142.61631944444446, 50.0],
+          [142.67374131944445, 50.0],
+          [142.73116319444446, 50.0],
+          [142.78858506944445, 50.0],
+          [142.84600694444447, 50.0],
+          [142.90342881944446, 50.0],
+          [142.96085069444445, 50.0],
+          [143.01827256944446, 50.0],
+          [143.07569444444445, 50.0],
+          [143.13311631944444, 50.0],
+          [143.19053819444446, 50.0],
+          [143.24796006944445, 50.0],
+          [143.30538194444443, 50.0],
+          [143.36280381944445, 50.0],
+          [143.42022569444444, 50.0],
+          [143.47764756944446, 50.0],
+          [143.53506944444445, 50.0],
+          [143.59249131944443, 50.0],
+          [143.64991319444445, 50.0],
+          [143.70733506944444, 50.0],
+          [143.76475694444446, 50.0],
+          [143.82217881944445, 50.0],
+          [143.87960069444443, 50.0],
+          [143.93702256944445, 50.0],
+          [143.99444444444444, 50.0]
+        ]
+      }
+    }
+  ]
+}

@@ -226,6 +226,19 @@
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "The 2012 RF-DPRK treaty expressly retains the 1990 demarcation protocol. The exact coordinate-defined territorial-sea segment is carried into the current Russian state-border overlay without inferring the river geometry."
+    },
+    {
+      "id": "frag-russian-empire-japan-sakhalin-1905-50n",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
+      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1917-03-15",
+      "derivationNote": "Article IX of the Portsmouth treaty fixes 50° N as the legal limit. The official 1940 Japanese statistical table, sourced to the Hydrographic Department, fixes the western and eastern endpoints at 142°09′25″ E and 143°59′40″ E. These historical geographic coordinates are retained literally and rendered as a rhumb/parallel line; source confidence is high while display placement remains datum-aware rather than falsely labeled WGS84. The fragment is scoped to the Russian Empire polity and ends at the 1917 regime transition; successor-state continuity must be separately evidenced."
     }
   ]
 }

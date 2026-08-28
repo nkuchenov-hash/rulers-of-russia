@@ -131,7 +131,43 @@
       },
       "authority": ["Правительство России", "Правительство Японии"],
       "publicationCitation": "Сборник действующих трактатов, конвенций и соглашений, заключенных Россией с другими государствами. Т. II. Изд. 2. СПб., 1906. С. 667–672.",
-      "notes": "Primary legal anchor for the post-war territorial settlement including the southern Sakhalin cession; demarcation geometry requires article-level extraction and boundary protocol/cartography."
+      "notes": "Article IX adopts the 50th parallel north as the limit of the ceded southern part of Sakhalin and sends the exact on-the-ground line to a bilateral boundary commission. Article XIV makes entry into force depend on the later ratification notification rather than the signature date."
+    },
+    {
+      "id": "doc-portsmouth-effective-1905-usdos-ibs17",
+      "sourceCollectionId": "usdos-international-boundary-studies",
+      "title": "International Boundary Study No. 17 — China–Korea Boundary (Portsmouth treaty chronology reference)",
+      "institution": "United States Department of State, Office of the Geographer",
+      "url": "https://library.law.fsu.edu/Digital-Collections/LimitsinSeas/pdf/ibs017.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {
+        "original": "29 June 1962",
+        "normalized": "1962-06-29",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United States Department of State, Office of the Geographer"],
+      "publicationCitation": "International Boundary Study No. 17, China–Korea Boundary. Washington, D.C.: The Geographer, Department of State, 29 June 1962.",
+      "notes": "The official study records that the Treaty of Portsmouth came into force on 15 October 1905. Used only to resolve the effective-date chronology; the treaty itself remains the legal source for the cession and 50th-parallel limit."
+    },
+    {
+      "id": "doc-sakhalin-border-endpoints-1940-ndl",
+      "sourceCollectionId": "ndl-japan-imperial-statistics",
+      "title": "帝国ノ位置 ([昭和15年]) — 大日本帝国統計年鑑 59, table 1",
+      "institution": "内閣統計局 / 海軍省水路部 / 国立国会図書館",
+      "url": "https://ndlsearch.ndl.go.jp/books/R100000136-I1600022178654507392",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-statistical-table",
+      "date": {
+        "original": "昭和15年 (1940)",
+        "normalized": "1940",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["内閣統計局", "海軍省水路部"],
+      "publicationCitation": "大日本帝国統計年鑑 59 (昭和15年), 表1「帝国ノ位置」, p. 2. Coordinate source identified as 海軍省水路部調査.",
+      "notes": "The official table states that the Sakhalin border's western endpoint is 142°09′25″ E and eastern endpoint 143°59′40″ E. Combined with the treaty's 50° N boundary rule, these are retained as the two source-coordinate endpoints. They are historical longitude/latitude values and are not silently asserted to be WGS84."
     }
   ]
 }
