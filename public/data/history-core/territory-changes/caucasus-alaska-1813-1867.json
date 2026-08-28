@@ -65,6 +65,32 @@
       "reviewStatus": "research-required"
     },
     {
+      "id": "territory-1843-anglo-russian-alaska-141w-confirmed",
+      "eventId": "evt-1843-anglo-russian-alaska-boundary-continuity",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "31 января 1843 г. — вступление договора, продолжившего конвенцию 1825 г., в силу",
+        "normalized": "1843-01-31",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "The 1825 convention contains the meridian rule, but its exact ratification-exchange date is not yet registered in History Core. The overlay therefore begins conservatively at the independently verified 1843 entry-into-force date of the treaty that expressly continued the 1825 convention."
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-russian-empire-british-america-141w-1843"],
+      "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-anglo-russian-commerce-1843-continuity-frus", "doc-anglo-russian-commerce-1843-eif-nzmfat", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/russian-empire-british-america-141w-1843.geojson",
+        "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+        "derivationNote": "Article III of the 1825 convention defines the northern continental boundary as the 141st degree of west longitude continuing north to the Frozen Ocean. The generated overlay intentionally clips that treaty-defined meridian to 61°–69° N, a conservative interior interval wholly inside the official Section 29 meridian sector. Those latitudes are display safety clips, not treaty endpoints. No southeastern panhandle geometry or terminal intersection is inferred."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Legal/source geometry confidence is high for the meridian rule. Display placement remains datum-aware because the historical treaty longitude is not silently asserted to be a modern geodetic datum."
+    },
+    {
       "id": "territory-1867-alaska-transfer-out",
       "eventId": "evt-1867-alaska-cession-effective",
       "polityId": "russian-empire",
