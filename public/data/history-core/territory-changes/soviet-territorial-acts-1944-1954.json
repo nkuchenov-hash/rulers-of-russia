@@ -5,81 +5,106 @@
       "id": "territory-1944-tuva-ussr-admission",
       "eventId": "evt-1944-tuva-ussr-admission",
       "polityId": "ussr",
-      "effectiveDate": {"original": "11 октября 1944 г.", "normalized": "1944-10-11", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {"original":"11 октября 1944 г.","normalized":"1944-10-11","precision":"day","calendar":"gregorian"},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
       "geometry": {
         "method": "not-yet-georeferenced",
         "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
-        "derivationNote": "The act supports inclusion of the entire Tuvan People's Republic. Geometry should use a source-backed 1944 Tuva boundary, not today's republic boundary without verification."
+        "derivationNote": "The source-verified act supports inclusion of the entire Tuvan People's Republic. Geometry must use a source-backed 1944 Tuvan external boundary or an authoritative continuity proof; today's Tuva Republic boundary must not be substituted without verification."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1944-tuva-rsfsr-internal",
       "eventId": "evt-1944-tuva-rsfsr-admission",
       "polityId": "rsfsr",
-      "effectiveDate": {"original": "13 октября 1944 г.", "normalized": "1944-10-13", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {"original":"13 октября 1944 г.","normalized":"1944-10-13","precision":"day","calendar":"gregorian"},
       "track": "internal-administrative",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
       "geometry": {
         "method": "not-yet-georeferenced",
         "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
-        "derivationNote": "Internal union assignment of Tuva to the RSFSR; does not create a second external USSR boundary change."
+        "derivationNote": "Source-verified internal union assignment of Tuva to the RSFSR. It does not create a second USSR external-boundary change; an historical Tuva AO polygon is the internal-layer geometry dependency."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1945-ussr-poland-border",
-      "eventId": "evt-1945-ussr-poland-border-treaty",
+      "eventId": "evt-1946-ussr-poland-border-effective",
       "polityId": "ussr",
-      "effectiveDate": {"original": "16 августа 1945 г.", "normalized": "1945-08-16", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {"original":"5 февраля 1946 г. — обмен ратификациями","normalized":"1946-02-05","precision":"day","calendar":"gregorian","note":"The treaty was signed 16 August 1945 but UNTS/UNTC records entry into force only on 5 February 1946 under Article 4."},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid"],
+      "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid", "doc-ussr-poland-border-1945-unts", "doc-ussr-poland-border-1945-eif-untc"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-ussr-poland-border-1945-ebid"],
-        "derivationNote": "Extract the treaty line and then prefer bilateral demarcation protocols/maps for geometry verification. The signing date is recorded here; ratification/entry into force should be separated if the treaty text requires it."
+        "method": "source-verified-boundary-text-and-map-pending-demarcation-ingest",
+        "evidenceDocumentIds": ["doc-ussr-poland-border-1945-unts"],
+        "routeSemantics": [
+          {"from":"point about 0.6 km southwest of San source","to":"San source","type":"short-land-segment"},
+          {"from":"San source","to":"point south of Solina","type":"river-median-line","waterbody":"San"},
+          {"from":"south of Solina","to":"Solokia","type":"described-land-route","via":["east of Przemysl","south of Rawa-Ruska"]},
+          {"from":"Solokia","to":"Niemirow-Yalowka","type":"river-boundary","waterbodies":["Solokia","Western Bug"]},
+          {"from":"Niemirow-Yalowka","to":"Lithuanian SSR-Poland-East Prussia tripoint","type":"mapped/described-land-boundary","rule":"Bialowieza deviation in Poland's favour; Grodno remains USSR"}
+        ],
+        "derivationNote": "The legal line and attached 1:500,000 treaty map are source-verified. Exact on-the-ground geometry is governed by the 1946–1947 demarcation package signed 30 April 1947 and must be digitized from those maps/protocols before geometry-verified promotion."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legacy id retained, but effective date now follows treaty entry into force rather than signature."
+    },
+    {
+      "id": "territory-1947-ussr-poland-border-demarcation",
+      "eventId": "evt-1947-ussr-poland-border-demarcation",
+      "polityId": "ussr",
+      "effectiveDate": {"original":"30 апреля 1947 г. — подписание документов демаркации","normalized":"1947-04-30","precision":"day","calendar":"gregorian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-poland-demarcation-1947-unts"],
+      "geometry": {
+        "method": "official-demarcation-package-pending-ingest",
+        "evidenceDocumentIds": ["doc-ussr-poland-demarcation-1947-unts"],
+        "derivationNote": "The later bilateral frontier-regime treaty identifies a signed authoritative package: descriptive frontier protocol, maps, and individual marker protocols with sketches/photos. It also states that the navigable Bug section follows the middle of the river. History Core records this as the exact geometry dependency; the package has not yet been transcribed into coordinate geometry."
+      },
+      "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1946-south-sakhalin-kurils-soviet-legal",
       "eventId": "evt-1946-south-sakhalin-kurils-soviet-law",
       "polityId": "ussr",
-      "effectiveDate": {"original": "2 февраля 1946 г.", "normalized": "1946-02-02", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {"original":"2 февраля 1946 г.","normalized":"1946-02-02","precision":"day","calendar":"gregorian"},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
       "geometry": {
         "method": "not-yet-georeferenced",
         "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
-        "derivationNote": "This act supports the Soviet domestic legal/administrative track for South Sakhalin and the Kurils. Do not use it as the sole evidence for international-recognition geometry; model 1945 military control and international treaty status separately."
+        "derivationNote": "The A2 Soviet act source-verifies the domestic legal/administrative treatment of South Sakhalin and the Kurils. It does not by itself settle the international-recognition track or identify every island polygon; de-facto control and international treaty status remain separate evidence layers."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1954-crimea-internal-transfer",
       "eventId": "evt-1954-crimea-transfer",
       "polityId": "ussr",
-      "effectiveDate": {"original": "19 февраля 1954 г.", "normalized": "1954-02-19", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {"original":"19 февраля 1954 г.","normalized":"1954-02-19","precision":"day","calendar":"gregorian"},
       "track": "internal-administrative",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
       "geometry": {
         "method": "not-yet-georeferenced",
         "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
-        "derivationNote": "Transfer the source-backed 1954 Crimean Oblast polygon from the RSFSR internal layer to the Ukrainian SSR internal layer. The USSR external boundary remains unchanged."
+        "derivationNote": "Source-verified internal transfer of the 1954 Crimean Oblast from RSFSR to Ukrainian SSR. The USSR external boundary remains unchanged. Geometry requires the source-backed 1954 oblast polygon, not a modern administrative boundary assumed unchanged."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified"
     }
   ]
 }
