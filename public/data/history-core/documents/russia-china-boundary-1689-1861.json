@@ -9,13 +9,7 @@
       "url": "https://www.prlib.ru/item/442818",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "27 августа 1689 г.",
-        "normalized": "1689-09-06",
-        "precision": "day",
-        "calendar": "julian",
-        "note": "Russian Old Style date; Presidential Library gives 27 August (6 September) 1689."
-      },
+      "date": {"original":"27 августа 1689 г.","normalized":"1689-09-06","precision":"day","calendar":"julian","note":"Russian Old Style date; Presidential Library gives 27 August (6 September) 1689."},
       "authority": ["Русское царство", "Империя Цин"],
       "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
       "notes": "First Russian-Chinese treaty. The contemporary delimitation was incomplete: the source record notes unclear geographic landmarks, lack of sufficiently accurate maps and absence of demarcation. Geometry must therefore preserve a broad uncertainty corridor."
@@ -28,13 +22,7 @@
       "url": "https://www.prlib.ru/item/442818",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "21 октября 1727 г.",
-        "normalized": "1727-11-01",
-        "precision": "day",
-        "calendar": "julian",
-        "note": "Presidential Library gives 21 October (1 November) 1727."
-      },
+      "date": {"original":"21 октября 1727 г.","normalized":"1727-11-01","precision":"day","calendar":"julian","note":"Presidential Library gives 21 October (1 November) 1727."},
       "authority": ["Российская империя", "Империя Цин"],
       "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
       "notes": "The Kyakhta treaty incorporated the Burin boundary settlement. Presidential Library records that geodetic survey was performed and the entire new Russian-Chinese border was mapped, making this a priority candidate for high-confidence georeferencing."
@@ -47,13 +35,7 @@
       "url": "https://www.prlib.ru/item/442818",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "16 мая 1858 г.",
-        "normalized": "1858-05-28",
-        "precision": "day",
-        "calendar": "julian",
-        "note": "Presidential Library gives 16 (28) May 1858."
-      },
+      "date": {"original":"16 мая 1858 г.","normalized":"1858-05-28","precision":"day","calendar":"julian","note":"Presidential Library gives 16 (28) May 1858."},
       "authority": ["Российская империя", "Империя Цин"],
       "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
       "notes": "The treaty assigned the left bank of the Amur from the Argun to its mouth to Russia, left the Ussuri-to-sea area in joint possession pending delimitation, and was approved by the Qing emperor on 2(14) June and ratified by Russia on 8(20) June 1858."
@@ -66,13 +48,7 @@
       "url": "https://www.prlib.ru/item/442818",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "2 ноября 1860 г.",
-        "normalized": "1860-11-14",
-        "precision": "day",
-        "calendar": "julian",
-        "note": "Presidential Library gives 2 (14) November 1860."
-      },
+      "date": {"original":"2 ноября 1860 г.","normalized":"1860-11-14","precision":"day","calendar":"julian","note":"Presidential Library gives 2 (14) November 1860."},
       "authority": ["Российская империя", "Империя Цин"],
       "publicationCitation": "Сборник договоров России с Китаем. 1689–1881 гг. / изд. Д. Пещуров. СПб.: издание Министерства иностранных дел, 1889.",
       "notes": "The treaty finally defined the eastern boundary, including the Amur/Ussuri/Sungacha/Lake Khanka and further watershed line, and had an eastern-boundary map attached."
@@ -84,17 +60,24 @@
       "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
       "url": "https://www.prlib.ru/item/370174",
       "tier": "A2-official-document-publication",
-      "documentType": "other",
-      "date": {
-        "original": "16 июня 1861 г.",
-        "normalized": "1861-06-28",
-        "precision": "day",
-        "calendar": "julian",
-        "note": "Presidential Library identifies 16 (28) June 1861 as the protocol date."
-      },
+      "documentType": "boundary-protocol",
+      "date": {"original":"16 июня 1861 г.","normalized":"1861-06-28","precision":"day","calendar":"julian","note":"Presidential Library identifies 16 (28) June 1861 as the protocol date."},
       "authority": ["Российская империя", "Империя Цин"],
       "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914.",
-      "notes": "The protocol was attached to the Peking Treaty as an integral part and records exchange of maps and delimitation in the Ussuri region; priority evidence for geometry verification."
+      "notes": "The commissioners verified and exchanged identical maps and detailed descriptions. The protocol makes those maps and descriptions an additional article to the Peking Treaty, to be observed as if included word-for-word in the treaty itself."
+    },
+    {
+      "id": "doc-ussuri-boundary-description-1861-mfa",
+      "sourceCollectionId": "prlib-russia-china-boundary-agreements",
+      "title": "Описание государственной границы между Россией и Китаем от реки Уссури до моря 16 июня 1861 г.",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека / ГПИБ",
+      "url": "https://www.prlib.ru/item/370174",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-description",
+      "date": {"original":"16 июня 1861 г.","normalized":"1861-06-28","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Империя Цин"],
+      "publicationCitation": "Соглашения между Россией и Китаем о проведении и исправлении границ и о пограничных делах. Пг., 1914, с. 2–3; archival original АВПРИ, Ф. Трактаты, Оп. 3.1861, Д. 883, Л. 2–4.",
+      "notes": "The description states: Ussuri and Sungacha are natural river boundaries; the line crosses Lake Khanka to the mouth of Belen-he/Tur; from there it follows a mountain watershed to the Hubitu/Hubtu, ascends that river to its source, then follows the watershed between Hunchun and the sea to the Tumen, ending 20 Chinese li above the river mouth. It specifies boundary posts E/I/K/L/N/O/P/T while expressly omitting posts along the natural river boundary except at defined termini."
     }
   ]
 }
