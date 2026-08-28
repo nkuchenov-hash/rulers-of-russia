@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "rusarchives-crimea-1783",
+      "title": "Присоединение Крыма к Российской империи — федеральный архивный проект",
+      "institution": "Федеральное архивное агентство / российские федеральные архивы",
+      "url": "https://krym.rusarchives.ru/node/277",
+      "tier": "A1-archival-original",
+      "coverage": "Archival originals and official chronology of the 1783 incorporation of Crimea/Kuban and Ottoman recognition",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "The federal archival project identifies the signed original 8 April 1783 manifesto (RGIA F.1329 Op.1 D.153 L.294–296a) and states that the 28 December 1783 Constantinople Act marked Ottoman recognition of Crimea's accession to Russia and establishment of new borders between the empires."
+    }
+  ]
+}
