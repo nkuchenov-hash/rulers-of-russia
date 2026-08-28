@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1955-ussr-iran-frontier-settlement",
+      "eventId": "evt-1955-ussr-iran-frontier-settlement-effective",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "20 мая 1955 г. — вступление соглашения 1954 г. в силу",
+        "normalized": "1955-05-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "status-change",
+      "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-frontier-settlement-eif-1955-untc"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts"],
+        "derivationNote": "Article II is already sufficiently explicit to segment the research task. The western frontier retains the 18 January 1829 Beyramlu description on large stated intervals, but introduces separate new lines for Mugan, Deman and Eddy-Evlyar; the agreement likewise defines the eastern sector. The annex maps and/or the later 1957 coordinate catalogue must be ingested before any of those lines is promoted to geometry-verified."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "This record corrects legal chronology and inheritance of the 1829 line but deliberately does not mutate production geometry until the annex/demarcation geometry is recovered."
+    },
+    {
+      "id": "territory-1957-ussr-iran-frontier-demarcation",
+      "eventId": "evt-1957-ussr-iran-frontier-demarcation-package",
+      "polityId": "ussr",
+      "effectiveDate": {
+        "original": "11 апреля 1957 г. — дата документов демаркации и редемаркации",
+        "normalized": "1957-04-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
+      "geometry": {
+        "method": "not-yet-georeferenced",
+        "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
+        "derivationNote": "The later bilateral treaty expressly identifies a complete coordinate-bearing demarcation package signed on 11 April 1957, including a catalogue of frontier-mark coordinates. History Core records that exact dependency but does not reconstruct substitute coordinates from secondary maps. Promotion to geometry-verified is blocked specifically on acquisition/transcription of that catalogue and the associated maps/croquis."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "This is the strongest available geometry dependency for replacing provisional Russo-Iranian/Caucasus border segments once the coordinate catalogue is obtained."
+    }
+  ]
+}

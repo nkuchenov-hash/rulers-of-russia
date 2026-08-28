@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-iran-frontier-settlement-1954-unts",
+      "sourceCollectionId": "untc-ussr-iran-frontier-settlement-6497",
+      "title": "Agreement concerning the settlement of frontier and financial questions between the USSR and Iran",
+      "institution": "United Nations Treaty Collection / United Nations Treaty Series",
+      "url": "https://treaties.un.org/Pages/showDetails.aspx?objid=0800000280133026",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "2 December 1954",
+        "normalized": "1954-12-02",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Union of Soviet Socialist Republics", "Iran"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 451, No. 6497, pp. 227 ff.",
+      "notes": "Article I records that all questions concerning the entire State frontier were settled and that neither party had territorial claims against the other. Article II describes the new frontier and repeatedly preserves sectors as defined in the Russo-Persian Boundary Description signed by the commissioners at Beyramlu on 18 January 1829, while expressly replacing specified sectors including Mugan, Deman and Eddy-Evlyar."
+    },
+    {
+      "id": "doc-ussr-iran-frontier-settlement-eif-1955-untc",
+      "sourceCollectionId": "untc-ussr-iran-frontier-settlement-6497",
+      "title": "UN Treaty Collection registration record for the 1954 USSR–Iran frontier settlement",
+      "institution": "United Nations Treaty Collection",
+      "url": "https://treaties.un.org/Pages/showDetails.aspx?objid=0800000280133026",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-register",
+      "date": {
+        "original": "20 May 1955 — entry into force",
+        "normalized": "1955-05-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United Nations Treaty Collection"],
+      "publicationCitation": "UNTC registration No. 6497.",
+      "notes": "Canonical chronology evidence that the agreement signed at Tehran on 2 December 1954 entered into force on 20 May 1955."
+    },
+    {
+      "id": "doc-ussr-iran-demarcation-package-1957-unts",
+      "sourceCollectionId": "untc-ussr-iran-frontier-regime-6586",
+      "title": "Demarcation and re-demarcation documents of the Soviet-Iranian frontier, as identified in the 1957 frontier treaty",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20457/volume-457-I-6586-English.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-boundary-study",
+      "date": {
+        "original": "11 April 1957 — date of the demarcation documents stated in the treaty",
+        "normalized": "1957-04-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Soviet-Iranian Mixed Commission", "Union of Soviet Socialist Republics", "Iran"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 457, No. 6586, Article 1.",
+      "notes": "Article 1 states that the frontier was determined and marked by documents signed on 11 April 1957. The package is explicitly enumerated as an album of maps and schemes of geodetic determination of frontier marks, protocols and croquis for the marks, a catalogue of coordinates of frontier marks, and a list of frontier marks. The catalogue itself has not yet been ingested, so this record verifies the existence and legal role of the precise geometry package without pretending its coordinates are already available."
+    },
+    {
+      "id": "doc-ussr-iran-frontier-regime-1957-unts",
+      "sourceCollectionId": "untc-ussr-iran-frontier-regime-6586",
+      "title": "Treaty concerning the régime of the Soviet-Iranian frontier and the procedure for settlement of frontier disputes and incidents",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20457/volume-457-I-6586-English.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "14 May 1957",
+        "normalized": "1957-05-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Union of Soviet Socialist Republics", "Iran"],
+      "publicationCitation": "United Nations Treaty Series, Vol. 457, No. 6586, pp. 212–260.",
+      "notes": "The treaty confirms the frontier fixed by the April 1957 demarcation and re-demarcation documents and establishes the frontier régime. It did not itself replace the 20 May 1955 settlement line."
+    },
+    {
+      "id": "doc-ussr-iran-frontier-regime-eif-1962-untc",
+      "sourceCollectionId": "untc-ussr-iran-frontier-regime-6586",
+      "title": "UN registration chronology for Treaty No. 6586",
+      "institution": "United Nations Treaty Collection / Monthly Statement of Treaties",
+      "url": "https://treaties.un.org/doc/Publication/Monthly%20Statement/1963/04/monstate.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-treaty-register",
+      "date": {
+        "original": "20 December 1962 — exchange of instruments of ratification at Tehran",
+        "normalized": "1962-12-20",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["United Nations Treaty Collection"],
+      "publicationCitation": "United Nations Monthly Statement of Treaties and International Agreements, April 1963, No. 6586.",
+      "notes": "Records that the frontier régime treaty signed on 14 May 1957 came into force on 20 December 1962 by exchange of instruments of ratification at Tehran."
+    }
+  ]
+}
