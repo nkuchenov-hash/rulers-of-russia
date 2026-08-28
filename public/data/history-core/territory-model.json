@@ -239,6 +239,19 @@
       "confidence": "high",
       "effectiveTo": "1917-03-15",
       "derivationNote": "Article IX of the Portsmouth treaty fixes 50° N as the legal limit. The official 1940 Japanese statistical table, sourced to the Hydrographic Department, fixes the western and eastern endpoints at 142°09′25″ E and 143°59′40″ E. These historical geographic coordinates are retained literally and rendered as a rhumb/parallel line; source confidence is high while display placement remains datum-aware rather than falsely labeled WGS84. The fragment is scoped to the Russian Empire polity and ends at the 1917 regime transition; successor-state continuity must be separately evidenced."
+    },
+    {
+      "id": "frag-russian-empire-british-america-141w-1843",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "boundary-corridor",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-empire-british-america-141w-1843.geojson",
+      "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-anglo-russian-commerce-1843-continuity-frus", "doc-anglo-russian-commerce-1843-eif-nzmfat", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "effectiveTo": "1867-06-20",
+      "derivationNote": "Article III of the 1825 Anglo-Russian convention fixes the northern continental boundary on the 141st degree of west longitude. The 1843 treaty expressly continued that convention in force. The verified overlay is deliberately clipped to 61°–69° N, safely inside the official meridian sector; the clip latitudes are not treaty endpoints. Source/legal geometry confidence is high, while display placement remains datum-aware until a documented modern geodetic transformation is registered."
     }
   ]
 }
