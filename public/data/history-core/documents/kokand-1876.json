@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-kokand-annexation-decree-1876-rgvia",
+      "sourceCollectionId": "rgvia-kokand-annexation-1876",
+      "title": "Указ императора Александра II Правительствующему Сенату о ликвидации Кокандского ханства и образовании Ферганской области",
+      "institution": "Российский государственный военно-исторический архив / Правительствующий Сенат",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/M.Asien/XVIII/1740-1760/Kirgis_russ/201-220/214.htm",
+      "tier": "A1-archival-original",
+      "documentType": "law",
+      "date": {"original":"19 февраля 1876 г. (старый стиль)","normalized":"1876-03-02","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя / Александр II", "Правительствующий Сенат"],
+      "archiveCitation": "РГВИА. Ф. ВУА. Д. 6886. Л. 30–31. Подлинник.",
+      "publicationCitation": "Полное собрание законов Российской империи. Собрание второе. Т. 51, отд. 1, 1876. СПб., 1878. С. 139. № 55593.",
+      "notes": "The decree expressly orders the territory constituting the Kokand Khanate until 1875 to be annexed to the Empire and formed into Fergana Oblast within the Turkestan Governor-Generalship and military district. This is the canonical legal-act evidence for the territorial transition; the 1876 General Staff map remains the geometry source candidate."
+    }
+  ]
+}
