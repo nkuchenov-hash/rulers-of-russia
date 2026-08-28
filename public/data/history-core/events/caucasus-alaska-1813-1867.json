@@ -5,12 +5,7 @@
       "id": "evt-1813-gulistan-peace",
       "title": "Гюлистанский мирный договор",
       "kind": "treaty",
-      "date": {
-        "original": "12 октября 1813 г.",
-        "normalized": "1813-10-24",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"12 октября 1813 г.","normalized":"1813-10-24","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
       "summary": "Персия признала переход к России Дагестана, Грузии и ряда владений Восточного Закавказья; вопрос точной даты полного вступления договора в силу требует отдельной фиксации миссии 1818 года.",
       "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection"],
@@ -21,12 +16,7 @@
       "id": "evt-1828-turkmenchay-peace",
       "title": "Туркманчайский мирный договор",
       "kind": "treaty",
-      "date": {
-        "original": "10 февраля 1828 г.",
-        "normalized": "1828-02-22",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"10 февраля 1828 г.","normalized":"1828-02-22","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
       "summary": "Новый русско-персидский договорный рубеж; к России переходили Эриванское и Нахичеванское ханства, а граница получила современную ей официальную картографическую фиксацию.",
       "evidenceDocumentIds": ["doc-turkmenchay-1828-mfa-border-collection", "doc-turkmenchay-boundary-map-1828-rnb"],
@@ -37,12 +27,7 @@
       "id": "evt-1829-adrianople-peace",
       "title": "Адрианопольский мирный договор",
       "kind": "treaty",
-      "date": {
-        "original": "2 сентября 1829 г.",
-        "normalized": "1829-09-14",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"2 сентября 1829 г.","normalized":"1829-09-14","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
       "summary": "Османская империя закрепила ряд территориальных уступок России на Дунае и Кавказе и признала ранее состоявшиеся присоединения в Закавказье.",
       "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection"],
@@ -53,12 +38,7 @@
       "id": "evt-1867-alaska-cession-signing",
       "title": "Подписание договора об уступке российских владений в Северной Америке США",
       "kind": "treaty",
-      "date": {
-        "original": "18 марта (30 марта) 1867 г.",
-        "normalized": "1867-03-30",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"18 марта (30 марта) 1867 г.","normalized":"1867-03-30","precision":"day","calendar":"gregorian"},
       "polityIds": ["russian-empire"],
       "summary": "Россия и США подписали договор об уступке Русской Америки. Договор прямо откладывал юридическое завершение уступки до обмена ратификациями, поэтому подписание не меняет территорию в replay.",
       "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus"],
@@ -68,12 +48,7 @@
       "id": "evt-1867-alaska-cession-effective",
       "title": "Обмен ратификациями и юридическое завершение уступки Аляски",
       "kind": "transfer",
-      "date": {
-        "original": "20 июня 1867 г.",
-        "normalized": "1867-06-20",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"20 июня 1867 г.","normalized":"1867-06-20","precision":"day","calendar":"gregorian"},
       "polityIds": ["russian-empire"],
       "summary": "В Вашингтоне обменены ратификационные грамоты. По статьям I и IV договора именно с этого момента уступка и право немедленного владения стали полными и абсолютными, без ожидания церемонии формальной передачи.",
       "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus", "doc-alaska-cession-ratification-exchange-1867-loc"],
@@ -84,17 +59,12 @@
       "id": "evt-1867-alaska-transfer",
       "title": "Формальная передача Аляски в Ситке",
       "kind": "transfer",
-      "date": {
-        "original": "6 октября (18 октября) 1867 г.",
-        "normalized": "1867-10-18",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"6 октября (18 октября) 1867 г.","normalized":"1867-10-18","precision":"day","calendar":"gregorian"},
       "polityIds": ["russian-empire"],
-      "summary": "В Ситке состоялась церемония формальной передачи территории Соединённым Штатам. Это административно-физический этап исполнения договора, а не дата юридического прекращения российского суверенитета в модели legal-border.",
-      "evidenceDocumentIds": ["doc-alaska-cession-1867-prlib-chronology"],
-      "reviewStatus": "source-located",
-      "notes": "Retained separately from the legal cession event; promote further after the formal transfer protocol is indexed from an A1/A2 documentary publication."
+      "summary": "В Ситке российский и американский комиссары осуществили формальную передачу территории, военных постов и государственного имущества. Это административно-физический этап исполнения договора, а не дата юридического прекращения российского суверенитета в legal-border replay.",
+      "evidenceDocumentIds": ["doc-alaska-formal-transfer-instructions-1867-frus", "doc-alaska-formal-transfer-date-1867-usdos", "doc-alaska-cession-1867-prlib-chronology"],
+      "reviewStatus": "source-verified",
+      "notes": "Official State Department transfer instructions and chronology verify the formal delivery separately from the 20 June legal cession."
     }
   ]
 }
