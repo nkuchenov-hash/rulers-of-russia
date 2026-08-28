@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-alaska-formal-transfer-instructions-1867-frus",
+      "sourceCollectionId": "usdos-frus-alaska-transfer-1867",
+      "title": "Instructions for the transfer of the Russian possessions in North America",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1867p1/d348",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-instructions",
+      "date": {"original":"1867","normalized":"1867","precision":"year","calendar":"gregorian"},
+      "authority": ["Imperial Russian Government", "United States Government"],
+      "publicationCitation": "Papers Relating to Foreign Affairs, Accompanying the Annual Message of the President to the Second Session Fortieth Congress, Part I; official transfer correspondence.",
+      "notes": "The instructions direct Captain Pestchouroff to proceed to formal transfer at Sitka under mutual national salutes, deliver forts and public property and draw up a protocol with the American commissioner. Used together with the independently dated official State Department/NPS chronology for the 18 October 1867 formal ceremony; it does not alter the 20 June legal cession date."
+    },
+    {
+      "id": "doc-alaska-formal-transfer-date-1867-usdos",
+      "sourceCollectionId": "usdos-frus-alaska-transfer-1867",
+      "title": "Purchase of Alaska, 1867 — formal transfer chronology",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/milestones/1866-1898/alaska-purchase",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-chronology",
+      "date": {"original":"18 October 1867","normalized":"1867-10-18","precision":"day","calendar":"gregorian"},
+      "authority": ["United States Department of State"],
+      "publicationCitation": "Office of the Historian, Milestones in the History of U.S. Foreign Relations: Purchase of Alaska, 1867.",
+      "notes": "Official Department of State chronology states that Alaska was formally transferred to the United States on 18 October 1867. Combined with the formal-transfer instructions to verify the ceremony/implementation event separately from legal effectiveness."
+    }
+  ]
+}
