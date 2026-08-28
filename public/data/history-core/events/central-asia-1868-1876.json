@@ -3,21 +3,21 @@
   "events": [
     {
       "id": "evt-1868-bukhara-treaty",
-      "title": "Мирный договор России с Бухарским ханством",
+      "title": "Мирное соглашение России с Бухарским эмиратом",
       "kind": "treaty",
-      "date": {"original": "23 июня (5 июля) 1868 г.", "normalized": "1868-07-05", "precision": "day", "calendar": "julian"},
+      "date": {"original":"23 июня 1868 г. (старый стиль)","normalized":"1868-07-05","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Бухарское ханство переходило в вассальную зависимость от России; часть завоёванных земель вокруг Самарканда вошла в российский Туркестан отдельно от самого вассального ханства.",
-      "evidenceDocumentIds": ["doc-bukhara-1868-prlib-chronology", "doc-kaufman-central-asia-rgia-inventory"],
+      "summary": "После военной кампании Россия и Бухара оформили мирные условия; Самарканд и зависимые от него земли были включены в российские владения, а граница с Бухарой подлежала отдельному точному определению.",
+      "evidenceDocumentIds": ["doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia", "doc-kaufman-central-asia-rgia-inventory"],
       "territoryChangeIds": ["territory-1868-bukhara-protectorate", "territory-1868-zeravshan-acquisition"],
-      "reviewStatus": "source-located",
-      "notes": "Primary treaty and exact administrative acts remain to be indexed before source-verified promotion."
+      "reviewStatus": "source-verified",
+      "notes": "Event verification applies to the dated peace settlement and Samarkand incorporation. The broader constitutional characterization of Bukhara as a protectorate/vassal remains separately conservative until the full 1868/1873 treaty sequence is indexed."
     },
     {
       "id": "evt-1873-gandimyan-khiva",
       "title": "Гендемианский мирный договор России с Хивой",
       "kind": "treaty",
-      "date": {"original": "12 (24) августа 1873 г.", "normalized": "1873-08-24", "precision": "day", "calendar": "julian"},
+      "date": {"original":"12 (24) августа 1873 г.","normalized":"1873-08-24","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
       "summary": "Хивинское ханство становилось зависимым от России, тогда как земли ханства по правому берегу Амударьи переходили непосредственно к Российской империи.",
       "evidenceDocumentIds": ["doc-khiva-1873-prlib-chronology"],
@@ -28,7 +28,7 @@
       "id": "evt-1876-kokand-annexation",
       "title": "Упразднение Кокандского ханства и образование Ферганской области",
       "kind": "law",
-      "date": {"original": "19 февраля (2 марта) 1876 г.", "normalized": "1876-03-02", "precision": "day", "calendar": "julian"},
+      "date": {"original":"19 февраля (2 марта) 1876 г.","normalized":"1876-03-02","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
       "summary": "Территория Кокандского ханства была непосредственно включена в Российскую империю и преобразована в Ферганскую область.",
       "evidenceDocumentIds": ["doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
