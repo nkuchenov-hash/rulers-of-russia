@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1888-afghan-west-final-demarcation",
+      "eventId": "evt-1888-afghan-west-final-demarcation",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "26 января 1888 г. — заключительные протоколы комиссии",
+        "normalized": "1888-01-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghanistan-ussr-western-boundary-ibs26-usdos"],
+      "geometry": {
+        "method": "protocols-maps-and-pillar-synopses-not-yet-fully-ingested",
+        "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+        "derivationNote": "The complete approximately 630 km line was demarcated with 79 posts, but the complete pillar synopsis and all annex maps have not yet been transcribed into History Core. The 1887 protocol already proves that the legal geometry is heterogeneous: some portions are straight, others follow watersheds, the Kushk or Murghab thalweg, or locally demarcated routes. Do not replace the complete line with a modern Afghanistan boundary or with straight connections between the currently extracted controls."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "Full legal/demarcated boundary is source-verified; complete geometry remains pending extraction of all 79 posts and annex map/segment semantics."
+    },
+    {
+      "id": "territory-1888-afghan-west-known-controls",
+      "eventId": "evt-1888-afghan-west-final-demarcation",
+      "polityId": "russian-empire",
+      "effectiveDate": {
+        "original": "26 января 1888 г. — консервативная дата завершённой демаркации",
+        "normalized": "1888-01-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "boundary-control-network",
+      "operation": "demarcate",
+      "geometryAction": "metadata-only",
+      "geometryFragmentIds": ["frag-russian-empire-afghanistan-west-1888-controls"],
+      "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghan-northwest-final-protocol-1888-ukts"],
+      "geometry": {
+        "method": "derived-from-boundary-control-points",
+        "file": "geometry/russian-empire-afghanistan-west-1888-controls.geojson",
+        "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official"],
+        "derivationNote": "Seven trigonometric/pillar controls are explicitly coordinate-defined in the 1887 protocol and cross-checked against the parallel Russian official publication. They are rendered as MultiPoint only. Activation is conservatively delayed to the 26 January 1888 completion of the commission work; the controls themselves were defined earlier."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Verified subset of the 79-post network. No line interpolation is asserted between these controls."
+    }
+  ]
+}
