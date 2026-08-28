@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "untc-ussr-iran-frontier-settlement-6497",
+      "title": "United Nations Treaty Series No. 6497 — USSR–Iran frontier and financial settlement",
+      "institution": "United Nations Treaty Collection / United Nations Treaty Series",
+      "url": "https://treaties.un.org/Pages/showDetails.aspx?objid=0800000280133026",
+      "tier": "A2-official-document-publication",
+      "coverage": "1954 Agreement concerning the settlement of frontier and financial questions, its Protocols and annexes, with official entry-into-force chronology",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "UN registration No. 6497 records signature at Tehran on 2 December 1954 and entry into force on 20 May 1955. The published Russian text preserves Article II's explicit references to the Russo-Persian boundary description signed at Beyramlu on 18 January 1829 and identifies the sectors replaced by the 1954 settlement."
+    },
+    {
+      "id": "untc-ussr-iran-frontier-regime-6586",
+      "title": "United Nations Treaty Series No. 6586 — Treaty concerning the régime of the Soviet-Iranian frontier",
+      "institution": "United Nations Treaty Collection / United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20457/volume-457-I-6586-English.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "1957 Soviet-Iranian frontier régime treaty, Protocol and annexes, including documentary identification of the April 1957 demarcation package",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "The treaty was signed at Moscow on 14 May 1957 and entered into force on 20 December 1962. Article 1 identifies the boundary as fixed by the demarcation and re-demarcation documents signed on 11 April 1957, including an album of maps/schemes, frontier-mark protocols and croquis, a coordinate catalogue of frontier marks, and a list of marks."
+    }
+  ]
+}
