@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1721-nystad-effective",
+      "title": "Вступление Ништадтского мира в действие после обмена ратификациями",
+      "kind": "treaty",
+      "date": {
+        "original": "19/30 сентября 1721 г. — размен ратификационных грамот в Ништадте",
+        "normalized": "1721-09-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-tsardom"],
+      "summary": "После предусмотренного договором взаимного обмена ратификационными грамотами Ништадтский мир получил договорную силу для территориального replay; последующая пограничная комиссия должна была реализовать описанное в статье 8 разграничение на местности.",
+      "evidenceDocumentIds": ["doc-nystad-1721-ebid", "doc-nystad-ratification-exchange-1721-academic"],
+      "territoryChangeIds": ["territory-1721-nystad-russia"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1812-bucharest-effective",
+      "title": "Вступление Бухарестского мира в действие после обмена ратификациями",
+      "kind": "treaty",
+      "date": {
+        "original": "2 (14) июля 1812 г. — размен ратификационных грамот в Бухаресте",
+        "normalized": "1812-07-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["russian-empire"],
+      "summary": "Размен ратификаций завершил мирный акт 1812 года. Территориальная граница в Европе определялась прежде всего серединой Прута до Дуная и далее условиями договора по дунайско-килийскому участку; сроки исполнения договора прямо отсчитывались от обмена ратификаций.",
+      "evidenceDocumentIds": ["doc-bucharest-1812-ebid", "doc-bucharest-ratification-exchange-1812-academic"],
+      "territoryChangeIds": ["territory-1812-bucharest-russia"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1920-rsfsr-fer-border-effective",
+      "title": "Вступление в силу договора РСФСР–ДВР о границах",
+      "kind": "treaty",
+      "date": {
+        "original": "30 декабря 1920 г. — подпись ДВР; договор предусматривает вступление в силу с момента подписания",
+        "normalized": "1920-12-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "polityIds": ["rsfsr"],
+      "summary": "После наличия подписей обеих сторон договор о границе РСФСР и Дальневосточной Республики вступил в силу согласно собственной оговорке. Текст задаёт смешанный маршрут по Селенге, Байкалу, прежним административным рубежам и водоразделам до Охотского моря и отдельное правило для водных границ.",
+      "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid", "doc-rsfsr-fer-border-1920-dvp"],
+      "territoryChangeIds": ["territory-1920-rsfsr-fer-border"],
+      "reviewStatus": "source-verified",
+      "notes": "The Moscow counterpart bears 15 December 1920 and the Chita counterpart 30 December. History Core uses 30 December as the conservative bilateral activation date because the treaty itself says it enters into force from the moment of signing."
+    }
+  ]
+}
