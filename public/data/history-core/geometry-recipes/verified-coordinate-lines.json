@@ -113,7 +113,7 @@
       "fragmentId": "frag-russian-empire-japan-sakhalin-1905-50n",
       "output": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
       "track": "russian-legal-border",
-      "sourceCrs": "historical Japanese Hydrographic Department geographic coordinates; WGS84 transformation not yet source-backed",
+      "sourceCrs": "historical Japanese Hydrographic Department geographic coordinates; no source-backed modern datum transformation registered",
       "interpolation": "rhumb",
       "stepsPerSegment": 32,
       "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
