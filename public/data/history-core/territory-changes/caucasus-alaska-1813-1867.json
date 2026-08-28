@@ -5,12 +5,7 @@
       "id": "territory-1813-gulistan-russian-legal-basis",
       "eventId": "evt-1813-gulistan-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "12 октября 1813 г.",
-        "normalized": "1813-10-24",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"12 октября 1813 г.","normalized":"1813-10-24","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "recognize",
@@ -26,12 +21,7 @@
       "id": "territory-1828-turkmenchay-russian-legal-border",
       "eventId": "evt-1828-turkmenchay-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "10 февраля 1828 г.",
-        "normalized": "1828-02-22",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"10 февраля 1828 г.","normalized":"1828-02-22","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
@@ -47,12 +37,7 @@
       "id": "territory-1829-adrianople-russian-legal-border",
       "eventId": "evt-1829-adrianople-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "2 сентября 1829 г.",
-        "normalized": "1829-09-14",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"2 сентября 1829 г.","normalized":"1829-09-14","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
@@ -68,13 +53,7 @@
       "id": "territory-1843-anglo-russian-alaska-141w-confirmed",
       "eventId": "evt-1843-anglo-russian-alaska-boundary-continuity",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "31 января 1843 г. — вступление договора, продолжившего конвенцию 1825 г., в силу",
-        "normalized": "1843-01-31",
-        "precision": "day",
-        "calendar": "gregorian",
-        "note": "The 1825 convention contains the meridian rule, but its exact ratification-exchange date is not yet registered in History Core. The overlay therefore begins conservatively at the independently verified 1843 entry-into-force date of the treaty that expressly continued the 1825 convention."
-      },
+      "effectiveDate": {"original":"31 января 1843 г. — вступление договора, продолжившего конвенцию 1825 г., в силу","normalized":"1843-01-31","precision":"day","calendar":"gregorian","note":"The 1825 convention contains the meridian rule, but its exact ratification-exchange date is not yet registered in History Core. The overlay therefore begins conservatively at the independently verified 1843 entry-into-force date of the treaty that expressly continued the 1825 convention."},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "status-change",
@@ -94,24 +73,18 @@
       "id": "territory-1867-alaska-transfer-out",
       "eventId": "evt-1867-alaska-cession-effective",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "20 июня 1867 г. — обмен ратификациями",
-        "normalized": "1867-06-20",
-        "precision": "day",
-        "calendar": "gregorian",
-        "note": "Articles I and IV make the cession and right of immediate possession complete and absolute upon exchange of ratifications. The later 18 October ceremony at Sitka is retained as a separate physical/formal-transfer event and does not drive the russian-legal-border replay."
-      },
+      "effectiveDate": {"original":"20 июня 1867 г. — обмен ратификациями","normalized":"1867-06-20","precision":"day","calendar":"gregorian","note":"Articles I and IV make the cession and right of immediate possession complete and absolute upon exchange of ratifications. The later 18 October ceremony at Sitka is retained as a separate physical/formal-transfer event and does not drive the russian-legal-border replay."},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "cede",
       "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus", "doc-alaska-cession-ratification-exchange-1867-loc"],
       "geometry": {
-        "method": "derived-from-boundary-text",
+        "method": "source-verified-boundary-text-full-polygon-pending",
         "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus"],
-        "derivationNote": "The treaty itself defines the ceded Russian possessions and reproduces the 1825 eastern boundary, including the 141st meridian sector. Do not promote a full cession polygon until the southeastern panhandle, islands, western Bering limit and historical coastlines are reconstructed from the treaty and authoritative cartography. The legal effective date is now verified independently of that remaining geometry work."
+        "derivationNote": "The treaty source-verifies the identity of the ceded Russian possessions and reproduces the 1825 eastern boundary, including the 141st-meridian sector. Full polygon geometry remains pending reconstruction of the southeastern panhandle, islands, western Bering limit and historical coastlines from the treaty and authoritative cartography. This geometry dependency does not make the already A1/A2-verified legal cession itself research-required."
       },
-      "reviewStatus": "research-required",
-      "notes": "Legacy change id retained for compatibility; semantically this change now represents legal cession on 20 June 1867, not the 18 October formal delivery ceremony."
+      "reviewStatus": "source-verified",
+      "notes": "Legal cession is fully source-verified on 20 June 1867; exact area geometry remains a separate verification dependency."
     }
   ]
 }
