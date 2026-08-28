@@ -50,8 +50,14 @@ jobs:
       - name: Materialize verified source-coordinate geometry
         run: npm run materialize:history-geometry
 
+      - name: Materialize source-verified historical reconstructions
+        run: npm run materialize:history-reconstructions
+
       - name: Validate source-coordinate geometry recipes
         run: npm run validate:history-geometry
+
+      - name: Validate historical reconstruction recipes
+        run: npm run validate:history-reconstructions
 
       - name: Validate History Core provenance
         run: npm run validate:history
