@@ -16,11 +16,12 @@
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "source-verified-area-extent-pending",
         "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
-        "derivationNote": "Replace the 1783 protectorate status with incorporated territory only after the contemporaneous territorial extent of Kartli-Kakheti is reconstructed from period administrative/cartographic evidence. Do not infer modern Georgian borders."
+        "derivationNote": "The January 1801 imperial manifesto and RGVIA/RGIA decision record source-verify the legal incorporation of the Georgian Kingdom (Kartli-Kakheti) into Russia. Exact area geometry remains pending reconstruction of its contemporaneous territorial extent from period administrative/cartographic evidence; modern Georgian borders must not be substituted."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legal incorporation is source-verified independently of the still-pending historical polygon. This replaces the 1783 protection-status relationship on the russian-legal-border track."
     },
     {
       "id": "territory-1801-georgia-direct-administration",
@@ -37,11 +38,12 @@
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri"],
-        "derivationNote": "Administrative change only. It must never duplicate external-territory acquisition."
+        "derivationNote": "Alexander I's September manifesto source-verifies the institution of direct internal administration over territory already incorporated earlier in 1801. This administrative transition must not add or redraw the external Russian territory a second time."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Administrative-state transition only; no second external-border acquisition is implied."
     }
   ]
 }
