@@ -11,7 +11,6 @@ page.on('console', message => {
   if (message.type() === 'error') consoleErrors.push(message.text());
 });
 
-const px = value => Number.parseFloat(value || '0');
 const near = (value, min, max, label) => {
   if (value < min || value > max) throw new Error(`${label}: ${value}px, expected ${min}..${max}px`);
 };
@@ -94,6 +93,12 @@ async function desktopAudit() {
   if (state.primary.bottom > state.events.top + 2) throw new Error('Dashboard overlaps events');
   if (state.events.bottom > state.timeline.top + 2) throw new Error('Events overlap timeline');
   if (state.overflow > 2) throw new Error(`Studio canvas horizontal overflow: ${state.overflow}px`);
+  if (Math.abs(state.timeline.width - state.surface.width) > 2) {
+    throw new Error(`Timeline width ${state.timeline.width}px does not match canvas ${state.surface.width}px`);
+  }
+  if (Math.abs(state.timeline.left - state.surface.left) > 2 || Math.abs(state.timeline.right - state.surface.right) > 2) {
+    throw new Error(`Timeline must align to canvas edges: timeline ${state.timeline.left}..${state.timeline.right}, canvas ${state.surface.left}..${state.surface.right}`);
+  }
 
   if (state.cards.length !== 7) throw new Error(`Expected 7 Studio event cards, got ${state.cards.length}`);
   if (state.rowCounts.length !== 2 || state.rowCounts[0] !== 4 || state.rowCounts[1] !== 3) {
