@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-petersburg-japan-1875-ratifications-mofa",
+      "sourceCollectionId": "japan-mofa-russia-treaties-1875",
+      "title": "1875 Treaty of Saint Petersburg — ratification exchange chronology",
+      "institution": "Ministry of Foreign Affairs of Japan",
+      "url": "https://www.mofa.go.jp/region/europe/russia/territory/edition92/period2.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty-record",
+      "date": {"original":"22 August 1875","normalized":"1875-08-22","precision":"day","calendar":"gregorian"},
+      "authority": ["Empire of Japan", "Russian Empire"],
+      "notes": "Official Japanese MFA treaty chronology: signed 7 May 1875, ratified 22 August 1875, and instruments of ratification exchanged in Tokyo on 22 August 1875. Used to move the legal transition from signature to ratification exchange."
+    },
+    {
+      "id": "doc-san-stefano-ratifications-1878-frus",
+      "sourceCollectionId": "usdos-frus-1878-eastern-question",
+      "title": "U.S. Legation report on exchange of San Stefano ratifications",
+      "institution": "United States Department of State / U.S. Legation at Constantinople",
+      "url": "https://history.state.gov/historicaldocuments/frus1878/d515",
+      "tier": "A2-official-document-publication",
+      "documentType": "diplomatic-report",
+      "date": {"original":"17 March 1878","normalized":"1878-03-17","precision":"day","calendar":"gregorian"},
+      "authority": ["United States Department of State"],
+      "publicationCitation": "Foreign Relations of the United States, 1878, document 510.",
+      "notes": "The U.S. minister reports that the San Stefano ratifications were exchanged at St Petersburg on 17 March 1878. Article 29 of the reproduced treaty states that the parties regard themselves as formally bound from ratification."
+    },
+    {
+      "id": "doc-berlin-ratifications-1878-frus",
+      "sourceCollectionId": "usdos-frus-1878-eastern-question",
+      "title": "Treaty of Berlin and procès-verbal of exchange of ratifications",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1878/d523",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"3 August 1878","normalized":"1878-08-03","precision":"day","calendar":"gregorian"},
+      "authority": ["Signatory Powers of the Treaty of Berlin"],
+      "publicationCitation": "Foreign Relations of the United States, 1878, Treaty of Berlin and ratification procès-verbal.",
+      "notes": "The procès-verbal records exchange of ratifications at Berlin on 3 August 1878; the Ottoman representative declared the Sultan had ratified the treaty and considered it valid from that date, with the Ottoman instrument to follow."
+    }
+  ]
+}

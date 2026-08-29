@@ -5,172 +5,119 @@
       "id": "territory-1323-orekhovo-demarcation",
       "eventId": "evt-1323-orekhovo-peace",
       "polityId": "novgorodian-land",
-      "effectiveDate": {
-        "original": "12 августа 1323 г.",
-        "normalized": "1323-08-12",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"12 августа 1323 г.","normalized":"1323-08-12","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
       "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
-        "derivationNote": "Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other boundary landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-orekhovo-1323-prlib"],"derivationNote":"Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other boundary landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."},
       "reviewStatus": "research-required"
     },
     {
       "id": "territory-1711-pruth-azov-settlement",
       "eventId": "evt-1711-pruth-peace",
       "polityId": "russian-tsardom",
-      "effectiveDate": {
-        "original": "12 июля 1711 г.",
-        "normalized": "1711-07-23",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"12 июля 1711 г.","normalized":"1711-07-23","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
       "evidenceDocumentIds": ["doc-pruth-1711-ebid"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-pruth-1711-ebid"],
-        "derivationNote": "Extract the Azov and associated territorial/fortification clauses from the treaty and distinguish legal cession from demolition obligations. Do not replay until the affected legal territory is represented by a verified fragment."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-pruth-1711-ebid"],"derivationNote":"Extract the Azov and associated territorial/fortification clauses from the treaty and distinguish legal cession from demolition obligations. Do not replay until the affected legal territory is represented by a verified fragment."},
       "reviewStatus": "research-required"
     },
     {
       "id": "territory-1713-adrianople-settlement",
       "eventId": "evt-1713-adrianople-peace",
       "polityId": "russian-tsardom",
-      "effectiveDate": {
-        "original": "13 июня 1713 г.",
-        "normalized": "1713-06-24",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"13 июня 1713 г.","normalized":"1713-06-24","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
       "evidenceDocumentIds": ["doc-adrianople-1713-ebid"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-adrianople-1713-ebid"],
-        "derivationNote": "Compare the 1713 treaty clauses with the 1711 Pruth settlement and implementation documents before defining the post-1713 southern legal border."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-adrianople-1713-ebid"],"derivationNote":"Compare the 1713 treaty clauses with the 1711 Pruth settlement and implementation documents before defining the post-1713 southern legal border."},
       "reviewStatus": "research-required"
     },
     {
       "id": "territory-1875-petersburg-sakhalin",
-      "eventId": "evt-1875-petersburg-japan-treaty",
+      "eventId": "evt-1875-petersburg-japan-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "25 апреля 1875 г.",
-        "normalized": "1875-05-07",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"22 августа 1875 г. — обмен ратификациями","normalized":"1875-08-22","precision":"day","calendar":"gregorian"},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "recognize",
-      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid"],
+      "geometryAction": "metadata-only",
+      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid"],
-        "derivationNote": "Model Japan's renunciation of rights to Sakhalin as a legal-status change. Determine the exact effective/ratification date before production replay if it differs from signature date."
+        "method": "source-verified-island-status-area-pending",
+        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+        "derivationNote": "The treaty source-verifies Japan's renunciation of rights to all Sakhalin in favor of Russia, effective for replay at the documented exchange of ratifications. This is a legal-status recognition layer; exact island coastline/area geometry must come from period cartography and must not be inferred from a modern Sakhalin polygon."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Moved from signature to the official 22 August 1875 ratification exchange recorded by the Japanese Foreign Ministry."
     },
     {
       "id": "territory-1875-petersburg-kurils",
-      "eventId": "evt-1875-petersburg-japan-treaty",
+      "eventId": "evt-1875-petersburg-japan-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "25 апреля 1875 г.",
-        "normalized": "1875-05-07",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"22 августа 1875 г. — обмен ратификациями","normalized":"1875-08-22","precision":"day","calendar":"gregorian"},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid"],
+      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid"],
-        "derivationNote": "Build the ceded Kuril-island fragment directly from the islands enumerated by the treaty/publication, not from a modern generalized archipelago polygon."
+        "method": "source-verified-enumerated-islands-area-pending",
+        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+        "derivationNote": "The treaty source-verifies cession to Japan of the enumerated Kuril islands from Shumshu through Urup. Build the area change from those named historical island units, not from a generalized modern archipelago polygon."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legal cession is source-verified at ratification exchange; island-by-island period coastline geometry remains pending."
     },
     {
       "id": "territory-1878-san-stefano-preliminary",
-      "eventId": "evt-1878-san-stefano-preliminary-peace",
+      "eventId": "evt-1878-san-stefano-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "19 февраля 1878 г.",
-        "normalized": "1878-03-03",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"17 марта 1878 г. — обмен ратификациями","normalized":"1878-03-17","precision":"day","calendar":"gregorian","note":"Article 29 states that the parties regard themselves as formally bound from ratification; FRUS reports the exchange at St Petersburg on 17 March 1878."},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-san-stefano-1878-ebid"],
+      "evidenceDocumentIds": ["doc-san-stefano-1878-ebid", "doc-san-stefano-ratifications-1878-frus"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-san-stefano-1878-ebid"],
-        "derivationNote": "Do not materialize as a permanent border. Establish whether and when the preliminary territorial clauses became legally operative, then supersede them with the Berlin settlement in July 1878."
+        "method": "source-verified-preliminary-boundary-area-pending",
+        "evidenceDocumentIds": ["doc-san-stefano-1878-ebid", "doc-san-stefano-ratifications-1878-frus"],
+        "derivationNote": "The preliminary territorial clauses became legally operative at ratification, but this state is explicitly temporary and later superseded by the Berlin settlement. Exact Caucasus/Balkan geometry requires the treaty's boundary clauses and explanatory map; it must not be materialized as a permanent post-1878 border."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Temporary legal state only, from 17 March 1878 until superseded by the Berlin settlement."
     },
     {
       "id": "territory-1878-berlin-caucasus",
-      "eventId": "evt-1878-berlin-treaty",
+      "eventId": "evt-1878-berlin-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "1 июля 1878 г.",
-        "normalized": "1878-07-13",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "effectiveDate": {"original":"3 августа 1878 г. — обмен ратификациями","normalized":"1878-08-03","precision":"day","calendar":"gregorian","note":"The Berlin ratification procès-verbal records the exchange on 3 August 1878 and the Ottoman declaration that the treaty was valid from that date."},
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-berlin-1878-ebid"],
+      "evidenceDocumentIds": ["doc-berlin-1878-ebid", "doc-berlin-ratifications-1878-frus"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-berlin-1878-ebid"],
-        "derivationNote": "Article 58 provides the legal territorial basis. Georeference the acquired Ardahan-Kars-Batum area from treaty wording plus contemporary Russian demarcation maps/records before geometry verification."
+        "method": "source-verified-boundary-area-pending",
+        "evidenceDocumentIds": ["doc-berlin-1878-ebid", "doc-berlin-ratifications-1878-frus"],
+        "derivationNote": "Article 58 source-verifies the Ottoman cession to Russia of Ardahan, Kars and Batum with associated territories. Exact acquired-area geometry must be georeferenced from the treaty boundary clauses and contemporary demarcation maps/records."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Berlin supersedes the provisional San Stefano territorial state; replay is moved from signature to the documented ratification exchange."
     },
     {
       "id": "territory-1905-portsmouth-south-sakhalin",
       "eventId": "evt-1905-portsmouth-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {
-        "original": "15 октября 1905 г. — вступление Портсмутского договора в силу",
-        "normalized": "1905-10-15",
-        "precision": "day",
-        "calendar": "gregorian",
-        "note": "Signature was 23 August (5 September) 1905. Article XIV ties entry into force to the later ratification notification; U.S. Department of State International Boundary Study No. 17 records 15 October 1905 as the date the treaty came into force."
-      },
+      "effectiveDate": {"original":"15 октября 1905 г. — вступление Портсмутского договора в силу","normalized":"1905-10-15","precision":"day","calendar":"gregorian","note":"Signature was 23 August (5 September) 1905. Article XIV ties entry into force to the later ratification notification; U.S. Department of State International Boundary Study No. 17 records 15 October 1905 as the date the treaty came into force."},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
       "geometryAction": "metadata-only",
       "geometryFragmentIds": ["frag-russian-empire-japan-sakhalin-1905-50n"],
       "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-portsmouth-effective-1905-usdos-ibs17", "doc-sakhalin-border-endpoints-1940-ndl"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "file": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
-        "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
-        "derivationNote": "Article IX fixes 50° N as the legal limit of the ceded territory. The official Japanese 1940 statistical table, citing Hydrographic Department survey data, publishes the border endpoints as 142°09′25″ E and 143°59′40″ E. The line is generated as a rhumb/parallel segment retaining those historical source coordinates literally. No unsourced WGS84 datum transformation is applied."
-      },
+      "geometry": {"method":"derived-from-boundary-text","file":"geometry/russian-empire-japan-sakhalin-1905-50n.geojson","evidenceDocumentIds":["doc-portsmouth-1905-ebid","doc-sakhalin-border-endpoints-1940-ndl"],"derivationNote":"Article IX fixes 50° N as the legal limit of the ceded territory. The official Japanese 1940 statistical table, citing Hydrographic Department survey data, publishes the border endpoints as 142°09′25″ E and 143°59′40″ E. The line is generated as a rhumb/parallel segment retaining those historical source coordinates literally. No unsourced WGS84 datum transformation is applied."},
       "reviewStatus": "geometry-verified",
       "notes": "This verifies the boundary line only. It does not promote the full South Sakhalin cession polygon or its coastline to geometry-verified status."
     }
