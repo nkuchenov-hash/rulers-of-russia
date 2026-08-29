@@ -30,33 +30,45 @@
     flex-shrink: 0 !important;
   }
 
-  /* A laptop-width editor must reflow instead of compressing the map between
-     two sidebars. This changes row composition, not module geometry. */
-  @media (max-width: 1299px) {
-    .core-site-surface .primary-content-row {
-      flex-wrap: wrap !important;
-    }
+  /* Card width and flex-basis must use the same gap as the row. Otherwise four
+     nominal quarter-width cards plus a larger visual gap wrap as 3+3+1. */
+  .core-site-surface [data-module-id="thematic-card"] {
+    --studio-event-gap: 14px;
+    column-gap: var(--studio-event-gap) !important;
+  }
 
-    .core-site-surface [data-module-id="territory"] {
-      flex: 0 0 200px !important;
-      width: 200px !important;
-    }
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    width: calc((100% - (var(--studio-event-columns) - 1) * var(--studio-event-gap)) / var(--studio-event-columns)) !important;
+    flex: 1 1 calc((100% - (var(--studio-event-columns) - 1) * var(--studio-event-gap)) / var(--studio-event-columns)) !important;
+  }
+}
 
-    .core-site-surface [data-module-id="map"] {
-      flex: 1 1 calc(100% - 224px) !important;
-      min-width: 520px !important;
-    }
+/* A laptop-width editor must reflow instead of compressing the map between two
+   sidebars. This changes row composition, not module geometry. */
+@media (min-width: 1101px) and (max-width: 1299px) {
+  .core-site-surface .primary-content-row {
+    flex-wrap: wrap !important;
+  }
 
-    .core-site-surface [data-module-id="facts"] {
-      flex: 0 0 100% !important;
-      width: 100% !important;
-      min-height: 0 !important;
-    }
+  .core-site-surface [data-module-id="territory"] {
+    flex: 0 0 200px !important;
+    width: 200px !important;
+  }
 
-    .core-site-surface [data-module-id="facts"] .facts-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-      column-gap: 28px !important;
-    }
+  .core-site-surface [data-module-id="map"] {
+    flex: 1 1 calc(100% - 224px) !important;
+    min-width: 520px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .facts-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 28px !important;
   }
 }
 
