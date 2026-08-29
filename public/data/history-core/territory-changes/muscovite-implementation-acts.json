@@ -16,11 +16,12 @@
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "source-verified-implementation-area-pending",
         "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
-        "derivationNote": "Use this act to establish the implementation date for Russian administration of Smolensk and specifically named returned towns. The complete Andrusovo legal boundary must be reconstructed from the treaty and related boundary acts separately."
+        "derivationNote": "The A1 implementation act source-verifies Russian administrative control of Smolensk and the specifically returned towns by 18 June 1667 OS. This change records implementation/control only. The complete Andrusovo legal boundary and the exact historical extent associated with each returned town still require the treaty and boundary acts; no later Smolensk administrative polygon is substituted."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "De-facto implementation is verified independently of the still-pending full treaty-border geometry."
     }
   ]
 }
