@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "japan-mofa-russia-treaties-1875",
+      "title": "Treaty records of Japan-Russia relations: 1875 Sakhalin-Kuril Exchange Treaty",
+      "institution": "Ministry of Foreign Affairs of Japan",
+      "url": "https://www.mofa.go.jp/region/europe/russia/territory/edition92/period2.html",
+      "tier": "A2-official-document-publication",
+      "coverage": "Signing, ratification and exchange of ratifications for the 1875 Treaty of Saint Petersburg; territorial exchange of Sakhalin/Kuril rights",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Japanese MFA records signing on 7 May 1875 and exchange of ratifications in Tokyo on 22 August 1875."
+    },
+    {
+      "id": "usdos-frus-1878-eastern-question",
+      "title": "Foreign Relations of the United States, 1878 — San Stefano and Berlin treaty documents",
+      "institution": "United States Department of State, Office of the Historian",
+      "url": "https://history.state.gov/historicaldocuments/frus1878",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official diplomatic publication of the San Stefano preliminaries, ratification exchange chronology, Treaty of Berlin and its ratification procès-verbal",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "FRUS records San Stefano ratifications exchanged at St Petersburg on 17 March 1878 and reproduces the Berlin ratification procès-verbal dated 3 August 1878."
+    }
+  ]
+}
