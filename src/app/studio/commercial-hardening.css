@@ -1,0 +1,119 @@
+/* Final safeguards for the commercial Studio preset. */
+
+@media (min-width: 1101px) {
+  /* The source heading remains semantic but visually replaced by the dashboard
+     label introduced by the reference composition. Do not render both. */
+  .core-site-surface [data-module-id="territory"] > h2,
+  .core-site-surface [data-module-id="facts"] > h2 {
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after,
+  .core-site-surface [data-module-id="facts"] > h2::after {
+    display: block !important;
+    font-size: 17pt !important;
+    line-height: 1.08 !important;
+  }
+
+  .core-site-surface .core-main-nav {
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+
+  .core-site-surface .core-main-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .core-site-surface .core-utilities {
+    flex-shrink: 0 !important;
+  }
+
+  /* A laptop-width editor must reflow instead of compressing the map between
+     two sidebars. This changes row composition, not module geometry. */
+  @media (max-width: 1299px) {
+    .core-site-surface .primary-content-row {
+      flex-wrap: wrap !important;
+    }
+
+    .core-site-surface [data-module-id="territory"] {
+      flex: 0 0 200px !important;
+      width: 200px !important;
+    }
+
+    .core-site-surface [data-module-id="map"] {
+      flex: 1 1 calc(100% - 224px) !important;
+      min-width: 520px !important;
+    }
+
+    .core-site-surface [data-module-id="facts"] {
+      flex: 0 0 100% !important;
+      width: 100% !important;
+      min-height: 0 !important;
+    }
+
+    .core-site-surface [data-module-id="facts"] .facts-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      column-gap: 28px !important;
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  .core-site-surface [data-module-id="territory"] > h2,
+  .core-site-surface [data-module-id="facts"] > h2 {
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after,
+  .core-site-surface [data-module-id="facts"] > h2::after {
+    display: block !important;
+    font-size: 20pt !important;
+    line-height: 1.08 !important;
+  }
+
+  /* Large type must grow the document instead of being clipped by old mobile
+     screenshot heights. */
+  .core-site-surface .ruler-content,
+  .core-site-surface .primary-content-row,
+  .core-site-surface [data-module-id="thematic-card"],
+  .core-site-surface [data-module-id="reign-timeline"] {
+    overflow: visible !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .facts-list {
+    grid-auto-rows: minmax(64px, auto) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    height: auto !important;
+    min-height: 64px !important;
+    padding-block: 10px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .core-site-surface [data-module-id="hero"] {
+    min-height: 860px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    padding-inline: 18px !important;
+    padding-bottom: 310px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    row-gap: 18px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta > div {
+    padding-inline: 0 12px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    min-height: 330px !important;
+  }
+}
