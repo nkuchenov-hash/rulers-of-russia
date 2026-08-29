@@ -10,18 +10,22 @@
         "normalized": "1792-02-09",
         "precision": "day",
         "calendar": "julian",
-        "note": "Working legal effectiveness is tied to the exchange of ratifications explicitly recorded in the official 1792 treaty printing."
+        "note": "Legal effectiveness is tied to the exchange of ratifications explicitly recorded in the official 1792 treaty printing."
       },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
       "geometry": {
-        "method": "derived-from-boundary-text",
+        "method": "source-verified-boundary-rule-period-hydrography-pending",
         "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
-        "derivationNote": "Article III makes the Dniester the interstate boundary, with lands on its left bank in Russian possession and lands on its right bank returned to the Ottoman Porte. Reconstruct the newly confirmed Russian territory east/left of the Dniester against the preceding legal state; do not include Bessarabia on the right bank, which the treaty explicitly returned. Use contemporary hydrography and official maps to resolve the river course at 1792 resolution."
+        "routeSemantics": [
+          {"type":"river-boundary","feature":"Dniester","russianSide":"left/east bank","ottomanSide":"right/west bank","source":"Article III"}
+        ],
+        "derivationNote": "Article III source-verifies the Dniester as the interstate boundary, with lands on its left/east bank remaining in Russian possession and lands on its right/west bank returned to the Ottoman Porte. Exact line geometry requires the contemporaneous 1792 river course and period official cartography; Bessarabia west/right of the Dniester must not be included in this change."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "The legal boundary rule is verified; geometry awaits historical hydrography rather than a modern river substitute."
     },
     {
       "id": "territory-1792-jassy-crimea-kuban-recognition",
@@ -34,15 +38,17 @@
         "calendar": "julian"
       },
       "track": "russian-legal-border",
-      "territorialModel": "linear-border",
+      "territorialModel": "mixed",
       "operation": "recognize",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
       "geometry": {
-        "method": "derived-from-boundary-text",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-jassy-1791-1792-imperial-print"],
-        "derivationNote": "Treat this as recognition/confirmation of earlier Russian possession of Crimea and Kuban, not as a fresh February 1792 acquisition polygon. It should alter provenance/status metadata of the existing geometry once the earlier 1783 legal changes are modeled."
+        "derivationNote": "The treaty source-verifies Ottoman confirmation of the earlier Russian possession/status of Crimea and Kuban. This is a recognition layer over the already modeled 1783 acquisition and 1784 recognition, not a fresh February 1792 territorial addition."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Recognition/status only; it must not duplicate the 1783 Crimea/Taman/Kuban acquisition polygon when that historical area is materialized."
     }
   ]
 }
