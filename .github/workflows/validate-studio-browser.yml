@@ -1,0 +1,76 @@
+name: Validate Studio in Chromium
+
+on:
+  pull_request:
+    paths:
+      - 'src/app/studio/**'
+      - 'src/components/core-system/**'
+      - 'src/modules/core/**'
+      - 'scripts/studio-browser-smoke.mjs'
+      - 'scripts/studio-editor-controls-smoke.mjs'
+      - '.github/workflows/validate-studio-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  studio-browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout proposed revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Prepare local historical world archive
+        run: node scripts/sync-historical-world.mjs
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Build production-layout static site
+        run: npm run build
+
+      - name: Start basePath-aware static server
+        run: |
+          node scripts/serve-territory-smoke.mjs > /tmp/studio-serve.log 2>&1 &
+          echo $! > /tmp/studio-serve.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/rulers-of-russia/studio/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/studio-serve.log
+          exit 1
+
+      - name: Audit Studio editor controls and auto-layout
+        run: node scripts/studio-editor-controls-smoke.mjs
+
+      - name: Audit Studio desktop and mobile layout
+        run: node scripts/studio-browser-smoke.mjs
+
+      - name: Upload Studio smoke screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-commercial-smoke
+          path: |
+            studio-smoke-desktop.png
+            studio-smoke-mobile.png
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/studio-serve.log || true
