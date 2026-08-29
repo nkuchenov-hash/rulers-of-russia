@@ -7,6 +7,7 @@ on:
       - 'src/components/core-system/**'
       - 'src/modules/core/**'
       - 'scripts/studio-browser-smoke.mjs'
+      - 'scripts/studio-editor-controls-smoke.mjs'
       - '.github/workflows/validate-studio-browser.yml'
   workflow_dispatch:
 
@@ -52,6 +53,9 @@ jobs:
           done
           cat /tmp/studio-serve.log
           exit 1
+
+      - name: Audit Studio editor controls and auto-layout
+        run: node scripts/studio-editor-controls-smoke.mjs
 
       - name: Audit Studio desktop and mobile layout
         run: node scripts/studio-browser-smoke.mjs
