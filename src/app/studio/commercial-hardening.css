@@ -1,6 +1,19 @@
 /* Final safeguards for the commercial Studio preset. */
 
 @media (min-width: 1101px) {
+  /* One geometry token owns both the visible page surface and modules that span
+     back across the ruler rail. This prevents the bottom chronology from using
+     the obsolete 1760px reference width when the commercial canvas is 1600px. */
+  .core-site-surface {
+    --page-surface-width: min(1600px, calc(100vw - 32px)) !important;
+  }
+
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    width: var(--page-surface-width) !important;
+    max-width: var(--page-surface-width) !important;
+    left: calc(100% - var(--page-surface-width)) !important;
+  }
+
   /* The source heading remains semantic but visually replaced by the dashboard
      label introduced by the reference composition. Do not render both. */
   .core-site-surface [data-module-id="territory"] > h2,
