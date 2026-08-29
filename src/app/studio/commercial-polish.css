@@ -1,0 +1,741 @@
+/*
+ * COMMERCIAL STUDIO BASELINE
+ *
+ * This file is deliberately loaded last. Older reference files may describe
+ * screenshot proportions, but they are not allowed to re-introduce 8–12px UI
+ * text or brittle fixed-height compositions. Inline Studio overrides with
+ * !important still win over these defaults, so the editor remains configurable.
+ */
+
+@media (min-width: 1101px) {
+  .core-site-surface {
+    --studio-canvas-max: 1600px;
+    --studio-rail-default: 258px;
+    --studio-gap-xs: 8px;
+    --studio-gap-sm: 12px;
+    --studio-gap-md: 16px;
+    --studio-gap-lg: 24px;
+    --studio-caption: 14pt;
+    --studio-body: 16pt;
+    --studio-title-sm: 17pt;
+    --studio-title-md: 20pt;
+    --studio-title-lg: 24pt;
+    width: min(var(--studio-canvas-max), calc(100vw - 32px)) !important;
+    max-width: var(--studio-canvas-max) !important;
+    font-size: var(--studio-body) !important;
+  }
+
+  /* Global navigation: readable, restrained, never micro-sized. */
+  .core-site-surface .core-header {
+    min-height: 60px !important;
+    border-bottom: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface .core-brand {
+    flex-basis: var(--studio-rail-default) !important;
+    width: var(--studio-rail-default) !important;
+    padding-inline: 22px !important;
+    font-size: 18pt !important;
+    line-height: 1 !important;
+    letter-spacing: .055em !important;
+    white-space: nowrap !important;
+  }
+
+  .core-site-surface .core-main-nav {
+    gap: clamp(18px, 2vw, 34px) !important;
+    padding-inline: 28px !important;
+    align-items: stretch !important;
+  }
+
+  .core-site-surface .core-main-nav button,
+  .core-site-surface .core-utilities button {
+    min-height: 60px !important;
+    padding-inline: 12px !important;
+    font-size: 14pt !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .core-site-surface .core-utilities {
+    min-width: 0 !important;
+  }
+
+  /* Historical rail: enough width and vertical rhythm for actual names. */
+  .core-site-surface .historical-rail {
+    flex-basis: var(--studio-rail-default) !important;
+    width: var(--studio-rail-default) !important;
+    border-right: 1px solid var(--border-emphasis) !important;
+  }
+
+  .core-site-surface .historical-rail > div {
+    top: 60px !important;
+  }
+
+  .core-site-surface .rail-controls {
+    min-height: 60px !important;
+    height: 60px !important;
+    padding-inline: 18px !important;
+  }
+
+  .core-site-surface .rail-controls button {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface .rail-list {
+    top: 120px !important;
+    height: calc(100vh - 124px) !important;
+    padding: 6px 14px 24px 38px !important;
+    overflow-y: auto !important;
+  }
+
+  .core-site-surface .rail-item,
+  .core-site-surface .rail-item.active {
+    grid-template-columns: 46px minmax(0, 1fr) !important;
+    gap: 11px !important;
+    min-height: 66px !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 8px 8px 8px 14px !important;
+    align-items: center !important;
+  }
+
+  .core-site-surface .rail-item.active {
+    min-height: 88px !important;
+    padding-block: 12px !important;
+  }
+
+  .core-site-surface .rail-portrait,
+  .core-site-surface .rail-item.active .rail-portrait {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface .rail-item strong {
+    display: block !important;
+    font-size: 14pt !important;
+    line-height: 1.12 !important;
+    font-weight: 650 !important;
+    overflow-wrap: normal !important;
+  }
+
+  .core-site-surface .rail-item.active strong {
+    font-size: 15pt !important;
+  }
+
+  .core-site-surface .rail-item span {
+    display: block !important;
+    margin-top: 4px !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.1 !important;
+  }
+
+  .core-site-surface .rail-item small {
+    margin-top: 4px !important;
+    font-size: var(--studio-caption) !important;
+  }
+
+  /* Hero: editorial scale with readable metadata and a clean baseline grid. */
+  .core-site-surface [data-module-id="hero"] {
+    min-height: 360px !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    padding: 38px 34px 32px 46px !important;
+    gap: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-period {
+    margin: 0 0 8px !important;
+    font-size: max(16pt, var(--hero-dates-size, 22px)) !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] h1 {
+    margin: 0 0 16px !important;
+    font-size: var(--hero-name-size, 104px) !important;
+    line-height: .9 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-summary {
+    width: auto !important;
+    max-width: var(--hero-summary-width, 620px) !important;
+    margin: 0 !important;
+    font-size: max(16pt, var(--hero-summary-size, 22px)) !important;
+    line-height: 1.42 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+    width: min(720px, 100%) !important;
+    max-width: 100% !important;
+    margin-top: auto !important;
+    padding-top: 24px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta > div {
+    min-width: 0 !important;
+    padding: 0 16px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta > div:first-child {
+    padding-left: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta small {
+    display: block !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.15 !important;
+    letter-spacing: .055em !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta strong {
+    display: block !important;
+    margin-top: 5px !important;
+    font-size: max(16pt, var(--hero-meta-size, 22px)) !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-actions {
+    top: 18px !important;
+    right: 18px !important;
+    gap: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-actions button {
+    width: var(--hero-action-size, 40px) !important;
+    height: var(--hero-action-size, 40px) !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    font-size: 15pt !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .key-events-card {
+    right: 20px !important;
+    bottom: 20px !important;
+    width: var(--hero-events-width, 360px) !important;
+    max-width: min(460px, 39%) !important;
+    min-height: 132px !important;
+    padding: 18px 20px !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] h3 {
+    margin: 0 0 10px !important;
+    font-size: 15pt !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] .quote-text,
+  .core-site-surface [data-module-id="key-events"] .key-event {
+    font-size: max(16pt, var(--hero-event-font-size, 22px)) !important;
+    line-height: 1.32 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] small,
+  .core-site-surface [data-module-id="key-events"] .quote-source,
+  .core-site-surface [data-module-id="key-events"] .quote-context {
+    font-size: var(--studio-caption) !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Section navigation must read like navigation, not legal fine print. */
+  .core-site-surface [data-module-id="page-tabs"] {
+    min-height: 52px !important;
+    height: auto !important;
+    padding-inline: 34px !important;
+    gap: clamp(22px, 3vw, 48px) !important;
+    align-items: stretch !important;
+    overflow-x: auto !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
+    min-height: 52px !important;
+    padding: 0 2px !important;
+    font-size: 14pt !important;
+    line-height: 1 !important;
+    letter-spacing: .055em !important;
+    white-space: nowrap !important;
+  }
+
+  /* Dashboard: map remains dominant, but no column is allowed to become a
+     compressed 10px-text sidebar. */
+  .core-site-surface .primary-content-row {
+    gap: 12px !important;
+    padding: 14px 16px 8px !important;
+    align-items: stretch !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    min-height: 390px !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    width: 210px !important;
+    flex: 0 1 210px !important;
+    padding: 22px 18px !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after,
+  .core-site-surface [data-module-id="territory"] > h2 {
+    font-size: var(--studio-title-sm) !important;
+    line-height: 1.08 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > p {
+    display: block !important;
+    margin: 12px 0 18px !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.4 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend {
+    margin-top: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend > div {
+    min-height: 48px !important;
+    padding: 10px 0 !important;
+    gap: 10px !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.22 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .module-cta {
+    min-height: 44px !important;
+    padding-inline: 12px !important;
+    font-size: var(--studio-caption) !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    flex: 1 1 560px !important;
+    padding: 10px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas {
+    min-height: 370px !important;
+    height: 100% !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas text {
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-controls {
+    right: 18px !important;
+    bottom: 18px !important;
+    gap: 8px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-controls button {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    font-size: 16pt !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    width: 350px !important;
+    flex: 0 1 350px !important;
+    padding: 22px 20px 16px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] > h2::after,
+  .core-site-surface [data-module-id="facts"] > h2 {
+    font-size: var(--studio-title-sm) !important;
+    line-height: 1.08 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .facts-list {
+    margin-top: 10px !important;
+    grid-auto-rows: minmax(54px, auto) !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    grid-template-columns: minmax(112px, .9fr) minmax(0, 1.25fr) !important;
+    min-height: 54px !important;
+    height: auto !important;
+    gap: 14px !important;
+    padding: 8px 0 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row label,
+  .core-site-surface [data-module-id="facts"] .fact-row strong {
+    font-size: var(--studio-caption) !important;
+    line-height: 1.25 !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] .fact-row strong {
+    text-align: right !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* Events: equal cards, readable typography, stable 4+3 rhythm on a full
+     desktop canvas. At reduced desktop widths the row is allowed to use three
+     columns rather than crush text. */
+  .core-site-surface [data-module-id="thematic-card"] {
+    gap: 14px !important;
+    padding: 14px 16px 18px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]::before {
+    min-height: 46px !important;
+    margin: 0 !important;
+    padding: 0 2px 4px !important;
+    font-size: var(--studio-title-md) !important;
+    line-height: 1.05 !important;
+    letter-spacing: .015em !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    position: relative !important;
+    min-height: 260px !important;
+    height: auto !important;
+    padding: 20px 18px 64px !important;
+    overflow: hidden !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card h2 {
+    margin: 0 0 7px !important;
+    font-size: 17pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card small {
+    margin-bottom: 10px !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card p,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card li {
+    max-width: 94% !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.38 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card .media-zone {
+    height: 44% !important;
+    padding: 14px 16px !important;
+    font-size: var(--studio-caption) !important;
+    line-height: 1.15 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card button {
+    right: 14px !important;
+    bottom: 14px !important;
+    min-height: 40px !important;
+    padding-inline: 12px !important;
+    font-size: var(--studio-caption) !important;
+  }
+
+  /* Timeline: final dashboard band, not a strip of unreadable labels. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    min-height: 156px !important;
+    height: auto !important;
+    padding: 18px 20px !important;
+    align-items: stretch !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] [data-element-id="timeline-title"] {
+    font-size: var(--studio-title-sm) !important;
+    line-height: 1.08 !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events b,
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events span,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler small,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler strong {
+    font-size: var(--studio-caption) !important;
+    line-height: 1.2 !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events {
+    gap: 14px !important;
+    margin-top: 10px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler {
+    min-width: 180px !important;
+    padding: 14px !important;
+  }
+}
+
+/* Preserve readability before the dedicated mobile composition begins. */
+@media (min-width: 1101px) and (max-width: 1399px) {
+  .core-site-surface {
+    --studio-rail-default: 244px;
+  }
+
+  .core-site-surface .core-main-nav {
+    gap: 14px !important;
+    padding-inline: 18px !important;
+  }
+
+  .core-site-surface .core-main-nav button,
+  .core-site-surface .core-utilities button {
+    font-size: 13pt !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    width: 190px !important;
+    flex-basis: 190px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    width: 330px !important;
+    flex-basis: 330px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] {
+    --studio-event-columns: 3 !important;
+  }
+}
+
+/* Mobile/tablet commercial typography. Small labels may use 14pt; normal text
+   is 16pt. Fixed heights from the old mobile reference are relaxed wherever
+   larger text needs more room. */
+@media (max-width: 1100px) {
+  .core-site-surface {
+    --studio-caption: 14pt;
+    --studio-body: 16pt;
+    font-size: var(--studio-body) !important;
+  }
+
+  .core-site-surface .core-brand {
+    min-height: 64px !important;
+    font-size: 20pt !important;
+  }
+
+  .core-site-surface .core-utilities button {
+    min-height: 52px !important;
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface .historical-rail {
+    height: 102px !important;
+    min-height: 102px !important;
+    max-height: 102px !important;
+  }
+
+  .core-site-surface .rail-list {
+    height: 101px !important;
+    min-height: 101px !important;
+    max-height: 101px !important;
+  }
+
+  .core-site-surface .rail-item,
+  .core-site-surface .rail-item.active {
+    flex-basis: 172px !important;
+    width: 172px !important;
+    min-width: 172px !important;
+    max-width: 172px !important;
+    height: 101px !important;
+    min-height: 101px !important;
+    max-height: 101px !important;
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 10px !important;
+  }
+
+  .core-site-surface .rail-portrait,
+  .core-site-surface .rail-item.active .rail-portrait {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface .rail-item strong,
+  .core-site-surface .rail-item.active strong {
+    font-size: 14pt !important;
+    line-height: 1.1 !important;
+  }
+
+  .core-site-surface .rail-item span {
+    font-size: 14pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] {
+    height: auto !important;
+    min-height: 790px !important;
+    max-height: none !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-copy {
+    padding: 32px 20px 280px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-dates"] {
+    font-size: 16pt !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-name"] {
+    margin-block: 10px 18px !important;
+    font-size: clamp(44px, 12vw, 62px) !important;
+    line-height: .92 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-summary"] {
+    font-size: 16pt !important;
+    line-height: 1.42 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta {
+    margin-top: 24px !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta small {
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] .hero-meta strong,
+  .core-site-surface [data-module-id="hero"] [data-element-id="hero-meta-item"] strong {
+    font-size: 16pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"] [data-module-id="key-events"] {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 76px !important;
+    max-height: none !important;
+    padding: 18px !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] h3 {
+    font-size: 16pt !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] .quote-text,
+  .core-site-surface [data-module-id="key-events"] [data-element-id="key-event-row"] {
+    font-size: 16pt !important;
+    line-height: 1.32 !important;
+  }
+
+  .core-site-surface [data-module-id="key-events"] small,
+  .core-site-surface [data-module-id="key-events"] .quote-source,
+  .core-site-surface [data-module-id="key-events"] .quote-context,
+  .core-site-surface [data-module-id="key-events"] [data-element-id="key-events-all"] {
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] {
+    min-height: 58px !important;
+    height: 58px !important;
+    max-height: 58px !important;
+    gap: 28px !important;
+  }
+
+  .core-site-surface [data-module-id="page-tabs"] [data-element-id="page-tab"] {
+    min-height: 58px !important;
+    height: 58px !important;
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface .primary-content-row {
+    gap: 14px !important;
+    padding: 16px !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    min-height: 0 !important;
+    padding: 20px !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > h2::after,
+  .core-site-surface [data-module-id="territory"] > h2,
+  .core-site-surface [data-module-id="facts"] > h2::after,
+  .core-site-surface [data-module-id="facts"] > h2 {
+    font-size: 20pt !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] > p,
+  .core-site-surface [data-module-id="territory"] .territory-legend > div,
+  .core-site-surface [data-module-id="facts"] .fact-row label,
+  .core-site-surface [data-module-id="facts"] .fact-row strong {
+    font-size: 16pt !important;
+    line-height: 1.32 !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] .territory-legend > div,
+  .core-site-surface [data-module-id="facts"] .fact-row {
+    min-height: 58px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    min-height: 430px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas {
+    min-height: 390px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] .map-canvas text {
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] {
+    gap: 14px !important;
+    padding: 18px 16px 22px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"]::before {
+    min-height: 52px !important;
+    font-size: 22pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    min-height: 300px !important;
+    padding: 22px 18px 70px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card h2 {
+    font-size: 19pt !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card small,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card p,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card li,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card button,
+  .core-site-surface [data-module-id="thematic-card"] .thematic-card .media-zone {
+    font-size: 14pt !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] {
+    min-height: 0 !important;
+    padding: 22px 18px !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] [data-element-id="timeline-title"] {
+    font-size: 20pt !important;
+  }
+
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events b,
+  .core-site-surface [data-module-id="reign-timeline"] .timeline-events span,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler small,
+  .core-site-surface [data-module-id="reign-timeline"] .adjacent-ruler strong {
+    font-size: 14pt !important;
+    line-height: 1.25 !important;
+  }
+}
