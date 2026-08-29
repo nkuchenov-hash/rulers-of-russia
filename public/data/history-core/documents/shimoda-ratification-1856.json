@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-shimoda-ratification-exchange-1856-japan-mofa",
+      "sourceCollectionId": "japan-mofa-russia-treaties-1855",
+      "title": "日露和親条約批准書 — обмен ратификациями Симодского трактата",
+      "institution": "Ministry of Foreign Affairs of Japan / Historiographical Institute, University of Tokyo",
+      "url": "https://www.mofa.go.jp/mofaj/annai/honsho/shiryo/j_russia_2005/2_1.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "ratification",
+      "date": {"original":"7 December 1856","normalized":"1856-12-07","precision":"day","calendar":"gregorian"},
+      "authority": ["Russian Empire", "Japan"],
+      "notes": "Japanese MFA archival exhibition identifies and illustrates the treaty ratification instrument and explicitly states that the instruments of ratification were exchanged on 7 December 1856."
+    },
+    {
+      "id": "doc-shimoda-article2-1855-joint-mofa-compendium",
+      "sourceCollectionId": "japan-mofa-russia-treaties-1855",
+      "title": "Article 2 of the 1855 Treaty of Commerce, Navigation and Delimitation between Japan and Russia",
+      "institution": "Ministry of Foreign Affairs of Japan / Ministry of Foreign Affairs of the Russian Federation",
+      "url": "https://www.mofa.go.jp/region/europe/russia/territory/edition92/period1.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"7 February 1855","normalized":"1855-02-07","precision":"day","calendar":"gregorian"},
+      "authority": ["Russian Empire", "Japan"],
+      "publicationCitation": "Joint Compendium of Documents on the History of Territorial Issue between Japan and Russia, jointly prepared by the Ministries of Foreign Affairs of Japan and the Russian Federation, 2001.",
+      "notes": "Article 2 states that the border passes between Etorofu/Iturup and Uruppu/Urup; Etorofu belongs to Japan, Urup and the Kurils north of it to Russia; Karafuto/Sakhalin remains unpartitioned between Japan and Russia."
+    }
+  ]
+}
