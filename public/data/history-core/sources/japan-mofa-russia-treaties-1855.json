@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "japan-mofa-russia-treaties-1855",
+      "title": "Japan-Russia diplomatic archives: 1855 Treaty of Shimoda and ratification exchange",
+      "institution": "Ministry of Foreign Affairs of Japan",
+      "url": "https://www.mofa.go.jp/mofaj/annai/honsho/shiryo/j_russia_2005/2_1.html",
+      "tier": "A2-official-document-publication",
+      "coverage": "Treaty signature on 7 February 1855, photographed ratification instrument, exchange of ratifications on 7 December 1856",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Japanese MFA archival exhibition explicitly dates exchange of the Japan-Russia Treaty of Shimoda ratifications to 7 December 1856. The joint Japan-Russia foreign-ministry document compendium separately reproduces Article 2 boundary/status language."
+    }
+  ]
+}
