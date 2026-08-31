@@ -5,57 +5,42 @@ on:
 permissions:
   contents: read
 jobs:
-  trace-read-link:
+  project-data:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Find async code that populates the RSL online-reader control
+      - name: Extract exact RSL ProjectData identifiers and resolve reader URL
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,html,urllib.parse
+          import urllib.request,re,json,html,urllib.parse
           record='https://search.rsl.ru/ru/record/01009649842'
-          base='https://search.rsl.ru'
-          def get(url):
-            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Referer':record})
-            with urllib.request.urlopen(req,timeout=90) as r: return r.read().decode('utf-8','replace')
-          page=get(record)
-          scripts=[]
-          for m in re.finditer(r'<script[^>]+src=["\']([^"\']+)["\']',page,re.I):
-            u=html.unescape(m.group(1))
-            if u.startswith('//'): u='https:'+u
-            elif u.startswith('/'): u=base+u
-            elif not u.startswith('http'): u=urllib.parse.urljoin(record,u)
-            if 'search.rsl.ru' in u and u not in scripts: scripts.append(u)
-          needles=[
-            'rsl-record-read-link-section','record-read-link','afterReady','ProjectData.document.id',
-            'showElementsForAccess','accessDod','document.id','read-url','js-free-access-alert',
-            'append(','html(','ajax({'
-          ]
-          for u in scripts:
-            try: js=get(u)
-            except Exception as e: print('SCRIPT_ERR',u,repr(e)); continue
-            positions=[]
-            for n in needles:
-              for m in re.finditer(re.escape(n),js,re.I): positions.append((m.start(),n))
-            if not positions: continue
-            print('\n=== SCRIPT',u,'BYTES',len(js),'===')
-            printed=[]
-            for pos,n in sorted(positions):
-              # Print only semantically useful matches; keep append/html contexts when near read/access/document terms.
-              ctx=js[max(0,pos-2500):min(len(js),pos+6500)]
-              low=ctx.lower()
-              if n in ['append(','html(','ajax({'] and not any(k in low for k in ['read','access','document','viewer','freeaccess']):
-                continue
-              key=(max(0,pos-2500),min(len(js),pos+6500))
-              if any(abs(key[0]-p[0])<1000 for p in printed): continue
-              printed.append(key)
-              print('\nNEEDLE',n,'AT',pos)
-              print(ctx)
-            print('\nCANDIDATE URL/PATH LITERALS')
-            for s in sorted(set(re.findall(r'["\']([^"\']{2,500})["\']',js))):
-              low=s.lower()
-              if any(k in low for k in ['access','document','viewer','read','ebook','file']) and ('/' in s or 'url' in low):
-                print(s[:500])
+          req=urllib.request.Request(record,headers={'User-Agent':'Mozilla/5.0'})
+          page=urllib.request.urlopen(req,timeout=90).read().decode('utf-8','replace')
+          m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});\s*</script>',page,re.S)
+          if not m:
+            m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});',page,re.S)
+          if not m: raise SystemExit('ProjectData not found')
+          raw=m.group(1)
+          data=json.loads(raw)
+          doc=data.get('document') or {}
+          pages=data.get('pages') or {}
+          keep={
+            'document': {k:doc.get(k) for k in ['id','hasFile','fullDocumentId','isAccessLevelDodInRoomDod','accessLevel','ownershipSystem']},
+            'pages': {k:pages.get(k) for k in ['fullDocumentView','accessDodInRoomDod','checkAccessDodInRoomDod']}
+          }
+          print('PROJECT_DATA_EXTRACT',json.dumps(keep,ensure_ascii=False,indent=2))
+          full_id=doc.get('fullDocumentId')
+          tpl=pages.get('fullDocumentView')
+          if full_id and tpl:
+            read=tpl.replace('=documentId=',str(full_id)).replace('=theme=','white')
+            read=urllib.parse.urljoin(record,read)
+            print('RESOLVED_READ_URL',read)
+            req=urllib.request.Request(read,headers={'User-Agent':'Mozilla/5.0','Referer':record})
+            with urllib.request.urlopen(req,timeout=90) as r:
+              body=r.read().decode('utf-8','replace')
+              print('READ_FINAL_URL',r.geturl(),'LEN',len(body))
+              print('READ_RSL_IDS',sorted(set(re.findall(r'rsl\d{8,}',body,re.I))))
+              print('READ_HEAD',body[:4000])
           PY
