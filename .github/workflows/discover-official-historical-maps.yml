@@ -13,77 +13,69 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Search digitized map hosts
+      - name: Search digitized official map scans
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p map-discovery
           python - <<'PY'
-          import json, urllib.parse, urllib.request, ssl, time
-
-          queries = [
-              'Большой советский атлас мира 1937',
-              'политико административная карта СССР ГУГК',
-              'карта СССР ГУГК 1939',
-              'карта СССР ГУГК 1940',
-              'карта РСФСР 1920',
-              'Российская империя карта 1914 Главное управление землеустройства',
-              'Карта Российской Империи 1914',
-              'Генеральная карта Российской империи военное топографическое депо',
+          import json, urllib.parse, urllib.request, ssl, re, time
+          ctx=ssl.create_default_context()
+          headers={'User-Agent':'Mozilla/5.0 HistoryCoreResearch/1.0'}
+          def get(url):
+            req=urllib.request.Request(url,headers=headers)
+            with urllib.request.urlopen(req,context=ctx,timeout=45) as r: return json.load(r)
+          queries=[
+            'СССР административная карта',
+            'СССР политико-административная карта',
+            'Союз Советских Социалистических Республик карта ГУГК',
+            'карта СССР ГУГК',
+            'карта СССР 1939 ГУГК',
+            'карта СССР 1940 ГУГК',
+            'карта СССР 1946 ГУГК',
+            'карта СССР 1954 ГУГК',
+            'карта СССР 1960 ГУГК',
+            'карта СССР 1989 ГУГК',
+            'РСФСР административная карта',
+            'РСФСР карта 1918',
+            'РСФСР карта 1920',
+            'Российская империя генеральная карта',
+            'Российская империя карта Военно-топографическое депо',
+            'генеральная карта Российской империи 1822',
+            'генеральная карта Российской империи 1871',
+            'Стрельбицкий карта Европейской России',
+            'карта Азиатской России переселенческое управление',
           ]
-          ctx = ssl.create_default_context()
-          headers = {'User-Agent':'Mozilla/5.0 HistoryCoreResearch/1.0'}
-          out = {'internet_archive': [], 'commons': []}
-
-          def get_json(url):
-              req=urllib.request.Request(url,headers=headers)
-              with urllib.request.urlopen(req,context=ctx,timeout=30) as r:
-                  return json.load(r)
-
+          seen={}
           for q in queries:
-              ia_q = urllib.parse.quote(q)
-              ia_url = 'https://archive.org/advancedsearch.php?q=' + ia_q + '&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=creator&fl%5B%5D=date&fl%5B%5D=description&fl%5B%5D=mediatype&rows=50&page=1&output=json'
-              try:
-                  data=get_json(ia_url)
-                  rows=data.get('response',{}).get('docs',[])
-                  print('\n### IA', q, len(rows))
-                  for row in rows[:20]:
-                      rec={'query':q, **row}
-                      out['internet_archive'].append(rec)
-                      print(json.dumps(rec,ensure_ascii=False)[:2500])
-              except Exception as e:
-                  print('IA ERROR', q, repr(e))
-
-              cm_url = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
-                  'action':'query','generator':'search','gsrsearch':q,'gsrnamespace':6,'gsrlimit':30,
-                  'prop':'imageinfo','iiprop':'url|extmetadata','format':'json','formatversion':2
-              })
-              try:
-                  data=get_json(cm_url)
-                  rows=data.get('query',{}).get('pages',[])
-                  print('\n### COMMONS', q, len(rows))
-                  for row in rows[:20]:
-                      ii=(row.get('imageinfo') or [{}])[0]
-                      meta=ii.get('extmetadata') or {}
-                      rec={
-                          'query':q,'title':row.get('title'),'pageid':row.get('pageid'),
-                          'url':ii.get('url'),'descriptionurl':ii.get('descriptionurl'),
-                          'date':(meta.get('DateTimeOriginal') or meta.get('DateTime') or {}).get('value'),
-                          'artist':(meta.get('Artist') or {}).get('value'),
-                          'credit':(meta.get('Credit') or {}).get('value'),
-                          'description':(meta.get('ImageDescription') or {}).get('value'),
-                      }
-                      out['commons'].append(rec)
-                      print(json.dumps(rec,ensure_ascii=False)[:3500])
-              except Exception as e:
-                  print('COMMONS ERROR', q, repr(e))
-              time.sleep(.3)
-
-          with open('map-discovery/results.json','w',encoding='utf8') as f:
-              json.dump(out,f,ensure_ascii=False,indent=2)
+            url='https://archive.org/advancedsearch.php?' + urllib.parse.urlencode({
+              'q':q,'fl[]':['identifier','title','creator','date','description','mediatype','collection'],
+              'rows':100,'page':1,'output':'json'
+            },doseq=True)
+            try:
+              rows=get(url).get('response',{}).get('docs',[])
+            except Exception as e:
+              print('SEARCH_ERROR',q,repr(e)); continue
+            print('\nQUERY',q,'COUNT',len(rows))
+            for r in rows:
+              ident=r.get('identifier'); title=str(r.get('title','')); desc=str(r.get('description','')); creator=str(r.get('creator',''))
+              hay=(title+' '+desc+' '+creator).lower()
+              score=sum(k in hay for k in ['ссср','совет','гугк','главн','российск','импер','военно','топограф','административ','политико','атлас','карта'])
+              if score<2 or not ident: continue
+              seen[ident]=r
+              print('ITEM',json.dumps({'score':score,**r},ensure_ascii=False)[:3000])
+          print('\nPROMISING_METADATA')
+          ranked=sorted(seen.values(),key=lambda r: -sum(k in (str(r.get('title',''))+' '+str(r.get('description',''))+' '+str(r.get('creator',''))).lower() for k in ['ссср','совет','гугк','главн','российск','импер','военно','топограф','административ','политико','атлас','карта']))[:60]
+          for r in ranked:
+            ident=r['identifier']
+            try:
+              meta=get('https://archive.org/metadata/'+urllib.parse.quote(ident,safe=''))
+            except Exception as e:
+              print('META_ERROR',ident,repr(e)); continue
+            files=[]
+            for f in meta.get('files',[]):
+              n=f.get('name',''); fmt=f.get('format',''); size=int(f.get('size') or 0)
+              if re.search(r'\.(?:jp2|jpg|jpeg|png|tif|tiff|pdf|djvu)$',n,re.I) or fmt in ['JPEG','JPEG 2000','Scandata','Text PDF','DjVu']:
+                files.append({'name':n,'format':fmt,'size':size})
+            print('META',json.dumps({'identifier':ident,'title':r.get('title'),'creator':r.get('creator'),'date':r.get('date'),'files':files[:20]},ensure_ascii=False)[:8000])
+            time.sleep(.05)
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: official-map-discovery-hosts
-          path: map-discovery/
-          if-no-files-found: error
