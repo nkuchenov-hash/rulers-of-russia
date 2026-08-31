@@ -6,42 +6,45 @@ on:
       - research/discover-official-historical-maps
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  inspect-ussr-1990:
+  extract-ussr-1990:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and inspect official 1990 GUGK atlas
+      - name: Extract full-USSR map sheet from official 1990 GUGK atlas
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq poppler-utils >/dev/null
-          mkdir -p atlas1990
-          curl -fL --retry 3 --connect-timeout 15 --max-time 180 \
-            'https://archive.org/download/antonov_vm_red_atlas_mira_1990/antonov_vm_red_atlas_mira_1990_text.pdf' \
-            -o atlas1990/atlas-text.pdf
+          mkdir -p research-artifacts/atlas1990
           curl -fL --retry 3 --connect-timeout 15 --max-time 240 \
             'https://archive.org/download/antonov_vm_red_atlas_mira_1990/antonov_vm_red_atlas_mira_1990.pdf' \
-            -o atlas1990/atlas-image.pdf
-          pdfinfo atlas1990/atlas-image.pdf | sed -n '1,30p'
-          pages=$(pdfinfo atlas1990/atlas-text.pdf | awk '/^Pages:/ {print $2}')
-          echo "TEXT_PAGES=$pages"
-          for p in $(seq 1 "$pages"); do
-            text=$(pdftotext -f "$p" -l "$p" -layout atlas1990/atlas-text.pdf - 2>/dev/null || true)
-            if printf '%s' "$text" | grep -Eqi 'Союз Советских|СССР|Union of Soviet'; then
-              echo "===== CANDIDATE PAGE $p ====="
-              printf '%s\n' "$text" | head -n 80
-            fi
-          done
-          pdftoppm -f 1 -l 20 -jpeg -r 80 atlas1990/atlas-image.pdf atlas1990/page >/dev/null 2>&1 || true
-          ls -lh atlas1990 | head -n 40
-      - uses: actions/upload-artifact@v4
-        with:
-          name: atlas-1990-inspection
-          path: |
-            atlas1990/page-*.jpg
-          retention-days: 1
-          if-no-files-found: warn
+            -o /tmp/atlas-image.pdf
+          # Page order: cover, contents/legend, political world map, full USSR map.
+          pdftoppm -f 3 -l 4 -jpeg -r 180 -singlefile /tmp/atlas-image.pdf /tmp/page >/dev/null 2>&1 || true
+          # pdftoppm -singlefile keeps only first requested page, so render each explicitly.
+          pdftoppm -f 3 -l 3 -jpeg -r 180 -singlefile /tmp/atlas-image.pdf research-artifacts/atlas1990/page-03-world
+          pdftoppm -f 4 -l 4 -jpeg -r 240 -singlefile /tmp/atlas-image.pdf research-artifacts/atlas1990/page-04-ussr
+          identify research-artifacts/atlas1990/*.jpg || true
+          sha256sum research-artifacts/atlas1990/*.jpg
+          cat > research-artifacts/atlas1990/README.md <<'EOF'
+          # GUGK Atlas 1990 research extraction
+
+          Temporary research raster extracted from the image-container scan of **Атлас мира (1990)**, produced by ПКО «Картография» ГУГК СССР, prepared in 1989 and corrected in 1990.
+
+          - `page-03-world.jpg`: political world map immediately after contents.
+          - `page-04-ussr.jpg`: full USSR map at 1:40,000,000, immediately before the regional USSR sheets.
+          - Scan host: Internet Archive item `antonov_vm_red_atlas_mira_1990`.
+          - Canonical provenance must cite the original GUGK atlas, not Internet Archive as map author.
+
+          These rasters are research inputs only; they are not themselves History Core geometry.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research-artifacts/atlas1990
+          git commit -m 'Research: extract 1990 GUGK USSR atlas sheet [skip ci]'
+          git push origin HEAD:research/discover-official-historical-maps
