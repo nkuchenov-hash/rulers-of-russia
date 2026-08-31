@@ -1,0 +1,39 @@
+name: Resolve RSL historical base maps
+on:
+  push:
+    branches: [research/rsl-ussr-base-maps]
+permissions:
+  contents: read
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect RSL record and viewer endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import urllib.request,re,html,json
+          records={
+            'ussr1927':'https://search.rsl.ru/ru/record/01009649842',
+            'ussr1925':'https://search.rsl.ru/ru/record/01009650083',
+            'rsfsr1922':'https://search.rsl.ru/ru/record/01009576229',
+            'ussr1928':'https://search.rsl.ru/ru/record/01009576192',
+          }
+          for key,url in records.items():
+            print('\n===',key,url,'===')
+            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+            try: page=urllib.request.urlopen(req,timeout=60).read().decode('utf-8','replace')
+            except Exception as e: print('FETCH_ERROR',repr(e)); continue
+            print('BYTES',len(page))
+            title=re.search(r'<title>(.*?)</title>',page,re.I|re.S)
+            print('TITLE',re.sub('<[^>]+>',' ',title.group(1)).strip() if title else '')
+            seen=set()
+            for m in re.finditer(r'(?:href|src)=["\']([^"\']+)["\']',page,re.I):
+              u=html.unescape(m.group(1))
+              if any(k in u.lower() for k in ['viewer','download','digital','image','record','storage','content','scan','bookreader','iiif']):
+                if u not in seen: seen.add(u); print('LINK',u[:1500])
+            for pat in ['viewer','fulltext','open access','открыт','Электрон','цифров','просмотр']:
+              if pat.lower() in page.lower(): print('HAS',pat)
+          PY
