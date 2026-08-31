@@ -5,37 +5,45 @@ on:
 permissions:
   contents: read
 jobs:
-  resolve-request:
+  download-map:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect request helper and route document-id normalization
+      - name: Download RSL page and inspect the 1927 USSR map
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import urllib.request,re
-          base='https://viewer.rsl.ru'
-          def get(url):
-            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-            return urllib.request.urlopen(req,timeout=90).read().decode('utf-8','replace')
-          app=get(base+'/js/app.a6574da3.js')
-          for needle in ['"9b0f":function','fetchDocumentInfo"','fetchDocumentInfo,','dispatch("fetchDocumentInfo"','dispatch(\'fetchDocumentInfo\'','route.params','docId','documentId']:
-            print('\n### NEEDLE',needle)
-            for m in list(re.finditer(re.escape(needle),app,re.I))[:20]:
-              print(app[max(0,m.start()-5000):min(len(app),m.end()+10000)])
-          # Try exact endpoint with common normalization/slash/header variants, logging bodies on errors.
-          import urllib.error
-          ids=['rsl01009649842','01009649842','rsl01009649842?','rsl01009649842/']
-          for d in ids:
-            u=f'{base}/api/v1/document/{d}/info'
-            for headers in [
-              {'User-Agent':'Mozilla/5.0','Accept':'application/json,text/plain,*/*','Referer':base+'/ru/rsl01009649842?page=1'},
-              {'User-Agent':'Mozilla/5.0','Accept':'application/json,text/plain,*/*','X-Requested-With':'XMLHttpRequest','Referer':base+'/ru/rsl01009649842?page=1'},
-            ]:
-              req=urllib.request.Request(u,headers=headers)
-              try:
-                with urllib.request.urlopen(req,timeout=60) as r: print('OK',u,r.status,r.geturl(),r.read()[:30000])
-              except urllib.error.HTTPError as e: print('HTTP',u,e.code,e.read()[:5000])
-              except Exception as e: print('ERR',u,repr(e))
-          PY
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq file imagemagick tesseract-ocr tesseract-ocr-rus poppler-utils >/dev/null
+          mkdir -p /tmp/rsl1927
+          for endpoint in page/1 pdf; do
+            name=$(echo "$endpoint" | tr '/' '-')
+            code=$(curl -L --retry 3 -sS -o "/tmp/rsl1927/$name.bin" -w '%{http_code}' \
+              -H 'User-Agent: Mozilla/5.0' \
+              "https://viewer.rsl.ru/api/v1/document/rsl01009649842/$endpoint" || true)
+            echo "ENDPOINT $endpoint HTTP $code"
+            file "/tmp/rsl1927/$name.bin" || true
+            ls -lh "/tmp/rsl1927/$name.bin" || true
+            head -c 100 "/tmp/rsl1927/$name.bin" | xxd || true
+          done
+          PAGE=/tmp/rsl1927/page-1.bin
+          if file "$PAGE" | grep -qiE 'JPEG|PNG|TIFF|image'; then
+            identify "$PAGE" || true
+            cp "$PAGE" /tmp/rsl1927/map-page.jpg
+            echo '=== OCR MAP ==='
+            tesseract "$PAGE" stdout -l rus+eng --psm 11 2>/dev/null | head -n 200 || true
+            convert "$PAGE" -resize '1800x1800>' /tmp/rsl1927/map-preview.jpg
+          fi
+          PDF=/tmp/rsl1927/pdf.bin
+          if file "$PDF" | grep -qi PDF; then
+            pdfinfo "$PDF" | head -n 30 || true
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rsl-ussr-1927-map
+          path: |
+            /tmp/rsl1927/map-preview.jpg
+            /tmp/rsl1927/map-page.jpg
+          if-no-files-found: ignore
+          retention-days: 7
