@@ -56,13 +56,22 @@ function rhumbSegment(a, b, steps) {
   return out;
 }
 
-function materializePoints(recipe) {
-  if (recipe.interpolation === 'source-vertices') return recipe.points.map(point => [...point]);
+function materializePath(recipe, points, close = false) {
+  const source = points.map(point => [...point]);
+  const hasExplicitClosure = source.length > 1 && samePoint(source[0], source[source.length - 1]);
+  const openSource = close && hasExplicitClosure ? source.slice(0, -1) : source;
+  if (recipe.interpolation === 'source-vertices') {
+    const out = openSource.map(point => [...point]);
+    if (close && out.length && !samePoint(out[0], out[out.length - 1])) out.push([...out[0]]);
+    return out;
+  }
+
   const steps = Math.max(1, Number(recipe.stepsPerSegment ?? 8));
+  const pairs = [];
+  for (let i = 0; i < openSource.length - 1; i += 1) pairs.push([openSource[i], openSource[i + 1]]);
+  if (close && openSource.length > 2) pairs.push([openSource[openSource.length - 1], openSource[0]]);
   const out = [];
-  for (let i = 0; i < recipe.points.length - 1; i += 1) {
-    const a = recipe.points[i];
-    const b = recipe.points[i + 1];
+  for (const [a, b] of pairs) {
     const segment = recipe.interpolation === 'geodesic'
       ? geodesicSegment(a, b, steps)
       : recipe.interpolation === 'rhumb'
@@ -72,6 +81,48 @@ function materializePoints(recipe) {
     if (out.length && samePoint(out[out.length - 1], segment[0])) segment.shift();
     out.push(...segment);
   }
+  if (close && out.length && !samePoint(out[0], out[out.length - 1])) out.push([...out[0]]);
+  return out;
+}
+
+function recipeSourcePoints(recipe, geometryType) {
+  if (geometryType === 'LineString' || geometryType === 'MultiPoint') return recipe.points ?? [];
+  if (geometryType === 'Polygon') return (recipe.rings ?? []).flat();
+  if (geometryType === 'MultiPolygon') return (recipe.polygons ?? []).flat(2);
+  return [];
+}
+
+function validateSourceShape(recipe, geometryType) {
+  if (geometryType === 'LineString' || geometryType === 'MultiPoint') {
+    assert(Array.isArray(recipe.points) && recipe.points.length >= 2 && recipe.points.every(finitePoint), `Invalid source points in ${recipe.id}`);
+    if (geometryType === 'MultiPoint') assert(recipe.interpolation === 'source-vertices', `MultiPoint recipe ${recipe.id} must use source-vertices interpolation`);
+    return;
+  }
+  if (geometryType === 'Polygon') {
+    assert(Array.isArray(recipe.rings) && recipe.rings.length > 0, `Polygon recipe ${recipe.id} has no rings`);
+    for (const ring of recipe.rings) assert(Array.isArray(ring) && ring.length >= 3 && ring.every(finitePoint), `Invalid polygon ring in ${recipe.id}`);
+    return;
+  }
+  assert(Array.isArray(recipe.polygons) && recipe.polygons.length > 0, `MultiPolygon recipe ${recipe.id} has no polygons`);
+  for (const polygon of recipe.polygons) {
+    assert(Array.isArray(polygon) && polygon.length > 0, `Invalid polygon in ${recipe.id}`);
+    for (const ring of polygon) assert(Array.isArray(ring) && ring.length >= 3 && ring.every(finitePoint), `Invalid multipolygon ring in ${recipe.id}`);
+  }
+}
+
+function materializeGeometry(recipe, geometryType) {
+  if (geometryType === 'LineString') return {type: geometryType, coordinates: materializePath(recipe, recipe.points, false)};
+  if (geometryType === 'MultiPoint') return {type: geometryType, coordinates: recipe.points.map(point => [...point])};
+  if (geometryType === 'Polygon') return {type: geometryType, coordinates: recipe.rings.map(ring => materializePath(recipe, ring, true))};
+  return {type: geometryType, coordinates: recipe.polygons.map(polygon => polygon.map(ring => materializePath(recipe, ring, true)))};
+}
+
+function flattenGeometryPoints(value, out = []) {
+  if (finitePoint(value)) {
+    out.push(value);
+    return out;
+  }
+  if (Array.isArray(value)) for (const child of value) flattenGeometryPoints(child, out);
   return out;
 }
 
@@ -84,14 +135,15 @@ for (const recipe of recipes) {
   assert(['russian-legal-border', 'maritime-jurisdiction', 'de-facto-control', 'front-line', 'internal-administrative', 'claim'].includes(recipe.track), `Invalid track in ${recipe.id}`);
   assert(['geodesic', 'rhumb', 'source-vertices'].includes(recipe.interpolation), `Invalid interpolation in ${recipe.id}`);
   const geometryType = recipe.geometryType ?? 'LineString';
-  assert(['LineString', 'MultiPoint'].includes(geometryType), `Invalid geometryType ${geometryType} in ${recipe.id}`);
-  if (geometryType === 'MultiPoint') assert(recipe.interpolation === 'source-vertices', `MultiPoint recipe ${recipe.id} must use source-vertices interpolation`);
+  assert(['LineString', 'MultiPoint', 'Polygon', 'MultiPolygon'].includes(geometryType), `Invalid geometryType ${geometryType} in ${recipe.id}`);
   assert(Array.isArray(recipe.evidenceDocumentIds) && recipe.evidenceDocumentIds.length > 0, `Recipe ${recipe.id} has no evidence documents`);
-  assert(Array.isArray(recipe.points) && recipe.points.length >= 2 && recipe.points.every(finitePoint), `Invalid source points in ${recipe.id}`);
+  validateSourceShape(recipe, geometryType);
 
-  const coordinates = materializePoints(recipe);
-  for (const sourcePoint of recipe.points) {
-    assert(coordinates.some(point => samePoint(point, sourcePoint, 1e-8)), `Generated ${recipe.id} lost a treaty source point ${JSON.stringify(sourcePoint)}`);
+  const geometry = materializeGeometry(recipe, geometryType);
+  const generatedPoints = flattenGeometryPoints(geometry.coordinates);
+  const sourcePoints = recipeSourcePoints(recipe, geometryType);
+  for (const sourcePoint of sourcePoints) {
+    assert(generatedPoints.some(point => samePoint(point, sourcePoint, 1e-8)), `Generated ${recipe.id} lost a source point ${JSON.stringify(sourcePoint)}`);
   }
 
   const datumStatus = displayDatumStatus(recipe);
@@ -112,7 +164,7 @@ for (const recipe of recipes) {
       interpolation: recipe.interpolation,
       geometryType,
       evidenceDocumentIds: recipe.evidenceDocumentIds,
-      sourcePointCount: recipe.points.length,
+      sourcePointCount: sourcePoints.length,
       note: recipe.note ?? null
     },
     features: [{
@@ -121,7 +173,7 @@ for (const recipe of recipes) {
         id: recipe.fragmentId,
         track: recipe.track,
         history_core_status: 'geometry-verified',
-        source_points: recipe.points,
+        source_points: sourcePoints,
         source_crs: recipe.sourceCrs ?? 'unspecified',
         display_datum_status: datumStatus,
         interpolation: recipe.interpolation,
@@ -129,7 +181,7 @@ for (const recipe of recipes) {
         evidence_document_ids: recipe.evidenceDocumentIds,
         note: recipe.note ?? null
       },
-      geometry: { type: geometryType, coordinates }
+      geometry
     }]
   };
   fs.writeFileSync(outputFile, JSON.stringify(payload, null, 2) + '\n');
