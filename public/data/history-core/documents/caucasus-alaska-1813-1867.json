@@ -9,15 +9,23 @@
       "url": "https://www.prlib.ru/item/442959",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "12 октября 1813 г.",
-        "normalized": "1813-10-24",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"12 октября 1813 г.","normalized":"1813-10-24","precision":"day","calendar":"julian"},
       "authority": ["Российская империя", "Персия"],
       "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
-      "notes": "Official MFA treaty corpus. Presidential Library chronology confirms the signing date and territorial recognition; exact treaty pages in the 1891 volume remain to be page-indexed."
+      "notes": "Official MFA treaty corpus. The treaty is the legal-basis/signature act; the bilateral ratification exchange is represented separately."
+    },
+    {
+      "id": "doc-gulistan-ratifications-1814-mfa-border-collection",
+      "sourceCollectionId": "prlib-mfa-border-treaties-1891",
+      "title": "Гюлистанский трактат — размен обоюдных ратификаций в Тифлисе",
+      "institution": "Министерство иностранных дел Российской империи / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/442959",
+      "tier": "A2-official-document-publication",
+      "documentType": "ratification-record",
+      "date": {"original":"15 сентября 1814 г.","normalized":"1814-09-27","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Персия"],
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
+      "notes": "Official treaty publication records the treaty as confirmed by mutual sovereign ratifications exchanged by the plenipotentiaries in Tiflis on 15 September 1814. This separates treaty signature from bilateral legal confirmation."
     },
     {
       "id": "doc-turkmenchay-1828-mfa-border-collection",
@@ -27,15 +35,10 @@
       "url": "https://www.prlib.ru/item/442959",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "10 февраля 1828 г.",
-        "normalized": "1828-02-22",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"10 февраля 1828 г.","normalized":"1828-02-22","precision":"day","calendar":"julian"},
       "authority": ["Российская империя", "Персия"],
-      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
-      "notes": "Primary legal basis for the new Russo-Persian boundary; use together with the 1828 Military Topographic Depot map."
+      "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891; ПСЗРИ, собр. II, т. III, № 1794.",
+      "notes": "Articles III–V directly cede Erivan and Nakhichevan and define/recognize the new frontier. Several implementation periods run from signature; separate articles postpone the joint demarcation commission and authoritative boundary map until after exchange of ratifications."
     },
     {
       "id": "doc-turkmenchay-boundary-map-1828-rnb",
@@ -45,12 +48,7 @@
       "url": "https://kp.rusneb.ru/item/material/generalnaya-karta-zemel-mezhdu-chernym-i-kaspiyskim-moryami-lezhashchih-s-oznacheniem-novoy-granicy-rossii-s-persieyu",
       "tier": "A3-contemporary-official-map",
       "documentType": "official-map",
-      "date": {
-        "original": "1828",
-        "normalized": "1828",
-        "precision": "year",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"1828","normalized":"1828","precision":"year","calendar":"gregorian"},
       "authority": ["Военно-топографическое депо Российской империи"],
       "archiveCitation": "РНБ. Шифр хранения К 2-Кав 2/15.",
       "notes": "Contemporary official map explicitly depicting the new Russian-Persian boundary after the Treaty of Turkmenchay. High-priority candidate for georeferencing and promotion to geometry-verified."
@@ -63,15 +61,23 @@
       "url": "https://www.prlib.ru/item/442959",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "2 сентября 1829 г.",
-        "normalized": "1829-09-14",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"2 сентября 1829 г.","normalized":"1829-09-14","precision":"day","calendar":"julian"},
       "authority": ["Российская империя", "Османская империя"],
       "publicationCitation": "Сборник пограничных договоров, заключенных Россией с соседними государствами. СПб.: МИД, 1891.",
-      "notes": "Territorial clauses include the Danube mouth islands, eastern Black Sea coast and Akhalkalaki/Akhaltsikhe districts."
+      "notes": "Articles III–IV define the European and Asian territorial settlement; Article XI explicitly starts execution of those boundary articles after exchange of ratifications, and Article XVI makes the exchange the final confirmation of the treaty."
+    },
+    {
+      "id": "doc-adrianople-ratifications-1829-diebitsch",
+      "sourceCollectionId": "russian-starina-diebitsch-correspondence",
+      "title": "И. И. Дибич Николаю I о размене ратификаций Адрианопольского мира, 15–16 октября 1829 г.",
+      "institution": "Русская старина / Восточная литература",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/Turk/XIX/1820-1840/Dibic/text15.htm",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "diplomatic-report",
+      "date": {"original":"16 октября 1829 г.","normalized":"1829-10-28","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя"],
+      "publicationCitation": "Император Николай Павлович и гр. Дибич-Забалканский. Переписка 1828–1830 гг. // Русская старина. 1883.",
+      "notes": "In the contemporaneous letter dated 15–16 October, Diebitsch first writes that the ratifications brought the previous day will be exchanged 'tomorrow', then continues after the ceremony that he has just returned from the exchange. Used with Articles XI and XVI of the official treaty corpus to fix the effective boundary transition at 16/28 October 1829."
     },
     {
       "id": "doc-alaska-cession-1867-prlib-chronology",
@@ -81,12 +87,7 @@
       "url": "https://www.prlib.ru/history/619131",
       "tier": "B1-russian-academic-interpretation",
       "documentType": "documentary-publication",
-      "date": {
-        "original": "18 марта 1867 г.",
-        "normalized": "1867-03-30",
-        "precision": "day",
-        "calendar": "julian"
-      },
+      "date": {"original":"18 марта 1867 г.","normalized":"1867-03-30","precision":"day","calendar":"julian"},
       "authority": ["Российская империя", "Соединённые Штаты Америки"],
       "notes": "Institutional chronology retained for Russian-language chronology and the 6 (18) October formal transfer ceremony. It is no longer the canonical legal-effect source for the cession itself."
     },
@@ -98,12 +99,7 @@
       "url": "https://www.loc.gov/item/2021671098/",
       "tier": "A1-archival-original",
       "documentType": "treaty",
-      "date": {
-        "original": "30 March 1867",
-        "normalized": "1867-03-30",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"30 March 1867","normalized":"1867-03-30","precision":"day","calendar":"gregorian"},
       "authority": ["Russian Empire", "United States of America"],
       "publicationCitation": "Original bilingual English/French Treaty of Cession, National Archives and Records Administration; digital presentation by the Library of Congress.",
       "notes": "Article I cedes all Russian territory and dominion in North America immediately upon exchange of ratifications and reproduces the eastern boundary established by the 1825 Anglo-Russian convention. Article IV makes the cession and right of immediate possession complete and absolute at that exchange without waiting for formal delivery."
@@ -116,12 +112,7 @@
       "url": "https://history.state.gov/historicaldocuments/frus1867p1/d324",
       "tier": "A2-official-document-publication",
       "documentType": "treaty",
-      "date": {
-        "original": "30 March 1867",
-        "normalized": "1867-03-30",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"30 March 1867","normalized":"1867-03-30","precision":"day","calendar":"gregorian"},
       "authority": ["Russian Empire", "United States of America"],
       "publicationCitation": "Papers Relating to Foreign Affairs, Accompanying the Annual Message of the President to the Second Session Fortieth Congress, Part I, pp. 387-392.",
       "notes": "Official documentary publication used for article-level legal interpretation and the treaty's geographic boundary description."
@@ -134,12 +125,7 @@
       "url": "https://www.loc.gov/resource/gdcwdl.wdl_16744/",
       "tier": "A1-archival-original",
       "documentType": "other",
-      "date": {
-        "original": "20 June 1867",
-        "normalized": "1867-06-20",
-        "precision": "day",
-        "calendar": "gregorian"
-      },
+      "date": {"original":"20 June 1867","normalized":"1867-06-20","precision":"day","calendar":"gregorian"},
       "authority": ["Russian Empire", "United States of America"],
       "publicationCitation": "Certificate recording exchange of the instruments of ratification by William H. Seward and Eduard de Stoeckl at Washington, 20 June 1867; original resource at NARA, digital presentation by Library of Congress.",
       "notes": "Canonical evidence for the moment at which Articles I and IV make the cession legally complete and confer the right of immediate possession."
