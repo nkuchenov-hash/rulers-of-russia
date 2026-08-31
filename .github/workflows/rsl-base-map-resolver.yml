@@ -5,26 +5,48 @@ on:
 permissions:
   contents: read
 jobs:
-  late-project-data:
+  endpoints:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trace all late ProjectData assignments in the RSL record HTML
+      - name: Enumerate ProjectData endpoints and probe digital-record candidates
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re
+          import urllib.request,re,json,urllib.parse,http.cookiejar,urllib.error
           record='https://search.rsl.ru/ru/record/01009649842'
-          req=urllib.request.Request(record,headers={'User-Agent':'Mozilla/5.0'})
-          page=urllib.request.urlopen(req,timeout=90).read().decode('utf-8','replace')
-          needles=['fullDocumentId','hasFile','isAccessLevelDodInRoomDod','fullDocumentView','ProjectData.document','ProjectData.pages','ownershipSystem','accessLevel']
-          for n in needles:
-            print('\n===',n,'===')
-            hits=list(re.finditer(re.escape(n),page,re.I))
-            print('COUNT',len(hits))
-            for m in hits[:50]: print(page[max(0,m.start()-5000):min(len(page),m.end()+10000)])
-          print('\n=== ALL PROJECTDATA ASSIGNMENTS ===')
-          for m in re.finditer(r'ProjectData(?:\.[A-Za-z0-9_]+)+\s*=\s*[^;]+;',page,re.S):
-            print(m.group(0)[:30000])
+          jar=http.cookiejar.CookieJar(); opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+          def request(url, method='GET', data=None, headers=None):
+            h={'User-Agent':'Mozilla/5.0','Referer':record,'X-Requested-With':'XMLHttpRequest','Accept':'application/json,text/plain,*/*'}
+            if headers: h.update(headers)
+            req=urllib.request.Request(url,data=data,headers=h,method=method)
+            with opener.open(req,timeout=90) as r: return r.geturl(),dict(r.headers),r.read()
+          _,_,body=request(record,headers={'X-Requested-With':''})
+          page=body.decode('utf-8','replace')
+          m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});',page,re.S)
+          if not m: raise SystemExit('ProjectData not found')
+          data=json.loads(m.group(1)); pages=data.get('pages') or {}
+          print('PAGE_ENDPOINT_COUNT',len(pages))
+          for k,v in sorted(pages.items()):
+            if isinstance(v,str): print('PAGE_ENDPOINT',k,'=',v)
+          print('CANDIDATES')
+          terms=['file','document','digital','access','view','record','full','reader','book','resource']
+          candidates=[]
+          for k,v in pages.items():
+            if not isinstance(v,str): continue
+            low=(k+' '+v).lower()
+            if any(t in low for t in terms) and v.startswith('/'):
+              u=urllib.parse.urljoin(record,v.replace('=documentId=','01009649842').replace('=id=','01009649842'))
+              candidates.append((k,u))
+          for k,u in candidates:
+            print('\nPROBE',k,u)
+            variants=[u]
+            sep='&' if '?' in u else '?'
+            variants += [u+sep+'id=01009649842',u+sep+'documentId=01009649842']
+            for q in dict.fromkeys(variants):
+              try:
+                final,h,b=request(q); print('OK',final,h.get('Content-Type'),len(b),b[:4000])
+              except urllib.error.HTTPError as e: print('HTTP',e.code,q,e.read()[:2000])
+              except Exception as e: print('ERR',q,repr(e))
           PY
