@@ -5,39 +5,56 @@ on:
 permissions:
   contents: read
 jobs:
-  probe-api:
+  fetch-map:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract API config and probe document/page endpoints
+      - name: Fetch document metadata and discover page image endpoints
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,json
+          import urllib.request,re,json,html
           base='https://viewer.rsl.ru'
+          doc='rsl01009649842'
           def get(url, binary=False):
             req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Accept':'application/json,text/plain,*/*'})
             with urllib.request.urlopen(req,timeout=90) as r:
-              b=r.read(); return r.geturl(),r.headers, b if binary else b.decode('utf-8','replace')
-          _,_,app=get(base+'/js/app.a6574da3.js')
-          _,_,pdf=get(base+'/js/pdfModule.2b47014e.js')
-          for label,js,needle in [
-            ('CONFIG',app,'"0d4f":function'),
-            ('FETCH_DOCUMENT',app,'fetchDocumentInfo:function'),
-            ('PDF_DOCUMENT',pdf,'/document/'),
-            ('PDF_PAGE',pdf,'/page/')]:
-            i=js.find(needle)
-            print('\n===',label,'INDEX',i,'===')
-            if i>=0: print(js[max(0,i-3000):i+9000])
-          candidates=[
-            base+'/api/v1/document/rsl01009649842',
-            base+'/api/v1/document/rsl01009649842/',
-            base+'/api/v1/document/01009649842',
-            base+'/api/v1/document/01009649842/',
+              b=r.read(); return r.geturl(),dict(r.headers), b if binary else b.decode('utf-8','replace')
+          info_url=f'{base}/api/v1/document/{doc}/info'
+          final,h,txt=get(info_url)
+          print('INFO_URL',final,'CTYPE',h.get('Content-Type'),'LEN',len(txt))
+          print('INFO_JSON',txt[:50000])
+          try: info=json.loads(txt)
+          except: info={}
+          print('INFO_SUMMARY',json.dumps({k:info.get(k) for k in ['docId','pageCount','formats','accessLevel','isAvailable','viewAccess','ownershipSystem','title']},ensure_ascii=False,indent=2))
+          # Search every JS asset named in the viewer shell for literal endpoint patterns.
+          _,_,shell=get(base+f'/ru/{doc}?page=1&rotate=0&theme=white')
+          assets=[]
+          for m in re.finditer(r'(?:src|href)=([^ >]+\.js(?:\?[^ >]*)?)',shell,re.I):
+            u=html.unescape(m.group(1).strip('"\''))
+            if u.startswith('/'): u=base+u
+            if u.startswith(base) and u not in assets: assets.append(u)
+          # Also include prefetched chunks whose href syntax is unquoted in minified HTML.
+          for u in re.findall(r'href=(/js/[^ >]+\.js)',shell,re.I):
+            u=base+u
+            if u not in assets: assets.append(u)
+          print('ASSET_COUNT',len(assets))
+          for u in assets:
+            try: _,_,js=get(u)
+            except Exception as e: print('ASSET_ERR',u,repr(e)); continue
+            for m in re.finditer(r'["\']([^"\']*(?:/page/|/image|image/|thumbnail|preview|render|pdf)[^"\']*)["\']',js,re.I):
+              s=m.group(1)
+              if len(s)<=500: print('PATH',u.rsplit('/',1)[-1],s)
+          # Probe conservative, read-only page variants based on API naming.
+          probes=[
+            f'{base}/api/v1/document/{doc}/page/1',
+            f'{base}/api/v1/document/{doc}/page/1/image',
+            f'{base}/api/v1/document/{doc}/page/1/info',
+            f'{base}/api/v1/document/{doc}/page/1/preview',
           ]
-          for u in candidates:
+          for u in probes:
             try:
-              final,h,txt=get(u); print('\nAPI_OK',u,'=>',final,'CTYPE',h.get('content-type'),'LEN',len(txt)); print(txt[:20000])
-            except Exception as e: print('API_ERR',u,repr(e))
+              final,h,b=get(u,binary=True); print('PROBE_OK',u,'=>',final,'STATUS_TYPE',h.get('Content-Type'),'LEN',len(b),'HEAD',b[:80])
+            except Exception as e: print('PROBE_ERR',u,repr(e))
           PY
