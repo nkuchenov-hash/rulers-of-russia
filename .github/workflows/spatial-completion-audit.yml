@@ -17,15 +17,15 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Build generated geometry and territory audit
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/build-history-geometry.mjs
-          node scripts/check-history-geometry-recipes.mjs
-          node scripts/materialize-history-territory.mjs
-          node scripts/build-history-month-index.mjs
+          npm run materialize:history-geometry
+          npm run validate:history-geometry
+          npm run validate:history
+          npm run materialize:history
           node scripts/audit-history-completion.mjs
       - name: Print exact spatial blockers and change inventory
         shell: bash
