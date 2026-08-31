@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Search Library of Congress map catalog
+      - name: Search digitized map hosts
         shell: bash
         run: |
           set -euo pipefail
@@ -22,50 +22,68 @@ jobs:
           import json, urllib.parse, urllib.request, ssl, time
 
           queries = [
-              'Soviet Union GUGK map',
-              'SSSR GUGK karta',
-              'politiko administrativnaia karta SSSR',
-              'RSFSR map 1920 Russian',
-              'Russian Empire official map 1914',
-              'Rossiiskaia Imperiia karta 1914',
-              'Glavnoe upravlenie zemleustroistva karta Rossiiskoi Imperii',
+              'Большой советский атлас мира 1937',
+              'политико административная карта СССР ГУГК',
+              'карта СССР ГУГК 1939',
+              'карта СССР ГУГК 1940',
+              'карта РСФСР 1920',
+              'Российская империя карта 1914 Главное управление землеустройства',
+              'Карта Российской Империи 1914',
+              'Генеральная карта Российской империи военное топографическое депо',
           ]
           ctx = ssl.create_default_context()
-          headers = {'User-Agent':'Mozilla/5.0'}
-          all_rows = []
+          headers = {'User-Agent':'Mozilla/5.0 HistoryCoreResearch/1.0'}
+          out = {'internet_archive': [], 'commons': []}
+
+          def get_json(url):
+              req=urllib.request.Request(url,headers=headers)
+              with urllib.request.urlopen(req,context=ctx,timeout=30) as r:
+                  return json.load(r)
+
           for q in queries:
-              url = 'https://www.loc.gov/maps/?fo=json&c=100&q=' + urllib.parse.quote(q)
+              ia_q = urllib.parse.quote(q)
+              ia_url = 'https://archive.org/advancedsearch.php?q=' + ia_q + '&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=creator&fl%5B%5D=date&fl%5B%5D=description&fl%5B%5D=mediatype&rows=50&page=1&output=json'
               try:
-                  req = urllib.request.Request(url, headers=headers)
-                  with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
-                      data = json.load(r)
-                  rows=[]
-                  for item in data.get('results',[]):
-                      rows.append({
-                          'query': q,
-                          'title': item.get('title'),
-                          'date': item.get('date'),
-                          'description': item.get('description'),
-                          'contributor': item.get('contributor'),
-                          'created_published': item.get('created_published'),
-                          'id': item.get('id'),
-                          'url': item.get('url'),
-                          'resources': item.get('resources'),
-                          'location': item.get('location'),
-                          'subject': item.get('subject'),
-                      })
-                  all_rows.extend(rows)
-                  print('\n###', q, len(rows))
-                  for x in rows[:12]:
-                      print(json.dumps(x, ensure_ascii=False)[:3500])
+                  data=get_json(ia_url)
+                  rows=data.get('response',{}).get('docs',[])
+                  print('\n### IA', q, len(rows))
+                  for row in rows[:20]:
+                      rec={'query':q, **row}
+                      out['internet_archive'].append(rec)
+                      print(json.dumps(rec,ensure_ascii=False)[:2500])
               except Exception as e:
-                  print('ERROR', q, repr(e))
-              time.sleep(.5)
-          with open('map-discovery/loc-results.json','w',encoding='utf8') as f:
-              json.dump(all_rows,f,ensure_ascii=False,indent=2)
+                  print('IA ERROR', q, repr(e))
+
+              cm_url = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
+                  'action':'query','generator':'search','gsrsearch':q,'gsrnamespace':6,'gsrlimit':30,
+                  'prop':'imageinfo','iiprop':'url|extmetadata','format':'json','formatversion':2
+              })
+              try:
+                  data=get_json(cm_url)
+                  rows=data.get('query',{}).get('pages',[])
+                  print('\n### COMMONS', q, len(rows))
+                  for row in rows[:20]:
+                      ii=(row.get('imageinfo') or [{}])[0]
+                      meta=ii.get('extmetadata') or {}
+                      rec={
+                          'query':q,'title':row.get('title'),'pageid':row.get('pageid'),
+                          'url':ii.get('url'),'descriptionurl':ii.get('descriptionurl'),
+                          'date':(meta.get('DateTimeOriginal') or meta.get('DateTime') or {}).get('value'),
+                          'artist':(meta.get('Artist') or {}).get('value'),
+                          'credit':(meta.get('Credit') or {}).get('value'),
+                          'description':(meta.get('ImageDescription') or {}).get('value'),
+                      }
+                      out['commons'].append(rec)
+                      print(json.dumps(rec,ensure_ascii=False)[:3500])
+              except Exception as e:
+                  print('COMMONS ERROR', q, repr(e))
+              time.sleep(.3)
+
+          with open('map-discovery/results.json','w',encoding='utf8') as f:
+              json.dump(out,f,ensure_ascii=False,indent=2)
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: official-map-discovery
+          name: official-map-discovery-hosts
           path: map-discovery/
           if-no-files-found: error
