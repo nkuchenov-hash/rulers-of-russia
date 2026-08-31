@@ -5,48 +5,27 @@ on:
 permissions:
   contents: read
 jobs:
-  endpoints:
+  ajax-record:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Enumerate ProjectData endpoints and probe digital-record candidates
+      - name: Inspect the AJAX record access/read block
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,json,urllib.parse,http.cookiejar,urllib.error
-          record='https://search.rsl.ru/ru/record/01009649842'
-          jar=http.cookiejar.CookieJar(); opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
-          def request(url, method='GET', data=None, headers=None):
-            h={'User-Agent':'Mozilla/5.0','Referer':record,'X-Requested-With':'XMLHttpRequest','Accept':'application/json,text/plain,*/*'}
-            if headers: h.update(headers)
-            req=urllib.request.Request(url,data=data,headers=h,method=method)
-            with opener.open(req,timeout=90) as r: return r.geturl(),dict(r.headers),r.read()
-          _,_,body=request(record,headers={'X-Requested-With':''})
-          page=body.decode('utf-8','replace')
-          m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});',page,re.S)
-          if not m: raise SystemExit('ProjectData not found')
-          data=json.loads(m.group(1)); pages=data.get('pages') or {}
-          print('PAGE_ENDPOINT_COUNT',len(pages))
-          for k,v in sorted(pages.items()):
-            if isinstance(v,str): print('PAGE_ENDPOINT',k,'=',v)
-          print('CANDIDATES')
-          terms=['file','document','digital','access','view','record','full','reader','book','resource']
-          candidates=[]
-          for k,v in pages.items():
-            if not isinstance(v,str): continue
-            low=(k+' '+v).lower()
-            if any(t in low for t in terms) and v.startswith('/'):
-              u=urllib.parse.urljoin(record,v.replace('=documentId=','01009649842').replace('=id=','01009649842'))
-              candidates.append((k,u))
-          for k,u in candidates:
-            print('\nPROBE',k,u)
-            variants=[u]
-            sep='&' if '?' in u else '?'
-            variants += [u+sep+'id=01009649842',u+sep+'documentId=01009649842']
-            for q in dict.fromkeys(variants):
-              try:
-                final,h,b=request(q); print('OK',final,h.get('Content-Type'),len(b),b[:4000])
-              except urllib.error.HTTPError as e: print('HTTP',e.code,q,e.read()[:2000])
-              except Exception as e: print('ERR',q,repr(e))
+          import urllib.request,re,html
+          url='https://search.rsl.ru/ru/record?id=01009649842'
+          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','X-Requested-With':'XMLHttpRequest','Referer':'https://search.rsl.ru/ru/record/01009649842'})
+          page=urllib.request.urlopen(req,timeout=90).read().decode('utf-8','replace')
+          print('LEN',len(page))
+          for needle in ['Документ в свободном доступе','Читать','viewer','fullDocument','hasFile','data-read','freeAccess','rsl01009649842','href=']:
+            print('\n===',needle,'===')
+            hits=list(re.finditer(re.escape(needle),page,re.I))
+            print('COUNT',len(hits))
+            for m in hits[:50]: print(page[max(0,m.start()-3000):min(len(page),m.end()+7000)])
+          print('\n=== LINKS ===')
+          for m in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',page,re.I|re.S):
+            href=html.unescape(m.group(1)); text=' '.join(re.sub('<[^>]+>',' ',m.group(2)).split())
+            print(text,'=>',href)
           PY
