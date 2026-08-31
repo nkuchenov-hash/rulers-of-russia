@@ -9,23 +9,30 @@ permissions:
   contents: read
 
 jobs:
-  resolve-ussr-1928-source:
+  resolve-ussr-1928-images:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Resolve Istmat attachment URLs and inspect map candidates
+      - name: Resolve image and Wikimedia links from the USSR atlas page
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import urllib.request,re,html
-          url='https://www.istmat.org/node/39972'
+          url='https://www.istmat.org/node/39983'
           req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-          page=urllib.request.urlopen(req,timeout=30).read().decode('utf-8','replace')
+          page=urllib.request.urlopen(req,timeout=45).read().decode('utf-8','replace')
           print('PAGE_BYTES',len(page))
+          print('IMAGES')
+          seen=set()
+          for m in re.finditer(r'<img[^>]+(?:src|data-src)=["\']([^"\']+)["\'][^>]*>',page,re.I|re.S):
+            u=html.unescape(m.group(1))
+            if u not in seen:
+              seen.add(u); print(u)
+          print('LINKS')
           for m in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',page,re.I|re.S):
             href=html.unescape(m.group(1)); text=re.sub('<[^>]+>',' ',m.group(2)); text=' '.join(html.unescape(text).split())
-            if 'pdf' in href.lower() or 'Союз Советских' in text or 'Карта мира' in text or 'Российская Социалистическая' in text:
-              print('LINK',text,'=>',href)
+            if any(k in href.lower() for k in ['wikimedia','upload.wikimedia','jpg','jpeg','png']) or any(k in text.upper() for k in ['СССР СЕВЕРО','СССР ЮГО','ЕВРОПЕЙСКАЯ ЧАСТЬ']):
+              print(text,'=>',href)
           PY
