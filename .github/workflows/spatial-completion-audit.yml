@@ -1,0 +1,62 @@
+name: Spatial completion audit
+
+on:
+  push:
+    branches:
+      - research/spatial-completion-audit-20260831
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci
+      - name: Build generated geometry and territory audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build-history-geometry.mjs
+          node scripts/check-history-geometry-recipes.mjs
+          node scripts/materialize-history-territory.mjs
+          node scripts/build-history-month-index.mjs
+          node scripts/audit-history-completion.mjs
+      - name: Print exact spatial blockers and change inventory
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root='public/data/history-core';
+          const model=JSON.parse(fs.readFileSync(path.join(root,'territory-model.json'),'utf8'));
+          const changes=[];
+          for (const rel of model.changeFiles ?? []) {
+            const p=path.join(root,rel);
+            const data=JSON.parse(fs.readFileSync(p,'utf8'));
+            for (const c of data.territoryChanges ?? []) changes.push({...c,_file:rel});
+          }
+          const unresolved=changes.filter(c=>c.geometry?.method==='not-yet-georeferenced');
+          console.log('SPATIAL_BLOCKERS_JSON');
+          console.log(JSON.stringify(unresolved.map(c=>({
+            id:c.id,file:c._file,polityId:c.polityId,track:c.track,operation:c.operation,
+            effectiveDate:c.effectiveDate,territorialModel:c.territorialModel,
+            reviewStatus:c.reviewStatus,geometryAction:c.geometryAction ?? null,
+            geometry:c.geometry,geometryFragmentIds:c.geometryFragmentIds ?? [],
+            evidenceDocumentIds:c.evidenceDocumentIds ?? []
+          })),null,2));
+          console.log('GEOMETRY_VERIFIED_CHANGES_JSON');
+          console.log(JSON.stringify(changes.filter(c=>c.reviewStatus==='geometry-verified').map(c=>({
+            id:c.id,file:c._file,polityId:c.polityId,track:c.track,operation:c.operation,
+            effectiveDate:c.effectiveDate,territorialModel:c.territorialModel,
+            geometryAction:c.geometryAction ?? null,geometry:c.geometry,
+            geometryFragmentIds:c.geometryFragmentIds ?? []
+          })),null,2));
+          console.log('BASE_AND_AREA_JSON');
+          console.log(JSON.stringify({baseStates:model.baseStates ?? [],areaFragments:(model.fragments ?? []).filter(f=>f.role==='territory-area')},null,2));
+          NODE
