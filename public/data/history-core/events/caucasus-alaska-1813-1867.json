@@ -3,14 +3,26 @@
   "events": [
     {
       "id": "evt-1813-gulistan-peace",
-      "title": "Гюлистанский мирный договор",
+      "title": "Подписание Гюлистанского мирного договора",
       "kind": "treaty",
       "date": {"original":"12 октября 1813 г.","normalized":"1813-10-24","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Персия признала переход к России Дагестана, Грузии и ряда владений Восточного Закавказья; вопрос точной даты полного вступления договора в силу требует отдельной фиксации миссии 1818 года.",
+      "summary": "Россия и Персия подписали Гюлистанский мирный договор; это договорный юридический базис, но не дата двустороннего размена ратификаций.",
       "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection"],
       "territoryChangeIds": ["territory-1813-gulistan-russian-legal-basis"],
       "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1814-gulistan-ratifications-exchanged",
+      "title": "Размен ратификаций Гюлистанского трактата в Тифлисе",
+      "kind": "ratification",
+      "date": {"original":"15 сентября 1814 г.","normalized":"1814-09-27","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "В Тифлисе полномочные России и Персии обменялись государственными ратификациями Гюлистанского трактата, двусторонне подтвердив договорный территориальный порядок.",
+      "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection", "doc-gulistan-ratifications-1814-mfa-border-collection"],
+      "territoryChangeIds": ["territory-1814-gulistan-russian-legal-border"],
+      "reviewStatus": "source-verified",
+      "notes": "The later 1818 Senate publication/manifesto is not treated as the first bilateral legal-effect date; it belongs to the later publication/political-recognition history."
     },
     {
       "id": "evt-1828-turkmenchay-peace",
@@ -18,19 +30,30 @@
       "kind": "treaty",
       "date": {"original":"10 февраля 1828 г.","normalized":"1828-02-22","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Новый русско-персидский договорный рубеж; к России переходили Эриванское и Нахичеванское ханства, а граница получила современную ей официальную картографическую фиксацию.",
+      "summary": "Персия уступила России Эриванское и Нахичеванское ханства; договор одновременно описал новую границу и запустил территориальные сроки исполнения от даты подписания.",
       "evidenceDocumentIds": ["doc-turkmenchay-1828-mfa-border-collection", "doc-turkmenchay-boundary-map-1828-rnb"],
       "territoryChangeIds": ["territory-1828-turkmenchay-russian-legal-border"],
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "The joint demarcation commission and authoritative exchanged boundary maps were to follow after ratification exchange; that later demarcation layer is a separate geometry dependency."
     },
     {
       "id": "evt-1829-adrianople-peace",
-      "title": "Адрианопольский мирный договор",
+      "title": "Подписание Адрианопольского мирного договора",
       "kind": "treaty",
       "date": {"original":"2 сентября 1829 г.","normalized":"1829-09-14","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Османская империя закрепила ряд территориальных уступок России на Дунае и Кавказе и признала ранее состоявшиеся присоединения в Закавказье.",
+      "summary": "Россия и Османская империя подписали Адрианопольский мир; статьи III–IV задали территориальное урегулирование, но статья XI связывает исполнение границ с последующим разменом ратификаций.",
       "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection"],
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "evt-1829-adrianople-ratifications-exchanged",
+      "title": "Размен ратификаций Адрианопольского мира",
+      "kind": "ratification",
+      "date": {"original":"16 октября 1829 г.","normalized":"1829-10-28","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "В Адрианополе состоялся размен ратификаций; по статьям XI и XVI договора с этого рубежа начинается исполнение территориальных статей и договор окончательно подтверждён.",
+      "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection", "doc-adrianople-ratifications-1829-diebitsch"],
       "territoryChangeIds": ["territory-1829-adrianople-russian-legal-border"],
       "reviewStatus": "source-verified"
     },

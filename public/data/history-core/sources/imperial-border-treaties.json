@@ -22,6 +22,26 @@
       "notes": "Registry entry anchored by the 1792 Imperial Printing House edition of the Treaty of Jassy; individual documents must retain their exact item URL and publication metadata."
     },
     {
+      "id": "feb-griboedov-diplomatic-papers",
+      "title": "Дипломатические письма и служебные бумаги А. С. Грибоедова",
+      "institution": "Фундаментальная электронная библиотека «Русская литература и фольклор» / академические документальные публикации",
+      "url": "https://feb-web.ru/feb/griboed/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Primary diplomatic correspondence and scholarly apparatus for Griboedov's 1828 mission to Persia, including the Turkmenchay ratification chronology",
+      "canonicalUse": ["event", "boundary-date", "interpretation"],
+      "notes": "Use only where the publication identifies the underlying primary correspondence or documentary edition. Treaty clauses themselves remain anchored in the official MFA/PSZRI corpus."
+    },
+    {
+      "id": "russian-starina-diebitsch-correspondence",
+      "title": "Переписка императора Николая I и графа И. И. Дибича-Забалканского, 1828–1830",
+      "institution": "Русская старина / документальная публикация; digital text via Восточная литература",
+      "url": "https://www.vostlit.info/Texts/Dokumenty/Turk/XIX/1820-1840/Dibic/text15.htm",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Published primary correspondence from the Russo-Turkish War and Adrianople peace implementation, including Diebitsch's contemporaneous account of the ratification exchange",
+      "canonicalUse": ["event", "boundary-date", "interpretation"],
+      "notes": "Primary correspondence published in Русская старина (1883) is used only to fix the day of the ratification exchange; the treaty's legal effect remains anchored in the official treaty corpus."
+    },
+    {
       "id": "usdos-international-boundary-studies",
       "title": "International Boundary Studies — Office of the Geographer, United States Department of State",
       "institution": "United States Department of State, Office of the Geographer",
