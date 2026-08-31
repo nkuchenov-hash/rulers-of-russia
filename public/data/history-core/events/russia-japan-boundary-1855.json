@@ -12,11 +12,11 @@
         "calendar": "julian"
       },
       "polityIds": ["russian-empire"],
-      "summary": "Первый российско-японский договор определил государственную границу в Курильской гряде и оставил Сахалин неразделённой зоной.",
-      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "summary": "Первый российско-японский договор определил государственную границу в Курильской гряде между Итурупом и Урупом и оставил Сахалин неразделённым; обмен ратификациями состоялся 7 декабря 1856 года.",
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
       "territoryChangeIds": ["territory-1856-shimoda-kuril-boundary", "territory-1856-shimoda-sakhalin-undivided"],
       "reviewStatus": "source-verified",
-      "notes": "Treaty signed 7 February 1855 Gregorian. Territorial changes are dated to the reported entry into force on 7 December 1856 and remain research-required until the ratification/exchange evidence is attached."
+      "notes": "Treaty signed 7 February 1855 Gregorian. The territorial status transition is replayed at the independently verified exchange of ratifications on 7 December 1856; exact island/coastal geometry remains a separate task."
     }
   ]
 }
