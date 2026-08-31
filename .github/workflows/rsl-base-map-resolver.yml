@@ -5,44 +5,47 @@ on:
 permissions:
   contents: read
 jobs:
-  trace-bootstrap:
+  resolve-read-url:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trace free-access online reader bootstrap across RSL scripts
+      - name: Extract free-access read URL and test viewer API in one session
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,html,urllib.parse
+          import urllib.request,urllib.parse,re,html,http.cookiejar,json
           record='https://search.rsl.ru/ru/record/01009649842'
-          base='https://search.rsl.ru'
-          def get(url):
-            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Referer':record})
-            with urllib.request.urlopen(req,timeout=90) as r: return r.geturl(),r.read().decode('utf-8','replace')
-          _,page=get(record)
-          scripts=[]
-          for m in re.finditer(r'<script[^>]+src=["\']([^"\']+)["\']',page,re.I):
-            u=html.unescape(m.group(1))
-            if u.startswith('//'): u='https:'+u
-            elif u.startswith('/'): u=base+u
-            elif not u.startswith('http'): u=urllib.parse.urljoin(record,u)
-            if 'search.rsl.ru' in u and u not in scripts: scripts.append(u)
-          print('SCRIPTS',len(scripts))
-          needles=['freeAccessAlertReadLink','freeAccessAlert','viewer.rsl.ru','viewer.rusneb.ru','Читать онлайн','freeAccess','readLink','fullDocumentId','hasFile','access_label','open-access']
-          for u in scripts:
-            try: _,js=get(u)
-            except Exception as e: print('SCRIPT_ERR',u,repr(e)); continue
-            matches=[]
-            for n in needles:
-              for m in re.finditer(re.escape(n),js,re.I): matches.append((m.start(),n))
-            if not matches: continue
-            print('\n=== SCRIPT',u,'BYTES',len(js),'===')
-            for pos,n in sorted(matches)[:80]:
-              print('\nNEEDLE',n,'AT',pos)
-              print(js[max(0,pos-3500):min(len(js),pos+8000)])
-            print('\nURL/PATH LITERALS')
-            for s in sorted(set(re.findall(r'["\']([^"\']{2,600})["\']',js))):
-              low=s.lower()
-              if any(k in low for k in ['viewer','access','online','document','file','read','fulltext','ebook','resource']): print(s[:600])
+          jar=http.cookiejar.CookieJar()
+          opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+          headers={'User-Agent':'Mozilla/5.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
+          req=urllib.request.Request(record,headers=headers)
+          with opener.open(req,timeout=90) as r: page=r.read().decode('utf-8','replace')
+          tags=[]
+          for m in re.finditer(r'<[^>]*class=["\'][^"\']*js-free-access-alert[^"\']*["\'][^>]*>',page,re.I):
+            tag=m.group(0); tags.append(tag); print('ACCESS_TAG',tag[:10000])
+          print('ACCESS_TAG_COUNT',len(tags))
+          read_urls=[]
+          for tag in tags:
+            mm=re.search(r'data-read-url=["\']([^"\']+)["\']',tag,re.I)
+            if mm:
+              u=html.unescape(mm.group(1))
+              u=urllib.parse.urljoin(record,u)
+              read_urls.append(u); print('READ_URL',u)
+          print('COOKIES_AFTER_RECORD',[(c.domain,c.name,c.value) for c in jar])
+          for u in read_urls:
+            req=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0','Referer':record})
+            try:
+              with opener.open(req,timeout=90) as r:
+                b=r.read(); print('READ_OK',u,'=>',r.geturl(),'CTYPE',r.headers.get('Content-Type'),'LEN',len(b)); print('READ_HEAD',b[:1000])
+            except Exception as e: print('READ_ERR',u,repr(e))
+          # Re-test direct viewer endpoints after the search-site session has been established.
+          for endpoint in ['page/1','pdf','info']:
+            u=f'https://viewer.rsl.ru/api/v1/document/rsl01009649842/{endpoint}'
+            req=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0','Referer':read_urls[0] if read_urls else record,'Accept':'*/*'})
+            try:
+              with opener.open(req,timeout=90) as r:
+                b=r.read(); print('API_OK',endpoint,r.status,r.geturl(),r.headers.get('Content-Type'),len(b),b[:300])
+            except urllib.error.HTTPError as e: print('API_HTTP',endpoint,e.code,e.read()[:3000])
+            except Exception as e: print('API_ERR',endpoint,repr(e))
           PY
