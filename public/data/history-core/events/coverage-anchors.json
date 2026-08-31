@@ -7,10 +7,10 @@
       "kind": "other",
       "date": {"original": "6370 (862) год", "normalized": "0862", "precision": "year", "calendar": "byzantine-era"},
       "polityIds": ["novgorodian-land"],
-      "summary": "Летописный хронологический рубеж, используемый проектом как начало основной шкалы правителей и ранней Руси.",
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
-      "reviewStatus": "source-located",
-      "notes": "This is a chronicle chronology anchor, not evidence for a precise 862 state border."
+      "summary": "Лаврентьевская летопись помещает под 6370 (862) годом рассказ о призвании варягов; проект использует этот источник-специфичный летописный год как начало основной шкалы ранней Руси.",
+      "evidenceDocumentIds": ["doc-laurentian-0862-nlr", "doc-pvl-laurentian-1926"],
+      "reviewStatus": "source-verified",
+      "notes": "Verified only as a Laurentian-chronicle chronology anchor. It is not evidence for a precise 862 state border, and the historicity/absolute dating of the narrative is not silently upgraded by this status."
     },
     {
       "id": "evt-0882-kiev-anchor",
@@ -18,40 +18,43 @@
       "kind": "other",
       "date": {"original": "6390 (882) год", "normalized": "0882", "precision": "year", "calendar": "byzantine-era"},
       "polityIds": ["kievan-rus"],
-      "summary": "Летописный рубеж, связанный с установлением власти Олега в Киеве и объединением северного и киевского центров.",
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
-      "reviewStatus": "source-located",
-      "notes": "The event supports chronology; territorial extent must be reconstructed separately."
+      "summary": "Лаврентьевская летопись под 6390 (882) годом описывает поход Олега, занятие Киева и начало его княжения в Киеве; проект использует этот летописный год как хронологический рубеж киевского периода.",
+      "evidenceDocumentIds": ["doc-laurentian-0882-nlr", "doc-pvl-laurentian-1926"],
+      "reviewStatus": "source-verified",
+      "notes": "Verified as source chronology, not as a claim that all territory conventionally associated with Kievan Rus changed sovereignty in a single year. Territorial extent must be reconstructed separately."
     },
     {
       "id": "evt-1125-vladimir-period-anchor",
-      "title": "Хронологический рубеж Владимиро-Суздальской Руси",
+      "title": "Хронологический рубеж Северо-Восточной Руси",
       "kind": "other",
       "date": {"original": "1125 год", "normalized": "1125", "precision": "year", "calendar": "julian"},
       "polityIds": ["grand-vladimir"],
-      "summary": "Проектный рубеж для перехода к северо-восточному политическому центру; не трактуется как одномоментное создание государства с фиксированной границей.",
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
-      "reviewStatus": "source-located"
+      "summary": "Проектный рубеж северо-восточного периода привязан к документированному 1125 году смерти Владимира Мономаха; академическая интерпретация БРЭ описывает Ростово-Суздальскую землю как владение Юрия Долгорукого, оформившееся в самостоятельный политический центр в течение его правления.",
+      "evidenceDocumentIds": ["doc-laurentian-1125-nlr", "doc-bigenc-northeastern-rus-1130-1230"],
+      "reviewStatus": "source-verified",
+      "notes": "This is an explicitly historiographic/project periodization anchor, not an assertion that a new state with a fixed border was created on one day in 1125. The underlying primary event is Vladimir Monomakh's death on 19 May 1125; territorial reconstruction remains separate."
     },
     {
       "id": "evt-1263-moscow-period-anchor",
       "title": "Хронологический рубеж Московского княжества",
       "kind": "other",
-      "date": {"original": "1263 год", "normalized": "1263", "precision": "year", "calendar": "julian"},
+      "date": {"original": "1263 год", "normalized": "1263", "precision": "year", "calendar": "byzantine-era"},
       "polityIds": ["grand-moscow"],
-      "summary": "Проектный хронологический рубеж для московской линии; конкретные владения и их изменения должны подтверждаться грамотами и договорами по отдельности.",
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813"],
-      "reviewStatus": "source-located"
+      "summary": "Лаврентьевская летопись фиксирует смерть Александра Невского под 6771 (1263) годом; БРЭ связывает образование Московского княжества с переходом Москвы к владениям его младшего сына Даниила после смерти Александра.",
+      "evidenceDocumentIds": ["doc-laurentian-1263-nlr", "doc-bigenc-moscow-principality-1263"],
+      "reviewStatus": "source-verified",
+      "notes": "Verified as a year-level dynastic/periodization anchor. It does not assert a precise 1263 polygon; the first Moscow holdings and later acquisitions require separate territorial evidence."
     },
     {
       "id": "evt-1547-tsardom-anchor",
       "title": "Венчание Ивана IV на царство",
       "kind": "other",
-      "date": {"original": "1547 год", "normalized": "1547", "precision": "year", "calendar": "julian"},
+      "date": {"original": "16 января 1547 г.", "normalized": "1547-01-26", "precision": "day", "calendar": "julian"},
       "polityIds": ["russian-tsardom"],
-      "summary": "Хронологический государственный рубеж Русского царства. Точная дата и церемониальные акты подлежат отдельной документальной карточке.",
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813"],
-      "reviewStatus": "source-located"
+      "summary": "16 января 1547 года по юлианскому календарю Иван IV был венчан на царство; архивный чин венчания хранится в РГАДА. Проект использует событие как государственно-хронологический рубеж Русского царства.",
+      "evidenceDocumentIds": ["doc-ivan-iv-coronation-1547-rgada"],
+      "reviewStatus": "source-verified",
+      "notes": "The coronation date and act are directly source-verified. This changes the chronology/state-title layer; it does not by itself change territorial geometry."
     },
     {
       "id": "evt-1617-stolbovo-peace",
