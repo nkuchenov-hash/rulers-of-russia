@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-laurentian-0862-nlr",
+      "sourceCollectionId": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись: летописная статья 6370 (862 г.) — призвание варягов",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/LaurentianCodex/_Project/page_Show.php?list=19&n=13",
+      "tier": "A1-archival-original",
+      "documentType": "chronicle-manuscript",
+      "date": {
+        "original": "6370 (862) год",
+        "normalized": "0862",
+        "precision": "year",
+        "calendar": "byzantine-era",
+        "note": "Chronicle year as presented by the NLR manuscript edition/navigation; this is a source-specific chronology, not a modern boundary date."
+      },
+      "archiveCitation": "РНБ. ОР F.п.IV.2. Лаврентьевская летопись. 1377. Л. 7–7 об.",
+      "notes": "Direct manuscript evidence that the Laurentian chronicle places the invitation-of-Varangians narrative under 6370/862."
+    },
+    {
+      "id": "doc-laurentian-0882-nlr",
+      "sourceCollectionId": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись: летописная статья 6390 (882 г.) — начало княжения Олега в Киеве",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/LaurentianCodex/_Project/page_Show.php?list=22&n=31",
+      "tier": "A1-archival-original",
+      "documentType": "chronicle-manuscript",
+      "date": {
+        "original": "6390 (882) год",
+        "normalized": "0882",
+        "precision": "year",
+        "calendar": "byzantine-era",
+        "note": "Chronicle year retained as source chronology."
+      },
+      "archiveCitation": "РНБ. ОР F.п.IV.2. Лаврентьевская летопись. 1377. Л. 8–8 об.",
+      "notes": "Direct manuscript evidence for the Laurentian tradition's dating of Oleg's establishment in Kiev. It does not define the extent of Kievan Rus."
+    },
+    {
+      "id": "doc-laurentian-1125-nlr",
+      "sourceCollectionId": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись: статья 6633 (1125 г.) — смерть Владимира Мономаха",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/LaurentianCodex/_Project/page_Show.php?list=201&n=253",
+      "tier": "A1-archival-original",
+      "documentType": "chronicle-manuscript",
+      "date": {
+        "original": "19 мая 6633 (1125) года",
+        "normalized": "1125-05-19",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "archiveCitation": "РНБ. ОР F.п.IV.2. Лаврентьевская летопись. 1377. Л. 97 об.–98.",
+      "notes": "The manuscript directly records Vladimir Monomakh's death on 19 May 1125 and Mstislav's succession in Kiev. The project's northeastern-period boundary remains a historiographic periodization, not a territorial mutation on that day."
+    },
+    {
+      "id": "doc-bigenc-northeastern-rus-1130-1230",
+      "sourceCollectionId": "bigenc-russian-medieval-history",
+      "title": "Россия. История. Русские земли и княжества в 1130–1230-х гг. — Северо-Восточная Русь",
+      "institution": "Большая российская энциклопедия",
+      "url": "https://bigenc.ru/c/rossiia-istoriia-russkie-zemli-i-kniazhestva-v-1130-1230-kh-gg-71dee3",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "academic-reference",
+      "date": {
+        "original": "современная академическая статья",
+        "normalized": "2026",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "notes": "BРЭ describes the Rostov-Suzdal land as Monomakh's northeastern patrimony, transferred to Yuri Dolgorukiy around 1110–1115 and becoming an independent land during his long rule. Used only to justify the 1125 project periodization alongside primary chronicle evidence."
+    },
+    {
+      "id": "doc-laurentian-1263-nlr",
+      "sourceCollectionId": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись: статья 6771 (1263 г.) — смерть Александра Невского",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/ex_manus/AlexanderNevsky/show.php?2=&i=8ef23706-6fc2-4330-8eb5-d7f7cd2b6f0f&l=341",
+      "tier": "A1-archival-original",
+      "documentType": "chronicle-manuscript",
+      "date": {
+        "original": "6771 (1263) год",
+        "normalized": "1263",
+        "precision": "year",
+        "calendar": "byzantine-era",
+        "note": "The surviving Laurentian manuscript places the death of Alexander Nevsky under 6771/1263; this record does not itself enumerate Daniel's Moscow inheritance."
+      },
+      "archiveCitation": "РНБ. ОР F.п.IV.2. Лаврентьевская летопись. 1377. Л. 169 об.",
+      "notes": "Primary chronological anchor for Alexander Nevsky's death year."
+    },
+    {
+      "id": "doc-bigenc-moscow-principality-1263",
+      "sourceCollectionId": "bigenc-russian-medieval-history",
+      "title": "Московское великое княжество — основание Московского княжества",
+      "institution": "Большая российская энциклопедия",
+      "url": "https://bigenc.ru/c/moskovskoe-velikoe-kniazhestvo-fef996",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "academic-reference",
+      "date": {
+        "original": "современная академическая статья",
+        "normalized": "2026",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "notes": "BРЭ states that the Moscow principality formed after Alexander Nevsky's death in 1263, when Moscow became the center of the holdings of his younger son Daniel. Used as interpretation of the 1263 project periodization, not as boundary geometry."
+    },
+    {
+      "id": "doc-ivan-iv-coronation-1547-rgada",
+      "sourceCollectionId": "rusarchives-rgada-rarities",
+      "title": "Чин венчания на царство Ивана IV Васильевича. 16 января 1547 г.",
+      "institution": "Российский государственный архив древних актов / Росархив",
+      "url": "https://raritety.rusarchives.ru/dokumenty/chin-venchaniya-na-carstvo-ivana-iv-vasilevicha",
+      "tier": "A1-archival-original",
+      "documentType": "state-ceremonial-act",
+      "date": {
+        "original": "16 января 1547 г.",
+        "normalized": "1547-01-26",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "Original Muscovite date retained; normalized Gregorian equivalent is 26 January 1547."
+      },
+      "archiveCitation": "РГАДА. Ф. 135. Государственное древлехранилище хартий и рукописей. Отд. IV. Рубр. I. № 1. Л. 1–62.",
+      "notes": "Archival manuscript of the coronation rite; Rosarchiv identifies 16 January 1547 as the coronation date."
+    }
+  ]
+}
