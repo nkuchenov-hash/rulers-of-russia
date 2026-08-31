@@ -23,6 +23,13 @@ const unresolvedDates = changes.filter(item => !['day', 'month'].includes(item.e
 const notYetGeoreferenced = changes.filter(item => item.geometry?.method === 'not-yet-georeferenced');
 const geometryVerifiedChanges = changes.filter(item => item.reviewStatus === 'geometry-verified');
 const sourceVerifiedChanges = changes.filter(item => item.reviewStatus === 'source-verified');
+
+// A source-verified change that is not geometry-verified must make its spatial semantics explicit.
+// Only an explicit geometryAction=metadata-only may remain documentary-only at completion time.
+// This prevents a territorial acquire/cede/replace event from disappearing from replay merely
+// because its geometry method has a different name than `not-yet-georeferenced`.
+const unclassifiedSourceVerifiedChanges = sourceVerifiedChanges.filter(item => item.geometryAction !== 'metadata-only');
+
 const fragments = model.fragments ?? [];
 const baseStates = model.baseStates ?? [];
 const areaFragments = fragments.filter(item => item.role === 'territory-area');
@@ -40,6 +47,7 @@ const criteria = {
   noResearchRequiredChanges: unresolvedChanges.length === 0,
   noUnresolvedChangeDates: unresolvedDates.length === 0,
   noNotYetGeoreferencedChanges: notYetGeoreferenced.length === 0,
+  noUnclassifiedSourceVerifiedChanges: unclassifiedSourceVerifiedChanges.length === 0,
   hasVerifiedAreaBaseStates: baseStates.length > 0 && verifiedAreaFragments.length > 0,
   noMaterializationWarnings: materializationWarnings.length === 0,
   noProvisionalMonths: provisionalMonths.length === 0,
@@ -62,6 +70,7 @@ const audit = {
     researchRequiredChanges: unresolvedChanges.length,
     unresolvedChangeDates: unresolvedDates.length,
     notYetGeoreferencedChanges: notYetGeoreferenced.length,
+    unclassifiedSourceVerifiedChanges: unclassifiedSourceVerifiedChanges.length,
     geometryFragments: fragments.length,
     territoryAreaFragments: areaFragments.length,
     geometryVerifiedTerritoryAreaFragments: verifiedAreaFragments.length,
@@ -80,6 +89,7 @@ const audit = {
     changeIds: unresolvedChanges.map(item => item.id),
     dateChangeIds: unresolvedDates.map(item => item.id),
     notYetGeoreferencedChangeIds: notYetGeoreferenced.map(item => item.id),
+    unclassifiedSourceVerifiedChangeIds: unclassifiedSourceVerifiedChanges.map(item => item.id),
     materializationWarnings,
   },
 };
