@@ -9,42 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect viewer JavaScript bundles for document APIs
+      - name: Inspect explicit viewer bundles for document APIs
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,html,urllib.parse
-          viewer='https://viewer.rsl.ru/ru/rsl01009649842?page=1&rotate=0&theme=white'
+          import urllib.request,re
+          base='https://viewer.rsl.ru'
+          assets=[
+            base+'/js/app.a6574da3.js',
+            base+'/js/chunk-vendors.bcbb31f1.js',
+            base+'/js/pdfModule.2b47014e.js',
+          ]
           def raw(url):
             req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-            with urllib.request.urlopen(req,timeout=90) as r: return r.geturl(),r.read()
-          final,data=raw(viewer); page=data.decode('utf-8','replace')
-          print('HTML_TAIL',page[-5000:])
-          assets=[]
-          for m in re.finditer(r'(?:src|href)=["\']([^"\']+\.js(?:\?[^"\']*)?)["\']',page,re.I):
-            u=html.unescape(m.group(1))
-            if u.startswith('//'): u='https:'+u
-            elif not u.startswith('http'): u=urllib.parse.urljoin(final,u)
-            if 'viewer.rsl.ru' in u and u not in assets: assets.append(u)
-          print('JS_ASSETS',len(assets))
-          print('\n'.join(assets))
-          needles=['/api/','api.','tile','image','document','pages','manifest','iiif','bookId','book_id','resource','rsl010']
-          for i,u in enumerate(assets):
-            try: _,b=raw(u); js=b.decode('utf-8','replace')
+            with urllib.request.urlopen(req,timeout=90) as r: return r.read()
+          needles=['/api/','api.','tile','image','document','pages','manifest','iiif','bookId','book_id','resource','download','rsl010']
+          for u in assets:
+            try: js=raw(u).decode('utf-8','replace')
             except Exception as e: print('ERR',u,repr(e)); continue
-            hits=[]
-            for n in needles:
-              if n.lower() in js.lower(): hits.append(n)
-            if not hits: continue
-            print(f'\n=== ASSET {i} {u} HITS {hits} ===')
-            # Print URL/path literals and focused contexts, not the entire bundle.
-            strings=set(re.findall(r'["\']([^"\']{3,400})["\']',js))
+            print('\n===',u,'BYTES',len(js),'===')
+            strings=set(re.findall(r'["\']([^"\']{3,500})["\']',js))
             for s in sorted(strings):
               low=s.lower()
-              if any(k in low for k in ['/api/','tile','image','manifest','iiif','document','page','book','resource']):
-                if len(s)<400: print('STR',s)
-            for n in ['/api/','manifest','iiif','tile']:
-              for m in list(re.finditer(re.escape(n),js,re.I))[:20]:
-                print('CTX',js[max(0,m.start()-800):min(len(js),m.end()+1400)])
+              if any(k in low for k in ['/api/','tile','manifest','iiif','image','document','page','book','resource','download']):
+                print('STR',s[:500])
+            for n in ['/api/','manifest','iiif','tile','download']:
+              for m in list(re.finditer(re.escape(n),js,re.I))[:40]:
+                print('CTX',n,js[max(0,m.start()-1200):min(len(js),m.end()+2400)])
           PY
