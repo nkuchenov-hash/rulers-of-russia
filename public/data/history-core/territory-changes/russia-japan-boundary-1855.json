@@ -6,43 +6,45 @@
       "eventId": "evt-1855-shimoda-treaty",
       "polityId": "russian-empire",
       "effectiveDate": {
-        "original": "25 ноября 1856 г.",
+        "original": "7 декабря 1856 г. — обмен ратификационными грамотами",
         "normalized": "1856-12-07",
         "precision": "day",
-        "calendar": "julian",
-        "note": "Entry-into-force date is stated by Presidential Library institutional chronology; ratification/exchange documentation must be attached before geometry verification."
+        "calendar": "gregorian",
+        "note": "The Japanese Ministry of Foreign Affairs independently records exchange of ratification instruments on 7 December 1856."
       },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
-        "derivationNote": "Reconstruct the Kuril boundary from the treaty clause placing the border between Iturup and Urup. Use island coastlines appropriate to the period; the maritime line should not be expanded into a modern EEZ-style boundary."
+        "method": "source-verified-inter-island-boundary-area-pending",
+        "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
+        "derivationNote": "The treaty source-verifies that the state boundary passes between Iturup/Etorofu and Urup/Uruppu, with Iturup on the Japanese side and Urup plus the Kurils to the north on the Russian side. The effective chronology is independently fixed by the 7 December 1856 ratification exchange. Exact inter-island maritime line and period coastlines remain pending; this must not be expanded into a modern EEZ-style boundary."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Legal boundary status is source-verified at ratification exchange; no exact modern maritime geometry is asserted."
     },
     {
       "id": "territory-1856-shimoda-sakhalin-undivided",
       "eventId": "evt-1855-shimoda-treaty",
       "polityId": "russian-empire",
       "effectiveDate": {
-        "original": "25 ноября 1856 г.",
+        "original": "7 декабря 1856 г. — обмен ратификационными грамотами",
         "normalized": "1856-12-07",
         "precision": "day",
-        "calendar": "julian"
+        "calendar": "gregorian"
       },
       "track": "claim",
       "territorialModel": "mixed",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
+      "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
       "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-shimoda-1855-avpri"],
-        "derivationNote": "Render Sakhalin as undivided/shared legal status under the treaty rather than assigning the whole island to either state. This state is superseded by the 1875 Petersburg settlement."
+        "method": "source-verified-undivided-island-status-area-pending",
+        "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
+        "derivationNote": "The treaty source-verifies that Sakhalin/Karafuto remained unpartitioned rather than assigning the entire island to either state. The effective chronology is independently fixed by the 7 December 1856 ratification exchange. Exact settlement/control zones and period coastline geometry remain pending and must not be represented as a single sovereign Russian polygon."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "This is an undivided/shared legal-status layer, later superseded by the 1875 Petersburg settlement."
     }
   ]
 }
