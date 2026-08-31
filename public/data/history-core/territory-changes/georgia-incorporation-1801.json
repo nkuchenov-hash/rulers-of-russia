@@ -36,6 +36,7 @@
       "track": "internal-administrative",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
       "geometry": {
         "method": "metadata-only",
