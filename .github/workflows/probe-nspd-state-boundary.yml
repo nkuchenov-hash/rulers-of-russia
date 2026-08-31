@@ -1,0 +1,77 @@
+name: Probe NSPD state boundary
+
+on:
+  push:
+    branches:
+      - research/probe-nspd-state-boundary
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe official NSPD layer 37313
+        shell: bash
+        run: |
+          set -u
+          mkdir -p nspd-probe
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/150 Safari/537.36'
+          REF='https://nspd.gov.ru/map'
+
+          probe_get () {
+            local name="$1"
+            local url="$2"
+            echo "GET $url" > "nspd-probe/${name}.request.txt"
+            curl -k -sS -L --max-time 120 -A "$UA" -e "$REF" \
+              -D "nspd-probe/${name}.headers.txt" \
+              -o "nspd-probe/${name}.body" "$url" || true
+            wc -c "nspd-probe/${name}.body" >> "nspd-probe/${name}.request.txt" 2>/dev/null || true
+          }
+
+          probe_get metadata 'https://nspd.gov.ru/api/aeggis/v3/37313'
+          probe_get wms_capabilities 'https://nspd.gov.ru/api/aeggis/v3/37313/wms?service=WMS&request=GetCapabilities&version=1.3.0'
+          probe_get wfs_capabilities 'https://nspd.gov.ru/api/aeggis/v3/37313/wfs?service=WFS&request=GetCapabilities&version=2.0.0'
+
+          cat > nspd-probe/intersects.request.json <<'JSON'
+          {
+            "geom": {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "geometry": {
+                  "crs": {"properties": {"name": "EPSG:3857"}, "type": "name"},
+                  "type": "Polygon",
+                  "coordinates": [[
+                    [-20037508.34,-20000000],
+                    [20037508.34,-20000000],
+                    [20037508.34,20000000],
+                    [-20037508.34,20000000],
+                    [-20037508.34,-20000000]
+                  ]]
+                },
+                "properties": {}
+              }]
+            },
+            "categories": [{"id": 37313}]
+          }
+          JSON
+          curl -k -sS -L --max-time 180 -A "$UA" -e "$REF" \
+            -H 'Content-Type: application/json' \
+            -D nspd-probe/intersects.headers.txt \
+            -o nspd-probe/intersects.body \
+            --data-binary @nspd-probe/intersects.request.json \
+            'https://nspd.gov.ru/api/geoportal/v1/intersects?typeIntersect=fullObject' || true
+
+          for f in nspd-probe/*.body; do
+            echo "===== $f ====="
+            head -c 1200 "$f" || true
+            echo
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nspd-state-boundary-probe
+          path: nspd-probe/
+          if-no-files-found: error
