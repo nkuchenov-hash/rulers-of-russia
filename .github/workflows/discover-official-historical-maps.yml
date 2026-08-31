@@ -9,38 +9,52 @@ permissions:
   contents: read
 
 jobs:
-  inspect-ussr-1928:
+  georef-ussr-1928:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and inspect the official 1928 USSR atlas
+      - name: OCR graticule and inspect the standalone 1928 USSR map
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-rus >/dev/null
-          mkdir -p /tmp/atlas1928
+          sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-rus python3-opencv >/dev/null
           curl -fL --retry 3 --connect-timeout 15 --max-time 300 \
             'https://cdn.ruarxive.org/public/saved_istmat/books/39972_1.pdf' \
-            -o /tmp/atlas1928/atlas.pdf
-          pdfinfo /tmp/atlas1928/atlas.pdf | sed -n '1,30p'
-          pages=$(pdfinfo /tmp/atlas1928/atlas.pdf | awk '/^Pages:/ {print $2}')
-          echo "PAGES=$pages"
-          echo '=== TEXT/OCR CANDIDATE PAGES ==='
-          for p in $(seq 1 "$pages"); do
-            txt=$(pdftotext -f "$p" -l "$p" -layout /tmp/atlas1928/atlas.pdf - 2>/dev/null || true)
-            if printf '%s' "$txt" | grep -Eqi 'Союз Советских|СССР|15 ?000 ?000|15.000.000'; then
-              echo "TEXT_PAGE=$p"
-              printf '%s\n' "$txt" | head -n 60
-            fi
-          done
-          max=$(( pages < 20 ? pages : 20 ))
-          for p in $(seq 1 "$max"); do
-            pdftoppm -f "$p" -l "$p" -jpeg -r 100 -singlefile /tmp/atlas1928/atlas.pdf "/tmp/atlas1928/p$(printf '%02d' "$p")" >/dev/null 2>&1
-            ocr=$(tesseract "/tmp/atlas1928/p$(printf '%02d' "$p").jpg" stdout -l rus+eng --psm 11 2>/dev/null || true)
-            if printf '%s' "$ocr" | grep -Eqi 'СОЮЗ|СОВЕТСК|СССР|15.?000.?000'; then
-              echo "OCR_PAGE=$p"
-              printf '%s\n' "$ocr" | head -n 100
-            fi
-          done
+            -o /tmp/ussr1928.pdf
+          pdftoppm -f 1 -l 1 -png -r 300 -singlefile /tmp/ussr1928.pdf /tmp/ussr1928
+          file /tmp/ussr1928.png
+          tesseract /tmp/ussr1928.png /tmp/ussr1928-ocr -l rus+eng --psm 11 tsv >/dev/null 2>&1
+          python - <<'PY'
+          import csv,re,cv2,numpy as np
+          img=cv2.imread('/tmp/ussr1928.png')
+          print('IMAGE_SHAPE',img.shape)
+          rows=[]
+          with open('/tmp/ussr1928-ocr.tsv',encoding='utf8') as f:
+            for r in csv.DictReader(f,delimiter='\t'):
+              txt=(r.get('text') or '').strip()
+              if not txt: continue
+              try:
+                conf=float(r.get('conf') or -1); x,y,w,h=[int(r[k]) for k in ('left','top','width','height')]
+              except: continue
+              rows.append((txt,conf,x,y,w,h))
+          print('OCR_HIGH_CONF')
+          for row in sorted(rows,key=lambda r:-r[1])[:350]: print(row)
+          print('OCR_COORDINATE_CANDIDATES')
+          pats=re.compile(r'(^|[^0-9])(?:0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|100|110|120|130|140|150|160|170|180)[°ºo]?($|[^0-9])')
+          for row in rows:
+            if pats.search(row[0]) or any(s in row[0].upper() for s in ['СССР','СОЮЗ','СОВЕТ','МАСШТАБ']): print(row)
+          # Basic color inventory to understand boundary/graticule symbology.
+          small=cv2.resize(img,(0,0),fx=.2,fy=.2,interpolation=cv2.INTER_AREA)
+          lab=cv2.cvtColor(small,cv2.COLOR_BGR2LAB)
+          Z=lab.reshape((-1,3)).astype(np.float32)
+          crit=(cv2.TERM_CRITERIA_EPS+cv2.TERM_CRITERIA_MAX_ITER,50,1.0)
+          _,labels,centers=cv2.kmeans(Z,12,None,crit,5,cv2.KMEANS_PP_CENTERS)
+          counts=np.bincount(labels.ravel(),minlength=12)
+          order=np.argsort(-counts)
+          print('COLOR_CLUSTERS_LAB_BGR')
+          for i in order:
+            labc=np.uint8([[centers[i]]]); bgr=cv2.cvtColor(labc,cv2.COLOR_LAB2BGR)[0,0].tolist()
+            print(int(i),int(counts[i]),[round(float(v),1) for v in centers[i]],bgr)
+          PY
