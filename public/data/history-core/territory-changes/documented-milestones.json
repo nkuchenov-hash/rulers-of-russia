@@ -105,13 +105,15 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "separate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "non-spatial-state-transition",
         "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
-        "derivationNote": "This is one legal transition milestone; ratifications and later December instruments must determine the exact state-switch timing in the final replay model."
+        "derivationNote": "The 8 December agreement is a documentary state-transition milestone, not a cartographic subtraction from a continuing USSR polygon. It therefore does not define a new boundary line or area delta. Ratifications and later December instruments remain relevant to the exact constitutional termination/succession chronology, while the Russian Federation period begins independently in the coverage model."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "Explicitly non-spatial for replay: do not derive post-Soviet state polygons from the Belovezha agreement itself."
     },
     {
       "id": "territory-2014-crimea-russian-legal",
