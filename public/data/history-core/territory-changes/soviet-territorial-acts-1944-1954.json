@@ -25,11 +25,12 @@
       "track": "internal-administrative",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-tuva-rsfsr-1944-ebid"],
-        "derivationNote": "Source-verified internal union assignment of Tuva to the RSFSR. It does not create a second USSR external-boundary change; an historical Tuva AO polygon is the internal-layer geometry dependency."
+        "derivationNote": "Source-verified internal union assignment of Tuva to the RSFSR. This does not create a second USSR external-boundary change. Any future historical Tuva AO polygon belongs to the internal-administrative visualization layer and is not required to mutate the sovereign territory replay."
       },
       "reviewStatus": "source-verified"
     },
@@ -98,11 +99,12 @@
       "track": "internal-administrative",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-crimea-transfer-1954-ebid"],
-        "derivationNote": "Source-verified internal transfer of the 1954 Crimean Oblast from RSFSR to Ukrainian SSR. The USSR external boundary remains unchanged. Geometry requires the source-backed 1954 oblast polygon, not a modern administrative boundary assumed unchanged."
+        "derivationNote": "Source-verified internal transfer of the 1954 Crimean Oblast from RSFSR to Ukrainian SSR. The USSR external boundary remains unchanged. The internal transfer can be visualized separately when a source-backed 1954 oblast polygon is available, but it must not mutate the USSR sovereign-territory replay."
       },
       "reviewStatus": "source-verified"
     }
