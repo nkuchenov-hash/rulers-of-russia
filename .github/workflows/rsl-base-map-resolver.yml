@@ -5,35 +5,31 @@ on:
 permissions:
   contents: read
 jobs:
-  resolve:
+  resolve-viewer:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect RSL record and viewer endpoints
+      - name: Inspect RSL viewer launch metadata and client code
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,html,json
-          records={
-            'ussr1927':'https://search.rsl.ru/ru/record/01009649842',
-            'ussr1925':'https://search.rsl.ru/ru/record/01009650083',
-            'rsfsr1922':'https://search.rsl.ru/ru/record/01009576229',
-            'ussr1928':'https://search.rsl.ru/ru/record/01009576192',
-          }
-          for key,url in records.items():
-            print('\n===',key,url,'===')
-            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-            try: page=urllib.request.urlopen(req,timeout=60).read().decode('utf-8','replace')
-            except Exception as e: print('FETCH_ERROR',repr(e)); continue
-            print('BYTES',len(page))
-            title=re.search(r'<title>(.*?)</title>',page,re.I|re.S)
-            print('TITLE',re.sub('<[^>]+>',' ',title.group(1)).strip() if title else '')
-            seen=set()
-            for m in re.finditer(r'(?:href|src)=["\']([^"\']+)["\']',page,re.I):
-              u=html.unescape(m.group(1))
-              if any(k in u.lower() for k in ['viewer','download','digital','image','record','storage','content','scan','bookreader','iiif']):
-                if u not in seen: seen.add(u); print('LINK',u[:1500])
-            for pat in ['viewer','fulltext','open access','открыт','Электрон','цифров','просмотр']:
-              if pat.lower() in page.lower(): print('HAS',pat)
+          import urllib.request,re,html
+          base='https://search.rsl.ru'
+          record='https://search.rsl.ru/ru/record/01009649842'
+          req=urllib.request.Request(record,headers={'User-Agent':'Mozilla/5.0'})
+          page=urllib.request.urlopen(req,timeout=60).read().decode('utf-8','replace')
+          print('=== RELEVANT HTML ===')
+          for line in page.splitlines():
+            low=line.lower()
+            if any(k in low for k in ['просмотр','viewer','ebook','fulltext','full-text','electronic','digital','read-online','access']) or '01009649842' in line:
+              print(line[:5000])
+          js_url=base+'/js/action-record.js?v=1787651650'
+          req=urllib.request.Request(js_url,headers={'User-Agent':'Mozilla/5.0'})
+          js=urllib.request.urlopen(req,timeout=60).read().decode('utf-8','replace')
+          print('=== ACTION RECORD JS ===')
+          print(js[:30000])
+          print('=== JS URL-LIKE STRINGS ===')
+          for m in re.finditer(r'["\']([^"\']*(?:viewer|ebook|fulltext|digital|record|resource|file|content|book)[^"\']*)["\']',js,re.I):
+            print(html.unescape(m.group(1))[:3000])
           PY
