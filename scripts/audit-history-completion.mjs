@@ -39,6 +39,7 @@ const criteria = {
   noResearchRequiredEvents: unresolvedEvents.length === 0,
   noResearchRequiredChanges: unresolvedChanges.length === 0,
   noUnresolvedChangeDates: unresolvedDates.length === 0,
+  noNotYetGeoreferencedChanges: notYetGeoreferenced.length === 0,
   hasVerifiedAreaBaseStates: baseStates.length > 0 && verifiedAreaFragments.length > 0,
   noMaterializationWarnings: materializationWarnings.length === 0,
   noProvisionalMonths: provisionalMonths.length === 0,
