@@ -1,28 +1,34 @@
-name: Audit History Core after PR 141
+name: Audit source-verified spatial semantics
 on:
   push:
     branches: [research/audit-after-141]
 permissions:
   contents: read
 jobs:
-  audit:
+  inventory:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: {node-version: 22}
-      - run: npm install
-      - name: Generate strict audit
+      - name: Print unclassified source-verified change semantics
         shell: bash
         run: |
           set -euo pipefail
-          npm run materialize:history-geometry
-          npm run validate:history-geometry
-          npm run validate:history
-          npm run materialize:history
-          node scripts/audit-history-completion.mjs
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const a=JSON.parse(fs.readFileSync('public/data/history-core/generated/completion-audit.json','utf8'));
-          console.log('FINAL_AUDIT',JSON.stringify(a,null,2));
+          import fs from 'node:fs'; import path from 'node:path';
+          const root='public/data/history-core';
+          const model=JSON.parse(fs.readFileSync(path.join(root,'territory-model.json'),'utf8'));
+          for(const rel of model.changeFiles??[]){
+            const data=JSON.parse(fs.readFileSync(path.join(root,rel),'utf8'));
+            for(const c of data.territoryChanges??[]){
+              if(c.reviewStatus==='source-verified' && c.geometryAction!=='metadata-only'){
+                console.log(JSON.stringify({
+                  id:c.id,file:rel,polityId:c.polityId,track:c.track,operation:c.operation,
+                  effectiveDate:c.effectiveDate,territorialModel:c.territorialModel,
+                  geometryAction:c.geometryAction??null,geometryMethod:c.geometry?.method??null,
+                  geometryFragmentIds:c.geometryFragmentIds??[],notes:c.notes??null,
+                  derivationNote:c.geometry?.derivationNote??null
+                }));
+              }
+            }
+          }
           NODE
