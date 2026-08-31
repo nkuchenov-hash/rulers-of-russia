@@ -18,7 +18,24 @@
       },
       "authority": ["Российская империя", "Япония"],
       "archiveCitation": "АВП РИ. Фонд Санкт-Петербургский Главный архив, I-10. Оп. 28. Д. 528. Л. 1–4.",
-      "notes": "Printed archival copy includes the Senate decree and treaty text. Presidential Library institutional chronology states that the treaty entered into force 25 November (7 December) 1856; exact ratification/exchange evidence should be located before promoting the effective-date change to geometry-verified."
+      "notes": "The treaty fixes the Kuril boundary between Iturup/Etorofu and Urup/Uruppu and leaves Sakhalin unpartitioned. The exact ratification-exchange date is independently supplied by the Japanese MFA record."
+    },
+    {
+      "id": "doc-shimoda-ratifications-1856-mofa",
+      "sourceCollectionId": "japan-mofa-russia-treaties-1855",
+      "title": "Treaty of Shimoda ratification instrument and exchange chronology",
+      "institution": "Ministry of Foreign Affairs of Japan",
+      "url": "https://www.mofa.go.jp/mofaj/annai/honsho/shiryo/j_russia_2005/2_1.html",
+      "tier": "A2-official-document-publication",
+      "documentType": "ratification-record",
+      "date": {
+        "original": "7 December 1856",
+        "normalized": "1856-12-07",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Japan", "Russian Empire"],
+      "notes": "Official Japanese MFA archival exhibition records that the Treaty of Shimoda was signed on 7 February 1855 and that instruments of ratification were exchanged on 7 December 1856."
     }
   ]
 }

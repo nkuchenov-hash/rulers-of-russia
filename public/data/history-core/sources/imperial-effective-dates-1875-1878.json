@@ -2,6 +2,16 @@
   "schema_version": 1,
   "sources": [
     {
+      "id": "japan-mofa-russia-treaties-1855",
+      "title": "Treaty records of Japan-Russia relations: 1855 Treaty of Shimoda",
+      "institution": "Ministry of Foreign Affairs of Japan",
+      "url": "https://www.mofa.go.jp/mofaj/annai/honsho/shiryo/j_russia_2005/2_1.html",
+      "tier": "A2-official-document-publication",
+      "coverage": "Signing and exchange of ratifications for the 1855 Treaty of Shimoda; official archival exhibit of the ratification instrument",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Japanese MFA records treaty signature on 7 February 1855 and exchange of ratification instruments on 7 December 1856."
+    },
+    {
       "id": "japan-mofa-russia-treaties-1875",
       "title": "Treaty records of Japan-Russia relations: 1875 Sakhalin-Kuril Exchange Treaty",
       "institution": "Ministry of Foreign Affairs of Japan",
