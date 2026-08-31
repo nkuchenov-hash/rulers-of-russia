@@ -25,7 +25,7 @@ jobs:
             local name="$1"
             local url="$2"
             echo "GET $url" > "nspd-probe/${name}.request.txt"
-            curl -k -sS -L --max-time 120 -A "$UA" -e "$REF" \
+            curl -k -sS -L --connect-timeout 5 --max-time 20 -A "$UA" -e "$REF" \
               -D "nspd-probe/${name}.headers.txt" \
               -o "nspd-probe/${name}.body" "$url" || true
             wc -c "nspd-probe/${name}.body" >> "nspd-probe/${name}.request.txt" 2>/dev/null || true
@@ -45,11 +45,11 @@ jobs:
                   "crs": {"properties": {"name": "EPSG:3857"}, "type": "name"},
                   "type": "Polygon",
                   "coordinates": [[
-                    [-20037508.34,-20000000],
-                    [20037508.34,-20000000],
-                    [20037508.34,20000000],
-                    [-20037508.34,20000000],
-                    [-20037508.34,-20000000]
+                    [2003750.834,6982997.919],
+                    [2671667.779,6982997.919],
+                    [2671667.779,7558415.655],
+                    [2003750.834,7558415.655],
+                    [2003750.834,6982997.919]
                   ]]
                 },
                 "properties": {}
@@ -58,7 +58,7 @@ jobs:
             "categories": [{"id": 37313}]
           }
           JSON
-          curl -k -sS -L --max-time 180 -A "$UA" -e "$REF" \
+          curl -k -sS -L --connect-timeout 5 --max-time 30 -A "$UA" -e "$REF" \
             -H 'Content-Type: application/json' \
             -D nspd-probe/intersects.headers.txt \
             -o nspd-probe/intersects.body \
@@ -67,11 +67,11 @@ jobs:
 
           for f in nspd-probe/*.body; do
             echo "===== $f ====="
-            head -c 1200 "$f" || true
+            head -c 2400 "$f" || true
             echo
           done
       - uses: actions/upload-artifact@v4
         with:
-          name: nspd-state-boundary-probe
+          name: nspd-state-boundary-probe-short
           path: nspd-probe/
           if-no-files-found: error
