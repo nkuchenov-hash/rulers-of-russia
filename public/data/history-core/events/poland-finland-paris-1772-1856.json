@@ -25,16 +25,27 @@
       "reviewStatus": "source-verified"
     },
     {
-      "id": "evt-1793-second-partition-control",
-      "title": "Второй раздел Речи Посполитой — межгосударственный раздел",
+      "id": "evt-1793-russia-prussia-partition-convention",
+      "title": "Русско-прусская конвенция о новом разделе Польши",
       "kind": "treaty",
+      "date": {"original":"12/23 января 1793 г.","normalized":"1793-01-23","precision":"day","calendar":"julian"},
+      "polityIds": ["russian-empire"],
+      "summary": "Россия и Пруссия заключили в Санкт-Петербурге конвенцию относительно нового раздела Польши; официальный имперский договорный корпус публикует акт под датой 12/23 января 1793 года.",
+      "evidenceDocumentIds": ["doc-second-partition-russia-prussia-1793-martens"],
+      "reviewStatus": "source-verified",
+      "notes": "Treaty-signing milestone only. The institutional chronology's 23 January/3 February partition/control milestone and the later Grodno treaty are modeled separately."
+    },
+    {
+      "id": "evt-1793-second-partition-control",
+      "title": "Второй раздел Речи Посполитой — фактический территориальный рубеж",
+      "kind": "other",
       "date": {"original":"23 января (3 февраля) 1793 г.","normalized":"1793-02-03","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Россия и Пруссия осуществили второй раздел; к России переходили значительные литовские, белорусские, волынские и подольские земли.",
-      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "summary": "Президентская библиотека фиксирует 23 января (3 февраля) 1793 года как рубеж осуществления Россией и Пруссией второго раздела; к России переходили значительные литовские, белорусские, волынские и подольские земли.",
+      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology", "doc-second-partition-russia-prussia-1793-martens"],
       "territoryChangeIds": ["territory-1793-second-partition-de-facto"],
-      "reviewStatus": "source-located",
-      "notes": "Separated from the later Grodno treaty with the Polish Commonwealth."
+      "reviewStatus": "source-verified",
+      "notes": "This is a de-facto/control milestone, deliberately separated from the 12/23 January Russia-Prussia convention and the July Grodno legal cession treaty."
     },
     {
       "id": "evt-1793-grodno-treaty",
@@ -53,11 +64,11 @@
       "kind": "treaty",
       "date": {"original":"13 (24) октября 1795 г.","normalized":"1795-10-24","precision":"day","calendar":"julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Россия, Пруссия и Австрия взаимно гарантировали владения, полученные при третьем разделе Речи Посполитой.",
-      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "summary": "Россия, Пруссия и Австрия договорно закрепили третий раздел; конвенция взаимно гарантировала новые владения и урегулировала передачу занятых территорий между державами.",
+      "evidenceDocumentIds": ["doc-third-partition-russia-prussia-austria-1795-martens", "doc-polish-partitions-prlib-chronology"],
       "territoryChangeIds": ["territory-1795-third-partition-russian-control"],
-      "reviewStatus": "source-located",
-      "notes": "The exact primary printing of the 1795 convention remains to be indexed; the 1797 final convention is separately source-verified."
+      "reviewStatus": "source-verified",
+      "notes": "The 1795 convention is now indexed from the official Russian foreign-ministry treaty corpus. The 1797 final convention remains a separate final legal settlement."
     },
     {
       "id": "evt-1797-final-partition-convention",

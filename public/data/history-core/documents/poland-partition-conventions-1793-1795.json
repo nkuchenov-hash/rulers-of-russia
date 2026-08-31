@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-second-partition-russia-prussia-1793-martens",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Конвенция между Россией и Пруссией относительно нового раздела Польши. 12/23 января 1793 г.",
+      "institution": "Министерство иностранных дел Российской империи / Ф. Ф. Мартенс / Президентская библиотека / РНБ",
+      "url": "https://www.prlib.ru/item/366326",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"12/23 января 1793 г.","normalized":"1793-01-23","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Пруссия"],
+      "publicationCitation": "Ф. Ф. Мартенс. Собрание трактатов и конвенций, заключенных Россией с иностранными державами, изданное по поручению Министерства иностранных дел. Т. VI: Трактаты с Германией. 1762–1808. СПб., 1883. № 232, с. 163–170.",
+      "notes": "Official imperial foreign-ministry treaty corpus. Used for the interstate convention chronology; the separate 23 Jan/3 Feb institutional partition/control milestone remains a distinct event."
+    },
+    {
+      "id": "doc-third-partition-russia-prussia-austria-1795-martens",
+      "sourceCollectionId": "prlib-imperial-official-treaty-printings",
+      "title": "Конвенция России и Пруссии при участии Австрии о третьем разделе Польши. 13/24 октября 1795 г.",
+      "institution": "Министерство иностранных дел Российской империи / Ф. Ф. Мартенс / Президентская библиотека / РНБ",
+      "url": "https://www.prlib.ru/item/366326",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"13/24 октября 1795 г.","normalized":"1795-10-24","precision":"day","calendar":"julian"},
+      "authority": ["Российская империя", "Пруссия", "Австрия"],
+      "publicationCitation": "Ф. Ф. Мартенс. Собрание трактатов и конвенций, заключенных Россией с иностранными державами, изданное по поручению Министерства иностранных дел. Т. VI: Трактаты с Германией. 1762–1808. СПб., 1883. № 233, с. 163–170; parallel Austrian-series printing in vol. II, no. 48.",
+      "notes": "The convention guarantees the partition powers' new possessions and provides for ratification exchange. It is distinct from the 1797 final convention and from the Polish king's abdication."
+    }
+  ]
+}

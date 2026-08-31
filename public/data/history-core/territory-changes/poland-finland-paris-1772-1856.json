@@ -10,18 +10,7 @@
       "territorialModel": "mixed",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-first-partition-russian-incorporation-1772-pszri"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-first-partition-russian-incorporation-1772-pszri"],
-        "routeSemantics": [
-          {"type":"river-boundary","waterbody":"Western Dvina/Daugava","note":"The act makes the Dvina a natural boundary over the stated interval."},
-          {"type":"administrative-boundary","note":"Existing Vitebsk/Polotsk and three-voivodeship junction boundaries are invoked."},
-          {"type":"straight","from":"three-voivodeship junction","to":"source of Drut/Druec near Ordva"},
-          {"type":"river-boundary","waterbody":"Drut/Druec","to":"Dnieper"},
-          {"type":"river-boundary","waterbody":"Dnieper","note":"Continues to the pre-existing Russia–Poland boundary while preserving the Kyiv district exception."}
-        ],
-        "derivationNote": "The Russian legal act supplies a source-verified route grammar and expressly orders boundary posts. Exact geometry still requires reconstruction of the 1772 administrative-boundary junctions, the identified Drut source/Ordva point and period river courses; modern lines must not be substituted silently."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-first-partition-russian-incorporation-1772-pszri"],"routeSemantics":[{"type":"river-boundary","waterbody":"Western Dvina/Daugava","note":"The act makes the Dvina a natural boundary over the stated interval."},{"type":"administrative-boundary","note":"Existing Vitebsk/Polotsk and three-voivodeship junction boundaries are invoked."},{"type":"straight","from":"three-voivodeship junction","to":"source of Drut/Druec near Ordva"},{"type":"river-boundary","waterbody":"Drut/Druec","to":"Dnieper"},{"type":"river-boundary","waterbody":"Dnieper","note":"Continues to the pre-existing Russia–Poland boundary while preserving the Kyiv district exception."}],"derivationNote":"The Russian legal act supplies a source-verified route grammar and expressly orders boundary posts. Exact geometry still requires reconstruction of the 1772 administrative-boundary junctions, the identified Drut source/Ordva point and period river courses; modern lines must not be substituted silently."},
       "reviewStatus": "source-verified",
       "notes": "Exact monthly chronology resolved. This is Russia's unilateral incorporation/effective-possession transition, not bilateral Polish recognition."
     },
@@ -35,11 +24,7 @@
       "operation": "recognize",
       "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-first-partition-russia-poland-treaty-1773-avpri"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-first-partition-russia-poland-treaty-1773-avpri"],
-        "derivationNote": "Article II repeats substantially the same Dvina–voivodeship junction–Druec–Dnieper boundary, while Article X creates commissioners for orderly marking. This change records bilateral cession/recognition and does not double-add territory already represented by the 1772 Russian-law acquisition."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-first-partition-russia-poland-treaty-1773-avpri"],"derivationNote":"Article II repeats substantially the same Dvina–voivodeship junction–Druec–Dnieper boundary, while Article X creates commissioners for orderly marking. This change records bilateral cession/recognition and does not double-add territory already represented by the 1772 Russian-law acquisition."},
       "reviewStatus": "source-verified"
     },
     {
@@ -50,13 +35,14 @@
       "track": "de-facto-control",
       "territorialModel": "mixed",
       "operation": "occupy",
-      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology", "doc-second-partition-russia-prussia-1793-martens"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
-        "derivationNote": "This track represents the partition/control milestone separately from the July 1793 treaty-based legal settlement."
+        "method": "source-verified-control-area-pending",
+        "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology", "doc-second-partition-russia-prussia-1793-martens"],
+        "derivationNote": "The Presidential Library institutional chronology source-verifies the 23 Jan/3 Feb partition/control milestone, while the official foreign-ministry corpus independently anchors the preceding Russia-Prussia partition convention. Exact occupied-area geometry must be reconstructed from the convention/Grodno settlement and contemporary administrative cartography rather than inferred from later guberniya borders."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "De-facto/control layer only; the July 1793 Grodno treaty remains the separate bilateral Russian-Polish legal settlement."
     },
     {
       "id": "territory-1793-grodno-russian-legal-border",
@@ -67,11 +53,7 @@
       "territorialModel": "linear-border",
       "operation": "recognize",
       "evidenceDocumentIds": ["doc-grodno-partition-treaty-1793-prlib"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-grodno-partition-treaty-1793-prlib"],
-        "derivationNote": "The official treaty printing source-verifies the legal settlement. Exact geometry still requires clause-by-clause extraction and reconciliation with period Russian administrative/cartographic material before georeferencing."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-grodno-partition-treaty-1793-prlib"],"derivationNote":"The official treaty printing source-verifies the legal settlement. Exact geometry still requires clause-by-clause extraction and reconciliation with period Russian administrative/cartographic material before georeferencing."},
       "reviewStatus": "source-verified"
     },
     {
@@ -82,13 +64,18 @@
       "track": "de-facto-control",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
+      "evidenceDocumentIds": ["doc-third-partition-russia-prussia-austria-1795-martens", "doc-polish-partitions-prlib-chronology"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology"],
-        "derivationNote": "Keep this non-canonical until the 1795 tripartite convention/declaration is indexed from an A1/A2 copy."
+        "method": "source-verified-control-area-pending",
+        "evidenceDocumentIds": ["doc-third-partition-russia-prussia-austria-1795-martens", "doc-polish-partitions-prlib-chronology"],
+        "routeSemantics": [
+          {"type":"possession-guarantee","note":"The convention guarantees the partition powers' new possessions and treats the Russian acquisitions described in the prior declaration as retained in Russian possession."},
+          {"type":"occupied-territory-transfer","note":"The treaty separately orders evacuation/transfer where Russian, Prussian or Austrian troops occupy territory assigned to another power."}
+        ],
+        "derivationNote": "The official MFA treaty corpus source-verifies the 13/24 Oct 1795 control/possession settlement. Exact Russian-share polygon geometry still requires the declaration/convention boundary descriptions and period demarcation/administrative maps. The later 1797 convention remains the final legal settlement."
       },
-      "reviewStatus": "research-required"
+      "reviewStatus": "source-verified",
+      "notes": "Conservative control/possession milestone at the source-verified convention date; not a substitute for the 1797 final legal settlement."
     },
     {
       "id": "territory-1797-final-partition-legal-settlement",
@@ -99,11 +86,7 @@
       "territorialModel": "linear-border",
       "operation": "recognize",
       "evidenceDocumentIds": ["doc-final-partition-convention-1797-prlib"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-final-partition-convention-1797-prlib"],
-        "derivationNote": "The official final convention source-verifies the legal settlement. Use its referenced possessions to validate the external boundary resulting from the partitions; do not use it to invent changes already legally effective earlier."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-final-partition-convention-1797-prlib"],"derivationNote":"The official final convention source-verifies the legal settlement. Use its referenced possessions to validate the external boundary resulting from the partitions; do not use it to invent changes already legally effective earlier."},
       "reviewStatus": "source-verified"
     },
     {
@@ -115,11 +98,7 @@
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-fredrikshamn-treaty-1809-prlib", "doc-finland-historical-boundary-maps-1909-rgia"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-fredrikshamn-treaty-1809-prlib", "doc-finland-historical-boundary-maps-1909-rgia"],
-        "derivationNote": "Treaty entry into force is precise and source-verified. Geometry must be reconstructed from treaty clauses plus period/contemporary boundary evidence; the 1909 RGIA maps are retrospective cross-checks only."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-fredrikshamn-treaty-1809-prlib","doc-finland-historical-boundary-maps-1909-rgia"],"derivationNote":"Treaty entry into force is precise and source-verified. Geometry must be reconstructed from treaty clauses plus period/contemporary boundary evidence; the 1909 RGIA maps are retrospective cross-checks only."},
       "reviewStatus": "source-verified"
     },
     {
@@ -131,11 +110,7 @@
       "territorialModel": "linear-border",
       "operation": "cede",
       "evidenceDocumentIds": ["doc-paris-bessarabia-1856-ebid", "doc-bessarabia-boundary-implementation-1856-rgia"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-paris-bessarabia-1856-ebid", "doc-bessarabia-boundary-implementation-1856-rgia"],
-        "derivationNote": "Treaty clauses source-verify the cession; the 1856 RGIA Ignatiev file documents actual boundary determination. Exact folio-level boundary descriptions/plans remain the geometry-verification dependency."
-      },
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-paris-bessarabia-1856-ebid","doc-bessarabia-boundary-implementation-1856-rgia"],"derivationNote":"Treaty clauses source-verify the cession; the 1856 RGIA Ignatiev file documents actual boundary determination. Exact folio-level boundary descriptions/plans remain the geometry-verification dependency."},
       "reviewStatus": "source-verified"
     }
   ]

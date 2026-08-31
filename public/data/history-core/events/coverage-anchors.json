@@ -69,12 +69,12 @@
       "id": "evt-1774-kucuk-kainarji",
       "title": "Кючук-Кайнарджийский мир",
       "kind": "treaty",
-      "date": {"original": "1774 год", "normalized": "1774", "precision": "year", "calendar": "julian"},
+      "date": {"original": "10 июля 1774 г. (старый стиль)", "normalized": "1774-07-21", "precision": "day", "calendar": "julian"},
       "polityIds": ["russian-empire"],
-      "summary": "Важный договорный рубеж русско-османских отношений и территориальной истории Российской империи.",
+      "summary": "Россия и Османская империя заключили Кючук-Кайнарджийский мирный договор; официальный текст опубликован в ПСЗРИ под № 14164 и датирован 10 июля 1774 года старого стиля.",
       "evidenceDocumentIds": ["doc-kucuk-1774-ebid"],
-      "reviewStatus": "source-located",
-      "notes": "Exact signing/effective day should be promoted only after direct date review of the treaty item."
+      "reviewStatus": "source-verified",
+      "notes": "Direct documentary date verified from the EBID treaty item / PSZRI publication. This chronology event does not by itself assert a fully reconstructed post-1774 area polygon."
     },
     {
       "id": "evt-1917-rights-peoples",
