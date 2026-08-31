@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись. 1377 — цифровая рукопись",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/LaurentianCodex/",
+      "tier": "A1-archival-original",
+      "coverage": "Digitized Laurentian Codex manuscript with folio-level transcription and modern navigation, including annals for 862, 882, 1125 and 1263",
+      "canonicalUse": ["event", "interpretation"],
+      "notes": "The manuscript is primary chronicle evidence for what the Laurentian tradition dates to the stated years. Chronicle chronology is not itself evidence for a precise territorial polygon."
+    },
+    {
+      "id": "bigenc-russian-medieval-history",
+      "title": "Большая российская энциклопедия — история средневековой Руси",
+      "institution": "Большая российская энциклопедия",
+      "url": "https://bigenc.ru/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Academic interpretation of the formation of the Rostov-Suzdal/Vladimir and Moscow political centers",
+      "canonicalUse": ["interpretation"],
+      "notes": "Used only to explain project periodization. It cannot create boundary geometry or replace primary evidence."
+    },
+    {
+      "id": "rusarchives-rgada-rarities",
+      "title": "100 раритетов российской государственности — РГАДА",
+      "institution": "Федеральное архивное агентство / Российский государственный архив древних актов",
+      "url": "https://raritety.rusarchives.ru/",
+      "tier": "A1-archival-original",
+      "coverage": "Digitized descriptions of archival originals and manuscript state acts held by RGADA",
+      "canonicalUse": ["event", "legal-basis", "interpretation"],
+      "notes": "The Ivan IV coronation record identifies the archival manuscript, date and RGADA shelfmark."
+    }
+  ]
+}
