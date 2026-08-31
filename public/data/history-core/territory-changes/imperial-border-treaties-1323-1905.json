@@ -10,8 +10,9 @@
       "territorialModel": "mixed",
       "operation": "demarcate",
       "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-orekhovo-1323-prlib"],"derivationNote":"Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other boundary landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."},
-      "reviewStatus": "research-required"
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-orekhovo-1323-prlib"],"derivationNote":"The A2 documentary publication source-verifies the treaty and its enumerated boundary landmarks. Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."},
+      "reviewStatus": "source-verified",
+      "notes": "The legal demarcation is source-verified; exact modern placement of all medieval landmarks remains a separate geometry task."
     },
     {
       "id": "territory-1711-pruth-azov-settlement",
@@ -22,8 +23,9 @@
       "territorialModel": "linear-border",
       "operation": "cede",
       "evidenceDocumentIds": ["doc-pruth-1711-ebid"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-pruth-1711-ebid"],"derivationNote":"Extract the Azov and associated territorial/fortification clauses from the treaty and distinguish legal cession from demolition obligations. Do not replay until the affected legal territory is represented by a verified fragment."},
-      "reviewStatus": "research-required"
+      "geometry": {"method":"source-verified-azov-settlement-area-pending","evidenceDocumentIds":["doc-pruth-1711-ebid"],"derivationNote":"The A1 archival treaty source-verifies the 12 July 1711 settlement and the return of Azov with its associated fortresses to Ottoman possession, together with related fortification obligations. Exact affected-area geometry remains pending reconstruction from the treaty, implementation records and period cartography; legal cession must not be represented by a modern administrative polygon."},
+      "reviewStatus": "source-verified",
+      "notes": "EBID also indexes Peter I's ratification of the Pruth treaty on 12 July 1711. The legal settlement is therefore source-backed independently of the still-pending exact area geometry."
     },
     {
       "id": "territory-1713-adrianople-settlement",
@@ -34,8 +36,9 @@
       "territorialModel": "linear-border",
       "operation": "demarcate",
       "evidenceDocumentIds": ["doc-adrianople-1713-ebid"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-adrianople-1713-ebid"],"derivationNote":"Compare the 1713 treaty clauses with the 1711 Pruth settlement and implementation documents before defining the post-1713 southern legal border."},
-      "reviewStatus": "research-required"
+      "geometry": {"method":"source-verified-follow-up-settlement-area-pending","evidenceDocumentIds":["doc-adrianople-1713-ebid"],"derivationNote":"The A1/A2 documentary record source-verifies the 13 June 1713 Russo-Ottoman follow-up peace settlement. Its post-Pruth boundary consequences must still be reconstructed clause-by-clause against the 1711 settlement and implementation/demarcation records before any exact area or line geometry is promoted."},
+      "reviewStatus": "source-verified",
+      "notes": "This promotion verifies the treaty-level territorial settlement only; it does not claim that the complete post-1713 southern border has been georeferenced."
     },
     {
       "id": "territory-1875-petersburg-sakhalin",
