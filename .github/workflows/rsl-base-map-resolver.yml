@@ -5,42 +5,26 @@ on:
 permissions:
   contents: read
 jobs:
-  project-data:
+  late-project-data:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract exact RSL ProjectData identifiers and resolve reader URL
+      - name: Trace all late ProjectData assignments in the RSL record HTML
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import urllib.request,re,json,html,urllib.parse
+          import urllib.request,re
           record='https://search.rsl.ru/ru/record/01009649842'
           req=urllib.request.Request(record,headers={'User-Agent':'Mozilla/5.0'})
           page=urllib.request.urlopen(req,timeout=90).read().decode('utf-8','replace')
-          m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});\s*</script>',page,re.S)
-          if not m:
-            m=re.search(r'var\s+ProjectData\s*=\s*(\{.*?\});',page,re.S)
-          if not m: raise SystemExit('ProjectData not found')
-          raw=m.group(1)
-          data=json.loads(raw)
-          doc=data.get('document') or {}
-          pages=data.get('pages') or {}
-          keep={
-            'document': {k:doc.get(k) for k in ['id','hasFile','fullDocumentId','isAccessLevelDodInRoomDod','accessLevel','ownershipSystem']},
-            'pages': {k:pages.get(k) for k in ['fullDocumentView','accessDodInRoomDod','checkAccessDodInRoomDod']}
-          }
-          print('PROJECT_DATA_EXTRACT',json.dumps(keep,ensure_ascii=False,indent=2))
-          full_id=doc.get('fullDocumentId')
-          tpl=pages.get('fullDocumentView')
-          if full_id and tpl:
-            read=tpl.replace('=documentId=',str(full_id)).replace('=theme=','white')
-            read=urllib.parse.urljoin(record,read)
-            print('RESOLVED_READ_URL',read)
-            req=urllib.request.Request(read,headers={'User-Agent':'Mozilla/5.0','Referer':record})
-            with urllib.request.urlopen(req,timeout=90) as r:
-              body=r.read().decode('utf-8','replace')
-              print('READ_FINAL_URL',r.geturl(),'LEN',len(body))
-              print('READ_RSL_IDS',sorted(set(re.findall(r'rsl\d{8,}',body,re.I))))
-              print('READ_HEAD',body[:4000])
+          needles=['fullDocumentId','hasFile','isAccessLevelDodInRoomDod','fullDocumentView','ProjectData.document','ProjectData.pages','ownershipSystem','accessLevel']
+          for n in needles:
+            print('\n===',n,'===')
+            hits=list(re.finditer(re.escape(n),page,re.I))
+            print('COUNT',len(hits))
+            for m in hits[:50]: print(page[max(0,m.start()-5000):min(len(page),m.end()+10000)])
+          print('\n=== ALL PROJECTDATA ASSIGNMENTS ===')
+          for m in re.finditer(r'ProjectData(?:\.[A-Za-z0-9_]+)+\s*=\s*[^;]+;',page,re.S):
+            print(m.group(0)[:30000])
           PY
