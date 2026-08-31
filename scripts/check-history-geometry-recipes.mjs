@@ -10,6 +10,8 @@ const listJson = dir => fs.existsSync(dir)
 const flatten = (files, key) => files.flatMap(file => readJson(file)[key] ?? []);
 const fail = message => { throw new Error(message); };
 const samePoint = (a, b, eps = 1e-8) => Array.isArray(a) && Array.isArray(b) && Math.abs(a[0] - b[0]) <= eps && Math.abs(a[1] - b[1]) <= eps;
+const finitePoint = point => Array.isArray(point) && point.length === 2 && point.every(Number.isFinite)
+  && point[0] >= -180 && point[0] <= 180 && point[1] >= -90 && point[1] <= 90;
 const isWgs84Display = recipe => /\bWGS\s*-?\s*84\b/i.test(String(recipe.sourceCrs ?? ''));
 
 const model = readJson(path.join(dataRoot, 'territory-model.json'));
@@ -21,6 +23,44 @@ const recipeByOutput = new Map();
 const rootDocuments = readJson(path.join(dataRoot, 'documents.json')).documents ?? [];
 const modularDocuments = flatten(listJson(path.join(dataRoot, 'documents')), 'documents');
 const documentIds = new Set([...rootDocuments, ...modularDocuments].map(document => document.id));
+
+function sourcePoints(recipe, geometryType) {
+  if (geometryType === 'LineString' || geometryType === 'MultiPoint') return recipe.points ?? [];
+  if (geometryType === 'Polygon') return (recipe.rings ?? []).flat();
+  if (geometryType === 'MultiPolygon') return (recipe.polygons ?? []).flat(2);
+  return [];
+}
+
+function validateSourceShape(recipe, geometryType) {
+  if (geometryType === 'LineString' || geometryType === 'MultiPoint') {
+    if (!Array.isArray(recipe.points) || recipe.points.length < 2 || !recipe.points.every(finitePoint)) fail(`Geometry recipe ${recipe.id} has invalid source points`);
+    if (geometryType === 'MultiPoint' && recipe.interpolation !== 'source-vertices') fail(`MultiPoint recipe ${recipe.id} must use source-vertices interpolation`);
+    return;
+  }
+  if (geometryType === 'Polygon') {
+    if (!Array.isArray(recipe.rings) || recipe.rings.length === 0) fail(`Polygon recipe ${recipe.id} has no source rings`);
+    for (const ring of recipe.rings) if (!Array.isArray(ring) || ring.length < 3 || !ring.every(finitePoint)) fail(`Polygon recipe ${recipe.id} has an invalid source ring`);
+    return;
+  }
+  if (geometryType === 'MultiPolygon') {
+    if (!Array.isArray(recipe.polygons) || recipe.polygons.length === 0) fail(`MultiPolygon recipe ${recipe.id} has no source polygons`);
+    for (const polygon of recipe.polygons) {
+      if (!Array.isArray(polygon) || polygon.length === 0) fail(`MultiPolygon recipe ${recipe.id} has an invalid source polygon`);
+      for (const ring of polygon) if (!Array.isArray(ring) || ring.length < 3 || !ring.every(finitePoint)) fail(`MultiPolygon recipe ${recipe.id} has an invalid source ring`);
+    }
+    return;
+  }
+  fail(`Geometry recipe ${recipe.id} has unsupported geometry type ${geometryType}`);
+}
+
+function flattenGeometryPoints(value, out = []) {
+  if (finitePoint(value)) {
+    out.push(value);
+    return out;
+  }
+  if (Array.isArray(value)) for (const child of value) flattenGeometryPoints(child, out);
+  return out;
+}
 
 for (const recipe of recipes) {
   if (!recipe.id || !recipe.fragmentId || !recipe.output) fail(`Incomplete geometry recipe ${recipe.id ?? '<missing>'}`);
@@ -34,7 +74,9 @@ for (const recipe of recipes) {
   if (fragment.reviewStatus !== 'geometry-verified') fail(`Geometry recipe ${recipe.id} targets non-verified fragment ${recipe.fragmentId}`);
   if (fragment.geometryFile !== recipe.output) fail(`Geometry recipe ${recipe.id} output ${recipe.output} differs from fragment file ${fragment.geometryFile}`);
   if (fragment.track !== recipe.track) fail(`Geometry recipe ${recipe.id} track ${recipe.track} differs from fragment track ${fragment.track}`);
-  if (!Array.isArray(recipe.points) || recipe.points.length < 2) fail(`Geometry recipe ${recipe.id} has fewer than two source points`);
+  const expectedGeometryType = recipe.geometryType ?? 'LineString';
+  if (!['LineString', 'MultiPoint', 'Polygon', 'MultiPolygon'].includes(expectedGeometryType)) fail(`Geometry recipe ${recipe.id} has unsupported type ${expectedGeometryType}`);
+  validateSourceShape(recipe, expectedGeometryType);
   if (!Array.isArray(recipe.evidenceDocumentIds) || recipe.evidenceDocumentIds.length === 0) fail(`Geometry recipe ${recipe.id} has no evidence documents`);
   for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Geometry recipe ${recipe.id} references unknown document ${id}`);
 
@@ -44,7 +86,6 @@ for (const recipe of recipes) {
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromSourceCoordinates !== true) {
     fail(`Geometry output ${recipe.output} is not marked as generated from recipe ${recipe.id}`);
   }
-  const expectedGeometryType = recipe.geometryType ?? 'LineString';
   if (generated.features?.[0]?.geometry?.type !== expectedGeometryType || generated.metadata?.geometryType !== expectedGeometryType) {
     fail(`Geometry output ${recipe.output} type mismatch: expected ${expectedGeometryType}`);
   }
@@ -57,9 +98,9 @@ for (const recipe of recipes) {
   if (expectedDatumStatus === 'source-geographic-untransformed' && !generated.metadata?.displayWarning) {
     fail(`Geometry output ${recipe.output} must expose a datum warning until a source-backed WGS84 transform exists`);
   }
-  const coordinates = generated.features?.[0]?.geometry?.coordinates ?? [];
-  for (const point of recipe.points) {
-    if (!coordinates.some(candidate => samePoint(candidate, point))) fail(`Generated ${recipe.output} lost source treaty point ${JSON.stringify(point)}`);
+  const generatedPoints = flattenGeometryPoints(generated.features?.[0]?.geometry?.coordinates ?? []);
+  for (const point of sourcePoints(recipe, expectedGeometryType)) {
+    if (!generatedPoints.some(candidate => samePoint(candidate, point))) fail(`Generated ${recipe.output} lost source point ${JSON.stringify(point)}`);
   }
 }
 
