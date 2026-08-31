@@ -84,7 +84,73 @@ const minConfidence = ids => {
 const states = new Map();
 const snapshots = [];
 const warnings = [];
+const snapshotIds = new Set();
 const keyOf = item => `${item.polityId}::${item.track}`;
+
+const emitSnapshot = (state, rawId, generatedFrom) => {
+  const safeId = rawId.replace(/[^a-zA-Z0-9._-]+/g, '-');
+  if (snapshotIds.has(safeId)) throw new Error(`Duplicate generated territory snapshot id: ${safeId}`);
+  snapshotIds.add(safeId);
+
+  const geometryFile = `${safeId}.geojson`;
+  const uncertaintyFile = `${safeId}.uncertainty.geojson`;
+  const uncertainIds = [...state.activeFragmentIds].filter(id => {
+    const fragment = fragments.get(id);
+    return fragment && fragment.role !== 'territory-area';
+  });
+
+  fs.writeFileSync(path.join(outRoot, geometryFile), JSON.stringify({
+    type: 'FeatureCollection',
+    features: state.geometry.length ? [{
+      type: 'Feature',
+      properties: {
+        polityId: state.polityId,
+        track: state.track,
+        generated: true,
+        generatedFrom,
+      },
+      geometry: {type: 'MultiPolygon', coordinates: state.geometry},
+    }] : [],
+  }));
+
+  const uncertaintyFeatures = [];
+  for (const id of uncertainIds) {
+    const fragment = fragments.get(id);
+    const file = path.join(dataRoot, fragment.geometryFile);
+    if (!fs.existsSync(file)) continue;
+    const payload = readJson(file);
+    const sourceFeatures = payload.type === 'FeatureCollection' ? payload.features : payload.type === 'Feature' ? [payload] : [];
+    for (const feature of sourceFeatures) uncertaintyFeatures.push({
+      ...feature,
+      properties: {
+        ...(feature.properties ?? {}),
+        historyFragmentId: id,
+        role: fragment.role,
+        confidence: fragment.confidence,
+        uncertaintyMeters: fragment.uncertaintyMeters ?? null,
+      },
+    });
+  }
+  fs.writeFileSync(path.join(outRoot, uncertaintyFile), JSON.stringify({type: 'FeatureCollection', features: uncertaintyFeatures}));
+
+  const snapshot = {
+    id: safeId,
+    polityId: state.polityId,
+    effectiveDate: state.date,
+    track: state.track,
+    territorialModel: state.territorialModel,
+    geometryFile: `generated/territory/${geometryFile}`,
+    uncertaintyGeometryFile: `generated/territory/${uncertaintyFile}`,
+    evidenceDocumentIds: [...state.evidenceDocumentIds],
+    derivedFromChangeIds: [...state.derivedFromChangeIds],
+    reviewStatus: 'geometry-verified',
+    confidence: minConfidence([...state.activeFragmentIds]),
+    generated: true,
+    generatedFrom,
+  };
+  snapshots.push(snapshot);
+  return snapshot;
+};
 
 for (const base of baseStates) {
   const dateKey = preciseDateKey(base.effectiveDate);
@@ -92,7 +158,9 @@ for (const base of baseStates) {
   const areaIds = (base.geometryFragmentIds ?? []).filter(id => fragments.get(id)?.role === 'territory-area');
   let geometry = [];
   for (const id of areaIds) geometry = geometry.length ? polygonClipping.union(geometry, geometryFor(id)) : geometryFor(id);
-  states.set(keyOf(base), {
+  if (!geometry.length) { warnings.push(`Base ${base.id} skipped: no verified territory-area geometry`); continue; }
+
+  const state = {
     polityId: base.polityId,
     track: base.track,
     territorialModel: base.territorialModel,
@@ -102,7 +170,9 @@ for (const base of baseStates) {
     derivedFromChangeIds: [],
     date: base.effectiveDate,
     dateKey,
-  });
+  };
+  states.set(keyOf(base), state);
+  emitSnapshot(state, `${base.id}-${dateKey}`, 'base-state');
 }
 
 const sortedChanges = [...changes].sort((a, b) => (preciseDateKey(a.effectiveDate) ?? '9999').localeCompare(preciseDateKey(b.effectiveDate) ?? '9999'));
@@ -130,57 +200,7 @@ for (const change of sortedChanges) {
   state.date = change.effectiveDate;
   state.dateKey = dateKey;
 
-  const safeId = `${change.polityId}-${change.track}-${dateKey}`.replace(/[^a-zA-Z0-9._-]+/g, '-');
-  const geometryFile = `${safeId}.geojson`;
-  const uncertaintyFile = `${safeId}.uncertainty.geojson`;
-  const uncertainIds = [...state.activeFragmentIds].filter(id => {
-    const fragment = fragments.get(id);
-    return fragment && fragment.role !== 'territory-area';
-  });
-
-  fs.writeFileSync(path.join(outRoot, geometryFile), JSON.stringify({
-    type: 'FeatureCollection',
-    features: state.geometry.length ? [{
-      type: 'Feature',
-      properties: {polityId: state.polityId, track: state.track, generated: true},
-      geometry: {type: 'MultiPolygon', coordinates: state.geometry},
-    }] : [],
-  }));
-
-  const uncertaintyFeatures = [];
-  for (const id of uncertainIds) {
-    const fragment = fragments.get(id);
-    const file = path.join(dataRoot, fragment.geometryFile);
-    if (!fs.existsSync(file)) continue;
-    const payload = readJson(file);
-    const sourceFeatures = payload.type === 'FeatureCollection' ? payload.features : payload.type === 'Feature' ? [payload] : [];
-    for (const feature of sourceFeatures) uncertaintyFeatures.push({
-      ...feature,
-      properties: {
-        ...(feature.properties ?? {}),
-        historyFragmentId: id,
-        role: fragment.role,
-        confidence: fragment.confidence,
-        uncertaintyMeters: fragment.uncertaintyMeters ?? null,
-      },
-    });
-  }
-  fs.writeFileSync(path.join(outRoot, uncertaintyFile), JSON.stringify({type: 'FeatureCollection', features: uncertaintyFeatures}));
-
-  snapshots.push({
-    id: safeId,
-    polityId: state.polityId,
-    effectiveDate: state.date,
-    track: state.track,
-    territorialModel: state.territorialModel,
-    geometryFile: `generated/territory/${geometryFile}`,
-    uncertaintyGeometryFile: `generated/territory/${uncertaintyFile}`,
-    evidenceDocumentIds: [...state.evidenceDocumentIds],
-    derivedFromChangeIds: [...state.derivedFromChangeIds],
-    reviewStatus: 'geometry-verified',
-    confidence: minConfidence([...state.activeFragmentIds]),
-    generated: true,
-  });
+  emitSnapshot(state, `${change.polityId}-${change.track}-${dateKey}`, 'territory-change');
 }
 
 const index = {
