@@ -119,9 +119,9 @@
       "notes": "The single polity label is a territory-rendering shorthand for a year of rapid constitutional change. Political regime chronology is represented by events, not by pretending one legal form lasted the entire year. The captured republic geometry begins later in 1917, so allowForwardProxy is explicit for earlier 1917 months and remains non-canonical."
     },
     {
-      "id": "coverage-1918-1921-rsfsr",
+      "id": "coverage-1918-1922-rsfsr",
       "startMonth": "1918-01",
-      "endMonth": "1921-12",
+      "endMonth": "1922-11",
       "polityId": "rsfsr",
       "label": "РСФСР",
       "track": "russian-legal-border",
@@ -131,11 +131,11 @@
       "confidence": "low",
       "bootstrapGeometry": true,
       "evidenceDocumentIds": ["doc-brest-1918-ebid", "doc-tartu-finland-1920-ebid", "doc-riga-1921-ebid", "doc-rsfsr-fer-border-1920-ebid"],
-      "notes": "Temporary visual proxy only; Civil War, secessions, front lines and internationally recognized borders must be separate tracks and dated changes."
+      "notes": "Temporary visual proxy only; Civil War, secessions, front lines and internationally recognized borders must be separate tracks and dated changes. January-November 1922 remain RSFSR coverage because the USSR was not constituted until 30 December 1922."
     },
     {
-      "id": "coverage-1922-1991-ussr",
-      "startMonth": "1922-01",
+      "id": "coverage-1922-12-1991-ussr",
+      "startMonth": "1922-12",
       "endMonth": "1991-12",
       "polityId": "ussr",
       "label": "СССР",
@@ -146,7 +146,7 @@
       "confidence": "medium",
       "bootstrapGeometry": true,
       "evidenceDocumentIds": ["doc-ussr-formation-1922-ebid", "doc-moscow-finland-1940-ebid", "doc-zakarpattia-1945-ebid", "doc-belovezha-1991-rosarchiv"],
-      "notes": "The USSR exterior border and internal union-republic borders are distinct tracks. Verified dated boundary changes override this fallback automatically."
+      "notes": "The USSR exterior border and internal union-republic borders are distinct tracks. Monthly assignment begins in December 1922 because the month-end state follows the 30 December 1922 formation act. Verified dated boundary changes override this fallback automatically."
     },
     {
       "id": "coverage-1992-2026-rf",
