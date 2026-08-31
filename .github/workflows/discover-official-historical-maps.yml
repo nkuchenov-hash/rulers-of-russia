@@ -21,10 +21,12 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-rus python3-opencv >/dev/null
           curl -fL --retry 3 --connect-timeout 15 --max-time 300 \
-            'https://cdn.ruarxive.org/public/saved_istmat/books/39972_1.pdf' \
+            'https://cdn.ruarxive.org/public/saved_istmat/books/39972_6.pdf' \
             -o /tmp/ussr1928.pdf
+          pdfinfo /tmp/ussr1928.pdf | sed -n '1,30p'
           pdftoppm -f 1 -l 1 -png -r 300 -singlefile /tmp/ussr1928.pdf /tmp/ussr1928
           tesseract /tmp/ussr1928.png /tmp/ussr1928-ocr -l rus+eng --psm 11 tsv >/dev/null 2>&1
+          tesseract /tmp/ussr1928.png stdout -l rus+eng --psm 11 2>/dev/null | head -n 80 || true
           mkdir -p /tmp/ussr1928-diagnostics
           python - <<'PY'
           import csv,re,cv2,numpy as np
@@ -43,14 +45,11 @@ jobs:
           pats=re.compile(r'(^|[^0-9])(?:0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|100|110|120|130|140|150|160|170|180)[°ºo]?($|[^0-9])')
           for row in rows:
             if pats.search(row[0]) or any(s in row[0].upper() for s in ['СССР','СОЮЗ','СОВЕТ','МАСШТАБ']): print(row)
-          # Export visual diagnostics. Boundary symbology on the scanned sheet is warm/red-brown,
-          # while graticule/text are dark; preserve both masks for manual validation.
           h,w=img.shape[:2]
           scale=min(1.0,1800/w)
           preview=cv2.resize(img,(round(w*scale),round(h*scale)),interpolation=cv2.INTER_AREA)
           cv2.imwrite('/tmp/ussr1928-diagnostics/preview.jpg',preview,[int(cv2.IMWRITE_JPEG_QUALITY),92])
           hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-          # warm red/brown linework, deliberately broad for diagnosis rather than final tracing
           m1=cv2.inRange(hsv,np.array([0,55,45]),np.array([22,255,245]))
           m2=cv2.inRange(hsv,np.array([165,55,45]),np.array([179,255,245]))
           warm=cv2.bitwise_or(m1,m2)
@@ -59,7 +58,6 @@ jobs:
           warm=cv2.morphologyEx(warm,cv2.MORPH_CLOSE,k,iterations=1)
           cv2.imwrite('/tmp/ussr1928-diagnostics/warm-mask.png',warm)
           cv2.imwrite('/tmp/ussr1928-diagnostics/dark-mask.png',dark)
-          # Overlays downscaled for quick visual inspection.
           overlay=img.copy(); overlay[warm>0]=(0,0,255)
           overlay=cv2.resize(overlay,(round(w*scale),round(h*scale)),interpolation=cv2.INTER_AREA)
           cv2.imwrite('/tmp/ussr1928-diagnostics/warm-overlay.jpg',overlay,[int(cv2.IMWRITE_JPEG_QUALITY),92])
