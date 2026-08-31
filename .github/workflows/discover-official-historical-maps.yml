@@ -9,62 +9,23 @@ permissions:
   contents: read
 
 jobs:
-  georef-ussr-1928:
+  resolve-ussr-1928-source:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: OCR graticule and inspect the standalone 1928 USSR map
+      - name: Resolve Istmat attachment URLs and inspect map candidates
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq poppler-utils tesseract-ocr tesseract-ocr-rus python3-opencv >/dev/null
-          curl -fL --retry 3 --connect-timeout 15 --max-time 300 \
-            'https://cdn.ruarxive.org/public/saved_istmat/books/39972_6.pdf' \
-            -o /tmp/ussr1928.pdf
-          pdfinfo /tmp/ussr1928.pdf | sed -n '1,30p'
-          pdftoppm -f 1 -l 1 -png -r 300 -singlefile /tmp/ussr1928.pdf /tmp/ussr1928
-          tesseract /tmp/ussr1928.png /tmp/ussr1928-ocr -l rus+eng --psm 11 tsv >/dev/null 2>&1
-          tesseract /tmp/ussr1928.png stdout -l rus+eng --psm 11 2>/dev/null | head -n 80 || true
-          mkdir -p /tmp/ussr1928-diagnostics
           python - <<'PY'
-          import csv,re,cv2,numpy as np
-          img=cv2.imread('/tmp/ussr1928.png')
-          print('IMAGE_SHAPE',img.shape)
-          rows=[]
-          with open('/tmp/ussr1928-ocr.tsv',encoding='utf8') as f:
-            for r in csv.DictReader(f,delimiter='\t'):
-              txt=(r.get('text') or '').strip()
-              if not txt: continue
-              try:
-                conf=float(r.get('conf') or -1); x,y,w,h=[int(r[k]) for k in ('left','top','width','height')]
-              except: continue
-              rows.append((txt,conf,x,y,w,h))
-          print('OCR_COORDINATE_CANDIDATES')
-          pats=re.compile(r'(^|[^0-9])(?:0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|100|110|120|130|140|150|160|170|180)[°ºo]?($|[^0-9])')
-          for row in rows:
-            if pats.search(row[0]) or any(s in row[0].upper() for s in ['СССР','СОЮЗ','СОВЕТ','МАСШТАБ']): print(row)
-          h,w=img.shape[:2]
-          scale=min(1.0,1800/w)
-          preview=cv2.resize(img,(round(w*scale),round(h*scale)),interpolation=cv2.INTER_AREA)
-          cv2.imwrite('/tmp/ussr1928-diagnostics/preview.jpg',preview,[int(cv2.IMWRITE_JPEG_QUALITY),92])
-          hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-          m1=cv2.inRange(hsv,np.array([0,55,45]),np.array([22,255,245]))
-          m2=cv2.inRange(hsv,np.array([165,55,45]),np.array([179,255,245]))
-          warm=cv2.bitwise_or(m1,m2)
-          dark=cv2.inRange(cv2.cvtColor(img,cv2.COLOR_BGR2GRAY),0,105)
-          k=np.ones((2,2),np.uint8)
-          warm=cv2.morphologyEx(warm,cv2.MORPH_CLOSE,k,iterations=1)
-          cv2.imwrite('/tmp/ussr1928-diagnostics/warm-mask.png',warm)
-          cv2.imwrite('/tmp/ussr1928-diagnostics/dark-mask.png',dark)
-          overlay=img.copy(); overlay[warm>0]=(0,0,255)
-          overlay=cv2.resize(overlay,(round(w*scale),round(h*scale)),interpolation=cv2.INTER_AREA)
-          cv2.imwrite('/tmp/ussr1928-diagnostics/warm-overlay.jpg',overlay,[int(cv2.IMWRITE_JPEG_QUALITY),92])
-          print('WARM_PIXELS',int(np.count_nonzero(warm)),'DARK_PIXELS',int(np.count_nonzero(dark)))
+          import urllib.request,re,html
+          url='https://www.istmat.org/node/39972'
+          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+          page=urllib.request.urlopen(req,timeout=30).read().decode('utf-8','replace')
+          print('PAGE_BYTES',len(page))
+          for m in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',page,re.I|re.S):
+            href=html.unescape(m.group(1)); text=re.sub('<[^>]+>',' ',m.group(2)); text=' '.join(html.unescape(text).split())
+            if 'pdf' in href.lower() or 'Союз Советских' in text or 'Карта мира' in text or 'Российская Социалистическая' in text:
+              print('LINK',text,'=>',href)
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ussr-1928-georef-diagnostics
-          path: /tmp/ussr1928-diagnostics
-          retention-days: 7
