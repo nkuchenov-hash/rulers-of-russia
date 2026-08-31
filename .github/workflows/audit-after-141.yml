@@ -1,0 +1,28 @@
+name: Audit History Core after PR 141
+on:
+  push:
+    branches: [research/audit-after-141]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: npm install
+      - name: Generate strict audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run materialize:history-geometry
+          npm run validate:history-geometry
+          npm run validate:history
+          npm run materialize:history
+          node scripts/audit-history-completion.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const a=JSON.parse(fs.readFileSync('public/data/history-core/generated/completion-audit.json','utf8'));
+          console.log('FINAL_AUDIT',JSON.stringify(a,null,2));
+          NODE
