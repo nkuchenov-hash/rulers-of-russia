@@ -5,49 +5,52 @@
       "id": "territory-1813-gulistan-russian-legal-basis",
       "eventId": "evt-1813-gulistan-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"12 октября 1813 г.","normalized":"1813-10-24","precision":"day","calendar":"julian"},
+      "effectiveDate": {"original":"12 октября 1813 г. — подписание","normalized":"1813-10-24","precision":"day","calendar":"julian","note":"Treaty-signing/legal-basis milestone only. Bilateral confirmation is modeled separately at the 1814 ratification exchange."},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "recognize",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection"],
-      "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection"],
-        "derivationNote": "Treat the 1813 signature as the legal-basis event only. Presidential Library chronology states full Persian recognition/entry into force in 1818; exact 1818 effective date must be resolved before geometry-verified replay."
-      },
-      "reviewStatus": "research-required"
+      "geometry": {"method":"source-verified-treaty-basis","evidenceDocumentIds":["doc-gulistan-1813-mfa-border-collection"],"derivationNote":"The official MFA treaty corpus source-verifies the territorial clauses and signature. This record intentionally does not mutate territory at signature; the bilateral ratification-exchange transition is represented separately."},
+      "reviewStatus": "source-verified"
+    },
+    {
+      "id": "territory-1814-gulistan-russian-legal-border",
+      "eventId": "evt-1814-gulistan-ratifications-exchanged",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"15 сентября 1814 г. — размен ратификаций","normalized":"1814-09-27","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "operation": "recognize",
+      "evidenceDocumentIds": ["doc-gulistan-1813-mfa-border-collection", "doc-gulistan-ratifications-1814-mfa-border-collection"],
+      "geometry": {"method":"source-verified-treaty-area-pending","evidenceDocumentIds":["doc-gulistan-1813-mfa-border-collection","doc-gulistan-ratifications-1814-mfa-border-collection"],"derivationNote":"The treaty and its recorded exchange of ratifications source-verify the bilateral territorial settlement. Exact Caucasus area/boundary geometry must be reconstructed from the treaty's possession language, contemporary surveys and official maps; later imperial administrative boundaries cannot be substituted silently."},
+      "reviewStatus": "source-verified",
+      "notes": "The later 1818 publication/political-recognition episode is not used as the first bilateral legal-effect date."
     },
     {
       "id": "territory-1828-turkmenchay-russian-legal-border",
       "eventId": "evt-1828-turkmenchay-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"10 февраля 1828 г.","normalized":"1828-02-22","precision":"day","calendar":"julian"},
+      "effectiveDate": {"original":"10 февраля 1828 г. — договорный территориальный рубеж","normalized":"1828-02-22","precision":"day","calendar":"julian","note":"Articles III–V directly cede, define and recognize the territorial settlement and run implementation periods from signature. The later ratification exchange is retained as a separate demarcation dependency rather than guessed from conflicting later annotations."},
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-turkmenchay-1828-mfa-border-collection", "doc-turkmenchay-boundary-map-1828-rnb"],
-      "geometry": {
-        "method": "contemporary-official-map",
-        "evidenceDocumentIds": ["doc-turkmenchay-1828-mfa-border-collection", "doc-turkmenchay-boundary-map-1828-rnb"],
-        "derivationNote": "The 1828 Military Topographic Depot map explicitly depicts the new boundary. It is a geometry-verification candidate, but must be georeferenced and checked against treaty clauses before promotion."
-      },
-      "reviewStatus": "research-required"
+      "geometry": {"method":"source-verified-boundary-text-official-map-georef-pending","evidenceDocumentIds":["doc-turkmenchay-1828-mfa-border-collection","doc-turkmenchay-boundary-map-1828-rnb"],"derivationNote":"Articles III–V of the official treaty publication source-verify the cession of Erivan and Nakhichevan and the new frontier. The 1828 Military Topographic Depot map explicitly depicts that frontier. Exact geometry must be georeferenced against the treaty route and, where available, the post-ratification commission map; the contemporary map is not promoted to geometry-verified until that georeferencing is performed."},
+      "reviewStatus": "source-verified",
+      "notes": "Documentary status is resolved without pretending that the official 1828 map has already been georeferenced."
     },
     {
       "id": "territory-1829-adrianople-russian-legal-border",
-      "eventId": "evt-1829-adrianople-peace",
+      "eventId": "evt-1829-adrianople-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"2 сентября 1829 г.","normalized":"1829-09-14","precision":"day","calendar":"julian"},
+      "effectiveDate": {"original":"16 октября 1829 г. — размен ратификаций","normalized":"1829-10-28","precision":"day","calendar":"julian","note":"Article XI starts execution of Articles III–IV after exchange; Diebitsch's contemporaneous 15–16 October correspondence fixes the exchange ceremony to 16 October old style."},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection"],
-      "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection"],
-        "derivationNote": "Georeference the Danube-mouth islands, Black Sea coastal line and Akhalkalaki/Akhaltsikhe districts from the treaty and period official maps; do not substitute modern administrative borders."
-      },
-      "reviewStatus": "research-required"
+      "evidenceDocumentIds": ["doc-adrianople-1829-mfa-border-collection", "doc-adrianople-ratifications-1829-diebitsch"],
+      "geometry": {"method":"source-verified-ratified-boundary-area-pending","evidenceDocumentIds":["doc-adrianople-1829-mfa-border-collection","doc-adrianople-ratifications-1829-diebitsch"],"derivationNote":"The official treaty source-verifies the Danube-mouth and Asian boundary settlement, and its Article XI ties execution to ratification exchange. Exact islands, eastern Black Sea coast and Akhalkalaki/Akhaltsikhe geometry must be georeferenced from the treaty and period official maps; modern administrative borders must not be substituted."},
+      "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1843-anglo-russian-alaska-141w-confirmed",
@@ -60,12 +63,7 @@
       "geometryAction": "metadata-only",
       "geometryFragmentIds": ["frag-russian-empire-british-america-141w-1843"],
       "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-anglo-russian-commerce-1843-continuity-frus", "doc-anglo-russian-commerce-1843-eif-nzmfat", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
-      "geometry": {
-        "method": "derived-from-boundary-text",
-        "file": "geometry/russian-empire-british-america-141w-1843.geojson",
-        "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
-        "derivationNote": "Article III of the 1825 convention defines the northern continental boundary as the 141st degree of west longitude continuing north to the Frozen Ocean. The generated overlay intentionally clips that treaty-defined meridian to 61°–69° N, a conservative interior interval wholly inside the official Section 29 meridian sector. Those latitudes are display safety clips, not treaty endpoints. No southeastern panhandle geometry or terminal intersection is inferred."
-      },
+      "geometry": {"method":"derived-from-boundary-text","file":"geometry/russian-empire-british-america-141w-1843.geojson","evidenceDocumentIds":["doc-anglo-russian-alaska-boundary-1825-frus","doc-alaska-141st-meridian-survey-1906-usdos","doc-ibc-alaska-yukon-141st-section29"],"derivationNote":"Article III of the 1825 convention defines the northern continental boundary as the 141st degree of west longitude continuing north to the Frozen Ocean. The generated overlay intentionally clips that treaty-defined meridian to 61°–69° N, a conservative interior interval wholly inside the official Section 29 meridian sector. Those latitudes are display safety clips, not treaty endpoints. No southeastern panhandle geometry or terminal intersection is inferred."},
       "reviewStatus": "geometry-verified",
       "notes": "Legal/source geometry confidence is high for the meridian rule. Display placement remains datum-aware because the historical treaty longitude is not silently asserted to be a modern geodetic datum."
     },
@@ -78,11 +76,7 @@
       "territorialModel": "mixed",
       "operation": "cede",
       "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus", "doc-alaska-cession-ratification-exchange-1867-loc"],
-      "geometry": {
-        "method": "source-verified-boundary-text-full-polygon-pending",
-        "evidenceDocumentIds": ["doc-alaska-cession-1867-original-loc", "doc-alaska-cession-1867-usdos-frus"],
-        "derivationNote": "The treaty source-verifies the identity of the ceded Russian possessions and reproduces the 1825 eastern boundary, including the 141st-meridian sector. Full polygon geometry remains pending reconstruction of the southeastern panhandle, islands, western Bering limit and historical coastlines from the treaty and authoritative cartography. This geometry dependency does not make the already A1/A2-verified legal cession itself research-required."
-      },
+      "geometry": {"method":"source-verified-boundary-text-full-polygon-pending","evidenceDocumentIds":["doc-alaska-cession-1867-original-loc","doc-alaska-cession-1867-usdos-frus"],"derivationNote":"The treaty source-verifies the identity of the ceded Russian possessions and reproduces the 1825 eastern boundary, including the 141st-meridian sector. Full polygon geometry remains pending reconstruction of the southeastern panhandle, islands, western Bering limit and historical coastlines from the treaty and authoritative cartography. This geometry dependency does not make the already A1/A2-verified legal cession itself research-required."},
       "reviewStatus": "source-verified",
       "notes": "Legal cession is fully source-verified on 20 June 1867; exact area geometry remains a separate verification dependency."
     }
