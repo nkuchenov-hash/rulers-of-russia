@@ -152,37 +152,69 @@ const emitSnapshot = (state, rawId, generatedFrom) => {
   return snapshot;
 };
 
+// Base states and verified changes are replayed on one timeline. This is essential when a later
+// authoritative base state exists for the same polity/track: it must not leak backwards into earlier
+// changes, and it must reset the accumulated state only from its own effective date onward.
+const replay = [];
 for (const base of baseStates) {
   const dateKey = preciseDateKey(base.effectiveDate);
-  if (!dateKey) { warnings.push(`Base ${base.id} skipped: date is not month/day precise`); continue; }
-  const areaIds = (base.geometryFragmentIds ?? []).filter(id => fragments.get(id)?.role === 'territory-area');
-  let geometry = [];
-  for (const id of areaIds) geometry = geometry.length ? polygonClipping.union(geometry, geometryFor(id)) : geometryFor(id);
-  if (!geometry.length) { warnings.push(`Base ${base.id} skipped: no verified territory-area geometry`); continue; }
-
-  const state = {
-    polityId: base.polityId,
-    track: base.track,
-    territorialModel: base.territorialModel,
-    geometry,
-    activeFragmentIds: new Set(base.geometryFragmentIds ?? []),
-    evidenceDocumentIds: new Set(base.evidenceDocumentIds ?? []),
-    derivedFromChangeIds: [],
-    date: base.effectiveDate,
-    dateKey,
-  };
-  states.set(keyOf(base), state);
-  emitSnapshot(state, `${base.id}-${dateKey}`, 'base-state');
+  if (!dateKey) {
+    warnings.push(`Base ${base.id} skipped: date is not month/day precise`);
+    continue;
+  }
+  replay.push({kind: 'base', dateKey, item: base});
 }
-
-const sortedChanges = [...changes].sort((a, b) => (preciseDateKey(a.effectiveDate) ?? '9999').localeCompare(preciseDateKey(b.effectiveDate) ?? '9999'));
-for (const change of sortedChanges) {
+for (const change of changes) {
   if (change.reviewStatus !== 'geometry-verified') continue;
   const dateKey = preciseDateKey(change.effectiveDate);
-  if (!dateKey) { warnings.push(`Change ${change.id} skipped: date is not month/day precise`); continue; }
+  if (!dateKey) {
+    warnings.push(`Change ${change.id} skipped: date is not month/day precise`);
+    continue;
+  }
+  replay.push({kind: 'change', dateKey, item: change});
+}
+replay.sort((a, b) => {
+  const byDate = a.dateKey.localeCompare(b.dateKey);
+  if (byDate) return byDate;
+  if (a.kind !== b.kind) return a.kind === 'base' ? -1 : 1;
+  return String(a.item.id).localeCompare(String(b.item.id));
+});
+
+for (const entry of replay) {
+  if (entry.kind === 'base') {
+    const base = entry.item;
+    const areaIds = (base.geometryFragmentIds ?? []).filter(id => fragments.get(id)?.role === 'territory-area');
+    let geometry = [];
+    for (const id of areaIds) geometry = geometry.length ? polygonClipping.union(geometry, geometryFor(id)) : geometryFor(id);
+    if (!geometry.length) {
+      warnings.push(`Base ${base.id} skipped: no verified territory-area geometry`);
+      continue;
+    }
+
+    const state = {
+      polityId: base.polityId,
+      track: base.track,
+      territorialModel: base.territorialModel,
+      geometry,
+      activeFragmentIds: new Set(base.geometryFragmentIds ?? []),
+      evidenceDocumentIds: new Set(base.evidenceDocumentIds ?? []),
+      derivedFromChangeIds: [],
+      date: base.effectiveDate,
+      dateKey: entry.dateKey,
+    };
+    states.set(keyOf(base), state);
+    emitSnapshot(state, `${base.id}-${entry.dateKey}`, 'base-state');
+    continue;
+  }
+
+  const change = entry.item;
   const stateKey = keyOf(change);
   const state = states.get(stateKey);
-  if (!state) { warnings.push(`Change ${change.id} skipped: no verified base state for ${stateKey}`); continue; }
+  if (!state) {
+    warnings.push(`Change ${change.id} skipped: no verified base state active by ${entry.dateKey} for ${stateKey}`);
+    continue;
+  }
+
   const action = inferAction(change);
   const ids = change.geometryFragmentIds ?? [];
   const areaIds = ids.filter(id => fragments.get(id)?.role === 'territory-area');
@@ -198,9 +230,9 @@ for (const change of sortedChanges) {
   state.derivedFromChangeIds.push(change.id);
   state.territorialModel = change.territorialModel;
   state.date = change.effectiveDate;
-  state.dateKey = dateKey;
+  state.dateKey = entry.dateKey;
 
-  emitSnapshot(state, `${change.polityId}-${change.track}-${dateKey}`, 'territory-change');
+  emitSnapshot(state, `${change.polityId}-${change.track}-${entry.dateKey}`, 'territory-change');
 }
 
 const index = {
