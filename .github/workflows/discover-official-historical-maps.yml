@@ -1,0 +1,71 @@
+name: Discover official historical maps
+
+on:
+  push:
+    branches:
+      - research/discover-official-historical-maps
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Search Library of Congress map catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p map-discovery
+          python - <<'PY'
+          import json, urllib.parse, urllib.request, ssl, time
+
+          queries = [
+              'Soviet Union GUGK map',
+              'SSSR GUGK karta',
+              'politiko administrativnaia karta SSSR',
+              'RSFSR map 1920 Russian',
+              'Russian Empire official map 1914',
+              'Rossiiskaia Imperiia karta 1914',
+              'Glavnoe upravlenie zemleustroistva karta Rossiiskoi Imperii',
+          ]
+          ctx = ssl.create_default_context()
+          headers = {'User-Agent':'Mozilla/5.0'}
+          all_rows = []
+          for q in queries:
+              url = 'https://www.loc.gov/maps/?fo=json&c=100&q=' + urllib.parse.quote(q)
+              try:
+                  req = urllib.request.Request(url, headers=headers)
+                  with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+                      data = json.load(r)
+                  rows=[]
+                  for item in data.get('results',[]):
+                      rows.append({
+                          'query': q,
+                          'title': item.get('title'),
+                          'date': item.get('date'),
+                          'description': item.get('description'),
+                          'contributor': item.get('contributor'),
+                          'created_published': item.get('created_published'),
+                          'id': item.get('id'),
+                          'url': item.get('url'),
+                          'resources': item.get('resources'),
+                          'location': item.get('location'),
+                          'subject': item.get('subject'),
+                      })
+                  all_rows.extend(rows)
+                  print('\n###', q, len(rows))
+                  for x in rows[:12]:
+                      print(json.dumps(x, ensure_ascii=False)[:3500])
+              except Exception as e:
+                  print('ERROR', q, repr(e))
+              time.sleep(.5)
+          with open('map-discovery/loc-results.json','w',encoding='utf8') as f:
+              json.dump(all_rows,f,ensure_ascii=False,indent=2)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-map-discovery
+          path: map-discovery/
+          if-no-files-found: error
