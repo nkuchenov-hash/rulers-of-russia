@@ -8,8 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "validate:history": "node scripts/validate-history-core.mjs",
-    "validate:history-geometry": "node scripts/check-history-geometry-recipes.mjs",
-    "materialize:history-geometry": "node scripts/build-history-geometry.mjs",
+    "validate:history-geometry": "node scripts/check-history-geometry-recipes.mjs && node scripts/check-history-raster-geometry-recipes.mjs && node scripts/test-raster-georeference.mjs",
+    "materialize:history-geometry": "node scripts/build-history-geometry.mjs && node scripts/build-history-raster-geometry.mjs",
     "materialize:history-territory": "node scripts/materialize-history-territory.mjs",
     "materialize:history-boundaries": "node scripts/build-history-boundary-index.mjs",
     "materialize:history": "npm run materialize:history-geometry && npm run materialize:history-territory && npm run materialize:history-boundaries && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs"
@@ -29,8 +29,8 @@
   "devDependencies": {
     "@types/d3-geo": "^3.1.0",
     "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "@types/topojson-client": "^3.1.0",
     "typescript": "^5.8.0"
   }
