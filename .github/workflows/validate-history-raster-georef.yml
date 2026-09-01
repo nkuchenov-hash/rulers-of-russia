@@ -12,8 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
+      - run: npm install
       - name: Materialize all registered history geometry
         run: npm run materialize:history-geometry
       - name: Validate coordinate and raster geometry recipes
