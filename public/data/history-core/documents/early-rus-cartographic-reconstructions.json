@@ -26,7 +26,8 @@
         "width": 1800,
         "height": 2207,
         "mimeType": "image/gif",
-        "commonsSha1": "d2091a5f4e3e89a8ba2e048ad2130c608234eb42"
+        "commonsSha1": "d2091a5f4e3e89a8ba2e048ad2130c608234eb42",
+        "sha256": "d0cd3dedfec309a9a2ce670f2e8de1b17b5ce03ae0abca8e4ef9fde68620496c"
       },
       "notes": "Use only as a reproducibly digitized secondary reconstruction layer. The map must not be presented as an exact ninth-century surveyed frontier. Primary chronicle evidence remains separate and controls the historical chronology; geometry retains low confidence and explicit uncertainty."
     }
