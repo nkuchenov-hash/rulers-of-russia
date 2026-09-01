@@ -4,7 +4,7 @@
     {
       "id": "recipe-early-rus-rurik-862-tornau",
       "fragmentId": "frag-early-rus-rurik-862-reconstruction",
-      "track": "russian-legal-border",
+      "track": "de-facto-control",
       "geometryType": "Polygon",
       "output": "geometry/early-rus-rurik-862-reconstruction.geojson",
       "evidenceDocumentIds": [
@@ -53,7 +53,7 @@
         [350, 1730], [320, 1740], [270, 1735], [280, 1705], [295, 1670], [320, 1630],
         [335, 1600], [335, 1560], [355, 1520]
       ]],
-      "note": "Reproducible transcription of the salmon/red 'Владения Рюрика 862–879' layer in Tornau's 1910 secondary reconstruction. Geometry verification means the pixel trace and georeference are reproducible; it does not mean a surveyed ninth-century state boundary existed. The production territorial model must render this as a low-confidence frontier-zone reconstruction with explicit uncertainty."
+      "note": "Reproducible transcription of the salmon/red 'Владения Рюрика 862–879' layer in Tornau's 1910 secondary reconstruction. Geometry verification means the pixel trace and georeference are reproducible; it does not mean a surveyed ninth-century state boundary existed. The production territorial model renders this as a low-confidence de-facto-control/frontier-zone reconstruction with explicit uncertainty."
     }
   ]
 }
