@@ -1,0 +1,75 @@
+name: Inspect early Rus 862 source map
+on:
+  push:
+    branches: [history/early-rus-862-base]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and inspect Tornau 1910 map
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-opencv python3-pil tesseract-ocr tesseract-ocr-rus >/dev/null
+          mkdir -p /tmp/early-rus-862
+          curl -fL --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif' \
+            -o /tmp/early-rus-862/source.gif
+          sha256sum /tmp/early-rus-862/source.gif | tee /tmp/early-rus-862/sha256.txt
+          python - <<'PY'
+          from PIL import Image
+          import cv2,numpy as np,json
+          src='/tmp/early-rus-862/source.gif'
+          im=Image.open(src).convert('RGB')
+          print('IMAGE_SIZE',im.size)
+          im.save('/tmp/early-rus-862/source.png')
+          preview=im.copy(); preview.thumbnail((1200,1200)); preview.save('/tmp/early-rus-862/preview.jpg',quality=92)
+          arr=np.array(im)
+          gray=cv2.cvtColor(arr,cv2.COLOR_RGB2GRAY)
+          edges=cv2.Canny(gray,70,160)
+          cv2.imwrite('/tmp/early-rus-862/edges.png',edges)
+          # Hough lines are diagnostic only: likely graticule/frame candidates for later manual GCP review.
+          lines=cv2.HoughLinesP(edges,1,np.pi/180,threshold=150,minLineLength=180,maxLineGap=15)
+          found=[]
+          if lines is not None:
+            for line in lines[:500]:
+              x1,y1,x2,y2=map(int,line[0]);
+              angle=float(np.degrees(np.arctan2(y2-y1,x2-x1)))
+              found.append({'p1':[x1,y1],'p2':[x2,y2],'angle':round(angle,3),'length':round(float(np.hypot(x2-x1,y2-y1)),2)})
+          with open('/tmp/early-rus-862/hough-lines.json','w') as f: json.dump(found,f,indent=2)
+          print('HOUGH_LINES',len(found))
+          PY
+          tesseract /tmp/early-rus-862/source.png /tmp/early-rus-862/ocr -l rus+eng --psm 11 tsv >/dev/null 2>&1 || true
+          python - <<'PY'
+          import csv,json,re
+          rows=[]
+          try:
+            with open('/tmp/early-rus-862/ocr.tsv',encoding='utf8') as f:
+              for r in csv.DictReader(f,delimiter='\t'):
+                text=(r.get('text') or '').strip()
+                if not text: continue
+                try: conf=float(r.get('conf') or -1)
+                except: conf=-1
+                if conf>=25:
+                  rows.append({'text':text,'confidence':conf,'x':int(r['left']),'y':int(r['top']),'w':int(r['width']),'h':int(r['height'])})
+          except FileNotFoundError: pass
+          with open('/tmp/early-rus-862/ocr.json','w') as f: json.dump(rows,f,ensure_ascii=False,indent=2)
+          print('OCR_ROWS',len(rows))
+          print('COORD_LABEL_CANDIDATES')
+          for r in rows:
+            if re.search(r'\d{1,3}\s*[°º]',r['text']) or r['text'] in {'40','50','60','70','20','30'}: print(r)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: early-rus-862-map-diagnostics
+          path: |
+            /tmp/early-rus-862/preview.jpg
+            /tmp/early-rus-862/edges.png
+            /tmp/early-rus-862/sha256.txt
+            /tmp/early-rus-862/hough-lines.json
+            /tmp/early-rus-862/ocr.json
+          retention-days: 7
