@@ -19,3 +19,15 @@ jobs:
         run: npm run validate:history-geometry
       - name: Validate History Core provenance
         run: npm run validate:history
+      - name: Materialize full monthly history
+        run: npm run materialize:history
+      - name: Print strict completion delta
+        shell: bash
+        run: |
+          node scripts/audit-history-completion.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const audit=JSON.parse(fs.readFileSync('public/data/history-core/generated/completion-audit.json','utf8'));
+          console.log('HISTORY_PROGRESS_COUNTS',JSON.stringify(audit.counts));
+          console.log('HISTORY_PROGRESS_CRITERIA',JSON.stringify(audit.criteria));
+          NODE
