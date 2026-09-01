@@ -17,15 +17,17 @@
       "endMonth": "0881-12",
       "polityId": "novgorodian-land",
       "label": "Ранняя Русь / северный центр",
-      "track": "russian-legal-border",
+      "track": "de-facto-control",
       "territorialModel": "frontier-zone",
       "fallbackGeometryFile": "data/territory/archive/novgorod-republic.geojson",
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
       "allowForwardProxy": true,
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
-      "notes": "Very rough visualization proxy only. The later Novgorod Republic capture is not asserted to equal the territory of 862-881; early Rus must be progressively reconstructed from chronicle, archaeology and documentary territorial evidence. allowForwardProxy is deliberately enabled only because no earlier dated bootstrap geometry exists; the generated state remains reconstruction-provisional and can never be promoted by this flag."
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926"
+      ],
+      "notes": "The verified replacement for this bootstrap is a low-confidence de-facto-control/frontier reconstruction, not a modern legal border. The later Novgorod Republic fallback remains only a provisional visual proxy where verified early geometry is unavailable."
     },
     {
       "id": "coverage-0882-1124-kievan-rus",
@@ -39,7 +41,9 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926"],
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926"
+      ],
       "notes": "Bootstrap polygon keeps the whole period renderable. It is explicitly non-canonical and will be replaced by source-backed territorial zones and dated changes."
     },
     {
@@ -54,7 +58,10 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-pvl-laurentian-1926", "doc-sgdd-vol1-1813"],
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926",
+        "doc-sgdd-vol1-1813"
+      ],
       "notes": "Political authority and dependencies varied within this span. Monthly coverage is operational while documentary sub-periods are researched."
     },
     {
@@ -69,7 +76,9 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813"],
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813"
+      ],
       "notes": "The period contains many incremental accessions, inheritances, conquests and treaty changes; the fallback keeps it visible until those are replayed from documents."
     },
     {
@@ -84,7 +93,10 @@
       "status": "reconstruction-provisional",
       "confidence": "medium",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-stolbovo-1617-ebid"],
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813",
+        "doc-stolbovo-1617-ebid"
+      ],
       "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry."
     },
     {
@@ -99,7 +111,10 @@
       "status": "reconstruction-provisional",
       "confidence": "medium",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-nystad-1721-ebid", "doc-bucharest-1812-ebid"],
+      "evidenceDocumentIds": [
+        "doc-nystad-1721-ebid",
+        "doc-bucharest-1812-ebid"
+      ],
       "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry."
     },
     {
@@ -115,7 +130,9 @@
       "confidence": "low",
       "bootstrapGeometry": true,
       "allowForwardProxy": true,
-      "evidenceDocumentIds": ["doc-rights-peoples-1917-rgaspi"],
+      "evidenceDocumentIds": [
+        "doc-rights-peoples-1917-rgaspi"
+      ],
       "notes": "The single polity label is a territory-rendering shorthand for a year of rapid constitutional change. Political regime chronology is represented by events, not by pretending one legal form lasted the entire year. The captured republic geometry begins later in 1917, so allowForwardProxy is explicit for earlier 1917 months and remains non-canonical."
     },
     {
@@ -130,7 +147,12 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-brest-1918-ebid", "doc-tartu-finland-1920-ebid", "doc-riga-1921-ebid", "doc-rsfsr-fer-border-1920-ebid"],
+      "evidenceDocumentIds": [
+        "doc-brest-1918-ebid",
+        "doc-tartu-finland-1920-ebid",
+        "doc-riga-1921-ebid",
+        "doc-rsfsr-fer-border-1920-ebid"
+      ],
       "notes": "Temporary visual proxy only; Civil War, secessions, front lines and internationally recognized borders must be separate tracks and dated changes. January-November 1922 remain RSFSR coverage because the USSR was not constituted until 30 December 1922."
     },
     {
@@ -145,7 +167,12 @@
       "status": "reconstruction-provisional",
       "confidence": "medium",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-ussr-formation-1922-ebid", "doc-moscow-finland-1940-ebid", "doc-zakarpattia-1945-ebid", "doc-belovezha-1991-rosarchiv"],
+      "evidenceDocumentIds": [
+        "doc-ussr-formation-1922-ebid",
+        "doc-moscow-finland-1940-ebid",
+        "doc-zakarpattia-1945-ebid",
+        "doc-belovezha-1991-rosarchiv"
+      ],
       "notes": "The USSR exterior border and internal union-republic borders are distinct tracks. Monthly assignment begins in December 1922 because the month-end state follows the 30 December 1922 formation act. Verified dated boundary changes override this fallback automatically."
     },
     {
@@ -160,7 +187,10 @@
       "status": "reconstruction-provisional",
       "confidence": "medium",
       "bootstrapGeometry": true,
-      "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv", "doc-crimea-2014-6fkz-pravo"],
+      "evidenceDocumentIds": [
+        "doc-belovezha-1991-rosarchiv",
+        "doc-crimea-2014-6fkz-pravo"
+      ],
       "notes": "This is the Russian legal-border track. Contested international recognition and de-facto control must be represented separately and never silently merged into this track."
     }
   ]
