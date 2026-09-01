@@ -1,0 +1,79 @@
+name: Apply early Rus 862 model once
+on:
+  push:
+    branches: [history/early-rus-862-base]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: history/early-rus-862-base
+      - name: Register the Rurik reconstruction fragment and coverage anchor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          model_path=Path('public/data/history-core/territory-model.json')
+          coverage_path=Path('public/data/history-core/coverage-periods.json')
+          model=json.loads(model_path.read_text())
+          fragment={
+            'id':'frag-early-rus-rurik-862-reconstruction',
+            'polityId':'novgorodian-land',
+            'track':'de-facto-control',
+            'role':'territory-area',
+            'territorialModel':'frontier-zone',
+            'geometryFile':'geometry/early-rus-rurik-862-reconstruction.geojson',
+            'evidenceDocumentIds':['doc-pvl-laurentian-1926','doc-tornau-rus-862-map-1910'],
+            'reviewStatus':'geometry-verified',
+            'confidence':'low',
+            'uncertaintyMeters':120000,
+            'derivationNote':'Geometry-verified transcription of Tornau 1910 map layer «Владения Рюрика 862–879», georeferenced from explicit raster GCPs and pinned source hash. This is a low-confidence secondary reconstruction of an early control/frontier area, not a surveyed ninth-century state boundary. The Laurentian/PVL evidence anchors the source-specific 862 chronology but does not create a thin border.'
+          }
+          fragments=model.setdefault('fragments',[])
+          fragments[:]=[f for f in fragments if f.get('id')!=fragment['id']]
+          fragments.insert(0,fragment)
+          base={
+            'id':'base-early-rus-rurik-circa-862',
+            'polityId':'novgorodian-land',
+            'track':'de-facto-control',
+            'territorialModel':'frontier-zone',
+            'coverageAnchorMonth':'0862-01',
+            'historicalDate':{
+              'original':'около 862 года',
+              'normalized':'0862',
+              'precision':'circa',
+              'calendar':'source-specific-chronicle-chronology'
+            },
+            'geometryFragmentIds':[fragment['id']],
+            'evidenceDocumentIds':['doc-pvl-laurentian-1926','doc-tornau-rus-862-map-1910'],
+            'reviewStatus':'geometry-verified',
+            'confidence':'low',
+            'notes':'coverageAnchorMonth starts the dataset at 0862-01; it is deliberately not asserted as a historical January date. The represented source date remains circa 862.'
+          }
+          bases=model.setdefault('baseStates',[])
+          bases[:]=[b for b in bases if b.get('id')!=base['id']]
+          bases.insert(0,base)
+          model_path.write_text(json.dumps(model,ensure_ascii=False,indent=2)+'\n')
+
+          coverage=json.loads(coverage_path.read_text())
+          period=next(p for p in coverage['periods'] if p['id']=='coverage-0862-0881-early-rus')
+          period['track']='de-facto-control'
+          period['territorialModel']='frontier-zone'
+          period['notes']='The verified replacement for this bootstrap is a low-confidence de-facto-control/frontier reconstruction, not a modern legal border. The later Novgorod Republic fallback remains only a provisional visual proxy where verified early geometry is unavailable.'
+          coverage_path.write_text(json.dumps(coverage,ensure_ascii=False,indent=2)+'\n')
+          PY
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add public/data/history-core/territory-model.json public/data/history-core/coverage-periods.json
+          if git diff --cached --quiet; then
+            echo 'Model already applied.'
+            exit 0
+          fi
+          git commit -m 'Register Rurik 862 frontier reconstruction base'
+          git push origin HEAD:history/early-rus-862-base
