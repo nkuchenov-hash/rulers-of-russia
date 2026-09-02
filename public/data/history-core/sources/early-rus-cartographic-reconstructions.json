@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "tornau-russian-history-atlas-1910",
+      "title": "Н. Н. Торнау. Учебный атлас по русской истории",
+      "institution": "Санкт-Петербургское издание 1910 г.; цифровые копии — Wikimedia Commons / проект «Исторические Материалы»",
+      "url": "https://istmat.org/node/45088",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Historical cartographic reconstructions of Rus and Russia from the 9th century onward",
+      "canonicalUse": ["reconstruction-geometry", "interpretation", "uncertainty-model"],
+      "notes": "Secondary late-imperial historical reconstruction. It may define the geometry of a named reconstruction layer when digitized reproducibly, but it cannot by itself establish a primary-source thin state boundary. Early-period layers must retain frontier/uncertainty semantics and cite independent primary documentary evidence for the underlying historical chronology."
+    }
+  ]
+}

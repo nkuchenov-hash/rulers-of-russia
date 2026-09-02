@@ -149,7 +149,15 @@ for (const base of territoryModel.baseStates ?? []) {
     continue;
   }
   validateEvidence(label, base.evidenceDocumentIds, true);
-  if (!validatePreciseDate(label, base.effectiveDate)) fail(`${label} must have day/month precision for deterministic replay`);
+  if (base.coverageAnchorMonth !== undefined) {
+    if (!/^\d{4}-\d{2}$/.test(base.coverageAnchorMonth ?? '')) fail(`${label} has invalid coverageAnchorMonth; expected YYYY-MM`);
+    const month = Number(String(base.coverageAnchorMonth).slice(5, 7));
+    if (month < 1 || month > 12) fail(`${label} has invalid coverage anchor month`);
+    if (!base.historicalDate?.normalized || !base.historicalDate?.precision) fail(`${label} uses a coverage anchor but has no explicit historicalDate`);
+    if (base.effectiveDate) fail(`${label} must not mix coverageAnchorMonth with a fabricated precise effectiveDate`);
+  } else if (!validatePreciseDate(label, base.effectiveDate)) {
+    fail(`${label} must have either a coverageAnchorMonth plus historicalDate or a day/month precise effectiveDate for deterministic replay`);
+  }
   if (!Array.isArray(base.geometryFragmentIds) || base.geometryFragmentIds.length === 0) fail(`${label} has no geometryFragmentIds`);
   for (const id of base.geometryFragmentIds ?? []) {
     const fragment = fragmentById.get(id);

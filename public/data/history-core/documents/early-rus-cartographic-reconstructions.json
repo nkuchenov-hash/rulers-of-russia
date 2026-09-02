@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-tornau-rus-862-map-1910",
+      "sourceCollectionId": "tornau-russian-history-atlas-1910",
+      "title": "Карта Руси около 862 года",
+      "institution": "Н. Н. Торнау; цифровая копия Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_862.gif",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1910",
+        "normalized": "1910",
+        "precision": "year",
+        "calendar": "gregorian",
+        "note": "Publication date of the reconstruction map; the represented historical date is circa 862."
+      },
+      "publicationCitation": "Торнау Н. Н. Учебный атлас по русской истории. Санкт-Петербург, 1910. Карта Руси около 862 года.",
+      "representedDate": {
+        "original": "около 862 года",
+        "normalized": "0862",
+        "precision": "circa"
+      },
+      "digitalRaster": {
+        "width": 1800,
+        "height": 2207,
+        "mimeType": "image/gif",
+        "commonsSha1": "d2091a5f4e3e89a8ba2e048ad2130c608234eb42",
+        "sha256": "d0cd3dedfec309a9a2ce670f2e8de1b17b5ce03ae0abca8e4ef9fde68620496c"
+      },
+      "notes": "Use only as a reproducibly digitized secondary reconstruction layer. The map must not be presented as an exact ninth-century surveyed frontier. Primary chronicle evidence remains separate and controls the historical chronology; geometry retains low confidence and explicit uncertainty."
+    }
+  ]
+}

@@ -30,6 +30,16 @@ const preciseDateKey = date => {
   if (date.precision === 'month' && /^\d{4}-\d{2}$/.test(date.normalized)) return `${date.normalized}-01`;
   return null;
 };
+const coverageAnchorKey = base => /^\d{4}-\d{2}$/.test(base?.coverageAnchorMonth ?? '') ? `${base.coverageAnchorMonth}-01` : null;
+const operationalBaseDate = base => base.coverageAnchorMonth
+  ? {
+      original: `History Core coverage anchor ${base.coverageAnchorMonth}`,
+      normalized: base.coverageAnchorMonth,
+      precision: 'month',
+      calendar: 'gregorian',
+      interpretation: 'dataset-coverage-anchor-not-historical-date'
+    }
+  : base.effectiveDate;
 
 const toMultiPolygon = geometry => {
   if (!geometry) return [];
@@ -137,6 +147,8 @@ const emitSnapshot = (state, rawId, generatedFrom) => {
     id: safeId,
     polityId: state.polityId,
     effectiveDate: state.date,
+    historicalDate: state.historicalDate ?? null,
+    coverageAnchorMonth: state.coverageAnchorMonth ?? null,
     track: state.track,
     territorialModel: state.territorialModel,
     geometryFile: `generated/territory/${geometryFile}`,
@@ -152,14 +164,14 @@ const emitSnapshot = (state, rawId, generatedFrom) => {
   return snapshot;
 };
 
-// Base states and verified changes are replayed on one timeline. This is essential when a later
-// authoritative base state exists for the same polity/track: it must not leak backwards into earlier
-// changes, and it must reset the accumulated state only from its own effective date onward.
+// Base states and verified changes are replayed on one timeline. A base may use coverageAnchorMonth
+// when the source only supports an imprecise historical date. The anchor is an operational month in
+// this dataset, never a claim that the historical transition occurred on the first day of that month.
 const replay = [];
 for (const base of baseStates) {
-  const dateKey = preciseDateKey(base.effectiveDate);
+  const dateKey = coverageAnchorKey(base) ?? preciseDateKey(base.effectiveDate);
   if (!dateKey) {
-    warnings.push(`Base ${base.id} skipped: date is not month/day precise`);
+    warnings.push(`Base ${base.id} skipped: neither a valid coverageAnchorMonth nor a month/day precise effectiveDate is available`);
     continue;
   }
   replay.push({kind: 'base', dateKey, item: base});
@@ -199,7 +211,9 @@ for (const entry of replay) {
       activeFragmentIds: new Set(base.geometryFragmentIds ?? []),
       evidenceDocumentIds: new Set(base.evidenceDocumentIds ?? []),
       derivedFromChangeIds: [],
-      date: base.effectiveDate,
+      date: operationalBaseDate(base),
+      historicalDate: base.historicalDate ?? base.effectiveDate ?? null,
+      coverageAnchorMonth: base.coverageAnchorMonth ?? null,
       dateKey: entry.dateKey,
     };
     states.set(keyOf(base), state);
@@ -218,84 +232,55 @@ for (const entry of replay) {
   const action = inferAction(change);
   const ids = change.geometryFragmentIds ?? [];
   const areaIds = ids.filter(id => fragments.get(id)?.role === 'territory-area');
-  let delta = [];
-  for (const id of areaIds) delta = delta.length ? polygonClipping.union(delta, geometryFor(id)) : geometryFor(id);
+  if (action !== 'metadata-only' && areaIds.length === 0) {
+    warnings.push(`Change ${change.id} skipped: geometry action ${action} has no verified territory-area fragment`);
+    continue;
+  }
 
-  if (action === 'replace') state.geometry = delta;
-  if (action === 'add' && delta.length) state.geometry = state.geometry.length ? polygonClipping.union(state.geometry, delta) : delta;
-  if (action === 'remove' && delta.length && state.geometry.length) state.geometry = polygonClipping.difference(state.geometry, delta);
+  try {
+    if (action === 'add') {
+      for (const id of areaIds) state.geometry = polygonClipping.union(state.geometry, geometryFor(id));
+    } else if (action === 'remove') {
+      for (const id of areaIds) state.geometry = polygonClipping.difference(state.geometry, geometryFor(id));
+    } else if (action === 'replace') {
+      let replacement = [];
+      for (const id of areaIds) replacement = replacement.length ? polygonClipping.union(replacement, geometryFor(id)) : geometryFor(id);
+      state.geometry = replacement;
+      state.activeFragmentIds.clear();
+    }
+  } catch (error) {
+    warnings.push(`Change ${change.id} skipped: polygon operation failed: ${error.message}`);
+    continue;
+  }
 
-  for (const id of ids) state.activeFragmentIds.add(id);
+  if (action === 'remove') for (const id of areaIds) state.activeFragmentIds.delete(id);
+  else for (const id of ids) state.activeFragmentIds.add(id);
   for (const id of change.evidenceDocumentIds ?? []) state.evidenceDocumentIds.add(id);
   state.derivedFromChangeIds.push(change.id);
-  state.territorialModel = change.territorialModel;
   state.date = change.effectiveDate;
+  state.historicalDate = change.effectiveDate;
+  state.coverageAnchorMonth = null;
   state.dateKey = entry.dateKey;
-
-  emitSnapshot(state, `${change.polityId}-${change.track}-${entry.dateKey}`, 'territory-change');
+  state.territorialModel = change.territorialModel ?? state.territorialModel;
+  emitSnapshot(state, `${change.id}-${entry.dateKey}`, 'territory-change');
 }
 
-const index = {
-  schema_version: 1,
-  generated_at: new Date().toISOString(),
-  generator: 'scripts/materialize-history-territory.mjs',
+snapshots.sort((a, b) => preciseDateKey(a.effectiveDate)?.localeCompare(preciseDateKey(b.effectiveDate)) || a.id.localeCompare(b.id));
+fs.writeFileSync(path.join(outRoot, 'index.json'), JSON.stringify({
+  schema_version: 2,
+  dataset: 'Rulers of Russia materialized geometry-verified territory snapshots',
   snapshots,
   warnings,
-};
-fs.writeFileSync(path.join(outRoot, 'index.json'), JSON.stringify(index, null, 2));
+}, null, 2) + '\n');
 
-// Compatibility bridge for the current year-based globe. The canonical generated index above keeps
-// exact month/day transitions; the legacy renderer receives the latest verified state within each year.
 if (fs.existsSync(legacyManifestFile)) {
-  const manifest = readJson(legacyManifestFile);
-  const byPolity = new Map();
-  for (const snapshot of snapshots) {
-    if (snapshot.track !== 'russian-legal-border') continue;
-    const year = Number(snapshot.effectiveDate?.normalized?.slice(0, 4));
-    if (!Number.isFinite(year)) continue;
-    const list = byPolity.get(snapshot.polityId) ?? [];
-    list.push({...snapshot, year});
-    byPolity.set(snapshot.polityId, list);
-  }
-
-  for (const [polityId, list] of byPolity) {
-    list.sort((a, b) => a.effectiveDate.normalized.localeCompare(b.effectiveDate.normalized));
-    const latestPerYear = new Map();
-    for (const item of list) latestPerYear.set(item.year, item);
-    const timeline = [...latestPerYear.values()].sort((a, b) => a.year - b.year);
-    const features = timeline.map((item, index) => {
-      const payload = readJson(path.join(dataRoot, item.geometryFile));
-      const geometry = payload.features?.[0]?.geometry;
-      if (!geometry) return null;
-      const next = timeline[index + 1];
-      return {
-        type: 'Feature',
-        properties: {
-          name: polityId,
-          polity_id: polityId,
-          start_date: `${item.year}-01-01`,
-          end_date: next ? `${next.year - 1}-12-31` : null,
-          history_core_generated: true,
-          history_core_effective_date: item.effectiveDate.normalized,
-          history_core_confidence: item.confidence,
-          history_core_snapshot_id: item.id,
-        },
-        geometry,
-      };
-    }).filter(Boolean);
-    if (!features.length) continue;
-
-    const bridgeFile = `history-core-${polityId}.geojson`;
-    fs.writeFileSync(path.join(legacyArchiveRoot, bridgeFile), JSON.stringify({type: 'FeatureCollection', features}));
-    const entry = (manifest.polities ?? []).find(x => x.polity_id === polityId);
-    if (entry) {
-      entry.file = bridgeFile;
-      entry.features = features.length;
-      entry.status = 'verified-history-core-generated';
-      entry.history_core_generated = true;
-    }
-  }
-  fs.writeFileSync(legacyManifestFile, JSON.stringify(manifest, null, 2));
+  const legacy = readJson(legacyManifestFile);
+  fs.writeFileSync(path.join(outRoot, 'legacy-manifest-reference.json'), JSON.stringify({
+    note: 'Bootstrap/provisional geometry remains available separately and is never promoted by this materializer.',
+    source: path.relative(root, legacyManifestFile).replaceAll('\\', '/'),
+    count: Array.isArray(legacy) ? legacy.length : Object.keys(legacy ?? {}).length,
+  }, null, 2) + '\n');
 }
 
-console.log(`History territory materialized: ${snapshots.length} snapshots, ${warnings.length} warnings.`);
+console.log(`History territory materialized: ${snapshots.length} geometry-verified snapshots; ${warnings.length} warnings.`);
+for (const warning of warnings) console.warn(`- ${warning}`);

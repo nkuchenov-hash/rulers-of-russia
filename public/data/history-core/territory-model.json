@@ -38,8 +38,48 @@
     "territory-changes/norway-varanger-2008.json",
     "territory-changes/norway-delimitation-2011.json"
   ],
-  "baseStates": [],
+  "baseStates": [
+    {
+      "id": "base-early-rus-rurik-circa-862",
+      "polityId": "novgorodian-land",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "0862-01",
+      "historicalDate": {
+        "original": "около 862 года",
+        "normalized": "0862",
+        "precision": "circa",
+        "calendar": "source-specific-chronicle-chronology"
+      },
+      "geometryFragmentIds": [
+        "frag-early-rus-rurik-862-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926",
+        "doc-tornau-rus-862-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "coverageAnchorMonth starts the dataset at 0862-01; it is deliberately not asserted as a historical January date. The represented source date remains circa 862."
+    }
+  ],
   "fragments": [
+    {
+      "id": "frag-early-rus-rurik-862-reconstruction",
+      "polityId": "novgorodian-land",
+      "track": "de-facto-control",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/early-rus-rurik-862-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926",
+        "doc-tornau-rus-862-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 120000,
+      "derivationNote": "Geometry-verified transcription of Tornau 1910 map layer «Владения Рюрика 862–879», georeferenced from explicit raster GCPs and pinned source hash. This is a low-confidence secondary reconstruction of an early control/frontier area, not a surveyed ninth-century state boundary. The Laurentian/PVL evidence anchors the source-specific 862 chronology but does not create a thin border."
+    },
     {
       "id": "frag-ussr-norway-varanger-1958-p1-p4",
       "polityId": "ussr",
@@ -47,7 +87,11 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-norway-varanger-1958-p1-p4.geojson",
-      "evidenceDocumentIds": ["doc-ussr-norway-varanger-protocol-1957", "doc-rf-norway-varanger-2007", "doc-rf-norway-varanger-ratification-33fz-2008"],
+      "evidenceDocumentIds": [
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-rf-norway-varanger-2007",
+        "doc-rf-norway-varanger-ratification-33fz-2008"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "2008-07-08",
@@ -60,7 +104,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-finland-sea-frontier-1966.geojson",
-      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965", "doc-ussr-finland-gulf-demarcation-1967"],
+      "evidenceDocumentIds": [
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-finland-gulf-demarcation-1967"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "effectiveTo": "1991-12-31",
@@ -73,7 +120,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-finland-maritime-jurisdiction-1966.geojson",
-      "evidenceDocumentIds": ["doc-ussr-finland-gulf-1965"],
+      "evidenceDocumentIds": [
+        "doc-ussr-finland-gulf-1965"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "effectiveTo": "1991-12-31",
@@ -86,7 +135,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-finland-shelf-extension-1968.geojson",
-      "evidenceDocumentIds": ["doc-ussr-finland-shelf-1967"],
+      "evidenceDocumentIds": [
+        "doc-ussr-finland-shelf-1967"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "effectiveTo": "1991-12-31",
@@ -99,7 +150,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-turkey-territorial-sea-1975.geojson",
-      "evidenceDocumentIds": ["doc-ussr-turkey-territorial-sea-1973", "doc-ussr-turkey-demarcation-description-1980"],
+      "evidenceDocumentIds": [
+        "doc-ussr-turkey-territorial-sea-1973",
+        "doc-ussr-turkey-demarcation-description-1980"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
@@ -112,7 +166,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-finland-fishing-extension-1980.geojson",
-      "evidenceDocumentIds": ["doc-ussr-finland-fishing-1980"],
+      "evidenceDocumentIds": [
+        "doc-ussr-finland-fishing-1980"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "effectiveTo": "1991-12-31",
@@ -125,7 +181,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-turkey-continental-shelf-1981.geojson",
-      "evidenceDocumentIds": ["doc-ussr-turkey-continental-shelf-1978", "doc-ussr-turkey-eez-notes-1986-1987"],
+      "evidenceDocumentIds": [
+        "doc-ussr-turkey-continental-shelf-1978",
+        "doc-ussr-turkey-eez-notes-1986-1987"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
@@ -138,7 +197,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-poland-territorial-sea-1986.geojson",
-      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985"],
+      "evidenceDocumentIds": [
+        "doc-ussr-poland-maritime-1985"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
@@ -151,7 +212,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-poland-maritime-jurisdiction-1986.geojson",
-      "evidenceDocumentIds": ["doc-ussr-poland-maritime-1985", "doc-ussr-poland-maritime-tripoint-1989"],
+      "evidenceDocumentIds": [
+        "doc-ussr-poland-maritime-1985",
+        "doc-ussr-poland-maritime-tripoint-1989"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
@@ -164,7 +228,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-sweden-maritime-1988-a1-a17.geojson",
-      "evidenceDocumentIds": ["doc-ussr-sweden-maritime-1988"],
+      "evidenceDocumentIds": [
+        "doc-ussr-sweden-maritime-1988"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "effectiveTo": "1991-12-31",
@@ -177,7 +243,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-dprk-territorial-sea-1991.geojson",
-      "evidenceDocumentIds": ["doc-ussr-dprk-border-regime-1990"],
+      "evidenceDocumentIds": [
+        "doc-ussr-dprk-border-regime-1990"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
@@ -190,7 +258,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-lithuania-maritime-2003-p1-p3.geojson",
-      "evidenceDocumentIds": ["doc-rf-lithuania-maritime-1997", "doc-rf-lithuania-ratification-70fz-2003"],
+      "evidenceDocumentIds": [
+        "doc-rf-lithuania-maritime-1997",
+        "doc-rf-lithuania-ratification-70fz-2003"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "Direct WGS84 coordinate transcription from the bilateral treaty. The source requires loxodromic segments and gives the coordinates priority over the appended maps; rendering densification follows rhumb lines in Mercator space."
@@ -202,7 +273,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-norway-varanger-2008-p1-p6.geojson",
-      "evidenceDocumentIds": ["doc-rf-norway-varanger-2007"],
+      "evidenceDocumentIds": [
+        "doc-rf-norway-varanger-2007"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "Direct coordinate transcription from the 2007 agreement Article 2 points 1–6 in WGS84; geodesic densification is used only for rendering. Point 6 joins the 2011 fragment exactly."
@@ -214,7 +287,9 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-norway-delimitation-2011-p1-p8.geojson",
-      "evidenceDocumentIds": ["doc-rf-norway-delimitation-2010"],
+      "evidenceDocumentIds": [
+        "doc-rf-norway-delimitation-2010"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "Direct coordinate transcription from treaty Article 1 points 1–8 in WGS 84; geodesic densification is used only for rendering. No terminal point beyond point 8 has been inferred."
@@ -226,7 +301,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/rf-dprk-territorial-sea-2013.geojson",
-      "evidenceDocumentIds": ["doc-rf-dprk-border-regime-2012", "doc-ussr-dprk-border-regime-1990"],
+      "evidenceDocumentIds": [
+        "doc-rf-dprk-border-regime-2012",
+        "doc-ussr-dprk-border-regime-1990"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "derivationNote": "The 2012 RF-DPRK treaty expressly retains the 1990 demarcation protocol. The exact coordinate-defined territorial-sea segment is carried into the current Russian state-border overlay without inferring the river geometry."
@@ -238,7 +316,10 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
-      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-sakhalin-border-endpoints-1940-ndl"],
+      "evidenceDocumentIds": [
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1917-03-15",
@@ -251,7 +332,13 @@
       "role": "boundary-corridor",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/russian-empire-british-america-141w-1843.geojson",
-      "evidenceDocumentIds": ["doc-anglo-russian-alaska-boundary-1825-frus", "doc-anglo-russian-commerce-1843-continuity-frus", "doc-anglo-russian-commerce-1843-eif-nzmfat", "doc-alaska-141st-meridian-survey-1906-usdos", "doc-ibc-alaska-yukon-141st-section29"],
+      "evidenceDocumentIds": [
+        "doc-anglo-russian-alaska-boundary-1825-frus",
+        "doc-anglo-russian-commerce-1843-continuity-frus",
+        "doc-anglo-russian-commerce-1843-eif-nzmfat",
+        "doc-alaska-141st-meridian-survey-1906-usdos",
+        "doc-ibc-alaska-yukon-141st-section29"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1867-06-20",
@@ -264,7 +351,11 @@
       "role": "boundary-control-network",
       "territorialModel": "boundary-control-network",
       "geometryFile": "geometry/russian-empire-afghanistan-pamir-1895-controls.geojson",
-      "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "evidenceDocumentIds": [
+        "doc-pamir-boundary-commission-report-1897-govindia",
+        "doc-pamir-joint-commission-map-1895-bl-qdl",
+        "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1917-03-15",
@@ -277,7 +368,11 @@
       "role": "boundary-control-network",
       "territorialModel": "boundary-control-network",
       "geometryFile": "geometry/russian-empire-afghanistan-west-1888-controls.geojson",
-      "evidenceDocumentIds": ["doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghan-northwest-final-protocol-1888-ukts"],
+      "evidenceDocumentIds": [
+        "doc-anglo-russian-afghan-boundary-protocol-1887-hmso",
+        "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official",
+        "doc-afghan-northwest-final-protocol-1888-ukts"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1917-03-15",
@@ -290,7 +385,10 @@
       "role": "boundary-control-network",
       "territorialModel": "boundary-control-network",
       "geometryFile": "geometry/ussr-afghanistan-pamir-1958-inherited-controls.geojson",
-      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "evidenceDocumentIds": [
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "high",
       "effectiveTo": "1991-12-31",
