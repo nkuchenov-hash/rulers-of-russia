@@ -31,6 +31,21 @@ jobs:
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
 
+      - name: Materialize History Core geometry
+        run: npm run materialize:history-geometry
+
+      - name: Validate History Core geometry recipes
+        run: npm run validate:history-geometry
+
+      - name: Validate History Core provenance
+        run: npm run validate:history
+
+      - name: Materialize monthly History Core
+        run: npm run materialize:history
+
+      - name: Audit History Core completion state
+        run: node scripts/audit-history-completion.mjs
+
       - name: Typecheck
         run: npm run typecheck
 
