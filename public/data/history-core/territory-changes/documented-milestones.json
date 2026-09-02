@@ -41,11 +41,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
+      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
-        "derivationNote": "Extract treaty boundary clauses and attached/implementation cartography; then create verified geometry fragments."
+        "method": "official-boundary-document-lineage-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
+        "derivationNote": "Finlex's official 1969 frontier protocol identifies the 14 October 1920 Finland–RSFSR peace treaty as one of the instruments establishing the state boundary and states that the line on the ground is defined by signed boundary-description protocols, boundary maps, boundary-mark protocols and other demarcation records, including the 28 April 1938 package. The authoritative documentary/cartographic lineage is therefore located. Production geometry remains pending until those primary boundary materials are reproducibly acquired, rights-reviewed where needed, georeferenced and spatially validated."
       },
       "reviewStatus": "source-verified"
     },
@@ -57,11 +57,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-riga-1921-ebid"],
+      "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-riga-1921-ebid"],
-        "derivationNote": "Promote only after the border description and period cartographic evidence are georeferenced."
+        "method": "official-treaty-boundary-description-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
+        "derivationNote": "Poland's Archiwum Akt Nowych preserves and publishes the original 18 March 1921 Treaty of Riga and identifies it as the decisive act establishing Poland's eastern boundary; its territorial Articles II–IV trace the Polish-Soviet frontier. The authoritative legal boundary description is therefore located. Production geometry remains pending controlled extraction of the line against authoritative period cartography/demarcation material and spatial validation."
       },
       "reviewStatus": "source-verified"
     },
@@ -73,11 +73,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
+      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
-        "derivationNote": "Use treaty and attached boundary materials for verified spatial reconstruction."
+        "method": "official-treaty-map-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
+        "derivationNote": "Rosarchiv publishes the map accompanying the 12 March 1940 USSR-Finland peace treaty from the Archive of Foreign Policy of the Russian Federation (АВП РФ. Ф. 3а. Оп. 1. П. 44. Д. 279). The authoritative treaty cartography is therefore located. Production geometry remains pending until the source raster is captured with reproducibility metadata, commercial-use rights are reviewed, and controlled georeferencing/validation is completed."
       },
       "reviewStatus": "source-verified"
     },
