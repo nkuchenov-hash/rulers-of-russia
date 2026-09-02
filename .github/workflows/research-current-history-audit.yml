@@ -1,0 +1,46 @@
+name: Research current History Core audit
+
+on:
+  push:
+    branches:
+      - research/current-history-audit
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Prepare local historical world archive
+        run: node scripts/sync-historical-world.mjs
+      - name: Materialize History Core geometry
+        run: npm run materialize:history-geometry
+      - name: Validate History Core geometry recipes
+        run: npm run validate:history-geometry
+      - name: Validate History Core provenance
+        run: npm run validate:history
+      - name: Materialize monthly History Core
+        run: npm run materialize:history
+      - name: Audit History Core completion state
+        run: node scripts/audit-history-completion.mjs
+      - name: Capture audit output
+        run: |
+          mkdir -p tmp
+          cp public/data/history-core/generated/completion-audit.json tmp/completion-audit.json
+      - name: Commit audit output to research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tmp/completion-audit.json
+          git commit -m "research: capture current History Core audit [skip ci]"
+          git push
