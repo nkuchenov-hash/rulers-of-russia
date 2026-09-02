@@ -16,12 +16,12 @@
       "operation": "status-change",
       "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-frontier-settlement-eif-1955-untc"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts"],
-        "derivationNote": "Article II is already sufficiently explicit to segment the research task. The western frontier retains the 18 January 1829 Beyramlu description on large stated intervals, but introduces separate new lines for Mugan, Deman and Eddy-Evlyar; the agreement likewise defines the eastern sector. The annex maps and/or the later 1957 coordinate catalogue must be ingested before any of those lines is promoted to geometry-verified."
+        "method": "official-map-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-demarcation-package-1957-unts"],
+        "derivationNote": "UN Treaty Series Vol. 451, No. 6497 publishes annex cartography that distinguishes the existing Soviet-Iranian frontier from the new line established by the 2 December 1954 agreement, so the authoritative map source is now located. Article II also segments the legal reconstruction: large intervals retain the 18 January 1829 Beyramlu description while Mugan, Deman and Eddy-Evlyar receive new lines, and the eastern sector is separately defined. The published annex maps must be georeferenced under the raster provenance/commercial-rights gate; the 11 April 1957 demarcation package and coordinate catalogue remain the preferred precision cross-check before promotion to geometry-verified."
       },
       "reviewStatus": "source-verified",
-      "notes": "This record corrects legal chronology and inheritance of the 1829 line but deliberately does not mutate production geometry until the annex/demarcation geometry is recovered."
+      "notes": "The source map is located, but production geometry remains intentionally unchanged until controlled georeferencing, rights review and cross-checking against the 1957 demarcation material are complete."
     },
     {
       "id": "territory-1957-ussr-iran-frontier-demarcation",
