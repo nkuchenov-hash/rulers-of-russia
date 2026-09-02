@@ -82,6 +82,66 @@
       },
       "publicationCitation": "Древнерусское государство в IX—XI вв. (до 1054 г.) / сост. Науч.-ред. картосост. частью ГУГК в 1941 г.; консультант Б. А. Рыбаков; ред. К. Б. Мартова. Испр. 1952. М.: ГУГК, 1961. 1:3 000 000.",
       "notes": "RSL catalog states that the map has a geographic graticule and separately colors the Old Russian state under Oleg (882–912), lands added 912–971, and lands added 972–1054. Use as a low-confidence scholarly reconstruction cross-check with primary chronicle evidence; do not infer intra-period dates absent from the source."
+    },
+    {
+      "id": "doc-tornau-rus-1054-1240-map-1910",
+      "sourceCollectionId": "tornau-russian-history-atlas-1910",
+      "title": "Русь в удельное время, 1054–1240",
+      "institution": "Н. Н. Торнау; цифровая копия Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Historical_map_of_the_Rus,_1054-1240.gif",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1910",
+        "normalized": "1910",
+        "precision": "year",
+        "calendar": "gregorian",
+        "note": "Publication date of the reconstruction map; represented interval is 1054–1240."
+      },
+      "publicationCitation": "Торнау Н. Н. Учебный атлас по русской истории. Санкт-Петербург, 1910. Русь в удельное время, 1054–1240.",
+      "representedDate": {
+        "original": "1054–1240",
+        "normalized": "1054/1240",
+        "precision": "range"
+      },
+      "digitalRaster": {
+        "width": 1800,
+        "height": 2207,
+        "mimeType": "image/gif",
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_the_Rus,_1054-1240.gif"
+      },
+      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. It is therefore a production-eligible raster source candidate, but no geometry is promoted until the exact raster bytes are hash-pinned, georeferenced with explicit GCPs, and the intended historical layer is traced reproducibly with uncertainty."
+    },
+    {
+      "id": "doc-tornau-rus-1240-1533-map-1910",
+      "sourceCollectionId": "tornau-russian-history-atlas-1910",
+      "title": "Русь, 1240–1533",
+      "institution": "Н. Н. Торнау; цифровая копия Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1910",
+        "normalized": "1910",
+        "precision": "year",
+        "calendar": "gregorian",
+        "note": "Publication date of the reconstruction map; represented interval is 1240–1533."
+      },
+      "publicationCitation": "Торнау Н. Н. Учебный атлас по русской истории. Санкт-Петербург, 1910. Русь, 1240–1533.",
+      "representedDate": {
+        "original": "1240–1533",
+        "normalized": "1240/1533",
+        "precision": "range"
+      },
+      "digitalRaster": {
+        "width": 1800,
+        "height": 2207,
+        "mimeType": "image/gif",
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif"
+      },
+      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. It is therefore a production-eligible raster source candidate, but no geometry is promoted until the exact raster bytes are hash-pinned, georeferenced with explicit GCPs, and the intended historical layer is traced reproducibly with uncertainty."
     }
   ]
 }
