@@ -26,13 +26,15 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
       "geometry": {
-        "method": "identified-demarcation-documents-not-yet-retrieved",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
-        "derivationNote": "The authentic 1958 treaty explicitly identifies demarcation documents and re-demarcation documents dated 29 September 1948. It also states that the re-demarcation was drafted on the basis of the 1885–1888 protocol. The documents/maps themselves have not yet been retrieved, so History Core records their legal existence and date but does not fabricate their line geometry."
+        "derivationNote": "The authentic 1958 treaty explicitly identifies demarcation and re-demarcation documents dated 29 September 1948 and states that the re-demarcation was drafted on the basis of the 1885–1888 protocol. Those documents remain a required geometry source for reconstructing the frontier legally effective from 17 January 1947, but the 29 September 1948 package itself records implementation/demarcation of that existing frontier rather than a second external territorial mutation."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "Metadata-only demarcation milestone. Its maps/protocols belong to the geometry evidence chain for the 1947 spatial frontier and must not create a duplicate 1948 territory change."
     },
     {
       "id": "territory-1958-ussr-afghanistan-frontier-continuity",
