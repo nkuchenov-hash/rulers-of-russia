@@ -7,7 +7,7 @@
       "institution": "Archiwum Akt Nowych (Poland)",
       "url": "https://www.aan.gov.pl/traktatryski/",
       "tier": "A2-official-document-publication",
-      "coverage": "Official Polish state-archive presentation of the original Treaty of Riga, identifying it as the act establishing Poland's eastern boundary and providing the treaty text and implementation context.",
+      "coverage": "Official Polish state-archive presentation of the original Treaty of Riga, identifying the treaty as a constitutive act for Poland's eastern boundary and providing the treaty text and implementation context.",
       "canonicalUse": ["legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
       "notes": "Use to establish that the authoritative treaty and its territorial-boundary clauses are located. Do not treat the archive presentation itself as production-ready geometry; exact line reconstruction still requires controlled extraction/georeferencing against authoritative period cartography or demarcation material."
     }
