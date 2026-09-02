@@ -3,53 +3,93 @@ on:
   push:
     branches: [history/runivers-medieval-bases]
 permissions:
-  contents: read
+  contents: write
 jobs:
   probe:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Map live Runivers GIS resources
+        with:
+          ref: history/runivers-medieval-bases
+      - name: Build compact medieval GIS summary
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p research-artifacts
           python - <<'PY'
-          import json, urllib.request, urllib.parse
-          base='https://gis.runivers.ru/api/resource'
-          ids=[1812,5344,11486,13818,14878,15948,6872,916]
+          import json,re,urllib.request,urllib.parse
+          from collections import deque,Counter
+          BASE='https://gis.runivers.ru/api/resource'
           def get(url):
-              with urllib.request.urlopen(url,timeout=60) as r:
-                  return json.load(r)
-          def summary(obj):
-              r=obj.get('resource',{})
-              fl=obj.get('feature_layer',{})
-              return {
-                  'id':r.get('id'),'cls':r.get('cls'),'name':r.get('display_name'),'keyname':r.get('keyname'),
-                  'parent':(r.get('parent') or {}).get('id'),'children':r.get('children'),
-                  'geometry':fl.get('geometry_type'),'srs':((fl.get('srs') or {}).get('id')),
-                  'fields':[f.get('keyname') for f in fl.get('fields',[])],
-                  'description':r.get('description')
-              }
-          for rid in ids:
-              print(f'=== RESOURCE {rid} ===')
-              try: print(json.dumps(summary(get(f'{base}/{rid}')),ensure_ascii=False))
-              except Exception as e: print('ERROR',repr(e)); continue
-              print(f'=== CHILDREN {rid} ===')
+              req=urllib.request.Request(url,headers={'User-Agent':'rulers-of-russia-history-research/1.0'})
+              with urllib.request.urlopen(req,timeout=60) as r: return json.load(r)
+          def meta(obj):
+              r=obj.get('resource',{}) if isinstance(obj,dict) else {}
+              fl=obj.get('feature_layer',{}) if isinstance(obj,dict) else {}
+              return {'id':r.get('id'),'cls':r.get('cls'),'name':r.get('display_name'),'keyname':r.get('keyname'),
+                      'parent':(r.get('parent') or {}).get('id'),'children':r.get('children'),
+                      'geometry':fl.get('geometry_type'),'srs':(fl.get('srs') or {}).get('id'),
+                      'fields':[f.get('keyname') for f in fl.get('fields',[])]}
+          out={'apiBase':BASE,'root':1812,'resources':[],'medievalNamedResources':[],'boundaryFeatureSummary':{}}
+          # Breadth-first resource map, bounded for safety.
+          seen=set(); q=deque([1812])
+          while q and len(seen)<2500:
+              parent=q.popleft()
+              if parent in seen: continue
+              seen.add(parent)
               try:
-                  children=get(f'{base}/?parent={rid}')
-                  rows=[summary(x) for x in children]
-                  print('COUNT',len(rows))
-                  for row in rows[:1000]: print(json.dumps(row,ensure_ascii=False))
-              except Exception as e: print('ERROR',repr(e))
-          # Inspect source/status values from master boundary lines without dumping all geometry.
-          for rid in [6872,916]:
-              print(f'=== FEATURE SAMPLE {rid} ===')
-              for query in ['limit=5','limit=20&fields=srcdata,lwdate,upperdat,lwdtappr,updtappr,linetype,status,eventstart,linecomnt,updtrl']:
-                  url=f'{base}/{rid}/feature/?{query}'
-                  try:
-                      data=get(url)
-                      print(url)
-                      print(json.dumps(data[:20] if isinstance(data,list) else data,ensure_ascii=False)[:30000])
-                      break
-                  except Exception as e: print('FEATURE_ERROR',url,repr(e))
+                  obj=get(f'{BASE}/{parent}'); row=meta(obj); out['resources'].append(row)
+                  children=get(f'{BASE}/?parent={parent}')
+              except Exception:
+                  continue
+              for child in children if isinstance(children,list) else []:
+                  cm=meta(child); cid=cm.get('id')
+                  if cid is not None and cid not in seen: q.append(cid)
+          year_re=re.compile(r'(?<!\d)(8[5-9]\d|9\d\d|1[0-5]\d\d)(?!\d)')
+          for r in out['resources']:
+              label=' '.join(str(r.get(k) or '') for k in ('name','keyname'))
+              years=[int(x) for x in year_re.findall(label)]
+              if years: out['medievalNamedResources'].append({**r,'years':years})
+          out['medievalNamedResources'].sort(key=lambda x:(min(x['years']),x.get('id') or 0))
+          # Query master boundary layers without geometry; retain only medieval records and aggregate sources.
+          for rid in [916,6872]:
+              relevant=[]; sources=Counter(); line_types=Counter(); statuses=Counter(); total=0
+              for offset in range(0,20000,500):
+                  params=urllib.parse.urlencode({'limit':500,'offset':offset,'geom':'no'})
+                  try: rows=get(f'{BASE}/{rid}/feature/?{params}')
+                  except Exception as e:
+                      relevant.append({'queryError':repr(e),'offset':offset}); break
+                  if not isinstance(rows,list) or not rows: break
+                  total += len(rows)
+                  for row in rows:
+                      f=row.get('fields',{}) if isinstance(row,dict) else {}
+                      text=' '.join(str(f.get(k) or '') for k in ['lwdate','upperdat','eventstart','srcdata','linecomnt'])
+                      years=[int(y) for y in re.findall(r'(?<!\d)(\d{3,4})(?!\d)',text)]
+                      is_medieval=any(850<=y<=1600 for y in years)
+                      if is_medieval:
+                          rec={'id':row.get('id'),'lwdate':f.get('lwdate'),'upperdat':f.get('upperdat'),
+                               'lwdtappr':f.get('lwdtappr'),'updtappr':f.get('updtappr'),'srcdata':f.get('srcdata'),
+                               'linetype':f.get('linetype'),'status':f.get('status'),'eventstart':f.get('eventstart'),
+                               'linecomnt':f.get('linecomnt'),'updtrl':f.get('updtrl')}
+                          relevant.append(rec)
+                          if rec['srcdata']: sources[str(rec['srcdata'])]+=1
+                          if rec['linetype'] is not None: line_types[str(rec['linetype'])]+=1
+                          if rec['status'] is not None: statuses[str(rec['status'])]+=1
+                  if len(rows)<500: break
+              out['boundaryFeatureSummary'][str(rid)]={'queriedFeatureCount':total,
+                  'medievalFeatureCount':len([x for x in relevant if 'id' in x]),
+                  'uniqueSources':sources.most_common(), 'lineTypes':line_types.most_common(),
+                  'statuses':statuses.most_common(), 'sample':relevant[:300]}
+          with open('research-artifacts/runivers-medieval-summary.json','w',encoding='utf8') as f:
+              json.dump(out,f,ensure_ascii=False,indent=2)
+          print('resources',len(out['resources']),'medieval_named',len(out['medievalNamedResources']))
+          for rid,v in out['boundaryFeatureSummary'].items(): print('layer',rid,'features',v['queriedFeatureCount'],'medieval',v['medievalFeatureCount'],'sources',v['uniqueSources'][:15])
           PY
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add research-artifacts/runivers-medieval-summary.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Capture compact Runivers medieval GIS research summary'
+            git push origin HEAD:history/runivers-medieval-bases
+          fi
