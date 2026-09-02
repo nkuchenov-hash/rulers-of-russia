@@ -20,6 +20,7 @@ const documentIds = new Set([...rootDocuments, ...modularDocuments].map(document
 const recipes = flatten(listJson(recipeRoot), 'recipes');
 const seenFragments = new Set();
 const seenOutputs = new Set();
+const commerciallyReusableRasterRights = new Set(['public-domain', 'cc0', 'cc-by', 'cc-by-sa', 'licensed-commercial', 'open-government-license']);
 
 function flattenPoints(value, out = []) {
   if (finiteLonLat(value)) out.push(value);
@@ -41,6 +42,8 @@ for (const recipe of recipes) {
   if (fragment.track !== recipe.track) fail(`Raster recipe ${recipe.id} track differs from fragment track`);
   if (!Array.isArray(recipe.evidenceDocumentIds) || recipe.evidenceDocumentIds.length === 0) fail(`Raster recipe ${recipe.id} has no evidence documents`);
   for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Raster recipe ${recipe.id} references unknown document ${id}`);
+  if (!commerciallyReusableRasterRights.has(recipe.sourceRaster?.rightsStatus)) fail(`Raster recipe ${recipe.id} source rights are not explicitly reusable for production/commercial output`);
+  if (!/^https:\/\//.test(recipe.sourceRaster?.rightsEvidenceUrl ?? '')) fail(`Raster recipe ${recipe.id} has no HTTPS rightsEvidenceUrl`);
   validateRasterGeoreference(recipe.georeference, recipe.sourceRaster);
 
   const outputFile = path.join(dataRoot, recipe.output);
@@ -48,6 +51,8 @@ for (const recipe of recipes) {
   const generated = readJson(outputFile);
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromRasterGeoreference !== true) fail(`Raster output ${recipe.output} is not linked to ${recipe.id}`);
   if (generated.metadata?.sourceRasterSha256 !== recipe.sourceRaster.sha256) fail(`Raster output ${recipe.output} source hash mismatch`);
+  if (generated.metadata?.sourceRasterRightsStatus !== recipe.sourceRaster.rightsStatus) fail(`Raster output ${recipe.output} source rights status mismatch`);
+  if (generated.metadata?.sourceRasterRightsEvidenceUrl !== recipe.sourceRaster.rightsEvidenceUrl) fail(`Raster output ${recipe.output} source rights evidence mismatch`);
   if (generated.metadata?.georeferenceMethod !== recipe.georeference.method) fail(`Raster output ${recipe.output} georeference method mismatch`);
   if (generated.metadata?.uncertaintyKm !== recipe.georeference.uncertaintyKm) fail(`Raster output ${recipe.output} uncertainty mismatch`);
 
