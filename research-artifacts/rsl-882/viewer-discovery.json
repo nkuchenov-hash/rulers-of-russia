@@ -1,0 +1,44 @@
+[
+  {
+    "record": "https://search.rsl.ru/ru/record/01009494305",
+    "htmlBytes": 73615,
+    "candidateLinks": [
+      "https://search.rsl.ru/en/record/01009494305",
+      "https://search.rsl.ru/images",
+      "https://search.rsl.ru/img/image-catalog.svg",
+      "https://search.rsl.ru/js/action-record.js?v=1787651650",
+      "https://search.rsl.ru/ru/record/01009494305",
+      "https://search.rsl.ru/ru/record/01009494305#tab_adv",
+      "https://search.rsl.ru/ru/record/01009494305#tab_prof"
+    ],
+    "snippets": [
+      "></script> <script id=\"service-menu-local-ru\" src=\"/js/serviceMenu-local.js?v=1787651650\"></script> <link rel=\"shortcut icon\" href=\"/img/favicon.png\" type=\"image/png\"> <link rel=\"apple-touch-icon\" href=\"/img/logo_main-57x57.png\"> <link rel=\"apple-touch-icon-precomposed\" href=\"/img/logo_main-57x57.png\"> <script type=\"text/javascript\"> var ProjectData = {\"pages\":{\"search\":\"\\/ru\\/search\",\"login\":\"\\/ru\\/site\\/login\",\"logout\":\"\\/ru\\/site\\/lo",
+      "urls\":{\"ajaxParticularRequest\":\"\\/site\\/ajax-particular?language=ru\",\"ajaxSuggest\":\"\\/site\\/ajax-suggest?language=ru\",\"base\":\"\",\"gak\":\"https:\\/\\/search.rsl.ru\\/images\",\"extSpell\":\"\\/site\\/ajax-spell?language=ru\",\"highlightPage\":\"\\/image\\/highlight-page?language=ru\",\"proposedDocs\":\"\\/site\\/get-proposed-docs?language=ru\",\"proposeDocument\":\"\\/site\\/propose-document?language=ru\",\"proposeDocumentCancel\":\"\\/site\\/propose-document?cancel=1&language=ru\",\"record\":\"\\/ru\\",
+      "/record\",\"search\":\"\\/ru\\/search\",\"searchGakSeparator\":\"https:\\/\\/search.rsl.ru\\/images\\/main\\/search\",\"searchGscThemes\":\"\\/site\\/search-gsc-themes?language=ru\",\"addBookmark\":\"\\/ru\\/api\\/favorite?action=add-bookmark\",\"removeBookmark\":\"\\/ru\\/api\\/favorite?action=remove-bookmark\",\"getBookmarks\":\"\\/ru\\/api\\/favorite?action=get-bookmarks\",\"eorderConfirmOrder\":\"\\/eorder-aleph\\/confirm-ord",
+      "me\":\"t\",\"defaultValue\":false,\"label\":\"\\u0422\\u0435\\u043c\\u0430\",\"badge\":true,\"encode\":true},\"page\":{\"type\":\"text\",\"id\":\"page\",\"hashname\":\"p\",\"defaultValue\":1},\"digitalAvail\":{\"type\":\"checkboxlist\",\"class\":\"digitalAvail-checkbox\",\"hashname\":\"digitalAvail\",\"defaultValue\":false,\"ignoreAllChecked\":true,\"label\":\"\\u0414\\u043e\\u043a\\u0443\\u043c\\u0435\\u043d\\u0442\\u044b\",\"badge\":true},\"nrrType\":{\"type\":\"checkboxlist\",\"class\":\"nrr-type-checkbox\",\"hashname\":\"nt\",\"defaultVal",
+      "hidden-xs\"> <div class=\"logo\" id=\"logoBlock\"> <a id=\"logoLink\" href=\"/ru\"> <img id=\"logoImage\" src=\"/img/logo_main.png\"> </a> <div class=\"hidden-xs hidden-sm logo-text logo-text-ru\" id=\"logoText\"> <a href=\"/ru\" title=\"Перейти на главную страницу\"><img src=\"/img/header-main-ru.png\" alt=\"\"></a> ",
+      " </span> <span class=\"navlink-cover\"> <a class=\"rsl-clear-link\" href=\"https://search.rsl.ru/images\" title=\"Имидж-каталог\"> <span class=\"navlink\"> <img src=\"/img/image-catalog.svg\" class=\"nav-image-catalog-icon\"><span class=\"hidden-md hidden-sm hidden-xs\"><span class=\"rsl-link\">Имидж-каталог</span> "
+    ]
+  },
+  {
+    "record": "https://search.rsl.ru/ru/record/01005496028",
+    "htmlBytes": 71702,
+    "candidateLinks": [
+      "https://search.rsl.ru/en/record/01005496028",
+      "https://search.rsl.ru/images",
+      "https://search.rsl.ru/img/image-catalog.svg",
+      "https://search.rsl.ru/js/action-record.js?v=1787651650",
+      "https://search.rsl.ru/ru/record/01005496028",
+      "https://search.rsl.ru/ru/record/01005496028#tab_adv",
+      "https://search.rsl.ru/ru/record/01005496028#tab_prof"
+    ],
+    "snippets": [
+      "></script> <script id=\"service-menu-local-ru\" src=\"/js/serviceMenu-local.js?v=1787651650\"></script> <link rel=\"shortcut icon\" href=\"/img/favicon.png\" type=\"image/png\"> <link rel=\"apple-touch-icon\" href=\"/img/logo_main-57x57.png\"> <link rel=\"apple-touch-icon-precomposed\" href=\"/img/logo_main-57x57.png\"> <script type=\"text/javascript\"> var ProjectData = {\"pages\":{\"search\":\"\\/ru\\/search\",\"login\":\"\\/ru\\/site\\/login\",\"logout\":\"\\/ru\\/site\\/lo",
+      "urls\":{\"ajaxParticularRequest\":\"\\/site\\/ajax-particular?language=ru\",\"ajaxSuggest\":\"\\/site\\/ajax-suggest?language=ru\",\"base\":\"\",\"gak\":\"https:\\/\\/search.rsl.ru\\/images\",\"extSpell\":\"\\/site\\/ajax-spell?language=ru\",\"highlightPage\":\"\\/image\\/highlight-page?language=ru\",\"proposedDocs\":\"\\/site\\/get-proposed-docs?language=ru\",\"proposeDocument\":\"\\/site\\/propose-document?language=ru\",\"proposeDocumentCancel\":\"\\/site\\/propose-document?cancel=1&language=ru\",\"record\":\"\\/ru\\",
+      "/record\",\"search\":\"\\/ru\\/search\",\"searchGakSeparator\":\"https:\\/\\/search.rsl.ru\\/images\\/main\\/search\",\"searchGscThemes\":\"\\/site\\/search-gsc-themes?language=ru\",\"addBookmark\":\"\\/ru\\/api\\/favorite?action=add-bookmark\",\"removeBookmark\":\"\\/ru\\/api\\/favorite?action=remove-bookmark\",\"getBookmarks\":\"\\/ru\\/api\\/favorite?action=get-bookmarks\",\"eorderConfirmOrder\":\"\\/eorder-aleph\\/confirm-ord",
+      "me\":\"t\",\"defaultValue\":false,\"label\":\"\\u0422\\u0435\\u043c\\u0430\",\"badge\":true,\"encode\":true},\"page\":{\"type\":\"text\",\"id\":\"page\",\"hashname\":\"p\",\"defaultValue\":1},\"digitalAvail\":{\"type\":\"checkboxlist\",\"class\":\"digitalAvail-checkbox\",\"hashname\":\"digitalAvail\",\"defaultValue\":false,\"ignoreAllChecked\":true,\"label\":\"\\u0414\\u043e\\u043a\\u0443\\u043c\\u0435\\u043d\\u0442\\u044b\",\"badge\":true},\"nrrType\":{\"type\":\"checkboxlist\",\"class\":\"nrr-type-checkbox\",\"hashname\":\"nt\",\"defaultVal",
+      "hidden-xs\"> <div class=\"logo\" id=\"logoBlock\"> <a id=\"logoLink\" href=\"/ru\"> <img id=\"logoImage\" src=\"/img/logo_main.png\"> </a> <div class=\"hidden-xs hidden-sm logo-text logo-text-ru\" id=\"logoText\"> <a href=\"/ru\" title=\"Перейти на главную страницу\"><img src=\"/img/header-main-ru.png\" alt=\"\"></a> ",
+      " </span> <span class=\"navlink-cover\"> <a class=\"rsl-clear-link\" href=\"https://search.rsl.ru/images\" title=\"Имидж-каталог\"> <span class=\"navlink\"> <img src=\"/img/image-catalog.svg\" class=\"nav-image-catalog-icon\"><span class=\"hidden-md hidden-sm hidden-xs\"><span class=\"rsl-link\">Имидж-каталог</span> "
+    ]
+  }
+]
