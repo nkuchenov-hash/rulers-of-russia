@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "finlex-finland-russia-border-1969",
+      "title": "Finlex — Protocol amending the Finland–USSR frontier régime agreement (60/1969)",
+      "institution": "Finland Ministry of Justice / Legal Register Centre (Finlex)",
+      "url": "https://data.finlex.fi/sv/fordrag/fordragsserie/1969/60",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official Finnish publication identifying the Finland–USSR state boundary as established by the 14 October 1920 Finland–RSFSR peace treaty and describing the signed boundary-description protocols, boundary maps, boundary-mark protocols and related demarcation documents that define the line on the ground.",
+      "canonicalUse": ["legal-basis", "boundary-date", "boundary-geometry", "interpretation"],
+      "notes": "The 1969 protocol is not used as a substitute geometry source. It is used to prove that the authoritative 1920 boundary definition and later official demarcation/map package are identified and locatable, so the unresolved task is controlled source acquisition/georeferencing rather than discovery of whether authoritative boundary material exists."
+    }
+  ]
+}
