@@ -39,12 +39,12 @@
       "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "metadata-only",
         "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
-        "derivationNote": "The later bilateral treaty expressly identifies a complete coordinate-bearing demarcation package signed on 11 April 1957, including a catalogue of frontier-mark coordinates. History Core records that exact dependency but does not reconstruct substitute coordinates from secondary maps. Promotion to geometry-verified is blocked specifically on acquisition/transcription of that catalogue and the associated maps/croquis."
+        "derivationNote": "The 11 April 1957 package demarcates and documents the frontier already legally settled by the 1954 agreement effective 20 May 1955; it is not a second external territorial mutation. Its coordinate catalogue and maps remain valuable source material for reconstructing the 1955 line, but this 1957 metadata event itself requires no separate territory-area geometry action."
       },
       "reviewStatus": "source-verified",
-      "notes": "This is the strongest available geometry dependency for replacing provisional Russo-Iranian/Caucasus border segments once the coordinate catalogue is obtained."
+      "notes": "Demarcation implementation of the already-effective 1955 legal frontier. Coordinate material should be attached to the 1955 spatial reconstruction rather than treated as a new 1957 territorial change."
     }
   ]
 }
