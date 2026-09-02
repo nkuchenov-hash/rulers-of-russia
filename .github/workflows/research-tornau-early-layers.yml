@@ -12,55 +12,45 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: research/rsl-882-map
-      - name: Analyze public-domain color layers
+      - name: Extract saturated yellow political components
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install pillow >/dev/null
+          python -m pip install pillow opencv-python-headless numpy >/dev/null
           python - <<'PY'
           import urllib.request,hashlib,json,colorsys
           from pathlib import Path
+          import numpy as np, cv2
           from PIL import Image
           url="https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif"
           data=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'rulers-history-research/1.0'}),timeout=60).read()
-          Path('/tmp/map.gif').write_bytes(data)
-          im=Image.open('/tmp/map.gif').convert('RGB')
-          crop=(150,1400,760,1960)
-          c=im.crop(crop)
-          # Quantize only for diagnostics; no geometry comes from the quantized image.
-          q=c.quantize(colors=24,method=Image.Quantize.MEDIANCUT).convert('RGB')
-          counts={}
-          for rgb in q.getdata(): counts[rgb]=counts.get(rgb,0)+1
-          palette=[]
-          for rgb,n in sorted(counts.items(),key=lambda kv:kv[1],reverse=True):
-              h,s,v=colorsys.rgb_to_hsv(*(x/255 for x in rgb))
-              palette.append({'rgb':rgb,'count':n,'hue':round(h*360,1),'sat':round(s,3),'val':round(v,3)})
-          # Candidate colored political fills: saturated non-blue, non-dark pixels.
-          masks={
-            'red_salmon': lambda h,s,v: ((h<25 or h>345) and s>.18 and v>.55),
-            'yellow': lambda h,s,v: (25<=h<75 and s>.18 and v>.55),
-            'green': lambda h,s,v: (75<=h<170 and s>.16 and v>.45),
-            'cyan': lambda h,s,v: (170<=h<215 and s>.16 and v>.5),
-            'blue': lambda h,s,v: (215<=h<265 and s>.16 and v>.45),
-            'purple': lambda h,s,v: (265<=h<345 and s>.16 and v>.45),
-          }
-          result={'source':url,'sha256':hashlib.sha256(data).hexdigest(),'size':im.size,'crop':crop,'palette':palette,'masks':{}}
-          pix=im.load(); W,H=im.size
-          for name,pred in masks.items():
-              pts=[]
-              for y in range(crop[1],crop[3]):
-                for x in range(crop[0],crop[2]):
-                  r,g,b=pix[x,y]; h,s,v=colorsys.rgb_to_hsv(r/255,g/255,b/255)
-                  if pred(h*360,s,v): pts.append((x,y))
-              if pts:
-                xs=[p[0] for p in pts]; ys=[p[1] for p in pts]
-                result['masks'][name]={'count':len(pts),'bbox':[min(xs),min(ys),max(xs),max(ys)]}
-              else: result['masks'][name]={'count':0}
-          Path('research-artifacts/tornau-early-layer-colors.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
-          print(json.dumps(result,ensure_ascii=False,indent=2))
+          im=np.array(Image.open(__import__('io').BytesIO(data)).convert('RGB'))
+          x0,y0,x1,y1=150,1400,760,1960
+          crop=im[y0:y1,x0:x1]
+          hsv=cv2.cvtColor(crop,cv2.COLOR_RGB2HSV)
+          # OpenCV hue 0..179. Bright saturated yellow: roughly 40..70 degrees.
+          mask=cv2.inRange(hsv,np.array([20,115,180],np.uint8),np.array([36,255,255],np.uint8))
+          # Close printed labels/rivers and remove tiny scan speckles without changing large contours materially.
+          mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8),iterations=2)
+          mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((3,3),np.uint8),iterations=1)
+          contours,_=cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+          comps=[]
+          for c in contours:
+              area=float(cv2.contourArea(c))
+              if area<120: continue
+              eps=max(1.5,0.003*cv2.arcLength(c,True))
+              simp=cv2.approxPolyDP(c,eps,True).reshape(-1,2)
+              bx,by,bw,bh=cv2.boundingRect(c)
+              comps.append({'area':round(area,1),'bbox':[int(bx+x0),int(by+y0),int(bx+bw-1+x0),int(by+bh-1+y0)],
+                            'ring':[[int(px+x0),int(py+y0)] for px,py in simp]})
+          comps.sort(key=lambda c:c['area'],reverse=True)
+          out={'source':url,'sha256':hashlib.sha256(data).hexdigest(),'threshold':'HSV hue 40-72deg, saturation>=115/255, value>=180/255; close5x5x2 open3x3',
+               'crop':[x0,y0,x1,y1],'componentCount':len(comps),'components':comps[:40]}
+          Path('research-artifacts/tornau-yellow-components.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+          print(json.dumps(out,ensure_ascii=False,indent=2))
           PY
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add research-artifacts/tornau-early-layer-colors.json
-          git commit -m 'Capture Tornau early layer color diagnostics' || exit 0
+          git add research-artifacts/tornau-yellow-components.json
+          git commit -m 'Capture Tornau yellow layer components' || exit 0
           git push origin HEAD:research/rsl-882-map
