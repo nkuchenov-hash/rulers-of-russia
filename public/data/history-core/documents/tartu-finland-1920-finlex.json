@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-tartu-finland-1920-finlex-border-protocol",
+      "sourceCollectionId": "finlex-finland-russia-border-1969",
+      "title": "Official Finland–USSR frontier protocol identifying the 1920 Tartu boundary and demarcation records",
+      "institution": "Finland Ministry of Justice / Legal Register Centre (Finlex)",
+      "url": "https://data.finlex.fi/sv/fordrag/fordragsserie/1969/60",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty-protocol",
+      "date": {
+        "original": "1969",
+        "normalized": "1969-01-01",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": ["Suomen tasavalta", "Sosialististen Neuvostotasavaltain Liitto"],
+      "notes": "The official protocol states that the Finland–USSR state-boundary line was established by the 14 October 1920 Finland–RSFSR peace treaty (among later instruments) and that its course on the ground is defined by signed boundary-description protocols, boundary maps, boundary-mark protocols and other demarcation documents, including the 28 April 1938 package. This locates the authoritative documentary/cartographic lineage for the Tartu boundary without promoting any production geometry."
+    }
+  ]
+}
