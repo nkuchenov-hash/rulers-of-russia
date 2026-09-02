@@ -57,11 +57,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-riga-1921-ebid"],
+      "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-riga-1921-ebid"],
-        "derivationNote": "Promote only after the border description and period cartographic evidence are georeferenced."
+        "method": "official-treaty-boundary-description-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
+        "derivationNote": "Poland's Archiwum Akt Nowych preserves and publishes the original 18 March 1921 Treaty of Riga and identifies it as the decisive act establishing Poland's eastern boundary; its territorial Articles II–IV trace the Polish-Soviet frontier. The authoritative legal boundary description is therefore located. Production geometry remains pending controlled extraction of the line against authoritative period cartography/demarcation material and spatial validation."
       },
       "reviewStatus": "source-verified"
     },
