@@ -125,12 +125,12 @@
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
       "geometry": {
-        "method": "not-yet-georeferenced",
+        "method": "official-legal-boundary-definition-located-pending-georeference",
         "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
-        "derivationNote": "Russian-law territorial status is verified for this track. Exact polygon source and separate international-recognition/de-facto tracks must be represented independently."
+        "derivationNote": "For the Russian domestic legal-border track, Article 3 of Federal Constitutional Law No. 6-FKZ defines the territorial limits of the Republic of Crimea and Sevastopol by the boundaries of those territories as they existed on the date of admission. The authoritative legal boundary definition is therefore located, but this provision does not itself supply production-ready polygon coordinates. Exact geometry still requires an authoritative contemporaneous administrative/cartographic source and controlled georeferencing. International-recognition and de-facto-control tracks must remain independent."
       },
       "reviewStatus": "source-verified",
-      "notes": "Do not use this record as a claim about international recognition."
+      "notes": "Do not use this record as a claim about international recognition. No geometry is promoted by this source-status refinement."
     }
   ]
 }
