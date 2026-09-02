@@ -1,0 +1,66 @@
+name: Research Tornau early Rus layers
+on:
+  push:
+    branches: [research/rsl-882-map]
+permissions:
+  contents: write
+jobs:
+  analyze:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rsl-882-map
+      - name: Analyze public-domain color layers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install pillow >/dev/null
+          python - <<'PY'
+          import urllib.request,hashlib,json,colorsys
+          from pathlib import Path
+          from PIL import Image
+          url="https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif"
+          data=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'rulers-history-research/1.0'}),timeout=60).read()
+          Path('/tmp/map.gif').write_bytes(data)
+          im=Image.open('/tmp/map.gif').convert('RGB')
+          crop=(150,1400,760,1960)
+          c=im.crop(crop)
+          # Quantize only for diagnostics; no geometry comes from the quantized image.
+          q=c.quantize(colors=24,method=Image.Quantize.MEDIANCUT).convert('RGB')
+          counts={}
+          for rgb in q.getdata(): counts[rgb]=counts.get(rgb,0)+1
+          palette=[]
+          for rgb,n in sorted(counts.items(),key=lambda kv:kv[1],reverse=True):
+              h,s,v=colorsys.rgb_to_hsv(*(x/255 for x in rgb))
+              palette.append({'rgb':rgb,'count':n,'hue':round(h*360,1),'sat':round(s,3),'val':round(v,3)})
+          # Candidate colored political fills: saturated non-blue, non-dark pixels.
+          masks={
+            'red_salmon': lambda h,s,v: ((h<25 or h>345) and s>.18 and v>.55),
+            'yellow': lambda h,s,v: (25<=h<75 and s>.18 and v>.55),
+            'green': lambda h,s,v: (75<=h<170 and s>.16 and v>.45),
+            'cyan': lambda h,s,v: (170<=h<215 and s>.16 and v>.5),
+            'blue': lambda h,s,v: (215<=h<265 and s>.16 and v>.45),
+            'purple': lambda h,s,v: (265<=h<345 and s>.16 and v>.45),
+          }
+          result={'source':url,'sha256':hashlib.sha256(data).hexdigest(),'size':im.size,'crop':crop,'palette':palette,'masks':{}}
+          pix=im.load(); W,H=im.size
+          for name,pred in masks.items():
+              pts=[]
+              for y in range(crop[1],crop[3]):
+                for x in range(crop[0],crop[2]):
+                  r,g,b=pix[x,y]; h,s,v=colorsys.rgb_to_hsv(r/255,g/255,b/255)
+                  if pred(h*360,s,v): pts.append((x,y))
+              if pts:
+                xs=[p[0] for p in pts]; ys=[p[1] for p in pts]
+                result['masks'][name]={'count':len(pts),'bbox':[min(xs),min(ys),max(xs),max(ys)]}
+              else: result['masks'][name]={'count':0}
+          Path('research-artifacts/tornau-early-layer-colors.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          PY
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add research-artifacts/tornau-early-layer-colors.json
+          git commit -m 'Capture Tornau early layer color diagnostics' || exit 0
+          git push origin HEAD:research/rsl-882-map
