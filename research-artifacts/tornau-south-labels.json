@@ -1,0 +1,196 @@
+{
+  "source": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif",
+  "sha256": "d0cd3dedfec309a9a2ce670f2e8de1b17b5ce03ae0abca8e4ef9fde68620496c",
+  "crop": [
+    160,
+    1680,
+    650,
+    1940
+  ],
+  "words": [
+    {
+      "text": "_$",
+      "confidence": 28.118149,
+      "pixelCenter": [
+        254.7,
+        1684.0
+      ]
+    },
+    {
+      "text": "|",
+      "confidence": 48.935097,
+      "pixelCenter": [
+        477.8,
+        1688.7
+      ]
+    },
+    {
+      "text": "НЫ",
+      "confidence": 32.61499,
+      "pixelCenter": [
+        537.2,
+        1698.0
+      ]
+    },
+    {
+      "text": "+",
+      "confidence": 50.738007,
+      "pixelCenter": [
+        520.5,
+        1704.8
+      ]
+    },
+    {
+      "text": "ря",
+      "confidence": 27.673401,
+      "pixelCenter": [
+        505.0,
+        1718.7
+      ]
+    },
+    {
+      "text": "Ч",
+      "confidence": 30.26973,
+      "pixelCenter": [
+        163.3,
+        1738.3
+      ]
+    },
+    {
+      "text": "Е",
+      "confidence": 36.607647,
+      "pixelCenter": [
+        507.2,
+        1734.2
+      ]
+    },
+    {
+      "text": "<",
+      "confidence": 63.746979,
+      "pixelCenter": [
+        165.8,
+        1751.0
+      ]
+    },
+    {
+      "text": "у",
+      "confidence": 59.522995,
+      "pixelCenter": [
+        357.3,
+        1752.3
+      ]
+    },
+    {
+      "text": "-",
+      "confidence": 42.85096,
+      "pixelCenter": [
+        557.7,
+        1758.2
+      ]
+    },
+    {
+      "text": "—",
+      "confidence": 61.98362,
+      "pixelCenter": [
+        326.0,
+        1807.5
+      ]
+    },
+    {
+      "text": "К",
+      "confidence": 87.865417,
+      "pixelCenter": [
+        360.0,
+        1805.8
+      ]
+    },
+    {
+      "text": "——=—",
+      "confidence": 26.445114,
+      "pixelCenter": [
+        604.0,
+        1844.2
+      ]
+    },
+    {
+      "text": "Ке",
+      "confidence": 84.679176,
+      "pixelCenter": [
+        521.8,
+        1886.7
+      ]
+    },
+    {
+      "text": "т",
+      "confidence": 48.602543,
+      "pixelCenter": [
+        221.8,
+        1890.0
+      ]
+    },
+    {
+      "text": "9?",
+      "confidence": 42.057663,
+      "pixelCenter": [
+        281.3,
+        1895.0
+      ]
+    },
+    {
+      "text": "е",
+      "confidence": 91.744034,
+      "pixelCenter": [
+        392.7,
+        1899.7
+      ]
+    },
+    {
+      "text": "чяЪъ",
+      "confidence": 47.342266,
+      "pixelCenter": [
+        444.0,
+        1898.0
+      ]
+    },
+    {
+      "text": "г",
+      "confidence": 92.797409,
+      "pixelCenter": [
+        498.2,
+        1902.8
+      ]
+    },
+    {
+      "text": "4%",
+      "confidence": 72.742935,
+      "pixelCenter": [
+        315.8,
+        1917.3
+      ]
+    },
+    {
+      "text": "‚<",
+      "confidence": 30.82341,
+      "pixelCenter": [
+        326.5,
+        1920.5
+      ]
+    },
+    {
+      "text": "-",
+      "confidence": 45.521767,
+      "pixelCenter": [
+        161.5,
+        1930.0
+      ]
+    },
+    {
+      "text": "м",
+      "confidence": 22.135193,
+      "pixelCenter": [
+        455.5,
+        1937.2
+      ]
+    }
+  ]
+}
