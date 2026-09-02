@@ -18,8 +18,8 @@
       "url": "https://map.runivers.ru/",
       "tier": "B1-russian-academic-interpretation",
       "coverage": "Dynamic scholarly GIS reconstruction of political boundaries of Russia and predecessor polities from the medieval period through the modern era",
-      "canonicalUse": ["reconstruction-geometry", "cross-check", "source-discovery", "uncertainty-model"],
-      "notes": "The underlying desktop GIS uses date-ranged boundary segments assembled by historical-GIS specialists from multiple sources; web polygon slices are generated from those segments. The project explicitly warns that early boundaries are conventional and often approximate. Its own forced day/month values for year-only chronology are not inherited by History Core. Raw Runivers GIS data is not vendored unless redistribution rights are established; production use pairs scholarly reconstruction geometry with independent primary documentary evidence."
+      "canonicalUse": ["cross-check", "source-discovery", "uncertainty-model"],
+      "notes": "Research cross-check only. Runivers' published site terms restrict portal materials to personal non-commercial use and prohibit commercial reuse or derivative works without prior consent. History Core therefore MUST NOT vendor, trace, transform, or derive production geometry from Runivers GIS unless separate written permission is obtained. The project remains useful for identifying historical intervals, methodology and candidate underlying sources."
     },
     {
       "id": "gugk-rybakov-early-rus-maps",
@@ -28,8 +28,8 @@
       "url": "https://search.rsl.ru/ru/record/01009494305",
       "tier": "B1-russian-academic-interpretation",
       "coverage": "Kievan Rus / Old Russian state, 882–1054, including differentiated reign-period and accession layers",
-      "canonicalUse": ["reconstruction-geometry", "cross-check", "uncertainty-model"],
-      "notes": "State-cartographic historical reconstruction compiled by GUGK with B. A. Rybakov as consultant; the 1961 edition is 1:3,000,000 with geographic graticule and explicitly distinguishes the Oleg 882–912 state from later 912–971 and 972–1054 accessions. It is a secondary historical reconstruction, not a contemporary medieval survey."
+      "canonicalUse": ["cross-check", "source-discovery", "uncertainty-model"],
+      "notes": "State-cartographic historical reconstruction compiled by GUGK with B. A. Rybakov as consultant; the 1961 edition is 1:3,000,000 with geographic graticule and explicitly distinguishes the Oleg 882–912 state from later 912–971 and 972–1054 accessions. It is a secondary historical reconstruction, not a contemporary medieval survey. Production geometry should be derived only after reuse rights for the raster are established or from an independently reusable source."
     }
   ]
 }
