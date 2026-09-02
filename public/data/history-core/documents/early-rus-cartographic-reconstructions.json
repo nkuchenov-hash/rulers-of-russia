@@ -107,11 +107,13 @@
       "digitalRaster": {
         "width": 1800,
         "height": 2207,
+        "bytes": 1859444,
         "mimeType": "image/gif",
+        "sha256": "8aec8ad5be66444a638342f4cdc083122596dfe7ff98536f8bbda9dd7435bc85",
         "rightsStatus": "public-domain",
         "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_the_Rus,_1054-1240.gif"
       },
-      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. It is therefore a production-eligible raster source candidate, but no geometry is promoted until the exact raster bytes are hash-pinned, georeferenced with explicit GCPs, and the intended historical layer is traced reproducibly with uncertainty."
+      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. The exact Commons raster bytes are hash-pinned for reproducibility. It is a production-eligible raster source candidate, but no geometry is promoted until explicit GCP georeferencing and the intended historical layer are traced reproducibly with uncertainty."
     },
     {
       "id": "doc-tornau-rus-1240-1533-map-1910",
@@ -137,11 +139,13 @@
       "digitalRaster": {
         "width": 1800,
         "height": 2207,
+        "bytes": 2103752,
         "mimeType": "image/gif",
+        "sha256": "be3f8afa9867b1734150c6b9eac5389c8e1f983a11c90626d738256c763793db",
         "rightsStatus": "public-domain",
         "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif"
       },
-      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. It is therefore a production-eligible raster source candidate, but no geometry is promoted until the exact raster bytes are hash-pinned, georeferenced with explicit GCPs, and the intended historical layer is traced reproducibly with uncertainty."
+      "notes": "Wikimedia Commons identifies this 1910 Tornau raster as public domain and free of known copyright restrictions. The exact Commons raster bytes are hash-pinned for reproducibility. It is a production-eligible raster source candidate, but no geometry is promoted until explicit GCP georeferencing and the intended historical layer are traced reproducibly with uncertainty."
     }
   ]
 }
