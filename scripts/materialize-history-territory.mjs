@@ -149,6 +149,7 @@ const emitSnapshot = (state, rawId, generatedFrom) => {
     effectiveDate: state.date,
     historicalDate: state.historicalDate ?? null,
     coverageAnchorMonth: state.coverageAnchorMonth ?? null,
+    validThroughMonth: state.validThroughMonth ?? null,
     track: state.track,
     territorialModel: state.territorialModel,
     geometryFile: `generated/territory/${geometryFile}`,
@@ -214,6 +215,7 @@ for (const entry of replay) {
       date: operationalBaseDate(base),
       historicalDate: base.historicalDate ?? base.effectiveDate ?? null,
       coverageAnchorMonth: base.coverageAnchorMonth ?? null,
+      validThroughMonth: base.validThroughMonth ?? null,
       dateKey: entry.dateKey,
     };
     states.set(keyOf(base), state);
@@ -226,6 +228,12 @@ for (const entry of replay) {
   const state = states.get(stateKey);
   if (!state) {
     warnings.push(`Change ${change.id} skipped: no verified base state active by ${entry.dateKey} for ${stateKey}`);
+    continue;
+  }
+
+  const changeMonth = entry.dateKey.slice(0, 7);
+  if (state.validThroughMonth && changeMonth > state.validThroughMonth) {
+    warnings.push(`Change ${change.id} skipped: active base for ${stateKey} expires at ${state.validThroughMonth}`);
     continue;
   }
 

@@ -35,7 +35,7 @@
       "endMonth": "1124-12",
       "polityId": "kievan-rus",
       "label": "Древнерусское государство",
-      "track": "russian-legal-border",
+      "track": "de-facto-control",
       "territorialModel": "mixed",
       "fallbackGeometryFile": "data/territory/archive/kievan-rus.geojson",
       "status": "reconstruction-provisional",
@@ -44,7 +44,7 @@
       "evidenceDocumentIds": [
         "doc-pvl-laurentian-1926"
       ],
-      "notes": "Bootstrap polygon keeps the whole period renderable. It is explicitly non-canonical and will be replaced by source-backed territorial zones and dated changes."
+      "notes": "Primary monthly surface is reconstructed political/de-facto control with frontier and tributary uncertainty, not a surveyed modern-style legal border. Where a treaty or demarcation provides an actual line, it must be represented separately as a dated boundary fragment."
     },
     {
       "id": "coverage-1125-1262-vladimir-rus",
@@ -52,7 +52,7 @@
       "endMonth": "1262-12",
       "polityId": "grand-vladimir",
       "label": "Владимиро-Суздальская / Владимирская Русь",
-      "track": "russian-legal-border",
+      "track": "de-facto-control",
       "territorialModel": "mixed",
       "fallbackGeometryFile": "data/territory/archive/grand-vladimir.geojson",
       "status": "reconstruction-provisional",
@@ -62,7 +62,7 @@
         "doc-pvl-laurentian-1926",
         "doc-sgdd-vol1-1813"
       ],
-      "notes": "Political authority and dependencies varied within this span. Monthly coverage is operational while documentary sub-periods are researched."
+      "notes": "Primary monthly surface is reconstructed political/de-facto control with frontier and tributary uncertainty, not a surveyed modern-style legal border. Where a treaty or demarcation provides an actual line, it must be represented separately as a dated boundary fragment."
     },
     {
       "id": "coverage-1263-1546-moscow",

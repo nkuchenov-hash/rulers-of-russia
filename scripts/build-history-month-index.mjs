@@ -191,12 +191,14 @@ const verifiedByPolityTrack = new Map();
 for (const snapshot of snapshots) {
   const dateKey = normalizedSnapshotKey(snapshot);
   if (!dateKey) continue;
+  const validFromMonth = snapshot.coverageAnchorMonth ?? dateKey.slice(0, 7);
+  const validThroughMonth = snapshot.validThroughMonth ?? null;
   const key = `${snapshot.polityId}::${snapshot.track}`;
   const list = verifiedByPolityTrack.get(key) ?? [];
-  list.push({...snapshot, __dateKey: dateKey});
+  list.push({...snapshot, __dateKey: dateKey, __validFromMonth: validFromMonth, __validThroughMonth: validThroughMonth});
   verifiedByPolityTrack.set(key, list);
 }
-for (const list of verifiedByPolityTrack.values()) list.sort((a, b) => a.__dateKey.localeCompare(b.__dateKey));
+for (const list of verifiedByPolityTrack.values()) list.sort((a, b) => a.__validFromMonth.localeCompare(b.__validFromMonth) || a.__dateKey.localeCompare(b.__dateKey));
 
 const months = [];
 const coverageCounts = new Map();
@@ -209,12 +211,14 @@ while (cursor <= coverage.maxMonth) {
   const period = matches[0];
   const key = `${period.polityId}::${period.track}`;
   const candidates = verifiedByPolityTrack.get(key) ?? [];
-  const end = monthEndKey(cursor);
-  let chosen = null;
+  let latestStarted = null;
   for (const candidate of candidates) {
-    if (candidate.__dateKey <= end) chosen = candidate;
+    if (candidate.__validFromMonth <= cursor) latestStarted = candidate;
     else break;
   }
+  const chosen = latestStarted && (!latestStarted.__validThroughMonth || cursor <= latestStarted.__validThroughMonth)
+    ? latestStarted
+    : null;
 
   if (chosen) {
     months.push({
@@ -231,6 +235,8 @@ while (cursor <= coverage.maxMonth) {
       bootstrapGeometry: false,
       snapshotId: chosen.id,
       effectiveDate: chosen.effectiveDate?.normalized ?? null,
+      historicalDate: chosen.historicalDate ?? null,
+      validThroughMonth: chosen.validThroughMonth ?? null,
       derivedFromChangeIds: chosen.derivedFromChangeIds ?? [],
     });
     coverageCounts.set('geometry-verified', (coverageCounts.get('geometry-verified') ?? 0) + 1);
@@ -285,7 +291,7 @@ const output = {
   complete: true,
   provisionalStateCount: provisionalOutputCache.size,
   forwardProxyMonthCount: months.filter(item => item.forwardProxy === true).length,
-  resolutionRule: 'Use latest geometry-verified History Core state at month end; otherwise materialize an unambiguous, explicitly provisional state from the dated bootstrap archive. A later-dated proxy is permitted only when the coverage period explicitly opts in via allowForwardProxy and remains visibly non-canonical.',
+  resolutionRule: 'Use the latest-started geometry-verified History Core state only while that snapshot remains within its explicit validity interval; never resurrect an older verified state after a later bounded snapshot expires. Otherwise materialize an explicitly provisional dated bootstrap state. A later-dated proxy is permitted only when the coverage period explicitly opts in and remains visibly non-canonical.',
   statusCounts: Object.fromEntries([...coverageCounts.entries()].sort()),
   months,
 };
