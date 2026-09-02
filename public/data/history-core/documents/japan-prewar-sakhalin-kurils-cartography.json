@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-karafuto-1923-government-map-ndl",
+      "sourceCollectionId": "ndl-japan-prewar-sakhalin-kurils-cartography",
+      "title": "樺太全圖 (Karafuto complete map)",
+      "institution": "National Diet Library, Japan / Karafuto Government",
+      "url": "https://ndlsearch.ndl.go.jp/books/R100000002-I000008247314",
+      "tier": "A2-official-document-publication",
+      "documentType": "government-map",
+      "date": {"original":"June 1923","normalized":"1923-06","precision":"month","calendar":"gregorian"},
+      "authority": ["樺太庁 (Karafuto Government)"],
+      "publicationCitation": "樺太庁, 樺太全圖, 1:700,000, June 1923. NDL call no. YG813-293; NDL bibliographic ID 000008247314.",
+      "notes": "Concrete government-produced full map of Karafuto located in the National Diet Library catalog. Suitable as authoritative pre-1945 cartographic evidence for southern Sakhalin coastline/administrative extent after reproducible raster acquisition, rights review, controlled georeferencing and validation."
+    },
+    {
+      "id": "doc-kurils-land-survey-map-corpus-ndl",
+      "sourceCollectionId": "ndl-japan-prewar-sakhalin-kurils-cartography",
+      "title": "千島列島地図集成 — prewar Kuril Islands Land Survey Department map corpus",
+      "institution": "National Diet Library, Japan / Imperial Japanese Land Survey Department",
+      "url": "https://ndlsearch.ndl.go.jp/books/R100000002-I000003564289",
+      "tier": "A2-official-document-publication",
+      "documentType": "government-map-corpus",
+      "date": {"original":"pre-1945 survey corpus; cataloged reprint 2001","normalized":"1945","precision":"year","calendar":"gregorian","note":"The NDL record is for a later compiled edition whose identified map creator is the Imperial Japanese Land Survey Department; original-sheet dates vary."},
+      "authority": ["大日本帝國陸地測量部 / 陸軍参謀本部陸地測量部 (Imperial Japanese Land Survey Department)"],
+      "publicationCitation": "National Diet Library bibliographic ID 000003564289; map corpus at 1:50,000–1:1,000,000 attributed to the Imperial Japanese Land Survey Department.",
+      "notes": "Locates the authoritative pre-1945 land-survey map lineage for the Kuril chain. Original constituent sheets, dates and coverage must be enumerated and acquired before production geometry is derived."
+    },
+    {
+      "id": "doc-kurils-hydrographic-maps-1928-1940-ndl",
+      "sourceCollectionId": "ndl-japan-prewar-sakhalin-kurils-cartography",
+      "title": "Prewar Navy Hydrographic Department maps of the Kuril Islands",
+      "institution": "National Diet Library, Japan / Japanese Navy Hydrographic Department",
+      "url": "https://ndlsearch.ndl.go.jp/books/R100000002-I023608591",
+      "tier": "A2-official-document-publication",
+      "documentType": "government-hydrographic-map-series",
+      "date": {"original":"1918–1943 examples located","normalized":"1940","precision":"year","calendar":"gregorian","note":"Concrete NDL holdings include Matsuwa/Rasshua (1928), Shumshu vicinity (1940), Paramushir (1929), Urup (1918) and other island sheets."},
+      "authority": ["海軍省水路部 (Navy Ministry Hydrographic Department)"],
+      "publicationCitation": "Representative NDL records: 023608591 (Matsuwa/Rasshua, 1928), 000008400633 (Shumshu, 1940), 023631910 (Paramushir, 1929), 000008425471 (Urup, 1918).",
+      "notes": "Independent government hydrographic mapping corroborates the existence and shape of named Kuril islands immediately before 1945. It is a cross-check/source lineage, not a substitute for enumerating the complete production sheet set."
+    }
+  ]
+}
