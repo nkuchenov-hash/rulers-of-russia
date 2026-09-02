@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-riga-1921-aan-treaty",
+      "sourceCollectionId": "aan-riga-peace-1921",
+      "title": "Treaty of Peace between Poland, Russia and Ukraine, signed at Riga on 18 March 1921",
+      "institution": "Archiwum Akt Nowych (Poland)",
+      "url": "https://www.aan.gov.pl/traktatryski/m/tresc_traktatu",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "18 March 1921",
+        "normalized": "1921-03-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": ["Rzeczpospolita Polska", "Russian Socialist Federative Soviet Republic", "Ukrainian Socialist Soviet Republic"],
+      "notes": "The Polish state archive identifies the treaty as the decisive act constituting Poland's eastern border and states that Articles II–IV regulate territorial and frontier questions and trace the Polish-Soviet boundary. This locates the authoritative legal boundary description without promoting any production geometry."
+    }
+  ]
+}
