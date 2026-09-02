@@ -224,6 +224,13 @@ for (const entry of replay) {
   }
 
   const change = entry.item;
+  const action = inferAction(change);
+
+  // Geometry-verified metadata-only changes are overlays or documentary transitions, not
+  // territory-area mutations. Boundary overlays are materialized independently by the boundary
+  // index, so requiring an area base state here creates false warnings and fake snapshots.
+  if (action === 'metadata-only') continue;
+
   const stateKey = keyOf(change);
   const state = states.get(stateKey);
   if (!state) {
@@ -237,10 +244,9 @@ for (const entry of replay) {
     continue;
   }
 
-  const action = inferAction(change);
   const ids = change.geometryFragmentIds ?? [];
   const areaIds = ids.filter(id => fragments.get(id)?.role === 'territory-area');
-  if (action !== 'metadata-only' && areaIds.length === 0) {
+  if (areaIds.length === 0) {
     warnings.push(`Change ${change.id} skipped: geometry action ${action} has no verified territory-area fragment`);
     continue;
   }
