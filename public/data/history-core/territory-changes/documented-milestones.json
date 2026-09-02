@@ -41,11 +41,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
+      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid"],
-        "derivationNote": "Extract treaty boundary clauses and attached/implementation cartography; then create verified geometry fragments."
+        "method": "official-boundary-document-lineage-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
+        "derivationNote": "Finlex's official 1969 frontier protocol identifies the 14 October 1920 Finland–RSFSR peace treaty as one of the instruments establishing the state boundary and states that the line on the ground is defined by signed boundary-description protocols, boundary maps, boundary-mark protocols and other demarcation records, including the 28 April 1938 package. The authoritative documentary/cartographic lineage is therefore located. Production geometry remains pending until those primary boundary materials are reproducibly acquired, rights-reviewed where needed, georeferenced and spatially validated."
       },
       "reviewStatus": "source-verified"
     },
