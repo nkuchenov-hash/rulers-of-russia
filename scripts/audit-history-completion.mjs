@@ -41,6 +41,24 @@ const provisionalMonths = months.filter(item => item.status === 'reconstruction-
 const forwardProxyMonths = months.filter(item => item.forwardProxy === true);
 const verifiedMonths = months.filter(item => item.status === 'geometry-verified');
 
+const countBy = (items, getter) => Object.fromEntries(
+  [...items.reduce((map, item) => {
+    const key = getter(item) ?? 'unspecified';
+    map.set(key, (map.get(key) ?? 0) + 1);
+    return map;
+  }, new Map()).entries()].sort(([a], [b]) => String(a).localeCompare(String(b))),
+);
+const changeSummary = item => ({
+  id: item.id,
+  polityId: item.polityId ?? null,
+  effectiveDate: item.effectiveDate?.normalized ?? null,
+  operation: item.operation ?? null,
+  territorialModel: item.territorialModel ?? null,
+  geometryMethod: item.geometry?.method ?? null,
+  geometryAction: item.geometryAction ?? null,
+  evidenceDocumentIds: item.evidenceDocumentIds ?? [],
+});
+
 const criteria = {
   exactMonthCoverage: monthIndex.complete === true && monthIndex.monthCount === 13980,
   noResearchRequiredEvents: unresolvedEvents.length === 0,
@@ -57,7 +75,7 @@ const criteria = {
 const fullyComplete = Object.values(criteria).every(Boolean);
 
 const audit = {
-  schema_version: 1,
+  schema_version: 2,
   generatedAt: new Date().toISOString(),
   fullyComplete,
   criteria,
@@ -84,12 +102,29 @@ const audit = {
     forwardProxyMonths: forwardProxyMonths.length,
     provisionalGeometryStates: monthIndex.provisionalStateCount ?? null,
   },
+  blockerBreakdown: {
+    unclassifiedSourceVerifiedByOperation: countBy(unclassifiedSourceVerifiedChanges, item => item.operation),
+    unclassifiedSourceVerifiedByGeometryMethod: countBy(unclassifiedSourceVerifiedChanges, item => item.geometry?.method),
+    unclassifiedSourceVerifiedByPolity: countBy(unclassifiedSourceVerifiedChanges, item => item.polityId),
+    notYetGeoreferencedByOperation: countBy(notYetGeoreferenced, item => item.operation),
+    notYetGeoreferencedByPolity: countBy(notYetGeoreferenced, item => item.polityId),
+    forwardProxyByCoveragePeriod: countBy(forwardProxyMonths, item => item.coveragePeriodId),
+    provisionalByCoveragePeriod: countBy(provisionalMonths, item => item.coveragePeriodId),
+  },
   unresolved: {
     eventIds: unresolvedEvents.map(item => item.id),
     changeIds: unresolvedChanges.map(item => item.id),
     dateChangeIds: unresolvedDates.map(item => item.id),
     notYetGeoreferencedChangeIds: notYetGeoreferenced.map(item => item.id),
     unclassifiedSourceVerifiedChangeIds: unclassifiedSourceVerifiedChanges.map(item => item.id),
+    notYetGeoreferencedChanges: notYetGeoreferenced.map(changeSummary),
+    unclassifiedSourceVerifiedChanges: unclassifiedSourceVerifiedChanges.map(changeSummary),
+    forwardProxyMonths: forwardProxyMonths.map(item => ({
+      month: item.month,
+      polityId: item.polityId ?? null,
+      coveragePeriodId: item.coveragePeriodId ?? null,
+      provisionalStateId: item.provisionalStateId ?? null,
+    })),
     materializationWarnings,
   },
 };
