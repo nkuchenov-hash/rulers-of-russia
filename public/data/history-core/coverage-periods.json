@@ -118,8 +118,25 @@
       "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry."
     },
     {
-      "id": "coverage-1917-revolutionary-russia",
+      "id": "coverage-1917-01-08-revolutionary-russia-predecessor",
       "startMonth": "1917-01",
+      "endMonth": "1917-08",
+      "polityId": "russian-republic",
+      "label": "Россия в 1917 году",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "fallbackGeometryFile": "data/territory/archive/russian-empire.geojson",
+      "status": "reconstruction-provisional",
+      "confidence": "low",
+      "bootstrapGeometry": true,
+      "evidenceDocumentIds": [
+        "doc-rights-peoples-1917-rgaspi"
+      ],
+      "notes": "Provisional continuity bootstrap for January-August 1917. It carries forward the predecessor exterior territory instead of back-projecting the later 1 September republic snapshot. This is not a claim that the imperial border remained unchanged through every 1917 event and can never be treated as geometry-verified. Political regime chronology is represented separately by events."
+    },
+    {
+      "id": "coverage-1917-09-12-revolutionary-russia",
+      "startMonth": "1917-09",
       "endMonth": "1917-12",
       "polityId": "russian-republic",
       "label": "Россия в 1917 году",
@@ -129,11 +146,10 @@
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
-      "allowForwardProxy": true,
       "evidenceDocumentIds": [
         "doc-rights-peoples-1917-rgaspi"
       ],
-      "notes": "The single polity label is a territory-rendering shorthand for a year of rapid constitutional change. Political regime chronology is represented by events, not by pretending one legal form lasted the entire year. The captured republic geometry begins later in 1917, so allowForwardProxy is explicit for earlier 1917 months and remains non-canonical."
+      "notes": "The captured republic bootstrap geometry begins on 1 September 1917. It remains an explicitly provisional territory-rendering shorthand for a year of rapid constitutional and territorial change; political regime chronology is represented separately by events."
     },
     {
       "id": "coverage-1918-1922-rsfsr",
