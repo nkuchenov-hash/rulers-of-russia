@@ -10,9 +10,9 @@
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"],
-      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "geometry": {"method": "official-legal-boundary-definition-pending-georeference", "evidenceDocumentIds": ["doc-dnr-2022-5fkz-pravo"], "derivationNote": "Article 3 of Federal Constitutional Law No. 5-FKZ defines the Russian domestic legal-territory extent by the DNR boundaries established by its constitution on the relevant formation/admission dates and treats the external-state-facing segment as the Russian state border. This resolves source location for the legal boundary definition only; a separately reviewed authoritative cartographic/administrative boundary geometry is still required before geometry-verified replay."},
       "reviewStatus": "source-verified",
-      "notes": "Russian legal-border track only."
+      "notes": "Russian legal-border track only; this record does not assert international recognition or de-facto control."
     },
     {
       "id": "territory-2022-lnr-russian-legal",
@@ -23,9 +23,9 @@
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"],
-      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "geometry": {"method": "official-legal-boundary-definition-pending-georeference", "evidenceDocumentIds": ["doc-lnr-2022-6fkz-pravo"], "derivationNote": "Article 3 of Federal Constitutional Law No. 6-FKZ defines the Russian domestic legal-territory extent by the LNR boundaries established by its constitution on the relevant formation/admission dates and treats the external-state-facing segment as the Russian state border. This resolves source location for the legal boundary definition only; a separately reviewed authoritative cartographic/administrative boundary geometry is still required before geometry-verified replay."},
       "reviewStatus": "source-verified",
-      "notes": "Russian legal-border track only."
+      "notes": "Russian legal-border track only; this record does not assert international recognition or de-facto control."
     },
     {
       "id": "territory-2022-zaporozhye-russian-legal",
@@ -36,9 +36,9 @@
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"],
-      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "geometry": {"method": "official-legal-boundary-definition-pending-georeference", "evidenceDocumentIds": ["doc-zaporozhye-2022-7fkz-pravo"], "derivationNote": "Article 3 of Federal Constitutional Law No. 7-FKZ defines the Russian domestic legal-territory extent by the boundaries of Zaporizhzhia Oblast existing on the date of admission and treats the external-state-facing segment as the Russian state border. This resolves source location for the legal boundary definition only; a separately reviewed authoritative administrative boundary geometry for the referenced date is still required before geometry-verified replay."},
       "reviewStatus": "source-verified",
-      "notes": "Russian legal-border track only."
+      "notes": "Russian legal-border track only; this record does not assert international recognition or de-facto control."
     },
     {
       "id": "territory-2022-kherson-russian-legal",
@@ -49,9 +49,9 @@
       "territorialModel": "linear-border",
       "operation": "acquire",
       "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"],
-      "geometry": {"method": "not-yet-georeferenced", "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"], "derivationNote": "The Russian legal-status event is source-verified. Geometry must be derived from a separately reviewed authoritative boundary description/official cartographic source before geometry-verified replay."},
+      "geometry": {"method": "official-legal-boundary-definition-pending-georeference", "evidenceDocumentIds": ["doc-kherson-2022-8fkz-pravo"], "derivationNote": "Article 3 of Federal Constitutional Law No. 8-FKZ defines the Russian domestic legal-territory extent by the boundaries of Kherson Oblast existing on the date of admission and treats the external-state-facing segment as the Russian state border. This resolves source location for the legal boundary definition only; a separately reviewed authoritative administrative boundary geometry for the referenced date is still required before geometry-verified replay."},
       "reviewStatus": "source-verified",
-      "notes": "Russian legal-border track only."
+      "notes": "Russian legal-border track only; this record does not assert international recognition or de-facto control."
     }
   ]
 }
