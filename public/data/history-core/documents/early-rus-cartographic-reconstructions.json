@@ -30,6 +30,58 @@
         "sha256": "d0cd3dedfec309a9a2ce670f2e8de1b17b5ce03ae0abca8e4ef9fde68620496c"
       },
       "notes": "Use only as a reproducibly digitized secondary reconstruction layer. The map must not be presented as an exact ninth-century surveyed frontier. Primary chronicle evidence remains separate and controls the historical chronology; geometry retains low confidence and explicit uncertainty."
+    },
+    {
+      "id": "doc-runivers-boundaries-methodology",
+      "sourceCollectionId": "runivers-ivi-ras-historical-gis",
+      "title": "Границы России — подробнее о проекте и метод диапазонов",
+      "institution": "Руниверс / Лаборатория исторической геоинформатики ИВИ РАН",
+      "url": "https://old.runivers.ru/granitsy-rossii/about/about_detailed/index.php",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-gis-methodology",
+      "date": {
+        "original": "2019",
+        "normalized": "2019",
+        "precision": "year",
+        "calendar": "gregorian",
+        "note": "Project-generation era; methodology page describes the dynamic historical GIS and its limitations."
+      },
+      "publicationCitation": "Руниверс. «Границы России»: методология исторической динамической карты; Фролов А. А., ИВИ РАН.",
+      "notes": "States explicitly that many ancient boundaries are conventional, that historical boundary segments are stored with lower/upper dates, and that the web application generates yearly polygon slices. History Core adopts the uncertainty principle but not the web project's artificial January 1 dates for year-only events."
+    },
+    {
+      "id": "doc-nextgis-runivers-technical-2019",
+      "sourceCollectionId": "runivers-ivi-ras-historical-gis",
+      "title": "Границы России и предшественников, 850–2020 — технологическое описание",
+      "institution": "NextGIS / Руниверс / Лаборатория исторической геоинформатики ИВИ РАН",
+      "url": "https://nextgis.ru/blog/runivers/",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-gis-technical-documentation",
+      "date": {
+        "original": "25 января 2019 г.",
+        "normalized": "2019-01-25",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "NextGIS. Границы России и предшественников, 850–2020. 25.01.2019.",
+      "notes": "Documents that IVI RAS specialists digitized each boundary segment from multiple historical sources, assigned validity ranges, and generated polygon time slices through NextGIS processing."
+    },
+    {
+      "id": "doc-gugk-rybakov-old-rus-1961",
+      "sourceCollectionId": "gugk-rybakov-early-rus-maps",
+      "title": "Древнерусское государство в IX–XI вв. (до 1054 г.)",
+      "institution": "ГУГК; Российская государственная библиотека",
+      "url": "https://search.rsl.ru/ru/record/01009494305",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1961; составлено 1941; исправлено 1952",
+        "normalized": "1961",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Древнерусское государство в IX—XI вв. (до 1054 г.) / сост. Науч.-ред. картосост. частью ГУГК в 1941 г.; консультант Б. А. Рыбаков; ред. К. Б. Мартова. Испр. 1952. М.: ГУГК, 1961. 1:3 000 000.",
+      "notes": "RSL catalog states that the map has a geographic graticule and separately colors the Old Russian state under Oleg (882–912), lands added 912–971, and lands added 972–1054. Use as a low-confidence scholarly reconstruction cross-check with primary chronicle evidence; do not infer intra-period dates absent from the source."
     }
   ]
 }
