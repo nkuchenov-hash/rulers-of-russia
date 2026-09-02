@@ -1,0 +1,47 @@
+name: Apply commercial raster rights gate
+on:
+  push:
+    branches: [history/raster-rights-gate]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: history/raster-rights-gate
+      - name: Apply and validate rights gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('public/data/history-core/raster-geometry-recipes/early-rus-rurik-862.json')
+          data=json.loads(p.read_text())
+          src=data['recipes'][0]['sourceRaster']
+          src['rightsStatus']='public-domain'
+          src['rightsEvidenceUrl']="https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_862.gif"
+          src['rightsNote']='Wikimedia Commons identifies the 1910 Tornau map as public domain and free of known copyright restrictions.'
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          p=Path('scripts/check-history-raster-geometry-recipes.mjs'); text=p.read_text()
+          text=text.replace("const seenOutputs = new Set();", "const seenOutputs = new Set();\nconst commerciallyReusableRasterRights = new Set(['public-domain', 'cc0', 'cc-by', 'cc-by-sa', 'licensed-commercial', 'open-government-license']);",1)
+          text=text.replace("  for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Raster recipe ${recipe.id} references unknown document ${id}`);\n  validateRasterGeoreference(recipe.georeference, recipe.sourceRaster);", "  for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Raster recipe ${recipe.id} references unknown document ${id}`);\n  if (!commerciallyReusableRasterRights.has(recipe.sourceRaster?.rightsStatus)) fail(`Raster recipe ${recipe.id} source rights are not explicitly reusable for production/commercial output`);\n  if (!/^https:\\/\\//.test(recipe.sourceRaster?.rightsEvidenceUrl ?? '')) fail(`Raster recipe ${recipe.id} has no HTTPS rightsEvidenceUrl`);\n  validateRasterGeoreference(recipe.georeference, recipe.sourceRaster);",1)
+          text=text.replace("  if (generated.metadata?.sourceRasterSha256 !== recipe.sourceRaster.sha256) fail(`Raster output ${recipe.output} source hash mismatch`);", "  if (generated.metadata?.sourceRasterSha256 !== recipe.sourceRaster.sha256) fail(`Raster output ${recipe.output} source hash mismatch`);\n  if (generated.metadata?.sourceRasterRightsStatus !== recipe.sourceRaster.rightsStatus) fail(`Raster output ${recipe.output} source rights status mismatch`);\n  if (generated.metadata?.sourceRasterRightsEvidenceUrl !== recipe.sourceRaster.rightsEvidenceUrl) fail(`Raster output ${recipe.output} source rights evidence mismatch`);",1)
+          p.write_text(text)
+          p=Path('scripts/build-history-raster-geometry.mjs'); text=p.read_text()
+          text=text.replace("      sourceRasterSha256: recipe.sourceRaster.sha256,\n      sourceRasterWidth: recipe.sourceRaster.width,", "      sourceRasterSha256: recipe.sourceRaster.sha256,\n      sourceRasterRightsStatus: recipe.sourceRaster.rightsStatus,\n      sourceRasterRightsEvidenceUrl: recipe.sourceRaster.rightsEvidenceUrl,\n      sourceRasterWidth: recipe.sourceRaster.width,",1)
+          text=text.replace("        source_raster_sha256: recipe.sourceRaster.sha256,\n        georeference_method: recipe.georeference.method,", "        source_raster_sha256: recipe.sourceRaster.sha256,\n        source_raster_rights_status: recipe.sourceRaster.rightsStatus,\n        source_raster_rights_evidence_url: recipe.sourceRaster.rightsEvidenceUrl,\n        georeference_method: recipe.georeference.method,",1)
+          p.write_text(text)
+          PY
+          npm ci --ignore-scripts
+          npm run materialize:history-geometry
+          npm run validate:history-geometry
+          npm run validate:history
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add public/data/history-core/raster-geometry-recipes/early-rus-rurik-862.json public/data/history-core/geometry/early-rus-rurik-862-reconstruction.geojson scripts/check-history-raster-geometry-recipes.mjs scripts/build-history-raster-geometry.mjs
+          git commit -m 'Require commercial reuse rights for raster geometry'
+          git push origin HEAD:history/raster-rights-gate
