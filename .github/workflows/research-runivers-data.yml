@@ -1,4 +1,4 @@
-name: Research Runivers historical GIS
+name: Research Runivers early polygon snapshots
 on:
   push:
     branches: [history/runivers-medieval-bases]
@@ -12,76 +12,33 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: history/runivers-medieval-bases
-      - name: Build compact medieval GIS summary
+      - name: Capture early polygon snapshot catalog
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p research-artifacts
           python - <<'PY'
-          import json,re,urllib.request,urllib.parse
-          from collections import Counter
+          import json,re,urllib.request
+          from pathlib import Path
           BASE='https://gis.runivers.ru/api/resource'
           def get(url):
               req=urllib.request.Request(url,headers={'User-Agent':'rulers-of-russia-history-research/1.0'})
               with urllib.request.urlopen(req,timeout=60) as r: return json.load(r)
-          def meta(obj):
-              r=obj.get('resource',{}) if isinstance(obj,dict) else {}; fl=obj.get('feature_layer',{}) if isinstance(obj,dict) else {}
-              return {'id':r.get('id'),'cls':r.get('cls'),'name':r.get('display_name'),'keyname':r.get('keyname'),
-                      'parent':(r.get('parent') or {}).get('id'),'children':r.get('children'),
-                      'geometry':fl.get('geometry_type'),'srs':(fl.get('srs') or {}).get('id'),
-                      'fields':[f.get('keyname') for f in fl.get('fields',[])]}
-          out={'apiBase':BASE,'groups':{},'medievalNamedResources':[],'boundaryFeatureSummary':{}}
-          year_re=re.compile(r'(?<!\d)(8[5-9]\d|9\d\d|1[0-5]\d\d)(?!\d)')
-          for rid in [1812,5344,11486,13818,14878,15948]:
-              group={'meta':None,'children':[]}
-              try: group['meta']=meta(get(f'{BASE}/{rid}'))
-              except Exception as e: group['meta']={'id':rid,'error':repr(e)}
-              try:
-                  children=get(f'{BASE}/?parent={rid}')
-                  group['children']=[meta(x) for x in children] if isinstance(children,list) else []
-              except Exception as e: group['childrenError']=repr(e)
-              out['groups'][str(rid)]=group
-              for r in group['children']:
-                  label=' '.join(str(r.get(k) or '') for k in ('name','keyname'))
-                  years=[int(x) for x in year_re.findall(label)]
-                  if years: out['medievalNamedResources'].append({**r,'years':years})
-          out['medievalNamedResources'].sort(key=lambda x:(min(x['years']),x.get('id') or 0))
-          for rid in [916,6872]:
-              relevant=[]; sources=Counter(); line_types=Counter(); statuses=Counter(); total=0
-              # Large page sizes keep the probe short; geometry is explicitly disabled.
-              for offset in [0,5000,10000,15000]:
-                  params=urllib.parse.urlencode({'limit':5000,'offset':offset,'geom':'no'})
-                  try: rows=get(f'{BASE}/{rid}/feature/?{params}')
-                  except Exception as e:
-                      relevant.append({'queryError':repr(e),'offset':offset}); break
-                  if not isinstance(rows,list) or not rows: break
-                  total += len(rows)
-                  for row in rows:
-                      f=row.get('fields',{}) if isinstance(row,dict) else {}
-                      text=' '.join(str(f.get(k) or '') for k in ['lwdate','upperdat','eventstart','srcdata','linecomnt'])
-                      years=[int(y) for y in re.findall(r'(?<!\d)(\d{3,4})(?!\d)',text)]
-                      if any(850<=y<=1600 for y in years):
-                          rec={'id':row.get('id'),'lwdate':f.get('lwdate'),'upperdat':f.get('upperdat'),
-                               'lwdtappr':f.get('lwdtappr'),'updtappr':f.get('updtappr'),'srcdata':f.get('srcdata'),
-                               'linetype':f.get('linetype'),'status':f.get('status'),'eventstart':f.get('eventstart'),
-                               'linecomnt':f.get('linecomnt'),'updtrl':f.get('updtrl')}
-                          relevant.append(rec)
-                          if rec['srcdata']: sources[str(rec['srcdata'])]+=1
-                          if rec['linetype'] is not None: line_types[str(rec['linetype'])]+=1
-                          if rec['status'] is not None: statuses[str(rec['status'])]+=1
-                  if len(rows)<5000: break
-              out['boundaryFeatureSummary'][str(rid)]={'queriedFeatureCount':total,
-                  'medievalFeatureCount':len([x for x in relevant if 'id' in x]),
-                  'uniqueSources':sources.most_common(),'lineTypes':line_types.most_common(),
-                  'statuses':statuses.most_common(),'sample':relevant[:300]}
-          with open('research-artifacts/runivers-medieval-summary.json','w',encoding='utf8') as f: json.dump(out,f,ensure_ascii=False,indent=2)
-          print('named',len(out['medievalNamedResources']))
-          for rid,v in out['boundaryFeatureSummary'].items(): print(rid,v['queriedFeatureCount'],v['medievalFeatureCount'],v['uniqueSources'][:10])
+          children=get(f'{BASE}/?parent=5344')
+          rows=[]
+          for x in children if isinstance(children,list) else []:
+              r=x.get('resource',{}) if isinstance(x,dict) else {}
+              fl=x.get('feature_layer',{}) if isinstance(x,dict) else {}
+              name=str(r.get('display_name') or '')
+              years=[int(y) for y in re.findall(r'(?<!\d)(\d{3,4})(?!\d)',name)]
+              if years and min(years)<=1015:
+                  rows.append({'id':r.get('id'),'name':name,'cls':r.get('cls'),'geometry':fl.get('geometry_type'),'srs':(fl.get('srs') or {}).get('id'),'fields':[f.get('keyname') for f in fl.get('fields',[])]})
+          rows.sort(key=lambda x:(min([int(y) for y in re.findall(r'\d{3,4}',x['name'])] or [9999]),x['id'] or 0))
+          out={'parent':5344,'count':len(rows),'resources':rows}
+          Path('research-artifacts/runivers-early-polygon-catalog.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+          print(json.dumps(out,ensure_ascii=False,indent=2))
           PY
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add research-artifacts/runivers-medieval-summary.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'Capture compact Runivers medieval GIS research summary'
-            git push origin HEAD:history/runivers-medieval-bases
-          fi
+          git add research-artifacts/runivers-early-polygon-catalog.json
+          git commit -m 'Capture early Runivers polygon snapshot catalog' || exit 0
+          git push origin HEAD:history/runivers-medieval-bases
