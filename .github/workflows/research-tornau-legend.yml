@@ -1,0 +1,69 @@
+name: Research Tornau 862-1054 legend
+on:
+  push:
+    branches: [research/tornau-legend]
+permissions:
+  contents: write
+jobs:
+  analyze:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/tornau-legend
+      - name: OCR legend and sample swatches
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-rus >/dev/null
+          python -m pip install pillow opencv-python-headless numpy >/dev/null
+          python - <<'PY'
+          import urllib.request,hashlib,json,subprocess,csv,io,colorsys
+          from pathlib import Path
+          from PIL import Image,ImageEnhance,ImageFilter
+          import numpy as np, cv2
+          url="https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif"
+          data=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'rulers-history-research/1.0'}),timeout=60).read()
+          im=Image.open(io.BytesIO(data)).convert('RGB')
+          # Search the right side of map no.2, including likely colored legend swatches.
+          box=(600,1400,1000,1760)
+          crop=im.crop(box)
+          g=crop.convert('L').resize(((box[2]-box[0])*4,(box[3]-box[1])*4))
+          g=ImageEnhance.Contrast(g).enhance(2.5).filter(ImageFilter.SHARPEN)
+          g.save('/tmp/legend.png')
+          subprocess.run(['tesseract','/tmp/legend.png','/tmp/ocr','-l','rus','--psm','11','tsv'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+          words=[]
+          with open('/tmp/ocr.tsv',encoding='utf8') as f:
+            for r in csv.DictReader(f,delimiter='\t'):
+              txt=(r.get('text') or '').strip(); conf=float(r.get('conf') or -1)
+              if txt and conf>=15:
+                left=int(r['left']); top=int(r['top']); w=int(r['width']); h=int(r['height'])
+                words.append({'text':txt,'confidence':round(conf,1),'bbox':[round(box[0]+left/4,1),round(box[1]+top/4,1),round(box[0]+(left+w)/4,1),round(box[1]+(top+h)/4,1)]})
+          arr=np.array(crop)
+          hsv=cv2.cvtColor(arr,cv2.COLOR_RGB2HSV)
+          # Highly saturated light components in the legend region; record color and geometry.
+          sat=cv2.inRange(hsv,np.array([0,65,110],np.uint8),np.array([179,255,255],np.uint8))
+          sat=cv2.morphologyEx(sat,cv2.MORPH_OPEN,np.ones((2,2),np.uint8),iterations=1)
+          contours,_=cv2.findContours(sat,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+          comps=[]
+          for c in contours:
+            area=float(cv2.contourArea(c))
+            if area<30: continue
+            x,y,w,h=cv2.boundingRect(c)
+            mask=np.zeros(sat.shape,np.uint8); cv2.drawContours(mask,[c],-1,255,-1)
+            vals=arr[mask>0]
+            med=np.median(vals,axis=0).astype(int).tolist() if len(vals) else [0,0,0]
+            hh,ss,vv=colorsys.rgb_to_hsv(*(z/255 for z in med))
+            comps.append({'area':round(area,1),'bbox':[x+box[0],y+box[1],x+w-1+box[0],y+h-1+box[1]],'medianRgb':med,'hue':round(hh*360,1),'sat':round(ss,3),'val':round(vv,3)})
+          comps.sort(key=lambda z:(z['bbox'][1],z['bbox'][0]))
+          out={'source':url,'sha256':hashlib.sha256(data).hexdigest(),'crop':box,'words':words,'saturatedComponents':comps}
+          Path('research-artifacts/tornau-legend.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add research-artifacts/tornau-legend.json
+          git commit -m 'Capture Tornau 862-1054 legend diagnostics' || exit 0
+          git push origin HEAD:research/tornau-legend
