@@ -73,11 +73,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
+      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid"],
-        "derivationNote": "Use treaty and attached boundary materials for verified spatial reconstruction."
+        "method": "official-treaty-map-located-pending-georeference",
+        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
+        "derivationNote": "Rosarchiv publishes the map accompanying the 12 March 1940 USSR-Finland peace treaty from the Archive of Foreign Policy of the Russian Federation (АВП РФ. Ф. 3а. Оп. 1. П. 44. Д. 279). The authoritative treaty cartography is therefore located. Production geometry remains pending until the source raster is captured with reproducibility metadata, commercial-use rights are reviewed, and controlled georeferencing/validation is completed."
       },
       "reviewStatus": "source-verified"
     },
