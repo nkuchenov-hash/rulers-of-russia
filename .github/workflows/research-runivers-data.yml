@@ -1,0 +1,54 @@
+name: Research Runivers historical GIS
+on:
+  push:
+    branches: [history/runivers-medieval-bases]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe Runivers app and NextGIS resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/runivers
+          echo '=== APP HEADERS ==='
+          curl -IL --max-time 40 https://map.runivers.ru/ | head -40 || true
+          curl -fsSL --max-time 60 https://map.runivers.ru/ -o /tmp/runivers/index.html
+          echo '=== SCRIPT SOURCES ==='
+          grep -Eo '<script[^>]+src="[^"]+"' /tmp/runivers/index.html | sed -E 's/.*src="([^"]+)"/\1/' | tee /tmp/runivers/scripts.txt || true
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.parse import urljoin
+          import urllib.request,re
+          base='https://map.runivers.ru/'
+          html=Path('/tmp/runivers/index.html').read_text(errors='ignore')
+          srcs=re.findall(r'<script[^>]+src=["\']([^"\']+)',html)
+          print('SCRIPT_COUNT',len(srcs))
+          for i,src in enumerate(srcs):
+              url=urljoin(base,src)
+              try:
+                  data=urllib.request.urlopen(url,timeout=40).read()
+                  p=Path(f'/tmp/runivers/bundle-{i}.js'); p.write_bytes(data)
+                  print('BUNDLE',i,url,len(data))
+              except Exception as e:
+                  print('BUNDLE_ERROR',i,url,e)
+          PY
+          echo '=== GIS/API STRINGS FROM BUNDLES ==='
+          grep -RhoE '.{0,100}(gis\.runivers\.ru|api/resource|resourceId|resource_id|vector|year|timeline).{0,180}' /tmp/runivers/bundle-*.js 2>/dev/null | head -300 || true
+          echo '=== UNIQUE RESOURCE IDS ==='
+          grep -RhoE 'resource[/=:" ]+[0-9]{2,7}|resourceId.{0,10}[0-9]{2,7}|resource_id.{0,10}[0-9]{2,7}' /tmp/runivers/bundle-*.js 2>/dev/null | sort -u | head -300 || true
+          echo '=== NEXTGIS ROOT ==='
+          curl -fsSL --max-time 40 'https://gis.runivers.ru/api/resource/?parent=0' | head -c 12000 || true
+          echo
+          echo '=== RESOURCE 5455 META ==='
+          curl -fsSL --max-time 40 'https://gis.runivers.ru/api/resource/5455' | head -c 12000 || true
+          echo
+          echo '=== RESOURCE 5455 GEOJSON HEAD ==='
+          curl -fsSL --max-time 60 'https://gis.runivers.ru/api/resource/5455/geojson' | head -c 12000 || true
+          echo
+          echo '=== OLD RUNIVERS ABOUT LINKS ==='
+          curl -fsSL --max-time 40 'https://old.runivers.ru/granitsy-rossii/about/about_detailed/index.php' -o /tmp/runivers/about.html || true
+          grep -Eo 'https?://[^"<> ]+|href="[^"]+"' /tmp/runivers/about.html 2>/dev/null | grep -Ei 'gis|api|source|источ|granitsy|map' | head -150 || true
