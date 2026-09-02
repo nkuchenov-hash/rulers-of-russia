@@ -1,0 +1,39 @@
+{
+  "actionRecordJsMatches": [
+    "$(jcarousel_load); $(document).on('afterReady', function () { checkBookmarks([ProjectData.document.id]); checkFragmentExpressEorder([ProjectData.document.id]); showElementsForAccessDodInRoomDod(); }); "
+  ],
+  "records": [
+    {
+      "record": "01009494305",
+      "tagMatches": [
+        "<link rel=\"shortcut icon\" href=\"/img/favicon.png\" type=\"image/png\">",
+        "<img id=\"logoImage\" src=\"/img/logo_main.png\">",
+        "<a class=\"rsl-clear-link\" href=\"https://search.rsl.ru/images\" title=\"Имидж-каталог\">",
+        "<img src=\"/img/image-catalog.svg\" class=\"nav-image-catalog-icon\">",
+        "<div class=\"rsl-record-read-link-section\">",
+        "<a id=\"freeAccessAlertReadLink\" class=\"rsl-link\" href=\"#\" target=\"_blank\">"
+      ],
+      "idSnippets": [
+        "ookmark\",\"removeBookmark\":\"\\/ru\\/api\\/favorite?action=remove-bookmark\",\"getBookmarks\":\"\\/ru\\/api\\/favorite?action=get-bookmarks\",\"eorderConfirmOrder\":\"\\/eorder-aleph\\/confirm-order?language=ru\",\"eorderGetOrder\":\"\\/eorder-aleph\\/get-order?language=ru\",\"eorderRequestDetails\":\"\\/eorder-aleph\\/request-order-details?language=ru\",\"refreshUserData\":\"\\/site\\/ajax-refresh-user-data?language=ru\",\"fragmentRequest\":\"\\/site\\/request-fragment?language=ru\",\"ajaxPeriodicReleas",
+        "me\":\"t\",\"defaultValue\":false,\"label\":\"\\u0422\\u0435\\u043c\\u0430\",\"badge\":true,\"encode\":true},\"page\":{\"type\":\"text\",\"id\":\"page\",\"hashname\":\"p\",\"defaultValue\":1},\"digitalAvail\":{\"type\":\"checkboxlist\",\"class\":\"digitalAvail-checkbox\",\"hashname\":\"digitalAvail\",\"defaultValue\":false,\"ignoreAllChecked\":true,\"label\":\"\\u0414\\u043e\\u043a\\u0443\\u043c\\u0435\\u043d\\u0442\\u044b\",\"badge\":true},\"nrrType\":{\"type\":\"checkboxlist\",\"class\":\"nrr-type-checkbox\",\"hashname\":\"nt\",\"defaultVal",
+        "тевые ресурсы\"> <span class=\"navlink\"> <img src=\"/img/nav-network-resources.svg\" class=\"nav-nrr-icon\"><span class=\"hidden-sm hidden-xs hidden-md\"><span class=\"rsl-link\">Сетевые ресурсы</span></span> </span> </a> </span> <span class=\"navlink-cover\"> <a class=\""
+      ]
+    },
+    {
+      "record": "01005496028",
+      "tagMatches": [
+        "<link rel=\"shortcut icon\" href=\"/img/favicon.png\" type=\"image/png\">",
+        "<img id=\"logoImage\" src=\"/img/logo_main.png\">",
+        "<a class=\"rsl-clear-link\" href=\"https://search.rsl.ru/images\" title=\"Имидж-каталог\">",
+        "<img src=\"/img/image-catalog.svg\" class=\"nav-image-catalog-icon\">",
+        "<div class=\"rsl-record-read-link-section\">",
+        "<a id=\"freeAccessAlertReadLink\" class=\"rsl-link\" href=\"#\" target=\"_blank\">"
+      ],
+      "idSnippets": [
+        "ookmark\",\"removeBookmark\":\"\\/ru\\/api\\/favorite?action=remove-bookmark\",\"getBookmarks\":\"\\/ru\\/api\\/favorite?action=get-bookmarks\",\"eorderConfirmOrder\":\"\\/eorder-aleph\\/confirm-order?language=ru\",\"eorderGetOrder\":\"\\/eorder-aleph\\/get-order?language=ru\",\"eorderRequestDetails\":\"\\/eorder-aleph\\/request-order-details?language=ru\",\"refreshUserData\":\"\\/site\\/ajax-refresh-user-data?language=ru\",\"fragmentRequest\":\"\\/site\\/request-fragment?language=ru\",\"ajaxPeriodicReleas",
+        "me\":\"t\",\"defaultValue\":false,\"label\":\"\\u0422\\u0435\\u043c\\u0430\",\"badge\":true,\"encode\":true},\"page\":{\"type\":\"text\",\"id\":\"page\",\"hashname\":\"p\",\"defaultValue\":1},\"digitalAvail\":{\"type\":\"checkboxlist\",\"class\":\"digitalAvail-checkbox\",\"hashname\":\"digitalAvail\",\"defaultValue\":false,\"ignoreAllChecked\":true,\"label\":\"\\u0414\\u043e\\u043a\\u0443\\u043c\\u0435\\u043d\\u0442\\u044b\",\"badge\":true},\"nrrType\":{\"type\":\"checkboxlist\",\"class\":\"nrr-type-checkbox\",\"hashname\":\"nt\",\"defaultVal",
+        "тевые ресурсы\"> <span class=\"navlink\"> <img src=\"/img/nav-network-resources.svg\" class=\"nav-nrr-icon\"><span class=\"hidden-sm hidden-xs hidden-md\"><span class=\"rsl-link\">Сетевые ресурсы</span></span> </span> </a> </span> <span class=\"navlink-cover\"> <a class=\""
+      ]
+    }
+  ]
+}
