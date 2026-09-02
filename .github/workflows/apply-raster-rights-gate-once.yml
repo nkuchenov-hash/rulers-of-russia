@@ -1,0 +1,64 @@
+name: Apply raster rights gate once
+on:
+  push:
+    branches: [research/rsl-882-map]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rsl-882-map
+      - name: Apply source rights metadata and validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('public/data/history-core/raster-geometry-recipes/early-rus-rurik-862.json')
+          data=json.loads(p.read_text())
+          src=data['recipes'][0]['sourceRaster']
+          src['rightsStatus']='public-domain'
+          src['rightsEvidenceUrl']="https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_862.gif"
+          src['rightsNote']='Wikimedia Commons file description marks the 1910 Tornau map public domain; source is a pre-1917 Russian Empire publication.'
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+
+          p=Path('scripts/check-history-raster-geometry-recipes.mjs')
+          text=p.read_text()
+          needle="const seenFragments = new Set();\nconst seenOutputs = new Set();"
+          repl="const seenFragments = new Set();\nconst seenOutputs = new Set();\nconst commerciallyReusableRasterRights = new Set(['public-domain', 'cc0', 'cc-by', 'cc-by-sa', 'licensed-commercial', 'open-government-license']);"
+          if needle not in text: raise SystemExit('validator insertion point missing')
+          text=text.replace(needle,repl,1)
+          needle="  for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Raster recipe ${recipe.id} references unknown document ${id}`);\n  validateRasterGeoreference(recipe.georeference, recipe.sourceRaster);"
+          repl="  for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Raster recipe ${recipe.id} references unknown document ${id}`);\n  if (!commerciallyReusableRasterRights.has(recipe.sourceRaster?.rightsStatus)) fail(`Raster recipe ${recipe.id} source rights are not explicitly reusable for production/commercial output`);\n  if (!/^https:\\/\\//.test(recipe.sourceRaster?.rightsEvidenceUrl ?? '')) fail(`Raster recipe ${recipe.id} has no HTTPS rightsEvidenceUrl`);\n  validateRasterGeoreference(recipe.georeference, recipe.sourceRaster);"
+          if needle not in text: raise SystemExit('validator recipe point missing')
+          text=text.replace(needle,repl,1)
+          p.write_text(text)
+
+          p=Path('scripts/build-history-raster-geometry.mjs')
+          text=p.read_text()
+          needle="        sourceRasterSha256: recipe.sourceRaster.sha256,\n        georeferenceMethod: recipe.georeference.method,"
+          repl="        sourceRasterSha256: recipe.sourceRaster.sha256,\n        sourceRasterRightsStatus: recipe.sourceRaster.rightsStatus,\n        sourceRasterRightsEvidenceUrl: recipe.sourceRaster.rightsEvidenceUrl,\n        georeferenceMethod: recipe.georeference.method,"
+          if needle not in text: raise SystemExit('builder metadata point missing')
+          text=text.replace(needle,repl,1)
+          p.write_text(text)
+
+          p=Path('scripts/check-history-raster-geometry-recipes.mjs')
+          text=p.read_text()
+          needle="  if (generated.metadata?.sourceRasterSha256 !== recipe.sourceRaster.sha256) fail(`Raster output ${recipe.output} source hash mismatch`);\n  if (generated.metadata?.georeferenceMethod !== recipe.georeference.method) fail(`Raster output ${recipe.output} georeference method mismatch`);"
+          repl="  if (generated.metadata?.sourceRasterSha256 !== recipe.sourceRaster.sha256) fail(`Raster output ${recipe.output} source hash mismatch`);\n  if (generated.metadata?.sourceRasterRightsStatus !== recipe.sourceRaster.rightsStatus) fail(`Raster output ${recipe.output} source rights status mismatch`);\n  if (generated.metadata?.sourceRasterRightsEvidenceUrl !== recipe.sourceRaster.rightsEvidenceUrl) fail(`Raster output ${recipe.output} source rights evidence mismatch`);\n  if (generated.metadata?.georeferenceMethod !== recipe.georeference.method) fail(`Raster output ${recipe.output} georeference method mismatch`);"
+          if needle not in text: raise SystemExit('validator output point missing')
+          text=text.replace(needle,repl,1)
+          p.write_text(text)
+          PY
+          npm run materialize:history-geometry
+          npm run validate:history-geometry
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add public/data/history-core/raster-geometry-recipes/early-rus-rurik-862.json public/data/history-core/geometry/early-rus-rurik-862-reconstruction.geojson scripts/check-history-raster-geometry-recipes.mjs scripts/build-history-raster-geometry.mjs
+          git commit -m 'Require commercial reuse rights for raster geometry' || exit 0
+          git push origin HEAD:research/rsl-882-map
