@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-moscow-finland-1940-map-rusarchives",
+      "sourceCollectionId": "rosarchiv-online",
+      "title": "Карта, прилагаемая к мирному договору между Финляндией и СССР",
+      "institution": "Федеральное архивное агентство / Архив внешней политики Российской Федерации",
+      "url": "https://nakanune.rusarchives.ru/en/node/214",
+      "tier": "A1-archival-original",
+      "documentType": "map",
+      "date": {
+        "original": "12 марта 1940 г.",
+        "normalized": "1940-03-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "archiveCitation": "АВП РФ. Ф. 3а. Оп. 1. П. 44. Д. 279. Типографский оттиск.",
+      "authority": ["СССР", "Финляндская Республика"],
+      "notes": "Rosarchiv identifies this as the map accompanying the 12 March 1940 peace treaty. It is an authoritative period cartographic source for the treaty boundary, but production geometry still requires controlled georeferencing, source-image capture with reproducibility metadata, and commercial-rights review before promotion to geometry-verified."
+    }
+  ]
+}
