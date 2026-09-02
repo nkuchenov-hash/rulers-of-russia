@@ -158,6 +158,13 @@ for (const base of territoryModel.baseStates ?? []) {
   } else if (!validatePreciseDate(label, base.effectiveDate)) {
     fail(`${label} must have either a coverageAnchorMonth plus historicalDate or a day/month precise effectiveDate for deterministic replay`);
   }
+  const baseStartMonth = base.coverageAnchorMonth ?? (/^\d{4}-\d{2}/.test(base.effectiveDate?.normalized ?? '') ? base.effectiveDate.normalized.slice(0, 7) : null);
+  if (base.validThroughMonth !== undefined) {
+    if (!/^\d{4}-\d{2}$/.test(base.validThroughMonth ?? '')) fail(`${label} has invalid validThroughMonth; expected YYYY-MM`);
+    const throughMonth = Number(String(base.validThroughMonth).slice(5, 7));
+    if (throughMonth < 1 || throughMonth > 12) fail(`${label} has invalid valid-through month`);
+    if (baseStartMonth && base.validThroughMonth < baseStartMonth) fail(`${label} validThroughMonth precedes its operational start month`);
+  }
   if (!Array.isArray(base.geometryFragmentIds) || base.geometryFragmentIds.length === 0) fail(`${label} has no geometryFragmentIds`);
   for (const id of base.geometryFragmentIds ?? []) {
     const fragment = fragmentById.get(id);

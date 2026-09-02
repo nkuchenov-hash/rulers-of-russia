@@ -60,7 +60,8 @@
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "low",
-      "notes": "coverageAnchorMonth starts the dataset at 0862-01; it is deliberately not asserted as a historical January date. The represented source date remains circa 862."
+      "notes": "coverageAnchorMonth starts the dataset at 0862-01 without inventing a January historical date. The Tornau legend explicitly labels this reconstruction «Владения Рюрика 862–879», so verified use ends at 0879-12; 880–881 remains provisional until separately sourced.",
+      "validThroughMonth": "0879-12"
     }
   ],
   "fragments": [
