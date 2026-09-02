@@ -1,0 +1,47 @@
+name: Research RSL early Rus map
+on:
+  push:
+    branches: [research/rsl-882-map]
+permissions:
+  contents: write
+jobs:
+  probe:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rsl-882-map
+      - name: Discover open-access viewer and raster endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-artifacts/rsl-882
+          python - <<'PY'
+          import re,json,urllib.request,urllib.parse
+          from pathlib import Path
+          urls=['https://search.rsl.ru/ru/record/01009494305','https://search.rsl.ru/ru/record/01005496028']
+          out=[]
+          for url in urls:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 history-research'})
+              try:
+                  html=urllib.request.urlopen(req,timeout=60).read().decode('utf8','ignore')
+              except Exception as e:
+                  out.append({'record':url,'error':repr(e)}); continue
+              links=[]
+              for raw in re.findall(r'(?:href|src)=["\']([^"\']+)',html,re.I):
+                  full=urllib.parse.urljoin(url,raw)
+                  if any(k in full.lower() for k in ['viewer','view','scan','image','digital','object','media','storage','content','record']): links.append(full)
+              scripts=[]
+              for m in re.finditer(r'.{0,160}(?:viewer|digital|scan|image|object|media|manifest|iiif).{0,300}',html,re.I|re.S):
+                  s=re.sub(r'\s+',' ',m.group(0))
+                  scripts.append(s[:500])
+                  if len(scripts)>=100: break
+              out.append({'record':url,'htmlBytes':len(html.encode()),'candidateLinks':sorted(set(links))[:300],'snippets':scripts})
+          Path('research-artifacts/rsl-882/viewer-discovery.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add research-artifacts/rsl-882/viewer-discovery.json
+          git commit -m 'Capture RSL viewer endpoint research' || exit 0
+          git push origin HEAD:research/rsl-882-map
