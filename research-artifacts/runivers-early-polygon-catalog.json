@@ -1,0 +1,584 @@
+{
+  "parent": 5344,
+  "count": 29,
+  "resources": [
+    {
+      "id": 13435,
+      "name": "850_861_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13437,
+      "name": "861_862_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13439,
+      "name": "862_863_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13441,
+      "name": "863_864_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13443,
+      "name": "864_881_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13445,
+      "name": "881_882_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13447,
+      "name": "882_883_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13449,
+      "name": "883_884_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13451,
+      "name": "884_885_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13453,
+      "name": "885_914_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13455,
+      "name": "914_915_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13457,
+      "name": "915_944_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13459,
+      "name": "944_945_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13461,
+      "name": "945_963_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13463,
+      "name": "963_964_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13465,
+      "name": "964_965_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13467,
+      "name": "965_977_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13469,
+      "name": "977_978_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13471,
+      "name": "978_979_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 14552,
+      "name": "979_980_rus_v.1.0",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2"
+      ]
+    },
+    {
+      "id": 13473,
+      "name": "980_981_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13475,
+      "name": "981_982_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13477,
+      "name": "982_983_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13479,
+      "name": "983_984_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13481,
+      "name": "984_985_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13483,
+      "name": "985_988_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13485,
+      "name": "988_1014_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13487,
+      "name": "1014_1015_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    },
+    {
+      "id": 13489,
+      "name": "1015_1017_rus",
+      "cls": "vector_layer",
+      "geometry": "POLYGON",
+      "srs": 3857,
+      "fields": [
+        "cat",
+        "fid",
+        "upperdat",
+        "lwdate",
+        "eventstart",
+        "status",
+        "name",
+        "YEAR",
+        "fid2",
+        "Area",
+        "ref"
+      ]
+    }
+  ]
+}
