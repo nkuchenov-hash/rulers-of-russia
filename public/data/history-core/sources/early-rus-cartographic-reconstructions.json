@@ -10,6 +10,26 @@
       "coverage": "Historical cartographic reconstructions of Rus and Russia from the 9th century onward",
       "canonicalUse": ["reconstruction-geometry", "interpretation", "uncertainty-model"],
       "notes": "Secondary late-imperial historical reconstruction. It may define the geometry of a named reconstruction layer when digitized reproducibly, but it cannot by itself establish a primary-source thin state boundary. Early-period layers must retain frontier/uncertainty semantics and cite independent primary documentary evidence for the underlying historical chronology."
+    },
+    {
+      "id": "runivers-ivi-ras-historical-gis",
+      "title": "Границы России и предшественников, 850–2020",
+      "institution": "Руниверс / Лаборатория исторической геоинформатики Института всеобщей истории РАН / NextGIS",
+      "url": "https://map.runivers.ru/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Dynamic scholarly GIS reconstruction of political boundaries of Russia and predecessor polities from the medieval period through the modern era",
+      "canonicalUse": ["reconstruction-geometry", "cross-check", "source-discovery", "uncertainty-model"],
+      "notes": "The underlying desktop GIS uses date-ranged boundary segments assembled by historical-GIS specialists from multiple sources; web polygon slices are generated from those segments. The project explicitly warns that early boundaries are conventional and often approximate. Its own forced day/month values for year-only chronology are not inherited by History Core. Raw Runivers GIS data is not vendored unless redistribution rights are established; production use pairs scholarly reconstruction geometry with independent primary documentary evidence."
+    },
+    {
+      "id": "gugk-rybakov-early-rus-maps",
+      "title": "ГУГК. Учебные исторические карты Древнерусского государства IX–XI вв.",
+      "institution": "Главное управление геодезии и картографии; Российская государственная библиотека",
+      "url": "https://search.rsl.ru/ru/record/01009494305",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Kievan Rus / Old Russian state, 882–1054, including differentiated reign-period and accession layers",
+      "canonicalUse": ["reconstruction-geometry", "cross-check", "uncertainty-model"],
+      "notes": "State-cartographic historical reconstruction compiled by GUGK with B. A. Rybakov as consultant; the 1961 edition is 1:3,000,000 with geographic graticule and explicitly distinguishes the Oleg 882–912 state from later 912–971 and 972–1054 accessions. It is a secondary historical reconstruction, not a contemporary medieval survey."
     }
   ]
 }
