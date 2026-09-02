@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: research/rsl-882-map
-      - name: Discover open-access viewer and raster endpoints
+      - name: Resolve RSL viewer API
         shell: bash
         run: |
           set -euo pipefail
@@ -20,28 +20,32 @@ jobs:
           python - <<'PY'
           import re,json,urllib.request,urllib.parse
           from pathlib import Path
-          urls=['https://search.rsl.ru/ru/record/01009494305','https://search.rsl.ru/ru/record/01005496028']
-          out=[]
-          for url in urls:
+          origin='https://search.rsl.ru'
+          def text(url):
               req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 history-research'})
-              try:
-                  html=urllib.request.urlopen(req,timeout=60).read().decode('utf8','ignore')
-              except Exception as e:
-                  out.append({'record':url,'error':repr(e)}); continue
-              links=[]
-              for raw in re.findall(r'(?:href|src)=["\']([^"\']+)',html,re.I):
-                  full=urllib.parse.urljoin(url,raw)
-                  if any(k in full.lower() for k in ['viewer','view','scan','image','digital','object','media','storage','content','record']): links.append(full)
-              scripts=[]
-              for m in re.finditer(r'.{0,160}(?:viewer|digital|scan|image|object|media|manifest|iiif).{0,300}',html,re.I|re.S):
-                  s=re.sub(r'\s+',' ',m.group(0))
-                  scripts.append(s[:500])
-                  if len(scripts)>=100: break
-              out.append({'record':url,'htmlBytes':len(html.encode()),'candidateLinks':sorted(set(links))[:300],'snippets':scripts})
-          Path('research-artifacts/rsl-882/viewer-discovery.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+              return urllib.request.urlopen(req,timeout=60).read().decode('utf8','ignore')
+          js=text(origin+'/js/action-record.js?v=1787651650')
+          patterns=[]
+          for m in re.finditer(r'.{0,260}(?:online|digital|viewer|read|fulltext|full-text|image|scan|aleph|nrr).{0,520}',js,re.I|re.S):
+              patterns.append(re.sub(r'\s+',' ',m.group(0))[:800])
+              if len(patterns)>=250: break
+          records=[]
+          for rec in ['01009494305','01005496028']:
+              html=text(origin+'/ru/record/'+rec)
+              attrs=[]
+              for m in re.finditer(r'<[^>]{0,1200}(?:online|digital|read|fulltext|viewer|image)[^>]{0,1200}>',html,re.I|re.S):
+                  attrs.append(re.sub(r'\s+',' ',m.group(0))[:1500])
+              # Preserve record-specific JS/data values likely consumed by action-record.js.
+              ids=[]
+              for m in re.finditer(r'.{0,160}(?:aleph|sysno|recordId|record-id|digital|online|nrr|viewer).{0,300}',html,re.I|re.S):
+                  ids.append(re.sub(r'\s+',' ',m.group(0))[:500])
+                  if len(ids)>=150: break
+              records.append({'record':rec,'tagMatches':attrs[:100],'idSnippets':ids})
+          out={'actionRecordJsMatches':patterns,'records':records}
+          Path('research-artifacts/rsl-882/viewer-api.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
           PY
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add research-artifacts/rsl-882/viewer-discovery.json
-          git commit -m 'Capture RSL viewer endpoint research' || exit 0
+          git add research-artifacts/rsl-882/viewer-api.json
+          git commit -m 'Capture RSL online viewer API research' || exit 0
           git push origin HEAD:research/rsl-882-map
