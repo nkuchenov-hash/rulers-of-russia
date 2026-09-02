@@ -36,7 +36,7 @@ jobs:
           text=text.replace("        source_raster_sha256: recipe.sourceRaster.sha256,\n        georeference_method: recipe.georeference.method,", "        source_raster_sha256: recipe.sourceRaster.sha256,\n        source_raster_rights_status: recipe.sourceRaster.rightsStatus,\n        source_raster_rights_evidence_url: recipe.sourceRaster.rightsEvidenceUrl,\n        georeference_method: recipe.georeference.method,",1)
           p.write_text(text)
           PY
-          npm ci --ignore-scripts
+          npm install --ignore-scripts --no-audit --no-fund
           npm run materialize:history-geometry
           npm run validate:history-geometry
           npm run validate:history
