@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - scripts/analyze-tornau-medieval-registration.py
+      - scripts/analyze-grand-moscow-archive-controls.py
       - scripts/capture-tornau-medieval-diagnostics.py
       - public/data/history-core/raster-geometry-recipes/**
       - .github/workflows/tornau-medieval-registration.yml
@@ -31,6 +32,9 @@ jobs:
 
       - name: Analyze Tornau medieval raster registration
         run: python scripts/analyze-tornau-medieval-registration.py
+
+      - name: Analyze Grand Moscow archive controls
+        run: python scripts/analyze-grand-moscow-archive-controls.py
 
       - name: Capture diagnostic rasters
         run: python scripts/capture-tornau-medieval-diagnostics.py

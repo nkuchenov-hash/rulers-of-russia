@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Research-only registration check for the public-domain Tornau 1910 sheets.
+"""Research-only registration and palette diagnostics for the public-domain Tornau 1910 sheets.
 
 Exact original raster hashes are already pinned in History Core. This diagnostic
 tries the originals first; if Wikimedia rate-limits GitHub-hosted runners, it
-uses a same-dimension visual proxy only for raster-to-raster registration. Proxy
-bytes are never accepted as source evidence and this script never promotes
-geometry by itself.
+uses a same-dimension visual proxy only for raster-to-raster registration and
+palette reconnaissance. Proxy bytes are never accepted as source evidence and
+this script never promotes geometry by itself.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections import Counter
 from pathlib import Path
 
 import cv2
@@ -65,6 +66,20 @@ REFERENCE_GCPS = [
     ("volodymyr-label-anchor", 235, 1765, 24.32, 50.85),
 ]
 
+MOSCOW_SHEET_SAMPLES = [
+    ("inside-1462-north", 830, 680),
+    ("inside-1462-center", 850, 760),
+    ("inside-1462-east", 980, 770),
+    ("novgorod", 620, 685),
+    ("pskov", 545, 720),
+    ("smolensk", 650, 850),
+    ("moscow", 830, 840),
+    ("tver", 725, 740),
+    ("nizhny-novgorod", 1090, 790),
+    ("ryazan", 1000, 890),
+    ("vyatka-approx", 1160, 650),
+]
+
 
 def request_bytes(url: str) -> bytes:
     request = urllib.request.Request(
@@ -107,15 +122,84 @@ def download_registration_image(spec: dict, root: Path) -> tuple[Path, str]:
     return target, mode
 
 
-def read_gray(path: Path, spec: dict) -> np.ndarray:
+def decode_image(path: Path, mode: int) -> np.ndarray:
     raw = np.frombuffer(path.read_bytes(), dtype=np.uint8)
-    image = cv2.imdecode(raw, cv2.IMREAD_GRAYSCALE)
+    image = cv2.imdecode(raw, mode)
     if image is None:
         raise RuntimeError(f"Could not decode {path}")
+    return image
+
+
+def read_gray(path: Path, spec: dict) -> np.ndarray:
+    image = decode_image(path, cv2.IMREAD_GRAYSCALE)
     height, width = image.shape[:2]
     if (width, height) != (spec["width"], spec["height"]):
         raise RuntimeError(f"Unexpected dimensions for {spec['id']}: {width}x{height}")
     return cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(image)
+
+
+def palette_diagnostics(path: Path, spec: dict) -> dict:
+    """Return machine-readable colour/component clues for manual tracing.
+
+    The 1910 GIF is palette-based. Exact-colour counts and connected components
+    are therefore useful for locating the legend fills, but remain diagnostics:
+    production pixel rings still require explicit visual/historical review.
+    """
+    bgr = decode_image(path, cv2.IMREAD_COLOR)
+    height, width = bgr.shape[:2]
+    if (width, height) != (spec["width"], spec["height"]):
+        raise RuntimeError(f"Unexpected colour dimensions for {spec['id']}: {width}x{height}")
+    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+
+    # Central map body, excluding most title/legend margins and page furniture.
+    x0, y0, x1, y1 = 420, 430, 1380, 1280
+    crop = rgb[y0:y1, x0:x1]
+    counter = Counter(map(tuple, crop.reshape(-1, 3).tolist()))
+    top = counter.most_common(32)
+
+    palette = []
+    for rank, (color, count) in enumerate(top, start=1):
+        mask = np.all(rgb == np.array(color, dtype=np.uint8), axis=2).astype(np.uint8)
+        labels, _, stats, centroids = cv2.connectedComponentsWithStats(mask, connectivity=8)
+        components = []
+        for label in range(1, labels):
+            x, y, w, h, area = [int(v) for v in stats[label]]
+            if area < 100:
+                continue
+            cx, cy = [round(float(v), 1) for v in centroids[label]]
+            components.append({"area": area, "bbox": [x, y, w, h], "centroid": [cx, cy]})
+        components.sort(key=lambda item: item["area"], reverse=True)
+        palette.append({
+            "rank": rank,
+            "rgb": list(color),
+            "cropPixelCount": int(count),
+            "componentsAreaGte100": components[:12],
+        })
+
+    samples = []
+    if spec["id"] == "1240-1533":
+        for sample_id, x, y in MOSCOW_SHEET_SAMPLES:
+            color = rgb[y, x].tolist()
+            # Neighborhood mode is more robust than the exact label/line pixel.
+            r = 9
+            patch = rgb[max(0, y-r):min(height, y+r+1), max(0, x-r):min(width, x+r+1)]
+            mode_color, mode_count = Counter(map(tuple, patch.reshape(-1, 3).tolist())).most_common(1)[0]
+            samples.append({
+                "id": sample_id,
+                "pixel": [x, y],
+                "rgb": color,
+                "neighborhoodModeRgb": list(mode_color),
+                "neighborhoodModeCount": int(mode_count),
+                "neighborhoodPixels": int(patch.shape[0] * patch.shape[1]),
+            })
+
+    return {
+        "sheet": spec["id"],
+        "crop": [x0, y0, x1, y1],
+        "topExactRgb": palette,
+        "samples": samples,
+        "warning": "Palette/component output is research-only. Do not promote a colour component without visual legend identification and historical review.",
+    }
 
 
 def error_stats(values: np.ndarray) -> dict:
@@ -202,6 +286,7 @@ def align(reference: np.ndarray, target: np.ndarray, target_id: str) -> dict:
 
 
 def main() -> None:
+    palette_reports = []
     with tempfile.TemporaryDirectory(prefix="tornau-registration-") as tmp:
         root = Path(tmp)
         ref_path, ref_mode = download_registration_image(REFERENCE, root)
@@ -213,14 +298,16 @@ def main() -> None:
             modes[spec["id"]] = mode
             target = read_gray(target_path, spec)
             results.append(align(ref, target, spec["id"]))
+            palette_reports.append(palette_diagnostics(target_path, spec))
 
     report = {
-        "schemaVersion": 2,
-        "purpose": "research-only batch registration diagnostics; does not promote History Core geometry",
+        "schemaVersion": 3,
+        "purpose": "research-only batch registration/palette diagnostics; does not promote History Core geometry",
         "sourceIntegrity": "Original SHA-256 values are pinned in History Core; any visual proxy fallback is registration-only and cannot satisfy source provenance.",
         "imageModes": modes,
         "reference": {"id": REFERENCE["id"], "sha256": REFERENCE["sha256"]},
         "targets": results,
+        "paletteDiagnostics": palette_reports,
         "allCandidateReusable": all(item.get("candidateReusable") is True for item in results),
     }
     Path("tornau-medieval-registration-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
