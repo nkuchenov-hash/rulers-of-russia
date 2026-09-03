@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-kievan-rus-sviatoslav-acquisitions-972-reconstruction",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/kievan-rus-sviatoslav-acquisitions-972-reconstruction.geojson",
+      "evidenceDocumentIds": ["doc-pvl-laurentian-1926", "doc-tornau-rus-862-map-1910", "doc-gugk-rybakov-old-rus-1961"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 180000,
+      "derivationNote": "Geometry-verified transcription of Tornau's dotted acquisition layer «Святослава +972». Temporary Sviatoslav-controlled areas separately identified in the legend are excluded. This is a low-confidence scholarly reconstruction, not a surveyed medieval border."
+    },
+    {
+      "id": "frag-kievan-rus-vladimir-acquisitions-1015-reconstruction",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/kievan-rus-vladimir-acquisitions-1015-reconstruction.geojson",
+      "evidenceDocumentIds": ["doc-pvl-laurentian-1926", "doc-tornau-rus-862-map-1910", "doc-gugk-rybakov-old-rus-1961"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 180000,
+      "derivationNote": "Geometry-verified transcription of Tornau's green acquisition layer «Владимира Св. +1015». This is an acquisition layer only and is combined with the previously verified cumulative territory fragments."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-kievan-rus-sviatoslav-end-972",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "0972-12",
+      "historicalDate": {"original":"к 972 году","normalized":"0972","precision":"year","calendar":"source-specific-chronicle-chronology"},
+      "geometryFragmentIds": [
+        "frag-early-rus-rurik-862-reconstruction",
+        "frag-kievan-rus-oleg-acquisitions-912-reconstruction",
+        "frag-kievan-rus-sviatoslav-acquisitions-972-reconstruction"
+      ],
+      "evidenceDocumentIds": ["doc-pvl-laurentian-1926", "doc-tornau-rus-862-map-1910", "doc-gugk-rybakov-old-rus-1961"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Coverage begins in the final month of the source's year label rather than inventing an exact month for acquisitions summarized as +972. The next durable acquisition layer in the same legend is Vladimir +1015; temporary Sviatoslav-controlled regions are excluded.",
+      "validThroughMonth": "1014-12"
+    },
+    {
+      "id": "base-kievan-rus-vladimir-end-1015",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "1015-12",
+      "historicalDate": {"original":"к 1015 году","normalized":"1015","precision":"year","calendar":"source-specific-chronicle-chronology"},
+      "geometryFragmentIds": [
+        "frag-early-rus-rurik-862-reconstruction",
+        "frag-kievan-rus-oleg-acquisitions-912-reconstruction",
+        "frag-kievan-rus-sviatoslav-acquisitions-972-reconstruction",
+        "frag-kievan-rus-vladimir-acquisitions-1015-reconstruction"
+      ],
+      "evidenceDocumentIds": ["doc-pvl-laurentian-1926", "doc-tornau-rus-862-map-1910", "doc-gugk-rybakov-old-rus-1961"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Coverage begins in the final month of the source's year label rather than inventing an exact acquisition date. The next cumulative Tornau acquisition layer is Yaroslav +1054, so this state is bounded through 1053-12.",
+      "validThroughMonth": "1053-12"
+    }
+  ]
+}
