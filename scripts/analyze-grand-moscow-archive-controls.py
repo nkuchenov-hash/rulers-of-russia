@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 ARCHIVE = Path("public/data/territory/archive/grand-moscow.geojson")
+OUT = Path("grand-moscow-archive-controls-report.json")
 
 CONTROLS = {
     "moscow": [37.6173, 55.7558],
@@ -78,7 +79,9 @@ def main():
                 for key, lon_lat in CONTROLS.items()
             }
         report["candidates"].append(item)
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    OUT.write_text(text, encoding="utf-8")
+    print(text, end="")
 
 
 if __name__ == "__main__":
