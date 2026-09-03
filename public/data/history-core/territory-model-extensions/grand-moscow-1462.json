@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-grand-moscow-1462-reconstruction",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/grand-moscow-1462-reconstruction.geojson",
+      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-tornau-rus-1240-1533-map-1910"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 180000,
+      "derivationNote": "Geometry-verified transcription of Tornau 1910's explicitly dated solid salmon layer «Московское В. Кн. въ 1462 г.». Documentary chronology is anchored separately by the state-document publication corpus; geometry remains a low-confidence historical reconstruction, not a surveyed fifteenth-century cadastral border."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-grand-moscow-end-1462",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1462-12",
+      "historicalDate": {"original":"Московское Великое княжество в 1462 г.","normalized":"1462","precision":"year","calendar":"source-specific-historical-atlas-chronology"},
+      "geometryFragmentIds": ["frag-grand-moscow-1462-reconstruction"],
+      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-tornau-rus-1240-1533-map-1910"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Coverage begins in the final month of the source's explicit 1462 state rather than fabricating an exact intra-year transition. Tornau's next separate acquisition layer is Ivan III +1505, so the verified use of this base is bounded through 1504-12.",
+      "validThroughMonth": "1504-12"
+    }
+  ]
+}
