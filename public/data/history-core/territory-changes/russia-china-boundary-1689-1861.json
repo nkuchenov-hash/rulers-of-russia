@@ -101,6 +101,7 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-ussuri-boundary-description-1861-mfa", "doc-peking-1860-mfa"],
       "geometry": {
         "method": "structured-official-description-and-exchanged-maps-pending-georeference",
@@ -125,7 +126,7 @@
         "derivationNote": "The 16 June 1861 protocol states that Russian and Qing commissioners verified and exchanged matching maps and detailed descriptions and made them an additional article to the Peking Treaty. The companion official description supplies the natural-boundary logic and post sequence E/I/K/L/N/O/P/T. Legal route semantics are therefore source-verified. Geometry is intentionally not promoted to geometry-verified until the exchanged maps and the later post-placement description with historical coordinates are transcribed/georeferenced."
       },
       "reviewStatus": "source-verified",
-      "notes": "This supersedes the vague 'research-required' state without asserting unsourced coordinate precision."
+      "notes": "Non-area demarcation of the eastern boundary already legally established by the 1860 Peking acquisition record. This record preserves the 1861 implementation maps, route semantics and post sequence as a separate boundary-geometry dependency without replaying a second sovereign-territory add/remove operation. Exact line geometry remains pending and is not promoted by this classification."
     },
     {
       "id": "territory-1886-south-ussuri-revision-framework",
