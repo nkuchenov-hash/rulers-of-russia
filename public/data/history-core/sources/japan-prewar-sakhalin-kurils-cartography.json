@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "ndl-japan-prewar-sakhalin-kurils-cartography",
+      "title": "Prewar Japanese government cartography of Karafuto and the Kuril Islands in the National Diet Library catalog",
+      "institution": "National Diet Library, Japan",
+      "url": "https://ndlsearch.ndl.go.jp/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Government-produced survey and hydrographic mapping of southern Sakhalin (Karafuto) and the Kuril Islands before 1945",
+      "canonicalUse": ["boundary-geometry", "cartographic-cross-check", "source-discovery"],
+      "notes": "NDL catalog records identify concrete maps produced by the Karafuto Government, Imperial Japanese Land Survey Department and Navy Hydrographic Department. These records locate the authoritative pre-1945 cartographic corpus but do not themselves authorize automatic production geometry. Exact source sheets must be acquired reproducibly, rights-reviewed where applicable, georeferenced and spatially validated before promotion."
+    }
+  ]
+}

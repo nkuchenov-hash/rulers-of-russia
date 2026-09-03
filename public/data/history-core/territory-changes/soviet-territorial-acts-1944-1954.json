@@ -83,11 +83,11 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
+      "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid", "doc-karafuto-1923-government-map-ndl", "doc-kurils-land-survey-map-corpus-ndl", "doc-kurils-hydrographic-maps-1928-1940-ndl"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid"],
-        "derivationNote": "The A2 Soviet act source-verifies the domestic legal/administrative treatment of South Sakhalin and the Kurils. It does not by itself settle the international-recognition track or identify every island polygon; de-facto control and international treaty status remain separate evidence layers."
+        "method": "official-prewar-cartographic-corpus-located-pending-sheet-ingest",
+        "evidenceDocumentIds": ["doc-karafuto-1923-government-map-ndl", "doc-kurils-land-survey-map-corpus-ndl", "doc-kurils-hydrographic-maps-1928-1940-ndl"],
+        "derivationNote": "The A2 Soviet act source-verifies the domestic legal/administrative treatment of South Sakhalin and the Kurils. For spatial reconstruction, the National Diet Library catalog now locates a concrete 1:700,000 Karafuto Government full map of southern Sakhalin and authoritative pre-1945 Kuril mapping produced by the Imperial Japanese Land Survey Department and Navy Hydrographic Department. The cartographic lineage is therefore located, but production geometry remains pending enumeration/acquisition of the complete required sheet set, rights review, controlled georeferencing and spatial validation. These maps do not by themselves settle the international-recognition track; de-facto control and treaty status remain separate evidence layers."
       },
       "reviewStatus": "source-verified"
     },
