@@ -5,14 +5,23 @@
       "id": "territory-1689-nerchinsk-delimitation",
       "eventId": "evt-1689-nerchinsk-treaty",
       "polityId": "russian-tsardom",
-      "effectiveDate": {"original":"27 августа 1689 г.","normalized":"1689-09-06","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "27 августа 1689 г.",
+        "normalized": "1689-09-06",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-nerchinsk-1689-mfa"],
+      "evidenceDocumentIds": [
+        "doc-nerchinsk-1689-mfa"
+      ],
       "geometry": {
         "method": "uncertain-zone",
-        "evidenceDocumentIds": ["doc-nerchinsk-1689-mfa"],
+        "evidenceDocumentIds": [
+          "doc-nerchinsk-1689-mfa"
+        ],
         "derivationNote": "The legal treaty event is source-verified, but an exact single line is not. The official source record notes divergent source-language formulations, ambiguous landmarks, inadequate contemporary mapping and no physical demarcation. Identifiable river/watershed portions may be reconstructed; unresolved portions must remain uncertainty corridors rather than an invented line."
       },
       "reviewStatus": "source-verified",
@@ -22,14 +31,23 @@
       "id": "territory-1727-kyakhta-demarcation",
       "eventId": "evt-1727-kyakhta-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"21 октября 1727 г.","normalized":"1727-11-01","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "21 октября 1727 г.",
+        "normalized": "1727-11-01",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-kyakhta-1727-mfa"],
+      "evidenceDocumentIds": [
+        "doc-kyakhta-1727-mfa"
+      ],
       "geometry": {
         "method": "contemporary-official-map-pending-georeference",
-        "evidenceDocumentIds": ["doc-kyakhta-1727-mfa"],
+        "evidenceDocumentIds": [
+          "doc-kyakhta-1727-mfa"
+        ],
         "derivationNote": "The legal demarcation is source-verified and the official record states that a geodetic survey was undertaken and the new border mapped. Geometry remains below geometry-verified until the Burin/Kyakhta boundary lists and original survey/cartographic sheets are ingested and georeferenced."
       },
       "reviewStatus": "source-verified"
@@ -38,15 +56,32 @@
       "id": "territory-1858-aigun-amur-left-bank",
       "eventId": "evt-1858-aigun-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"утверждение и ратификация в июне 1858 г.","normalized":"1858-06","precision":"month","calendar":"gregorian","note":"Qing approval: 14 June 1858 Gregorian; Russian ratification: 20 June 1858 Gregorian. Exact legal effectiveness within the month remains under review."},
+      "effectiveDate": {
+        "original": "утверждение и ратификация в июне 1858 г.",
+        "normalized": "1858-06",
+        "precision": "month",
+        "calendar": "gregorian",
+        "note": "Qing approval: 14 June 1858 Gregorian; Russian ratification: 20 June 1858 Gregorian. Exact legal effectiveness within the month remains under review."
+      },
       "track": "russian-legal-border",
       "territorialModel": "river-boundary",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+      "evidenceDocumentIds": [
+        "doc-aigun-1858-mfa"
+      ],
       "geometry": {
         "method": "source-verified-river-rule-period-hydrography-pending",
-        "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
-        "routeSemantics": [{"from":"Argun-Amur confluence","to":"Amur mouth","type":"river-bank-allocation","rule":"left/northern bank assigned to Russia"}],
+        "evidenceDocumentIds": [
+          "doc-aigun-1858-mfa"
+        ],
+        "routeSemantics": [
+          {
+            "from": "Argun-Amur confluence",
+            "to": "Amur mouth",
+            "type": "river-bank-allocation",
+            "rule": "left/northern bank assigned to Russia"
+          }
+        ],
         "derivationNote": "The territorial/legal rule is source-verified. Exact display geometry must use period Amur hydrography and treaty/demarcation maps where available; a modern river channel must not be silently substituted for the 1858 river state."
       },
       "reviewStatus": "source-verified"
@@ -55,15 +90,24 @@
       "id": "territory-1858-aigun-ussuri-joint-status",
       "eventId": "evt-1858-aigun-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"утверждение и ратификация в июне 1858 г.","normalized":"1858-06","precision":"month","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "утверждение и ратификация в июне 1858 г.",
+        "normalized": "1858-06",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
       "track": "claim",
       "territorialModel": "mixed",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+      "evidenceDocumentIds": [
+        "doc-aigun-1858-mfa"
+      ],
       "geometry": {
         "method": "source-verified-joint-status",
-        "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
+        "evidenceDocumentIds": [
+          "doc-aigun-1858-mfa"
+        ],
         "derivationNote": "The area between the Ussuri and the sea was source-verifiably left in joint possession pending later delimitation. This is shared legal-status metadata on the claim track, not a Russian sovereign-territory mutation: it must not add the region to Russian core-territory replay before the Peking settlement or require a Russian territory-area polygon. Any optional visualization of the joint possession belongs to a separate claim layer and must use period geometry independently of core territorial materialization."
       },
       "reviewStatus": "source-verified"
@@ -72,22 +116,68 @@
       "id": "territory-1860-peking-ussuri-acquisition",
       "eventId": "evt-1860-peking-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"2 ноября 1860 г.","normalized":"1860-11-14","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "2 ноября 1860 г.",
+        "normalized": "1860-11-14",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-peking-1860-mfa"],
+      "evidenceDocumentIds": [
+        "doc-peking-1860-mfa"
+      ],
       "geometry": {
         "method": "structured-boundary-text-and-attached-map-pending-georeference",
-        "evidenceDocumentIds": ["doc-peking-1860-mfa"],
+        "evidenceDocumentIds": [
+          "doc-peking-1860-mfa"
+        ],
         "routeSemantics": [
-          {"from":"Shilka-Argun confluence","to":"Ussuri mouth","type":"river-boundary","waterbody":"Amur"},
-          {"from":"Ussuri mouth","to":"Sungacha source","type":"river-boundary","waterbodies":["Ussuri","Sungacha"]},
-          {"from":"Sungacha source","to":"Belen-he/Tur mouth","type":"lake-crossing","waterbody":"Lake Khanka"},
-          {"from":"Belen-he/Tur mouth","to":"Hubitu/Hubtu mouth","type":"mountain-watershed"},
-          {"from":"Hubitu/Hubtu mouth","to":"Hubitu/Hubtu source","type":"river-course","waterbody":"Hubitu/Hubtu"},
-          {"from":"Hubitu/Hubtu source","to":"Tumen River","type":"mountain-watershed","rule":"mountains between Hunchun river basin and the sea"},
-          {"from":"watershed terminus","to":"20 Chinese li above Tumen mouth","type":"river-terminal-point","waterbody":"Tumen"}
+          {
+            "from": "Shilka-Argun confluence",
+            "to": "Ussuri mouth",
+            "type": "river-boundary",
+            "waterbody": "Amur"
+          },
+          {
+            "from": "Ussuri mouth",
+            "to": "Sungacha source",
+            "type": "river-boundary",
+            "waterbodies": [
+              "Ussuri",
+              "Sungacha"
+            ]
+          },
+          {
+            "from": "Sungacha source",
+            "to": "Belen-he/Tur mouth",
+            "type": "lake-crossing",
+            "waterbody": "Lake Khanka"
+          },
+          {
+            "from": "Belen-he/Tur mouth",
+            "to": "Hubitu/Hubtu mouth",
+            "type": "mountain-watershed"
+          },
+          {
+            "from": "Hubitu/Hubtu mouth",
+            "to": "Hubitu/Hubtu source",
+            "type": "river-course",
+            "waterbody": "Hubitu/Hubtu"
+          },
+          {
+            "from": "Hubitu/Hubtu source",
+            "to": "Tumen River",
+            "type": "mountain-watershed",
+            "rule": "mountains between Hunchun river basin and the sea"
+          },
+          {
+            "from": "watershed terminus",
+            "to": "20 Chinese li above Tumen mouth",
+            "type": "river-terminal-point",
+            "waterbody": "Tumen"
+          }
         ],
         "derivationNote": "The Peking Treaty source-verifiably defines the eastern boundary and approves an attached red-line map. The route grammar is canonical at source-verified level. Exact map geometry remains pending georeferencing of the signed treaty map and 1861 implementation materials."
       },
@@ -97,31 +187,99 @@
       "id": "territory-1861-ussuri-map-demarcation",
       "eventId": "evt-1861-ussuri-map-exchange",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"16 июня 1861 г.","normalized":"1861-06-28","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "16 июня 1861 г.",
+        "normalized": "1861-06-28",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-ussuri-boundary-description-1861-mfa", "doc-peking-1860-mfa"],
+      "evidenceDocumentIds": [
+        "doc-ussuri-map-exchange-1861-mfa",
+        "doc-ussuri-boundary-description-1861-mfa",
+        "doc-peking-1860-mfa"
+      ],
       "geometry": {
         "method": "structured-official-description-and-exchanged-maps-pending-georeference",
-        "evidenceDocumentIds": ["doc-ussuri-map-exchange-1861-mfa", "doc-ussuri-boundary-description-1861-mfa", "doc-peking-1860-mfa"],
+        "evidenceDocumentIds": [
+          "doc-ussuri-map-exchange-1861-mfa",
+          "doc-ussuri-boundary-description-1861-mfa",
+          "doc-peking-1860-mfa"
+        ],
         "boundaryPosts": [
-          {"id":"E","role":"Ussuri terminus post"},
-          {"id":"I","role":"Sungacha terminus post"},
-          {"id":"K","role":"Belen-he/Tur mouth post"},
-          {"id":"L","role":"watershed post northwest of K"},
-          {"id":"N","role":"junction of Khanka/Muren and Suifun watershed lines"},
-          {"id":"O","role":"Hubitu/Hubtu mouth post"},
-          {"id":"P","role":"Hubitu/Hubtu source/watershed post"},
-          {"id":"T","role":"Tumen left-bank terminal post 20 Chinese li above mouth"}
+          {
+            "id": "E",
+            "role": "Ussuri terminus post"
+          },
+          {
+            "id": "I",
+            "role": "Sungacha terminus post"
+          },
+          {
+            "id": "K",
+            "role": "Belen-he/Tur mouth post"
+          },
+          {
+            "id": "L",
+            "role": "watershed post northwest of K"
+          },
+          {
+            "id": "N",
+            "role": "junction of Khanka/Muren and Suifun watershed lines"
+          },
+          {
+            "id": "O",
+            "role": "Hubitu/Hubtu mouth post"
+          },
+          {
+            "id": "P",
+            "role": "Hubitu/Hubtu source/watershed post"
+          },
+          {
+            "id": "T",
+            "role": "Tumen left-bank terminal post 20 Chinese li above mouth"
+          }
         ],
         "routeSemantics": [
-          {"from":"Ussuri mouth","to":"Sungacha source","type":"natural-river-boundary","waterbodies":["Ussuri","Sungacha"],"postRule":"no intermediate posts; E and I at defined termini"},
-          {"from":"Sungacha source","to":"K","type":"Lake-Khanka-crossing-to-Belen-he-mouth"},
-          {"from":"K","to":"O","type":"watershed-to-Hubitu-mouth","viaPosts":["L","N"]},
-          {"from":"O","to":"P","type":"river-upstream","waterbody":"Hubitu/Hubtu"},
-          {"from":"P","to":"T","type":"watershed","rule":"between Hunchun basin and sea, terminating on Tumen"}
+          {
+            "from": "Ussuri mouth",
+            "to": "Sungacha source",
+            "type": "natural-river-boundary",
+            "waterbodies": [
+              "Ussuri",
+              "Sungacha"
+            ],
+            "postRule": "no intermediate posts; E and I at defined termini"
+          },
+          {
+            "from": "Sungacha source",
+            "to": "K",
+            "type": "Lake-Khanka-crossing-to-Belen-he-mouth"
+          },
+          {
+            "from": "K",
+            "to": "O",
+            "type": "watershed-to-Hubitu-mouth",
+            "viaPosts": [
+              "L",
+              "N"
+            ]
+          },
+          {
+            "from": "O",
+            "to": "P",
+            "type": "river-upstream",
+            "waterbody": "Hubitu/Hubtu"
+          },
+          {
+            "from": "P",
+            "to": "T",
+            "type": "watershed",
+            "rule": "between Hunchun basin and sea, terminating on Tumen"
+          }
         ],
         "derivationNote": "The 16 June 1861 protocol states that Russian and Qing commissioners verified and exchanged matching maps and detailed descriptions and made them an additional article to the Peking Treaty. The companion official description supplies the natural-boundary logic and post sequence E/I/K/L/N/O/P/T. Legal route semantics are therefore source-verified. Geometry is intentionally not promoted to geometry-verified until the exchanged maps and the later post-placement description with historical coordinates are transcribed/georeferenced."
       },
@@ -132,15 +290,25 @@
       "id": "territory-1886-south-ussuri-revision-framework",
       "eventId": "evt-1886-south-ussuri-general-revision",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"22 июня 1886 г.","normalized":"1886-07-04","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "22 июня 1886 г.",
+        "normalized": "1886-07-04",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-south-ussuri-general-protocol-1886-mfa", "doc-ussuri-map-exchange-1861-mfa"],
+      "evidenceDocumentIds": [
+        "doc-south-ussuri-general-protocol-1886-mfa",
+        "doc-ussuri-map-exchange-1861-mfa"
+      ],
       "geometry": {
         "method": "joint-revision-framework",
-        "evidenceDocumentIds": ["doc-south-ussuri-general-protocol-1886-mfa"],
+        "evidenceDocumentIds": [
+          "doc-south-ussuri-general-protocol-1886-mfa"
+        ],
         "derivationNote": "The bilateral commission expressly found portions of the 1861 red-line map insufficiently carefully drawn and initiated re-checking, replacement of principal wooden markers with stone markers, new M/R/S markers and correction of disputed placements. This record opens the 1886 revision sequence but does not itself replace a specific sector geometry."
       },
       "reviewStatus": "source-verified"
@@ -149,17 +317,32 @@
       "id": "territory-1886-south-ussuri-sector1",
       "eventId": "evt-1886-south-ussuri-sector1-verified",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"26 июня 1886 г.","normalized":"1886-07-08","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "26 июня 1886 г.",
+        "normalized": "1886-07-08",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa", "doc-south-ussuri-general-protocol-1886-mfa"],
+      "evidenceDocumentIds": [
+        "doc-south-ussuri-sector1-1886-mfa",
+        "doc-south-ussuri-general-protocol-1886-mfa"
+      ],
       "geometry": {
         "method": "joint-verified-sector-map-pending-georeference",
-        "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa"],
+        "evidenceDocumentIds": [
+          "doc-south-ussuri-sector1-1886-mfa"
+        ],
         "routeSemantics": [
-          {"from":"Tumen/Tumyn-ula sector","to":"Chang-ling astronomical point No. 8","type":"surveyed-demarcated-chain","source":"joint 1886 sector protocol and 1884 Russian survey plan"}
+          {
+            "from": "Tumen/Tumyn-ula sector",
+            "to": "Chang-ling astronomical point No. 8",
+            "type": "surveyed-demarcated-chain",
+            "source": "joint 1886 sector protocol and 1884 Russian survey plan"
+          }
         ],
         "derivationNote": "The first sector was jointly investigated, checked against the 1884 survey and recorded on bilateral maps. Exact vertices remain a map/geodetic-control ingestion dependency."
       },
@@ -170,18 +353,44 @@
       "id": "territory-1886-south-ussuri-sectors2-3-no",
       "eventId": "evt-1886-south-ussuri-sectors2-3-no-verified",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "20 сентября 1886 г.",
+        "normalized": "1886-10-02",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+      "evidenceDocumentIds": [
+        "doc-south-ussuri-sectors2-3-no-1886-mfa"
+      ],
       "geometry": {
         "method": "joint-verified-sector-description-pending-georeference",
-        "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+        "evidenceDocumentIds": [
+          "doc-south-ussuri-sectors2-3-no-1886-mfa"
+        ],
         "routeSemantics": [
-          {"from":"Chang-ling astronomical point No. 8","to":"marker R at Munguchai","type":"surveyed-demarcated-chain","length":"121 versts 497 sazhens","sector":2},
-          {"from":"marker P","to":"mouth of Usha-go/Hubtu","type":"watershed-and-terrain-chain","length":"96 versts 70 sazhens","sector":3},
-          {"from":"marker N","to":"marker O","type":"marker-position-correction","source":"separate 20 September correction protocol"}
+          {
+            "from": "Chang-ling astronomical point No. 8",
+            "to": "marker R at Munguchai",
+            "type": "surveyed-demarcated-chain",
+            "length": "121 versts 497 sazhens",
+            "sector": 2
+          },
+          {
+            "from": "marker P",
+            "to": "mouth of Usha-go/Hubtu",
+            "type": "watershed-and-terrain-chain",
+            "length": "96 versts 70 sazhens",
+            "sector": 3
+          },
+          {
+            "from": "marker N",
+            "to": "marker O",
+            "type": "marker-position-correction",
+            "source": "separate 20 September correction protocol"
+          }
         ],
         "derivationNote": "The 20 September package both verifies sectors 2 and 3 and explicitly corrects the placement of principal posts N and O. The corrected 1886 realization supersedes the uncorrected 1861 post positions for subsequent replay; exact coordinates remain dependent on the jointly checked maps/geodetic records."
       },
@@ -191,19 +400,43 @@
       "id": "territory-1886-south-ussuri-sector6",
       "eventId": "evt-1886-south-ussuri-sector6-verified",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"28 сентября 1886 г.","normalized":"1886-10-10","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "28 сентября 1886 г.",
+        "normalized": "1886-10-10",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
+      "evidenceDocumentIds": [
+        "doc-south-ussuri-sector6-1886-mfa"
+      ],
       "geometry": {
         "method": "joint-verified-sector-description-pending-georeference",
-        "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
+        "evidenceDocumentIds": [
+          "doc-south-ussuri-sector6-1886-mfa"
+        ],
         "routeSemantics": [
-          {"from":"marker M","to":"Lake Khanka at Bai-lin-he mouth","type":"ridge-and-river-chain","length":"90 versts 45 sazhens"},
-          {"from":"marker L","to":"marker K","type":"measured-chain","length":"16 versts 451 sazhens"},
-          {"from":"marker L","to":"Bai-lin-he mouth at Lake Khanka","type":"measured-chain","length":"17 versts 75 sazhens"}
+          {
+            "from": "marker M",
+            "to": "Lake Khanka at Bai-lin-he mouth",
+            "type": "ridge-and-river-chain",
+            "length": "90 versts 45 sazhens"
+          },
+          {
+            "from": "marker L",
+            "to": "marker K",
+            "type": "measured-chain",
+            "length": "16 versts 451 sazhens"
+          },
+          {
+            "from": "marker L",
+            "to": "Bai-lin-he mouth at Lake Khanka",
+            "type": "measured-chain",
+            "length": "17 versts 75 sazhens"
+          }
         ],
         "derivationNote": "The sixth sector was jointly checked and mapped in duplicate. The source contains measured distances and terrain rules but not yet a History Core coordinate realization; no straight interpolation is allowed except where the protocol explicitly says so."
       },
@@ -214,25 +447,69 @@
       "id": "territory-1886-south-ussuri-sectors4-5",
       "eventId": "evt-1886-south-ussuri-sectors4-5-verified",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"3 октября 1886 г.","normalized":"1886-10-15","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "3 октября 1886 г.",
+        "normalized": "1886-10-15",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
+      "evidenceDocumentIds": [
+        "doc-south-ussuri-sectors4-5-1886-mfa",
+        "doc-south-ussuri-sector6-supplement-1886-mfa"
+      ],
       "geometry": {
         "method": "joint-verified-bearing-distance-and-watershed-rules-pending-anchor-georeference",
-        "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
+        "evidenceDocumentIds": [
+          "doc-south-ussuri-sectors4-5-1886-mfa",
+          "doc-south-ussuri-sector6-supplement-1886-mfa"
+        ],
         "routeSemantics": [
-          {"from":"mouth of Usha-go/Hubtu","to":"marker N","type":"straight-bearing-distance","bearing":"northwest 12°04′03″","length":"70 versts 254 sazhens","sector":4,"note":"The source explicitly states that the entire fourth sector follows one straight line."},
-          {"from":"marker N","to":"marker M","type":"watershed-ridge","length":"77 versts 250 sazhens","sector":5},
-          {"from":"marker M","to":"secondary marker 24","type":"measured-route-control","distance":"46 versts 440 sazhens","plannedMarkerYear":1887},
-          {"from":"secondary marker 24","to":"secondary marker 25","type":"measured-route-control","distance":"9 versts 100 sazhens","plannedMarkerYear":1887},
-          {"from":"secondary marker 26","to":"marker L","type":"measured-route-control","distance":"2 versts 300 sazhens","plannedMarkerYear":1887}
+          {
+            "from": "mouth of Usha-go/Hubtu",
+            "to": "marker N",
+            "type": "straight-bearing-distance",
+            "bearing": "northwest 12°04′03″",
+            "length": "70 versts 254 sazhens",
+            "sector": 4,
+            "note": "The source explicitly states that the entire fourth sector follows one straight line."
+          },
+          {
+            "from": "marker N",
+            "to": "marker M",
+            "type": "watershed-ridge",
+            "length": "77 versts 250 sazhens",
+            "sector": 5
+          },
+          {
+            "from": "marker M",
+            "to": "secondary marker 24",
+            "type": "measured-route-control",
+            "distance": "46 versts 440 sazhens",
+            "plannedMarkerYear": 1887
+          },
+          {
+            "from": "secondary marker 24",
+            "to": "secondary marker 25",
+            "type": "measured-route-control",
+            "distance": "9 versts 100 sazhens",
+            "plannedMarkerYear": 1887
+          },
+          {
+            "from": "secondary marker 26",
+            "to": "marker L",
+            "type": "measured-route-control",
+            "distance": "2 versts 300 sazhens",
+            "plannedMarkerYear": 1887
+          }
         ],
         "derivationNote": "The fourth sector provides unusually strong geometric structure: an explicitly straight segment with bilateral bearing and length. It remains below geometry-verified only because neither endpoint has yet been independently transformed into a registered modern display datum. Once a source-backed anchor for O or N is obtained, the historical rule can be materialized without tracing a modern border. The fifth sector remains terrain/watershed geometry and therefore needs mapped vertices."
       },
       "reviewStatus": "source-verified",
-      "notes": "This closes the documented 1886 joint verification sequence through the final 3 October sector protocols while preserving the later physical construction of some secondary signs as a separate implementation detail."
+      "notes": "This closes the documented 1886 joint verification sequence through the final 3 October sector protocols while preserving the later physical construction of some secondary signs as a separate implementation detail.",
+      "geometryAction": "metadata-only"
     }
   ]
 }
