@@ -25,11 +25,12 @@
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-georgievsk-1783-prlib"],
       "geometry": {
-        "method": "source-verified-protection-status-period-area-pending",
+        "method": "source-verified-protection-status",
         "evidenceDocumentIds": ["doc-georgievsk-1783-prlib"],
-        "derivationNote": "The official bilingual treaty printing source-verifies recognition of Russian supreme authority and protection while preserving Kartli-Kakheti as a separate kingdom. Visualization therefore requires a period Kartli-Kakheti polygon on a protection/claim layer, never a 1783 Russian sovereign-territory fill."
+        "derivationNote": "The official bilingual treaty printing source-verifies recognition of Russian supreme authority and protection while preserving Kartli-Kakheti as a separate kingdom. This is therefore political-status metadata on the claim/sphere-of-control track, not a sovereign-territory mutation: it must not add Kartli-Kakheti to the Russian core-territory replay or require a Russian territory-area polygon. Any optional visualization of the protected kingdom belongs to a separate claim/dependency layer and must use period geometry independently of core territorial materialization."
       },
       "reviewStatus": "source-verified"
     },
