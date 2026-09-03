@@ -59,11 +59,12 @@
       "track": "claim",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
       "geometry": {
-        "method": "source-verified-joint-status-area-pending-map",
+        "method": "source-verified-joint-status",
         "evidenceDocumentIds": ["doc-aigun-1858-mfa"],
-        "derivationNote": "The area between the Ussuri and the sea was source-verifiably left in joint possession pending later delimitation. It must be represented as joint/overlapping legal status, never as uncontested Russian sovereign territory before the Peking settlement. Exact area geometry remains dependent on period maps."
+        "derivationNote": "The area between the Ussuri and the sea was source-verifiably left in joint possession pending later delimitation. This is shared legal-status metadata on the claim track, not a Russian sovereign-territory mutation: it must not add the region to Russian core-territory replay before the Peking settlement or require a Russian territory-area polygon. Any optional visualization of the joint possession belongs to a separate claim layer and must use period geometry independently of core territorial materialization."
       },
       "reviewStatus": "source-verified"
     },
