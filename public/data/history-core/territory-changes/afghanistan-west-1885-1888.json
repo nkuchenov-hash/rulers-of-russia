@@ -14,6 +14,7 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-afghan-northwest-final-protocol-1888-ukts", "doc-anglo-russian-afghan-boundary-protocol-1887-hmso", "doc-anglo-russian-afghan-boundary-protocol-1887-russian-official", "doc-afghan-frontier-hari-rud-oxus-1933-govindia", "doc-afghanistan-ussr-western-boundary-ibs26-usdos"],
       "geometry": {
         "method": "structured-boundary-description-plus-maps-pending-full-digitization",
@@ -38,7 +39,7 @@
         "derivationNote": "The line is now encoded as a source-derived sequence of segment semantics rather than an undifferentiated pending line. The official texts prove where the frontier is straight, follows ridge/watershed, follows a river course/thalweg, or relies on mapped/local-demarcation controls. This still does not justify a geometry-verified full polyline: mapped points A-D, the complete 1-19/36-66 pillar synopsis, the later eastern posts and terrain-following vertices must be digitized from the authoritative maps/descriptions before coordinate geometry is promoted."
       },
       "reviewStatus": "source-verified",
-      "notes": "Full legal/demarcated boundary and its segment grammar are source-verified. The seven explicit coordinate controls remain the only geometry-verified western subset until all terrain and mapped controls are digitized."
+      "notes": "This record is the documentary completion/demarcation event and therefore does not itself add or remove territory-area geometry in replay. The seven explicitly coordinate-defined controls remain the separate geometry-verified spatial subset; full boundary-line digitization remains a boundary-overlay task rather than an area mutation."
     },
     {
       "id": "territory-1888-afghan-west-known-controls",
