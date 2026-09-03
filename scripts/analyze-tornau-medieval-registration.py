@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Research-only registration check for the public-domain Tornau 1910 sheets.
 
-The script verifies the exact Commons raster hashes, aligns the medieval sheets to
-our already geometry-verified 862 sheet with feature matching + RANSAC, and
-reports transferred GCP candidates. It NEVER promotes geometry by itself.
+Exact original raster hashes are already pinned in History Core. This diagnostic
+tries the originals first; if Wikimedia rate-limits GitHub-hosted runners, it
+uses a same-dimension visual proxy only for raster-to-raster registration. Proxy
+bytes are never accepted as source evidence and this script never promotes
+geometry by itself.
 """
 
 from __future__ import annotations
@@ -11,8 +13,8 @@ from __future__ import annotations
 import hashlib
 import json
 import tempfile
-import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -64,43 +66,50 @@ REFERENCE_GCPS = [
 ]
 
 
-def download(spec: dict, root: Path) -> Path:
-    target = root / f"tornau-{spec['id']}.gif"
-    delays = [0, 15, 30, 60]
-    data = None
-    last_error = None
-    for attempt, delay in enumerate(delays, start=1):
-        if delay:
-            print(f"Wikimedia backoff for {spec['id']}: {delay}s before attempt {attempt}", flush=True)
-            time.sleep(delay)
-        request = urllib.request.Request(
-            spec["url"],
-            headers={
-                "User-Agent": "RulersOfRussiaHistoryCore/1.0 (historical-map research; contact via github.com/nkuchenov-hash/rulers-of-russia)",
-                "Accept": "image/gif,image/*;q=0.8,*/*;q=0.5",
-            },
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=90) as response:
-                data = response.read()
-            break
-        except urllib.error.HTTPError as error:
-            last_error = error
-            if error.code != 429 or attempt == len(delays):
-                raise
-            print(f"Wikimedia returned 429 for {spec['id']} on attempt {attempt}; retrying", flush=True)
-    if data is None:
-        raise RuntimeError(f"Could not download {spec['id']}: {last_error}")
-    digest = hashlib.sha256(data).hexdigest()
-    if digest != spec["sha256"]:
-        raise RuntimeError(f"SHA mismatch for {spec['id']}: {digest}")
+def request_bytes(url: str) -> bytes:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "RulersOfRussiaHistoryCore/1.0 (historical-map research; github.com/nkuchenov-hash/rulers-of-russia)",
+            "Accept": "image/*,*/*;q=0.5",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=90) as response:
+        return response.read()
+
+
+def proxy_url(spec: dict) -> str:
+    source = spec["url"].removeprefix("https://")
+    encoded = urllib.parse.quote(source, safe="/%")
+    return (
+        "https://images.weserv.nl/?url=" + encoded
+        + f"&w={spec['width']}&h={spec['height']}&fit=fill&output=png"
+    )
+
+
+def download_registration_image(spec: dict, root: Path) -> tuple[Path, str]:
+    target = root / f"tornau-{spec['id']}.img"
+    mode = "exact-original"
+    try:
+        data = request_bytes(spec["url"])
+        digest = hashlib.sha256(data).hexdigest()
+        if digest != spec["sha256"]:
+            raise RuntimeError(f"SHA mismatch for {spec['id']}: {digest}")
+        print(f"Verified exact raster {spec['id']}: sha256={digest}, bytes={len(data)}", flush=True)
+    except urllib.error.HTTPError as error:
+        if error.code != 429:
+            raise
+        mode = "visual-proxy-fallback"
+        purl = proxy_url(spec)
+        print(f"Wikimedia 429 for {spec['id']}; using same-dimension proxy for registration only", flush=True)
+        data = request_bytes(purl)
     target.write_bytes(data)
-    print(f"Verified raster {spec['id']}: sha256={digest}, bytes={len(data)}", flush=True)
-    return target
+    return target, mode
 
 
 def read_gray(path: Path, spec: dict) -> np.ndarray:
-    image = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+    raw = np.frombuffer(path.read_bytes(), dtype=np.uint8)
+    image = cv2.imdecode(raw, cv2.IMREAD_GRAYSCALE)
     if image is None:
         raise RuntimeError(f"Could not decode {path}")
     height, width = image.shape[:2]
@@ -150,17 +159,13 @@ def align(reference: np.ndarray, target: np.ndarray, target_id: str) -> dict:
     predicted = cv2.perspectiveTransform(inlier_ref.reshape(-1, 1, 2), H).reshape(-1, 2)
     actual = inlier_target.reshape(-1, 2)
     forward_error = np.linalg.norm(predicted - actual, axis=1)
-
     H_inv = np.linalg.inv(H)
-    roundtrip = cv2.perspectiveTransform(
-        cv2.perspectiveTransform(inlier_ref.reshape(-1, 1, 2), H), H_inv
-    ).reshape(-1, 2)
+    roundtrip = cv2.perspectiveTransform(cv2.perspectiveTransform(inlier_ref.reshape(-1, 1, 2), H), H_inv).reshape(-1, 2)
     roundtrip_error = np.linalg.norm(roundtrip - inlier_ref.reshape(-1, 2), axis=1)
 
     transferred = []
     for gcp_id, x, y, lon, lat in REFERENCE_GCPS:
-        source = np.float32([[[x, y]]])
-        px = cv2.perspectiveTransform(source, H)[0, 0]
+        px = cv2.perspectiveTransform(np.float32([[[x, y]]]), H)[0, 0]
         transferred.append({
             "id": gcp_id,
             "pixel": [round(float(px[0]), 2), round(float(px[1]), 2)],
@@ -174,15 +179,12 @@ def align(reference: np.ndarray, target: np.ndarray, target_id: str) -> dict:
     fstats = error_stats(forward_error)
     rstats = error_stats(roundtrip_error)
     reusable = (
-        len(good) >= 80
-        and inlier_count >= 50
-        and ratio >= 0.30
+        len(good) >= 80 and inlier_count >= 50 and ratio >= 0.30
         and fstats["median"] is not None and fstats["median"] <= 3.0
         and fstats["p95"] is not None and fstats["p95"] <= 8.0
         and rstats["median"] is not None and rstats["median"] <= 0.1
         and 0.65 <= abs(determinant) <= 1.45
     )
-
     return {
         "target": target_id,
         "candidateReusable": reusable,
@@ -195,34 +197,33 @@ def align(reference: np.ndarray, target: np.ndarray, target_id: str) -> dict:
         "linearDeterminant": round(determinant, 6),
         "homographyReferenceToTarget": [[round(float(v), 10) for v in row] for row in H],
         "transferredGcps": transferred,
-        "warning": "Transferred GCPs are candidates only. They require visual/independent-anchor validation before any production recipe or geometry promotion.",
+        "warning": "Transferred GCPs are candidates only; independently validate anchors before production use.",
     }
 
 
 def main() -> None:
     with tempfile.TemporaryDirectory(prefix="tornau-registration-") as tmp:
         root = Path(tmp)
-        ref_path = download(REFERENCE, root)
+        ref_path, ref_mode = download_registration_image(REFERENCE, root)
         ref = read_gray(ref_path, REFERENCE)
         results = []
+        modes = {REFERENCE["id"]: ref_mode}
         for spec in TARGETS:
-            # Avoid burst requests to upload.wikimedia.org; exact hash verification
-            # means we cannot silently substitute a thumbnail or recompressed mirror.
-            time.sleep(8)
-            target_path = download(spec, root)
+            target_path, mode = download_registration_image(spec, root)
+            modes[spec["id"]] = mode
             target = read_gray(target_path, spec)
             results.append(align(ref, target, spec["id"]))
 
     report = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "purpose": "research-only batch registration diagnostics; does not promote History Core geometry",
+        "sourceIntegrity": "Original SHA-256 values are pinned in History Core; any visual proxy fallback is registration-only and cannot satisfy source provenance.",
+        "imageModes": modes,
         "reference": {"id": REFERENCE["id"], "sha256": REFERENCE["sha256"]},
         "targets": results,
         "allCandidateReusable": all(item.get("candidateReusable") is True for item in results),
     }
-    Path("tornau-medieval-registration-report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    Path("tornau-medieval-registration-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("TORNAU_MEDIEVAL_REGISTRATION_REPORT")
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
