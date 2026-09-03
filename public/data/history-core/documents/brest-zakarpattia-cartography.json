@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-brest-1918-treaty-map-pa-aa",
+      "sourceCollectionId": "pa-aa-brest-1918-treaty-map",
+      "title": "Map annex 1 to the Treaty of Brest-Litovsk (German original, archival reproduction)",
+      "institution": "Politisches Archiv des Auswärtigen Amts",
+      "url": "https://commons.wikimedia.org/wiki/File:Brest-Litovsk_Siebert.jpg",
+      "tier": "A1-archival-original",
+      "documentType": "treaty-map",
+      "date": {"original":"March 1918","normalized":"1918-03","precision":"month","calendar":"gregorian"},
+      "authority": ["Governments of the Central Powers", "Russian Soviet Federative Socialist Republic"],
+      "publicationCitation": "Annex 1 map to the German copy of the Treaty of Brest-Litovsk, held by the Politisches Archiv des Auswärtigen Amts; digitized excerpt reproduced on Wikimedia Commons.",
+      "notes": "The archival reproduction shows the treaty demarcation line in blue. It locates primary treaty cartography and removes the generic source-discovery state, but does not itself constitute a fully georeferenced production line."
+    },
+    {
+      "id": "doc-zakarpattia-1945-unts",
+      "sourceCollectionId": "unts-zakarpattia-1945-boundary",
+      "title": "Treaty concerning the Trans-Carpathian Ukraine, signed at Moscow on 29 June 1945",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20504/v504.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {"original":"29 June 1945","normalized":"1945-06-29","precision":"day","calendar":"gregorian"},
+      "authority": ["Czechoslovak Republic", "Union of Soviet Socialist Republics"],
+      "publicationCitation": "United Nations Treaty Series, vol. 504, No. 607, pp. 299 ff.",
+      "notes": "Article 1 states that the frontier between Slovakia and Trans-Carpathian Ukraine as it existed on 29 September 1938, with specified changes, becomes the Czechoslovak-USSR frontier as shown on the attached map."
+    },
+    {
+      "id": "doc-zakarpattia-demarcation-1974-unts",
+      "sourceCollectionId": "unts-zakarpattia-1945-boundary",
+      "title": "Agreement concerning the regime of the Czechoslovak-Soviet State frontier and co-operation and mutual assistance in frontier questions",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20971/v971.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "frontier-agreement",
+      "date": {"original":"10 February 1973; entered into force 13 July 1974","normalized":"1974-07-13","precision":"day","calendar":"gregorian"},
+      "authority": ["Czechoslovak Socialist Republic", "Union of Soviet Socialist Republics"],
+      "publicationCitation": "United Nations Treaty Series, vol. 971, No. 14064, Article 1.",
+      "notes": "Article 1 confirms that the frontier is defined by Article 1 of the 1945 treaty and identifies the authoritative demarcation documents: the Descriptive Protocol signed at Uzhgorod on 8 May 1946 and its album of maps, cartographic materials and geodetic studies for the frontier demarcated in November 1945-April 1946."
+    }
+  ]
+}
