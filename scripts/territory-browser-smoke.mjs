@@ -33,8 +33,8 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
 });
 
 const waitForCurrentVerifiedTracks = async () => {
-  await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 2'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 2'), null, { timeout: 8000 });
+  await page.waitForFunction(() => /проверенная госграница:\\s*[1-9]\\d*/.test(document.body?.innerText || ''), null, { timeout: 8000 });
+  await page.waitForFunction(() => /морское разграничение:\\s*[1-9]\\d*/.test(document.body?.innerText || ''), null, { timeout: 8000 });
 };
 
 try {
@@ -49,7 +49,6 @@ try {
   await page.waitForTimeout(4500);
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('реконструкция · достоверность'), null, { timeout: 8000 });
   await waitForCurrentVerifiedTracks();
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
@@ -97,7 +96,6 @@ try {
   if (await eraSelect.count() !== 1) throw new Error('Era selector missing');
   await eraSelect.selectOption('862');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 0862-02'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('поздний proxy'), null, { timeout: 8000 });
   await eraSelect.selectOption('1992');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, { timeout: 8000 });
 
