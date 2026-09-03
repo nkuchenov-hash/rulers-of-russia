@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - scripts/analyze-tornau-medieval-registration.py
+      - scripts/capture-tornau-medieval-diagnostics.py
       - public/data/history-core/raster-geometry-recipes/**
       - .github/workflows/tornau-medieval-registration.yml
   workflow_dispatch:
@@ -31,9 +32,19 @@ jobs:
       - name: Analyze Tornau medieval raster registration
         run: python scripts/analyze-tornau-medieval-registration.py
 
+      - name: Capture diagnostic rasters
+        run: python scripts/capture-tornau-medieval-diagnostics.py
+
       - name: Upload registration report
         uses: actions/upload-artifact@v4
         with:
           name: tornau-medieval-registration-report
           path: tornau-medieval-registration-report.json
+          if-no-files-found: error
+
+      - name: Upload diagnostic rasters
+        uses: actions/upload-artifact@v4
+        with:
+          name: tornau-medieval-diagnostic-rasters
+          path: tornau-medieval-diagnostics/*.png
           if-no-files-found: error
