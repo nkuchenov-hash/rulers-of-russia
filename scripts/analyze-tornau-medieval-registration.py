@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import hashlib
 import json
-import math
 import tempfile
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -65,13 +66,36 @@ REFERENCE_GCPS = [
 
 def download(spec: dict, root: Path) -> Path:
     target = root / f"tornau-{spec['id']}.gif"
-    request = urllib.request.Request(spec["url"], headers={"User-Agent": "rulers-of-russia-history-core/1.0"})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        data = response.read()
+    delays = [0, 15, 30, 60]
+    data = None
+    last_error = None
+    for attempt, delay in enumerate(delays, start=1):
+        if delay:
+            print(f"Wikimedia backoff for {spec['id']}: {delay}s before attempt {attempt}", flush=True)
+            time.sleep(delay)
+        request = urllib.request.Request(
+            spec["url"],
+            headers={
+                "User-Agent": "RulersOfRussiaHistoryCore/1.0 (historical-map research; contact via github.com/nkuchenov-hash/rulers-of-russia)",
+                "Accept": "image/gif,image/*;q=0.8,*/*;q=0.5",
+            },
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=90) as response:
+                data = response.read()
+            break
+        except urllib.error.HTTPError as error:
+            last_error = error
+            if error.code != 429 or attempt == len(delays):
+                raise
+            print(f"Wikimedia returned 429 for {spec['id']} on attempt {attempt}; retrying", flush=True)
+    if data is None:
+        raise RuntimeError(f"Could not download {spec['id']}: {last_error}")
     digest = hashlib.sha256(data).hexdigest()
     if digest != spec["sha256"]:
         raise RuntimeError(f"SHA mismatch for {spec['id']}: {digest}")
     target.write_bytes(data)
+    print(f"Verified raster {spec['id']}: sha256={digest}, bytes={len(data)}", flush=True)
     return target
 
 
@@ -82,8 +106,6 @@ def read_gray(path: Path, spec: dict) -> np.ndarray:
     height, width = image.shape[:2]
     if (width, height) != (spec["width"], spec["height"]):
         raise RuntimeError(f"Unexpected dimensions for {spec['id']}: {width}x{height}")
-    # Local contrast improves matching of shared rivers/coastlines while reducing
-    # dependence on the historical fill colours we actually want to trace later.
     return cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(image)
 
 
@@ -184,6 +206,9 @@ def main() -> None:
         ref = read_gray(ref_path, REFERENCE)
         results = []
         for spec in TARGETS:
+            # Avoid burst requests to upload.wikimedia.org; exact hash verification
+            # means we cannot silently substitute a thumbnail or recompressed mirror.
+            time.sleep(8)
             target_path = download(spec, root)
             target = read_gray(target_path, spec)
             results.append(align(ref, target, spec["id"]))
@@ -195,7 +220,9 @@ def main() -> None:
         "targets": results,
         "allCandidateReusable": all(item.get("candidateReusable") is True for item in results),
     }
-    Path("tornau-medieval-registration-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    Path("tornau-medieval-registration-report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print("TORNAU_MEDIEVAL_REGISTRATION_REPORT")
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
