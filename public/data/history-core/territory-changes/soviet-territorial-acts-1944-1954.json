@@ -83,13 +83,15 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-south-sakhalin-kurils-1946-ebid", "doc-karafuto-1923-government-map-ndl", "doc-kurils-land-survey-map-corpus-ndl", "doc-kurils-hydrographic-maps-1928-1940-ndl"],
       "geometry": {
-        "method": "official-prewar-cartographic-corpus-located-pending-sheet-ingest",
+        "method": "domestic-legal-status-metadata",
         "evidenceDocumentIds": ["doc-karafuto-1923-government-map-ndl", "doc-kurils-land-survey-map-corpus-ndl", "doc-kurils-hydrographic-maps-1928-1940-ndl"],
-        "derivationNote": "The A2 Soviet act source-verifies the domestic legal/administrative treatment of South Sakhalin and the Kurils. For spatial reconstruction, the National Diet Library catalog now locates a concrete 1:700,000 Karafuto Government full map of southern Sakhalin and authoritative pre-1945 Kuril mapping produced by the Imperial Japanese Land Survey Department and Navy Hydrographic Department. The cartographic lineage is therefore located, but production geometry remains pending enumeration/acquisition of the complete required sheet set, rights review, controlled georeferencing and spatial validation. These maps do not by themselves settle the international-recognition track; de-facto control and treaty status remain separate evidence layers."
+        "derivationNote": "The A2 Soviet act source-verifies the domestic legal/administrative treatment of South Sakhalin and the Kurils by extending Soviet nationalization to land and economic objects after the military events of 1945. It does not itself define a new external boundary, establish the de-facto-control transition, or settle international title, so it is documentary status metadata rather than a separate core-territory area mutation. The National Diet Library cartographic corpus remains useful evidence for a future source-backed reconstruction of the relevant islands on the appropriate control/legal tracks, but that geometry must be attached to the actual spatial transition rather than replaying the 2 February 1946 nationalization decree as an acquisition."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "Domestic legal-status milestone only. De-facto control, external-boundary geometry and international treaty status remain separate spatial/evidence tracks."
     },
     {
       "id": "territory-1954-crimea-internal-transfer",
