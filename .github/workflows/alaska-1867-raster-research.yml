@@ -1,0 +1,41 @@
+name: Alaska 1867 raster research
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/capture-alaska-1867-raster.py
+      - .github/workflows/alaska-1867-raster-research.yml
+      - public/data/history-core/raster-geometry-recipes/alaska-1867-lindenkohl.json
+      - public/data/history-core/territory-model-extensions/alaska-1867.json
+      - public/data/history-core/territory-changes/caucasus-alaska-1813-1867.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image dependency
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Capture official 1867 Alaska map raster
+        run: python scripts/capture-alaska-1867-raster.py
+
+      - name: Upload raster and fingerprint
+        uses: actions/upload-artifact@v4
+        with:
+          name: alaska-1867-diagnostics
+          path: alaska-1867-diagnostics/*
+          if-no-files-found: error
