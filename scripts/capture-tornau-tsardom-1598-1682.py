@@ -31,6 +31,14 @@ STATE_1598_SWATCH = (103, 209, 154, 229)
 # colour overlap statistics are not inflated by page furniture or inset maps.
 MAIN_MAP_BODY = (430, 82, 1395, 1390)
 
+# Specificity diagnostics intentionally stay conservative. A colour must be
+# represented by several pixels in the printed legend sample and be at least
+# twice as concentrated there as it is across the map body. This does not make
+# it territory geometry; it only removes ubiquitous paper/base-fill colours
+# from the next connected-component review.
+SPECIFICITY_MIN_SWATCH_PIXELS = 5
+SPECIFICITY_MIN_ENRICHMENT = 2.0
+
 
 def fetch() -> bytes:
     req = urllib.request.Request(SOURCE_URL, headers={"User-Agent": "rulers-of-russia-history-core/1.0"})
@@ -38,10 +46,17 @@ def fetch() -> bytes:
         return response.read()
 
 
+def pixel_counter(image: Image.Image) -> Counter:
+    """Count pixels without relying on Pillow's deprecated Image.getdata path."""
+    if hasattr(image, "get_flattened_data"):
+        return Counter(image.get_flattened_data())
+    return Counter(image.getdata())
+
+
 def ranked_palette(image: Image.Image, limit: int) -> list[dict]:
     return [
         {"rank": rank, "rgb": list(color), "pixelCount": count}
-        for rank, (color, count) in enumerate(Counter(image.getdata()).most_common(limit), start=1)
+        for rank, (color, count) in enumerate(pixel_counter(image).most_common(limit), start=1)
     ]
 
 
@@ -95,6 +110,43 @@ def connected_components(image: Image.Image, palette: set[tuple[int, int, int]],
     return components[:limit]
 
 
+def palette_specificity(
+    swatch_fill: Counter,
+    body_counter: Counter,
+    swatch_pixel_count: int,
+    body_pixel_count: int,
+) -> list[dict]:
+    """Rank legend colours by normalized concentration relative to the map body."""
+    ranked = []
+    for color, legend_count in swatch_fill.items():
+        if legend_count < SPECIFICITY_MIN_SWATCH_PIXELS:
+            continue
+        body_count = int(body_counter.get(color, 0))
+        if body_count <= 0:
+            continue
+        legend_share = legend_count / swatch_pixel_count
+        body_share = body_count / body_pixel_count
+        enrichment = legend_share / body_share if body_share else None
+        ranked.append({
+            "rgb": list(color),
+            "legendPixelCount": int(legend_count),
+            "mainMapPixelCount": body_count,
+            "legendShare": round(legend_share, 8),
+            "mainMapShare": round(body_share, 8),
+            "legendToMapEnrichment": round(enrichment, 4),
+            "passesSpecificityGate": enrichment >= SPECIFICITY_MIN_ENRICHMENT,
+        })
+    ranked.sort(
+        key=lambda item: (
+            item["legendToMapEnrichment"],
+            item["legendPixelCount"],
+            -item["mainMapPixelCount"],
+        ),
+        reverse=True,
+    )
+    return ranked
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     raw = fetch()
@@ -107,10 +159,10 @@ def main() -> None:
     rgb = image.convert("RGB")
     # Exclude a narrow scan/page edge while retaining the map body and inset legends.
     crop = rgb.crop((35, 35, width - 35, height - 35))
-    colors = Counter(crop.getdata()).most_common(48)
+    colors = pixel_counter(crop).most_common(48)
 
     swatch = rgb.crop(STATE_1598_SWATCH)
-    swatch_counter = Counter(swatch.getdata())
+    swatch_counter = pixel_counter(swatch)
     # Ignore near-black hatch/outline pixels when ranking candidate fill colours,
     # but preserve the complete swatch histogram separately in the report.
     swatch_fill = Counter({
@@ -121,7 +173,7 @@ def main() -> None:
     swatch_colors = {color for color, _ in swatch_top}
 
     map_body = rgb.crop(MAIN_MAP_BODY)
-    body_counter = Counter(map_body.getdata())
+    body_counter = pixel_counter(map_body)
     overlap = [
         {
             "rgb": list(color),
@@ -133,13 +185,28 @@ def main() -> None:
     ]
     overlap.sort(key=lambda item: (item["mainMapPixelCount"], item["legendPixelCount"]), reverse=True)
 
-    # Also expose all map-body colours that are exact members of the dominant
-    # legend palette, useful for connected-component tracing in a later reviewed step.
+    # Exact palette overlap is intentionally retained as a broad diagnostic so
+    # we can measure how much the specificity gate removes rather than hiding
+    # the original ambiguity.
     legend_matched_map_pixels = sum(body_counter.get(color, 0) for color in swatch_colors)
     components = connected_components(map_body, swatch_colors)
 
+    specificity = palette_specificity(
+        swatch_fill,
+        body_counter,
+        swatch.width * swatch.height,
+        map_body.width * map_body.height,
+    )
+    specific_colors = {
+        tuple(item["rgb"])
+        for item in specificity
+        if item["passesSpecificityGate"]
+    }
+    specificity_matched_map_pixels = sum(body_counter.get(color, 0) for color in specific_colors)
+    specificity_components = connected_components(map_body, specific_colors)
+
     report = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "purpose": "research-only Tornau 1598-1682 production-source and signed-legend diagnostics; no geometry promotion",
         "source": {
             "page": SOURCE_PAGE,
@@ -169,9 +236,19 @@ def main() -> None:
             "legendMatchedMainMapPixelCount": int(legend_matched_map_pixels),
             "largestExactPaletteConnectedComponents": components,
             "connectedComponentInterpretation": "These are diagnostic exact-colour islands only. Bounding boxes expose whether the legend palette forms coherent map regions or is dispersed through scan/terrain/background colours; they are not polygons and must not be promoted directly.",
-            "interpretation": "The printed 1598 state swatch is hatched/multi-colour. Candidate production pixels must be selected from this exact swatch palette and then reviewed as spatial components; no single RGB is declared to equal the historical state.",
+            "paletteSpecificity": {
+                "method": "normalized legend-share divided by normalized main-map-share for each exact RGB",
+                "minimumLegendPixels": SPECIFICITY_MIN_SWATCH_PIXELS,
+                "minimumEnrichment": SPECIFICITY_MIN_ENRICHMENT,
+                "rankedColors": specificity,
+                "passingColorCount": len(specific_colors),
+                "matchedMainMapPixelCount": int(specificity_matched_map_pixels),
+                "largestPassingPaletteConnectedComponents": specificity_components,
+                "interpretation": "The gate removes colours that are common across the whole sheet even when they occur in the 1598 swatch. Passing colours remain research candidates only; spatial controls and same-sheet georeferencing are still mandatory before any trace can be promoted.",
+            },
+            "interpretation": "The printed 1598 state swatch is hatched/multi-colour. Candidate production pixels must be selected from this exact swatch palette, ranked for legend specificity, and then reviewed as spatial components; no single RGB is declared to equal the historical state.",
         },
-        "warning": "Do not promote any colour or boundary to production geometry until legend meaning, same-sheet georeferencing, connected-component review, spatial controls and source-period interpretation are reviewed.",
+        "warning": "Do not promote any colour or boundary to production geometry until legend meaning, same-sheet georeferencing, specificity/component review, spatial controls and source-period interpretation are reviewed.",
     }
     (OUT / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
