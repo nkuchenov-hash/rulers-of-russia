@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import urllib.request
-from collections import Counter
+from collections import Counter, deque
 from io import BytesIO
 from pathlib import Path
 
@@ -43,6 +43,56 @@ def ranked_palette(image: Image.Image, limit: int) -> list[dict]:
         {"rank": rank, "rgb": list(color), "pixelCount": count}
         for rank, (color, count) in enumerate(Counter(image.getdata()).most_common(limit), start=1)
     ]
+
+
+def connected_components(image: Image.Image, palette: set[tuple[int, int, int]], limit: int = 40) -> list[dict]:
+    """Return largest exact-palette components without interpreting them as historical geometry."""
+    width, height = image.size
+    pixels = image.load()
+    candidate = bytearray(width * height)
+    for y in range(height):
+        row = y * width
+        for x in range(width):
+            if pixels[x, y] in palette:
+                candidate[row + x] = 1
+
+    visited = bytearray(width * height)
+    components: list[dict] = []
+    for y0 in range(height):
+        for x0 in range(width):
+            start = y0 * width + x0
+            if not candidate[start] or visited[start]:
+                continue
+            visited[start] = 1
+            queue = deque([(x0, y0)])
+            count = 0
+            min_x = max_x = x0
+            min_y = max_y = y0
+            while queue:
+                x, y = queue.popleft()
+                count += 1
+                min_x = min(min_x, x)
+                max_x = max(max_x, x)
+                min_y = min(min_y, y)
+                max_y = max(max_y, y)
+                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    if 0 <= nx < width and 0 <= ny < height:
+                        idx = ny * width + nx
+                        if candidate[idx] and not visited[idx]:
+                            visited[idx] = 1
+                            queue.append((nx, ny))
+            components.append({
+                "pixelCount": count,
+                "bodyPixelBox": [min_x, min_y, max_x + 1, max_y + 1],
+                "sourcePixelBox": [
+                    MAIN_MAP_BODY[0] + min_x,
+                    MAIN_MAP_BODY[1] + min_y,
+                    MAIN_MAP_BODY[0] + max_x + 1,
+                    MAIN_MAP_BODY[1] + max_y + 1,
+                ],
+            })
+    components.sort(key=lambda item: item["pixelCount"], reverse=True)
+    return components[:limit]
 
 
 def main() -> None:
@@ -86,9 +136,10 @@ def main() -> None:
     # Also expose all map-body colours that are exact members of the dominant
     # legend palette, useful for connected-component tracing in a later reviewed step.
     legend_matched_map_pixels = sum(body_counter.get(color, 0) for color in swatch_colors)
+    components = connected_components(map_body, swatch_colors)
 
     report = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "purpose": "research-only Tornau 1598-1682 production-source and signed-legend diagnostics; no geometry promotion",
         "source": {
             "page": SOURCE_PAGE,
@@ -116,6 +167,8 @@ def main() -> None:
             "mainMapBodyPixelBox": list(MAIN_MAP_BODY),
             "dominantLegendColorsPresentInMainMap": overlap,
             "legendMatchedMainMapPixelCount": int(legend_matched_map_pixels),
+            "largestExactPaletteConnectedComponents": components,
+            "connectedComponentInterpretation": "These are diagnostic exact-colour islands only. Bounding boxes expose whether the legend palette forms coherent map regions or is dispersed through scan/terrain/background colours; they are not polygons and must not be promoted directly.",
             "interpretation": "The printed 1598 state swatch is hatched/multi-colour. Candidate production pixels must be selected from this exact swatch palette and then reviewed as spatial components; no single RGB is declared to equal the historical state.",
         },
         "warning": "Do not promote any colour or boundary to production geometry until legend meaning, same-sheet georeferencing, connected-component review, spatial controls and source-period interpretation are reviewed.",
