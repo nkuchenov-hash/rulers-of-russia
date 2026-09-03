@@ -85,9 +85,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "recognize",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-final-partition-convention-1797-prlib"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-final-partition-convention-1797-prlib"],"derivationNote":"The official final convention source-verifies the legal settlement. Use its referenced possessions to validate the external boundary resulting from the partitions; do not use it to invent changes already legally effective earlier."},
-      "reviewStatus": "source-verified"
+      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-final-partition-convention-1797-prlib"],"derivationNote":"The official final convention source-verifies the concluding legal recognition of possessions already established by the earlier partition settlements. It is a validation/recognition layer over the existing Russian legal-border state, not a fresh 1797 area delta; use its referenced possessions to cross-check the external boundary without adding territory again."},
+      "reviewStatus": "source-verified",
+      "notes": "Final recognition/settlement only. Territorial changes already legally effective under the earlier partition acts and treaties must not be replayed a second time in January 1797."
     },
     {
       "id": "territory-1809-finland-effective",
