@@ -7,12 +7,13 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "validate:history": "node scripts/validate-history-core.mjs",
-    "validate:history-geometry": "node scripts/check-history-geometry-recipes.mjs && node scripts/check-history-raster-geometry-recipes.mjs && node scripts/test-raster-georeference.mjs",
-    "materialize:history-geometry": "node scripts/build-history-geometry.mjs && node scripts/build-history-raster-geometry.mjs",
-    "materialize:history-territory": "node scripts/materialize-history-territory.mjs",
-    "materialize:history-boundaries": "node scripts/build-history-boundary-index.mjs",
-    "materialize:history": "npm run materialize:history-geometry && npm run materialize:history-territory && npm run materialize:history-boundaries && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs"
+    "prepare:history-model": "node scripts/apply-history-model-extensions.mjs",
+    "validate:history": "npm run prepare:history-model && node scripts/validate-history-core.mjs",
+    "validate:history-geometry": "npm run prepare:history-model && node scripts/check-history-geometry-recipes.mjs && node scripts/check-history-raster-geometry-recipes.mjs && node scripts/test-raster-georeference.mjs",
+    "materialize:history-geometry": "npm run prepare:history-model && node scripts/build-history-geometry.mjs && node scripts/build-history-raster-geometry.mjs",
+    "materialize:history-territory": "npm run prepare:history-model && node scripts/materialize-history-territory.mjs",
+    "materialize:history-boundaries": "npm run prepare:history-model && node scripts/build-history-boundary-index.mjs",
+    "materialize:history": "npm run prepare:history-model && npm run materialize:history-geometry && node scripts/materialize-history-territory.mjs && node scripts/build-history-boundary-index.mjs && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs"
   },
   "dependencies": {
     "@mapbox/geojson-rewind": "0.5.2",
