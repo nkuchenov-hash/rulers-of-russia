@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - scripts/capture-tornau-tsardom-1598-1682.py
+      - scripts/analyze-tornau-tsardom-registration.py
       - .github/workflows/tornau-tsardom-1598-1682-research.yml
   workflow_dispatch:
 
@@ -19,10 +20,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install Pillow
-        run: python -m pip install --disable-pip-version-check pillow
-      - name: Capture public-domain Tornau sheet and diagnostics
+      - name: Install raster research dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy opencv-python-headless
+      - name: Capture public-domain Tornau sheet and palette diagnostics
         run: python scripts/capture-tornau-tsardom-1598-1682.py
+      - name: Measure same-atlas registration candidate
+        run: python scripts/analyze-tornau-tsardom-registration.py
       - name: Upload reproducible diagnostics
         uses: actions/upload-artifact@v4
         with:
