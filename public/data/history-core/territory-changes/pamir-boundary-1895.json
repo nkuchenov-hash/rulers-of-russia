@@ -14,14 +14,15 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-pamir-1895-ten-protocols-bl-qdl", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
       "geometry": {
         "method": "signed-commission-map-and-boundary-description",
         "evidenceDocumentIds": ["doc-pamir-boundary-commission-report-1897-govindia", "doc-pamir-joint-commission-map-1895-bl-qdl", "doc-pamir-1895-ten-protocols-bl-qdl"],
-        "derivationNote": "The signed Joint Commission map and official report verify the complete demarcated boundary and its segment semantics, but the full trace is not yet digitized. The report explicitly distinguishes watershed/crest/spur portions and a river portion following the middle of the Aksu stream. Therefore the twelve pillars and named geodetic controls must not be connected by arbitrary straight segments. The signed commission map is the canonical source for future source-backed tracing between control points."
+        "derivationNote": "The signed Joint Commission map and official report verify the complete demarcated boundary and its segment semantics, but the full trace is not yet digitized. The report explicitly distinguishes watershed/crest/spur portions and a river portion following the middle of the Aksu stream. Therefore the twelve pillars and named geodetic controls must not be connected by arbitrary straight segments. The signed commission map is the canonical source for future source-backed tracing between control points. This final protocol records completion/demarcation of the line and does not itself add, remove or replace territory-area geometry in replay."
       },
       "reviewStatus": "source-verified",
-      "notes": "Legal line and final demarcation date are verified. Full line geometry remains intentionally below geometry-verified until the signed map and segment descriptions are digitized as the actual watershed/river route."
+      "notes": "Legal line and final demarcation date are verified. This record is metadata-only for territory-area replay; the separate geometry-verified control network preserves the coordinate-defined spatial subset, while the full watershed/river boundary overlay remains pending signed-map digitization."
     },
     {
       "id": "territory-1895-pamir-control-network",
