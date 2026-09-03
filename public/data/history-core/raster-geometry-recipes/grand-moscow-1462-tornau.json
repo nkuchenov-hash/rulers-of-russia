@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-grand-moscow-1462-tornau",
+      "fragmentId": "frag-grand-moscow-1462-reconstruction",
+      "track": "russian-legal-border",
+      "geometryType": "Polygon",
+      "output": "geometry/grand-moscow-1462-reconstruction.geojson",
+      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-tornau-rus-1240-1533-map-1910"],
+      "sourceRaster": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/18/Historical_map_of_Rus%27%2C_1240-1533.gif",
+        "sha256": "be3f8afa9867b1734150c6b9eac5389c8e1f983a11c90626d738256c763793db",
+        "width": 1800,
+        "height": 2207,
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif",
+        "rightsNote": "Wikimedia Commons identifies Tornau's 1910 sheet as public domain. The recipe traces the solid salmon legend layer «Московское В. Кн. въ 1462 г.» from the hash-pinned raster."
+      },
+      "georeference": {
+        "method": "piecewise-affine-triangulation",
+        "uncertaintyKm": 180,
+        "gcpCoordinateBasis": "Direct same-sheet settlement/label anchors surrounding the traced Moscow 1462 layer. Coordinates are modern WGS84 locations of the named surviving settlements; source pixels are read directly from the pinned Tornau sheet. No cross-sheet registration is used. The 180 km uncertainty intentionally dominates label-anchor error and the limits of this secondary reconstruction.",
+        "gcps": [
+          {"id":"belozersk-label-anchor","pixel":[780,600],"lonLat":[37.8078,60.0308]},
+          {"id":"vologda-label-anchor","pixel":[880,640],"lonLat":[39.8915,59.2205]},
+          {"id":"tver-label-anchor","pixel":[725,740],"lonLat":[35.9119,56.8587]},
+          {"id":"yaroslavl-label-anchor","pixel":[860,735],"lonLat":[39.8845,57.6261]},
+          {"id":"rostov-label-anchor","pixel":[895,765],"lonLat":[39.4139,57.1859]},
+          {"id":"moscow-settlement-anchor","pixel":[830,840],"lonLat":[37.6173,55.7558]},
+          {"id":"vladimir-label-anchor","pixel":[975,820],"lonLat":[40.4066,56.1291]},
+          {"id":"nizhny-novgorod-label-anchor","pixel":[1090,790],"lonLat":[44.0059,56.3269]},
+          {"id":"ryazan-label-anchor","pixel":[1000,890],"lonLat":[39.74,54.6296]},
+          {"id":"novgorod-label-anchor","pixel":[620,685],"lonLat":[31.2755,58.5229]},
+          {"id":"pskov-label-anchor","pixel":[545,720],"lonLat":[28.3318,57.8193]},
+          {"id":"smolensk-label-anchor","pixel":[650,850],"lonLat":[32.0453,54.7826]},
+          {"id":"veliky-ustyug-label-anchor","pixel":[1080,580],"lonLat":[46.305,60.761]},
+          {"id":"murom-label-anchor","pixel":[1040,850],"lonLat":[42.0426,55.575]}
+        ],
+        "triangles": [[1,0,12],[0,1,3],[2,0,3],[1,4,3],[4,12,7],[4,1,12],[0,9,10],[2,9,0],[9,11,10],[9,2,11],[6,4,7],[5,8,11],[2,5,11],[5,6,8],[6,5,4],[5,2,3],[4,5,3],[13,6,7],[6,13,8]]
+      },
+      "pixelRings": [
+        [[790,605],[830,605],[880,600],[940,610],[990,600],[1030,590],[1070,590],[1080,630],[1060,680],[1070,730],[1050,760],[1020,780],[1000,820],[970,850],[930,860],[900,840],[860,830],[830,840],[790,830],[760,800],[740,760],[750,720],[760,680],[780,640]]
+      ],
+      "note": "Reproducible low-confidence transcription of Tornau's solid salmon layer «Московское В. Кн. въ 1462 г.». The immediately following legend layer is «Приобр. Иоанна III +1505», so this geometry is used only as the bounded 1462 state and is not stretched past 1504."
+    }
+  ]
+}
