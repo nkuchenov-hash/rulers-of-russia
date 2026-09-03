@@ -2,19 +2,6 @@
   "schema_version": 1,
   "fragments": [
     {
-      "id": "frag-grand-moscow-ivan3-1505-ohm-corroborated",
-      "polityId": "grand-moscow",
-      "track": "russian-legal-border",
-      "role": "territory-area",
-      "territorialModel": "mixed",
-      "geometryFile": "geometry/grand-moscow-ivan3-1505-ohm-corroborated.geojson",
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-tornau-rus-1240-1533-map-1910"],
-      "reviewStatus": "geometry-verified",
-      "confidence": "low",
-      "uncertaintyMeters": 220000,
-      "derivationNote": "Reproducibly selected project-archived OpenHistoricalMap state (exact Git blob pinned) used as a vector substrate, independently corroborated against Tornau's cumulative `Приобр. Иоанна III +1505` state and documentary chronology controls. Geometry verification means the archived vector and corroboration checks are reproducible; it does not claim a surveyed 1505 cadastral frontier."
-    },
-    {
       "id": "frag-grand-moscow-vasily3-1533-ohm-corroborated",
       "polityId": "grand-moscow",
       "track": "russian-legal-border",
@@ -29,20 +16,6 @@
     }
   ],
   "baseStates": [
-    {
-      "id": "base-grand-moscow-ivan3-end-1505",
-      "polityId": "grand-moscow",
-      "track": "russian-legal-border",
-      "territorialModel": "mixed",
-      "coverageAnchorMonth": "1505-12",
-      "historicalDate": {"original":"Приобретения Иоанна III +1505","normalized":"1505","precision":"year","calendar":"source-specific-historical-atlas-chronology"},
-      "geometryFragmentIds": ["frag-grand-moscow-ivan3-1505-ohm-corroborated"],
-      "evidenceDocumentIds": ["doc-sgdd-vol1-1813", "doc-tornau-rus-1240-1533-map-1910"],
-      "reviewStatus": "geometry-verified",
-      "confidence": "low",
-      "notes": "The archived vector substrate spans 1485–1521, but History Core deliberately begins verified use only at Tornau's independently dated +1505 cumulative state. It ends before the source substrate changes in 1521; no interpolation across the 1521–1532 gap is allowed.",
-      "validThroughMonth": "1520-12"
-    },
     {
       "id": "base-grand-moscow-vasily3-end-1533",
       "polityId": "grand-moscow",
