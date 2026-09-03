@@ -153,6 +153,7 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-south-ussuri-sector1-1886-mfa", "doc-south-ussuri-general-protocol-1886-mfa"],
       "geometry": {
         "method": "joint-verified-sector-map-pending-georeference",
@@ -162,7 +163,8 @@
         ],
         "derivationNote": "The first sector was jointly investigated, checked against the 1884 survey and recorded on bilateral maps. Exact vertices remain a map/geodetic-control ingestion dependency."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "Non-area joint verification of an already established boundary sector. The protocol records checking and bilateral mapping, but no separate territorial transfer or stated correction of the legal line; exact sector geometry remains a boundary-display dependency, not a second sovereign-area mutation."
     },
     {
       "id": "territory-1886-south-ussuri-sectors2-3-no",
@@ -193,6 +195,7 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-south-ussuri-sector6-1886-mfa"],
       "geometry": {
         "method": "joint-verified-sector-description-pending-georeference",
@@ -204,7 +207,8 @@
         ],
         "derivationNote": "The sixth sector was jointly checked and mapped in duplicate. The source contains measured distances and terrain rules but not yet a History Core coordinate realization; no straight interpolation is allowed except where the protocol explicitly says so."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "Non-area joint verification of an existing sector: the record says the line was checked and mapped in duplicate and does not state a territorial transfer or correction. The detailed route remains valuable for future boundary visualization but must not replay a new sovereign-area mutation."
     },
     {
       "id": "territory-1886-south-ussuri-sectors4-5",
