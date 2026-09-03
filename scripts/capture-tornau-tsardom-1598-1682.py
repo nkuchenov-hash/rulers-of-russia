@@ -2,8 +2,9 @@
 """Capture reproducible diagnostics for Tornau's public-domain 1598-1682 Muscovite sheet.
 
 Research-only: this script does not promote raster pixels to History Core geometry.
-It pins the downloaded bytes, dimensions, palette and coarse connected colour extents
-so later production tracing can be reviewed against an explicit source artifact.
+It pins the downloaded bytes, dimensions and palette, then isolates the printed
+legend swatch for «Московское гос. въ 1598 г.» so later production tracing can
+be tied to an explicit legend sample rather than a visually guessed pink fill.
 """
 from __future__ import annotations
 
@@ -20,11 +21,28 @@ SOURCE_PAGE = "https://commons.wikimedia.org/wiki/File:Historical_map_of_Russian
 SOURCE_URL = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Historical_map_of_Russian,_1598-1682.gif"
 OUT = Path("tornau-tsardom-1598-1682-diagnostics")
 
+# Pixel bounds are on the pinned 1800x2207 original. The box is deliberately
+# inside the printed sample rectangle next to «Московское гос. въ 1598 г.» and
+# excludes the surrounding legend text/border. The swatch is hatched, so a
+# histogram is more faithful than pretending it has one exact RGB value.
+STATE_1598_SWATCH = (103, 209, 154, 229)
+
+# Main-map body only. This excludes the title/legend and both lower insets, so
+# colour overlap statistics are not inflated by page furniture or inset maps.
+MAIN_MAP_BODY = (430, 82, 1395, 1390)
+
 
 def fetch() -> bytes:
     req = urllib.request.Request(SOURCE_URL, headers={"User-Agent": "rulers-of-russia-history-core/1.0"})
     with urllib.request.urlopen(req, timeout=60) as response:
         return response.read()
+
+
+def ranked_palette(image: Image.Image, limit: int) -> list[dict]:
+    return [
+        {"rank": rank, "rgb": list(color), "pixelCount": count}
+        for rank, (color, count) in enumerate(Counter(image.getdata()).most_common(limit), start=1)
+    ]
 
 
 def main() -> None:
@@ -41,9 +59,37 @@ def main() -> None:
     crop = rgb.crop((35, 35, width - 35, height - 35))
     colors = Counter(crop.getdata()).most_common(48)
 
+    swatch = rgb.crop(STATE_1598_SWATCH)
+    swatch_counter = Counter(swatch.getdata())
+    # Ignore near-black hatch/outline pixels when ranking candidate fill colours,
+    # but preserve the complete swatch histogram separately in the report.
+    swatch_fill = Counter({
+        color: count for color, count in swatch_counter.items()
+        if sum(color) >= 180
+    })
+    swatch_top = swatch_fill.most_common(24)
+    swatch_colors = {color for color, _ in swatch_top}
+
+    map_body = rgb.crop(MAIN_MAP_BODY)
+    body_counter = Counter(map_body.getdata())
+    overlap = [
+        {
+            "rgb": list(color),
+            "legendPixelCount": int(swatch_fill[color]),
+            "mainMapPixelCount": int(body_counter.get(color, 0)),
+        }
+        for color, _ in swatch_top
+        if body_counter.get(color, 0) > 0
+    ]
+    overlap.sort(key=lambda item: (item["mainMapPixelCount"], item["legendPixelCount"]), reverse=True)
+
+    # Also expose all map-body colours that are exact members of the dominant
+    # legend palette, useful for connected-component tracing in a later reviewed step.
+    legend_matched_map_pixels = sum(body_counter.get(color, 0) for color in swatch_colors)
+
     report = {
-        "schemaVersion": 1,
-        "purpose": "research-only Tornau 1598-1682 production-source diagnostics; no geometry promotion",
+        "schemaVersion": 2,
+        "purpose": "research-only Tornau 1598-1682 production-source and signed-legend diagnostics; no geometry promotion",
         "source": {
             "page": SOURCE_PAGE,
             "download": SOURCE_URL,
@@ -62,7 +108,17 @@ def main() -> None:
             {"rank": rank, "rgb": list(color), "pixelCount": count}
             for rank, (color, count) in enumerate(colors, start=1)
         ],
-        "warning": "Do not promote any colour or boundary to production geometry until legend meaning, same-sheet georeferencing, spatial controls and source-period interpretation are reviewed.",
+        "state1598Legend": {
+            "label": "Московское гос. въ 1598 г.",
+            "swatchPixelBox": list(STATE_1598_SWATCH),
+            "swatchPixelCount": swatch.width * swatch.height,
+            "dominantNonDarkRgb": ranked_palette(swatch, 32),
+            "mainMapBodyPixelBox": list(MAIN_MAP_BODY),
+            "dominantLegendColorsPresentInMainMap": overlap,
+            "legendMatchedMainMapPixelCount": int(legend_matched_map_pixels),
+            "interpretation": "The printed 1598 state swatch is hatched/multi-colour. Candidate production pixels must be selected from this exact swatch palette and then reviewed as spatial components; no single RGB is declared to equal the historical state.",
+        },
+        "warning": "Do not promote any colour or boundary to production geometry until legend meaning, same-sheet georeferencing, connected-component review, spatial controls and source-period interpretation are reviewed.",
     }
     (OUT / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
