@@ -1,0 +1,31 @@
+name: Tornau Tsardom 1598-1682 research
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/capture-tornau-tsardom-1598-1682.py
+      - .github/workflows/tornau-tsardom-1598-1682-research.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Capture public-domain Tornau sheet and diagnostics
+        run: python scripts/capture-tornau-tsardom-1598-1682.py
+      - name: Upload reproducible diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: tornau-tsardom-1598-1682-diagnostics
+          path: tornau-tsardom-1598-1682-diagnostics/
+          if-no-files-found: error

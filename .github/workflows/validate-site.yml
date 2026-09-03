@@ -46,6 +46,13 @@ jobs:
       - name: Audit History Core completion state
         run: node scripts/audit-history-completion.mjs
 
+      - name: Upload strict completion audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: history-completion-audit
+          path: public/data/history-core/generated/completion-audit.json
+          if-no-files-found: error
+
       - name: Typecheck
         run: npm run typecheck
 
