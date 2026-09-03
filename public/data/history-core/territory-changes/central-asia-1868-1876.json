@@ -9,6 +9,7 @@
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-bukhara-protection-supplement-1868-imperial-publication", "doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication"],
       "geometry": {
         "method": "source-verified-dependency-status",
@@ -48,6 +49,7 @@
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa", "doc-khiva-1873-prlib-chronology"],
       "geometry": {
         "method": "source-verified-dependent-polity-status",
