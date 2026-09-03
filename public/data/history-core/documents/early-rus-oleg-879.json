@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-laurentian-0879-nlr",
+      "sourceCollectionId": "nlr-laurentian-codex",
+      "title": "Лаврентьевская летопись: статья 6387 (879 г.) — передача княжения Рюрика Олегу",
+      "institution": "Российская национальная библиотека",
+      "url": "https://expositions.nlr.ru/LaurentianCodex/_Project/page_Show.php?list=21&n=23",
+      "tier": "A1-archival-original",
+      "documentType": "chronicle-manuscript",
+      "date": {
+        "original": "6387 (879) год",
+        "normalized": "0879",
+        "precision": "year",
+        "calendar": "byzantine-era",
+        "note": "Chronicle year retained as source-specific chronology; it is not treated as an exact modern calendar boundary date."
+      },
+      "archiveCitation": "РНБ. ОР F.п.IV.2. Лаврентьевская летопись. 1377. Л. 8–8 об.",
+      "notes": "The NLR manuscript description and text record Rurik's death and transfer of his княжение to Oleg, with Igor entrusted to him. The same NLR sequence marks 6388–6389 (880–881) as having no factual entries and 6390 (882) as Oleg's separate Kiev campaign. Used only to establish bounded continuity of the inherited northern polity through 880–881; it does not define a new territorial expansion or a surveyed boundary."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "baseStates": [
+    {
+      "id": "base-novgorodian-oleg-inherited-879-881",
+      "polityId": "novgorodian-land",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "0880-01",
+      "historicalDate": {
+        "original": "6387 (879): Рюрик передал княжение Олегу",
+        "normalized": "0879",
+        "precision": "year",
+        "calendar": "source-specific-chronicle-chronology"
+      },
+      "geometryFragmentIds": [
+        "frag-early-rus-rurik-862-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-laurentian-0879-nlr",
+        "doc-tornau-rus-862-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "This is a bounded continuity state, not a new territorial reconstruction. Tornau's mapped Rurik holdings are used only as the inherited geometry already verified through 0879-12; the NLR manuscript explicitly records transfer of the same княжение to Oleg in 879, records no factual events for 880–881, and separately begins Oleg's Kiev expansion in 882. Coverage therefore resumes only for the previously unresolved 0880-01..0881-12 gap and stops before the 882 spatial transition.",
+      "validThroughMonth": "0881-12"
+    }
+  ]
+}
