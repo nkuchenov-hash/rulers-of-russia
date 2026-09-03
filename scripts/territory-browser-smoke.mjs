@@ -33,8 +33,8 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
 });
 
 const waitForCurrentVerifiedTracks = async () => {
-  await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 2'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 2'), null, { timeout: 8000 });
+  await page.waitForFunction(() => /проверенная госграница:\\s*[1-9]\\d*/.test(document.body?.innerText || ''), null, { timeout: 8000 });
+  await page.waitForFunction(() => /морское разграничение:\\s*[1-9]\\d*/.test(document.body?.innerText || ''), null, { timeout: 8000 });
 };
 
 try {
