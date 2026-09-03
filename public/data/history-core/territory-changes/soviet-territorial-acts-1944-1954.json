@@ -9,11 +9,11 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
+      "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid", "doc-tuva-tnr-digital-corpus-national-archive"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid"],
-        "derivationNote": "The source-verified act supports inclusion of the entire Tuvan People's Republic. Geometry must use a source-backed 1944 Tuvan external boundary or an authoritative continuity proof; today's Tuva Republic boundary must not be substituted without verification."
+        "method": "official-tnr-archival-corpus-located-pending-boundary-record-identification",
+        "evidenceDocumentIds": ["doc-tuva-ussr-1944-ebid", "doc-tuva-tnr-digital-corpus-national-archive"],
+        "derivationNote": "The source-verified 11 October 1944 act supports admission of the entire Tuvan People's Republic. The National Archive of the Republic of Tuva now provides a concrete public TNR-era archival corpus with geographically indexed holdings, so the generic source-discovery state is resolved. Production geometry is still blocked on identification of a specific source-backed 1944 TNR external-boundary map/survey record or an authoritative continuity proof, followed by controlled reconstruction and spatial validation. Today's Tuva Republic boundary must not be substituted automatically."
       },
       "reviewStatus": "source-verified"
     },
