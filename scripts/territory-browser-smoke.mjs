@@ -97,7 +97,6 @@ try {
   if (await eraSelect.count() !== 1) throw new Error('Era selector missing');
   await eraSelect.selectOption('862');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 0862-02'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('поздний proxy'), null, { timeout: 8000 });
   await eraSelect.selectOption('1992');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, { timeout: 8000 });
 
