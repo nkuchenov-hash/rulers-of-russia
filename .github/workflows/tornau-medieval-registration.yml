@@ -1,0 +1,50 @@
+name: Tornau medieval registration research
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/analyze-tornau-medieval-registration.py
+      - scripts/capture-tornau-medieval-diagnostics.py
+      - public/data/history-core/raster-geometry-recipes/**
+      - .github/workflows/tornau-medieval-registration.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image registration dependencies
+        run: python -m pip install --disable-pip-version-check numpy opencv-python-headless
+
+      - name: Analyze Tornau medieval raster registration
+        run: python scripts/analyze-tornau-medieval-registration.py
+
+      - name: Capture diagnostic rasters
+        run: python scripts/capture-tornau-medieval-diagnostics.py
+
+      - name: Upload registration report
+        uses: actions/upload-artifact@v4
+        with:
+          name: tornau-medieval-registration-report
+          path: tornau-medieval-registration-report.json
+          if-no-files-found: error
+
+      - name: Upload diagnostic rasters
+        uses: actions/upload-artifact@v4
+        with:
+          name: tornau-medieval-diagnostic-rasters
+          path: tornau-medieval-diagnostics/*.png
+          if-no-files-found: error
