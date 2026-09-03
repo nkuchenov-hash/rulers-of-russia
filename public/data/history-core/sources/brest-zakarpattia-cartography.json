@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "pa-aa-brest-1918-treaty-map",
+      "title": "Brest-Litovsk treaty map annex preserved by the Political Archive of the German Federal Foreign Office",
+      "institution": "Politisches Archiv des Auswärtigen Amts",
+      "url": "https://commons.wikimedia.org/wiki/File:Brest-Litovsk_Siebert.jpg",
+      "tier": "A1-archival-original",
+      "coverage": "Map annex to the German original of the Treaty of Brest-Litovsk, March 1918, showing the treaty demarcation line",
+      "canonicalUse": ["boundary-geometry", "cartographic-cross-check", "source-discovery"],
+      "notes": "The digitized reproduction identifies the Political Archive of the German Federal Foreign Office as the holding archive and the image as an excerpt of Annex 1 to the German treaty copy, with the demarcation line marked in blue. Wikimedia Commons marks the official-work image public domain under German law. Production geometry still requires reproducible acquisition of the full relevant map extent, controlled georeferencing and spatial validation."
+    },
+    {
+      "id": "unts-zakarpattia-1945-boundary",
+      "title": "UN Treaty Series records for the 1945 Czechoslovakia-USSR Trans-Carpathian Ukraine settlement and later frontier demarcation instruments",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20504/v504.pdf",
+      "tier": "A2-official-document-publication",
+      "coverage": "Treaty of 29 June 1945, its attached-map boundary rule, and the later official record identifying the 1945-1946 demarcation package",
+      "canonicalUse": ["boundary-geometry", "effective-date-research", "source-discovery"],
+      "notes": "UNTS volume 504 publishes the 1945 treaty; Article 1 makes the former Slovakia/Trans-Carpathian Ukraine frontier, with stated changes, the Czechoslovak-USSR frontier according to an attached map. UNTS volume 971 later identifies the authoritative descriptive protocol, map album, cartographic materials and geodetic studies from the November 1945-April 1946 demarcation."
+    }
+  ]
+}
