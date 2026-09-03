@@ -37,11 +37,12 @@
       "track": "claim",
       "territorialModel": "mixed",
       "operation": "status-change",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
       "geometry": {
-        "method": "source-verified-undivided-island-status-area-pending",
+        "method": "source-verified-undivided-island-status",
         "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
-        "derivationNote": "The treaty source-verifies that Sakhalin/Karafuto remained unpartitioned rather than assigning the entire island to either state. The effective chronology is independently fixed by the 7 December 1856 ratification exchange. Exact settlement/control zones and period coastline geometry remain pending and must not be represented as a single sovereign Russian polygon."
+        "derivationNote": "The treaty source-verifies that Sakhalin/Karafuto remained unpartitioned rather than assigning the entire island to either state. This is shared/undivided legal-status metadata on the claim track, not a Russian sovereign-territory mutation: it must not add Sakhalin to the Russian core-territory replay or require a Russian territory-area polygon. Any optional visualization of the shared status belongs to a separate claim layer and must use period coastline, settlement and control geometry independently of core territorial materialization."
       },
       "reviewStatus": "source-verified",
       "notes": "This is an undivided/shared legal-status layer, later superseded by the 1875 Petersburg settlement."
