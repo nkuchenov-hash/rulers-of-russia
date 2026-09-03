@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "candidate-kievan-rus-yaroslav-1054",
+  "status": "geometry-required",
+  "priority": "high",
+  "polityId": "kievan-rus",
+  "track": "de-facto-control",
+  "territorialModel": "frontier-zone",
+  "candidateAnchorMonth": "1054-12",
+  "candidateValidThroughMonth": null,
+  "source": {
+    "documentId": "doc-tornau-rus-862-map-1910",
+    "title": "Historical map of Rus', 862",
+    "author": "N. N. Tornau",
+    "publicationYear": 1910,
+    "rasterUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Historical_map_of_Rus%27%2C_862.gif",
+    "sha256": "d0cd3dedfec309a9a2ce670f2e8de1b17b5ce03ae0abca8e4ef9fde68620496c",
+    "rightsStatus": "public-domain",
+    "legendEvidence": "The same pinned Tornau legend used by the verified 912, 972 and 1015 bases explicitly identifies the next cumulative acquisition layer as Yaroslav +1054."
+  },
+  "predecessorState": {
+    "baseStateId": "base-kievan-rus-vladimir-end-1015",
+    "verifiedThroughMonth": "1053-12"
+  },
+  "expectedCoverageImpact": {
+    "earliestNewVerifiedMonth": "1054-12",
+    "rule": "Do not extend beyond a later independently supported territorial transition. No validity end is asserted by this candidate record."
+  },
+  "acceptanceGates": [
+    "Trace only the explicitly labelled Yaroslav +1054 acquisition layer from the hash-pinned same-sheet raster.",
+    "Use same-sheet georeferencing with explicit GCPs and no cross-sheet geometry transfer.",
+    "Keep the reconstruction low-confidence with uncertainty large enough to dominate manual edge reading and atlas distortion.",
+    "Exclude later principality divisions, temporary control and any layer not explicitly part of the cumulative 1054 state.",
+    "Require generated geometry, raster hash verification, spatial-control checks, strict History Core audit and green CI before promotion to geometry-verified.",
+    "Do not create or extend a verified base state from this research candidate alone."
+  ],
+  "evidenceDocumentIds": [
+    "doc-pvl-laurentian-1926",
+    "doc-tornau-rus-862-map-1910",
+    "doc-gugk-rybakov-old-rus-1961"
+  ],
+  "note": "This record closes an ambiguity in the next-base-state work queue: after the verified Vladimir +1015 state ends at 1053-12, the next same-sheet cumulative layer to trace is Yaroslav +1054. It intentionally carries no production geometry and therefore does not change verified-month counts."
+}
