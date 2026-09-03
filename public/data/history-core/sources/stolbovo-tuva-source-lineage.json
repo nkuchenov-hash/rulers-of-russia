@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "finna-stolbovo-1617-boundary-study",
+      "title": "National Library of Finland catalogue record for Kyösti Julku's reconstruction study of the 1617 Stolbovo boundary",
+      "institution": "Kansalliskirjasto / National Library of Finland",
+      "url": "https://www.finna.fi/Record/arto.012568827",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Specialist historical-geographical reconstruction of the 1617 Stolbovo peace boundary, including maps, from the modern state border to Suolampi",
+      "canonicalUse": ["boundary-geometry-research", "cartographic-cross-check", "source-discovery"],
+      "notes": "Finna's National Library catalogue identifies Kyösti Julku's 1987 Faravid study specifically as a reconstruction of the 1617 Stolbovo boundary and indexes it under borders and the Stolbovo peace. It is a secondary reconstruction source, not primary treaty cartography, and therefore cannot by itself promote production geometry to geometry-verified."
+    },
+    {
+      "id": "tuva-national-archive-tnr-digital-corpus",
+      "title": "National Archive of the Republic of Tuva public digital corpus for the Tuvan People's Republic",
+      "institution": "National Archive of the Republic of Tuva",
+      "url": "https://fond.gosarhivrt.ru/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Digitized Tuvan People's Republic archival holdings, including wartime documents, constitutional material, period newspapers and geographically indexed archival objects",
+      "canonicalUse": ["territorial-continuity-research", "source-discovery", "archival-cross-check"],
+      "notes": "The official regional archive exposes a public catalogue of TNR-era original holdings and a geospatial document index. This locates an authoritative institutional corpus for reconstructing the pre-admission TNR territorial extent, but a specific source-backed 1944 external-boundary polygon still has to be identified and validated before production use."
+    }
+  ]
+}

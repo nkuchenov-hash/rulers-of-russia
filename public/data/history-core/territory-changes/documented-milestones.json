@@ -9,11 +9,11 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-stolbovo-1617-ebid"],
+      "evidenceDocumentIds": ["doc-stolbovo-1617-ebid", "doc-stolbovo-1617-julku-finna"],
       "geometry": {
-        "method": "not-yet-georeferenced",
-        "evidenceDocumentIds": ["doc-stolbovo-1617-ebid"],
-        "derivationNote": "Locate and georeference the treaty/mezhевание description before promoting this record to geometry-verified."
+        "method": "specialist-historical-boundary-reconstruction-located-pending-primary-corroboration",
+        "evidenceDocumentIds": ["doc-stolbovo-1617-ebid", "doc-stolbovo-1617-julku-finna"],
+        "derivationNote": "The treaty is already source-verified. The National Library of Finland catalogue now locates Kyösti Julku's specialist study devoted specifically to reconstructing the 1617 Stolbovo boundary, with mapped treatment of the line from the modern state border to Suolampi. The generic source-discovery state is therefore resolved, but this secondary reconstruction cannot by itself establish production geometry. Promotion remains blocked on acquisition/corroboration of the primary treaty or demarcation evidence, controlled georeferencing of the reconstructed sectors, and spatial validation."
       },
       "reviewStatus": "source-verified"
     },

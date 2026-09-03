@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-stolbovo-1617-julku-finna",
+      "sourceCollectionId": "finna-stolbovo-1617-boundary-study",
+      "title": "Stolbovan rauhan vuonna 1617 raja nykyiseltä valtakunnanrajalta Suolammelle",
+      "institution": "Kansalliskirjasto / National Library of Finland",
+      "url": "https://www.finna.fi/Record/arto.012568827",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-boundary-reconstruction",
+      "date": {"original":"1987","normalized":"1987","precision":"year","calendar":"gregorian"},
+      "authority": ["Kyösti Julku"],
+      "publicationCitation": "Faravid 11 (1987), pp. 95-118; National Library of Finland Arto catalogue record 012568827.",
+      "notes": "The catalogue record is explicitly devoted to the 1617 Stolbovo boundary and the National Library copy is described as illustrated with maps. It provides a concrete specialist reconstruction target for the unresolved boundary, but is secondary evidence and is not a substitute for primary treaty/demarcation material or controlled production georeferencing."
+    },
+    {
+      "id": "doc-tuva-tnr-digital-corpus-national-archive",
+      "sourceCollectionId": "tuva-national-archive-tnr-digital-corpus",
+      "title": "Public electronic holdings of the National Archive of the Republic of Tuva: Tuvan People's Republic corpus",
+      "institution": "National Archive of the Republic of Tuva",
+      "url": "https://fond.gosarhivrt.ru/",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "archival-finding-aid",
+      "date": {"original":"TNR period, 1921-1944; digital catalogue current","normalized":"1944","precision":"year","calendar":"gregorian"},
+      "authority": ["National Archive of the Republic of Tuva"],
+      "publicationCitation": "National Archive of the Republic of Tuva, public electronic funds and geospatial document catalogue.",
+      "notes": "The archive states that its public system contains digitized TNR-era archival documents and provides geographic indexing of digital objects. This establishes a concrete authoritative archival corpus for continuity/boundary research, but the exact 1944 external boundary still requires identification of specific map/survey records and controlled spatial validation."
+    }
+  ]
+}
