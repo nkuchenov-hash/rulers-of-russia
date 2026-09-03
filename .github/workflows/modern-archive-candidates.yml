@@ -1,0 +1,26 @@
+name: Modern archive candidate research
+
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-modern-archive-candidates.mjs
+      - public/data/territory/archive/ussr.geojson
+      - public/data/territory/archive/russian-federation.geojson
+      - .github/workflows/modern-archive-candidates.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enumerate archived USSR and RF vector states
+        run: node scripts/analyze-modern-archive-candidates.mjs
+      - name: Upload candidate report
+        uses: actions/upload-artifact@v4
+        with:
+          name: modern-archive-candidates
+          path: modern-archive-candidates.json
