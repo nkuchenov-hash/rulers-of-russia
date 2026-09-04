@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-main-1834-1835-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1834-1835-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1834-1835-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all non-Finland controls pass. Finland remains a separate previously verified fragment."
+    },
+    {
+      "id": "frag-russian-empire-main-1836-1839-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1836-1839-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1836-1839-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all non-Finland controls pass. Finland remains a separate previously verified fragment."
+    },
+    {
+      "id": "frag-russian-empire-main-1840-1845-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1840-1845-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1840-1845-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all non-Finland controls pass. Finland remains a separate previously verified fragment."
+    },
+    {
+      "id": "frag-russian-empire-main-1846-1847-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1846-1847-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1846-1847-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all non-Finland controls pass. Finland remains a separate previously verified fragment."
+    },
+    {
+      "id": "frag-russian-empire-main-1848-1848-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1848-1848-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1848-1848-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all non-Finland controls pass. Finland remains a separate previously verified fragment."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1834-1835",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1834-12",
+      "historicalDate": {
+        "original": "1834–1835 main Empire state plus continuous Grand Duchy of Finland component",
+        "normalized": "1834",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1834-1835-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1834-1835-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1835-12",
+      "notes": "Main geometry passes all non-Finland historical controls. Finland is supplied by the separately verified component whose temporal continuity is independently anchored by the 1809 treaty and RGIA 1909 retrospective state-boundary maps. Starts conservatively in December; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-composite-1836-1839",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1836-12",
+      "historicalDate": {
+        "original": "1836–1839 main Empire state plus continuous Grand Duchy of Finland component",
+        "normalized": "1836",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1836-1839-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1836-1839-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1839-12",
+      "notes": "Main geometry passes all non-Finland historical controls. Finland is supplied by the separately verified component whose temporal continuity is independently anchored by the 1809 treaty and RGIA 1909 retrospective state-boundary maps. Starts conservatively in December; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-composite-1840-1845",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1840-12",
+      "historicalDate": {
+        "original": "1840–1845 main Empire state plus continuous Grand Duchy of Finland component",
+        "normalized": "1840",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1840-1845-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1840-1845-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1845-12",
+      "notes": "Main geometry passes all non-Finland historical controls. Finland is supplied by the separately verified component whose temporal continuity is independently anchored by the 1809 treaty and RGIA 1909 retrospective state-boundary maps. Starts conservatively in December; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-composite-1846-1847",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1846-12",
+      "historicalDate": {
+        "original": "1846–1847 main Empire state plus continuous Grand Duchy of Finland component",
+        "normalized": "1846",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1846-1847-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1846-1847-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1847-12",
+      "notes": "Main geometry passes all non-Finland historical controls. Finland is supplied by the separately verified component whose temporal continuity is independently anchored by the 1809 treaty and RGIA 1909 retrospective state-boundary maps. Starts conservatively in December; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-composite-1848-1848",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1848-12",
+      "historicalDate": {
+        "original": "1848–1848 main Empire state plus continuous Grand Duchy of Finland component",
+        "normalized": "1848",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1848-1848-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1848-1848-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1848-12",
+      "notes": "Main geometry passes all non-Finland historical controls. Finland is supplied by the separately verified component whose temporal continuity is independently anchored by the 1809 treaty and RGIA 1909 retrospective state-boundary maps. Starts conservatively in December; no forward proxy."
+    }
+  ]
+}

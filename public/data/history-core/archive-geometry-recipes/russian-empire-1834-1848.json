@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-main-1834-1835-finland-composite",
+      "fragmentId": "frag-russian-empire-main-1834-1835-finland-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1834,
+        "end_date": 1835
+      },
+      "output": "geometry/russian-empire-main-1834-1835-finland-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1834-1835-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component passes all non-Finland controls. Full base state unions this fragment with the already verified Grand Duchy of Finland fragment; no other area is repaired or inferred."
+    },
+    {
+      "id": "recipe-russian-empire-main-1836-1839-finland-composite",
+      "fragmentId": "frag-russian-empire-main-1836-1839-finland-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1836,
+        "end_date": 1839
+      },
+      "output": "geometry/russian-empire-main-1836-1839-finland-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1836-1839-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component passes all non-Finland controls. Full base state unions this fragment with the already verified Grand Duchy of Finland fragment; no other area is repaired or inferred."
+    },
+    {
+      "id": "recipe-russian-empire-main-1840-1845-finland-composite",
+      "fragmentId": "frag-russian-empire-main-1840-1845-finland-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1840,
+        "end_date": 1845
+      },
+      "output": "geometry/russian-empire-main-1840-1845-finland-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1840-1845-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component passes all non-Finland controls. Full base state unions this fragment with the already verified Grand Duchy of Finland fragment; no other area is repaired or inferred."
+    },
+    {
+      "id": "recipe-russian-empire-main-1846-1847-finland-composite",
+      "fragmentId": "frag-russian-empire-main-1846-1847-finland-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1846,
+        "end_date": 1847
+      },
+      "output": "geometry/russian-empire-main-1846-1847-finland-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1846-1847-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component passes all non-Finland controls. Full base state unions this fragment with the already verified Grand Duchy of Finland fragment; no other area is repaired or inferred."
+    },
+    {
+      "id": "recipe-russian-empire-main-1848-1848-finland-composite",
+      "fragmentId": "frag-russian-empire-main-1848-1848-finland-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1848,
+        "end_date": 1848
+      },
+      "output": "geometry/russian-empire-main-1848-1848-finland-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1848-1848-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component passes all non-Finland controls. Full base state unions this fragment with the already verified Grand Duchy of Finland fragment; no other area is repaired or inferred."
+    }
+  ]
+}
