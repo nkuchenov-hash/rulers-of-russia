@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "openhistoricalmap-cc0",
+      "title": "OpenHistoricalMap historical boundary relations",
+      "institution": "OpenHistoricalMap / OpenStreetMap US",
+      "url": "https://www.openhistoricalmap.org/copyright",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Community historical boundary relations; CC0/public-domain except elements carrying an explicit alternative open license",
+      "canonicalUse": [
+        "reconstruction-geometry",
+        "cross-check",
+        "uncertainty-model"
+      ],
+      "notes": "Production use requires the exact relation id/version, confirmation that no element-specific license overrides CC0, a pinned project archive blob, distributed spatial controls, and independent A1/A2/A3 historical evidence. OHM relations are never authoritative by themselves."
+    }
+  ]
+}
