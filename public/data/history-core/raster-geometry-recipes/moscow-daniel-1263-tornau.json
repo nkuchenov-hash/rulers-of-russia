@@ -4,7 +4,7 @@
     {
       "id": "recipe-moscow-daniel-patrimony-1263-tornau-inset",
       "fragmentId": "frag-moscow-daniel-patrimony-1263-reconstruction",
-      "track": "de-facto-control",
+      "track": "russian-legal-border",
       "geometryType": "Polygon",
       "output": "geometry/moscow-daniel-patrimony-1263-reconstruction.geojson",
       "evidenceDocumentIds": [
