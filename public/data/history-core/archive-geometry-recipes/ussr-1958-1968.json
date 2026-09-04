@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-1958-1968-corroborated-archive",
+      "fragmentId": "frag-ussr-1958-1968-corroborated-archive",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1953,
+        "end_date": 1968
+      },
+      "output": "geometry/ussr-1958-1968-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1953-1968",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact archive feature dated 1953–1968. Production use begins only in October 1958, after the source-verified USSR–Afghanistan frontier-regime treaty entered into force, and is bounded at 1968-12. Distributed controls cover European USSR, Baltics, Moldova, Caucasus, Central Asia, Kaliningrad, Far East and Sakhalin while excluding neighboring capitals."
+    }
+  ]
+}
