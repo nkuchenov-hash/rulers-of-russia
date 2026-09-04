@@ -1,0 +1,1330 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-northern-kurils-1856-1875",
+      "fragmentId": "frag-russian-empire-northern-kurils-1856-1875",
+      "archivePath": "public/data/territory/world-history/snapshots/1880.geojson",
+      "archiveBlobSha1": "793604bfa54464c890fef775844e911e76069468",
+      "featureIndices": [
+        1
+      ],
+      "componentBboxFilter": {
+        "minLon": 149,
+        "minLat": 45.3,
+        "maxLon": 156.6,
+        "maxLat": 51.2
+      },
+      "output": "geometry/russian-empire-northern-kurils-1856-1875.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-northern-kurils-1880",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
+      "controls": [
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "shumshu",
+          "lonLat": [
+            156.3,
+            50.75
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "iturup",
+          "lonLat": [
+            147.45,
+            45
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "hokkaido",
+          "lonLat": [
+            142,
+            43.1
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Extracts only northern Kuril polygon components from the 1880 Imperial Japan MultiPolygon. Geographic shapes come from the pinned historical snapshot; Russian ownership through 1875 is established independently by the Shimoda treaty, not by the 1880 political label."
+    },
+    {
+      "id": "recipe-russian-empire-main-1856-1856-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1856-1856-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1856,
+        "end_date": 1856
+      },
+      "output": "geometry/russian-empire-main-1856-1856-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1857-1858-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1857-1858-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1857,
+        "end_date": 1858
+      },
+      "output": "geometry/russian-empire-main-1857-1858-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "blagoveshchensk",
+          "lonLat": [
+            127.5404,
+            50.2907
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1859-1859-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1859-1859-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1859,
+        "end_date": 1859
+      },
+      "output": "geometry/russian-empire-main-1859-1859-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "blagoveshchensk",
+          "lonLat": [
+            127.5404,
+            50.2907
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1860-1861-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1860-1861-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1860,
+        "end_date": 1861
+      },
+      "output": "geometry/russian-empire-main-1860-1861-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "blagoveshchensk",
+          "lonLat": [
+            127.5404,
+            50.2907
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1862-1862-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1862-1862-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1862,
+        "end_date": 1862
+      },
+      "output": "geometry/russian-empire-main-1862-1862-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1863-1863-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1863-1863-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1863,
+        "end_date": 1863
+      },
+      "output": "geometry/russian-empire-main-1863-1863-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1868-1869-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1868-1869-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1868,
+        "end_date": 1869
+      },
+      "output": "geometry/russian-empire-main-1868-1869-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-alaska-cession-ratification-exchange-1867-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "sitka",
+          "lonLat": [
+            -135.33,
+            57.05
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1870-1870-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1870-1870-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1870,
+        "end_date": 1870
+      },
+      "output": "geometry/russian-empire-main-1870-1870-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "sitka",
+          "lonLat": [
+            -135.33,
+            57.05
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    },
+    {
+      "id": "recipe-russian-empire-main-1871-1872-1856-1872",
+      "fragmentId": "frag-russian-empire-main-1871-1872-1856-1872",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1871,
+        "end_date": 1872
+      },
+      "output": "geometry/russian-empire-main-1871-1872-1856-1872.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "sitka",
+          "lonLat": [
+            -135.33,
+            57.05
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "samarkand",
+          "lonLat": [
+            66.9597,
+            39.6542
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "urup",
+          "lonLat": [
+            150.1,
+            45.9
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+    }
+  ]
+}
