@@ -1,0 +1,18 @@
+name: USSR world 1980 1990 controls
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-ussr-world-1980-1990.mjs
+      - .github/workflows/ussr-world-1980-1990-controls.yml
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-ussr-world-1980-1990.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ussr-world-1980-1990-controls
+          path: ussr-world-1980-1990-controls.json
