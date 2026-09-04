@@ -208,8 +208,7 @@
         "doc-adrianople-1829-mfa-border-collection",
         "doc-paris-bessarabia-1856-ebid",
         "doc-shimoda-1855-avpri",
-        "doc-shimoda-ratifications-1856-mofa",
-        "doc-aigun-1858-mfa"
+        "doc-shimoda-ratifications-1856-mofa"
       ],
       "controls": [
         {
@@ -306,7 +305,7 @@
             127.5404,
             50.2907
           ],
-          "expected": "inside"
+          "expected": "outside"
         },
         {
           "id": "vladivostok",
@@ -325,7 +324,7 @@
           "expected": "outside"
         }
       ],
-      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+      "note": "Main 1857–1858 archive state is explicitly treated as pre-Aigun because Blagoveshchensk/left-Amur control is outside. It is used only from 1857-12 through 1858-05, before the June 1858 Aigun transition; Finland and northern Kurils remain separate verified fragments."
     },
     {
       "id": "recipe-russian-empire-main-1859-1859-1856-1872",
