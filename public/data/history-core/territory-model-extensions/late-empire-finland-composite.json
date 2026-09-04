@@ -1,0 +1,346 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-finland-component-1887-1917",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-finland-component-1887-1917.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 75000,
+      "derivationNote": "Grand Duchy of Finland component from pinned 1914 historical-basemaps feature, temporally corroborated by the 1809 Fredrikshamn treaty and RGIA 1909 historical state-boundary maps."
+    },
+    {
+      "id": "frag-russian-empire-main-1885-1894-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1885-1894-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1885-1894-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1895-1897-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1895-1897-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1895-1897-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1898-1899-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1898-1899-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1898-1899-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1900-1904-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1900-1904-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1900-1904-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1905-1911-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1905-1911-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1905-1911-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1912-1912-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1912-1912-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1912-1912-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    },
+    {
+      "id": "frag-russian-empire-main-1913-1913-late",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1913-1913-late.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1913-1913-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat main-Empire component after distributed non-Finland spatial controls."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1887-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1887-12",
+      "historicalDate": {
+        "original": "1885–1894 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1885",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1885-1894-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1885-1894-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1894-12",
+      "notes": "The 1885–1894 main state is not used from its first year: activation waits until December 1887, after the 1886 Ussuri implementation and 1887-era frontier stabilization, avoiding back-projection across changes within the source range. Finland is added as a separately evidenced component."
+    },
+    {
+      "id": "base-russian-empire-composite-1895-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1895-12",
+      "historicalDate": {
+        "original": "1895–1897 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1895",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1895-1897-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1895-1897-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1897-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    },
+    {
+      "id": "base-russian-empire-composite-1898-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1898-12",
+      "historicalDate": {
+        "original": "1898–1899 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1898",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1898-1899-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1898-1899-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1899-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    },
+    {
+      "id": "base-russian-empire-composite-1900-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1900-12",
+      "historicalDate": {
+        "original": "1900–1904 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1900",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1900-1904-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1900-1904-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1904-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    },
+    {
+      "id": "base-russian-empire-composite-1905-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1905-12",
+      "historicalDate": {
+        "original": "1905–1911 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1905",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1905-1911-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1905-1911-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1911-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    },
+    {
+      "id": "base-russian-empire-composite-1912-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1912-12",
+      "historicalDate": {
+        "original": "1912–1912 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1912",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1912-1912-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1912-1912-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1912-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    },
+    {
+      "id": "base-russian-empire-composite-1913-12",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1913-12",
+      "historicalDate": {
+        "original": "1913–1913 dated main state plus historically continuous Grand Duchy of Finland component",
+        "normalized": "1913",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1913-1913-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1913-1913-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1913-12",
+      "notes": "The main state begins conservatively at the selected source-supported year-end anchor. Finland is added only as the separately evidenced Grand Duchy component. No geometry is carried beyond the dated main interval."
+    }
+  ]
+}
