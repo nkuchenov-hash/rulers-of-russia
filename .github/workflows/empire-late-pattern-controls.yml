@@ -1,0 +1,18 @@
+name: Empire late pattern controls
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-empire-late-pattern.mjs
+      - .github/workflows/empire-late-pattern-controls.yml
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-empire-late-pattern.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-late-pattern-controls
+          path: empire-late-pattern-controls.json
