@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-1914-corroborated-world-snapshot",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1914-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-peking-1860-mfa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned multi-feature 1914 historical-basemaps reconstruction, promoted only after distributed spatial controls and primary-document corroboration. Generalized historical state, not a surveyed cadastral polygon."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-end-1914",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1914-12",
+      "historicalDate": {
+        "original": "1914",
+        "normalized": "1914",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1914-corroborated-world-snapshot"
+      ],
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-peking-1860-mfa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Because the secondary snapshot is year-precision only, coverage begins at 1914-12 rather than fabricating an intra-year effective date. The state is bounded through the end of the Russian Empire coverage period, 1916-12; 1917 remains separately provisional.",
+      "validThroughMonth": "1916-12"
+    }
+  ]
+}

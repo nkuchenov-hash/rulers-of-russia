@@ -46,7 +46,7 @@ function matchesSelector(feature, selector) {
 }
 
 for (const recipe of recipes) {
-  assert(recipe?.id && recipe?.fragmentId && recipe?.archivePath && recipe?.archiveBlobSha1 && recipe?.selector && recipe?.output, `Incomplete archive geometry recipe ${recipe?.id ?? '<missing>'}`);
+  assert(recipe?.id && recipe?.fragmentId && recipe?.archivePath && recipe?.archiveBlobSha1 && (recipe?.selector || Array.isArray(recipe?.featureIndices)) && recipe?.output, `Incomplete archive geometry recipe ${recipe?.id ?? '<missing>'}`);
   assert(Array.isArray(recipe.evidenceDocumentIds) && recipe.evidenceDocumentIds.length > 0, `Archive geometry recipe ${recipe.id} has no evidence documents`);
   const archiveFile = path.join(root, recipe.archivePath);
   assert(fs.existsSync(archiveFile), `Archive geometry recipe ${recipe.id} source missing: ${recipe.archivePath}`);
@@ -54,14 +54,26 @@ for (const recipe of recipes) {
   const digest = gitBlobSha1(bytes);
   assert(digest === recipe.archiveBlobSha1, `Archive geometry recipe ${recipe.id} blob SHA mismatch: expected ${recipe.archiveBlobSha1}, got ${digest}`);
   const archive = JSON.parse(bytes.toString('utf8'));
-  const candidates = (archive.features ?? []).filter(feature => matchesSelector(feature, recipe.selector));
-  assert(candidates.length === 1, `Archive geometry recipe ${recipe.id} selector matched ${candidates.length} features`);
-  const sourceFeature = candidates[0];
-  assert(['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${sourceFeature.geometry?.type}`);
+  let candidates;
+  if (Array.isArray(recipe.featureIndices)) {
+    const all = archive.features ?? [];
+    candidates = recipe.featureIndices.map(index => {
+      assert(Number.isInteger(index) && index >= 0 && index < all.length, `Archive geometry recipe ${recipe.id} feature index ${index} is out of range`);
+      return all[index];
+    });
+  } else {
+    candidates = (archive.features ?? []).filter(feature => matchesSelector(feature, recipe.selector));
+  }
+  assert(candidates.length >= 1, `Archive geometry recipe ${recipe.id} selected no features`);
+  for (const feature of candidates) {
+    assert(['Polygon', 'MultiPolygon'].includes(feature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${feature.geometry?.type}`);
+  }
+  const polygons = candidates.flatMap(feature => feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates);
+  const sourceGeometry = {type:'MultiPolygon', coordinates:polygons};
 
   for (const control of recipe.controls ?? []) {
     assert(Array.isArray(control.lonLat) && control.lonLat.length === 2 && control.lonLat.every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid control ${control.id}`);
-    const inside = geometryContains(control.lonLat, sourceFeature.geometry);
+    const inside = geometryContains(control.lonLat, sourceGeometry);
     const expected = control.expected === 'inside';
     assert(inside === expected, `Archive geometry recipe ${recipe.id} control ${control.id} expected ${control.expected}, got ${inside ? 'inside' : 'outside'}`);
   }
@@ -77,7 +89,8 @@ for (const recipe of recipes) {
       generatedFromCorroboratedArchive: true,
       archivePath: recipe.archivePath,
       archiveBlobSha1: recipe.archiveBlobSha1,
-      selector: recipe.selector,
+      selector: recipe.selector ?? null,
+      featureIndices: recipe.featureIndices ?? null,
       sourceCrs: recipe.sourceCrs ?? 'RFC 7946 longitude/latitude',
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       independentControls: recipe.controls ?? [],
@@ -89,12 +102,12 @@ for (const recipe of recipes) {
         id: recipe.fragmentId,
         track: recipe.track,
         history_core_status: 'geometry-verified',
-        archive_source_properties: sourceFeature.properties ?? {},
+        archive_source_properties: candidates.map(feature => feature.properties ?? {}),
         evidence_document_ids: recipe.evidenceDocumentIds,
         corroboration_controls: recipe.controls ?? [],
         note: recipe.note ?? null,
       },
-      geometry: sourceFeature.geometry,
+      geometry: sourceGeometry,
     }],
   };
   fs.writeFileSync(outputFile, JSON.stringify(payload, null, 2) + '\n');

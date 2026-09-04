@@ -1,0 +1,21 @@
+name: Empire world snapshot controls
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-empire-world-snapshots.mjs
+      - .github/workflows/empire-world-snapshot-controls.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze Russian Empire candidates
+        run: node scripts/analyze-empire-world-snapshots.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-world-snapshot-candidates
+          path: empire-world-snapshot-candidates.json
+          if-no-files-found: error

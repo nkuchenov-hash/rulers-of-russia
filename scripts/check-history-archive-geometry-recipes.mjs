@@ -67,13 +67,33 @@ for (const recipe of recipes) {
   const digest = gitBlobSha1(bytes);
   if (digest !== recipe.archiveBlobSha1) fail(`Archive recipe ${recipe.id} blob SHA mismatch: ${digest}`);
   const archive = JSON.parse(bytes.toString('utf8'));
-  const candidates = (archive.features ?? []).filter(feature => matchesSelector(feature, recipe.selector));
-  if (candidates.length !== 1) fail(`Archive recipe ${recipe.id} selector matched ${candidates.length} features`);
-  const sourceFeature = candidates[0];
-  if (!['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type)) fail(`Archive recipe ${recipe.id} selected unsupported geometry`);
+  const allFeatures = archive.features ?? [];
+  let candidates;
+  if (Array.isArray(recipe.featureIndices)) {
+    if (recipe.featureIndices.length === 0) fail(`Archive recipe ${recipe.id} has empty featureIndices`);
+    const unique = new Set(recipe.featureIndices);
+    if (unique.size !== recipe.featureIndices.length) fail(`Archive recipe ${recipe.id} has duplicate featureIndices`);
+    candidates = recipe.featureIndices.map(index => {
+      if (!Number.isInteger(index) || index < 0 || index >= allFeatures.length) fail(`Archive recipe ${recipe.id} feature index ${index} is out of range`);
+      return allFeatures[index];
+    });
+  } else {
+    if (!recipe.selector || typeof recipe.selector !== 'object') fail(`Archive recipe ${recipe.id} has neither selector nor featureIndices`);
+    candidates = allFeatures.filter(feature => matchesSelector(feature, recipe.selector));
+    if (candidates.length !== 1) fail(`Archive recipe ${recipe.id} selector matched ${candidates.length} features`);
+  }
+  if (candidates.length < 1) fail(`Archive recipe ${recipe.id} selected no features`);
+  for (const sourceFeature of candidates) {
+    if (!['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type)) fail(`Archive recipe ${recipe.id} selected unsupported geometry`);
+  }
+  const polygons = candidates.flatMap(sourceFeature => sourceFeature.geometry.type === 'Polygon'
+    ? [sourceFeature.geometry.coordinates]
+    : sourceFeature.geometry.coordinates);
+  const sourceGeometry = {type: 'MultiPolygon', coordinates: polygons};
   for (const control of recipe.controls ?? []) {
     if (!['inside', 'outside'].includes(control.expected)) fail(`Archive recipe ${recipe.id} control ${control.id} has invalid expectation`);
-    const inside = geometryContains(control.lonLat, sourceFeature.geometry);
+    if (!Array.isArray(control.lonLat) || control.lonLat.length !== 2 || !control.lonLat.every(Number.isFinite)) fail(`Archive recipe ${recipe.id} control ${control.id} has invalid lonLat`);
+    const inside = geometryContains(control.lonLat, sourceGeometry);
     if (inside !== (control.expected === 'inside')) fail(`Archive recipe ${recipe.id} control ${control.id} expected ${control.expected}, got ${inside ? 'inside' : 'outside'}`);
   }
 
@@ -82,7 +102,8 @@ for (const recipe of recipes) {
   const generated = readJson(outputFile);
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromCorroboratedArchive !== true) fail(`Archive output ${recipe.output} is not tied to recipe ${recipe.id}`);
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
-  if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceFeature.geometry)) fail(`Archive output ${recipe.output} does not preserve exact selected geometry`);
+  if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact selected geometry`);
+  if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
 }
 
 console.log(`History archive geometry recipe check passed: ${recipes.length} pinned/corroborated recipes.`);

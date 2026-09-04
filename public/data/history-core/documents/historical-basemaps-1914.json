@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-historical-basemaps-russian-empire-1914",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps — Russian Empire components, 1914 snapshot",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps/blob/62d8f1a03a71f2d3ff17f2d166f7553f256bce68/geojson/world_1914.geojson",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1914 snapshot in pinned historical-basemaps dataset",
+        "normalized": "1914",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "historical-basemaps, pinned commit 62d8f1a03a71f2d3ff17f2d166f7553f256bce68, world_1914.geojson.",
+      "representedDate": {
+        "original": "1914",
+        "normalized": "1914",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/world-history/snapshots/1914.geojson",
+        "gitBlobSha1": "29ba986cedc6f4e61d3870a9e29cef3234cd2da1",
+        "license": "GPL-3.0"
+      },
+      "notes": "The 1914 empire is split across several features in the source dataset. Production use combines only explicitly pinned indices and is independently checked against inside/outside controls. This B1 reconstruction is not sufficient alone; primary treaty and official-document evidence is cited by the resulting base state."
+    }
+  ]
+}
