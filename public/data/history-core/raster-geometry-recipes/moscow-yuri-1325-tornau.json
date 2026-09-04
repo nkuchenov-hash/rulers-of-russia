@@ -24,7 +24,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 90,
-        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from inset 9. Modern coordinates register named surviving settlements only; no cross-sheet GCP transfer. Southern and western controls (Kolomna, Serpukhov, Mozhaysk, Volokolamsk, Kaluga) keep every traced patrimony vertex inside explicit triangulation. The Mozhaysk–Kaluga–Serpukhov triangle is explicitly included because the +1325 acquisition trace reaches the southwestern sector between those directly identified target-sheet settlements. A conservative southwest control at the traced acquisition edge is included to avoid any out-of-triangulation extrapolation; its positional uncertainty is absorbed by the declared 90 km reconstruction uncertainty. A west-edge control bounds the trace near [1160,1914], eliminating extrapolation at the western acquisition edge; its uncertainty is covered by the declared 90 km reconstruction envelope.",
+        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from inset 9. Modern coordinates register named surviving settlements only; no cross-sheet GCP transfer. Southern and western controls (Kolomna, Serpukhov, Mozhaysk, Volokolamsk, Kaluga) keep every traced patrimony vertex inside explicit triangulation. The Mozhaysk–Kaluga–Serpukhov triangle is explicitly included because the +1325 acquisition trace reaches the southwestern sector between those directly identified target-sheet settlements. A conservative southwest control at the traced acquisition edge is included to avoid any out-of-triangulation extrapolation; its positional uncertainty is absorbed by the declared 90 km reconstruction uncertainty. A west-edge control bounds the trace near [1160,1914], eliminating extrapolation at the western acquisition edge; its uncertainty is covered by the declared 90 km reconstruction envelope. A west-north edge control encloses the traced vertex [1160,1875], keeping the complete acquisition ring inside explicit target-sheet triangulation.",
         "gcps": [
           {
             "id": "moscow",
@@ -201,6 +201,17 @@
               35.35,
               55.25
             ]
+          },
+          {
+            "id": "west-north-acquisition-control",
+            "pixel": [
+              1150,
+              1860
+            ],
+            "lonLat": [
+              35.45,
+              55.72
+            ]
           }
         ],
         "triangles": [
@@ -343,6 +354,21 @@
             15,
             13,
             14
+          ],
+          [
+            12,
+            16,
+            15
+          ],
+          [
+            16,
+            11,
+            15
+          ],
+          [
+            2,
+            16,
+            12
           ]
         ]
       },
