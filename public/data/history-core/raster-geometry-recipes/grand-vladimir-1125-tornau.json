@@ -339,20 +339,20 @@
       "pixelRings": [
         [
           [
-            1250,
-            1490
+            1265,
+            1565
           ],
           [
             1320,
-            1530
+            1565
           ],
           [
             1400,
-            1560
+            1565
           ],
           [
             1550,
-            1530
+            1565
           ],
           [
             1555,
@@ -380,47 +380,47 @@
           ],
           [
             1450,
-            1900
+            1885
           ],
           [
             1380,
-            1910
+            1885
           ],
           [
             1320,
-            1890
+            1885
           ],
           [
-            1260,
-            1900
+            1265,
+            1885
           ],
           [
-            1210,
+            1265,
             1850
           ],
           [
-            1230,
+            1265,
             1800
           ],
           [
-            1260,
+            1265,
             1750
           ],
           [
-            1240,
+            1265,
             1690
           ],
           [
-            1260,
+            1265,
             1630
           ],
           [
-            1250,
+            1265,
             1570
           ]
         ]
       ],
-      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary from the same hash-pinned Tornau 1054-1240 sheet. The trace follows the visible shaded region and is intentionally coarse; 120 km uncertainty dominates manual edge reading and atlas generalization. One manually read edge vertex was shifted 5 source pixels inward to remain inside the explicit GCP triangulation; this is far below the declared 120 km reconstruction uncertainty."
+      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary. Edge vertices are conservatively clipped to the convex hull of explicit target-sheet GCPs so the materializer never extrapolates beyond independently registered controls; 120 km uncertainty dominates this inward clipping and atlas generalization."
     }
   ]
 }
