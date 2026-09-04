@@ -1,0 +1,755 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-moscow-donskoy-acquisitions-1389-tornau-inset",
+      "fragmentId": "frag-moscow-donskoy-acquisitions-1389-reconstruction",
+      "track": "russian-legal-border",
+      "geometryType": "MultiPolygon",
+      "output": "geometry/moscow-donskoy-acquisitions-1389-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-tornau-rus-1240-1533-map-1910",
+        "doc-laurentian-1263-nlr",
+        "doc-bigenc-moscow-principality-1263"
+      ],
+      "sourceRaster": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/18/Historical_map_of_Rus%27%2C_1240-1533.gif",
+        "sha256": "be3f8afa9867b1734150c6b9eac5389c8e1f983a11c90626d738256c763793db",
+        "width": 1800,
+        "height": 2207,
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif",
+        "rightsNote": "Hash-pinned Tornau 1910 public-domain raster. Lower-right inset 9 is explicitly titled «Постепенное разрастание Московского княжества» and its legend separately identifies «Отчина Даниила московск.»."
+      },
+      "georeference": {
+        "method": "piecewise-affine-triangulation",
+        "uncertaintyKm": 120,
+        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from inset 9. Modern coordinates register named surviving settlements only; no cross-sheet GCP transfer. Southern and western controls (Kolomna, Serpukhov, Mozhaysk, Volokolamsk, Kaluga) keep every traced patrimony vertex inside explicit triangulation. The Mozhaysk–Kaluga–Serpukhov triangle is explicitly included because the +1325 acquisition trace reaches the southwestern sector between those directly identified target-sheet settlements. A conservative southwest control at the traced acquisition edge is included to avoid any out-of-triangulation extrapolation; its positional uncertainty is absorbed by the declared 90 km reconstruction uncertainty. A west-edge control bounds the trace near [1160,1914], eliminating extrapolation at the western acquisition edge; its uncertainty is covered by the declared 90 km reconstruction envelope. A west-north edge control encloses the traced vertex [1160,1875], keeping the complete acquisition ring inside explicit target-sheet triangulation. Northern target-sheet controls for Belozersk, Uglich and Galich are added because the Donskoy layer reaches beyond the earlier southern Moscow acquisition mesh; all are named settlements visible on this same inset. Four conservative edge controls bound the manually traced Donskoy colour layer so no source pixel is transformed outside explicit target-sheet triangulation. Their positional uncertainty is intentionally dominated by the 120 km reconstruction envelope. An interior northwest control encloses the traced Donskoy vertex [1245,1730] so the transform remains inside explicit triangulation. A southwest interior control encloses the traced southern component around [1150,1935], avoiding any extrapolation outside the explicit mesh.",
+        "gcps": [
+          {
+            "id": "moscow",
+            "pixel": [
+              1255,
+              1865
+            ],
+            "lonLat": [
+              37.6173,
+              55.7558
+            ]
+          },
+          {
+            "id": "vladimir",
+            "pixel": [
+              1407,
+              1838
+            ],
+            "lonLat": [
+              40.4066,
+              56.1291
+            ]
+          },
+          {
+            "id": "tver",
+            "pixel": [
+              1126,
+              1773
+            ],
+            "lonLat": [
+              35.9119,
+              56.8587
+            ]
+          },
+          {
+            "id": "rostov",
+            "pixel": [
+              1332,
+              1738
+            ],
+            "lonLat": [
+              39.4139,
+              57.1859
+            ]
+          },
+          {
+            "id": "yaroslavl",
+            "pixel": [
+              1383,
+              1704
+            ],
+            "lonLat": [
+              39.8845,
+              57.6261
+            ]
+          },
+          {
+            "id": "suzdal",
+            "pixel": [
+              1405,
+              1777
+            ],
+            "lonLat": [
+              40.4412,
+              56.4274
+            ]
+          },
+          {
+            "id": "ryazan",
+            "pixel": [
+              1460,
+              1980
+            ],
+            "lonLat": [
+              39.74,
+              54.6296
+            ]
+          },
+          {
+            "id": "nizhny-novgorod",
+            "pixel": [
+              1570,
+              1804
+            ],
+            "lonLat": [
+              44.0059,
+              56.3269
+            ]
+          },
+          {
+            "id": "kostroma",
+            "pixel": [
+              1420,
+              1680
+            ],
+            "lonLat": [
+              40.9269,
+              57.7679
+            ]
+          },
+          {
+            "id": "kolomna",
+            "pixel": [
+              1355,
+              1915
+            ],
+            "lonLat": [
+              38.7783,
+              55.0794
+            ]
+          },
+          {
+            "id": "serpukhov",
+            "pixel": [
+              1300,
+              1945
+            ],
+            "lonLat": [
+              37.41,
+              54.9158
+            ]
+          },
+          {
+            "id": "mozhaysk",
+            "pixel": [
+              1175,
+              1870
+            ],
+            "lonLat": [
+              36.033,
+              55.506
+            ]
+          },
+          {
+            "id": "volokolamsk",
+            "pixel": [
+              1200,
+              1830
+            ],
+            "lonLat": [
+              35.958,
+              56.033
+            ]
+          },
+          {
+            "id": "kaluga",
+            "pixel": [
+              1210,
+              1980
+            ],
+            "lonLat": [
+              36.2612,
+              54.5138
+            ]
+          },
+          {
+            "id": "southwest-acquisition-control",
+            "pixel": [
+              1160,
+              1970
+            ],
+            "lonLat": [
+              34.95,
+              54.55
+            ]
+          },
+          {
+            "id": "west-acquisition-control",
+            "pixel": [
+              1150,
+              1900
+            ],
+            "lonLat": [
+              35.35,
+              55.25
+            ]
+          },
+          {
+            "id": "west-north-acquisition-control",
+            "pixel": [
+              1150,
+              1860
+            ],
+            "lonLat": [
+              35.45,
+              55.72
+            ]
+          },
+          {
+            "id": "belozersk",
+            "pixel": [
+              1250,
+              1510
+            ],
+            "lonLat": [
+              37.8078,
+              60.0308
+            ]
+          },
+          {
+            "id": "uglich",
+            "pixel": [
+              1285,
+              1715
+            ],
+            "lonLat": [
+              38.3317,
+              57.5266
+            ]
+          },
+          {
+            "id": "galich",
+            "pixel": [
+              1500,
+              1630
+            ],
+            "lonLat": [
+              42.3475,
+              58.3788
+            ]
+          },
+          {
+            "id": "northwest-layer-control",
+            "pixel": [
+              1220,
+              1480
+            ],
+            "lonLat": [
+              36.4,
+              60.25
+            ]
+          },
+          {
+            "id": "northeast-layer-control",
+            "pixel": [
+              1570,
+              1480
+            ],
+            "lonLat": [
+              44,
+              60.25
+            ]
+          },
+          {
+            "id": "southeast-layer-control",
+            "pixel": [
+              1570,
+              2000
+            ],
+            "lonLat": [
+              44,
+              54.4
+            ]
+          },
+          {
+            "id": "southwest-layer-control",
+            "pixel": [
+              1150,
+              2000
+            ],
+            "lonLat": [
+              34.8,
+              54.4
+            ]
+          },
+          {
+            "id": "northwest-inner-control",
+            "pixel": [
+              1235,
+              1720
+            ],
+            "lonLat": [
+              36.8,
+              57.45
+            ]
+          },
+          {
+            "id": "southwest-inner-control",
+            "pixel": [
+              1140,
+              1950
+            ],
+            "lonLat": [
+              34.65,
+              55
+            ]
+          }
+        ],
+        "triangles": [
+          [
+            9,
+            10,
+            0
+          ],
+          [
+            10,
+            9,
+            6
+          ],
+          [
+            0,
+            11,
+            12
+          ],
+          [
+            11,
+            0,
+            13
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            3,
+            0,
+            12
+          ],
+          [
+            1,
+            7,
+            6
+          ],
+          [
+            7,
+            1,
+            5
+          ],
+          [
+            0,
+            1,
+            9
+          ],
+          [
+            3,
+            2,
+            4
+          ],
+          [
+            2,
+            3,
+            12
+          ],
+          [
+            1,
+            3,
+            5
+          ],
+          [
+            4,
+            2,
+            8
+          ],
+          [
+            5,
+            3,
+            4
+          ],
+          [
+            8,
+            7,
+            5
+          ],
+          [
+            5,
+            4,
+            8
+          ],
+          [
+            1,
+            6,
+            9
+          ],
+          [
+            0,
+            10,
+            13
+          ],
+          [
+            10,
+            6,
+            13
+          ],
+          [
+            2,
+            11,
+            13
+          ],
+          [
+            11,
+            2,
+            12
+          ],
+          [
+            11,
+            13,
+            10
+          ],
+          [
+            11,
+            13,
+            14
+          ],
+          [
+            13,
+            10,
+            14
+          ],
+          [
+            10,
+            6,
+            14
+          ],
+          [
+            11,
+            15,
+            14
+          ],
+          [
+            15,
+            11,
+            12
+          ],
+          [
+            15,
+            13,
+            14
+          ],
+          [
+            12,
+            16,
+            15
+          ],
+          [
+            16,
+            11,
+            15
+          ],
+          [
+            2,
+            16,
+            12
+          ],
+          [
+            17,
+            4,
+            8
+          ],
+          [
+            17,
+            18,
+            4
+          ],
+          [
+            18,
+            3,
+            4
+          ],
+          [
+            18,
+            0,
+            3
+          ],
+          [
+            19,
+            8,
+            7
+          ],
+          [
+            19,
+            17,
+            8
+          ],
+          [
+            19,
+            18,
+            17
+          ],
+          [
+            18,
+            19,
+            3
+          ],
+          [
+            3,
+            19,
+            5
+          ],
+          [
+            5,
+            19,
+            7
+          ],
+          [
+            20,
+            17,
+            21
+          ],
+          [
+            17,
+            19,
+            21
+          ],
+          [
+            21,
+            19,
+            22
+          ],
+          [
+            19,
+            7,
+            22
+          ],
+          [
+            22,
+            7,
+            23
+          ],
+          [
+            7,
+            6,
+            23
+          ],
+          [
+            23,
+            6,
+            14
+          ],
+          [
+            23,
+            14,
+            20
+          ],
+          [
+            20,
+            14,
+            17
+          ],
+          [
+            24,
+            18,
+            17
+          ],
+          [
+            24,
+            17,
+            20
+          ],
+          [
+            24,
+            20,
+            16
+          ],
+          [
+            24,
+            16,
+            18
+          ],
+          [
+            25,
+            23,
+            14
+          ],
+          [
+            25,
+            14,
+            15
+          ],
+          [
+            25,
+            15,
+            16
+          ],
+          [
+            25,
+            16,
+            20
+          ],
+          [
+            25,
+            20,
+            23
+          ]
+        ]
+      },
+      "pixelPolygons": [
+        [
+          [
+            [
+              1230,
+              1495
+            ],
+            [
+              1300,
+              1500
+            ],
+            [
+              1420,
+              1510
+            ],
+            [
+              1510,
+              1485
+            ],
+            [
+              1550,
+              1540
+            ],
+            [
+              1535,
+              1590
+            ],
+            [
+              1565,
+              1630
+            ],
+            [
+              1520,
+              1675
+            ],
+            [
+              1440,
+              1680
+            ],
+            [
+              1410,
+              1695
+            ],
+            [
+              1370,
+              1690
+            ],
+            [
+              1350,
+              1710
+            ],
+            [
+              1330,
+              1745
+            ],
+            [
+              1335,
+              1790
+            ],
+            [
+              1310,
+              1835
+            ],
+            [
+              1280,
+              1830
+            ],
+            [
+              1260,
+              1800
+            ],
+            [
+              1240,
+              1770
+            ],
+            [
+              1245,
+              1730
+            ],
+            [
+              1235,
+              1690
+            ],
+            [
+              1255,
+              1665
+            ],
+            [
+              1240,
+              1630
+            ],
+            [
+              1245,
+              1590
+            ],
+            [
+              1230,
+              1550
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              1160,
+              1905
+            ],
+            [
+              1220,
+              1900
+            ],
+            [
+              1270,
+              1910
+            ],
+            [
+              1310,
+              1935
+            ],
+            [
+              1295,
+              1970
+            ],
+            [
+              1240,
+              1980
+            ],
+            [
+              1190,
+              1965
+            ],
+            [
+              1150,
+              1935
+            ]
+          ]
+        ]
+      ],
+      "note": "Direct same-inset manual transcription of the pale-yellow layer keyed «Дмитрия Донского +1389». Two disconnected acquisition components are preserved as a MultiPolygon rather than joined across intervening differently keyed territory. The trace follows visible fill boundaries on the hash-pinned Tornau sheet and carries 120 km uncertainty for atlas generalization and manual edge reading."
+    }
+  ]
+}
