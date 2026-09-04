@@ -8,7 +8,8 @@ const controls1914=[
 ['moscow',[37.6173,55.7558],'inside'],['st-petersburg',[30.3351,59.9343],'inside'],['helsinki',[24.9384,60.1699],'inside'],['warsaw',[21.0122,52.2297],'inside'],['kyiv',[30.5234,50.4501],'inside'],['tbilisi',[44.793,41.7151],'inside'],['baku',[49.8671,40.4093],'inside'],['tashkent',[69.2401,41.2995],'inside'],['almaty',[76.886,43.2389],'inside'],['vladivostok',[131.8855,43.1155],'inside'],['north-sakhalin',[142.7,51.2],'inside'],
 ['berlin',[13.405,52.52],'outside'],['vienna',[16.3738,48.2082],'outside'],['istanbul',[28.9784,41.0082],'outside'],['tehran',[51.389,35.6892],'outside'],['beijing',[116.4074,39.9042],'outside'],['stockholm',[18.0686,59.3293],'outside'],['bucharest',[26.1025,44.4268],'outside'],['south-sakhalin',[142.738,46.9591],'outside']
 ];
-function unionContains(point,features){return features.some(f=>contains(point,f.geometry))}\nconst report={schema_version:2,years:[]};
+function unionContains(point,features){return features.some(f=>contains(point,f.geometry))}
+const report={schema_version:2,years:[]};
 for(const year of years){
  const file=`public/data/territory/world-history/snapshots/${year}.geojson`;
  const d=JSON.parse(fs.readFileSync(file,'utf8'));
