@@ -563,7 +563,7 @@
           ]
         ]
       ],
-      "note": "Direct coarse same-sheet transcription of the diagonally hatched legend layer «Василия III +1533» on Tornau's 1240–1533 map. Three disconnected acquisition components are preserved separately around the Pskov/Smolensk/Ryazan sectors rather than joined across territory belonging to earlier layers. The fragment is used only cumulatively with the verified 1505 state and carries the inherited 220 km uncertainty. Source-edge vertices outside the final Ivan III target-sheet GCP hull are conservatively clipped inward to the registered hull rather than extrapolated; the maximum adjustment is dominated by the inherited 220 km uncertainty."
+      "note": "Direct coarse same-sheet transcription of the diagonally hatched legend layer «Василия III +1533» on Tornau's 1240–1533 map. Three disconnected acquisition components are preserved separately around the Pskov/Smolensk/Ryazan sectors rather than joined across territory belonging to earlier layers. The fragment is used only cumulatively with the verified 1505 state and carries the inherited 220 km uncertainty. Source-edge vertices outside the final Ivan III target-sheet GCP hull are conservatively clipped inward to the registered hull rather than extrapolated; the maximum adjustment is dominated by the inherited 220 km uncertainty. Georeference mesh is inherited from the final green 1505 base-state recipe in main so the 1533 acquisitions use the identical registered target sheet."
     }
   ]
 }
