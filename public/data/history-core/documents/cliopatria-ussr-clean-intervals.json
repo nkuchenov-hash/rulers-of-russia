@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-ussr-1969-1972",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1969–1972",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1969–1972 capture interval",
+        "normalized": "1969/1972",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1969–1972",
+        "normalized": "1969/1972",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      }
+    },
+    {
+      "id": "doc-cliopatria-ussr-1973-1975",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1973–1975",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1973–1975 capture interval",
+        "normalized": "1973/1975",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1973–1975",
+        "normalized": "1973/1975",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      }
+    },
+    {
+      "id": "doc-cliopatria-ussr-1976-1978",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1976–1978",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1976–1978 capture interval",
+        "normalized": "1976/1978",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1976–1978",
+        "normalized": "1976/1978",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      }
+    },
+    {
+      "id": "doc-cliopatria-ussr-1987-1989",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1987–1989",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1987–1989 capture interval",
+        "normalized": "1987/1989",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1987–1989",
+        "normalized": "1987/1989",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      }
+    }
+  ]
+}

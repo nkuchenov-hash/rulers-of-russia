@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-1969-1972-corroborated-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1969-1972-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1969-1972",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive feature promoted after distributed spatial controls and primary treaty corroboration."
+    },
+    {
+      "id": "frag-ussr-1975-corroborated-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1975-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1973-1975",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-turkey-territorial-sea-1973"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive feature promoted after distributed spatial controls and primary treaty corroboration."
+    },
+    {
+      "id": "frag-ussr-1976-1978-corroborated-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1976-1978-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1976-1978",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-turkey-territorial-sea-1973"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive feature promoted after distributed spatial controls and primary treaty corroboration."
+    },
+    {
+      "id": "frag-ussr-1987-1989-corroborated-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1987-1989-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-poland-maritime-1985",
+        "doc-ussr-turkey-eez-notes-1986-1987"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive feature promoted after distributed spatial controls and primary treaty corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-1969-1972",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1969-12",
+      "historicalDate": {
+        "original": "1969–1972 archive interval; conservative year-end start",
+        "normalized": "1969",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1969-1972-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1969-1972",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Bounded to the exact dated archive interval; no forward proxy beyond the represented state.",
+      "validThroughMonth": "1972-12"
+    },
+    {
+      "id": "base-ussr-1975",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1975-03",
+      "historicalDate": {
+        "original": "27 марта 1975 г.",
+        "normalized": "1975-03-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1975-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1973-1975",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-turkey-territorial-sea-1973"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Bounded to the exact dated archive interval; no forward proxy beyond the represented state.",
+      "validThroughMonth": "1975-12"
+    },
+    {
+      "id": "base-ussr-1976-1978",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1976-12",
+      "historicalDate": {
+        "original": "1976–1978 archive interval; conservative year-end start",
+        "normalized": "1976",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1976-1978-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1976-1978",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-turkey-territorial-sea-1973"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Bounded to the exact dated archive interval; no forward proxy beyond the represented state.",
+      "validThroughMonth": "1978-12"
+    },
+    {
+      "id": "base-ussr-1987-1989",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1987-12",
+      "historicalDate": {
+        "original": "1987–1989 archive interval; conservative year-end start",
+        "normalized": "1987",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1987-1989-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-poland-maritime-1985",
+        "doc-ussr-turkey-eez-notes-1986-1987"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Bounded to the exact dated archive interval; no forward proxy beyond the represented state.",
+      "validThroughMonth": "1989-12"
+    }
+  ]
+}
