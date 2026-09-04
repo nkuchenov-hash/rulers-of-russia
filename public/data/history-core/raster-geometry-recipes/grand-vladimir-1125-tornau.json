@@ -24,7 +24,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 120,
-        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates are used only to register named surviving settlements; no 862-sheet raster transfer is used. Northern controls at Novgorod, Belozersk and Chukhloma keep the entire traced inset polygon inside explicit triangulation.",
+        "gcpCoordinateBasis": "Direct target-sheet anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates register named surviving settlements and the center of Lake Beloye only; no 862-sheet raster transfer is used. The Lake Beloye control is visible directly on the inset and closes the northern hull around the traced shaded territory.",
         "gcps": [
           {
             "id": "vologda",
@@ -190,9 +190,35 @@
               31.2755,
               58.5229
             ]
+          },
+          {
+            "id": "lake-beloye-center",
+            "pixel": [
+              1255,
+              1450
+            ],
+            "lonLat": [
+              37.63,
+              60.17
+            ]
           }
         ],
         "triangles": [
+          [
+            15,
+            13,
+            11
+          ],
+          [
+            15,
+            12,
+            13
+          ],
+          [
+            15,
+            14,
+            12
+          ],
           [
             0,
             13,
