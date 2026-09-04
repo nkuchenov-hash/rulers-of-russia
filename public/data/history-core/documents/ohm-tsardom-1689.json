@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ohm-tsardom-1689-relation-2851290",
+      "sourceCollectionId": "openhistoricalmap-cc0",
+      "title": "OpenHistoricalMap relation 2851290 — Tsardom of Russia, start 1689, end 1699",
+      "institution": "OpenHistoricalMap; exact relation metadata checked 2026-09-04",
+      "url": "https://api.openhistoricalmap.org/api/0.6/relation/2851290",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "start_date=1689; end_date=1699",
+        "normalized": "1689/1699",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "OpenHistoricalMap relation 2851290, version 34, changeset 263520, timestamp 2026-08-21T03:11:29Z.",
+      "representedDate": {
+        "original": "Extent of Russian expansion in 1689",
+        "normalized": "1689",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+        "gitBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+        "relationId": "2851290",
+        "relationVersion": "34",
+        "license": "CC0 / public domain; no relation-level license=* override"
+      },
+      "notes": "The relation has no explicit license tag, so OHM's published CC0 default applies. Its own start_event says 'Extent of Russian expansion in 1689'. The polygon is not treated as authoritative: it is pinned, spatially controlled and combined with primary documentary evidence. It notably excludes Azov, so it is not used after the 1696 acquisition."
+    }
+  ]
+}
