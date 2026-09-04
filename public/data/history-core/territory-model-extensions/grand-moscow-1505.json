@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-grand-moscow-1505-reconstruction",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/grand-moscow-1505-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813",
+        "doc-tornau-rus-1240-1533-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 220000,
+      "derivationNote": "Geometry-verified low-confidence direct transcription of Tornau 1910's cumulative Moscow state through the explicitly keyed Ivan III +1505 layer. The large uncertainty reflects atlas generalization and coarse manual edge tracing."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-grand-moscow-end-1505",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1505-12",
+      "historicalDate": {
+        "original": "приобретения Иоанна III +1505",
+        "normalized": "1505",
+        "precision": "year",
+        "calendar": "source-specific-historical-atlas-chronology"
+      },
+      "geometryFragmentIds": [
+        "frag-grand-moscow-1505-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813",
+        "doc-tornau-rus-1240-1533-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Tornau explicitly separates the Ivan III +1505 cumulative state from the next Vasily III +1533 layer. Coverage begins at year-end and is therefore bounded through 1532-12.",
+      "validThroughMonth": "1532-12"
+    }
+  ]
+}
