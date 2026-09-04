@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-rf-1992-2004-corroborated-archive",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-federation-1992-2004-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-belovezha-1991-rosarchiv"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 10000,
+      "derivationNote": "Exact pinned project archive geometry for the RF state beginning 26 Dec 1991, accepted only after distributed inside/outside spatial controls pass. No later claim geometry is back-projected."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-federation-1992-2004",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1992-01",
+      "historicalDate": {
+        "original": "26 декабря 1991 г.",
+        "normalized": "1991-12-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-rf-1992-2004-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-belovezha-1991-rosarchiv"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Month-end RF coverage begins in January 1992. The pinned archive feature ends 14 Oct 2004, so this base is conservatively bounded through 2004-09 and is never stretched across the next archived border state.",
+      "validThroughMonth": "2004-09"
+    }
+  ]
+}
