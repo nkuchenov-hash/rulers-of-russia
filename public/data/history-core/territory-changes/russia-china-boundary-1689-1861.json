@@ -167,25 +167,46 @@
       "notes": "Non-area joint verification of an already established boundary sector. The protocol records checking and bilateral mapping, but no separate territorial transfer or stated correction of the legal line; exact sector geometry remains a boundary-display dependency, not a second sovereign-area mutation."
     },
     {
-      "id": "territory-1886-south-ussuri-sectors2-3-no",
+      "id": "territory-1886-south-ussuri-sectors2-3-verification",
       "eventId": "evt-1886-south-ussuri-sectors2-3-no-verified",
       "polityId": "russian-empire",
       "effectiveDate": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
       "geometry": {
         "method": "joint-verified-sector-description-pending-georeference",
         "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
         "routeSemantics": [
           {"from":"Chang-ling astronomical point No. 8","to":"marker R at Munguchai","type":"surveyed-demarcated-chain","length":"121 versts 497 sazhens","sector":2},
-          {"from":"marker P","to":"mouth of Usha-go/Hubtu","type":"watershed-and-terrain-chain","length":"96 versts 70 sazhens","sector":3},
+          {"from":"marker P","to":"mouth of Usha-go/Hubtu","type":"watershed-and-terrain-chain","length":"96 versts 70 sazhens","sector":3}
+        ],
+        "derivationNote": "The sectors 2 and 3 portion of the 20 September package verifies and records the existing boundary realization. It does not itself state a sovereign-territory transfer. Exact display geometry remains useful for boundary visualization but is not a second area mutation."
+      },
+      "reviewStatus": "source-verified",
+      "notes": "Non-area verification is separated from the distinct N/O marker-position correction contained in the same documentary package."
+    },
+    {
+      "id": "territory-1886-south-ussuri-no-marker-correction",
+      "eventId": "evt-1886-south-ussuri-sectors2-3-no-verified",
+      "polityId": "russian-empire",
+      "effectiveDate": {"original":"20 сентября 1886 г.","normalized":"1886-10-02","precision":"day","calendar":"julian"},
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "demarcate",
+      "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+      "geometry": {
+        "method": "source-verified-marker-position-correction-pending-georeference",
+        "evidenceDocumentIds": ["doc-south-ussuri-sectors2-3-no-1886-mfa"],
+        "routeSemantics": [
           {"from":"marker N","to":"marker O","type":"marker-position-correction","source":"separate 20 September correction protocol"}
         ],
-        "derivationNote": "The 20 September package both verifies sectors 2 and 3 and explicitly corrects the placement of principal posts N and O. The corrected 1886 realization supersedes the uncorrected 1861 post positions for subsequent replay; exact coordinates remain dependent on the jointly checked maps/geodetic records."
+        "derivationNote": "The separate 20 September correction protocol explicitly corrects the placement of principal posts N and O. This is retained as a true spatial blocker until the corrected 1886 realization is georeferenced; it must not be erased by classifying the surrounding sector verification as metadata-only."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "source-verified",
+      "notes": "True spatial correction split from the non-area verification of sectors 2 and 3. No geometry is promoted without the jointly checked map/geodetic record."
     },
     {
       "id": "territory-1886-south-ussuri-sector6",
