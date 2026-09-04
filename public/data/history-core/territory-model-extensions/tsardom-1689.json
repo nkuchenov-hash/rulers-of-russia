@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-tsardom-1689-corroborated-ohm",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-tsardom-1689-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1689-relation-2851290",
+        "doc-nerchinsk-1689-mfa",
+        "doc-andrusovo-smolensk-implementation-1667-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 150000,
+      "derivationNote": "Pinned OHM 1689 reconstruction accepted only after exact-relation licensing check, distributed spatial controls and primary-document corroboration. It is a generalized historical reconstruction, not a surveyed state border."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-tsardom-end-1689",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1689-12",
+      "historicalDate": {
+        "original": "1689 — extent of Russian expansion; conservative year-end anchor",
+        "normalized": "1689",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-tsardom-1689-corroborated-ohm"
+      ],
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1689-relation-2851290",
+        "doc-nerchinsk-1689-mfa",
+        "doc-andrusovo-smolensk-implementation-1667-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "The OHM source is year-precision, so coverage begins only at 1689-12. The polygon excludes Azov, matching the pre-1696 state; therefore it is conservatively bounded through 1695-12 and is not stretched across the Azov acquisition.",
+      "validThroughMonth": "1695-12"
+    }
+  ]
+}
