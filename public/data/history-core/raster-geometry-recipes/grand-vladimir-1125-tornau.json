@@ -24,7 +24,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 120,
-        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates are used only to register named surviving settlements; no 862-sheet raster transfer is used. Northern controls at Belozersk and Chukhloma keep the full traced inset polygon inside explicit triangulation.",
+        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates are used only to register named surviving settlements; no 862-sheet raster transfer is used. Northern controls at Novgorod, Belozersk and Chukhloma keep the entire traced inset polygon inside explicit triangulation.",
         "gcps": [
           {
             "id": "vologda",
@@ -179,6 +179,17 @@
               42.682,
               58.752
             ]
+          },
+          {
+            "id": "novgorod",
+            "pixel": [
+              985,
+              1595
+            ],
+            "lonLat": [
+              31.2755,
+              58.5229
+            ]
           }
         ],
         "triangles": [
@@ -263,9 +274,19 @@
             6
           ],
           [
+            5,
+            14,
+            8
+          ],
+          [
             9,
             7,
             6
+          ],
+          [
+            14,
+            12,
+            8
           ],
           [
             11,
