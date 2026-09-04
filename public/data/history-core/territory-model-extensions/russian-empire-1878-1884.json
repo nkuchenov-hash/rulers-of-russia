@@ -2,30 +2,6 @@
   "schema_version": 1,
   "fragments": [
     {
-      "id": "frag-russian-empire-main-1877-1879-postberlin",
-      "polityId": "russian-empire",
-      "track": "russian-legal-border",
-      "role": "territory-area",
-      "territorialModel": "mixed",
-      "geometryFile": "geometry/russian-empire-main-1877-1879-postberlin.geojson",
-      "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1877-1879-postberlin",
-        "doc-berlin-1878-ebid",
-        "doc-berlin-ratifications-1878-frus",
-        "doc-petersburg-japan-1875-ebid",
-        "doc-petersburg-japan-1875-ratifications-mofa",
-        "doc-kokand-annexation-decree-1876-rgvia",
-        "doc-bukhara-peace-conditions-1868-imperial-publication",
-        "doc-khiva-gandymyan-1873-imperial-mfa",
-        "doc-peking-1860-mfa",
-        "doc-fredrikshamn-treaty-1809-prlib"
-      ],
-      "reviewStatus": "geometry-verified",
-      "confidence": "medium",
-      "uncertaintyMeters": 100000,
-      "derivationNote": "Pinned post-Berlin main-Empire state verified by distributed controls and primary treaty evidence."
-    },
-    {
       "id": "frag-russian-empire-main-1880-1884",
       "polityId": "russian-empire",
       "track": "russian-legal-border",
@@ -51,42 +27,6 @@
     }
   ],
   "baseStates": [
-    {
-      "id": "base-russian-empire-composite-1878-12-postberlin",
-      "polityId": "russian-empire",
-      "track": "russian-legal-border",
-      "territorialModel": "mixed",
-      "coverageAnchorMonth": "1878-12",
-      "historicalDate": {
-        "original": "Post-Berlin 1878 state; conservative year-end activation",
-        "normalized": "1878-12",
-        "precision": "month",
-        "calendar": "gregorian"
-      },
-      "geometryFragmentIds": [
-        "frag-russian-empire-main-1877-1879-postberlin",
-        "frag-russian-empire-finland-component-1887-1917"
-      ],
-      "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1877-1879-postberlin",
-        "doc-berlin-1878-ebid",
-        "doc-berlin-ratifications-1878-frus",
-        "doc-petersburg-japan-1875-ebid",
-        "doc-petersburg-japan-1875-ratifications-mofa",
-        "doc-kokand-annexation-decree-1876-rgvia",
-        "doc-bukhara-peace-conditions-1868-imperial-publication",
-        "doc-khiva-gandymyan-1873-imperial-mfa",
-        "doc-peking-1860-mfa",
-        "doc-fredrikshamn-treaty-1809-prlib",
-        "doc-historical-basemaps-finland-1914",
-        "doc-fredrikshamn-treaty-1809-prlib",
-        "doc-finland-historical-boundary-maps-1909-rgia"
-      ],
-      "reviewStatus": "geometry-verified",
-      "confidence": "medium",
-      "validThroughMonth": "1879-12",
-      "notes": "The 1877–1879 archive state is used only after the Berlin settlement, starting 1878-12, because Kars/Batum and other post-1878 controls must pass. Finland is separate."
-    },
     {
       "id": "base-russian-empire-composite-1880-1884",
       "polityId": "russian-empire",
