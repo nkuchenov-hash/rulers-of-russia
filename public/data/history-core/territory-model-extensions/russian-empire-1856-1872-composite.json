@@ -58,13 +58,12 @@
         "doc-adrianople-1829-mfa-border-collection",
         "doc-paris-bessarabia-1856-ebid",
         "doc-shimoda-1855-avpri",
-        "doc-shimoda-ratifications-1856-mofa",
-        "doc-aigun-1858-mfa"
+        "doc-shimoda-ratifications-1856-mofa"
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "uncertaintyMeters": 100000,
-      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+      "derivationNote": "Pinned 1857–1858 main-Empire reconstruction explicitly classified as pre-Aigun by the Blagoveshchensk outside control; Finland and northern Kurils are separate fragments."
     },
     {
       "id": "frag-russian-empire-main-1859-1859-1856-1872",
@@ -284,14 +283,14 @@
       "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
     },
     {
-      "id": "base-russian-empire-composite-1858-12-kurils",
+      "id": "base-russian-empire-composite-1857-12-pre-aigun-kurils",
       "polityId": "russian-empire",
       "track": "russian-legal-border",
       "territorialModel": "mixed",
-      "coverageAnchorMonth": "1858-12",
+      "coverageAnchorMonth": "1857-12",
       "historicalDate": {
-        "original": "Conservative source-supported state at 1858-12",
-        "normalized": "1858-12",
+        "original": "Pre-Aigun 1857–1858 archive state; conservatively activated at 1857-12",
+        "normalized": "1857-12",
         "precision": "month",
         "calendar": "gregorian"
       },
@@ -310,7 +309,6 @@
         "doc-paris-bessarabia-1856-ebid",
         "doc-shimoda-1855-avpri",
         "doc-shimoda-ratifications-1856-mofa",
-        "doc-aigun-1858-mfa",
         "doc-fredrikshamn-treaty-1809-prlib",
         "doc-finland-historical-boundary-maps-1909-rgia",
         "doc-historical-basemaps-finland-1914",
@@ -318,8 +316,8 @@
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
-      "validThroughMonth": "1858-12",
-      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+      "validThroughMonth": "1858-05",
+      "notes": "The source state fails the post-Aigun Blagoveshchensk control and is therefore explicitly classified as pre-Aigun. It is used only from December 1857 through May 1858 and ends before the June 1858 boundary transition."
     },
     {
       "id": "base-russian-empire-composite-1859-12-kurils",
