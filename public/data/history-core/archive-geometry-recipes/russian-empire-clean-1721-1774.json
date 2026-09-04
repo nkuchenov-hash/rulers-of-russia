@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-1721-1726-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1721-1726-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1721,
+        "end_date": 1726
+      },
+      "output": "geometry/russian-empire-1721-1726-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1721-1726",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "smolensk",
+          "lonLat": [
+            32.0453,
+            54.7826
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kazan",
+          "lonLat": [
+            49.1221,
+            55.7887
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "astrakhan",
+          "lonLat": [
+            48.0408,
+            46.3497
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yakutsk",
+          "lonLat": [
+            129.7326,
+            62.0278
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "okhotsk",
+          "lonLat": [
+            143.217,
+            59.36
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact 1721–1726 Cliopatria/Seshat feature. Promoted only after all distributed controls pass and the Nystad legal settlement/effective chronology independently corroborate the western state. Year-range source is used conservatively from 1721-12 through 1726-12."
+    },
+    {
+      "id": "recipe-russian-empire-1772-1774-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1772-1774-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1772,
+        "end_date": 1774
+      },
+      "output": "geometry/russian-empire-1772-1774-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1772-1774",
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "smolensk",
+          "lonLat": [
+            32.0453,
+            54.7826
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vitebsk",
+          "lonLat": [
+            30.2049,
+            55.1904
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "polotsk",
+          "lonLat": [
+            28.784,
+            55.487
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "mogilev",
+          "lonLat": [
+            30.3325,
+            53.9007
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact 1772–1774 Cliopatria/Seshat feature. Promoted only after all distributed controls pass and the official Russian incorporation act corroborates the first-partition gains. Year-range source is used conservatively from 1772-12 through 1774-12."
+    }
+  ]
+}
