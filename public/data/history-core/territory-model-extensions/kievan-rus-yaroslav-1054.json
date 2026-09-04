@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-kievan-rus-yaroslav-acquisitions-1054-reconstruction",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/kievan-rus-yaroslav-acquisitions-1054-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926",
+        "doc-tornau-rus-862-map-1910",
+        "doc-gugk-rybakov-old-rus-1961"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 180000,
+      "derivationNote": "Same-sheet transcription of Tornau's explicitly labelled Yaroslav +1054 acquisition layer; low-confidence historical reconstruction, not a surveyed medieval border."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-kievan-rus-yaroslav-end-1054",
+      "polityId": "kievan-rus",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "1054-12",
+      "historicalDate": {
+        "original": "к 1054 году",
+        "normalized": "1054",
+        "precision": "year",
+        "calendar": "source-specific-historical-atlas-chronology"
+      },
+      "geometryFragmentIds": [
+        "frag-early-rus-rurik-862-reconstruction",
+        "frag-kievan-rus-oleg-acquisitions-912-reconstruction",
+        "frag-kievan-rus-sviatoslav-acquisitions-972-reconstruction",
+        "frag-kievan-rus-vladimir-acquisitions-1015-reconstruction",
+        "frag-kievan-rus-yaroslav-acquisitions-1054-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-pvl-laurentian-1926",
+        "doc-tornau-rus-862-map-1910",
+        "doc-gugk-rybakov-old-rus-1961"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Coverage begins at the final month of the source's +1054 layer. No validThroughMonth is asserted; strict materialization must not forward-fill beyond independently supported continuity."
+    }
+  ]
+}
