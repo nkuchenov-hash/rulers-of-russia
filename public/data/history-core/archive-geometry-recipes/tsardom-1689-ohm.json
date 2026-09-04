@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-tsardom-1689-corroborated-ohm",
+      "fragmentId": "frag-tsardom-1689-corroborated-ohm",
+      "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+      "archiveBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+      "selector": {
+        "start_date": "1689",
+        "end_date": "1699"
+      },
+      "output": "geometry/russian-tsardom-1689-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1689-relation-2851290",
+        "doc-nerchinsk-1689-mfa",
+        "doc-andrusovo-smolensk-implementation-1667-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "smolensk",
+          "lonLat": [
+            32.0453,
+            54.7826
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kazan",
+          "lonLat": [
+            49.1221,
+            55.7887
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "astrakhan",
+          "lonLat": [
+            48.0408,
+            46.3497
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tyumen",
+          "lonLat": [
+            65.5343,
+            57.153
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tobolsk",
+          "lonLat": [
+            68.2538,
+            58.1981
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tomsk",
+          "lonLat": [
+            84.9482,
+            56.4846
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "krasnoyarsk",
+          "lonLat": [
+            92.8932,
+            56.0153
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "irkutsk",
+          "lonLat": [
+            104.2807,
+            52.2864
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yakutsk",
+          "lonLat": [
+            129.7326,
+            62.0278
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "okhotsk",
+          "lonLat": [
+            143.217,
+            59.36
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "azov",
+          "lonLat": [
+            39.416,
+            47.112
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "narva",
+          "lonLat": [
+            28.19,
+            59.38
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact project-archived OHM relation 2851290 (version 34, no feature-specific license override) is used as a low-confidence 1689 reconstruction only after broad west-to-Pacific controls. Primary documentary evidence independently anchors the 1689 eastern settlement and 1667 Smolensk implementation. The polygon excludes Azov and therefore is bounded before the 1696 acquisition rather than stretched through the relation's nominal 1699 end."
+    }
+  ]
+}
