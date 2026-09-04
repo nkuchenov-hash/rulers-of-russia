@@ -218,6 +218,7 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
+      "geometryAction": "metadata-only",
       "evidenceDocumentIds": ["doc-south-ussuri-sectors4-5-1886-mfa", "doc-south-ussuri-sector6-supplement-1886-mfa"],
       "geometry": {
         "method": "joint-verified-bearing-distance-and-watershed-rules-pending-anchor-georeference",
@@ -232,7 +233,7 @@
         "derivationNote": "The fourth sector provides unusually strong geometric structure: an explicitly straight segment with bilateral bearing and length. It remains below geometry-verified only because neither endpoint has yet been independently transformed into a registered modern display datum. Once a source-backed anchor for O or N is obtained, the historical rule can be materialized without tracing a modern border. The fifth sector remains terrain/watershed geometry and therefore needs mapped vertices."
       },
       "reviewStatus": "source-verified",
-      "notes": "This closes the documented 1886 joint verification sequence through the final 3 October sector protocols while preserving the later physical construction of some secondary signs as a separate implementation detail."
+      "notes": "Non-area joint verification of existing boundary sectors 4–5. The 3 October 1886 protocol records the surveyed straight-line rule for sector 4, watershed/measured-route controls for sector 5, and subsequent sign construction details, but does not state a sovereign-territory transfer or a correction of the legal line. Preserve these source-backed geometry semantics for future boundary visualization without replaying a second sovereign-area mutation."
     }
   ]
 }
