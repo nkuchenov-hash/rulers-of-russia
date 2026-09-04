@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-historical-basemaps-finland-1914",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps — Grand Duchy of Finland component, 1914 snapshot",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps/blob/62d8f1a03a71f2d3ff17f2d166f7553f256bce68/geojson/world_1914.geojson",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1914 snapshot",
+        "normalized": "1914",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "historical-basemaps, pinned commit 62d8f1a03a71f2d3ff17f2d166f7553f256bce68, world_1914.geojson, feature index 75.",
+      "representedDate": {
+        "original": "Grand Duchy of Finland within Russian Empire, 1914",
+        "normalized": "1914",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/world-history/snapshots/1914.geojson",
+        "gitBlobSha1": "29ba986cedc6f4e61d3870a9e29cef3234cd2da1",
+        "featureIndices": [
+          75
+        ],
+        "license": "GPL-3.0"
+      },
+      "notes": "Secondary geometry only. Temporal reuse is not inferred from 1914 alone: the 1809 Fredrikshamn treaty and the RGIA 1909 retrospective state-boundary maps independently establish the Finnish external-border lineage used here."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1885-1894-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1885–1894",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1885–1894 capture interval",
+        "normalized": "1885/1894",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1885–1894",
+        "normalized": "1885/1894",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1895-1897-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1895–1897",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1895–1897 capture interval",
+        "normalized": "1895/1897",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1895–1897",
+        "normalized": "1895/1897",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1898-1899-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1898–1899",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1898–1899 capture interval",
+        "normalized": "1898/1899",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1898–1899",
+        "normalized": "1898/1899",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1900-1904-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1900–1904",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1900–1904 capture interval",
+        "normalized": "1900/1904",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1900–1904",
+        "normalized": "1900/1904",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1905-1911-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1905–1911",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1905–1911 capture interval",
+        "normalized": "1905/1911",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1905–1911",
+        "normalized": "1905/1911",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1912-1912-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1912–1912",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1912–1912 capture interval",
+        "normalized": "1912/1912",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1912–1912",
+        "normalized": "1912/1912",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1913-1913-late",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1913–1913",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1913–1913 capture interval",
+        "normalized": "1913/1913",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1913–1913",
+        "normalized": "1913/1913",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "This source omits the Grand Duchy of Finland as a separate component. Production bases therefore union this checked main-Empire geometry with the separately corroborated Finland component; no other missing area is supplied."
+    }
+  ]
+}
