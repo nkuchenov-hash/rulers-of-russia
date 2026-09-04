@@ -14,14 +14,19 @@
       "track": "de-facto-control",
       "territorialModel": "linear-border",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
+      "evidenceDocumentIds": [
+        "doc-andrusovo-smolensk-implementation-1667-ebid"
+      ],
       "geometry": {
         "method": "source-verified-implementation-area-pending",
-        "evidenceDocumentIds": ["doc-andrusovo-smolensk-implementation-1667-ebid"],
+        "evidenceDocumentIds": [
+          "doc-andrusovo-smolensk-implementation-1667-ebid"
+        ],
         "derivationNote": "The A1 implementation act source-verifies Russian administrative control of Smolensk and the specifically returned towns by 18 June 1667 OS. This change records implementation/control only. The complete Andrusovo legal boundary and the exact historical extent associated with each returned town still require the treaty and boundary acts; no later Smolensk administrative polygon is substituted."
       },
       "reviewStatus": "source-verified",
-      "notes": "De-facto implementation is verified independently of the still-pending full treaty-border geometry."
+      "notes": "Source-verified de-facto implementation/control status for Smolensk and returned towns. This record does not define a new sovereign territorial acquisition or cession; the legal Andrusovo boundary remains a separate geometry dependency. Preserve this record as control/status metadata without replaying a second sovereign-area mutation.",
+      "geometryAction": "metadata-only"
     }
   ]
 }
