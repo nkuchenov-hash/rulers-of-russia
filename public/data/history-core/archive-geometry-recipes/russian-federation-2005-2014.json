@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-rf-2005-2014-corroborated-archive",
+      "fragmentId": "frag-rf-2005-2014-corroborated-archive",
+      "archivePath": "public/data/territory/archive/russian-federation.geojson",
+      "archiveBlobSha1": "d2283877e87ef0ea16854a5b69bd1564973d7b48",
+      "selector": {
+        "start_date": "2004-10-14",
+        "end_date": "2018-08-12"
+      },
+      "output": "geometry/russian-federation-2005-2014-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-rf-china-east-border-2004-2005-pravo"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "murmansk",
+          "lonLat": [
+            33.0827,
+            68.9707
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "sochi",
+          "lonLat": [
+            39.7231,
+            43.5855
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "grozny",
+          "lonLat": [
+            45.6986,
+            43.3178
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "petropavlovsk-kamchatsky",
+          "lonLat": [
+            158.65,
+            53.037
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "norilsk",
+          "lonLat": [
+            88.2027,
+            69.3558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "sevastopol",
+          "lonLat": [
+            33.5224,
+            44.6166
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "simferopol",
+          "lonLat": [
+            34.1024,
+            44.9521
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "astana",
+          "lonLat": [
+            71.4304,
+            51.1282
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "donetsk",
+          "lonLat": [
+            37.8028,
+            48.0159
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "luhansk",
+          "lonLat": [
+            39.3078,
+            48.574
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact project-archived RF vector state selected for the 2004 eastern-border settlement is pinned by Git blob SHA and independently checked across European Russia, Kaliningrad, Caucasus, Siberia and Far East. It excludes Crimea and the four 2022-claimed Ukrainian regions. Used only from the agreement's legal entry into force through 2014-02."
+    }
+  ]
+}
