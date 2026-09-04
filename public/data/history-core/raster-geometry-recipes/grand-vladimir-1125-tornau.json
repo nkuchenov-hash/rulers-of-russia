@@ -391,7 +391,7 @@
             1885
           ],
           [
-            1265,
+            1275,
             1885
           ],
           [
@@ -420,7 +420,7 @@
           ]
         ]
       ],
-      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary. Edge vertices are conservatively clipped to the convex hull of explicit target-sheet GCPs so the materializer never extrapolates beyond independently registered controls; 120 km uncertainty dominates this inward clipping and atlas generalization."
+      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary. Edge vertices are conservatively clipped to the convex hull of explicit target-sheet GCPs so the materializer never extrapolates beyond independently registered controls; 120 km uncertainty dominates this inward clipping and atlas generalization. The single southwest-bottom vertex is conservatively inset 10 raster pixels to remain inside the explicit GCP triangulation; this is far below the declared reconstruction uncertainty."
     }
   ]
 }
