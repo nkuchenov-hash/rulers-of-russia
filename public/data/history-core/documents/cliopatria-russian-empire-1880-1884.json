@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-russian-empire-1880-1884-main",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire main boundary capture, 1880–1884",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1880–1884 capture interval",
+        "normalized": "1880/1884",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1880–1884",
+        "normalized": "1880/1884",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "Main-Empire component omits Finland. All other distributed controls pass for the post-1878 state; production use unions it only with the separately verified Finland component."
+    }
+  ]
+}
