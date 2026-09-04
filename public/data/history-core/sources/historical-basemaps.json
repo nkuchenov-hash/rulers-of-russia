@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps — historical world boundary snapshots",
+      "institution": "A. Ourednik / GitHub historical-basemaps",
+      "url": "https://github.com/aourednik/historical-basemaps",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Historical world political boundary reconstructions including Russian Empire snapshots",
+      "canonicalUse": [
+        "reconstruction-geometry",
+        "cross-check",
+        "uncertainty-model"
+      ],
+      "notes": "Secondary historical reconstruction. The project vendors exact pinned snapshots from commit 62d8f1a03a71f2d3ff17f2d166f7553f256bce68. Repository license is GPL-3.0. A snapshot may be promoted only when its exact Git blob is pinned, the relevant component set passes distributed spatial controls, and independent A1/A2/A3 documentary evidence corroborates the state."
+    }
+  ]
+}
