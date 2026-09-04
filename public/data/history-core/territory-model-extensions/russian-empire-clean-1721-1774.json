@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-1721-1726-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1721-1726-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1721-1726",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat state; accepted only after distributed spatial controls and independent treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1772-1774-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1772-1774-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1772-1774",
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat state; accepted only after distributed spatial controls and independent official incorporation evidence."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1721-1726",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1721-12",
+      "historicalDate": {
+        "original": "1721–1726 source interval; conservative year-end start after 1721 imperial transition",
+        "normalized": "1721",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1721-1726-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1721-1726",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Starts at 1721-12 because the cartographic state is year-precision and the Russian Empire coverage begins late in 1721. Ends at 1726-12 before the distinct 1727 state and Kyakhta settlement. No forward proxy.",
+      "validThroughMonth": "1726-12"
+    },
+    {
+      "id": "base-russian-empire-1772-1774",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1772-12",
+      "historicalDate": {
+        "original": "1772–1774 source interval; conservative year-end start after 1772 incorporation",
+        "normalized": "1772",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1772-1774-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1772-1774",
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Starts at 1772-12 because the source interval is year-precision; bounded through 1774-12 and never stretched into later territorial changes.",
+      "validThroughMonth": "1774-12"
+    }
+  ]
+}
