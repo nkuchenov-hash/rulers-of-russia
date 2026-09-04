@@ -23,7 +23,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 220,
-        "gcpCoordinateBasis": "Direct same-sheet settlement/lake anchors on Tornau's 1240–1533 main map. The 1462 controls are retained and expanded north/east using Lake Onega, Vyatka, Cherdyn, Kazan and interior northern controls visible on the same source sheet. No modern political border or cross-sheet registration is used; 220 km uncertainty intentionally dominates manual source-edge reading and atlas generalization. The northwest source area is explicitly triangulated between Pskov, Novgorod, Lake Onega and the same-sheet northern interior controls; the traced boundary itself is unchanged.",
+        "gcpCoordinateBasis": "Direct same-sheet settlement/lake anchors on Tornau's 1240–1533 main map. The 1462 controls are retained and expanded north/east using Lake Onega, Vyatka, Cherdyn, Kazan and interior northern controls visible on the same source sheet. No modern political border or cross-sheet registration is used; 220 km uncertainty intentionally dominates manual source-edge reading and atlas generalization. The northwest source area is explicitly triangulated between Pskov, Novgorod, Lake Onega and the same-sheet northern interior controls; the traced boundary itself is unchanged. Lake Peipus is added as a direct same-sheet natural-feature control west of Pskov; this encloses the source-traced northwest edge without moving the traced boundary.",
         "gcps": [
           {
             "id": "belozersk-label-anchor",
@@ -244,6 +244,17 @@
               41,
               62
             ]
+          },
+          {
+            "id": "lake-peipus-center",
+            "pixel": [
+              500,
+              660
+            ],
+            "lonLat": [
+              27.6,
+              58.65
+            ]
           }
         ],
         "triangles": [
@@ -426,6 +437,21 @@
             18,
             19,
             0
+          ],
+          [
+            20,
+            10,
+            18
+          ],
+          [
+            20,
+            18,
+            9
+          ],
+          [
+            20,
+            9,
+            10
           ]
         ]
       },
