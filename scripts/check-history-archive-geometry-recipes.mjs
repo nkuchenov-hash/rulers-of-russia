@@ -86,9 +86,23 @@ for (const recipe of recipes) {
   for (const sourceFeature of candidates) {
     if (!['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type)) fail(`Archive recipe ${recipe.id} selected unsupported geometry`);
   }
-  const polygons = candidates.flatMap(sourceFeature => sourceFeature.geometry.type === 'Polygon'
+  let polygons = candidates.flatMap(sourceFeature => sourceFeature.geometry.type === 'Polygon'
     ? [sourceFeature.geometry.coordinates]
     : sourceFeature.geometry.coordinates);
+  if (recipe.componentBboxFilter) {
+    const f = recipe.componentBboxFilter;
+    if (![f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite)) fail(`Archive recipe ${recipe.id} has invalid componentBboxFilter`);
+    const polygonBbox = polygon => {
+      const pts = polygon.flat();
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+    };
+    polygons = polygons.filter(polygon => {
+      const [minX,minY,maxX,maxY] = polygonBbox(polygon);
+      return minX >= f.minLon && minY >= f.minLat && maxX <= f.maxLon && maxY <= f.maxLat;
+    });
+    if (polygons.length < 1) fail(`Archive recipe ${recipe.id} componentBboxFilter selected no polygon components`);
+  }
   const sourceGeometry = {type: 'MultiPolygon', coordinates: polygons};
   for (const control of recipe.controls ?? []) {
     if (!['inside', 'outside'].includes(control.expected)) fail(`Archive recipe ${recipe.id} control ${control.id} has invalid expectation`);
@@ -104,6 +118,7 @@ for (const recipe of recipes) {
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
   if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact selected geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
+  if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
 }
 
 console.log(`History archive geometry recipe check passed: ${recipes.length} pinned/corroborated recipes.`);

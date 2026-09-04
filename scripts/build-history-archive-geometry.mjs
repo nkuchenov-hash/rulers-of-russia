@@ -68,7 +68,21 @@ for (const recipe of recipes) {
   for (const feature of candidates) {
     assert(['Polygon', 'MultiPolygon'].includes(feature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${feature.geometry?.type}`);
   }
-  const polygons = candidates.flatMap(feature => feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates);
+  let polygons = candidates.flatMap(feature => feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates);
+  if (recipe.componentBboxFilter) {
+    const f = recipe.componentBboxFilter;
+    assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid componentBboxFilter`);
+    const polygonBbox = polygon => {
+      const pts = polygon.flat();
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+    };
+    polygons = polygons.filter(polygon => {
+      const [minX,minY,maxX,maxY] = polygonBbox(polygon);
+      return minX >= f.minLon && minY >= f.minLat && maxX <= f.maxLon && maxY <= f.maxLat;
+    });
+    assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} componentBboxFilter selected no polygon components`);
+  }
   const sourceGeometry = {type:'MultiPolygon', coordinates:polygons};
 
   for (const control of recipe.controls ?? []) {
@@ -91,6 +105,7 @@ for (const recipe of recipes) {
       archiveBlobSha1: recipe.archiveBlobSha1,
       selector: recipe.selector ?? null,
       featureIndices: recipe.featureIndices ?? null,
+      componentBboxFilter: recipe.componentBboxFilter ?? null,
       sourceCrs: recipe.sourceCrs ?? 'RFC 7946 longitude/latitude',
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       independentControls: recipe.controls ?? [],

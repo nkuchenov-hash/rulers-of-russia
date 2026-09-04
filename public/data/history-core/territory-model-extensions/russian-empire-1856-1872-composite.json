@@ -1,0 +1,537 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-northern-kurils-1856-1875",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-northern-kurils-1856-1875.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-northern-kurils-1880",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 25000,
+      "effectiveTo": "1875-08-22",
+      "derivationNote": "Northern Kuril island shapes are extracted reproducibly from a pinned 1880 historical snapshot; legal Russian ownership before the 1875 exchange treaty is anchored to the Shimoda treaty."
+    },
+    {
+      "id": "frag-russian-empire-main-1856-1856-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1856-1856-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1857-1858-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1857-1858-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned 1857–1858 main-Empire reconstruction explicitly classified as pre-Aigun by the Blagoveshchensk outside control; Finland and northern Kurils are separate fragments."
+    },
+    {
+      "id": "frag-russian-empire-main-1860-1861-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1860-1861-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1862-1862-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1862-1862-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1863-1863-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1863-1863-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1868-1869-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1868-1869-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-alaska-cession-ratification-exchange-1867-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1870-1870-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1870-1870-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    },
+    {
+      "id": "frag-russian-empire-main-1871-1872-1856-1872",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1871-1872-1856-1872.geojson",
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction; all treaty-state controls pass except separately modeled Finland and northern Kurils."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1856-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1856-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1856-12",
+        "normalized": "1856-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1856-1856-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1856-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1857-12-pre-aigun-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1857-12",
+      "historicalDate": {
+        "original": "Pre-Aigun 1857–1858 archive state; conservatively activated at 1857-12",
+        "normalized": "1857-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1857-1858-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1858-05",
+      "notes": "The source state fails the post-Aigun Blagoveshchensk control and is therefore explicitly classified as pre-Aigun. It is used only from December 1857 through May 1858 and ends before the June 1858 boundary transition."
+    },
+    {
+      "id": "base-russian-empire-composite-1860-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1860-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1860-12",
+        "normalized": "1860-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1860-1861-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1861-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1862-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1862-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1862-12",
+        "normalized": "1862-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1862-1862-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1862-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1863-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1863-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1863-12",
+        "normalized": "1863-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1863-1863-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1863-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1868-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1868-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1868-12",
+        "normalized": "1868-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1868-1869-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-alaska-cession-ratification-exchange-1867-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1869-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1870-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1870-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1870-12",
+        "normalized": "1870-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1870-1870-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1870-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    },
+    {
+      "id": "base-russian-empire-composite-1871-12-kurils",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1871-12",
+      "historicalDate": {
+        "original": "Conservative source-supported state at 1871-12",
+        "normalized": "1871-12",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1871-1872-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1872-12",
+      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+    }
+  ]
+}
