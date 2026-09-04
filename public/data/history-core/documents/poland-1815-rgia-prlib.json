@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-poland-kingdom-1815-rgia-prlib",
+      "sourceCollectionId": "prlib-rgia-poland-1815",
+      "title": "Основы конституции Польского королевства, установленные на Венском конгрессе 1815 года, и манифесты Александра I",
+      "institution": "РГИА / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/1743755",
+      "tier": "A2-official-document-publication",
+      "documentType": "archival-legislative-record",
+      "date": {
+        "original": "1815",
+        "normalized": "1815",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "Российская империя"
+      ],
+      "publicationCitation": "РГИА. 1260 / 1 / 551. Основы конституции Польского королевства, установленные на Венском конгрессе 1815 года...",
+      "notes": "Используется как первичное архивное подтверждение включения Царства Польского в политико-правовое пространство Российской империи после Венского конгресса. Геометрия берётся не из этого текста, а из независимо проверенного исторического snapshot."
+    }
+  ]
+}
