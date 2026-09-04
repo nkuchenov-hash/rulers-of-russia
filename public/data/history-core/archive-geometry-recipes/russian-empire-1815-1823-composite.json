@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-main-1815-1823-composite",
+      "fragmentId": "frag-russian-empire-main-1815-1823-composite",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1815,
+        "end_date": 1823
+      },
+      "output": "geometry/russian-empire-main-1815-1823-composite.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1815-1823",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "istanbul",
+          "lonLat": [
+            28.9784,
+            41.0082
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Main 1815–1823 Empire state. It is intentionally accepted without Finland; the full base state unions it with a second independently verified 1815 component."
+    },
+    {
+      "id": "recipe-russian-empire-world-1815-components",
+      "fragmentId": "frag-russian-empire-world-1815-components",
+      "archivePath": "public/data/territory/world-history/snapshots/1815.geojson",
+      "archiveBlobSha1": "43a3b7c23b57e9372566a8e9b0e1248799cf84bb",
+      "featureIndices": [
+        408,
+        428
+      ],
+      "output": "geometry/russian-empire-world-1815-components.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1815-components",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-poland-kingdom-1815-rgia-prlib",
+        "doc-alaska-cession-1867-original-loc"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bucharest",
+          "lonLat": [
+            26.1025,
+            44.4268
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "1815 historical-basemaps Russian components. They supply Finland and Congress Poland to the composite but are not trusted for Bessarabia/Caucasus, which the main fragment supplies."
+    }
+  ]
+}
