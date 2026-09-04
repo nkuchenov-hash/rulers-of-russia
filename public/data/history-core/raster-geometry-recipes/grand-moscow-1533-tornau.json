@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-grand-moscow-vasily3-acquisitions-1533-tornau",
+      "fragmentId": "frag-grand-moscow-vasily3-acquisitions-1533-reconstruction",
+      "track": "russian-legal-border",
+      "geometryType": "MultiPolygon",
+      "output": "geometry/grand-moscow-vasily3-acquisitions-1533-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813",
+        "doc-tornau-rus-1240-1533-map-1910"
+      ],
+      "sourceRaster": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/18/Historical_map_of_Rus%27%2C_1240-1533.gif",
+        "sha256": "be3f8afa9867b1734150c6b9eac5389c8e1f983a11c90626d738256c763793db",
+        "width": 1800,
+        "height": 2207,
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_1240-1533.gif",
+        "rightsNote": "Wikimedia Commons identifies Tornau's 1910 sheet as public domain. The recipe traces the solid salmon legend layer «Московское В. Кн. въ 1462 г.» from the hash-pinned raster."
+      },
+      "georeference": {
+        "method": "piecewise-affine-triangulation",
+        "uncertaintyKm": 220,
+        "gcpCoordinateBasis": "Direct same-sheet settlement/lake anchors on Tornau's 1240–1533 main map. The 1462 controls are retained and expanded north/east using Lake Onega, Vyatka, Cherdyn, Kazan and interior northern controls visible on the same source sheet. No modern political border or cross-sheet registration is used; 220 km uncertainty intentionally dominates manual source-edge reading and atlas generalization. The northwest source area is explicitly triangulated between Pskov, Novgorod, Lake Onega and the same-sheet northern interior controls; the traced boundary itself is unchanged. Lake Peipus is added as a direct same-sheet natural-feature control west of Pskov; this encloses the source-traced northwest edge without moving the traced boundary. Lake Peipus is also triangulated directly to Lake Onega and the northern interior control, covering the source-traced northwest arc around [585,565] without altering the source ring. Lake Ladoga is added as a direct same-sheet natural-feature control; together with Lake Peipus, Lake Onega and the northern interior control it encloses the traced source arc around [620,520] without moving the ring. The clearly recognizable eastern shore of Lake Onega is added as a same-sheet natural-feature control at the traced northern edge; this pins the source vertex directly rather than extrapolating it. Triangles are normalized to a complete Delaunay mesh of the explicit same-sheet GCP set. Nine coarse outer-ring vertices that lay outside the GCP convex hull are conservatively moved inward to the nearest registered hull edge (by at most ~43 source pixels), rather than extrapolated. This inward clipping is fully dominated by the declared 220 km uncertainty. The Murom–Kazan–Ryazan triangle is explicitly included for the southeastern Vasily III acquisition component; this covers its registered edge without extrapolation.",
+        "gcps": [
+          {
+            "id": "belozersk-label-anchor",
+            "pixel": [
+              780,
+              600
+            ],
+            "lonLat": [
+              37.8078,
+              60.0308
+            ]
+          },
+          {
+            "id": "vologda-label-anchor",
+            "pixel": [
+              880,
+              640
+            ],
+            "lonLat": [
+              39.8915,
+              59.2205
+            ]
+          },
+          {
+            "id": "tver-label-anchor",
+            "pixel": [
+              725,
+              740
+            ],
+            "lonLat": [
+              35.9119,
+              56.8587
+            ]
+          },
+          {
+            "id": "yaroslavl-label-anchor",
+            "pixel": [
+              860,
+              735
+            ],
+            "lonLat": [
+              39.8845,
+              57.6261
+            ]
+          },
+          {
+            "id": "rostov-label-anchor",
+            "pixel": [
+              895,
+              765
+            ],
+            "lonLat": [
+              39.4139,
+              57.1859
+            ]
+          },
+          {
+            "id": "moscow-settlement-anchor",
+            "pixel": [
+              830,
+              840
+            ],
+            "lonLat": [
+              37.6173,
+              55.7558
+            ]
+          },
+          {
+            "id": "vladimir-label-anchor",
+            "pixel": [
+              975,
+              820
+            ],
+            "lonLat": [
+              40.4066,
+              56.1291
+            ]
+          },
+          {
+            "id": "nizhny-novgorod-label-anchor",
+            "pixel": [
+              1090,
+              790
+            ],
+            "lonLat": [
+              44.0059,
+              56.3269
+            ]
+          },
+          {
+            "id": "ryazan-label-anchor",
+            "pixel": [
+              1000,
+              890
+            ],
+            "lonLat": [
+              39.74,
+              54.6296
+            ]
+          },
+          {
+            "id": "novgorod-label-anchor",
+            "pixel": [
+              620,
+              685
+            ],
+            "lonLat": [
+              31.2755,
+              58.5229
+            ]
+          },
+          {
+            "id": "pskov-label-anchor",
+            "pixel": [
+              545,
+              720
+            ],
+            "lonLat": [
+              28.3318,
+              57.8193
+            ]
+          },
+          {
+            "id": "smolensk-label-anchor",
+            "pixel": [
+              650,
+              850
+            ],
+            "lonLat": [
+              32.0453,
+              54.7826
+            ]
+          },
+          {
+            "id": "veliky-ustyug-label-anchor",
+            "pixel": [
+              1080,
+              580
+            ],
+            "lonLat": [
+              46.305,
+              60.761
+            ]
+          },
+          {
+            "id": "murom-label-anchor",
+            "pixel": [
+              1040,
+              850
+            ],
+            "lonLat": [
+              42.0426,
+              55.575
+            ]
+          },
+          {
+            "id": "lake-onega-center",
+            "pixel": [
+              720,
+              410
+            ],
+            "lonLat": [
+              35.5,
+              61.7
+            ]
+          },
+          {
+            "id": "vyatka-label-anchor",
+            "pixel": [
+              1180,
+              715
+            ],
+            "lonLat": [
+              50.0614,
+              58.6036
+            ]
+          },
+          {
+            "id": "cherdyn-label-anchor",
+            "pixel": [
+              1230,
+              585
+            ],
+            "lonLat": [
+              56.4787,
+              60.4029
+            ]
+          },
+          {
+            "id": "kazan-label-anchor",
+            "pixel": [
+              1180,
+              795
+            ],
+            "lonLat": [
+              49.1221,
+              55.7887
+            ]
+          },
+          {
+            "id": "northwest-interior-control",
+            "pixel": [
+              650,
+              520
+            ],
+            "lonLat": [
+              32.5,
+              61.4
+            ]
+          },
+          {
+            "id": "northern-interior-control",
+            "pixel": [
+              900,
+              500
+            ],
+            "lonLat": [
+              41,
+              62
+            ]
+          },
+          {
+            "id": "lake-peipus-center",
+            "pixel": [
+              500,
+              660
+            ],
+            "lonLat": [
+              27.6,
+              58.65
+            ]
+          },
+          {
+            "id": "lake-ladoga-center",
+            "pixel": [
+              590,
+              470
+            ],
+            "lonLat": [
+              31.5,
+              60.83
+            ]
+          },
+          {
+            "id": "lake-onega-east-shore",
+            "pixel": [
+              760,
+              410
+            ],
+            "lonLat": [
+              36.8,
+              61.7
+            ]
+          }
+        ],
+        "triangles": [
+          [
+            8,
+            11,
+            5
+          ],
+          [
+            11,
+            2,
+            5
+          ],
+          [
+            2,
+            11,
+            9
+          ],
+          [
+            9,
+            11,
+            10
+          ],
+          [
+            20,
+            9,
+            10
+          ],
+          [
+            21,
+            20,
+            10
+          ],
+          [
+            9,
+            20,
+            18
+          ],
+          [
+            21,
+            18,
+            20
+          ],
+          [
+            18,
+            21,
+            14
+          ],
+          [
+            22,
+            18,
+            14
+          ],
+          [
+            0,
+            18,
+            22
+          ],
+          [
+            19,
+            0,
+            22
+          ],
+          [
+            1,
+            0,
+            19
+          ],
+          [
+            12,
+            1,
+            19
+          ],
+          [
+            12,
+            19,
+            16
+          ],
+          [
+            19,
+            22,
+            16
+          ],
+          [
+            22,
+            14,
+            16
+          ],
+          [
+            15,
+            12,
+            16
+          ],
+          [
+            17,
+            15,
+            16
+          ],
+          [
+            7,
+            15,
+            17
+          ],
+          [
+            13,
+            7,
+            17
+          ],
+          [
+            6,
+            13,
+            17
+          ],
+          [
+            8,
+            13,
+            6
+          ],
+          [
+            5,
+            8,
+            6
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            3,
+            4,
+            6
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            3,
+            1,
+            4
+          ],
+          [
+            1,
+            12,
+            4
+          ],
+          [
+            12,
+            7,
+            4
+          ],
+          [
+            7,
+            13,
+            4
+          ],
+          [
+            13,
+            8,
+            4
+          ],
+          [
+            2,
+            3,
+            5
+          ],
+          [
+            2,
+            9,
+            0
+          ],
+          [
+            13,
+            17,
+            8
+          ]
+        ]
+      },
+      "pixelPolygons": [
+        [
+          [
+            [
+              530,
+              690
+            ],
+            [
+              575,
+              680
+            ],
+            [
+              610,
+              710
+            ],
+            [
+              615,
+              750
+            ],
+            [
+              594,
+              778
+            ],
+            [
+              574,
+              753
+            ],
+            [
+              547,
+              720
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              619,
+              808
+            ],
+            [
+              660,
+              805
+            ],
+            [
+              705,
+              830
+            ],
+            [
+              727,
+              857
+            ],
+            [
+              711,
+              855
+            ],
+            [
+              663,
+              850
+            ],
+            [
+              652,
+              849
+            ],
+            [
+              632,
+              824
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              960,
+              835
+            ],
+            [
+              1015,
+              820
+            ],
+            [
+              1060,
+              840
+            ],
+            [
+              1067,
+              852
+            ],
+            [
+              1039,
+              867
+            ],
+            [
+              999,
+              888
+            ],
+            [
+              972,
+              885
+            ],
+            [
+              950,
+              875
+            ]
+          ]
+        ]
+      ],
+      "note": "Direct coarse same-sheet transcription of the diagonally hatched legend layer «Василия III +1533» on Tornau's 1240–1533 map. Three disconnected acquisition components are preserved separately around the Pskov/Smolensk/Ryazan sectors rather than joined across territory belonging to earlier layers. The fragment is used only cumulatively with the verified 1505 state and carries the inherited 220 km uncertainty. Source-edge vertices outside the final Ivan III target-sheet GCP hull are conservatively clipped inward to the registered hull rather than extrapolated; the maximum adjustment is dominated by the inherited 220 km uncertainty. Georeference mesh is inherited from the final green 1505 base-state recipe in main so the 1533 acquisitions use the identical registered target sheet."
+    }
+  ]
+}
