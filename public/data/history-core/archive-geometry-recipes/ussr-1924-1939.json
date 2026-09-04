@@ -1,0 +1,993 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-1924-1925-early",
+      "fragmentId": "frag-ussr-1924-1925-early",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1924,
+        "end_date": 1925
+      },
+      "output": "geometry/ussr-1924-1925-early.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1924-1925-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+    },
+    {
+      "id": "recipe-ussr-1926-1928-early",
+      "fragmentId": "frag-ussr-1926-1928-early",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1926,
+        "end_date": 1928
+      },
+      "output": "geometry/ussr-1926-1928-early.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1926-1928-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+    },
+    {
+      "id": "recipe-ussr-1929-1931-early",
+      "fragmentId": "frag-ussr-1929-1931-early",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1929,
+        "end_date": 1931
+      },
+      "output": "geometry/ussr-1929-1931-early.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1929-1931-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+    },
+    {
+      "id": "recipe-ussr-1932-1935-early",
+      "fragmentId": "frag-ussr-1932-1935-early",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1932,
+        "end_date": 1935
+      },
+      "output": "geometry/ussr-1932-1935-early.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1932-1935-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+    },
+    {
+      "id": "recipe-ussr-1936-1939-early",
+      "fragmentId": "frag-ussr-1936-1939-early",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1936,
+        "end_date": 1939
+      },
+      "output": "geometry/ussr-1936-1939-early.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1936-1939-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kabul",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tehran",
+          "lonLat": [
+            51.389,
+            35.6892
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "lviv",
+          "lonLat": [
+            24.0316,
+            49.8429
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pre-September-1939 USSR state: all period controls pass and Lviv remains outside. Use ends at 1939-08 before the western territorial transition."
+    }
+  ]
+}
