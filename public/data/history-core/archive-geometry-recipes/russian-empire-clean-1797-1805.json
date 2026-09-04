@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-1797-1798-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1797-1798-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1797,
+        "end_date": 1798
+      },
+      "output": "geometry/russian-empire-1797-1798-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1797-1798",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact post-partition 1797–1798 state; all controls pass. Used only from 1797-12 through 1798-12."
+    },
+    {
+      "id": "recipe-russian-empire-1803-1804-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1803-1804-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1803,
+        "end_date": 1804
+      },
+      "output": "geometry/russian-empire-1803-1804-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1803-1804",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact 1803–1804 state after the source-verified 1801 Kartli-Kakheti incorporation and before later Caucasus/Finland/Bessarabia changes. All controls pass."
+    },
+    {
+      "id": "recipe-russian-empire-1805-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1805-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1805,
+        "end_date": 1805
+      },
+      "output": "geometry/russian-empire-1805-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1805",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Exact 1805 state; all controls pass. Year precision means only December 1805 is promoted."
+    }
+  ]
+}

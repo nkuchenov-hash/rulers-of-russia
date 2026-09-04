@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-1797-1798-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1797-1798-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1797-1798",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted after distributed spatial controls and independent official/archival corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1803-1804-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1803-1804-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1803-1804",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted after distributed spatial controls and independent official/archival corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1805-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1805-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1805",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted after distributed spatial controls and independent official/archival corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1797-1798",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1797-12",
+      "historicalDate": {
+        "original": "1797–1798 source interval; conservative year-end start",
+        "normalized": "1797",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1797-1798-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1797-1798",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1798-12",
+      "notes": "Post-final-partition state. Bounded to source interval; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-1803-1804",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1803-12",
+      "historicalDate": {
+        "original": "1803–1804 source interval; conservative year-end start",
+        "normalized": "1803",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1803-1804-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1803-1804",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1804-12",
+      "notes": "Post-1801 Georgia incorporation state. Bounded to source interval; no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-1805",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1805-12",
+      "historicalDate": {
+        "original": "1805",
+        "normalized": "1805",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1805-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1805",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1805-12",
+      "notes": "Year-precision 1805 state; only December is promoted."
+    }
+  ]
+}
