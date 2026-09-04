@@ -24,7 +24,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 90,
-        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from inset 9. Modern coordinates register named surviving settlements only; no cross-sheet GCP transfer. Southern and western controls (Kolomna, Serpukhov, Mozhaysk, Volokolamsk) are included so every traced patrimony vertex lies inside explicit triangulation.",
+        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from inset 9. Modern coordinates register named surviving settlements only; no cross-sheet GCP transfer. Southern and western controls (Kolomna, Serpukhov, Mozhaysk, Volokolamsk, Kaluga) keep every traced patrimony vertex inside explicit triangulation.",
         "gcps": [
           {
             "id": "moscow",
@@ -168,6 +168,17 @@
               35.958,
               56.033
             ]
+          },
+          {
+            "id": "kaluga",
+            "pixel": [
+              1210,
+              1980
+            ],
+            "lonLat": [
+              36.2612,
+              54.5138
+            ]
           }
         ],
         "triangles": [
@@ -189,7 +200,7 @@
           [
             11,
             0,
-            10
+            13
           ],
           [
             0,
@@ -255,6 +266,21 @@
             1,
             6,
             9
+          ],
+          [
+            0,
+            10,
+            13
+          ],
+          [
+            10,
+            6,
+            13
+          ],
+          [
+            2,
+            11,
+            13
           ],
           [
             11,
