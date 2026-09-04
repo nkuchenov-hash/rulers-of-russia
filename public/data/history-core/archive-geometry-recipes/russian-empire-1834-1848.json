@@ -13,7 +13,14 @@
       "output": "geometry/russian-empire-main-1834-1835-finland-composite.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1834-1835-main"
+        "doc-cliopatria-russian-empire-1834-1835-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
       ],
       "controls": [
         {
@@ -143,7 +150,14 @@
       "output": "geometry/russian-empire-main-1836-1839-finland-composite.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1836-1839-main"
+        "doc-cliopatria-russian-empire-1836-1839-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
       ],
       "controls": [
         {
@@ -273,7 +287,14 @@
       "output": "geometry/russian-empire-main-1840-1845-finland-composite.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1840-1845-main"
+        "doc-cliopatria-russian-empire-1840-1845-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
       ],
       "controls": [
         {
@@ -403,7 +424,14 @@
       "output": "geometry/russian-empire-main-1846-1847-finland-composite.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1846-1847-main"
+        "doc-cliopatria-russian-empire-1846-1847-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
       ],
       "controls": [
         {
@@ -533,7 +561,14 @@
       "output": "geometry/russian-empire-main-1848-1848-finland-composite.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-cliopatria-russian-empire-1848-1848-main"
+        "doc-cliopatria-russian-empire-1848-1848-main",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection"
       ],
       "controls": [
         {
