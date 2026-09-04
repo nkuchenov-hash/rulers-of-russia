@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-rf-2005-2014-corroborated-archive",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-federation-2005-2014-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-rf-china-east-border-2004-2005-pravo"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 10000,
+      "derivationNote": "Pinned project archive state corresponding to the 2004 eastern-border settlement, accepted only after distributed spatial controls. Legal use begins at 2 Jun 2005 entry into force and stops before the March 2014 Russian legal-border change."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-federation-2005-2014",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "2005-06",
+      "historicalDate": {
+        "original": "2 июня 2005 г.",
+        "normalized": "2005-06-02",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-rf-2005-2014-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-rf-china-east-border-2004-2005-pravo"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Coverage begins in June 2005 when the 2004 RF–PRC additional boundary agreement entered into force. The archive geometry excludes Crimea, so this state is conservatively bounded through February 2014 and is never reused after the March 2014 Russian domestic legal-border change.",
+      "validThroughMonth": "2014-02"
+    }
+  ]
+}

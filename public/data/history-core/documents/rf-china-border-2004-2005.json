@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-rf-china-east-border-2004-2005-pravo",
+      "sourceCollectionId": "pravo-international",
+      "title": "Дополнительное соглашение между Российской Федерацией и Китайской Народной Республикой о российско-китайской государственной границе на ее Восточной части",
+      "institution": "Российская Федерация; официальное опубликование международных договоров",
+      "url": "https://publication.pravo.gov.ru/documents/block/international",
+      "tier": "A2-official-document-publication",
+      "documentType": "international-boundary-agreement",
+      "date": {
+        "original": "14 октября 2004 г.; вступило в силу 2 июня 2005 г.",
+        "normalized": "2005-06-02",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "Signed in Beijing 14 Oct 2004; ratified by Federal Law No. 52-FZ of 31 May 2005; instruments exchanged and agreement entered into force 2 Jun 2005."
+      },
+      "publicationCitation": "Дополнительное соглашение РФ–КНР о российско-китайской государственной границе на ее Восточной части, Пекин, 14.10.2004; ратифицировано Федеральным законом от 31.05.2005 № 52-ФЗ; вступило в силу 02.06.2005; СЗ РФ 08.08.2005, № 32, ст. 3270.",
+      "notes": "The agreement defines the two remaining agreed eastern-border sectors and provides river/fairway rules plus subsequent joint demarcation. This document anchors the 2 June 2005 legal-border state; the geometry used below is independently pinned and spatially checked rather than derived by guessing from the treaty text."
+    }
+  ]
+}
