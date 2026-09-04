@@ -1,0 +1,6 @@
+import crypto from 'node:crypto'; import fs from 'node:fs';
+const file='public/data/territory/archive/russian-empire.geojson'; const bytes=fs.readFileSync(file); const d=JSON.parse(bytes);
+const sha=crypto.createHash('sha1').update(Buffer.from(`blob ${bytes.length}\0`)).update(bytes).digest('hex');
+function bbox(g){const p=[];const w=v=>{if(!Array.isArray(v))return;if(v.length>=2&&Number.isFinite(v[0])&&Number.isFinite(v[1]))p.push(v);else v.forEach(w)};w(g?.coordinates);if(!p.length)return null;const x=p.map(a=>a[0]),y=p.map(a=>a[1]);return[Math.min(...x),Math.min(...y),Math.max(...x),Math.max(...y)]}
+const out={schema_version:1,archive_git_blob_sha1:sha,features:(d.features??[]).map((f,i)=>({index:i,start:f.properties?.start_date??null,end:f.properties?.end_date??null,source_ids:f.properties?.source_ids??null,provenance:f.properties?.provenance??null,bbox:bbox(f.geometry)}))};
+fs.writeFileSync('empire-ohm-candidates.json',JSON.stringify(out,null,2)+'\n'); console.log(JSON.stringify(out,null,2));
