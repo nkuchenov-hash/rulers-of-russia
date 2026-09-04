@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-1924-1925-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1924-1925-early.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1924-1925-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct controls and independent official treaty/constitutional corroboration."
+    },
+    {
+      "id": "frag-ussr-1926-1928-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1926-1928-early.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1926-1928-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct controls and independent official treaty/constitutional corroboration."
+    },
+    {
+      "id": "frag-ussr-1929-1931-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1929-1931-early.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1929-1931-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct controls and independent official treaty/constitutional corroboration."
+    },
+    {
+      "id": "frag-ussr-1932-1935-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1932-1935-early.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1932-1935-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct controls and independent official treaty/constitutional corroboration."
+    },
+    {
+      "id": "frag-ussr-1936-1939-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1936-1939-early.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1936-1939-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct controls and independent official treaty/constitutional corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-1924-1925-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1924-12",
+      "historicalDate": {
+        "original": "1924–1925 dated USSR state; conservative year-end activation",
+        "normalized": "1924",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1924-1925-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1924-1925-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1925-12",
+      "notes": "Year-range source starts conservatively in December of its first year and is never carried beyond its represented interval."
+    },
+    {
+      "id": "base-ussr-1926-1928-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1926-12",
+      "historicalDate": {
+        "original": "1926–1928 dated USSR state; conservative year-end activation",
+        "normalized": "1926",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1926-1928-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1926-1928-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1928-12",
+      "notes": "Year-range source starts conservatively in December of its first year and is never carried beyond its represented interval."
+    },
+    {
+      "id": "base-ussr-1929-1931-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1929-12",
+      "historicalDate": {
+        "original": "1929–1931 dated USSR state; conservative year-end activation",
+        "normalized": "1929",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1929-1931-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1929-1931-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1931-12",
+      "notes": "Year-range source starts conservatively in December of its first year and is never carried beyond its represented interval."
+    },
+    {
+      "id": "base-ussr-1932-1935-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1932-12",
+      "historicalDate": {
+        "original": "1932–1935 dated USSR state; conservative year-end activation",
+        "normalized": "1932",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1932-1935-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1932-1935-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1935-12",
+      "notes": "Year-range source starts conservatively in December of its first year and is never carried beyond its represented interval."
+    },
+    {
+      "id": "base-ussr-1936-1939-early",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1936-12",
+      "historicalDate": {
+        "original": "1936–1939 dated USSR state; conservative year-end activation",
+        "normalized": "1936",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1936-1939-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1936-1939-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-ussr-constitution-1924-prlib",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1939-08",
+      "notes": "State is explicitly bounded through August 1939 because the source geometry keeps Lviv outside and must not be reused across the September 1939 western transition."
+    }
+  ]
+}

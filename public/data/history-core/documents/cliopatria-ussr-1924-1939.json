@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-ussr-1924-1925-early",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1924–1925",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1924–1925 capture interval",
+        "normalized": "1924/1925",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1924–1925",
+        "normalized": "1924/1925",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      },
+      "notes": "Dated reconstruction promoted only after period-correct controls and primary treaty/constitutional corroboration. The 1936–39 feature is used only through August 1939 because it keeps Lviv outside."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1926-1928-early",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1926–1928",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1926–1928 capture interval",
+        "normalized": "1926/1928",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1926–1928",
+        "normalized": "1926/1928",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      },
+      "notes": "Dated reconstruction promoted only after period-correct controls and primary treaty/constitutional corroboration. The 1936–39 feature is used only through August 1939 because it keeps Lviv outside."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1929-1931-early",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1929–1931",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1929–1931 capture interval",
+        "normalized": "1929/1931",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1929–1931",
+        "normalized": "1929/1931",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      },
+      "notes": "Dated reconstruction promoted only after period-correct controls and primary treaty/constitutional corroboration. The 1936–39 feature is used only through August 1939 because it keeps Lviv outside."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1932-1935-early",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1932–1935",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1932–1935 capture interval",
+        "normalized": "1932/1935",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1932–1935",
+        "normalized": "1932/1935",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      },
+      "notes": "Dated reconstruction promoted only after period-correct controls and primary treaty/constitutional corroboration. The 1936–39 feature is used only through August 1939 because it keeps Lviv outside."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1936-1939-early",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1936–1939",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1936–1939 capture interval",
+        "normalized": "1936/1939",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {
+        "original": "1936–1939",
+        "normalized": "1936/1939",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/ussr.geojson",
+        "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"
+      },
+      "notes": "Dated reconstruction promoted only after period-correct controls and primary treaty/constitutional corroboration. The 1936–39 feature is used only through August 1939 because it keeps Lviv outside."
+    }
+  ]
+}

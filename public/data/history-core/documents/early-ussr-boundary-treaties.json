@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-formation-treaty-1922-ebid",
+      "sourceCollectionId": "ebid-early-soviet-boundary-treaties",
+      "title": "Договор об образовании Союза Советских Социалистических Республик",
+      "institution": "I съезд Советов СССР / ЭБИД",
+      "url": "https://docs.historyrussia.org/ru/nodes/138379",
+      "tier": "A2-official-document-publication",
+      "documentType": "union-treaty",
+      "date": {
+        "original": "30 декабря 1922 г.",
+        "normalized": "1922-12-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "РСФСР",
+        "УССР",
+        "БССР",
+        "ЗСФСР"
+      ],
+      "publicationCitation": "Известия ВЦИК, 31 декабря 1922 г., № 293.",
+      "notes": "Юридический акт образования СССР; используется как основа преемственного союзного territorial state, но не как источник конкретного полигона."
+    },
+    {
+      "id": "doc-ussr-constitution-1924-prlib",
+      "sourceCollectionId": "prlib-ussr-constitution-1924",
+      "title": "Конституция (Основной Закон) Союза Советских Социалистических Республик",
+      "institution": "II съезд Советов СССР / Президентская библиотека",
+      "url": "https://www.prlib.ru/item/420935",
+      "tier": "A2-official-document-publication",
+      "documentType": "constitution",
+      "date": {
+        "original": "31 января 1924 г.",
+        "normalized": "1924-01-31",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "СССР"
+      ],
+      "publicationCitation": "Конституция СССР 1924 г.; утверждена II Съездом Советов Союза ССР 31 января 1924 г.",
+      "notes": "Подтверждает юридическое устройство Союза и союзных республик; геометрия внешней границы дополнительно проверяется договорами и независимыми spatial controls."
+    },
+    {
+      "id": "doc-rsfsr-estonia-tartu-1920-ebid",
+      "sourceCollectionId": "ebid-early-soviet-boundary-treaties",
+      "title": "Мирный договор между РСФСР и Эстонией, заключенный в Юрьеве (Тарту)",
+      "institution": "Правительство РСФСР / Правительство Эстонии / ЭБИД",
+      "url": "https://docs.historyrussia.org/ru/nodes/138426-mirnyy-dogovor-mezhdu-rsfsr-i-estoniey-zaklyuchennyy-v-yurieve-2-fevralya-1920-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-treaty",
+      "date": {
+        "original": "2 февраля 1920 г.",
+        "normalized": "1920-02-02",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "РСФСР",
+        "Эстония"
+      ],
+      "publicationCitation": "Известия ВЦИК, № 23, 8 февраля 1920 г.; СУ РСФСР № 7, 9 февраля 1920 г.",
+      "notes": "Правовое подтверждение независимой Эстонии и западного внешнего контура, используемое для контроля того, что Таллин остаётся вне СССР в 1924–1939."
+    },
+    {
+      "id": "doc-rsfsr-latvia-riga-1920-ebid",
+      "sourceCollectionId": "ebid-early-soviet-boundary-treaties",
+      "title": "Мирный договор между РСФСР и Латвией, заключенный в Риге",
+      "institution": "Правительство РСФСР / Правительство Латвии / ЭБИД",
+      "url": "https://docs.historyrussia.org/ru/nodes/138404-mirnyy-dogovor-mezhdu-rsfsr-i-latviey-zaklyuchennyy-v-rige-11-avgusta-1920-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-treaty",
+      "date": {
+        "original": "11 августа 1920 г.",
+        "normalized": "1920-08-11",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "РСФСР",
+        "Латвия"
+      ],
+      "publicationCitation": "Известия ВЦИК № 209, 21 сентября 1920 г.; СУ РСФСР 1920, № 95.",
+      "notes": "Подтверждает внешний контур с независимой Латвией до 1940; Riga spatial control должен оставаться outside."
+    },
+    {
+      "id": "doc-rsfsr-finland-tartu-1920-ebid",
+      "sourceCollectionId": "ebid-early-soviet-boundary-treaties",
+      "title": "Мирный договор между РСФСР и Финляндской Республикой",
+      "institution": "Правительство РСФСР / Правительство Финляндии / ЭБИД",
+      "url": "https://docs.historyrussia.org/ru/nodes/464855",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-treaty",
+      "date": {
+        "original": "14 октября 1920 г.",
+        "normalized": "1920-10-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "РСФСР",
+        "Финляндия"
+      ],
+      "publicationCitation": "Документы внешней политики СССР, т. 3, 1959, с. 208–272; СУ РСФСР 1921, № 71, ст. 573.",
+      "notes": "Правовой внешний контур с Финляндией; Helsinki spatial control остаётся outside в 1924–1939."
+    },
+    {
+      "id": "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+      "sourceCollectionId": "ebid-early-soviet-boundary-treaties",
+      "title": "Мирный договор между БССР, РСФСР и УССР и Польшей, заключенный в Риге",
+      "institution": "Правительства БССР, РСФСР, УССР и Польши / ЭБИД",
+      "url": "https://docs.historyrussia.org/ru/nodes/138414-mirnyy-dogovor-mezhdu-bssr-rsfsr-i-ussr-s-odnoy-storony-i-polshey-s-drugoy-zaklyuchennyy-v-rige-18-marta-1921-goda",
+      "tier": "A2-official-document-publication",
+      "documentType": "boundary-treaty",
+      "date": {
+        "original": "18 марта 1921 г.",
+        "normalized": "1921-03-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "БССР",
+        "РСФСР",
+        "УССР",
+        "Польша"
+      ],
+      "publicationCitation": "СУ РСФСР 1921, № 41–42; СУ УССР 1921, № 8, ст. 223–225.",
+      "notes": "Правовой контур с Польшей до изменений 1939 года; Warsaw и Lviv используются как outside-controls для pre-1939 states."
+    }
+  ]
+}
