@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-main-1815-1823-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1815-1823-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1815-1823",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned 1815–1823 Cliopatria/Seshat main state; verified on Bessarabia/Caucasus/Poland controls and used only as part of the composite."
+    },
+    {
+      "id": "frag-russian-empire-world-1815-components",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-world-1815-components.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1815-components",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-poland-kingdom-1815-rgia-prlib",
+        "doc-alaska-cession-1867-original-loc"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned 1815 historical-basemaps Russian components, independently corroborated for Finland, Congress Poland and pre-1867 Alaska."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1815-1823",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1815-12",
+      "historicalDate": {
+        "original": "1815–1823 composite state; conservative year-end activation",
+        "normalized": "1815",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1815-1823-composite",
+        "frag-russian-empire-world-1815-components"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1815-1823",
+        "doc-historical-basemaps-russian-empire-1815-components",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-poland-kingdom-1815-rgia-prlib",
+        "doc-alaska-cession-1867-original-loc"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1823-12",
+      "notes": "The two source geometries are complementary: Cliopatria supplies Bessarabia/Caucasus, while the 1815 world snapshot supplies Finland and Congress Poland. Activation starts at 1815-12 due year precision and never extends past the dated 1823 source interval."
+    }
+  ]
+}

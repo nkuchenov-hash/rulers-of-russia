@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-russian-empire-1815-1823",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire main boundary capture, 1815–1823",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1815–1823 capture interval",
+        "normalized": "1815/1823",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "1815–1823",
+        "normalized": "1815/1823",
+        "precision": "range"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "Main component preserves Bessarabia and Caucasus but omits Finland. Used only as one component of a corroborated composite."
+    },
+    {
+      "id": "doc-historical-basemaps-russian-empire-1815-components",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps — Russian Empire components, 1815 snapshot",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1815 snapshot",
+        "normalized": "1815",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "historical-basemaps, vendored 1815 world snapshot, features 408 and 428.",
+      "representedDate": {
+        "original": "Russian Empire components, 1815",
+        "normalized": "1815",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/world-history/snapshots/1815.geojson",
+        "gitBlobSha1": "43a3b7c23b57e9372566a8e9b0e1248799cf84bb",
+        "featureIndices": [
+          408,
+          428
+        ],
+        "license": "GPL-3.0"
+      },
+      "notes": "This snapshot supplies Finland/Poland and other Russian components missing from the Cliopatria main state. It is not relied on for Bessarabia/Caucasus, where it is incomplete."
+    }
+  ]
+}
