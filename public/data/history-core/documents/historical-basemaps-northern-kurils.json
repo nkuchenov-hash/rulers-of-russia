@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-historical-basemaps-northern-kurils-1880",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps 1880 — northern Kuril island coastline components inside Imperial Japan feature",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1880 snapshot",
+        "normalized": "1880",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "historical-basemaps, vendored 1880 world snapshot, Imperial Japan feature index 1.",
+      "representedDate": {
+        "original": "Northern Kuril island geographic shapes in 1880",
+        "normalized": "1880",
+        "precision": "year"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/world-history/snapshots/1880.geojson",
+        "gitBlobSha1": "793604bfa54464c890fef775844e911e76069468",
+        "featureIndices": [
+          1
+        ],
+        "license": "GPL-3.0"
+      },
+      "notes": "Used only for island coastline shapes. Russian sovereignty before 1875 is not inferred from the 1880 Japanese political state; it is established independently by Article 2 of the 1855 Shimoda treaty and its ratification chronology."
+    }
+  ]
+}
