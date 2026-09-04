@@ -1,0 +1,818 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-1738-1743-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1738-1743-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1738,
+        "end_date": 1743
+      },
+      "output": "geometry/russian-empire-1738-1743-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1738-1743",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pre-Åbo state. The dated feature passes all controls; it is bounded through August 1743 because the verified Åbo ratification exchange changes the Swedish frontier in September 1743."
+    },
+    {
+      "id": "recipe-russian-empire-1744-1747-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1744-1747-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1744,
+        "end_date": 1747
+      },
+      "output": "geometry/russian-empire-1744-1747-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1744-1747",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1748-1751-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1748-1751-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1748,
+        "end_date": 1751
+      },
+      "output": "geometry/russian-empire-1748-1751-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1748-1751",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1752-1756-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1752-1756-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1752,
+        "end_date": 1756
+      },
+      "output": "geometry/russian-empire-1752-1756-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1752-1756",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1757-1761-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1757-1761-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1757,
+        "end_date": 1761
+      },
+      "output": "geometry/russian-empire-1757-1761-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1757-1761",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1763-1768-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1763-1768-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1763,
+        "end_date": 1768
+      },
+      "output": "geometry/russian-empire-1763-1768-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1763-1768",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1769-1771-corroborated-cliopatria",
+      "fragmentId": "frag-russian-empire-1769-1771-corroborated-cliopatria",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1769,
+        "end_date": 1771
+      },
+      "output": "geometry/russian-empire-1769-1771-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1769-1771",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "st-petersburg",
+          "lonLat": [
+            30.3351,
+            59.9343
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vyborg",
+          "lonLat": [
+            28.7528,
+            60.7076
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-Åbo state. The dated feature passes all controls including Hamina and Lappeenranta inside while Helsinki remains outside. It is bounded strictly to its source interval."
+    }
+  ]
+}
