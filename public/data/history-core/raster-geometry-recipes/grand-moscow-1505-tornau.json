@@ -23,7 +23,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 220,
-        "gcpCoordinateBasis": "Direct same-sheet settlement/lake anchors on Tornau's 1240–1533 main map. The 1462 controls are retained and expanded north/east using Lake Onega, Vyatka, Cherdyn, Kazan and interior northern controls visible on the same source sheet. No modern political border or cross-sheet registration is used; 220 km uncertainty intentionally dominates manual source-edge reading and atlas generalization. The northwest source area is explicitly triangulated between Pskov, Novgorod, Lake Onega and the same-sheet northern interior controls; the traced boundary itself is unchanged. Lake Peipus is added as a direct same-sheet natural-feature control west of Pskov; this encloses the source-traced northwest edge without moving the traced boundary. Lake Peipus is also triangulated directly to Lake Onega and the northern interior control, covering the source-traced northwest arc around [585,565] without altering the source ring. Lake Ladoga is added as a direct same-sheet natural-feature control; together with Lake Peipus, Lake Onega and the northern interior control it encloses the traced source arc around [620,520] without moving the ring.",
+        "gcpCoordinateBasis": "Direct same-sheet settlement/lake anchors on Tornau's 1240–1533 main map. The 1462 controls are retained and expanded north/east using Lake Onega, Vyatka, Cherdyn, Kazan and interior northern controls visible on the same source sheet. No modern political border or cross-sheet registration is used; 220 km uncertainty intentionally dominates manual source-edge reading and atlas generalization. The northwest source area is explicitly triangulated between Pskov, Novgorod, Lake Onega and the same-sheet northern interior controls; the traced boundary itself is unchanged. Lake Peipus is added as a direct same-sheet natural-feature control west of Pskov; this encloses the source-traced northwest edge without moving the traced boundary. Lake Peipus is also triangulated directly to Lake Onega and the northern interior control, covering the source-traced northwest arc around [585,565] without altering the source ring. Lake Ladoga is added as a direct same-sheet natural-feature control; together with Lake Peipus, Lake Onega and the northern interior control it encloses the traced source arc around [620,520] without moving the ring. The clearly recognizable eastern shore of Lake Onega is added as a same-sheet natural-feature control at the traced northern edge; this pins the source vertex directly rather than extrapolating it.",
         "gcps": [
           {
             "id": "belozersk-label-anchor",
@@ -266,6 +266,17 @@
               31.5,
               60.83
             ]
+          },
+          {
+            "id": "lake-onega-east-shore",
+            "pixel": [
+              760,
+              410
+            ],
+            "lonLat": [
+              36.8,
+              61.7
+            ]
           }
         ],
         "triangles": [
@@ -488,6 +499,21 @@
             20,
             21,
             14
+          ],
+          [
+            14,
+            22,
+            19
+          ],
+          [
+            22,
+            19,
+            18
+          ],
+          [
+            14,
+            22,
+            18
           ]
         ]
       },
