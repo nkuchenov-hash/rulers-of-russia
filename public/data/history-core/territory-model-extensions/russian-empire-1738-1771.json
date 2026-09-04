@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-1738-1743-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1738-1743-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1738-1743",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1744-1747-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1744-1747-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1744-1747",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1748-1751-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1748-1751-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1748-1751",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1752-1756-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1752-1756-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1752-1756",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1757-1761-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1757-1761-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1757-1761",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1763-1768-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1763-1768-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1763-1768",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1769-1771-corroborated-cliopatria",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1769-1771-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1769-1771",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed historical controls and independent official treaty corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1738-1743",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1738-12",
+      "historicalDate": {
+        "original": "1738–1743 source interval; conservative year-end start",
+        "normalized": "1738",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1738-1743-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1738-1743",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1743-08",
+      "notes": "Year-precision source begins at December 1738. The state is ended in August 1743, immediately before the verified Åbo ratification exchange; no post-Åbo boundary is back-projected."
+    },
+    {
+      "id": "base-russian-empire-1744-1747",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1744-12",
+      "historicalDate": {
+        "original": "1744–1747 source interval; conservative year-end start",
+        "normalized": "1744",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1744-1747-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1744-1747",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1747-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    },
+    {
+      "id": "base-russian-empire-1748-1751",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1748-12",
+      "historicalDate": {
+        "original": "1748–1751 source interval; conservative year-end start",
+        "normalized": "1748",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1748-1751-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1748-1751",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1751-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    },
+    {
+      "id": "base-russian-empire-1752-1756",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1752-12",
+      "historicalDate": {
+        "original": "1752–1756 source interval; conservative year-end start",
+        "normalized": "1752",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1752-1756-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1752-1756",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1756-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    },
+    {
+      "id": "base-russian-empire-1757-1761",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1757-12",
+      "historicalDate": {
+        "original": "1757–1761 source interval; conservative year-end start",
+        "normalized": "1757",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1757-1761-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1757-1761",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1761-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    },
+    {
+      "id": "base-russian-empire-1763-1768",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1763-12",
+      "historicalDate": {
+        "original": "1763–1768 source interval; conservative year-end start",
+        "normalized": "1763",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1763-1768-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1763-1768",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1768-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    },
+    {
+      "id": "base-russian-empire-1769-1771",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1769-12",
+      "historicalDate": {
+        "original": "1769–1771 source interval; conservative year-end start",
+        "normalized": "1769",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1769-1771-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1769-1771",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1771-12",
+      "notes": "Year-precision source starts conservatively in December of the first represented year and is never carried beyond the represented interval."
+    }
+  ]
+}
