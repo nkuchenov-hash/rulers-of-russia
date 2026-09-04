@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-main-1880-1884",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1880-1884.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1880-1884",
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus",
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned post-Berlin main-Empire state verified by distributed controls and primary treaty evidence."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1880-1884",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1880-12",
+      "historicalDate": {
+        "original": "1880–1884 state; conservative year-end start",
+        "normalized": "1880",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1880-1884",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1880-1884",
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus",
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1884-12",
+      "notes": "Main state plus separately verified Finland. Bounded to the source interval; no forward proxy."
+    }
+  ]
+}
