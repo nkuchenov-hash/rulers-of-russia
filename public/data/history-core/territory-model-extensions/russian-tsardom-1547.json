@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "baseStates": [
+    {
+      "id": "base-russian-tsardom-start-1547",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1547-01",
+      "historicalDate": {
+        "original": "переход от Великого княжества Московского к Русскому царству в 1547 г.; без отдельного территориального изменения",
+        "normalized": "1547",
+        "precision": "year",
+        "calendar": "julian"
+      },
+      "geometryFragmentIds": [
+        "frag-grand-moscow-1505-reconstruction",
+        "frag-grand-moscow-vasily3-acquisitions-1533-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813",
+        "doc-tornau-rus-1240-1533-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "The coverage-period change in 1547 is a polity/title transition, not a separately evidenced external-border mutation. Therefore the final verified Grand Moscow geometry is carried into the Russian Tsardom as the opening base state. It is bounded through 1551-12, immediately before the Kazan territorial change represented separately from 1552 onward.",
+      "validThroughMonth": "1551-12"
+    }
+  ]
+}
