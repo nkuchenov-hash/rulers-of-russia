@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-main-1880-1884-finland-composite",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-main-1880-1884-finland-composite.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1880-1884-main",
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated main-Empire reconstruction after distributed post-1878 controls; Finland is modeled separately."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1880-1884",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1880-12",
+      "historicalDate": {
+        "original": "1880–1884 main Empire state plus Grand Duchy of Finland component",
+        "normalized": "1880",
+        "precision": "range",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1880-1884-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1880-1884-main",
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1884-12",
+      "notes": "Starts conservatively at 1880-12 after the 1875/1876/1878 changes already represented by the main state. Finland is supplied only by the separately verified component. No forward proxy."
+    }
+  ]
+}
