@@ -24,7 +24,7 @@
       "georeference": {
         "method": "piecewise-affine-triangulation",
         "uncertaintyKm": 120,
-        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates are used only to register named surviving settlements; no 862-sheet raster transfer is used.",
+        "gcpCoordinateBasis": "Direct target-sheet settlement anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates are used only to register named surviving settlements; no 862-sheet raster transfer is used. Northern controls at Belozersk and Chukhloma keep the full traced inset polygon inside explicit triangulation.",
         "gcps": [
           {
             "id": "vologda",
@@ -157,9 +157,41 @@
               42.3475,
               58.3788
             ]
+          },
+          {
+            "id": "belozersk",
+            "pixel": [
+              1270,
+              1485
+            ],
+            "lonLat": [
+              37.8078,
+              60.0308
+            ]
+          },
+          {
+            "id": "chukhloma",
+            "pixel": [
+              1550,
+              1490
+            ],
+            "lonLat": [
+              42.682,
+              58.752
+            ]
           }
         ],
         "triangles": [
+          [
+            0,
+            13,
+            11
+          ],
+          [
+            13,
+            0,
+            12
+          ],
           [
             2,
             10,
@@ -173,7 +205,7 @@
           [
             0,
             1,
-            8
+            12
           ],
           [
             1,
@@ -189,6 +221,11 @@
             8,
             2,
             5
+          ],
+          [
+            1,
+            8,
+            12
           ],
           [
             5,
@@ -239,6 +276,11 @@
             10,
             11,
             9
+          ],
+          [
+            9,
+            11,
+            13
           ]
         ]
       },
@@ -261,52 +303,44 @@
             1530
           ],
           [
-            1580,
-            1580
+            1560,
+            1600
           ],
           [
-            1570,
-            1640
-          ],
-          [
-            1600,
-            1690
-          ],
-          [
-            1590,
-            1750
-          ],
-          [
-            1620,
-            1800
-          ],
-          [
-            1570,
-            1840
+            1540,
+            1660
           ],
           [
             1510,
+            1720
+          ],
+          [
+            1510,
+            1780
+          ],
+          [
+            1530,
+            1830
+          ],
+          [
+            1490,
             1870
           ],
           [
-            1480,
+            1450,
             1900
           ],
           [
-            1410,
+            1380,
             1910
           ],
           [
-            1350,
-            1895
-          ],
-          [
-            1300,
-            1910
-          ],
-          [
-            1240,
+            1320,
             1890
+          ],
+          [
+            1260,
+            1900
           ],
           [
             1210,
@@ -314,31 +348,27 @@
           ],
           [
             1230,
-            1810
+            1800
+          ],
+          [
+            1260,
+            1750
           ],
           [
             1240,
-            1760
+            1690
           ],
           [
             1260,
-            1710
+            1630
           ],
           [
             1250,
-            1660
-          ],
-          [
-            1260,
-            1600
-          ],
-          [
-            1250,
-            1540
+            1570
           ]
         ]
       ],
-      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary from the same hash-pinned Tornau 1054-1240 sheet. The polygon is intentionally coarse and carries 120 km uncertainty to dominate manual edge reading and atlas generalization."
+      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary from the same hash-pinned Tornau 1054-1240 sheet. The trace follows the visible shaded region and is intentionally coarse; 120 km uncertainty dominates manual edge reading and atlas generalization."
     }
   ]
 }
