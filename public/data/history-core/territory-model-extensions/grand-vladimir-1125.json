@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-grand-vladimir-1125-reconstruction",
+      "polityId": "grand-vladimir",
+      "track": "de-facto-control",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/grand-vladimir-1125-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-tornau-rus-1054-1240-map-1910",
+        "doc-laurentian-1125-nlr",
+        "doc-bigenc-northeastern-rus-1130-1230"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 120000,
+      "derivationNote": "Geometry-verified direct transcription of Tornau 1910's inset «Владимиро-Суздальская земля», registered with target-sheet settlement anchors. This is a generalized scholarly reconstruction, not a surveyed medieval cadastral boundary."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-grand-vladimir-1125-tornau",
+      "polityId": "grand-vladimir",
+      "track": "de-facto-control",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "1125-12",
+      "historicalDate": {
+        "original": "1125 год",
+        "normalized": "1125",
+        "precision": "year",
+        "calendar": "julian"
+      },
+      "geometryFragmentIds": [
+        "frag-grand-vladimir-1125-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-laurentian-1125-nlr",
+        "doc-bigenc-northeastern-rus-1130-1230",
+        "doc-tornau-rus-1054-1240-map-1910"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "The 1125 chronology anchor is source-verified independently. Tornau's dedicated Vladimir-Suzdal inset provides the bounded low-confidence territorial reconstruction. Because the source sheet itself covers 1054-1240, this state is not extended beyond 1240-12 without another independently supported geometry.",
+      "validThroughMonth": "1240-12"
+    }
+  ]
+}

@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-grand-vladimir-1125-tornau-inset",
+      "fragmentId": "frag-grand-vladimir-1125-reconstruction",
+      "track": "de-facto-control",
+      "geometryType": "Polygon",
+      "output": "geometry/grand-vladimir-1125-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-tornau-rus-1054-1240-map-1910",
+        "doc-laurentian-1125-nlr",
+        "doc-bigenc-northeastern-rus-1130-1230"
+      ],
+      "sourceRaster": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/32/Historical_map_of_the_Rus%2C_1054-1240.gif",
+        "sha256": "8aec8ad5be66444a638342f4cdc083122596dfe7ff98536f8bbda9dd7435bc85",
+        "width": 1800,
+        "height": 2207,
+        "rightsStatus": "public-domain",
+        "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_the_Rus,_1054-1240.gif",
+        "rightsNote": "Hash-pinned Tornau 1910 public-domain raster. The lower-right inset is explicitly titled «Владимиро-Суздальская земля» and is traced directly from that same sheet."
+      },
+      "georeference": {
+        "method": "piecewise-affine-triangulation",
+        "uncertaintyKm": 120,
+        "gcpCoordinateBasis": "Direct target-sheet anchors read from the Vladimir-Suzdal inset itself. Modern WGS84 coordinates register named surviving settlements and the center of Lake Beloye only; no 862-sheet raster transfer is used. The Lake Beloye control is visible directly on the inset and closes the northern hull around the traced shaded territory. The Chukhloma–Galich–Nizhny Novgorod triangle explicitly covers the eastern edge of the traced shaded region.",
+        "gcps": [
+          {
+            "id": "vologda",
+            "pixel": [
+              1366,
+              1562
+            ],
+            "lonLat": [
+              39.8915,
+              59.2205
+            ]
+          },
+          {
+            "id": "yaroslavl",
+            "pixel": [
+              1338,
+              1711
+            ],
+            "lonLat": [
+              39.8845,
+              57.6261
+            ]
+          },
+          {
+            "id": "rostov",
+            "pixel": [
+              1344,
+              1744
+            ],
+            "lonLat": [
+              39.4139,
+              57.1859
+            ]
+          },
+          {
+            "id": "suzdal",
+            "pixel": [
+              1400,
+              1790
+            ],
+            "lonLat": [
+              40.4412,
+              56.4274
+            ]
+          },
+          {
+            "id": "vladimir",
+            "pixel": [
+              1405,
+              1842
+            ],
+            "lonLat": [
+              40.4066,
+              56.1291
+            ]
+          },
+          {
+            "id": "moscow",
+            "pixel": [
+              1248,
+              1862
+            ],
+            "lonLat": [
+              37.6173,
+              55.7558
+            ]
+          },
+          {
+            "id": "murom",
+            "pixel": [
+              1488,
+              1878
+            ],
+            "lonLat": [
+              42.0426,
+              55.575
+            ]
+          },
+          {
+            "id": "ryazan",
+            "pixel": [
+              1402,
+              2005
+            ],
+            "lonLat": [
+              39.74,
+              54.6296
+            ]
+          },
+          {
+            "id": "tver",
+            "pixel": [
+              1155,
+              1745
+            ],
+            "lonLat": [
+              35.9119,
+              56.8587
+            ]
+          },
+          {
+            "id": "nizhny-novgorod",
+            "pixel": [
+              1575,
+              1805
+            ],
+            "lonLat": [
+              44.0059,
+              56.3269
+            ]
+          },
+          {
+            "id": "kostroma",
+            "pixel": [
+              1428,
+              1688
+            ],
+            "lonLat": [
+              40.9269,
+              57.7679
+            ]
+          },
+          {
+            "id": "galich",
+            "pixel": [
+              1471,
+              1617
+            ],
+            "lonLat": [
+              42.3475,
+              58.3788
+            ]
+          },
+          {
+            "id": "belozersk",
+            "pixel": [
+              1270,
+              1485
+            ],
+            "lonLat": [
+              37.8078,
+              60.0308
+            ]
+          },
+          {
+            "id": "chukhloma",
+            "pixel": [
+              1550,
+              1490
+            ],
+            "lonLat": [
+              42.682,
+              58.752
+            ]
+          },
+          {
+            "id": "novgorod",
+            "pixel": [
+              985,
+              1595
+            ],
+            "lonLat": [
+              31.2755,
+              58.5229
+            ]
+          },
+          {
+            "id": "lake-beloye-center",
+            "pixel": [
+              1255,
+              1450
+            ],
+            "lonLat": [
+              37.63,
+              60.17
+            ]
+          }
+        ],
+        "triangles": [
+          [
+            15,
+            13,
+            11
+          ],
+          [
+            15,
+            12,
+            13
+          ],
+          [
+            15,
+            14,
+            12
+          ],
+          [
+            0,
+            13,
+            11
+          ],
+          [
+            13,
+            0,
+            12
+          ],
+          [
+            2,
+            10,
+            3
+          ],
+          [
+            10,
+            2,
+            1
+          ],
+          [
+            0,
+            1,
+            12
+          ],
+          [
+            1,
+            0,
+            10
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            8,
+            2,
+            5
+          ],
+          [
+            1,
+            8,
+            12
+          ],
+          [
+            5,
+            4,
+            7
+          ],
+          [
+            4,
+            5,
+            2
+          ],
+          [
+            2,
+            3,
+            4
+          ],
+          [
+            3,
+            9,
+            6
+          ],
+          [
+            9,
+            3,
+            10
+          ],
+          [
+            7,
+            4,
+            6
+          ],
+          [
+            4,
+            3,
+            6
+          ],
+          [
+            5,
+            14,
+            8
+          ],
+          [
+            9,
+            7,
+            6
+          ],
+          [
+            14,
+            12,
+            8
+          ],
+          [
+            11,
+            10,
+            0
+          ],
+          [
+            10,
+            11,
+            9
+          ],
+          [
+            9,
+            11,
+            13
+          ],
+          [
+            13,
+            11,
+            9
+          ]
+        ]
+      },
+      "pixelRings": [
+        [
+          [
+            1265,
+            1565
+          ],
+          [
+            1320,
+            1565
+          ],
+          [
+            1400,
+            1565
+          ],
+          [
+            1550,
+            1565
+          ],
+          [
+            1555,
+            1600
+          ],
+          [
+            1540,
+            1660
+          ],
+          [
+            1510,
+            1720
+          ],
+          [
+            1510,
+            1780
+          ],
+          [
+            1530,
+            1830
+          ],
+          [
+            1490,
+            1870
+          ],
+          [
+            1450,
+            1885
+          ],
+          [
+            1380,
+            1885
+          ],
+          [
+            1320,
+            1885
+          ],
+          [
+            1275,
+            1885
+          ],
+          [
+            1265,
+            1850
+          ],
+          [
+            1265,
+            1800
+          ],
+          [
+            1265,
+            1750
+          ],
+          [
+            1265,
+            1690
+          ],
+          [
+            1265,
+            1630
+          ],
+          [
+            1265,
+            1570
+          ]
+        ]
+      ],
+      "note": "Low-confidence direct transcription of the shaded Vladimir-Suzdal inset boundary. Edge vertices are conservatively clipped to the convex hull of explicit target-sheet GCPs so the materializer never extrapolates beyond independently registered controls; 120 km uncertainty dominates this inward clipping and atlas generalization. The single southwest-bottom vertex is conservatively inset 10 raster pixels to remain inside the explicit GCP triangulation; this is far below the declared reconstruction uncertainty."
+    }
+  ]
+}
