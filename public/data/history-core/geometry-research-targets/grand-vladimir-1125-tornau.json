@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "target": {
+    "id": "target-grand-vladimir-1125-tornau-1054-1240",
+    "polityId": "grand-vladimir",
+    "coverageAnchorMonth": "1125-12",
+    "sourceDocumentId": "doc-tornau-rus-1054-1240-map-1910",
+    "sourceRaster": {
+      "sha256": "8aec8ad5be66444a638342f4cdc083122596dfe7ff98536f8bbda9dd7435bc85",
+      "width": 1800,
+      "height": 2207,
+      "rightsStatus": "public-domain",
+      "rightsEvidenceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_the_Rus,_1054-1240.gif"
+    },
+    "chronologyEvidenceDocumentIds": [
+      "doc-laurentian-1125-nlr",
+      "doc-bigenc-northeastern-rus-1130-1230"
+    ],
+    "intendedRole": "territory-area",
+    "territorialModel": "frontier-zone",
+    "promotionStatus": "georeference-required",
+    "requiredWork": [
+      "Use the exact hash-pinned 1054-1240 Tornau raster, not the 862 sheet or a proxy.",
+      "Build target-sheet GCPs from recognizable settlements, lakes, river junctions and/or the printed coordinate grid; do not reuse transferred 862 pixels as evidence.",
+      "Trace only the legend-supported Rostov-Suzdal/Vladimir territorial layer relevant to the 1125 project anchor.",
+      "Record uncertainty and source-period interpretation; run raster recipe, spatial controls and strict completion audit before geometry-verified promotion."
+    ],
+    "rejectedShortcut": {
+      "method": "862-to-1054-1240 automatic raster homography/GCP transfer",
+      "reason": "The existing registration workflow treats transferred GCPs as research candidates only and requires independent target-sheet validation before production use. It cannot establish 1125 geometry by itself."
+    },
+    "notes": "1125 is already source-verified as a chronology/periodization anchor. This target binds that anchor to the exact production-eligible Tornau 1054-1240 raster so the next work item is target-sheet georeferencing and tracing, not source discovery."
+  }
+}
