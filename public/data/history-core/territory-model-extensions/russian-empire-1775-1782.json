@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-1775-1775-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1775-1775-precrimea.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1775-1775-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed controls and official 1743/1772 corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1776-1777-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1776-1777-precrimea.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1776-1777-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed controls and official 1743/1772 corroboration."
+    },
+    {
+      "id": "frag-russian-empire-1778-1782-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-1778-1782-precrimea.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1778-1782-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned dated Cliopatria/Seshat reconstruction promoted only after distributed controls and official 1743/1772 corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1775-1775-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1775-12",
+      "historicalDate": {
+        "original": "1775–1775 source interval; conservative year-end start",
+        "normalized": "1775",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1775-1775-precrimea"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1775-1775-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1775-12",
+      "notes": "Year-precision state starts in December of its first represented year and is never carried beyond the source interval. The 1783 Crimea transition is not back-projected."
+    },
+    {
+      "id": "base-russian-empire-1776-1777-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1776-12",
+      "historicalDate": {
+        "original": "1776–1777 source interval; conservative year-end start",
+        "normalized": "1776",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1776-1777-precrimea"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1776-1777-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1777-12",
+      "notes": "Year-precision state starts in December of its first represented year and is never carried beyond the source interval. The 1783 Crimea transition is not back-projected."
+    },
+    {
+      "id": "base-russian-empire-1778-1782-precrimea",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1778-12",
+      "historicalDate": {
+        "original": "1778–1782 source interval; conservative year-end start",
+        "normalized": "1778",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1778-1782-precrimea"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1778-1782-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1782-12",
+      "notes": "Year-precision state starts in December of its first represented year and is never carried beyond the source interval. The 1783 Crimea transition is not back-projected."
+    }
+  ]
+}

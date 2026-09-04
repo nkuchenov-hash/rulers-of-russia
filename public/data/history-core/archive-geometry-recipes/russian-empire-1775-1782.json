@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-1775-1775-precrimea",
+      "fragmentId": "frag-russian-empire-1775-1775-precrimea",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1775,
+        "end_date": 1775
+      },
+      "output": "geometry/russian-empire-1775-1775-precrimea.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1775-1775-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vitebsk",
+          "lonLat": [
+            30.2049,
+            55.1904
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "polotsk",
+          "lonLat": [
+            28.784,
+            55.487
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "mogilev",
+          "lonLat": [
+            30.3325,
+            53.9007
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kerch",
+          "lonLat": [
+            36.4674,
+            45.3562
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All distributed controls pass: first-partition gains and post-Åbo Finnish frontier are inside; Helsinki, remaining Poland-Lithuania, Crimea/Kerch and Caucasus remain outside. Bounded strictly to source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1776-1777-precrimea",
+      "fragmentId": "frag-russian-empire-1776-1777-precrimea",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1776,
+        "end_date": 1777
+      },
+      "output": "geometry/russian-empire-1776-1777-precrimea.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1776-1777-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vitebsk",
+          "lonLat": [
+            30.2049,
+            55.1904
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "polotsk",
+          "lonLat": [
+            28.784,
+            55.487
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "mogilev",
+          "lonLat": [
+            30.3325,
+            53.9007
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kerch",
+          "lonLat": [
+            36.4674,
+            45.3562
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All distributed controls pass: first-partition gains and post-Åbo Finnish frontier are inside; Helsinki, remaining Poland-Lithuania, Crimea/Kerch and Caucasus remain outside. Bounded strictly to source interval."
+    },
+    {
+      "id": "recipe-russian-empire-1778-1782-precrimea",
+      "fragmentId": "frag-russian-empire-1778-1782-precrimea",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1778,
+        "end_date": 1782
+      },
+      "output": "geometry/russian-empire-1778-1782-precrimea.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1778-1782-precrimea",
+        "doc-first-partition-russian-incorporation-1772-pszri",
+        "doc-abo-ratification-1743-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "hamina",
+          "lonLat": [
+            27.1979,
+            60.5697
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lappeenranta",
+          "lonLat": [
+            28.1887,
+            61.0587
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vitebsk",
+          "lonLat": [
+            30.2049,
+            55.1904
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "polotsk",
+          "lonLat": [
+            28.784,
+            55.487
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "mogilev",
+          "lonLat": [
+            30.3325,
+            53.9007
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kerch",
+          "lonLat": [
+            36.4674,
+            45.3562
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "All distributed controls pass: first-partition gains and post-Åbo Finnish frontier are inside; Helsinki, remaining Poland-Lithuania, Crimea/Kerch and Caucasus remain outside. Bounded strictly to source interval."
+    }
+  ]
+}
