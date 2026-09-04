@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-moscow-kalita-acquisitions-1341-reconstruction",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "frontier-zone",
+      "geometryFile": "geometry/moscow-kalita-acquisitions-1341-reconstruction.geojson",
+      "evidenceDocumentIds": [
+        "doc-tornau-rus-1240-1533-map-1910",
+        "doc-laurentian-1263-nlr",
+        "doc-bigenc-moscow-principality-1263"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 90000,
+      "derivationNote": "Target-sheet transcription of Tornau inset 9's separately keyed «Иоанна Калиты +1341» acquisition layer; used cumulatively only."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-grand-moscow-kalita-end-1341",
+      "polityId": "grand-moscow",
+      "track": "russian-legal-border",
+      "territorialModel": "frontier-zone",
+      "coverageAnchorMonth": "1341-12",
+      "historicalDate": {
+        "original": "приобретения Иоанна Калиты +1341",
+        "normalized": "1341",
+        "precision": "year",
+        "calendar": "source-specific-historical-atlas-chronology"
+      },
+      "geometryFragmentIds": [
+        "frag-moscow-daniel-patrimony-1263-reconstruction",
+        "frag-moscow-daniel-acquisitions-1303-reconstruction",
+        "frag-moscow-yuri-acquisitions-1325-reconstruction",
+        "frag-moscow-kalita-acquisitions-1341-reconstruction"
+      ],
+      "evidenceDocumentIds": [
+        "doc-tornau-rus-1240-1533-map-1910",
+        "doc-laurentian-1263-nlr",
+        "doc-bigenc-moscow-principality-1263"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "notes": "Tornau inset 9 explicitly dates Kalita's cumulative acquisition layer +1341. Coverage begins at year-end and is bounded before the next separately keyed «Димитрия Донского +1389» layer.",
+      "validThroughMonth": "1388-12"
+    }
+  ]
+}
