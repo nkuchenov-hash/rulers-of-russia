@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "tsardom-1598-independent-gcps",
+  "sourceSha256": "37d8c83f216b3038bdc869dc7294ac13f10022645878112e90f40fe870d996de",
+  "automaticPromotionAllowed": false,
+  "uncertaintyPixels": 18,
+  "controls": [
+    {"id":"arkhangelsk","pixel":[777,306],"lonLat":[40.5433,64.5393]},
+    {"id":"novgorod","pixel":[627,590],"lonLat":[31.2755,58.5229]},
+    {"id":"pskov","pixel":[584,623],"lonLat":[28.3318,57.8193]},
+    {"id":"moscow","pixel":[776,782],"lonLat":[37.6173,55.7558]},
+    {"id":"nizhny-novgorod","pixel":[1042,804],"lonLat":[44.0059,56.3269]},
+    {"id":"astrakhan","pixel":[1118,1286],"lonLat":[48.0408,46.3497]}
+  ],
+  "note": "Research-only target-sheet controls read directly from the pinned Tornau 1598-1682 raster; no inherited 862 transform and no geometry promotion."
+}
