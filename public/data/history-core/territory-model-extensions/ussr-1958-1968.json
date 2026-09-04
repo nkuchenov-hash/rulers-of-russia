@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-1958-1968-corroborated-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1958-1968-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1953-1968",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned 1953–1968 USSR archive feature promoted only after distributed spatial controls and primary treaty corroboration. Generalized state geometry, not cadastral precision."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-1958-1968",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1958-10",
+      "historicalDate": {
+        "original": "5 октября 1958 г.",
+        "normalized": "1958-10-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1958-1968-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1953-1968",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "notes": "Coverage starts in October 1958 at a source-verified treaty anchor and uses the dated 1953–1968 archive feature only within its own represented interval. It is bounded through 1968-12 and is not forward-filled into the later 1969 archive state.",
+      "validThroughMonth": "1968-12"
+    }
+  ]
+}

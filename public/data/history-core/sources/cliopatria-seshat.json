@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "cliopatria-seshat-historical-boundaries",
+      "title": "Cliopatria / Seshat Global History Databank — historical polity boundary captures",
+      "institution": "Cliopatria / Seshat Global History Databank",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Historical polity boundary reconstructions used only as secondary cartographic captures",
+      "canonicalUse": [
+        "reconstruction-geometry",
+        "cross-check",
+        "uncertainty-model"
+      ],
+      "notes": "Secondary reconstruction only. A captured vector may be promoted to History Core only when the exact project archive blob and dated source feature are pinned, distributed spatial controls pass, and independent A1/A2/A3 documentary evidence corroborates the represented state. It cannot by itself establish a canonical border."
+    }
+  ]
+}
