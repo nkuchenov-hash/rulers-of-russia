@@ -70,6 +70,14 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Persist generated History Core month index
+        uses: actions/upload-artifact@v4
+        with:
+          name: history-core-month-index-${{ github.sha }}
+          path: public/data/history-core/generated/month-index.json
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Verify complete month coverage
         run: |
           node - <<'NODE'
