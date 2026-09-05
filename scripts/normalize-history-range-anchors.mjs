@@ -22,6 +22,16 @@ const documentById = new Map(documents.map(document => [document.id, document]))
 const changes = [];
 for (const file of listJsonFiles(changesDir)) changes.push(...(readJson(file).territoryChanges ?? []));
 
+const russianLegalContinuityPolities = new Set([
+  'grand-principality-of-moscow',
+  'russian-tsardom',
+  'russian-empire',
+  'russian-republic',
+  'rsfsr',
+  'ussr',
+  'russian-federation',
+]);
+
 const parseRepresentedRange = representedDate => {
   if (representedDate?.precision !== 'range') return null;
   const match = String(representedDate.normalized ?? '').match(/^(\d{4})\/(\d{4})$/);
@@ -42,8 +52,17 @@ const explicitMultiYearRangeForSnapshot = snapshot => {
   return null;
 };
 
+const isContinuousRussianLegalTrack = (snapshot, change) => (
+  snapshot.track === 'russian-legal-border'
+  && change.track === 'russian-legal-border'
+  && russianLegalContinuityPolities.has(snapshot.polityId)
+  && russianLegalContinuityPolities.has(change.polityId)
+);
+
 const sameTrackChangeInYear = (snapshot, year) => changes.find(change => {
-  if (change.polityId !== snapshot.polityId || change.track !== snapshot.track) return false;
+  if (change.track !== snapshot.track) return false;
+  const samePolity = change.polityId === snapshot.polityId;
+  if (!samePolity && !isContinuousRussianLegalTrack(snapshot, change)) return false;
   const normalized = String(change.effectiveDate?.normalized ?? '');
   return normalized === String(year) || normalized.startsWith(`${year}-`);
 });
@@ -66,7 +85,7 @@ for (const snapshot of payload.snapshots ?? []) {
   snapshot.declaredCoverageAnchorMonth = anchor;
   snapshot.coverageAnchorMonth = `${range.startYear}-01`;
   snapshot.rangeAnchorEvidenceDocumentId = range.documentId;
-  snapshot.rangeAnchorNormalization = 'explicit-multi-year-represented-range-with-no-same-track-change-in-first-year';
+  snapshot.rangeAnchorNormalization = 'explicit-multi-year-represented-range-with-no-continuous-track-change-in-first-year';
   normalizedCount += 1;
   normalizedSnapshots.push({
     id: snapshot.id,
@@ -78,7 +97,7 @@ for (const snapshot of payload.snapshots ?? []) {
 }
 
 payload.rangeAnchorNormalization = {
-  policy: 'Only geometry-verified December-anchored snapshots backed by an explicit multi-year representedDate range may move to January of the first represented year, and only when no same-polity/same-track territorial change exists in that year.',
+  policy: 'Only geometry-verified December-anchored snapshots backed by an explicit multi-year representedDate range may move to January of the first represented year, and only when no territorial change exists in that year on the same polity/track or across the continuous Russian legal-border succession.',
   normalizedCount,
   normalizedSnapshots,
 };
