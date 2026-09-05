@@ -27,10 +27,10 @@
       "polityId": "ussr",
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
-      "coverageAnchorMonth": "1958-10",
+      "coverageAnchorMonth": "1955-05",
       "historicalDate": {
-        "original": "5 октября 1958 г.",
-        "normalized": "1958-10-05",
+        "original": "20 мая 1955 г. — вступление советско-иранского соглашения 1954 г. в силу",
+        "normalized": "1955-05-20",
         "precision": "day",
         "calendar": "gregorian"
       },
@@ -46,7 +46,7 @@
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
-      "notes": "Coverage starts in October 1958 at a source-verified treaty anchor and uses the dated 1953–1968 archive feature only within its own represented interval. It is bounded through 1968-12 and is not forward-filled into the later 1969 archive state.",
+      "notes": "Coverage begins with the source-verified USSR–Iran frontier settlement effective 20 May 1955. The archive itself explicitly represents 1953–1968; using it from this post-settlement anchor does not project a later snapshot backward. Later 1957–1958 Soviet–Iranian, Soviet–Norwegian and Soviet–Afghan records in this interval are demarcation/continuity metadata rather than a second sovereign-area mutation. The state remains bounded through 1968-12 and is not forward-filled into the later 1969 archive state.",
       "validThroughMonth": "1968-12"
     }
   ]
