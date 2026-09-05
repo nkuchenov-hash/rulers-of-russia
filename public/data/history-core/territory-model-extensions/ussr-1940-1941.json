@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-1940-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1940-archive.geojson",
+      "evidenceDocumentIds": ["doc-cliopatria-ussr-1940", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-turkmenchay-1828-mfa-border-collection", "doc-portsmouth-1905-ebid"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct spatial controls."
+    },
+    {
+      "id": "frag-ussr-1941-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1941-archive.geojson",
+      "evidenceDocumentIds": ["doc-cliopatria-ussr-1941", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-turkmenchay-1828-mfa-border-collection", "doc-portsmouth-1905-ebid"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned dated USSR archive state promoted after period-correct spatial controls."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-1940-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1940-12",
+      "historicalDate": {"original": "1940 dated USSR state; conservative year-end activation", "normalized": "1940", "precision": "year", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-ussr-1940-archive"],
+      "evidenceDocumentIds": ["doc-cliopatria-ussr-1940", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-turkmenchay-1828-mfa-border-collection", "doc-portsmouth-1905-ebid"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1940-12",
+      "notes": "Year-precision source is activated only for December 1940; no forward proxy."
+    },
+    {
+      "id": "base-ussr-1941-archive",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1941-12",
+      "historicalDate": {"original": "1941 dated USSR state; conservative year-end activation", "normalized": "1941", "precision": "year", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-ussr-1941-archive"],
+      "evidenceDocumentIds": ["doc-cliopatria-ussr-1941", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-turkmenchay-1828-mfa-border-collection", "doc-portsmouth-1905-ebid"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1941-12",
+      "notes": "Year-precision source is activated only for December 1941; no forward proxy."
+    }
+  ]
+}
