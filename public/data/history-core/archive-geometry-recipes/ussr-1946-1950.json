@@ -1,0 +1,23 @@
+{
+  "schema_version":1,
+  "recipes":[{
+    "id":"recipe-ussr-1945-world",
+    "fragmentId":"frag-ussr-1946-1950-world",
+    "archivePath":"public/data/territory/world-history/snapshots/1945.geojson",
+    "archiveBlobSha1":"060cd2882b9b96d4f5dde7aa300e38f1791ec15f",
+    "selector":{"NAME":"USSR"},
+    "output":"geometry/ussr-1946-1950-world.geojson",
+    "track":"russian-legal-border",
+    "evidenceDocumentIds":["doc-historical-basemaps-ussr-1945","doc-ussr-poland-border-1945-unts","doc-ussr-poland-border-1945-eif-untc","doc-south-sakhalin-kurils-1946-ebid"],
+    "controls":[
+      {"id":"moscow","lonLat":[37.6173,55.7558],"expected":"inside"},
+      {"id":"kyiv","lonLat":[30.5234,50.4501],"expected":"inside"},
+      {"id":"vilnius","lonLat":[25.2797,54.6872],"expected":"inside"},
+      {"id":"kaliningrad","lonLat":[20.4522,54.7104],"expected":"inside"},
+      {"id":"yuzhno-sakhalinsk","lonLat":[142.738,46.9591],"expected":"inside"},
+      {"id":"vladivostok","lonLat":[131.8855,43.1155],"expected":"inside"},
+      {"id":"warsaw","lonLat":[21.0122,52.2297],"expected":"outside"},
+      {"id":"helsinki","lonLat":[24.9384,60.1699],"expected":"outside"}
+    ]
+  }]
+}
