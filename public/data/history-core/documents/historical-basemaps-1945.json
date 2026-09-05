@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-historical-basemaps-ussr-1945",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps USSR 1945 snapshot",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"1945","normalized":"1945","precision":"year","calendar":"gregorian"},
+      "representedDate": {"original":"1945","normalized":"1945","precision":"year"},
+      "digitalVector": {"archivePath":"public/data/territory/world-history/snapshots/1945.geojson","gitBlobSha1":"060cd2882b9b96d4f5dde7aa300e38f1791ec15f","license":"GPL-3.0"},
+      "notes": "Secondary reconstruction; production use requires A2 corroboration and passing spatial controls."
+    }
+  ]
+}
