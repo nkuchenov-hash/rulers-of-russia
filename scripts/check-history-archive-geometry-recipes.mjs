@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import polygonClipping from 'polygon-clipping';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
@@ -41,6 +42,9 @@ const geometryContains = (point, geometry) => geometry?.type === 'Polygon'
   ? polygonContains(point, geometry.coordinates)
   : geometry?.type === 'MultiPolygon' && geometry.coordinates.some(polygon => polygonContains(point, polygon));
 const matchesSelector = (feature, selector) => Object.entries(selector ?? {}).every(([key, value]) => String(feature?.properties?.[key] ?? '') === String(value));
+const geometryPolygons = geometry => geometry?.type === 'Polygon'
+  ? [geometry.coordinates]
+  : geometry?.type === 'MultiPolygon' ? geometry.coordinates : [];
 
 const seenIds = new Set();
 const seenFragments = new Set();
@@ -86,9 +90,7 @@ for (const recipe of recipes) {
   for (const sourceFeature of candidates) {
     if (!['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type)) fail(`Archive recipe ${recipe.id} selected unsupported geometry`);
   }
-  let polygons = candidates.flatMap(sourceFeature => sourceFeature.geometry.type === 'Polygon'
-    ? [sourceFeature.geometry.coordinates]
-    : sourceFeature.geometry.coordinates);
+  let polygons = candidates.flatMap(sourceFeature => geometryPolygons(sourceFeature.geometry));
   if (recipe.componentBboxFilter) {
     const f = recipe.componentBboxFilter;
     if (![f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite)) fail(`Archive recipe ${recipe.id} has invalid componentBboxFilter`);
@@ -103,6 +105,32 @@ for (const recipe of recipes) {
     });
     if (polygons.length < 1) fail(`Archive recipe ${recipe.id} componentBboxFilter selected no polygon components`);
   }
+
+  const validatedDifferenceMasks = [];
+  for (const mask of recipe.differenceMasks ?? []) {
+    if (!mask?.archivePath || !mask?.archiveBlobSha1 || !mask?.selector) fail(`Archive recipe ${recipe.id} has incomplete difference mask`);
+    const maskFile = path.join(root, mask.archivePath);
+    if (!fs.existsSync(maskFile)) fail(`Archive recipe ${recipe.id} difference mask source missing: ${mask.archivePath}`);
+    const maskBytes = fs.readFileSync(maskFile);
+    const maskDigest = gitBlobSha1(maskBytes);
+    if (maskDigest !== mask.archiveBlobSha1) fail(`Archive recipe ${recipe.id} difference mask blob SHA mismatch: ${maskDigest}`);
+    const maskArchive = JSON.parse(maskBytes.toString('utf8'));
+    const maskFeatures = (maskArchive.features ?? []).filter(feature => matchesSelector(feature, mask.selector));
+    if (mask.expectedFeatureCount != null && maskFeatures.length !== Number(mask.expectedFeatureCount)) fail(`Archive recipe ${recipe.id} difference mask expected ${mask.expectedFeatureCount} features, got ${maskFeatures.length}`);
+    if (maskFeatures.length < 1) fail(`Archive recipe ${recipe.id} difference mask selected no features`);
+    const maskPolygons = maskFeatures.flatMap(feature => geometryPolygons(feature.geometry));
+    if (maskPolygons.length < 1) fail(`Archive recipe ${recipe.id} difference mask has no polygon geometry`);
+    polygons = polygonClipping.difference(polygons, ...maskPolygons);
+    if (!Array.isArray(polygons) || polygons.length < 1) fail(`Archive recipe ${recipe.id} difference mask removed all geometry`);
+    validatedDifferenceMasks.push({
+      archivePath: mask.archivePath,
+      archiveBlobSha1: mask.archiveBlobSha1,
+      selector: mask.selector,
+      expectedFeatureCount: mask.expectedFeatureCount ?? null,
+      note: mask.note ?? null,
+    });
+  }
+
   const sourceGeometry = {type: 'MultiPolygon', coordinates: polygons};
   for (const control of recipe.controls ?? []) {
     if (!['inside', 'outside'].includes(control.expected)) fail(`Archive recipe ${recipe.id} control ${control.id} has invalid expectation`);
@@ -116,9 +144,10 @@ for (const recipe of recipes) {
   const generated = readJson(outputFile);
   if (generated.metadata?.recipeId !== recipe.id || generated.metadata?.generatedFromCorroboratedArchive !== true) fail(`Archive output ${recipe.output} is not tied to recipe ${recipe.id}`);
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
-  if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact selected geometry`);
+  if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact derived geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
+  if (JSON.stringify(generated.metadata?.differenceMasks ?? []) !== JSON.stringify(validatedDifferenceMasks)) fail(`Archive output ${recipe.output} lost difference-mask provenance`);
 }
 
 console.log(`History archive geometry recipe check passed: ${recipes.length} pinned/corroborated recipes.`);

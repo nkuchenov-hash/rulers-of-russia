@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import polygonClipping from 'polygon-clipping';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
@@ -45,6 +46,12 @@ function matchesSelector(feature, selector) {
   return Object.entries(selector ?? {}).every(([key, value]) => String(props[key] ?? '') === String(value));
 }
 
+function geometryPolygons(geometry) {
+  if (geometry?.type === 'Polygon') return [geometry.coordinates];
+  if (geometry?.type === 'MultiPolygon') return geometry.coordinates;
+  return [];
+}
+
 for (const recipe of recipes) {
   assert(recipe?.id && recipe?.fragmentId && recipe?.archivePath && recipe?.archiveBlobSha1 && (recipe?.selector || Array.isArray(recipe?.featureIndices)) && recipe?.output, `Incomplete archive geometry recipe ${recipe?.id ?? '<missing>'}`);
   assert(Array.isArray(recipe.evidenceDocumentIds) && recipe.evidenceDocumentIds.length > 0, `Archive geometry recipe ${recipe.id} has no evidence documents`);
@@ -68,7 +75,7 @@ for (const recipe of recipes) {
   for (const feature of candidates) {
     assert(['Polygon', 'MultiPolygon'].includes(feature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${feature.geometry?.type}`);
   }
-  let polygons = candidates.flatMap(feature => feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates);
+  let polygons = candidates.flatMap(feature => geometryPolygons(feature.geometry));
   if (recipe.componentBboxFilter) {
     const f = recipe.componentBboxFilter;
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid componentBboxFilter`);
@@ -83,6 +90,35 @@ for (const recipe of recipes) {
     });
     assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} componentBboxFilter selected no polygon components`);
   }
+
+  const appliedDifferenceMasks = [];
+  for (const mask of recipe.differenceMasks ?? []) {
+    assert(mask?.archivePath && mask?.archiveBlobSha1 && mask?.selector, `Archive geometry recipe ${recipe.id} has incomplete difference mask`);
+    const maskFile = path.join(root, mask.archivePath);
+    assert(fs.existsSync(maskFile), `Archive geometry recipe ${recipe.id} difference mask source missing: ${mask.archivePath}`);
+    const maskBytes = fs.readFileSync(maskFile);
+    const maskDigest = gitBlobSha1(maskBytes);
+    assert(maskDigest === mask.archiveBlobSha1, `Archive geometry recipe ${recipe.id} difference mask blob SHA mismatch: expected ${mask.archiveBlobSha1}, got ${maskDigest}`);
+    const maskArchive = JSON.parse(maskBytes.toString('utf8'));
+    const maskFeatures = (maskArchive.features ?? []).filter(feature => matchesSelector(feature, mask.selector));
+    if (mask.expectedFeatureCount != null) {
+      assert(maskFeatures.length === Number(mask.expectedFeatureCount), `Archive geometry recipe ${recipe.id} difference mask expected ${mask.expectedFeatureCount} features, got ${maskFeatures.length}`);
+    } else {
+      assert(maskFeatures.length >= 1, `Archive geometry recipe ${recipe.id} difference mask selected no features`);
+    }
+    const maskPolygons = maskFeatures.flatMap(feature => geometryPolygons(feature.geometry));
+    assert(maskPolygons.length >= 1, `Archive geometry recipe ${recipe.id} difference mask has no polygon geometry`);
+    polygons = polygonClipping.difference(polygons, ...maskPolygons);
+    assert(Array.isArray(polygons) && polygons.length >= 1, `Archive geometry recipe ${recipe.id} difference mask removed all geometry`);
+    appliedDifferenceMasks.push({
+      archivePath: mask.archivePath,
+      archiveBlobSha1: mask.archiveBlobSha1,
+      selector: mask.selector,
+      expectedFeatureCount: mask.expectedFeatureCount ?? null,
+      note: mask.note ?? null,
+    });
+  }
+
   const sourceGeometry = {type:'MultiPolygon', coordinates:polygons};
 
   for (const control of recipe.controls ?? []) {
@@ -106,6 +142,7 @@ for (const recipe of recipes) {
       selector: recipe.selector ?? null,
       featureIndices: recipe.featureIndices ?? null,
       componentBboxFilter: recipe.componentBboxFilter ?? null,
+      differenceMasks: appliedDifferenceMasks,
       sourceCrs: recipe.sourceCrs ?? 'RFC 7946 longitude/latitude',
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       independentControls: recipe.controls ?? [],
@@ -120,6 +157,7 @@ for (const recipe of recipes) {
         archive_source_properties: candidates.map(feature => feature.properties ?? {}),
         evidence_document_ids: recipe.evidenceDocumentIds,
         corroboration_controls: recipe.controls ?? [],
+        difference_masks: appliedDifferenceMasks,
         note: recipe.note ?? null,
       },
       geometry: sourceGeometry,

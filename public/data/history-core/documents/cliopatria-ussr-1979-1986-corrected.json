@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-ussr-1979-1982-corrected",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1979–1982, corrected against Afghanistan mask",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"1979–1982 capture interval","normalized":"1979/1982","precision":"range","calendar":"gregorian"},
+      "representedDate": {"original":"1979–1982","normalized":"1979/1982","precision":"range"},
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "digitalVector": {"archivePath":"public/data/territory/archive/ussr.geojson","gitBlobSha1":"574de5060c4cbfd2bb777c9e78b908cc2a2067d3"},
+      "notes": "The vendored interval contains Afghanistan fused into the mainland polygon. Production geometry is derived reproducibly by subtracting the separately pinned Afghanistan 1960 Historical Basemaps polygon, then applying distributed inside/outside controls and primary treaty corroboration."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1983-1986-corrected",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1983–1986, corrected against Afghanistan mask",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"1983–1986 capture interval","normalized":"1983/1986","precision":"range","calendar":"gregorian"},
+      "representedDate": {"original":"1983–1986","normalized":"1983/1986","precision":"range"},
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "digitalVector": {"archivePath":"public/data/territory/archive/ussr.geojson","gitBlobSha1":"574de5060c4cbfd2bb777c9e78b908cc2a2067d3"},
+      "notes": "The vendored interval contains Afghanistan fused into the mainland polygon. Production geometry is derived reproducibly by subtracting the separately pinned Afghanistan 1960 Historical Basemaps polygon, then applying distributed inside/outside controls and primary treaty corroboration."
+    },
+    {
+      "id": "doc-historical-basemaps-afghanistan-1960-mask",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps Afghanistan 1960 snapshot used as correction mask",
+      "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"1960","normalized":"1960","precision":"year","calendar":"gregorian"},
+      "representedDate": {"original":"1960","normalized":"1960","precision":"year"},
+      "publicationCitation": "A. Ourednik, historical-basemaps, pinned 1960 world political boundary snapshot; vendored project copy.",
+      "digitalVector": {"archivePath":"public/data/territory/world-history/snapshots/1960.geojson","gitBlobSha1":"5120220da4499d10042caf1a50d0223a06336a57","license":"GPL-3.0"},
+      "notes": "Used only as a subtraction mask for the Afghanistan contamination in the Cliopatria USSR 1979–1986 polygons. The Soviet-Afghan frontier is independently corroborated by the project treaty corpus."
+    }
+  ]
+}
