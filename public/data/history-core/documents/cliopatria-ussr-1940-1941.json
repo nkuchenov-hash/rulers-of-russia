@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-ussr-1940",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1940",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1940 capture", "normalized": "1940", "precision": "year", "calendar": "gregorian"},
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {"original": "1940", "normalized": "1940", "precision": "year"},
+      "digitalVector": {"archivePath": "public/data/territory/archive/ussr.geojson", "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"},
+      "notes": "Promoted only after period-correct spatial controls: Baltics, Bessarabia and Lviv inside; Kaliningrad and South Sakhalin outside."
+    },
+    {
+      "id": "doc-cliopatria-ussr-1941",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "USSR boundary capture, 1941",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1941 capture", "normalized": "1941", "precision": "year", "calendar": "gregorian"},
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, USSR historical polity capture; vendored as public/data/territory/archive/ussr.geojson.",
+      "representedDate": {"original": "1941", "normalized": "1941", "precision": "year"},
+      "digitalVector": {"archivePath": "public/data/territory/archive/ussr.geojson", "gitBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3"},
+      "notes": "Promoted only after period-correct spatial controls: Baltics, Bessarabia and Lviv inside; Kaliningrad and South Sakhalin outside."
+    }
+  ]
+}
