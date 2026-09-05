@@ -6,12 +6,14 @@
       "sourceCollectionId": "historical-basemaps-aourednik",
       "title": "Historical Basemaps USSR 1945 snapshot",
       "institution": "A. Ourednik / historical-basemaps; vendored project snapshot",
+      "url": "https://github.com/aourednik/historical-basemaps",
       "tier": "B1-russian-academic-interpretation",
       "documentType": "historical-cartographic-reconstruction",
       "date": {"original":"1945","normalized":"1945","precision":"year","calendar":"gregorian"},
       "representedDate": {"original":"1945","normalized":"1945","precision":"year"},
+      "publicationCitation": "A. Ourednik, historical-basemaps, pinned 1945 world political boundary snapshot; vendored project copy from commit 62d8f1a03a71f2d3ff17f2d166f7553f256bce68.",
       "digitalVector": {"archivePath":"public/data/territory/world-history/snapshots/1945.geojson","gitBlobSha1":"060cd2882b9b96d4f5dde7aa300e38f1791ec15f","license":"GPL-3.0"},
-      "notes": "Secondary reconstruction; production use requires A2 corroboration and passing spatial controls."
+      "notes": "Secondary reconstruction; production use requires independent A1/A2/A3 corroboration and passing spatial controls."
     }
   ]
 }
