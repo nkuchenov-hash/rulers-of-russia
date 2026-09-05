@@ -7,6 +7,7 @@ const publicRoot = path.join(root, 'public');
 const dataRoot = path.join(publicRoot, 'data', 'history-core');
 const coverageFile = path.join(dataRoot, 'coverage-periods.json');
 const documentsFile = path.join(dataRoot, 'documents.json');
+const territoryChangesDir = path.join(dataRoot, 'territory-changes');
 const territoryIndexFile = path.join(dataRoot, 'generated', 'territory', 'index.json');
 const outputDir = path.join(dataRoot, 'generated');
 const provisionalDir = path.join(outputDir, 'provisional');
@@ -18,6 +19,13 @@ if (!fs.existsSync(documentsFile)) throw new Error('Missing public/data/history-
 const coverage = readJson(coverageFile);
 const documents = readJson(documentsFile).documents ?? [];
 const documentIds = new Set(documents.map(item => item.id));
+const documentById = new Map(documents.map(item => [item.id, item]));
+const territoryChanges = fs.existsSync(territoryChangesDir)
+  ? fs.readdirSync(territoryChangesDir)
+    .filter(name => name.endsWith('.json'))
+    .sort()
+    .flatMap(name => readJson(path.join(territoryChangesDir, name)).territoryChanges ?? [])
+  : [];
 const verified = fs.existsSync(territoryIndexFile) ? readJson(territoryIndexFile) : {snapshots: []};
 const periods = coverage.periods ?? [];
 const snapshots = (verified.snapshots ?? []).filter(item => item.reviewStatus === 'geometry-verified');
@@ -58,6 +66,28 @@ const normalizeBoundaryDate = (value, side) => {
   match = text.match(/-?\d{3,4}/);
   if (match) return `${String(Number(match[0])).padStart(4, '0')}-${side === 'start' ? '01-01' : '12-31'}`;
   return side === 'start' ? '0000-01-01' : '9999-12-31';
+};
+
+const rangeDocumentStartsInYear = (snapshot, year) => (snapshot.evidenceDocumentIds ?? []).some(id => {
+  const representedDate = documentById.get(id)?.representedDate;
+  if (representedDate?.precision !== 'range') return false;
+  const normalized = representedDate.normalized ?? '';
+  return normalized.startsWith(`${year}/`) || normalized.startsWith(`${year}-`);
+});
+
+const hasSameTrackChangeInYear = (snapshot, year) => territoryChanges.some(change => {
+  if (change.polityId !== snapshot.polityId || change.track !== snapshot.track) return false;
+  const normalized = change.effectiveDate?.normalized ?? '';
+  return normalized.startsWith(`${year}-`) || normalized === year;
+});
+
+const normalizedCoverageAnchorMonth = (snapshot, fallbackMonth) => {
+  if (!/^\d{4}-12$/.test(fallbackMonth ?? '')) return fallbackMonth;
+  if (snapshot.historicalDate?.precision !== 'range') return fallbackMonth;
+  const year = fallbackMonth.slice(0, 4);
+  if (!rangeDocumentStartsInYear(snapshot, year)) return fallbackMonth;
+  if (hasSameTrackChangeInYear(snapshot, year)) return fallbackMonth;
+  return `${year}-01`;
 };
 
 assertMonth(coverage.minMonth, 'minMonth');
@@ -191,11 +221,12 @@ const verifiedByPolityTrack = new Map();
 for (const snapshot of snapshots) {
   const dateKey = normalizedSnapshotKey(snapshot);
   if (!dateKey) continue;
-  const validFromMonth = snapshot.coverageAnchorMonth ?? dateKey.slice(0, 7);
+  const declaredFromMonth = snapshot.coverageAnchorMonth ?? dateKey.slice(0, 7);
+  const validFromMonth = normalizedCoverageAnchorMonth(snapshot, declaredFromMonth);
   const validThroughMonth = snapshot.validThroughMonth ?? null;
   const key = `${snapshot.polityId}::${snapshot.track}`;
   const list = verifiedByPolityTrack.get(key) ?? [];
-  list.push({...snapshot, __dateKey: dateKey, __validFromMonth: validFromMonth, __validThroughMonth: validThroughMonth});
+  list.push({...snapshot, __dateKey: dateKey, __declaredFromMonth: declaredFromMonth, __validFromMonth: validFromMonth, __validThroughMonth: validThroughMonth});
   verifiedByPolityTrack.set(key, list);
 }
 for (const list of verifiedByPolityTrack.values()) list.sort((a, b) => a.__validFromMonth.localeCompare(b.__validFromMonth) || a.__dateKey.localeCompare(b.__dateKey));
@@ -236,6 +267,8 @@ while (cursor <= coverage.maxMonth) {
       snapshotId: chosen.id,
       effectiveDate: chosen.effectiveDate?.normalized ?? null,
       historicalDate: chosen.historicalDate ?? null,
+      coverageAnchorMonth: chosen.__validFromMonth,
+      declaredCoverageAnchorMonth: chosen.__declaredFromMonth,
       validThroughMonth: chosen.validThroughMonth ?? null,
       derivedFromChangeIds: chosen.derivedFromChangeIds ?? [],
     });
@@ -291,7 +324,7 @@ const output = {
   complete: true,
   provisionalStateCount: provisionalOutputCache.size,
   forwardProxyMonthCount: months.filter(item => item.forwardProxy === true).length,
-  resolutionRule: 'Use the latest-started geometry-verified History Core state only while that snapshot remains within its explicit validity interval; never resurrect an older verified state after a later bounded snapshot expires. Otherwise materialize an explicitly provisional dated bootstrap state. A later-dated proxy is permitted only when the coverage period explicitly opts in and remains visibly non-canonical.',
+  resolutionRule: 'Use the latest-started geometry-verified History Core state only while that snapshot remains within its explicit validity interval; never resurrect an older verified state after a later bounded snapshot expires. A range-dated verified state may begin in January of its first represented year only when an evidence document explicitly represents that range and no same-track territorial change is recorded in that first year. Otherwise retain the declared conservative anchor. If no verified state applies, materialize an explicitly provisional dated bootstrap state. A later-dated proxy is permitted only when the coverage period explicitly opts in and remains visibly non-canonical.',
   statusCounts: Object.fromEntries([...coverageCounts.entries()].sort()),
   months,
 };
