@@ -1,5 +1,5 @@
 {
   "schema_version": 1,
-  "rule": "A geometry-verified base state whose evidence explicitly represents a multi-year range may begin in January of the first represented year only when no same-track territorial change is recorded for that polity in that first year. Otherwise its declared conservative coverage anchor remains authoritative.",
-  "purpose": "Prevent artificial January-November gaps caused solely by coarse archive range dating without back-projecting states across documented border changes."
+  "rule": "A geometry-verified base state whose evidence explicitly represents a multi-year range may begin in January of the first represented year only when no territorial change is recorded on the same track in that first year. For the continuous russian-legal-border succession, predecessor/successor polity ids are treated as one continuity chain so a state cannot be back-projected across a border change merely because the polity label changed.",
+  "purpose": "Prevent artificial January-November gaps caused solely by coarse archive range dating without back-projecting states across documented border changes, including state-name transitions such as Russian Tsardom to Russian Empire."
 }
