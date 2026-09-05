@@ -14,7 +14,7 @@
     "materialize:history-geometry": "npm run prepare:history-model && node scripts/build-history-geometry.mjs && node scripts/build-history-raster-geometry.mjs && node scripts/build-history-archive-geometry.mjs",
     "materialize:history-territory": "npm run prepare:history-model && node scripts/materialize-history-territory.mjs",
     "materialize:history-boundaries": "npm run prepare:history-model && node scripts/build-history-boundary-index.mjs",
-    "materialize:history": "npm run prepare:history-model && npm run materialize:history-geometry && node scripts/materialize-history-territory.mjs && node scripts/build-history-boundary-index.mjs && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs && node scripts/report-history-spatial-blockers.mjs"
+    "materialize:history": "npm run prepare:history-model && npm run materialize:history-geometry && node scripts/materialize-history-territory.mjs && node scripts/normalize-history-range-anchors.mjs && node scripts/build-history-boundary-index.mjs && node scripts/build-history-month-index.mjs && node scripts/build-history-event-index.mjs && node scripts/build-history-completion-report.mjs && node scripts/report-history-spatial-blockers.mjs"
   },
   "dependencies": {
     "@mapbox/geojson-rewind": "0.5.2",
@@ -32,7 +32,7 @@
     "@types/d3-geo": "^3.1.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react-dom": "^19.2.8",
     "@types/topojson-client": "^3.1.0",
     "typescript": "^5.8.0"
   }
