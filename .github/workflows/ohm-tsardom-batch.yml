@@ -1,0 +1,18 @@
+name: OHM Tsardom batch provenance
+on:
+  pull_request:
+    paths:
+      - scripts/check-ohm-tsardom-batch.mjs
+      - .github/workflows/ohm-tsardom-batch.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/check-ohm-tsardom-batch.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ohm-tsardom-batch-provenance
+          path: ohm-tsardom-batch-provenance.json
