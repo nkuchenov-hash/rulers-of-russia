@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-russian-empire-1857-1858-selector-validity",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1857–1858",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1857–1858 archive validity interval", "normalized": "1857/1858", "precision": "range", "calendar": "gregorian"},
+      "representedDate": {"original": "1857–1858", "normalized": "1857/1858", "precision": "range"},
+      "publicationCitation": "Pinned project archive public/data/territory/archive/russian-empire.geojson, selector start_date=1857, end_date=1858.",
+      "digitalVector": {"archivePath": "public/data/territory/archive/russian-empire.geojson", "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"},
+      "notes": "The pinned feature is independently controlled as the pre-Aigun state: Blagoveshchensk remains outside. It may represent 1857 from January, but is capped before the June 1858 Aigun transition."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1862-selector-validity",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1862",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1862 archive validity interval", "normalized": "1862/1862", "precision": "range", "calendar": "gregorian"},
+      "representedDate": {"original": "1862–1862", "normalized": "1862/1862", "precision": "range"},
+      "publicationCitation": "Pinned project archive public/data/territory/archive/russian-empire.geojson, selector start_date=1862, end_date=1862.",
+      "digitalVector": {"archivePath": "public/data/territory/archive/russian-empire.geojson", "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"},
+      "notes": "The already geometry-verified recipe passes the post-Aigun/Peking distributed controls. No Russian-legal-border change is recorded during 1862."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1863-selector-validity",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1863",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1863 archive validity interval", "normalized": "1863/1863", "precision": "range", "calendar": "gregorian"},
+      "representedDate": {"original": "1863–1863", "normalized": "1863/1863", "precision": "range"},
+      "publicationCitation": "Pinned project archive public/data/territory/archive/russian-empire.geojson, selector start_date=1863, end_date=1863.",
+      "digitalVector": {"archivePath": "public/data/territory/archive/russian-empire.geojson", "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"},
+      "notes": "The already geometry-verified recipe passes the post-Aigun/Peking distributed controls. No Russian-legal-border change is recorded during 1863."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1870-selector-validity",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1870",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1870 archive validity interval", "normalized": "1870/1870", "precision": "range", "calendar": "gregorian"},
+      "representedDate": {"original": "1870–1870", "normalized": "1870/1870", "precision": "range"},
+      "publicationCitation": "Pinned project archive public/data/territory/archive/russian-empire.geojson, selector start_date=1870, end_date=1870.",
+      "digitalVector": {"archivePath": "public/data/territory/archive/russian-empire.geojson", "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"},
+      "notes": "The already geometry-verified recipe reflects the post-1867 Alaska and post-1868 Zeravshan state. No Russian-legal-border change is recorded during 1870."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-1871-1872-selector-validity",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture, 1871–1872",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original": "1871–1872 archive validity interval", "normalized": "1871/1872", "precision": "range", "calendar": "gregorian"},
+      "representedDate": {"original": "1871–1872", "normalized": "1871/1872", "precision": "range"},
+      "publicationCitation": "Pinned project archive public/data/territory/archive/russian-empire.geojson, selector start_date=1871, end_date=1872.",
+      "digitalVector": {"archivePath": "public/data/territory/archive/russian-empire.geojson", "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"},
+      "notes": "The already geometry-verified recipe reflects the post-1867 Alaska and post-1868 Zeravshan state. No Russian-legal-border change is recorded during 1871; the 1872 partition event is outside this state's January-1871 backfill use."
+    }
+  ]
+}

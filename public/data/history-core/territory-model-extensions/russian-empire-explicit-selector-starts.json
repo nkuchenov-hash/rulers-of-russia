@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "baseStates": [
+    {
+      "id": "base-russian-empire-composite-1857-01-pre-aigun-selector",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1857-01",
+      "historicalDate": {"original": "Pinned archive selector 1857–1858, pre-Aigun state", "normalized": "1857-01", "precision": "month", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-russian-empire-main-1857-1858-1856-1872", "frag-russian-empire-finland-component-1887-1917", "frag-russian-empire-northern-kurils-1856-1875"],
+      "evidenceDocumentIds": ["doc-cliopatria-russian-empire-1857-1858-selector-validity", "doc-paris-bessarabia-1856-ebid", "doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa", "doc-fredrikshamn-treaty-1809-prlib", "doc-historical-basemaps-finland-1914", "doc-historical-basemaps-northern-kurils-1880"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1857-11",
+      "notes": "Backfills only January–November 1857 from the pinned start_date=1857/end_date=1858 archive feature already validated as pre-Aigun. It does not cross the June 1858 Aigun transition."
+    },
+    {
+      "id": "base-russian-empire-composite-1862-01-selector",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1862-01",
+      "historicalDate": {"original": "Pinned archive selector 1862–1862", "normalized": "1862-01", "precision": "month", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-russian-empire-main-1862-1862-1856-1872", "frag-russian-empire-finland-component-1887-1917", "frag-russian-empire-northern-kurils-1856-1875"],
+      "evidenceDocumentIds": ["doc-cliopatria-russian-empire-1862-selector-validity", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-fredrikshamn-treaty-1809-prlib", "doc-historical-basemaps-finland-1914", "doc-historical-basemaps-northern-kurils-1880"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1862-11",
+      "notes": "Backfills January–November 1862 from the pinned same-year archive validity selector. No same-track territorial change occurs during 1862."
+    },
+    {
+      "id": "base-russian-empire-composite-1863-01-selector",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1863-01",
+      "historicalDate": {"original": "Pinned archive selector 1863–1863", "normalized": "1863-01", "precision": "month", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-russian-empire-main-1863-1863-1856-1872", "frag-russian-empire-finland-component-1887-1917", "frag-russian-empire-northern-kurils-1856-1875"],
+      "evidenceDocumentIds": ["doc-cliopatria-russian-empire-1863-selector-validity", "doc-aigun-1858-mfa", "doc-peking-1860-mfa", "doc-fredrikshamn-treaty-1809-prlib", "doc-historical-basemaps-finland-1914", "doc-historical-basemaps-northern-kurils-1880"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1863-11",
+      "notes": "Backfills January–November 1863 from the pinned same-year archive validity selector. No same-track territorial change occurs during 1863."
+    },
+    {
+      "id": "base-russian-empire-composite-1870-01-selector",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1870-01",
+      "historicalDate": {"original": "Pinned archive selector 1870–1870", "normalized": "1870-01", "precision": "month", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-russian-empire-main-1870-1870-1856-1872", "frag-russian-empire-finland-component-1887-1917", "frag-russian-empire-northern-kurils-1856-1875"],
+      "evidenceDocumentIds": ["doc-cliopatria-russian-empire-1870-selector-validity", "doc-peking-1860-mfa", "doc-alaska-cession-1867-original-loc", "doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia", "doc-fredrikshamn-treaty-1809-prlib", "doc-historical-basemaps-finland-1914", "doc-historical-basemaps-northern-kurils-1880"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1870-11",
+      "notes": "Backfills January–November 1870 from the pinned same-year archive validity selector after the 1867 Alaska transfer and 1868 Zeravshan acquisition."
+    },
+    {
+      "id": "base-russian-empire-composite-1871-01-selector",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1871-01",
+      "historicalDate": {"original": "Pinned archive selector 1871–1872", "normalized": "1871-01", "precision": "month", "calendar": "gregorian"},
+      "geometryFragmentIds": ["frag-russian-empire-main-1871-1872-1856-1872", "frag-russian-empire-finland-component-1887-1917", "frag-russian-empire-northern-kurils-1856-1875"],
+      "evidenceDocumentIds": ["doc-cliopatria-russian-empire-1871-1872-selector-validity", "doc-peking-1860-mfa", "doc-alaska-cession-1867-original-loc", "doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia", "doc-fredrikshamn-treaty-1809-prlib", "doc-historical-basemaps-finland-1914", "doc-historical-basemaps-northern-kurils-1880"],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1871-11",
+      "notes": "Backfills January–November 1871 only. The 1872 first-partition-related record is not crossed by this backfill."
+    }
+  ]
+}
