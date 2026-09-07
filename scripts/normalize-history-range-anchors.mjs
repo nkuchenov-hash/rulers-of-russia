@@ -32,21 +32,43 @@ const russianLegalContinuityPolities = new Set([
   'russian-federation',
 ]);
 
-const parseRepresentedRange = representedDate => {
-  if (representedDate?.precision !== 'range') return null;
-  const match = String(representedDate.normalized ?? '').match(/^(\d{4})\/(\d{4})$/);
+const isPinnedArchiveValidityDocument = document => {
+  const archivePath = String(document?.digitalVector?.archivePath ?? '');
+  const blob = String(document?.digitalVector?.gitBlobSha1 ?? '');
+  return archivePath.startsWith('public/data/territory/archive/') && /^[0-9a-f]{40}$/i.test(blob);
+};
+
+const parseRepresentedRange = document => {
+  const representedDate = document?.representedDate;
+  const match = String(representedDate?.normalized ?? '').match(/^(\d{4})\/(\d{4})$/);
   if (!match) return null;
   const startYear = Number(match[1]);
   const endYear = Number(match[2]);
-  if (!Number.isInteger(startYear) || !Number.isInteger(endYear) || endYear <= startYear) return null;
-  return {startYear, endYear};
+  if (!Number.isInteger(startYear) || !Number.isInteger(endYear) || endYear < startYear) return null;
+
+  // Multi-year ranges are already explicit temporal ranges.
+  if (endYear > startYear && representedDate?.precision === 'range') {
+    return {startYear, endYear, intervalKind: 'explicit-multi-year-range'};
+  }
+
+  // Cliopatria/Seshat archive features carry start_date/end_date validity fields. When both
+  // fields equal the same year, our document layer serializes that as YYYY/YYYY with year
+  // precision. It is still an explicit full-year validity interval in the pinned source,
+  // not an instantaneous December observation. Restrict this interpretation to exact pinned
+  // project archive vectors so ordinary year-only historical dates are never backdated.
+  if (endYear === startYear && representedDate?.precision === 'year' && isPinnedArchiveValidityDocument(document)) {
+    return {startYear, endYear, intervalKind: 'pinned-same-year-archive-validity'};
+  }
+
+  return null;
 };
 
-const explicitMultiYearRangeForSnapshot = snapshot => {
+const explicitRepresentedIntervalForSnapshot = snapshot => {
   const anchorYear = Number(String(snapshot.coverageAnchorMonth ?? '').slice(0, 4));
   if (!Number.isInteger(anchorYear)) return null;
   for (const id of snapshot.evidenceDocumentIds ?? []) {
-    const range = parseRepresentedRange(documentById.get(id)?.representedDate);
+    const document = documentById.get(id);
+    const range = parseRepresentedRange(document);
     if (range?.startYear === anchorYear) return {documentId: id, ...range};
   }
   return null;
@@ -76,7 +98,7 @@ for (const snapshot of payload.snapshots ?? []) {
   if (!/^\d{4}-12$/.test(anchor ?? '')) continue;
   if (snapshot.reviewStatus !== 'geometry-verified') continue;
 
-  const range = explicitMultiYearRangeForSnapshot(snapshot);
+  const range = explicitRepresentedIntervalForSnapshot(snapshot);
   if (!range) continue;
 
   const blockingChange = sameTrackChangeInYear(snapshot, range.startYear);
@@ -85,23 +107,26 @@ for (const snapshot of payload.snapshots ?? []) {
   snapshot.declaredCoverageAnchorMonth = anchor;
   snapshot.coverageAnchorMonth = `${range.startYear}-01`;
   snapshot.rangeAnchorEvidenceDocumentId = range.documentId;
-  snapshot.rangeAnchorNormalization = 'explicit-multi-year-represented-range-with-no-continuous-track-change-in-first-year';
+  snapshot.rangeAnchorNormalization = range.intervalKind === 'pinned-same-year-archive-validity'
+    ? 'pinned-same-year-archive-validity-with-no-continuous-track-change-in-year'
+    : 'explicit-multi-year-represented-range-with-no-continuous-track-change-in-first-year';
   normalizedCount += 1;
   normalizedSnapshots.push({
     id: snapshot.id,
     from: anchor,
     to: snapshot.coverageAnchorMonth,
     representedRange: `${range.startYear}/${range.endYear}`,
+    intervalKind: range.intervalKind,
     evidenceDocumentId: range.documentId,
   });
 }
 
 payload.rangeAnchorNormalization = {
-  policy: 'Only geometry-verified December-anchored snapshots backed by an explicit multi-year representedDate range may move to January of the first represented year, and only when no territorial change exists in that year on the same polity/track or across the continuous Russian legal-border succession.',
+  policy: 'A geometry-verified December-anchored snapshot may move to January only when its evidence explicitly represents a source validity interval beginning in that year and no territorial change exists in that year on the same polity/track or across the continuous Russian legal-border succession. Multi-year representedDate ranges qualify directly. Same-year YYYY/YYYY intervals qualify only for exact pinned project archive vectors whose source start_date/end_date fields define validity, never for ordinary year-only dates.',
   normalizedCount,
   normalizedSnapshots,
 };
 
 fs.writeFileSync(territoryIndexFile, JSON.stringify(payload));
 console.log(`History range anchors normalized: ${normalizedCount} verified snapshots.`);
-for (const item of normalizedSnapshots) console.log(`- ${item.id}: ${item.from} -> ${item.to} (${item.representedRange})`);
+for (const item of normalizedSnapshots) console.log(`- ${item.id}: ${item.from} -> ${item.to} (${item.representedRange}; ${item.intervalKind})`);
