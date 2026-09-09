@@ -9,6 +9,7 @@ import './autolayout-contract.css';
 import './commercial-polish.css';
 import './commercial-hardening.css';
 import './builder-flow.css';
+import './builder-basis.css';
 import type { ReactNode } from 'react';
 
 export default function StudioLayout({ children }: { children: ReactNode }) {
