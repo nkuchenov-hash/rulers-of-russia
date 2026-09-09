@@ -1,0 +1,8 @@
+/* Selected Studio objects can be dragged directly to reorder them in auto-layout. */
+[data-inspector="on"] .is-inspector-selected {
+  cursor: grab !important;
+}
+
+body[data-studio-dragging="true"] .is-inspector-selected {
+  cursor: grabbing !important;
+}
