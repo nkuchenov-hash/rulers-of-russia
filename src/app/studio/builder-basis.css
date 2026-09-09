@@ -21,4 +21,13 @@
     width: 350px !important;
     min-width: 320px !important;
   }
+
+  /* The chronology is intentionally a full-canvas module spanning back across
+     the historical rail. Keep that production geometry as its default while
+     still allowing a direct inline resize to override it after selection. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    width: var(--page-surface-width) !important;
+    max-width: var(--page-surface-width) !important;
+    left: calc(100% - var(--page-surface-width)) !important;
+  }
 }
