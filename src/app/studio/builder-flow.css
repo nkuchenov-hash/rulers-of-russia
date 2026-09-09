@@ -1,9 +1,10 @@
 /*
  * STUDIO DIRECT PAGE BUILDER
  *
- * The page canvas is intentionally fluid in Studio. Resizing an item changes
- * its real box in normal flow; surrounding modules consume the remaining space,
- * wrap, or move to the next row. Nothing here relies on absolute page layout.
+ * Studio uses nested auto-layout containers, not absolute page coordinates.
+ * Every edited box stays in document flow: when it grows, its siblings consume
+ * the remaining space, wrap, or move. Dragging changes order inside the same
+ * flow container.
  */
 
 @media (min-width: 1101px) {
@@ -36,39 +37,51 @@
     flex: 0 0 auto !important;
   }
 
+  /* The main page is one vertical auto-layout. Sections can be reordered by
+     CSS order without leaving normal document flow. */
   .core-site-surface .ruler-content {
     display: flex !important;
     flex: 1 1 0 !important;
-    flex-wrap: wrap !important;
-    align-items: flex-start !important;
-    align-content: flex-start !important;
-    column-gap: 12px !important;
-    row-gap: 0 !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
     overflow: visible !important;
   }
 
-  /* The old dashboard wrapper is structural only. Its children become genuine
-     page-builder flex items beside every other top-level module. */
-  .core-site-surface .primary-content-row {
-    display: contents !important;
-  }
-
   .core-site-surface .ruler-content > .core-module,
-  .core-site-surface .ruler-content > .primary-content-row > .core-module {
-    position: relative !important;
+  .core-site-surface .ruler-content > .primary-content-row {
     box-sizing: border-box !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
     max-width: none !important;
   }
 
-  .core-site-surface [data-module-id="hero"],
-  .core-site-surface [data-module-id="page-tabs"],
-  .core-site-surface [data-module-id="thematic-card"],
-  .core-site-surface [data-module-id="reign-timeline"] {
-    flex: 0 0 auto !important;
+  /* The dashboard remains a genuine nested rubber row. This is critical: an
+     edited Territory/Map/Facts width must immediately alter the other two. */
+  .core-site-surface .primary-content-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    align-content: flex-start !important;
+    gap: 12px !important;
     width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 8px 16px 0 !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    position: relative !important;
+    box-sizing: border-box !important;
+    max-width: none !important;
+    height: auto !important;
   }
 
   .core-site-surface [data-module-id="territory"] {
@@ -90,18 +103,26 @@
     margin-left: 0 !important;
   }
 
-  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
-    left: auto !important;
+  .core-site-surface [data-module-id="hero"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface [data-module-id="thematic-card"] {
     width: 100% !important;
-    max-width: none !important;
   }
 
-  /* Cards are also a local rubber layout: edited widths become real flex bases
-     and the remaining cards wrap/reflow immediately. */
+  /* Keep the production full-canvas timeline geometry until the user edits it;
+     its direct inline width/height still wins over this default. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    flex: 0 0 auto !important;
+  }
+
+  /* Event cards are another local rubber container. A resized card changes the
+     room available to the rest and forces wrapping naturally. */
   .core-site-surface [data-module-id="thematic-card"] {
     display: flex !important;
+    flex-direction: row !important;
     flex-wrap: wrap !important;
     align-items: stretch !important;
+    align-content: flex-start !important;
     gap: 12px !important;
   }
 
@@ -117,8 +138,8 @@
   }
 }
 
-/* Direct-manipulation overlay. It lives outside the page DOM so the handles
-   never affect layout measurements. */
+/* Direct-manipulation overlay lives outside the page DOM, so handles never
+   contribute to layout measurements. */
 .studio-direct-frame {
   position: fixed;
   z-index: 150;
