@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1799-1800-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1799-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified post-final-partition 1797–1798 state until the January 1801 Georgia incorporation",
+        "normalized": "1799-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1797-1798-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1797-1798",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1800-12",
+      "notes": "Carries the already verified post-final-partition legal-border geometry only through the last full month before the 30 January 1801 Kartli-Kakheti incorporation. The post-1801 geometry is deliberately not back-projected into 1801–1802."
+    },
+    {
+      "id": "base-russian-empire-1805-selector-start",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1805-01",
+      "historicalDate": {
+        "original": "Pinned archive selector start_date=1805/end_date=1805",
+        "normalized": "1805-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1805-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1805",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1805-11",
+      "notes": "Backfills January–November 1805 from the pinned same-year archive selector whose period-correct controls all pass. This follows the existing explicit-selector-start policy already used for other same-year Empire archive states; no russian-legal-border change is crossed."
+    },
+    {
+      "id": "base-russian-empire-pre-turkmenchay-1828-01",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1828-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1824–1827 state through January 1828 before the Treaty of Turkmenchay",
+        "normalized": "1828-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1824-1827-composite",
+        "frag-russian-empire-world-1815-components"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1824-1827",
+        "doc-historical-basemaps-russian-empire-1815-components",
+        "doc-bucharest-1812-ebid",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-poland-kingdom-1815-rgia-prlib",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-turkmenchay-1828-mfa-border-collection"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1828-01",
+      "notes": "Closes only January 1828. It stops before the 22 February 1828 Turkmenchay acquisition; no post-treaty Caucasus geometry is projected backward."
+    },
+    {
+      "id": "base-russian-empire-post-zeravshan-1868-07",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1868-07",
+      "historicalDate": {
+        "original": "5 July 1868 — initial Samarkand/Zarafshan acquisition under the Bukhara peace settlement",
+        "normalized": "1868-07-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1868-1869-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-peking-1860-mfa",
+        "doc-shimoda-1855-avpri",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1868-11",
+      "derivedFromChangeIds": [
+        "territory-1868-zeravshan-acquisition"
+      ],
+      "notes": "Uses the already verified 1868–1869 archive state only from the exact initial Zarafshan acquisition month. It closes July–November before the existing December state and does not backdate later 1870–1871 additions."
+    },
+    {
+      "id": "base-russian-empire-pre-amudarya-1873",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1873-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1871–1872 state before the 24 August 1873 Amu Darya right-bank acquisition",
+        "normalized": "1873-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1871-1872-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1871-1872-selector-validity",
+        "doc-peking-1860-mfa",
+        "doc-alaska-cession-1867-original-loc",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-historical-basemaps-finland-1914",
+        "doc-historical-basemaps-northern-kurils-1880"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1873-07",
+      "notes": "Carries the verified 1871–1872 legal-border state only through July 1873, ending before the exact 24 August 1873 Khivan right-bank territorial acquisition."
+    }
+  ]
+}
