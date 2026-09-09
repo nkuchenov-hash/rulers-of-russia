@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-post-abo-1743-09",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1743-09",
+      "historicalDate": {
+        "original": "7 September 1743 — exchange of ratifications of the Treaty of Åbo",
+        "normalized": "1743-09-07",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1744-1747-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1744-1747",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1743-12",
+      "notes": "Bounded post-Åbo legal-border state. The independently corroborated 1744–1747 geometry represents the boundary established by the 7 September 1743 ratification exchange; it is used only from that exact treaty month until the dated archive interval begins. No pre-treaty back-projection and no forward proxy."
+    },
+    {
+      "id": "base-russian-empire-pre-first-partition-continuity-1772-01",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1772-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1769–1771 legal-border state until the First Partition acquisition",
+        "normalized": "1772-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1769-1771-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1769-1771",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri",
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1772-07",
+      "notes": "Bounded carry-forward of an already verified legal-border state. It stops before the month of the 27 August 1772 Russian incorporation act, so no later acquisition is projected backward."
+    },
+    {
+      "id": "base-russian-empire-first-partition-1772-08",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1772-08",
+      "historicalDate": {
+        "original": "27 August 1772 — Russian incorporation act for the First Partition provinces",
+        "normalized": "1772-08-27",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1772-1774-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1772-1774",
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1772-11",
+      "derivedFromChangeIds": [
+        "territory-1772-first-partition-russia"
+      ],
+      "notes": "Month-resolution activation at the exact documented First Partition incorporation month. The same independently corroborated geometry is already verified for the dated 1772–1774 interval; this closes only August–November before the existing conservative December anchor."
+    },
+    {
+      "id": "base-russian-empire-1849-to-pre-paris-1856-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1849-01",
+      "historicalDate": {
+        "original": "Bounded continuity after the verified 1848 legal-border state and before the Treaty of Paris territorial cession",
+        "normalized": "1849-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1848-1848-finland-composite",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1848-1848-main",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-historical-basemaps-finland-1914",
+        "doc-final-partition-convention-1797-prlib",
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic",
+        "doc-gulistan-1813-mfa-border-collection",
+        "doc-gulistan-ratifications-1814-mfa-border-collection",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-adrianople-1829-mfa-border-collection",
+        "doc-paris-bessarabia-1856-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1856-02",
+      "notes": "Bounded continuity of the last fully checked pre-Paris legal-border geometry. It ends immediately before the March 1856 Treaty of Paris cession and therefore does not cross the next source-verified territorial change. No wartime occupation is treated as a change to this legal-border track."
+    },
+    {
+      "id": "base-ussr-1973-to-pre-turkey-ratification-continuity",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1973-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1969–1972 USSR legal-border state until the 27 March 1975 USSR–Turkey territorial-sea boundary entered into force",
+        "normalized": "1973-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1969-1972-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1969-1972",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-turkey-territorial-sea-1973"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1975-02",
+      "notes": "Bounded carry-forward of the already verified USSR legal-border state. It stops before March 1975, when the separately modeled USSR–Turkey territorial-sea boundary became effective; no post-change geometry is projected backward."
+    }
+  ]
+}
