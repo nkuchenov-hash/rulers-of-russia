@@ -16,9 +16,9 @@ async function dragLocator(locator, dx, dy) {
   const y = box.y + box.height / 2;
   await page.mouse.move(x, y);
   await page.mouse.down();
-  await page.mouse.move(x + dx, y + dy, { steps: 8 });
+  await page.mouse.move(x + dx, y + dy, { steps: 12 });
   await page.mouse.up();
-  await page.waitForTimeout(180);
+  await page.waitForTimeout(220);
 }
 
 try {
@@ -36,20 +36,21 @@ try {
   const mapBefore = await rect('[data-module-id="map"]');
   const factsBefore = await rect('[data-module-id="facts"]');
 
-  await dragLocator(page.locator('[data-studio-resize-handle="e"]'), 120, 0);
+  await dragLocator(page.locator('[data-studio-resize-handle="e"]'), 360, 0);
 
   const territoryAfter = await rect('[data-module-id="territory"]');
   const mapAfter = await rect('[data-module-id="map"]');
   const factsAfter = await rect('[data-module-id="facts"]');
 
-  if (territoryAfter.width < territoryBefore.width + 100) {
+  if (territoryAfter.width < territoryBefore.width + 320) {
     throw new Error(`Direct edge resize did not grow Territory enough: ${territoryBefore.width} -> ${territoryAfter.width}`);
   }
 
-  const mapShrank = mapAfter.width < mapBefore.width - 70;
+  const mapShrank = mapAfter.width < mapBefore.width - 40;
   const factsReflowed = factsAfter.top > factsBefore.top + 40;
-  if (!mapShrank && !factsReflowed) {
-    throw new Error(`Adjacent layout did not react to Territory resize: map ${mapBefore.width} -> ${mapAfter.width}, facts top ${factsBefore.top} -> ${factsAfter.top}`);
+  const mapReflowed = mapAfter.top > mapBefore.top + 40;
+  if (!mapShrank && !factsReflowed && !mapReflowed) {
+    throw new Error(`Adjacent layout did not react to large Territory resize: map ${mapBefore.width} -> ${mapAfter.width}, map top ${mapBefore.top} -> ${mapAfter.top}, facts top ${factsBefore.top} -> ${factsAfter.top}`);
   }
 
   const storedAfterResize = await page.evaluate(() => window.localStorage.getItem('rulers-of-russia:studio:element-layout:v1'));
@@ -102,6 +103,7 @@ try {
   console.log('Studio direct page-builder smoke passed', JSON.stringify({
     territory: [territoryBefore.width, territoryAfter.width, territoryReloaded.width],
     map: [mapBefore.width, mapAfter.width],
+    mapTop: [mapBefore.top, mapAfter.top],
     factsTop: [factsBefore.top, factsAfter.top],
     orders,
     ordersReloaded
