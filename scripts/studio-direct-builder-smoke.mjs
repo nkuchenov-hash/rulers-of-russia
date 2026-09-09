@@ -9,6 +9,50 @@ const rect = async selector => page.locator(selector).first().evaluate(el => {
   return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
 });
 
+async function dashboardDiagnostic() {
+  return page.evaluate(() => {
+    const row = document.querySelector('.primary-content-row');
+    const inspect = (selector) => {
+      const el = document.querySelector(selector);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      const c = getComputedStyle(el);
+      return {
+        rect: { left: r.left, top: r.top, width: r.width, height: r.height },
+        display: c.display,
+        position: c.position,
+        width: c.width,
+        minWidth: c.minWidth,
+        maxWidth: c.maxWidth,
+        flex: c.flex,
+        flexBasis: c.flexBasis,
+        flexGrow: c.flexGrow,
+        flexShrink: c.flexShrink,
+        order: c.order
+      };
+    };
+    const rowRect = row?.getBoundingClientRect();
+    const rowStyle = row ? getComputedStyle(row) : null;
+    return {
+      row: row && rowRect && rowStyle ? {
+        rect: { left: rowRect.left, top: rowRect.top, width: rowRect.width, height: rowRect.height },
+        clientWidth: row.clientWidth,
+        scrollWidth: row.scrollWidth,
+        display: rowStyle.display,
+        flexDirection: rowStyle.flexDirection,
+        flexWrap: rowStyle.flexWrap,
+        gap: rowStyle.gap,
+        width: rowStyle.width,
+        minWidth: rowStyle.minWidth,
+        overflow: rowStyle.overflow
+      } : null,
+      territory: inspect('[data-module-id="territory"]'),
+      map: inspect('[data-module-id="map"]'),
+      facts: inspect('[data-module-id="facts"]')
+    };
+  });
+}
+
 async function dragLocator(locator, dx, dy) {
   const box = await locator.boundingBox();
   if (!box) throw new Error('Drag target has no bounding box');
@@ -41,16 +85,17 @@ try {
   const territoryAfter = await rect('[data-module-id="territory"]');
   const mapAfter = await rect('[data-module-id="map"]');
   const factsAfter = await rect('[data-module-id="facts"]');
+  const diagnostic = await dashboardDiagnostic();
 
   if (territoryAfter.width < territoryBefore.width + 320) {
-    throw new Error(`Direct edge resize did not grow Territory enough: ${territoryBefore.width} -> ${territoryAfter.width}`);
+    throw new Error(`Direct edge resize did not grow Territory enough: ${territoryBefore.width} -> ${territoryAfter.width}; ${JSON.stringify(diagnostic)}`);
   }
 
   const mapShrank = mapAfter.width < mapBefore.width - 40;
   const factsReflowed = factsAfter.top > factsBefore.top + 40;
   const mapReflowed = mapAfter.top > mapBefore.top + 40;
   if (!mapShrank && !factsReflowed && !mapReflowed) {
-    throw new Error(`Adjacent layout did not react to large Territory resize: map ${mapBefore.width} -> ${mapAfter.width}, map top ${mapBefore.top} -> ${mapAfter.top}, facts top ${factsBefore.top} -> ${factsAfter.top}`);
+    throw new Error(`Adjacent layout did not react to large Territory resize: territory ${territoryBefore.width} -> ${territoryAfter.width}, map ${mapBefore.width} -> ${mapAfter.width}, map top ${mapBefore.top} -> ${mapAfter.top}, facts top ${factsBefore.top} -> ${factsAfter.top}; diagnostic=${JSON.stringify(diagnostic)}`);
   }
 
   const storedAfterResize = await page.evaluate(() => window.localStorage.getItem('rulers-of-russia:studio:element-layout:v1'));
