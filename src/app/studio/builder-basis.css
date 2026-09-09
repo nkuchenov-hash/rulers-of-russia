@@ -1,0 +1,24 @@
+/* Stable default flex bases for the direct builder.
+   Direct manipulation writes inline flex-basis when the user resizes a box. */
+@media (min-width: 1101px) {
+  .core-site-surface .primary-content-row > [data-module-id="territory"] {
+    flex: 0 0 210px !important;
+    flex-basis: 210px !important;
+    width: 210px !important;
+    min-width: 190px !important;
+  }
+
+  .core-site-surface .primary-content-row > [data-module-id="map"] {
+    flex: 1 1 520px !important;
+    flex-basis: 520px !important;
+    width: auto !important;
+    min-width: 520px !important;
+  }
+
+  .core-site-surface .primary-content-row > [data-module-id="facts"] {
+    flex: 0 0 350px !important;
+    flex-basis: 350px !important;
+    width: 350px !important;
+    min-width: 320px !important;
+  }
+}
