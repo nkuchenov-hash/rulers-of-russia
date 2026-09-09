@@ -8,6 +8,7 @@ on:
       - 'src/modules/core/**'
       - 'scripts/studio-browser-smoke.mjs'
       - 'scripts/studio-editor-controls-smoke.mjs'
+      - 'scripts/studio-direct-builder-smoke.mjs'
       - '.github/workflows/validate-studio-browser.yml'
   workflow_dispatch:
 
@@ -56,6 +57,9 @@ jobs:
 
       - name: Audit Studio editor controls and auto-layout
         run: node scripts/studio-editor-controls-smoke.mjs
+
+      - name: Audit Studio direct page-builder manipulation
+        run: node scripts/studio-direct-builder-smoke.mjs
 
       - name: Audit Studio desktop and mobile layout
         run: node scripts/studio-browser-smoke.mjs
