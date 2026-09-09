@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { RulerPageData } from '@/content/rulers/pageModel';
 import { CoreDesignSystemSkeleton } from '@/components/core-system/CoreDesignSystemSkeleton';
 import { StudioElementControls } from '@/components/core-system/StudioElementControls';
+import { StudioDirectManipulationV3, STUDIO_DIRECT_LAYOUT_STORAGE_KEY } from '@/components/core-system/StudioDirectManipulationV3';
 import {
   defaultInspectorTuning,
   STUDIO_TUNING_STORAGE_KEY,
@@ -51,12 +52,14 @@ export function PersistentStudioRenderer({ data }: { data: RulerPageData }) {
     <>
       <CoreDesignSystemSkeleton data={data} editorMode />
       <StudioElementControls />
+      <StudioDirectManipulationV3 />
       <button
         type="button"
         className="studio-reset-button"
         onClick={() => {
           window.localStorage.removeItem(STUDIO_TUNING_STORAGE_KEY);
           window.localStorage.removeItem(STUDIO_LAYOUT_STORAGE_KEY);
+          window.localStorage.removeItem(STUDIO_DIRECT_LAYOUT_STORAGE_KEY);
           window.location.reload();
         }}
         style={{

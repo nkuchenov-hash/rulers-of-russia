@@ -1,0 +1,291 @@
+/*
+ * STUDIO DIRECT PAGE BUILDER
+ *
+ * Studio uses nested auto-layout containers, not absolute page coordinates.
+ * Every edited box stays in document flow: when it grows, its siblings consume
+ * the remaining space, wrap, or move. Dragging changes order inside the same
+ * flow container.
+ */
+
+@media (min-width: 1101px) {
+  .core-site-surface .core-header {
+    display: flex !important;
+    align-items: stretch !important;
+  }
+
+  .core-site-surface .core-brand {
+    flex: 0 0 auto !important;
+  }
+
+  .core-site-surface .core-main-nav {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface .core-utilities {
+    flex: 0 0 auto !important;
+  }
+
+  .core-site-surface .core-workspace {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="historical-rail"] {
+    flex: 0 0 auto !important;
+  }
+
+  /* The main page is one vertical auto-layout. Sections can be reordered by
+     CSS order without leaving normal document flow. */
+  .core-site-surface .ruler-content {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  .core-site-surface .ruler-content > .core-module,
+  .core-site-surface .ruler-content > .primary-content-row {
+    box-sizing: border-box !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  /* The dashboard remains a genuine nested rubber row. This is critical: an
+     edited Territory/Map/Facts width must immediately alter the other two. */
+  .core-site-surface .primary-content-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    align-content: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 8px 16px 0 !important;
+  }
+
+  .core-site-surface .primary-content-row > .core-module {
+    position: relative !important;
+    box-sizing: border-box !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+
+  .core-site-surface [data-module-id="territory"] {
+    flex: 0 0 auto !important;
+    width: 210px !important;
+    min-width: 190px !important;
+  }
+
+  .core-site-surface [data-module-id="map"] {
+    flex: 1 1 auto !important;
+    width: calc(100% - 584px) !important;
+    min-width: 520px !important;
+  }
+
+  .core-site-surface [data-module-id="facts"] {
+    flex: 0 0 auto !important;
+    width: 350px !important;
+    min-width: 320px !important;
+    margin-left: 0 !important;
+  }
+
+  .core-site-surface [data-module-id="hero"],
+  .core-site-surface [data-module-id="page-tabs"],
+  .core-site-surface [data-module-id="thematic-card"] {
+    width: 100% !important;
+  }
+
+  /* Keep the production full-canvas timeline geometry until the user edits it;
+     its direct inline width/height still wins over this default. */
+  .core-site-surface .ruler-content > [data-module-id="reign-timeline"] {
+    flex: 0 0 auto !important;
+  }
+
+  /* Event cards are another local rubber container. A resized card changes the
+     room available to the rest and forces wrapping naturally. */
+  .core-site-surface [data-module-id="thematic-card"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    align-content: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card {
+    flex: 0 1 auto !important;
+    width: calc((100% - 36px) / 4) !important;
+    min-width: 250px !important;
+    max-width: none !important;
+  }
+
+  .core-site-surface [data-module-id="thematic-card"] > .thematic-card:nth-of-type(n+5) {
+    flex-grow: 1 !important;
+  }
+}
+
+/* Direct-manipulation overlay lives outside the page DOM, so handles never
+   contribute to layout measurements. */
+.studio-direct-frame {
+  position: fixed;
+  z-index: 150;
+  box-sizing: border-box;
+  border: 2px solid rgba(64, 101, 172, .95);
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+.studio-direct-frame::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(64, 101, 172, .24);
+  pointer-events: none;
+}
+
+.studio-direct-frame.is-dragging {
+  border-style: dashed;
+}
+
+.studio-direct-frame.is-resizing {
+  border-color: rgba(35, 78, 155, 1);
+}
+
+.studio-direct-label {
+  position: absolute;
+  left: -2px;
+  top: -38px;
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.studio-direct-grip,
+.studio-direct-reset {
+  appearance: none;
+  border: 1px solid rgba(40, 56, 88, .9);
+  background: #f7f8fb;
+  color: #202532;
+  min-height: 32px;
+  font: inherit;
+  box-shadow: 0 4px 16px rgba(20, 28, 44, .16);
+}
+
+.studio-direct-grip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 8px;
+  cursor: grab;
+  white-space: nowrap;
+  border-radius: 5px 0 0 5px;
+  touch-action: none;
+}
+
+.studio-direct-grip:active,
+body[data-studio-dragging="true"] .studio-direct-grip {
+  cursor: grabbing;
+}
+
+.studio-direct-grip span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.studio-direct-grip b {
+  font-size: 14px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.studio-direct-grip em {
+  font-size: 12px;
+  line-height: 1.1;
+  font-style: normal;
+  opacity: .62;
+}
+
+.studio-direct-reset {
+  width: 34px;
+  padding: 0;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.studio-direct-resize {
+  appearance: none;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  margin: 0;
+  border: 2px solid #f7f8fb;
+  border-radius: 2px;
+  background: rgb(64, 101, 172);
+  box-shadow: 0 0 0 1px rgba(35, 78, 155, .85);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.studio-direct-resize-n,
+.studio-direct-resize-s {
+  left: 50%;
+  margin-left: -6px;
+}
+
+.studio-direct-resize-e,
+.studio-direct-resize-w {
+  top: 50%;
+  margin-top: -6px;
+}
+
+.studio-direct-resize-n { top: -7px; cursor: ns-resize; }
+.studio-direct-resize-ne { top: -7px; right: -7px; cursor: nesw-resize; }
+.studio-direct-resize-e { right: -7px; cursor: ew-resize; }
+.studio-direct-resize-se { right: -7px; bottom: -7px; cursor: nwse-resize; }
+.studio-direct-resize-s { bottom: -7px; cursor: ns-resize; }
+.studio-direct-resize-sw { left: -7px; bottom: -7px; cursor: nesw-resize; }
+.studio-direct-resize-w { left: -7px; cursor: ew-resize; }
+.studio-direct-resize-nw { left: -7px; top: -7px; cursor: nwse-resize; }
+
+body[data-studio-resizing="true"],
+body[data-studio-dragging="true"] {
+  user-select: none !important;
+}
+
+[data-studio-moving="true"] {
+  opacity: .58 !important;
+  transition: opacity 100ms linear;
+}
+
+[data-inspector="on"] .core-module,
+[data-inspector="on"] [data-card-id],
+[data-inspector="on"] [data-element-id] {
+  scroll-margin: 64px;
+}
+
+@media (max-width: 1100px) {
+  .studio-direct-label {
+    top: -36px;
+  }
+
+  .studio-direct-grip em {
+    display: none;
+  }
+}
