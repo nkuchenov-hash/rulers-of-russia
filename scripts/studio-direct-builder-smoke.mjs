@@ -66,7 +66,6 @@ async function dragLocator(locator, dx, dy) {
 }
 
 try {
-  await page.addInitScript(() => window.localStorage.clear());
   const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   if (!response || !response.ok()) throw new Error(`Studio HTTP failed: ${response?.status()}`);
   await page.waitForSelector('[data-studio-direct-frame="true"]', { timeout: 15000 });
