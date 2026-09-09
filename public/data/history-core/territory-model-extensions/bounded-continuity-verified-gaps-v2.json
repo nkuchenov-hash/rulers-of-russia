@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-1762-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1762-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1757–1761 legal-border state through 1762",
+        "normalized": "1762-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1757-1761-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1757-1761",
+        "doc-abo-ratification-1743-prlib",
+        "doc-belgrade-peace-1739-pszri"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1762-12",
+      "notes": "Bounded carry-forward of an already verified legal-border state across 1762. No same-track territorial change is recorded in the interval; the state ends before the independently dated 1763–1768 archive interval. No forward proxy."
+    },
+    {
+      "id": "base-russian-empire-1895-pre-new-snapshot-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1895-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1885–1894 legal-border area state during 1895",
+        "normalized": "1895-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1885-1894-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1885-1894-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-pamir-boundary-commission-report-1897-govindia",
+        "doc-pamir-joint-commission-map-1895-bl-qdl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1895-11",
+      "notes": "The September 1895 Pamir record is explicitly metadata-only for territory-area replay: it demarcates the already established line and does not add, remove, or replace territory-area geometry. Therefore the prior verified legal-border area state is safely carried through November, ending before the existing December 1895 archive state."
+    },
+    {
+      "id": "base-russian-empire-pre-portsmouth-1905-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1905-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1900–1904 legal-border state until the Treaty of Portsmouth entered into force",
+        "normalized": "1905-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1900-1904-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1900-1904-late",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-portsmouth-1905-ebid",
+        "doc-portsmouth-effective-1905-usdos-ibs17"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1905-09",
+      "notes": "Bounded carry-forward of the pre-Portsmouth area state. The Portsmouth treaty was signed 5 September but entered into force only on 15 October 1905; this state therefore ends with September and does not cross the effective cession month."
+    },
+    {
+      "id": "base-russian-empire-post-portsmouth-1905-10",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1905-10",
+      "historicalDate": {
+        "original": "15 October 1905 — Treaty of Portsmouth entered into force",
+        "normalized": "1905-10-15",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1905-1911-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1905-1911-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-portsmouth-effective-1905-usdos-ibs17",
+        "doc-sakhalin-border-endpoints-1940-ndl",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1905-11",
+      "derivedFromChangeIds": [
+        "territory-1905-portsmouth-south-sakhalin"
+      ],
+      "notes": "Month-resolution activation at the documented 15 October 1905 entry into force. Reuses the independently verified 1905–1911 post-Portsmouth main-area reconstruction plus the separately verified Finland component only for October–November before the existing December anchor."
+    },
+    {
+      "id": "base-russian-empire-1914-pre-december-snapshot-continuity",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1914-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1913 legal-border state through the first eleven months of 1914",
+        "normalized": "1914-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1913-1913-late",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1913-1913-late",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl",
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1914-11",
+      "notes": "Bounded legal-border continuity only; wartime occupation/control is not treated as a change of the russian-legal-border track. No same-track territorial-area change occurs before the existing December 1914 full-area snapshot, which supersedes this state."
+    }
+  ]
+}
