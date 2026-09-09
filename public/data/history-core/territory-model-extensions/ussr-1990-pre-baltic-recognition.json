@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-ussr-1990-pre-baltic-recognition",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1990-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the verified 1987–1989 USSR legal-border state until formal Union recognition of Baltic independence on 6 September 1991",
+        "normalized": "1990-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1987-1989-corroborated-archive"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-norway-varanger-protocol-1957",
+        "doc-ussr-finland-gulf-1965",
+        "doc-ussr-poland-maritime-1985",
+        "doc-ussr-turkey-eez-notes-1986-1987",
+        "doc-ussr-baltic-independence-recognition-1991-vedomosti"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1991-08",
+      "notes": "Bounded legal-border continuity only. Lithuania's March 1990 declaration and the 1990–1991 Baltic restoration acts are not silently treated as Union-recognized external-border changes. The state stops before September 1991, when the USSR State Council formally recognized the independence of Lithuania, Latvia and Estonia. September–December 1991 therefore require a distinct geometry excluding the Baltic republics."
+    }
+  ]
+}
