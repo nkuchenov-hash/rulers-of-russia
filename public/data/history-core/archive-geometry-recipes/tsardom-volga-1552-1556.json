@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-tsardom-kazan-1552-ohm",
+      "fragmentId": "frag-tsardom-kazan-1552-corroborated-ohm",
+      "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+      "archiveBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+      "featureIndices": [1],
+      "output": "geometry/russian-tsardom-kazan-1552-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1552-relation-2851886",
+        "doc-kazan-conquest-1552-prlib",
+        "doc-kazan-gury-land-grant-1555-ebid"
+      ],
+      "controls": [
+        {"id":"moscow","lonLat":[37.6173,55.7558],"expected":"inside"},
+        {"id":"novgorod","lonLat":[31.2755,58.5229],"expected":"inside"},
+        {"id":"pskov","lonLat":[28.3318,57.8193],"expected":"inside"},
+        {"id":"kazan","lonLat":[49.1064,55.7963],"expected":"inside"},
+        {"id":"astrakhan","lonLat":[48.0408,46.3497],"expected":"outside"},
+        {"id":"tyumen","lonLat":[65.5343,57.1530],"expected":"outside"},
+        {"id":"tobolsk","lonLat":[68.2538,58.1981],"expected":"outside"},
+        {"id":"smolensk","lonLat":[32.0453,54.7826],"expected":"outside"},
+        {"id":"kyiv","lonLat":[30.5234,50.4501],"expected":"outside"},
+        {"id":"warsaw","lonLat":[21.0122,52.2297],"expected":"outside"},
+        {"id":"bakhchysarai","lonLat":[33.857,44.75],"expected":"outside"}
+      ],
+      "note": "Pinned OHM relation 2851886 v13 is used only as reconstruction geometry. The 1552 Kazan transition is independently dated by the Presidential Library and Russian jurisdiction in Kazan is corroborated by the 1555 archival land grant. The geometry is bounded before the September 1556 Astrakhan incorporation."
+    },
+    {
+      "id": "recipe-tsardom-astrakhan-1556-ohm",
+      "fragmentId": "frag-tsardom-astrakhan-1556-corroborated-ohm",
+      "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+      "archiveBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+      "featureIndices": [2],
+      "output": "geometry/russian-tsardom-astrakhan-1556-corroborated.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1556-relation-2890617",
+        "doc-kazan-gury-land-grant-1555-ebid",
+        "doc-astrakhan-annexation-1556-prlib",
+        "doc-astrakhan-troitsky-grant-1575-ebid"
+      ],
+      "controls": [
+        {"id":"moscow","lonLat":[37.6173,55.7558],"expected":"inside"},
+        {"id":"novgorod","lonLat":[31.2755,58.5229],"expected":"inside"},
+        {"id":"pskov","lonLat":[28.3318,57.8193],"expected":"inside"},
+        {"id":"kazan","lonLat":[49.1064,55.7963],"expected":"inside"},
+        {"id":"astrakhan","lonLat":[48.0408,46.3497],"expected":"inside"},
+        {"id":"tyumen","lonLat":[65.5343,57.1530],"expected":"outside"},
+        {"id":"tobolsk","lonLat":[68.2538,58.1981],"expected":"outside"},
+        {"id":"smolensk","lonLat":[32.0453,54.7826],"expected":"outside"},
+        {"id":"kyiv","lonLat":[30.5234,50.4501],"expected":"outside"},
+        {"id":"warsaw","lonLat":[21.0122,52.2297],"expected":"outside"},
+        {"id":"bakhchysarai","lonLat":[33.857,44.75],"expected":"outside"}
+      ],
+      "note": "Pinned OHM relation 2890617 v8 is used only as reconstruction geometry. It is independently corroborated by Russian archival administration records for Kazan and Astrakhan. Because the polygon still excludes the Siberian conquest area, it is bounded through 1580-12, before the earliest 1581 Yermak chronology used in the Presidential Library collections."
+    }
+  ]
+}
