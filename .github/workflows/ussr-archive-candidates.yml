@@ -1,0 +1,21 @@
+name: USSR archive candidate research
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/analyze-ussr-archive-candidates.mjs'
+      - '.github/workflows/ussr-archive-candidates.yml'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze USSR archive candidates
+        run: node scripts/analyze-ussr-archive-candidates.mjs
+      - name: Upload candidate report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ussr-archive-candidates
+          path: ussr-archive-candidates.json
