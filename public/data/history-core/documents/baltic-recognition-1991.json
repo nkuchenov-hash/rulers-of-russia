@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-baltic-independence-recognition-1991-vedomosti",
+      "sourceCollectionId": "ussr-official-legislation",
+      "title": "Постановления Государственного Совета СССР от 6 сентября 1991 г. о признании независимости Литовской, Латвийской и Эстонской Республик",
+      "institution": "Государственный Совет СССР / Ведомости Съезда народных депутатов СССР и Верховного Совета СССР",
+      "url": "https://vedomosti.sssr.su/1991/37/",
+      "tier": "A2-official-document-publication",
+      "documentType": "official-resolution",
+      "date": {
+        "original": "6 сентября 1991 г.",
+        "normalized": "1991-09-06",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "Государственный Совет СССР"
+      ],
+      "publicationCitation": "Ведомости Съезда народных депутатов СССР и Верховного Совета СССР. 1991. № 37. Ст. 1091–1093.",
+      "notes": "The three State Council resolutions of 6 September 1991 formally recognize the independence of Lithuania, Latvia and Estonia. For the USSR legal-border track this provides the first source-backed Union-level date after which those three republics can no longer be carried inside the USSR territory polygon."
+    }
+  ]
+}

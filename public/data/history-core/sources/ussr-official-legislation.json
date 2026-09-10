@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "ussr-official-legislation",
+      "title": "Ведомости Съезда народных депутатов СССР и Верховного Совета СССР — официальное печатное издание",
+      "institution": "Верховный Совет СССР",
+      "url": "https://vedomosti.sssr.su/1991/37/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Official USSR laws, decrees and resolutions published in the 1991 gazette; the web host is an unofficial electronic reproduction of the official printed issues",
+      "canonicalUse": ["event", "legal-basis", "boundary-date", "interpretation"],
+      "notes": "Canonical citation must refer to the original printed Vedomosti issue/article, not treat the web transcription itself as an official host. For Baltic recognition use 1991 No. 37, arts. 1091–1093, resolutions GS-1, GS-2 and GS-3 of 6 September 1991."
+    }
+  ]
+}
