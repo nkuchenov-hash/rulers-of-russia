@@ -44,7 +44,7 @@ const verifiedMonths = months.filter(item => item.status === 'geometry-verified'
 const countBy = (items, getter) => Object.fromEntries(
   [...items.reduce((map, item) => {
     const key = getter(item) ?? 'unspecified';
-    map.set(key, (map.get(key) ?? 0) + 1;
+    map.set(key, (map.get(key) ?? 0) + 1);
     return map;
   }, new Map()).entries()].sort(([a], [b]) => String(a).localeCompare(String(b))),
 );
@@ -54,6 +54,7 @@ const nextMonth = value => {
   if (month === 13) { month = 1; year += 1; }
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
 };
+// Group the exact remaining provisional intervals so completion work can target real gaps.
 const contiguousMonthRanges = items => {
   const sorted = [...items].sort((a, b) => a.month.localeCompare(b.month));
   const ranges = [];
