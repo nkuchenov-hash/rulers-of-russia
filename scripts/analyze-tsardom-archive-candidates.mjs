@@ -49,6 +49,32 @@ function geometryContains(point, geometry) {
   if (geometry?.type === 'MultiPolygon') return geometry.coordinates.some(polygon => polygonContains(point, polygon));
   return false;
 }
+function xmlAttr(xml, name) {
+  const m = xml.match(new RegExp(`\\b${name}="([^"]*)"`));
+  return m?.[1] ?? null;
+}
+async function fetchRelationMetadata(id) {
+  const url = `https://api.openhistoricalmap.org/api/0.6/relation/${id}`;
+  try {
+    const response = await fetch(url, {headers:{'user-agent':'rulers-of-russia-history-core-research/1.0'}});
+    const xml = await response.text();
+    if (!response.ok) return {id, url, ok:false, status:response.status};
+    const relationTag = xml.match(/<relation\b[^>]*>/)?.[0] ?? '';
+    const licenseTags = [...xml.matchAll(/<tag\s+k="license"\s+v="([^"]+)"\s*\/>/g)].map(m => m[1]);
+    return {
+      id,
+      url,
+      ok:true,
+      version: xmlAttr(relationTag, 'version'),
+      changeset: xmlAttr(relationTag, 'changeset'),
+      timestamp: xmlAttr(relationTag, 'timestamp'),
+      visible: xmlAttr(relationTag, 'visible'),
+      explicit_license_tags: licenseTags,
+    };
+  } catch (error) {
+    return {id, url, ok:false, error:String(error)};
+  }
+}
 
 const controls = [
   {id:'moscow', lonLat:[37.6173,55.7558]}, {id:'novgorod', lonLat:[31.2755,58.5229]},
@@ -82,14 +108,17 @@ const duplicateGeometryGroups = Object.values(rows.reduce((groups, row) => {
   (groups[row.geometry_sha256] ??= []).push(row.index);
   return groups;
 }, {})).filter(group => group.length > 1);
+const relationIds = [...new Set(rows.map(row => row.properties?.provenance?.capture_id).filter(Number.isInteger))];
+const relationMetadata = await Promise.all(relationIds.map(fetchRelationMetadata));
 
 const report = {
-  schema_version: 4,
-  purpose: 'Research-only enumeration and broad spatial fingerprinting of archived Russian Tsardom vector candidates. Does not promote geometry.',
+  schema_version: 5,
+  purpose: 'Research-only enumeration, source-version lookup and broad spatial fingerprinting of archived Russian Tsardom vector candidates. Does not promote geometry.',
   archive: file,
   archive_git_blob_sha1: gitBlobSha1,
   feature_count: rows.length,
   duplicate_geometry_groups: duplicateGeometryGroups,
+  relation_metadata: relationMetadata,
   candidates: rows,
 };
 fs.writeFileSync('tsardom-archive-candidates.json', JSON.stringify(report, null, 2) + '\n');
