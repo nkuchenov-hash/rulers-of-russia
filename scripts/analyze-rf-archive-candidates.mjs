@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 
+// Research-only analyzer; touching this file intentionally triggers the dedicated workflow.
 const file = 'public/data/territory/archive/russian-federation.geojson';
 const bytes = fs.readFileSync(file);
 const payload = JSON.parse(bytes.toString('utf8'));
