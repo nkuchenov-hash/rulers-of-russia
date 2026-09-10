@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 
+// Keep the archived Tsardom candidate inventory reproducible as completion gaps are reduced.
 const file = 'public/data/territory/archive/russian-tsardom.geojson';
 const bytes = fs.readFileSync(file);
 const payload = JSON.parse(bytes.toString('utf8'));
