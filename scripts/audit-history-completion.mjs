@@ -48,6 +48,40 @@ const countBy = (items, getter) => Object.fromEntries(
     return map;
   }, new Map()).entries()].sort(([a], [b]) => String(a).localeCompare(String(b))),
 );
+const nextMonth = value => {
+  let year = Number(value.slice(0, 4));
+  let month = Number(value.slice(5, 7)) + 1;
+  if (month === 13) { month = 1; year += 1; }
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
+};
+// Group the exact remaining provisional intervals so completion work can target real gaps.
+const contiguousMonthRanges = items => {
+  const sorted = [...items].sort((a, b) => a.month.localeCompare(b.month));
+  const ranges = [];
+  let current = null;
+  for (const item of sorted) {
+    const sameBucket = current
+      && current.polityId === (item.polityId ?? null)
+      && current.coveragePeriodId === (item.coveragePeriodId ?? null)
+      && nextMonth(current.endMonth) === item.month;
+    if (!sameBucket) {
+      if (current) ranges.push(current);
+      current = {
+        startMonth: item.month,
+        endMonth: item.month,
+        monthCount: 1,
+        polityId: item.polityId ?? null,
+        coveragePeriodId: item.coveragePeriodId ?? null,
+        provisionalStateId: item.provisionalStateId ?? null,
+      };
+    } else {
+      current.endMonth = item.month;
+      current.monthCount += 1;
+    }
+  }
+  if (current) ranges.push(current);
+  return ranges;
+};
 const changeSummary = item => ({
   id: item.id,
   polityId: item.polityId ?? null,
@@ -110,6 +144,7 @@ const audit = {
     notYetGeoreferencedByPolity: countBy(notYetGeoreferenced, item => item.polityId),
     forwardProxyByCoveragePeriod: countBy(forwardProxyMonths, item => item.coveragePeriodId),
     provisionalByCoveragePeriod: countBy(provisionalMonths, item => item.coveragePeriodId),
+    provisionalRanges: contiguousMonthRanges(provisionalMonths),
   },
   unresolved: {
     eventIds: unresolvedEvents.map(item => item.id),
