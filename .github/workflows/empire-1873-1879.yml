@@ -1,0 +1,19 @@
+name: Empire 1873-1879 candidate research
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/analyze-empire-1873-1879.mjs'
+      - '.github/workflows/empire-1873-1879.yml'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-empire-1873-1879.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1873-1879
+          path: empire-1873-1879.json
