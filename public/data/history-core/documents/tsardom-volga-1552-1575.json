@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ohm-tsardom-1552-relation-2851886",
+      "sourceCollectionId": "openhistoricalmap-cc0",
+      "title": "OpenHistoricalMap relation 2851886 — Tsardom of Russia, 1552–1556",
+      "institution": "OpenHistoricalMap; exact relation metadata checked 2026-09-10",
+      "url": "https://api.openhistoricalmap.org/api/0.6/relation/2851886",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"start_date=1552; end_date=1556","normalized":"1552/1556","precision":"range","calendar":"julian"},
+      "publicationCitation": "OpenHistoricalMap relation 2851886, version 13, changeset 240778, timestamp 2026-05-22T05:04:03Z.",
+      "representedDate": {"original":"Russian Tsardom extent after the 1552 Kazan conquest and before the 1556 Astrakhan annexation","normalized":"1552/1556","precision":"range"},
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+        "gitBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+        "relationId": "2851886",
+        "relationVersion": "13",
+        "license": "CC0 / public domain; no relation-level license=* override"
+      },
+      "notes": "Pinned reconstruction only. Spatial controls confirm Kazan is inside while Astrakhan, Tyumen, Tobolsk, Smolensk and Kyiv remain outside. It is used only with independent Russian documentary evidence."
+    },
+    {
+      "id": "doc-ohm-tsardom-1556-relation-2890617",
+      "sourceCollectionId": "openhistoricalmap-cc0",
+      "title": "OpenHistoricalMap relation 2890617 — Tsardom of Russia, 1556–1595",
+      "institution": "OpenHistoricalMap; exact relation metadata checked 2026-09-10",
+      "url": "https://api.openhistoricalmap.org/api/0.6/relation/2890617",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {"original":"start_date=1556; end_date=1595-05-18","normalized":"1556/1595","precision":"range","calendar":"julian"},
+      "publicationCitation": "OpenHistoricalMap relation 2890617, version 8, changeset 240778, timestamp 2026-05-22T05:04:21Z.",
+      "representedDate": {"original":"Russian Tsardom extent after the 1556 Astrakhan annexation and before the late-sixteenth-century Siberian expansion","normalized":"1556/1595","precision":"range"},
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-tsardom.geojson",
+        "gitBlobSha1": "149bee2eb008fd99aaa486a67677f598d5ffc00c",
+        "relationId": "2890617",
+        "relationVersion": "8",
+        "license": "CC0 / public domain; no relation-level license=* override"
+      },
+      "notes": "Pinned reconstruction only. Spatial controls confirm both Kazan and Astrakhan are inside while Tyumen, Tobolsk, Smolensk and Kyiv remain outside. It is not extended into the Siberian-conquest interval."
+    },
+    {
+      "id": "doc-kazan-conquest-1552-prlib",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Войсками Ивана Грозного была взята Казань",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/history/619591",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "official-library-chronology",
+      "date": {"original":"2 октября 1552 г. по юлианскому календарю / 12 октября 1552 г.","normalized":"1552-10-12","precision":"day","calendar":"gregorian"},
+      "notes": "The Presidential Library explicitly states that after the capture of Kazan the Kazan Khanate was liquidated and the Middle Volga region entered the Russian Tsardom. Used for transition chronology, not as boundary geometry."
+    },
+    {
+      "id": "doc-kazan-gury-land-grant-1555-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "1555 Августа 15. Данная грамота Казанскому Архиепископу Гурию, на земли и рыбные ловли в Казанском уезде, и на слободу и дворовые места в Казани",
+      "institution": "Электронная библиотека исторических документов / Археографическая комиссия",
+      "url": "https://docs.historyrussia.org/ru/nodes/344618",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {"original":"15 августа 1555 г.","normalized":"1555-08-25","precision":"day","calendar":"julian","note":"Old Style date retained in the title; Gregorian equivalent is 25 August 1555."},
+      "authority": ["Русское царство"],
+      "archiveCitation": "Государственный Старых дел Архив при Правительствующем Сенате.",
+      "publicationCitation": "Акты исторические, собранные и изданные Археографическою комиссией. Т. 1. 1334-1598. СПб., 1841.",
+      "notes": "Primary administrative evidence of Russian jurisdiction in Kazan and Kazan uyezd after the 1552 conquest."
+    },
+    {
+      "id": "doc-astrakhan-annexation-1556-prlib",
+      "sourceCollectionId": "prlib-history-chronology",
+      "title": "Русские войска взяли Астрахань",
+      "institution": "Президентская библиотека имени Б. Н. Ельцина",
+      "url": "https://www.prlib.ru/history/619351",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "official-library-chronology",
+      "date": {"original":"26 августа 1556 г.","normalized":"1556-09-05","precision":"day","calendar":"gregorian","note":"The same Presidential Library chronology explicitly gives its 1554 Astrakhan campaign dates in the Julian calendar; 26 August 1556 OS corresponds to 5 September 1556 Gregorian."},
+      "notes": "The Presidential Library states that the 1556 campaign finally incorporated the Astrakhan Khanate into Russia. Used for transition chronology, not as boundary geometry."
+    },
+    {
+      "id": "doc-astrakhan-troitsky-grant-1575-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "1575 Февраля 12. Царская жалованная грамота Астраханскому Троицкому монастырю, на рыбную ловлю, с правом беспошлинной торговли",
+      "institution": "Электронная библиотека исторических документов / Археографическая комиссия",
+      "url": "https://docs.historyrussia.org/ru/nodes/344649-1575-fevralya-12-tsarskaya-zhalovannaya-gramota-astrahanskomu-troitskomu-monastyryu-na-rybnuyu-lovlyu-s-pravom-besposhlinnoy-torgovli",
+      "tier": "A1-archival-original",
+      "documentType": "archival-document",
+      "date": {"original":"12 февраля 1575 г.","normalized":"1575-02-22","precision":"day","calendar":"julian","note":"Old Style date in the document title; Gregorian equivalent is 22 February 1575."},
+      "authority": ["Русское царство"],
+      "publicationCitation": "Акты исторические / Дополнения к актам историческим, Археографическая комиссия.",
+      "notes": "Primary Russian administrative evidence for Astrakhan after the 1556 annexation."
+    }
+  ]
+}

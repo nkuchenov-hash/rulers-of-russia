@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-tsardom-kazan-1552-corroborated-ohm",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-tsardom-kazan-1552-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1552-relation-2851886",
+        "doc-kazan-conquest-1552-prlib",
+        "doc-kazan-gury-land-grant-1555-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 150000,
+      "derivationNote": "Pinned OHM 1552-1556 reconstruction promoted only after exact relation/version check, distributed spatial controls and independent Russian documentary corroboration for Kazan."
+    },
+    {
+      "id": "frag-tsardom-astrakhan-1556-corroborated-ohm",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-tsardom-astrakhan-1556-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1556-relation-2890617",
+        "doc-kazan-gury-land-grant-1555-ebid",
+        "doc-astrakhan-annexation-1556-prlib",
+        "doc-astrakhan-troitsky-grant-1575-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 150000,
+      "derivationNote": "Pinned OHM 1556-1595 reconstruction promoted only for the pre-Siberian interval after exact relation/version check, distributed spatial controls and Russian archival corroboration for Astrakhan."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-tsardom-kazan-1552",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1552-10",
+      "historicalDate": {
+        "original": "2 октября 1552 г. по юлианскому календарю / 12 октября 1552 г. по григорианскому календарю — взятие Казани и ликвидация Казанского ханства",
+        "normalized": "1552-10-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": ["frag-tsardom-kazan-1552-corroborated-ohm"],
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1552-relation-2851886",
+        "doc-kazan-conquest-1552-prlib",
+        "doc-kazan-gury-land-grant-1555-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "validThroughMonth": "1556-08",
+      "notes": "Activation begins in the exact Gregorian month of the Kazan conquest. The state is bounded through August 1556, immediately before the normalized September 1556 Astrakhan incorporation."
+    },
+    {
+      "id": "base-russian-tsardom-astrakhan-1556",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1556-09",
+      "historicalDate": {
+        "original": "26 августа 1556 г. по юлианской хронологии Президентской библиотеки / 5 сентября 1556 г. по григорианскому календарю — окончательное присоединение Астраханского ханства",
+        "normalized": "1556-09-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": ["frag-tsardom-astrakhan-1556-corroborated-ohm"],
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1556-relation-2890617",
+        "doc-kazan-gury-land-grant-1555-ebid",
+        "doc-astrakhan-annexation-1556-prlib",
+        "doc-astrakhan-troitsky-grant-1575-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "validThroughMonth": "1580-12",
+      "notes": "The state includes Kazan and Astrakhan but excludes the later Siberian conquest area. It is therefore stopped before the earliest 1581 Yermak/Siberia chronology rather than stretched to the OHM relation's nominal 1595 end date."
+    }
+  ]
+}
