@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "territoryChanges": [
+    {
+      "id": "territory-1917-finland-separation",
+      "eventId": "evt-1917-finland-independence-recognition",
+      "polityId": "russian-republic",
+      "effectiveDate": {
+        "original": "18 (31) декабря 1917 г.",
+        "normalized": "1917-12-31",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "operation": "separate",
+      "geometryAction": "remove",
+      "geometryFragmentIds": [
+        "frag-russian-republic-finland-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-finland-independence-recognition-1917-ebid",
+        "doc-historical-basemaps-finland-1914",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "geometry": {
+        "method": "official-recognition-plus-verified-finland-component",
+        "evidenceDocumentIds": [
+          "doc-finland-independence-recognition-1917-ebid",
+          "doc-historical-basemaps-finland-1914",
+          "doc-finland-historical-boundary-maps-1909-rgia"
+        ],
+        "derivationNote": "The official 31 December 1917 recognition fixes the legal separation date. Geometry uses the same separately verified Grand Duchy of Finland component already accepted in late-Empire states, so replay removes that component from the inherited Russian state instead of redrawing the remaining border."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Legal-border separation only. The verified Finland component is removed from the inherited 1917 Russian state in the recognition month."
+    }
+  ]
+}
