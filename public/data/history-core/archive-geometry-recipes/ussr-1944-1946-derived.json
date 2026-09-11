@@ -2,37 +2,19 @@
   "schema_version": 1,
   "recipes": [
     {
-      "id": "recipe-ussr-tuva-1944-derived-difference",
-      "fragmentId": "frag-ussr-tuva-1944-derived-difference",
-      "archivePath": "public/data/territory/world-history/snapshots/1945.geojson",
-      "archiveBlobSha1": "060cd2882b9b96d4f5dde7aa300e38f1791ec15f",
+      "id": "recipe-ussr-tuva-1944-admin1-corroborated",
+      "fragmentId": "frag-ussr-tuva-1944-admin1-corroborated",
+      "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
       "selector": {
-        "NAME": "USSR"
+        "adm1_code": "RUS-2605"
       },
-      "differenceMasks": [
-        {
-          "archivePath": "public/data/territory/archive/ussr.geojson",
-          "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
-          "selector": {
-            "start_date": 1941,
-            "end_date": 1941
-          },
-          "expectedFeatureCount": 1,
-          "note": "Subtract the verified 1941 USSR state; retain only the newly present post-1941 component in the Tuva locality."
-        }
-      ],
-      "resultComponentBboxFilter": {
-        "minLon": 87.5,
-        "minLat": 48,
-        "maxLon": 100.5,
-        "maxLat": 55
-      },
-      "output": "geometry/ussr-tuva-1944-derived-difference.geojson",
+      "output": "geometry/ussr-tuva-1944-admin1-corroborated.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-historical-basemaps-ussr-1945",
-        "doc-cliopatria-ussr-1941",
-        "doc-tuva-ussr-1944-ebid"
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -60,7 +42,7 @@
           "expected": "outside"
         }
       ],
-      "note": "Historical Tuva acquisition fragment derived reproducibly as the local post-1941 component present in the independently verified 1945 USSR state but absent from the verified 1941 USSR state. The exact legal date comes from the 11 October 1944 Soviet admission act. This avoids substituting the modern Tuva administrative border."
+      "note": "The 11 October 1944 Soviet act supplies the legal acquisition date. A pinned public-domain Natural Earth Tuva admin-1 polygon supplies reproducible spatial geometry and is independently cross-checked against the public-domain Tuvan People's Republic reconstruction on Wikimedia Commons. The fragment is generalized with 50 km uncertainty and is not claimed as a surveyed 1944 cadastral line."
     },
     {
       "id": "recipe-ussr-zakarpattia-1946-derived-difference",
