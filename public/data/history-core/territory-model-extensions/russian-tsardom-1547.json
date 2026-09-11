@@ -19,12 +19,13 @@
       ],
       "evidenceDocumentIds": [
         "doc-sgdd-vol1-1813",
-        "doc-tornau-rus-1240-1533-map-1910"
+        "doc-tornau-rus-1240-1533-map-1910",
+        "doc-kazan-conquest-1552-prlib"
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "low",
-      "notes": "The coverage-period change in 1547 is a polity/title transition, not a separately evidenced external-border mutation. Therefore the final verified Grand Moscow geometry is carried into the Russian Tsardom as the opening base state. It is bounded through 1551-12, immediately before the Kazan territorial change represented separately from 1552 onward.",
-      "validThroughMonth": "1551-12"
+      "notes": "The coverage-period change in 1547 is a polity/title transition, not a separately evidenced external-border mutation. Therefore the final verified Grand Moscow geometry is carried into the Russian Tsardom as the opening base state. It remains valid through September 1552 and stops before the exact October 1552 Kazan conquest state (12 October Gregorian), so no Kazan territory is projected backward.",
+      "validThroughMonth": "1552-09"
     }
   ]
 }
