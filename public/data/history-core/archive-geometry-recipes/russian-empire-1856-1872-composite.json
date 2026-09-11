@@ -184,33 +184,9 @@
             45.9
           ],
           "expected": "outside"
-        },
-        {
-          "id": "izmail-post-paris",
-          "lonLat": [
-            28.8406,
-            45.3503
-          ],
-          "expected": "outside"
-        },
-        {
-          "id": "cahul-post-paris",
-          "lonLat": [
-            28.1944,
-            45.9043
-          ],
-          "expected": "outside"
-        },
-        {
-          "id": "bolhrad-post-paris",
-          "lonLat": [
-            28.6149,
-            45.6826
-          ],
-          "expected": "outside"
         }
       ],
-      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Izmail, Cahul and Bolhrad are explicit outside-controls proving this dated 1856 geometry is post-Paris rather than the pre-cession Bessarabian state."
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. This 1856 capture is retained as archive research only for the post-Paris transition because it includes Izmail and therefore cannot be used as the post-30-March legal state."
     },
     {
       "id": "recipe-russian-empire-main-1857-1858-1856-1872",
@@ -346,9 +322,33 @@
             45.9
           ],
           "expected": "outside"
+        },
+        {
+          "id": "izmail-post-paris",
+          "lonLat": [
+            28.8406,
+            45.3503
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "cahul-post-paris",
+          "lonLat": [
+            28.1944,
+            45.9043
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bolhrad-post-paris",
+          "lonLat": [
+            28.6149,
+            45.6826
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Main 1857–1858 archive state is explicitly treated as pre-Aigun because Blagoveshchensk/left-Amur control is outside. It is used only from 1857-12 through 1858-05, before the June 1858 Aigun transition; Finland and northern Kurils remain separate verified fragments."
+      "note": "Main 1857–1858 archive state is tested as the post-Paris/pre-Aigun state: Izmail, Cahul and Bolhrad must be outside, while Blagoveshchensk remains outside. If all controls pass, it can be bounded backward only to the exact March 1856 Paris cession and forward only through May 1858."
     },
     {
       "id": "recipe-russian-empire-main-1860-1861-1856-1872",
