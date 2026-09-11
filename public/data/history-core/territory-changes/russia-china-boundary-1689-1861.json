@@ -18,14 +18,20 @@
         "doc-nerchinsk-1689-mfa"
       ],
       "geometry": {
-        "method": "uncertain-zone",
+        "method": "treaty-corroborated-verified-full-state",
         "evidenceDocumentIds": [
-          "doc-nerchinsk-1689-mfa"
+          "doc-nerchinsk-1689-mfa",
+          "doc-ohm-tsardom-1689-relation-2851290",
+          "doc-andrusovo-smolensk-implementation-1667-ebid"
         ],
-        "derivationNote": "The legal treaty event is source-verified, but an exact single line is not. The official source record notes divergent source-language formulations, ambiguous landmarks, inadequate contemporary mapping and no physical demarcation. Identifiable river/watershed portions may be reconstructed; unresolved portions must remain uncertainty corridors rather than an invented line."
+        "derivationNote": "The exact 6 September 1689 legal transition is paired with the already geometry-verified low-confidence 1689 OHM full-state reconstruction, independently corroborated by the Nerchinsk treaty and the 1667 Smolensk implementation record. For monthly replay this event replaces the prior state with that verified 1689 full state. The fragment retains 150 km uncertainty and does not claim a surveyed exact Nerchinsk line; unresolved line precision remains a boundary-detail uncertainty, not an unclassified area mutation."
       },
-      "reviewStatus": "source-verified",
-      "notes": "Source verification applies to the treaty and its intentionally uncertain boundary model, not to exact geometry."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified as a low-confidence full-state replacement on the exact treaty date; detailed Nerchinsk line precision remains intentionally uncertain.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-tsardom-1689-corroborated-ohm"
+      ]
     },
     {
       "id": "territory-1727-kyakhta-demarcation",
