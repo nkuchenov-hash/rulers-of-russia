@@ -1,0 +1,23 @@
+name: Tornau 1598-1682 public-domain raster
+on:
+  push:
+    paths:
+      - '.github/workflows/tornau-1598-1682-raster.yml'
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch pinned Wikimedia Commons original
+        run: |
+          set -euxo pipefail
+          curl -L --fail --retry 3 -A 'rulers-of-russia-history-core/1.0' \
+            'https://commons.wikimedia.org/wiki/Special:Redirect/file/Historical_map_of_Russian%2C_1598-1682.gif' \
+            -o tornau-1598-1682.gif
+          test "$(stat -c%s tornau-1598-1682.gif)" -eq 2048903
+          echo '5b78566787732141ad81726380a83f06b9aff491  tornau-1598-1682.gif' | sha1sum -c -
+          file tornau-1598-1682.gif
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tornau-1598-1682-raster
+          path: tornau-1598-1682.gif
