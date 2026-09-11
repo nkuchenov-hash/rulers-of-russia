@@ -14,14 +14,25 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-nystad-1721-ebid", "doc-nystad-ratification-exchange-1721-academic"],
+      "evidenceDocumentIds": [
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
       "geometry": {
-        "method": "derived-from-boundary-text-and-post-ratification-demarcation",
-        "evidenceDocumentIds": ["doc-nystad-1721-ebid"],
-        "derivationNote": "Article 8 supplies an explicit boundary grammar: from the north shore of the Gulf of Finland at Virelax the line runs inland at stated offsets from the coast, then uses straight segments around Vyborg, rejoins the former Russo-Swedish boundary, follows that older line north for a stated distance, and then runs by another straight segment through the Kexholm district to the Lake Poroarvi area; the Lapland boundary remains as before the war. Article 8 also orders bilateral commissioners to implement the delimitation after ratification. This legal route is source-verified, but exact historical vertices require the commission's survey/demarcation evidence and must not be replaced by a modern atlas trace."
+        "method": "post-ratification-verified-full-state",
+        "evidenceDocumentIds": [
+          "doc-nystad-1721-ebid",
+          "doc-cliopatria-russian-empire-1721-1726",
+          "doc-nystad-ratification-exchange-1721-academic"
+        ],
+        "derivationNote": "The Treaty of Nystad and verified exchange of ratifications establish the exact legal transition. The pinned 1721–1726 Cliopatria/Seshat state is independently spatially controlled and corroborated by those treaty sources; for replay the Nystad transition replaces the pre-treaty full state with that verified post-ratification full state rather than approximating the acquisition as a modern regional polygon."
       },
-      "reviewStatus": "source-verified",
-      "notes": "Territorial replay activates on the verified exchange of ratifications, not the signature date. Exact mapped implementation remains a separate geometry task."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified as a full-state replacement on the verified ratification-exchange date; detailed surveyed line precision remains medium-confidence.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-russian-empire-1721-1726-corroborated-cliopatria"
+      ]
     },
     {
       "id": "territory-1812-bucharest-russia",
@@ -36,10 +47,15 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-bucharest-1812-ebid", "doc-bucharest-ratification-exchange-1812-academic"],
+      "evidenceDocumentIds": [
+        "doc-bucharest-1812-ebid",
+        "doc-bucharest-ratification-exchange-1812-academic"
+      ],
       "geometry": {
         "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-bucharest-1812-ebid"],
+        "evidenceDocumentIds": [
+          "doc-bucharest-1812-ebid"
+        ],
         "derivationNote": "Article 4 gives a direct legal route: the Prut from its entry into Moldavia to its confluence with the Danube, with the middle of the Prut as the interstate boundary; from that confluence the left bank of the Danube continues to the Kilia mouth and the sea, subject to the treaty's explicit special treatment of small islands and the two large islands opposite Ismail and Kilia. Territory on the left bank of the Prut is ceded to Russia. Article 6 restores the Asian frontier to its pre-war position rather than creating a new exact Asian line. Historical river-channel geometry and island positions still require period hydrography; the treaty text must not be snapped to modern channels without evidence."
       },
       "reviewStatus": "source-verified",
@@ -58,10 +74,16 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid", "doc-rsfsr-fer-border-1920-dvp"],
+      "evidenceDocumentIds": [
+        "doc-rsfsr-fer-border-1920-ebid",
+        "doc-rsfsr-fer-border-1920-dvp"
+      ],
       "geometry": {
         "method": "derived-from-boundary-text-and-historic-administrative-boundaries",
-        "evidenceDocumentIds": ["doc-rsfsr-fer-border-1920-ebid", "doc-rsfsr-fer-border-1920-dvp"],
+        "evidenceDocumentIds": [
+          "doc-rsfsr-fer-border-1920-ebid",
+          "doc-rsfsr-fer-border-1920-dvp"
+        ],
         "derivationNote": "The treaty defines a mixed route: along the Selenga to Lake Baikal; through Lake Baikal using the former Irkutsk/Transbaikal administrative division; onward by former Yakut and Far-Eastern regional boundaries, then watershed systems to the Sea of Okhotsk near Cape Madzhalida. It also allocates the islands south of the specified parallel, including northern Sakhalin, to the Far Eastern Republic and requires a mixed commission to mark the line. On rivers and lakes the treaty uses the middle of the navigable part. Exact geometry therefore depends on period administrative-boundary maps, hydrography and commission marking evidence; no modern oblast/republic boundary may be substituted automatically."
       },
       "reviewStatus": "source-verified",
