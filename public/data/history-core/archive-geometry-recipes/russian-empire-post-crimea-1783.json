@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-post-crimea-1783-1787",
+      "fragmentId": "frag-russian-empire-post-crimea-1783-1787",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1783,
+        "end_date": 1787
+      },
+      "output": "geometry/russian-empire-post-crimea-1783-1787.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1783-1787",
+        "doc-crimea-manifest-1783-pszri",
+        "doc-constantinople-crimea-recognition-1783-prlib"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "sevastopol",
+          "lonLat": [
+            33.5224,
+            44.6166
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bakhchysarai",
+          "lonLat": [
+            33.857,
+            44.75
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "odessa",
+          "lonLat": [
+            30.7233,
+            46.4825
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned post-Crimea/pre-Jassy Empire state. The April 1783 manifesto supplies the exact start; the state is carried only until January 1792, immediately before the Jassy ratification transition. No Polish-partition or Bessarabian/Caucasian later geometry is projected backward."
+    }
+  ]
+}
