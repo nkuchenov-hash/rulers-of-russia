@@ -1,0 +1,17 @@
+name: Empire 1801-1802 candidate diagnostic
+on:
+  push:
+    paths:
+      - 'scripts/analyze-empire-1801-1802.mjs'
+      - '.github/workflows/empire-1801-1802.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-empire-1801-1802.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1801-1802-diagnostic
+          path: empire-1801-1802-diagnostic.json
