@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-tsardom-post-adrianople-1713-corroborated-ohm",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-tsardom-post-adrianople-1713-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1713-relation-2851289",
+        "doc-pruth-1711-ebid",
+        "doc-adrianople-1713-ebid",
+        "doc-nerchinsk-1689-mfa",
+        "doc-andrusovo-smolensk-implementation-1667-ebid",
+        "doc-nystad-1721-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "uncertaintyMeters": 150000,
+      "derivationNote": "Pinned OHM version-38 generalized reconstruction accepted only for the post-Adrianople 1713–1720 interval after primary-document corroboration and broad west-to-Pacific controls. It is not used for 1699–1710 despite the source tag."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-tsardom-post-adrianople-1713",
+      "polityId": "russian-tsardom",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1713-06",
+      "historicalDate": {
+        "original": "13 июня 1713 г. / 24 июня 1713 г. — Адрианопольское урегулирование",
+        "normalized": "1713-06-24",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-tsardom-post-adrianople-1713-corroborated-ohm"
+      ],
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1713-relation-2851289",
+        "doc-pruth-1711-ebid",
+        "doc-adrianople-1713-ebid",
+        "doc-nerchinsk-1689-mfa",
+        "doc-andrusovo-smolensk-implementation-1667-ebid",
+        "doc-nystad-1721-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "validThroughMonth": "1720-12",
+      "derivedFromChangeIds": [
+        "territory-1713-adrianople-settlement"
+      ],
+      "notes": "Starts only in the exact month of the 1713 follow-up settlement, after the post-Pruth southern state is fixed. Stops at the end of the Tsardom coverage period and never crosses the 1721 Nystad change."
+    }
+  ]
+}

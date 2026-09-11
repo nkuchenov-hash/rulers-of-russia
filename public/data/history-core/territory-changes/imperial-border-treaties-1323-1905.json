@@ -5,12 +5,25 @@
       "id": "territory-1323-orekhovo-demarcation",
       "eventId": "evt-1323-orekhovo-peace",
       "polityId": "novgorodian-land",
-      "effectiveDate": {"original":"12 августа 1323 г.","normalized":"1323-08-12","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "12 августа 1323 г.",
+        "normalized": "1323-08-12",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-orekhovo-1323-prlib"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-orekhovo-1323-prlib"],"derivationNote":"The A2 documentary publication source-verifies the treaty and its enumerated boundary landmarks. Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."},
+      "evidenceDocumentIds": [
+        "doc-orekhovo-1323-prlib"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": [
+          "doc-orekhovo-1323-prlib"
+        ],
+        "derivationNote": "The A2 documentary publication source-verifies the treaty and its enumerated boundary landmarks. Reconstruct the southern segment from the treaty's named rivers, bogs, stones, lakes and other landmarks. The sparse northern segment must remain a frontier/boundary corridor with uncertainty instead of a falsely exact line until the named landmarks are securely identified."
+      },
       "reviewStatus": "source-verified",
       "notes": "The legal demarcation is source-verified; exact modern placement of all medieval landmarks remains a separate geometry task."
     },
@@ -18,12 +31,25 @@
       "id": "territory-1711-pruth-azov-settlement",
       "eventId": "evt-1711-pruth-peace",
       "polityId": "russian-tsardom",
-      "effectiveDate": {"original":"12 июля 1711 г.","normalized":"1711-07-23","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "12 июля 1711 г.",
+        "normalized": "1711-07-23",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-pruth-1711-ebid"],
-      "geometry": {"method":"source-verified-azov-settlement-area-pending","evidenceDocumentIds":["doc-pruth-1711-ebid"],"derivationNote":"The A1 archival treaty source-verifies the 12 July 1711 settlement and the return of Azov with its associated fortresses to Ottoman possession, together with related fortification obligations. Exact affected-area geometry remains pending reconstruction from the treaty, implementation records and period cartography; legal cession must not be represented by a modern administrative polygon."},
+      "evidenceDocumentIds": [
+        "doc-pruth-1711-ebid"
+      ],
+      "geometry": {
+        "method": "source-verified-azov-settlement-area-pending",
+        "evidenceDocumentIds": [
+          "doc-pruth-1711-ebid"
+        ],
+        "derivationNote": "The A1 archival treaty source-verifies the 12 July 1711 settlement and the return of Azov with its associated fortresses to Ottoman possession, together with related fortification obligations. Exact affected-area geometry remains pending reconstruction from the treaty, implementation records and period cartography; legal cession must not be represented by a modern administrative polygon."
+      },
       "reviewStatus": "source-verified",
       "notes": "EBID also indexes Peter I's ratification of the Pruth treaty on 12 July 1711. The legal settlement is therefore source-backed independently of the still-pending exact area geometry."
     },
@@ -31,28 +57,57 @@
       "id": "territory-1713-adrianople-settlement",
       "eventId": "evt-1713-adrianople-peace",
       "polityId": "russian-tsardom",
-      "effectiveDate": {"original":"13 июня 1713 г.","normalized":"1713-06-24","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "13 июня 1713 г.",
+        "normalized": "1713-06-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-adrianople-1713-ebid"],
-      "geometry": {"method":"source-verified-follow-up-settlement-area-pending","evidenceDocumentIds":["doc-adrianople-1713-ebid"],"derivationNote":"The A1/A2 documentary record source-verifies the 13 June 1713 Russo-Ottoman follow-up peace settlement. Its post-Pruth boundary consequences must still be reconstructed clause-by-clause against the 1711 settlement and implementation/demarcation records before any exact area or line geometry is promoted."},
-      "reviewStatus": "source-verified",
-      "notes": "This promotion verifies the treaty-level territorial settlement only; it does not claim that the complete post-1713 southern border has been georeferenced."
+      "evidenceDocumentIds": [
+        "doc-adrianople-1713-ebid",
+        "doc-ohm-tsardom-1713-relation-2851289"
+      ],
+      "geometry": {
+        "method": "primary-settlement-plus-controlled-post-settlement-state",
+        "evidenceDocumentIds": [
+          "doc-adrianople-1713-ebid",
+          "doc-ohm-tsardom-1713-relation-2851289"
+        ],
+        "derivationNote": "The 1713 documentary settlement fixes the post-Pruth legal state. Exact-line survey precision is unavailable, but the pinned OHM version-38 polygon is accepted as a low-confidence full-state realization only after primary-document corroboration and broad controls: Azov outside, Riga/Narva outside, established western core and Siberian expansion inside. The polygon is bounded to 1713-06..1720-12 and is not used from its nominal 1699 source start."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified as a low-confidence generalized post-settlement state for monthly sovereign-area replay; detailed surveyed boundary display remains lower precision.",
+      "geometryFragmentIds": [
+        "frag-tsardom-post-adrianople-1713-corroborated-ohm"
+      ]
     },
     {
       "id": "territory-1875-petersburg-sakhalin",
       "eventId": "evt-1875-petersburg-japan-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"22 августа 1875 г. — обмен ратификациями","normalized":"1875-08-22","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "22 августа 1875 г. — обмен ратификациями",
+        "normalized": "1875-08-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "recognize",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+      "evidenceDocumentIds": [
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa"
+      ],
       "geometry": {
         "method": "source-verified-island-status-area-pending",
-        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+        "evidenceDocumentIds": [
+          "doc-petersburg-japan-1875-ebid",
+          "doc-petersburg-japan-1875-ratifications-mofa"
+        ],
         "derivationNote": "The treaty source-verifies Japan's renunciation of rights to all Sakhalin in favor of Russia, effective for replay at the documented exchange of ratifications. This is a legal-status recognition layer; exact island coastline/area geometry must come from period cartography and must not be inferred from a modern Sakhalin polygon."
       },
       "reviewStatus": "source-verified",
@@ -62,14 +117,25 @@
       "id": "territory-1875-petersburg-kurils",
       "eventId": "evt-1875-petersburg-japan-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"22 августа 1875 г. — обмен ратификациями","normalized":"1875-08-22","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "22 августа 1875 г. — обмен ратификациями",
+        "normalized": "1875-08-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+      "evidenceDocumentIds": [
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa"
+      ],
       "geometry": {
         "method": "source-verified-enumerated-islands-area-pending",
-        "evidenceDocumentIds": ["doc-petersburg-japan-1875-ebid", "doc-petersburg-japan-1875-ratifications-mofa"],
+        "evidenceDocumentIds": [
+          "doc-petersburg-japan-1875-ebid",
+          "doc-petersburg-japan-1875-ratifications-mofa"
+        ],
         "derivationNote": "The treaty source-verifies cession to Japan of the enumerated Kuril islands from Shumshu through Urup. Build the area change from those named historical island units, not from a generalized modern archipelago polygon."
       },
       "reviewStatus": "source-verified",
@@ -79,14 +145,26 @@
       "id": "territory-1878-san-stefano-preliminary",
       "eventId": "evt-1878-san-stefano-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"17 марта 1878 г. — обмен ратификациями","normalized":"1878-03-17","precision":"day","calendar":"gregorian","note":"Article 29 states that the parties regard themselves as formally bound from ratification; FRUS reports the exchange at St Petersburg on 17 March 1878."},
+      "effectiveDate": {
+        "original": "17 марта 1878 г. — обмен ратификациями",
+        "normalized": "1878-03-17",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "Article 29 states that the parties regard themselves as formally bound from ratification; FRUS reports the exchange at St Petersburg on 17 March 1878."
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-san-stefano-1878-ebid", "doc-san-stefano-ratifications-1878-frus"],
+      "evidenceDocumentIds": [
+        "doc-san-stefano-1878-ebid",
+        "doc-san-stefano-ratifications-1878-frus"
+      ],
       "geometry": {
         "method": "source-verified-preliminary-boundary-area-pending",
-        "evidenceDocumentIds": ["doc-san-stefano-1878-ebid", "doc-san-stefano-ratifications-1878-frus"],
+        "evidenceDocumentIds": [
+          "doc-san-stefano-1878-ebid",
+          "doc-san-stefano-ratifications-1878-frus"
+        ],
         "derivationNote": "The preliminary territorial clauses became legally operative at ratification, but this state is explicitly temporary and later superseded by the Berlin settlement. Exact Caucasus/Balkan geometry requires the treaty's boundary clauses and explanatory map; it must not be materialized as a permanent post-1878 border."
       },
       "reviewStatus": "source-verified",
@@ -96,14 +174,26 @@
       "id": "territory-1878-berlin-caucasus",
       "eventId": "evt-1878-berlin-ratifications-exchanged",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"3 августа 1878 г. — обмен ратификациями","normalized":"1878-08-03","precision":"day","calendar":"gregorian","note":"The Berlin ratification procès-verbal records the exchange on 3 August 1878 and the Ottoman declaration that the treaty was valid from that date."},
+      "effectiveDate": {
+        "original": "3 августа 1878 г. — обмен ратификациями",
+        "normalized": "1878-08-03",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "The Berlin ratification procès-verbal records the exchange on 3 August 1878 and the Ottoman declaration that the treaty was valid from that date."
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-berlin-1878-ebid", "doc-berlin-ratifications-1878-frus"],
+      "evidenceDocumentIds": [
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus"
+      ],
       "geometry": {
         "method": "source-verified-boundary-area-pending",
-        "evidenceDocumentIds": ["doc-berlin-1878-ebid", "doc-berlin-ratifications-1878-frus"],
+        "evidenceDocumentIds": [
+          "doc-berlin-1878-ebid",
+          "doc-berlin-ratifications-1878-frus"
+        ],
         "derivationNote": "Article 58 source-verifies the Ottoman cession to Russia of Ardahan, Kars and Batum with associated territories. Exact acquired-area geometry must be georeferenced from the treaty boundary clauses and contemporary demarcation maps/records."
       },
       "reviewStatus": "source-verified",
@@ -113,14 +203,34 @@
       "id": "territory-1905-portsmouth-south-sakhalin",
       "eventId": "evt-1905-portsmouth-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"15 октября 1905 г. — вступление Портсмутского договора в силу","normalized":"1905-10-15","precision":"day","calendar":"gregorian","note":"Signature was 23 August (5 September) 1905. Article XIV ties entry into force to the later ratification notification; U.S. Department of State International Boundary Study No. 17 records 15 October 1905 as the date the treaty came into force."},
+      "effectiveDate": {
+        "original": "15 октября 1905 г. — вступление Портсмутского договора в силу",
+        "normalized": "1905-10-15",
+        "precision": "day",
+        "calendar": "gregorian",
+        "note": "Signature was 23 August (5 September) 1905. Article XIV ties entry into force to the later ratification notification; U.S. Department of State International Boundary Study No. 17 records 15 October 1905 as the date the treaty came into force."
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
       "geometryAction": "metadata-only",
-      "geometryFragmentIds": ["frag-russian-empire-japan-sakhalin-1905-50n"],
-      "evidenceDocumentIds": ["doc-portsmouth-1905-ebid", "doc-portsmouth-effective-1905-usdos-ibs17", "doc-sakhalin-border-endpoints-1940-ndl"],
-      "geometry": {"method":"derived-from-boundary-text","file":"geometry/russian-empire-japan-sakhalin-1905-50n.geojson","evidenceDocumentIds":["doc-portsmouth-1905-ebid","doc-sakhalin-border-endpoints-1940-ndl"],"derivationNote":"Article IX fixes 50° N as the legal limit of the ceded territory. The official Japanese 1940 statistical table, citing Hydrographic Department survey data, publishes the border endpoints as 142°09′25″ E and 143°59′40″ E. The line is generated as a rhumb/parallel segment retaining those historical source coordinates literally. No unsourced WGS84 datum transformation is applied."},
+      "geometryFragmentIds": [
+        "frag-russian-empire-japan-sakhalin-1905-50n"
+      ],
+      "evidenceDocumentIds": [
+        "doc-portsmouth-1905-ebid",
+        "doc-portsmouth-effective-1905-usdos-ibs17",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "file": "geometry/russian-empire-japan-sakhalin-1905-50n.geojson",
+        "evidenceDocumentIds": [
+          "doc-portsmouth-1905-ebid",
+          "doc-sakhalin-border-endpoints-1940-ndl"
+        ],
+        "derivationNote": "Article IX fixes 50° N as the legal limit of the ceded territory. The official Japanese 1940 statistical table, citing Hydrographic Department survey data, publishes the border endpoints as 142°09′25″ E and 143°59′40″ E. The line is generated as a rhumb/parallel segment retaining those historical source coordinates literally. No unsourced WGS84 datum transformation is applied."
+      },
       "reviewStatus": "geometry-verified",
       "notes": "This verifies the boundary line only. It does not promote the full South Sakhalin cession polygon or its coastline to geometry-verified status."
     }
