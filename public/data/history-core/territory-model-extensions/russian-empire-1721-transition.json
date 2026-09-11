@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-pre-nystad-1721",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1721-01",
+      "historicalDate": {
+        "original": "Bounded continuity of the post-Adrianople external legal contour until the 30 September 1721 Nystad ratification exchange",
+        "normalized": "1721-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-tsardom-post-adrianople-1713-corroborated-ohm"
+      ],
+      "evidenceDocumentIds": [
+        "doc-ohm-tsardom-1713-relation-2851289",
+        "doc-adrianople-1713-ebid",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "low",
+      "validThroughMonth": "1721-08",
+      "notes": "Dataset coverage uses russian-empire for 1721. This base reuses the already verified post-Adrianople external legal contour only through the last full month before Nystad; political title/regime chronology is separate from the external-border geometry."
+    },
+    {
+      "id": "base-russian-empire-post-nystad-1721",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1721-09",
+      "historicalDate": {
+        "original": "30 September 1721 — exchange of ratifications of the Treaty of Nystad",
+        "normalized": "1721-09-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1721-1726-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1721-1726",
+        "doc-nystad-1721-ebid",
+        "doc-nystad-ratification-exchange-1721-academic"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1721-11",
+      "derivedFromChangeIds": [
+        "territory-1721-nystad-russia"
+      ],
+      "notes": "Activates the already verified 1721–1726 post-Nystad state in the exact legal-effect month and closes September–November before the existing December anchor."
+    }
+  ]
+}
