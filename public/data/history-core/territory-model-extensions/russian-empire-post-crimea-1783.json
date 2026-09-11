@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-post-crimea-1783-1787",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-post-crimea-1783-1787.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1783-1787",
+        "doc-crimea-manifest-1783-pszri",
+        "doc-constantinople-crimea-recognition-1783-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Pinned Cliopatria/Seshat post-Crimea state promoted after distributed controls and official 1783 corroboration."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-post-crimea-pre-jassy-1783",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1783-04",
+      "historicalDate": {
+        "original": "8/19 April 1783 — Crimea, Taman and Kuban manifesto",
+        "normalized": "1783-04-19",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-post-crimea-1783-1787"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1783-1787",
+        "doc-crimea-manifest-1783-pszri",
+        "doc-constantinople-crimea-recognition-1783-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1792-01",
+      "notes": "Begins in the exact month of the Russian Crimea/Taman/Kuban manifesto and is carried only through the last full month before the Jassy boundary transition effective 9 February 1792. The archive's 1788–1790 candidate has the same period-correct control fingerprint, corroborating continuity; no later partition geometry is projected backward."
+    }
+  ]
+}
