@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-finland-independence-recognition-1917-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Постановление Совета Народных Комиссаров о признании независимости Финляндской Республики. 18 (31) декабря 1917 г.",
+      "institution": "Совет Народных Комиссаров / Электронная библиотека исторических документов",
+      "url": "https://docs.historyrussia.org/ru/nodes/283259-postanovlenie-soveta-narodnyh-komissarov-o-priznanii-nezavisimosti-finlyandskoy-respubliki-18-31-dekabrya-1917-g",
+      "tier": "A2-official-document-publication",
+      "documentType": "decree",
+      "date": {
+        "original": "18 (31) декабря 1917 г.",
+        "normalized": "1917-12-31",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "authority": [
+        "Совет Народных Комиссаров"
+      ],
+      "publicationCitation": "Собрание узаконений и распоряжений Рабочего и Крестьянского Правительства, № 11, 1917, ст. 163; Документы внешней политики СССР, т. I.",
+      "notes": "Official recognition of Finland's state independence. Used as the legal-border separation date; this record is distinct from wartime occupation/control and from later Soviet-Finnish boundary treaties."
+    }
+  ]
+}
