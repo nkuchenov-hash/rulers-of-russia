@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-post-1951-poland-exchange",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-post-1951-poland-exchange.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-ussr-poland-territorial-exchange-1951-unts",
+        "doc-natural-earth-poland-ukraine-admin0-50m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Verified post-war USSR exterior transformed only by the 1951 Poland exchange using pinned Poland/Ukraine public-domain masks; source uncertainty dominates Natural Earth simplification."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-post-1951-exchange-pre-iran-1955",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1951-06",
+      "historicalDate": {
+        "original": "5 June 1951 — USSR–Poland territorial exchange entered into force",
+        "normalized": "1951-06-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-post-1951-poland-exchange"
+      ],
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-ussr-poland-territorial-exchange-1951-unts",
+        "doc-natural-earth-poland-ukraine-admin0-50m",
+        "doc-ussr-iran-frontier-settlement-1954-unts"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1955-04",
+      "notes": "Begins in the exact month of the 1951 Poland exchange and stops immediately before the May 1955 USSR–Iran frontier settlement. The only external-area edits relative to the verified post-war state are the two Poland/Ukraine exchange sectors."
+    }
+  ]
+}
