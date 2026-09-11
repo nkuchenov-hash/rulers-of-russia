@@ -1,0 +1,17 @@
+name: USSR 1991 candidate research
+on:
+  push:
+    paths:
+      - 'scripts/analyze-ussr-1991.mjs'
+      - '.github/workflows/ussr-1991-candidate.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-ussr-1991.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ussr-1991-candidate
+          path: ussr-1991-candidate.json
