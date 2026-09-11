@@ -14,14 +14,26 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "evidenceDocumentIds": [
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-cliopatria-russian-empire-1803-1804"
+      ],
       "geometry": {
-        "method": "source-verified-area-extent-pending",
-        "evidenceDocumentIds": ["doc-georgia-paul-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
-        "derivationNote": "The January 1801 imperial manifesto and RGVIA/RGIA decision record source-verify the legal incorporation of the Georgian Kingdom (Kartli-Kakheti) into Russia. Exact area geometry remains pending reconstruction of its contemporaneous territorial extent from period administrative/cartographic evidence; modern Georgian borders must not be substituted."
+        "method": "post-incorporation-verified-full-state",
+        "evidenceDocumentIds": [
+          "doc-georgia-paul-manifest-1801-pszri",
+          "doc-georgia-accession-council-1800-1801-rgia",
+          "doc-cliopatria-russian-empire-1803-1804"
+        ],
+        "derivationNote": "The exact 30 January 1801 incorporation is replayed with the independently controlled 1803–1804 archive state. Distributed Caucasus controls show Kartli-Kakheti inside while Kutaisi, Batumi, Sukhumi, Gagra, Ganja, Sheki, Baku and Yerevan remain outside, so the fragment does not contain later Caucasus acquisitions. For monthly replay it replaces the pre-incorporation full state from the incorporation month."
       },
-      "reviewStatus": "source-verified",
-      "notes": "Legal incorporation is source-verified independently of the still-pending historical polygon. This replaces the 1783 protection-status relationship on the russian-legal-border track."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified full-state replacement for the January 1801 incorporation; the fragment is bounded to 1802-12 for this backward use and does not include later Caucasus acquisitions.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-russian-empire-1803-1804-corroborated-cliopatria"
+      ]
     },
     {
       "id": "territory-1801-georgia-direct-administration",
@@ -37,10 +49,15 @@
       "territorialModel": "mixed",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri", "doc-georgia-accession-council-1800-1801-rgia"],
+      "evidenceDocumentIds": [
+        "doc-georgia-alexander-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia"
+      ],
       "geometry": {
         "method": "metadata-only",
-        "evidenceDocumentIds": ["doc-georgia-alexander-manifest-1801-pszri"],
+        "evidenceDocumentIds": [
+          "doc-georgia-alexander-manifest-1801-pszri"
+        ],
         "derivationNote": "Alexander I's September manifesto source-verifies the institution of direct internal administration over territory already incorporated earlier in 1801. This administrative transition must not add or redraw the external Russian territory a second time."
       },
       "reviewStatus": "source-verified",

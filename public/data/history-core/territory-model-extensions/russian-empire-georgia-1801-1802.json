@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-post-georgia-1801-1802",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1801-01",
+      "historicalDate": {
+        "original": "18/30 January 1801 — Kartli-Kakheti incorporation manifesto",
+        "normalized": "1801-01-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1803-1804-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1803-1804",
+        "doc-georgia-paul-manifest-1801-pszri",
+        "doc-georgia-accession-council-1800-1801-rgia",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1802-12",
+      "derivedFromChangeIds": [
+        "territory-1801-georgia-incorporation-russian-law"
+      ],
+      "notes": "The controlled 1803–1804 archive state contains Kartli-Kakheti (Tbilisi/Mtskheta/Telavi/Gori) while excluding later Caucasus acquisitions (Kutaisi, Batumi, Sukhumi, Gagra, Ganja, Sheki, Baku, Yerevan). It is therefore carried backward only to the exact January 1801 incorporation and bounded through 1802-12 before the archive's own 1803 interval. No later Caucasus geometry is projected backward."
+    }
+  ]
+}
