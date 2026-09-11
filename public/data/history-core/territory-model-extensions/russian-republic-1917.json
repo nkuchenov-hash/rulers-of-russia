@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-republic-1917-inherited-empire",
+      "polityId": "russian-republic",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-empire-1914-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-peking-1860-mfa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-berlin-1878-ebid",
+        "doc-portsmouth-1905-ebid",
+        "doc-sakhalin-border-endpoints-1940-ndl"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 100000,
+      "derivationNote": "Reuses the already verified 1914 full-Empire legal-border geometry as the inherited Russian external legal state for 1917. Wartime occupations are not legal-border mutations; Finland is removed separately on the exact recognition date."
+    },
+    {
+      "id": "frag-russian-republic-finland-1917",
+      "polityId": "russian-republic",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/russian-empire-finland-component-1887-1917.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-finland-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia",
+        "doc-finland-independence-recognition-1917-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 75000,
+      "derivationNote": "Same verified Finland component used in late-Empire composites, re-declared for Russian-Republic replay so it can be removed on 31 December 1917."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-republic-1917-inherited-legal-border",
+      "polityId": "russian-republic",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1917-01",
+      "historicalDate": {
+        "original": "Inherited Russian external legal border at the start of 1917",
+        "normalized": "1917-01",
+        "precision": "month",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-republic-1917-inherited-empire"
+      ],
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-russian-empire-1914",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-peking-1860-mfa",
+        "doc-portsmouth-1905-ebid",
+        "doc-finland-independence-recognition-1917-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1917-12",
+      "notes": "The 1917 Russian state inherits the last verified imperial legal-border geometry. Wartime occupation is excluded from this track. The 31 December Finland recognition is replayed as a removal within this bounded year."
+    }
+  ]
+}
