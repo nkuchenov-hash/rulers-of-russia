@@ -186,7 +186,7 @@
           "expected": "outside"
         }
       ],
-      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. The raw 1856 capture includes Izmail, so it is not accepted as the post-30-March-1856 Paris legal state."
     },
     {
       "id": "recipe-russian-empire-main-1857-1858-1856-1872",
@@ -322,9 +322,33 @@
             45.9
           ],
           "expected": "outside"
+        },
+        {
+          "id": "izmail-post-paris",
+          "lonLat": [
+            28.8406,
+            45.3503
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "cahul-post-paris",
+          "lonLat": [
+            28.1944,
+            45.9043
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bolhrad-post-paris",
+          "lonLat": [
+            28.6149,
+            45.6826
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Main 1857–1858 archive state is explicitly treated as pre-Aigun because Blagoveshchensk/left-Amur control is outside. It is used only from 1857-12 through 1858-05, before the June 1858 Aigun transition; Finland and northern Kurils remain separate verified fragments."
+      "note": "Main 1857–1858 archive state is explicitly constrained as the post-Paris/pre-Aigun state: Izmail, Cahul and Bolhrad outside; Blagoveshchensk outside. It is bounded backward only to the exact March 1856 Paris cession and forward only through May 1858."
     },
     {
       "id": "recipe-russian-empire-main-1860-1861-1856-1872",
