@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-1991-post-baltic-recognition",
+      "fragmentId": "frag-ussr-1991-post-baltic-recognition",
+      "archivePath": "public/data/territory/archive/ussr.geojson",
+      "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+      "selector": {
+        "start_date": 1987,
+        "end_date": 1989
+      },
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADMIN": "Lithuania"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Remove Lithuania after USSR recognition of independence on 6 September 1991."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADMIN": "Latvia"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Remove Latvia after USSR recognition of independence on 6 September 1991."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADMIN": "Estonia"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Remove Estonia after USSR recognition of independence on 6 September 1991."
+        }
+      ],
+      "output": "geometry/ussr-1991-post-baltic-recognition.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-baltic-independence-recognition-1991-vedomosti",
+        "doc-natural-earth-baltic-admin0-50m"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "minsk",
+          "lonLat": [
+            27.5615,
+            53.9045
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chisinau",
+          "lonLat": [
+            28.8353,
+            47.0105
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tbilisi",
+          "lonLat": [
+            44.793,
+            41.7151
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yerevan",
+          "lonLat": [
+            44.5152,
+            40.1872
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "baku",
+          "lonLat": [
+            49.8671,
+            40.4093
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "tashkent",
+          "lonLat": [
+            69.2401,
+            41.2995
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "almaty",
+          "lonLat": [
+            76.886,
+            43.2389
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "bishkek",
+          "lonLat": [
+            74.5698,
+            42.8746
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "dushanbe",
+          "lonLat": [
+            68.787,
+            38.5598
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "ashgabat",
+          "lonLat": [
+            58.3261,
+            37.9601
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vladivostok",
+          "lonLat": [
+            131.8855,
+            43.1155
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "vilnius",
+          "lonLat": [
+            25.2797,
+            54.6872
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "riga",
+          "lonLat": [
+            24.1052,
+            56.9496
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "tallinn",
+          "lonLat": [
+            24.7536,
+            59.437
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "beijing",
+          "lonLat": [
+            116.4074,
+            39.9042
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ankara",
+          "lonLat": [
+            32.8597,
+            39.9334
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Post-6-September-1991 USSR legal-border geometry: retain the verified 1987–1989 USSR exterior everywhere except the three Baltic republics formally recognized as independent by the USSR State Council. Natural Earth masks affect only Lithuania, Latvia and Estonia; all other Soviet external-border geometry remains the previously verified archive state."
+    }
+  ]
+}

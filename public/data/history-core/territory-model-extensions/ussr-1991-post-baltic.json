@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-1991-post-baltic-recognition",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/ussr-1991-post-baltic-recognition.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-baltic-independence-recognition-1991-vedomosti",
+        "doc-natural-earth-baltic-admin0-50m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Verified pre-recognition USSR archive polygon with only Lithuania, Latvia and Estonia removed by pinned public-domain Natural Earth masks after the USSR's official 6 September 1991 recognition."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-ussr-1991-post-baltic-recognition",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1991-09",
+      "historicalDate": {
+        "original": "6 September 1991 — USSR State Council recognition of Lithuania, Latvia and Estonia",
+        "normalized": "1991-09-06",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1991-post-baltic-recognition"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1987-1989",
+        "doc-ussr-baltic-independence-recognition-1991-vedomosti",
+        "doc-natural-earth-baltic-admin0-50m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1991-12",
+      "notes": "Starts in September 1991 after formal Union recognition of all three Baltic states and is bounded to the USSR's final month. The rest of the USSR external perimeter is retained from the already verified 1987–1989 state; no successor-state geometry is back-projected."
+    }
+  ]
+}
