@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const url='https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_10m_admin_1_states_provinces.geojson';
+const res=await fetch(url,{headers:{'user-agent':'rulers-of-russia-history-core/1.0'}});
+if(!res.ok) throw new Error('fetch '+res.status);
+const bytes=Buffer.from(await res.arrayBuffer());
+const data=JSON.parse(bytes.toString('utf8'));
+const terms=['tuva','tyva','zakarp','transcarpath','zakarpat'];
+const rows=(data.features??[]).map((f,index)=>({index,p:f.properties??{},g:f.geometry})).filter(r=>terms.some(t=>JSON.stringify(r.p).toLowerCase().includes(t))).map(r=>({index:r.index,properties:r.p,geometrySha256:crypto.createHash('sha256').update(JSON.stringify(r.g)).digest('hex')}));
+const out={url,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),rows};
+fs.writeFileSync('ussr-1944-admin1-candidates.json',JSON.stringify(out,null,2)+'\n');
+console.log(JSON.stringify(out,null,2));
