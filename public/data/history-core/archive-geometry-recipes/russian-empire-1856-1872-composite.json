@@ -184,9 +184,33 @@
             45.9
           ],
           "expected": "outside"
+        },
+        {
+          "id": "izmail-post-paris",
+          "lonLat": [
+            28.8406,
+            45.3503
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "cahul-post-paris",
+          "lonLat": [
+            28.1944,
+            45.9043
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bolhrad-post-paris",
+          "lonLat": [
+            28.6149,
+            45.6826
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Controls are tailored to the treaty state at the conservative base anchor."
+      "note": "Main Empire component only; Finland and the treaty-defined northern Kurils are supplied as separate verified fragments. Izmail, Cahul and Bolhrad are explicit outside-controls proving this dated 1856 geometry is post-Paris rather than the pre-cession Bessarabian state."
     },
     {
       "id": "recipe-russian-empire-main-1857-1858-1856-1872",
