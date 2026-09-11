@@ -1,0 +1,19 @@
+name: RF Natural Earth admin1 candidates
+on:
+  push:
+    paths:
+      - 'scripts/analyze-rf-admin1-candidates.mjs'
+      - '.github/workflows/rf-admin1-candidates.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-rf-admin1-candidates.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rf-admin1-candidates
+          path: |
+            rf-admin1-candidates.json
+            rf-admin1-selected.geojson
