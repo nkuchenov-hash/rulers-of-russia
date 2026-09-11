@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-rf-crimea-2014-admin1",
+      "fragmentId": "frag-rf-crimea-2014-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "RUS-283"
+      },
+      "output": "geometry/rf-crimea-2014-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "simferopol-interior",
+          "lonLat": [
+            34.2489919883,
+            45.299262
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "sevastopol",
+          "lonLat": [
+            33.5224,
+            44.6166
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kherson",
+          "lonLat": [
+            32.6178,
+            46.6354
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Crimea admin-1 polygon. Used only as the spatial realization of the territory referenced by the 21 March 2014 Russian legal act."
+    },
+    {
+      "id": "recipe-rf-sevastopol-2014-admin1",
+      "fragmentId": "frag-rf-sevastopol-2014-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "RUS-5482"
+      },
+      "output": "geometry/rf-sevastopol-2014-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "sevastopol-interior",
+          "lonLat": [
+            33.6446927992,
+            44.6265935
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "simferopol",
+          "lonLat": [
+            34.1024,
+            44.9521
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Sevastopol federal-city polygon. Used only as the spatial realization of the territory referenced by the 21 March 2014 Russian legal act. Sevastopol control uses a point-on-surface derived from the pinned polygon rather than a generic city-centre coordinate, avoiding coastal-boundary ambiguity."
+    },
+    {
+      "id": "recipe-rf-donetsk-2022-admin1",
+      "fragmentId": "frag-rf-donetsk-2022-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "UKR-327"
+      },
+      "output": "geometry/rf-donetsk-2022-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "donetsk-interior",
+          "lonLat": [
+            37.8390358382,
+            48.053217
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "luhansk",
+          "lonLat": [
+            39.3078,
+            48.574
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "zaporizhzhia",
+          "lonLat": [
+            35.1396,
+            47.8388
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Donetsk Oblast admin-1 polygon; legal use in this project is governed by the 4 October 2022 Russian constitutional law, not by Natural Earth attribution."
+    },
+    {
+      "id": "recipe-rf-luhansk-2022-admin1",
+      "fragmentId": "frag-rf-luhansk-2022-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "UKR-329"
+      },
+      "output": "geometry/rf-luhansk-2022-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "luhansk-interior",
+          "lonLat": [
+            38.8897831035,
+            48.9376075
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "donetsk",
+          "lonLat": [
+            37.8028,
+            48.0159
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Luhansk Oblast admin-1 polygon; legal use in this project is governed by the 4 October 2022 Russian constitutional law, not by Natural Earth attribution."
+    },
+    {
+      "id": "recipe-rf-zaporizhzhia-2022-admin1",
+      "fragmentId": "frag-rf-zaporizhzhia-2022-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "UKR-331"
+      },
+      "output": "geometry/rf-zaporizhzhia-2022-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "zaporizhzhia-interior",
+          "lonLat": [
+            35.6779341845,
+            47.1921845
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "donetsk",
+          "lonLat": [
+            37.8028,
+            48.0159
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kherson",
+          "lonLat": [
+            32.6178,
+            46.6354
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Zaporizhzhia Oblast admin-1 polygon matching the oblast-boundary definition referenced by the 4 October 2022 Russian constitutional law."
+    },
+    {
+      "id": "recipe-rf-kherson-2022-admin1",
+      "fragmentId": "frag-rf-kherson-2022-admin1",
+      "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+      "archiveBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+      "selector": {
+        "adm1_code": "UKR-4827"
+      },
+      "output": "geometry/rf-kherson-2022-admin1.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "controls": [
+        {
+          "id": "kherson-interior",
+          "lonLat": [
+            33.3685996745,
+            46.6515955
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "zaporizhzhia",
+          "lonLat": [
+            35.1396,
+            47.8388
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "simferopol",
+          "lonLat": [
+            34.1024,
+            44.9521
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Pinned Natural Earth Kherson Oblast admin-1 polygon matching the oblast-boundary definition referenced by the 4 October 2022 Russian constitutional law."
+    }
+  ]
+}

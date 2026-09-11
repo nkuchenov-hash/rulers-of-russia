@@ -5,14 +5,25 @@
       "id": "territory-1617-stolbovo-russia",
       "eventId": "evt-1617-stolbovo-peace",
       "polityId": "russian-tsardom",
-      "effectiveDate": {"original": "27 февраля 1617 г.", "normalized": "1617-03-09", "precision": "day", "calendar": "julian"},
+      "effectiveDate": {
+        "original": "27 февраля 1617 г.",
+        "normalized": "1617-03-09",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-stolbovo-1617-ebid", "doc-stolbovo-1617-julku-finna"],
+      "evidenceDocumentIds": [
+        "doc-stolbovo-1617-ebid",
+        "doc-stolbovo-1617-julku-finna"
+      ],
       "geometry": {
         "method": "specialist-historical-boundary-reconstruction-located-pending-primary-corroboration",
-        "evidenceDocumentIds": ["doc-stolbovo-1617-ebid", "doc-stolbovo-1617-julku-finna"],
+        "evidenceDocumentIds": [
+          "doc-stolbovo-1617-ebid",
+          "doc-stolbovo-1617-julku-finna"
+        ],
         "derivationNote": "The treaty is already source-verified. The National Library of Finland catalogue now locates Kyösti Julku's specialist study devoted specifically to reconstructing the 1617 Stolbovo boundary, with mapped treatment of the line from the modern state border to Suolampi. The generic source-discovery state is therefore resolved, but this secondary reconstruction cannot by itself establish production geometry. Promotion remains blocked on acquisition/corroboration of the primary treaty or demarcation evidence, controlled georeferencing of the reconstructed sectors, and spatial validation."
       },
       "reviewStatus": "source-verified"
@@ -21,14 +32,25 @@
       "id": "territory-1918-brest-rsfsr",
       "eventId": "evt-1918-brest-peace",
       "polityId": "rsfsr",
-      "effectiveDate": {"original": "3 марта 1918 г.", "normalized": "1918-03-03", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "3 марта 1918 г.",
+        "normalized": "1918-03-03",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-brest-1918-ebid", "doc-brest-1918-treaty-map-pa-aa"],
+      "evidenceDocumentIds": [
+        "doc-brest-1918-ebid",
+        "doc-brest-1918-treaty-map-pa-aa"
+      ],
       "geometry": {
         "method": "official-treaty-map-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-brest-1918-ebid", "doc-brest-1918-treaty-map-pa-aa"],
+        "evidenceDocumentIds": [
+          "doc-brest-1918-ebid",
+          "doc-brest-1918-treaty-map-pa-aa"
+        ],
         "derivationNote": "The treaty text is already source-verified and an archival reproduction of Annex 1 to the German original is now located from the Politisches Archiv des Auswärtigen Amts; it shows the treaty demarcation line in blue. The generic source-discovery blocker is therefore resolved. Production geometry remains pending reproducible acquisition of the full relevant map extent, controlled georeferencing and spatial validation; the map must not be replaced by a later atlas trace."
       },
       "reviewStatus": "source-verified"
@@ -37,14 +59,25 @@
       "id": "territory-1920-tartu-finland-rsfsr",
       "eventId": "evt-1920-tartu-finland",
       "polityId": "rsfsr",
-      "effectiveDate": {"original": "14 октября 1920 г.", "normalized": "1920-10-14", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "14 октября 1920 г.",
+        "normalized": "1920-10-14",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
+      "evidenceDocumentIds": [
+        "doc-tartu-finland-1920-ebid",
+        "doc-tartu-finland-1920-finlex-border-protocol"
+      ],
       "geometry": {
         "method": "official-boundary-document-lineage-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-tartu-finland-1920-ebid", "doc-tartu-finland-1920-finlex-border-protocol"],
+        "evidenceDocumentIds": [
+          "doc-tartu-finland-1920-ebid",
+          "doc-tartu-finland-1920-finlex-border-protocol"
+        ],
         "derivationNote": "Finlex's official 1969 frontier protocol identifies the 14 October 1920 Finland–RSFSR peace treaty as one of the instruments establishing the state boundary and states that the line on the ground is defined by signed boundary-description protocols, boundary maps, boundary-mark protocols and other demarcation records, including the 28 April 1938 package. The authoritative documentary/cartographic lineage is therefore located. Production geometry remains pending until those primary boundary materials are reproducibly acquired, rights-reviewed where needed, georeferenced and spatially validated."
       },
       "reviewStatus": "source-verified"
@@ -53,14 +86,25 @@
       "id": "territory-1921-riga-rsfsr",
       "eventId": "evt-1921-riga-peace",
       "polityId": "rsfsr",
-      "effectiveDate": {"original": "18 марта 1921 г.", "normalized": "1921-03-18", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "18 марта 1921 г.",
+        "normalized": "1921-03-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
+      "evidenceDocumentIds": [
+        "doc-riga-1921-ebid",
+        "doc-riga-1921-aan-treaty"
+      ],
       "geometry": {
         "method": "official-treaty-boundary-description-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-riga-1921-ebid", "doc-riga-1921-aan-treaty"],
+        "evidenceDocumentIds": [
+          "doc-riga-1921-ebid",
+          "doc-riga-1921-aan-treaty"
+        ],
         "derivationNote": "Poland's Archiwum Akt Nowych preserves and publishes the original 18 March 1921 Treaty of Riga and identifies it as the decisive act establishing Poland's eastern boundary; its territorial Articles II–IV trace the Polish-Soviet frontier. The authoritative legal boundary description is therefore located. Production geometry remains pending controlled extraction of the line against authoritative period cartography/demarcation material and spatial validation."
       },
       "reviewStatus": "source-verified"
@@ -69,14 +113,25 @@
       "id": "territory-1940-moscow-finland-ussr",
       "eventId": "evt-1940-moscow-finland-peace",
       "polityId": "ussr",
-      "effectiveDate": {"original": "12 марта 1940 г.", "normalized": "1940-03-12", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "12 марта 1940 г.",
+        "normalized": "1940-03-12",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
+      "evidenceDocumentIds": [
+        "doc-moscow-finland-1940-ebid",
+        "doc-moscow-finland-1940-map-rusarchives"
+      ],
       "geometry": {
         "method": "official-treaty-map-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-moscow-finland-1940-ebid", "doc-moscow-finland-1940-map-rusarchives"],
+        "evidenceDocumentIds": [
+          "doc-moscow-finland-1940-ebid",
+          "doc-moscow-finland-1940-map-rusarchives"
+        ],
         "derivationNote": "Rosarchiv publishes the map accompanying the 12 March 1940 USSR-Finland peace treaty from the Archive of Foreign Policy of the Russian Federation (АВП РФ. Ф. 3а. Оп. 1. П. 44. Д. 279). The authoritative treaty cartography is therefore located. Production geometry remains pending until the source raster is captured with reproducibility metadata, commercial-use rights are reviewed, and controlled georeferencing/validation is completed."
       },
       "reviewStatus": "source-verified"
@@ -85,14 +140,26 @@
       "id": "territory-1945-zakarpattia-ussr",
       "eventId": "evt-1945-zakarpattia",
       "polityId": "ussr",
-      "effectiveDate": {"original": "29 июня 1945 г.", "normalized": "1945-06-29", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "29 июня 1945 г.",
+        "normalized": "1945-06-29",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-zakarpattia-1945-ebid", "doc-zakarpattia-1945-unts", "doc-zakarpattia-demarcation-1974-unts"],
+      "evidenceDocumentIds": [
+        "doc-zakarpattia-1945-ebid",
+        "doc-zakarpattia-1945-unts",
+        "doc-zakarpattia-demarcation-1974-unts"
+      ],
       "geometry": {
         "method": "official-treaty-map-and-demarcation-package-located-pending-ingest",
-        "evidenceDocumentIds": ["doc-zakarpattia-1945-unts", "doc-zakarpattia-demarcation-1974-unts"],
+        "evidenceDocumentIds": [
+          "doc-zakarpattia-1945-unts",
+          "doc-zakarpattia-demarcation-1974-unts"
+        ],
         "derivationNote": "UNTS volume 504 source-verifies Article 1 of the 29 June 1945 treaty: the Slovakia/Trans-Carpathian Ukraine frontier as of 29 September 1938, with stated changes, becomes the Czechoslovak-USSR frontier according to the attached map. UNTS volume 971 then identifies the authoritative implementation package for the line demarcated in November 1945-April 1946: the Descriptive Protocol signed at Uzhgorod on 8 May 1946 together with its album of maps, cartographic materials and geodetic studies. The source lineage is therefore located. Production geometry remains pending acquisition/transcription of those primary demarcation materials and spatial validation."
       },
       "reviewStatus": "source-verified"
@@ -101,15 +168,24 @@
       "id": "territory-1991-belovezha-ussr",
       "eventId": "evt-1991-belovezha",
       "polityId": "ussr",
-      "effectiveDate": {"original": "8 декабря 1991 г.", "normalized": "1991-12-08", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "8 декабря 1991 г.",
+        "normalized": "1991-12-08",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "separate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
+      "evidenceDocumentIds": [
+        "doc-belovezha-1991-rosarchiv"
+      ],
       "geometry": {
         "method": "non-spatial-state-transition",
-        "evidenceDocumentIds": ["doc-belovezha-1991-rosarchiv"],
+        "evidenceDocumentIds": [
+          "doc-belovezha-1991-rosarchiv"
+        ],
         "derivationNote": "The 8 December agreement is a documentary state-transition milestone, not a cartographic subtraction from a continuing USSR polygon. It therefore does not define a new boundary line or area delta. Ratifications and later December instruments remain relevant to the exact constitutional termination/succession chronology, while the Russian Federation period begins independently in the coverage model."
       },
       "reviewStatus": "source-verified",
@@ -119,18 +195,33 @@
       "id": "territory-2014-crimea-russian-legal",
       "eventId": "evt-2014-crimea-russian-law",
       "polityId": "russian-federation",
-      "effectiveDate": {"original": "21 марта 2014 г.", "normalized": "2014-03-21", "precision": "day", "calendar": "gregorian"},
+      "effectiveDate": {
+        "original": "21 марта 2014 г.",
+        "normalized": "2014-03-21",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
+      "evidenceDocumentIds": [
+        "doc-crimea-2014-6fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
       "geometry": {
-        "method": "official-legal-boundary-definition-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-crimea-2014-6fkz-pravo"],
-        "derivationNote": "For the Russian domestic legal-border track, Article 3 of Federal Constitutional Law No. 6-FKZ defines the territorial limits of the Republic of Crimea and Sevastopol by the boundaries of those territories as they existed on the date of admission. The authoritative legal boundary definition is therefore located, but this provision does not itself supply production-ready polygon coordinates. Exact geometry still requires an authoritative contemporaneous administrative/cartographic source and controlled georeferencing. International-recognition and de-facto-control tracks must remain independent."
+        "method": "official-legal-definition-plus-pinned-admin1-polygons",
+        "evidenceDocumentIds": [
+          "doc-crimea-2014-6fkz-pravo",
+          "doc-natural-earth-rf-legal-admin1-selected-10m"
+        ],
+        "derivationNote": "Federal Constitutional Law No. 6-FKZ establishes the project legal-border scope/date; pinned public-domain Natural Earth 1:10m admin-1 polygons separately realize the Republic of Crimea and Sevastopol boundaries for deterministic replay. This geometry is canonical only for the project's russian-legal-border track and does not assert international recognition or de-facto control."
       },
-      "reviewStatus": "source-verified",
-      "notes": "Do not use this record as a claim about international recognition. No geometry is promoted by this source-status refinement."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified for the Russian domestic legal-border track by combining the official legal definition with separately pinned Crimea and Sevastopol admin-1 polygons.",
+      "geometryFragmentIds": [
+        "frag-rf-crimea-2014-admin1",
+        "frag-rf-sevastopol-2014-admin1"
+      ]
     }
   ]
 }

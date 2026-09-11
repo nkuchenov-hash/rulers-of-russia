@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-natural-earth-rf-legal-admin1-selected-10m",
+      "sourceCollectionId": "natural-earth-admin1-public-domain",
+      "title": "Natural Earth 1:10m admin-1 polygons — Crimea, Sevastopol, Donetsk, Luhansk, Zaporizhzhia and Kherson",
+      "institution": "Natural Earth; project-vendored pinned selection",
+      "url": "https://github.com/nvkelso/natural-earth-vector/tree/ca96624a",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "modern-cartographic-reference",
+      "publicationCitation": "Natural Earth, ne_10m_admin_1_states_provinces.geojson, pinned upstream commit ca96624a; six selected features vendored by exact upstream SHA-256.",
+      "digitalVector": {
+        "archivePath": "public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson",
+        "gitBlobSha1": "99ca6c199162145f653f8b77380a189ab9e9d5b3",
+        "upstreamSha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+        "license": "Public domain",
+        "selectedAdm1Codes": [
+          "RUS-283",
+          "RUS-5482",
+          "UKR-327",
+          "UKR-329",
+          "UKR-331",
+          "UKR-4827"
+        ]
+      },
+      "notes": "Spatial reference only. Crimea/Sevastopol and the four 2022 regions are kept as separate polygons. Official Russian laws in the corresponding History Core records establish the project track, effective date and legal meaning; Natural Earth supplies only the mapped administrative outline."
+    }
+  ]
+}

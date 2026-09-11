@@ -1,0 +1,37 @@
+name: Vendor selected RF legal admin1
+
+on:
+  push:
+    branches:
+      - 'history-core/rf-2014-2026-legal-geometry'
+    paths:
+      - 'scripts/vendor-rf-legal-admin1.mjs'
+      - '.github/workflows/vendor-rf-legal-admin1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'history-core/rf-2014-2026-legal-geometry'
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/vendor-rf-legal-admin1.mjs
+      - name: Commit selected public-domain geometry
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/territory/cultural/rf_legal_admin1_selected_10m.geojson
+          if git diff --cached --quiet; then
+            echo 'Selected archive already current.'
+            exit 0
+          fi
+          git commit -m 'Vendor selected Natural Earth admin-1 geometry'
+          git push origin HEAD:history-core/rf-2014-2026-legal-geometry
