@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "id": "evt-1917-finland-independence-recognition",
+      "title": "Recognition of Finland's independence",
+      "kind": "territorial-change",
+      "date": {
+        "original": "18 (31) декабря 1917 г.",
+        "normalized": "1917-12-31",
+        "precision": "day",
+        "calendar": "julian"
+      },
+      "evidenceDocumentIds": [
+        "doc-finland-independence-recognition-1917-ebid"
+      ],
+      "reviewStatus": "source-verified",
+      "notes": "Russian/Soviet governmental recognition of Finland's independence; modeled on the russian-legal-border track, not de-facto wartime control."
+    }
+  ]
+}
