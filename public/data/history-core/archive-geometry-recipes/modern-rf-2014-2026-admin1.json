@@ -16,10 +16,10 @@
       ],
       "controls": [
         {
-          "id": "simferopol",
+          "id": "simferopol-interior",
           "lonLat": [
-            34.1024,
-            44.9521
+            34.2489919883,
+            45.299262
           ],
           "expected": "inside"
         },
@@ -57,9 +57,9 @@
       ],
       "controls": [
         {
-          "id": "sevastopol",
+          "id": "sevastopol-interior",
           "lonLat": [
-            33.6446928,
+            33.6446927992,
             44.6265935
           ],
           "expected": "inside"
@@ -90,10 +90,10 @@
       ],
       "controls": [
         {
-          "id": "donetsk",
+          "id": "donetsk-interior",
           "lonLat": [
-            37.8028,
-            48.0159
+            37.8390358382,
+            48.053217
           ],
           "expected": "inside"
         },
@@ -131,10 +131,10 @@
       ],
       "controls": [
         {
-          "id": "luhansk",
+          "id": "luhansk-interior",
           "lonLat": [
-            39.3078,
-            48.574
+            38.8897831035,
+            48.9376075
           ],
           "expected": "inside"
         },
@@ -164,10 +164,10 @@
       ],
       "controls": [
         {
-          "id": "zaporizhzhia",
+          "id": "zaporizhzhia-interior",
           "lonLat": [
-            35.1396,
-            47.8388
+            35.6779341845,
+            47.1921845
           ],
           "expected": "inside"
         },
@@ -205,10 +205,10 @@
       ],
       "controls": [
         {
-          "id": "kherson",
+          "id": "kherson-interior",
           "lonLat": [
-            32.6178,
-            46.6354
+            33.3685996745,
+            46.6515955
           ],
           "expected": "inside"
         },
