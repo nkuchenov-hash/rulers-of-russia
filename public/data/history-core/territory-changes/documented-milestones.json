@@ -141,10 +141,11 @@
       "eventId": "evt-1945-zakarpattia",
       "polityId": "ussr",
       "effectiveDate": {
-        "original": "29 июня 1945 г.",
-        "normalized": "1945-06-29",
+        "original": "30 января 1946 г. — обмен ратификационными грамотами в Праге",
+        "normalized": "1946-01-30",
         "precision": "day",
-        "calendar": "gregorian"
+        "calendar": "gregorian",
+        "note": "UN Treaty Series No. 607 records entry into force on 30 January 1946, the date of exchange of instruments of ratification, under Article 2."
       },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
@@ -155,14 +156,20 @@
         "doc-zakarpattia-demarcation-1974-unts"
       ],
       "geometry": {
-        "method": "official-treaty-map-and-demarcation-package-located-pending-ingest",
+        "method": "official-treaty-entry-into-force-plus-derived-local-state-difference",
         "evidenceDocumentIds": [
           "doc-zakarpattia-1945-unts",
-          "doc-zakarpattia-demarcation-1974-unts"
+          "doc-zakarpattia-demarcation-1974-unts",
+          "doc-historical-basemaps-ussr-1945",
+          "doc-cliopatria-ussr-1941"
         ],
-        "derivationNote": "UNTS volume 504 source-verifies Article 1 of the 29 June 1945 treaty: the Slovakia/Trans-Carpathian Ukraine frontier as of 29 September 1938, with stated changes, becomes the Czechoslovak-USSR frontier according to the attached map. UNTS volume 971 then identifies the authoritative implementation package for the line demarcated in November 1945-April 1946: the Descriptive Protocol signed at Uzhgorod on 8 May 1946 together with its album of maps, cartographic materials and geodetic studies. The source lineage is therefore located. Production geometry remains pending acquisition/transcription of those primary demarcation materials and spatial validation."
+        "derivationNote": "UNTS No. 607 fixes legal effect at the 30 January 1946 exchange of ratifications. The territorial polygon is reconstructed as the Trans-Carpathian-local component present in the verified 1945 USSR state and absent from the verified 1941 USSR state, with Uzhhorod/Mukachevo controls and neighboring exclusion controls. The 1974 frontier agreement independently confirms the 1945 treaty line and 1946 demarcation package."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "geometry-verified",
+      "geometryFragmentIds": [
+        "frag-ussr-zakarpattia-1946-derived-difference"
+      ],
+      "notes": "Legacy id retains 1945 signature year, but replay now uses the treaty's verified 30 January 1946 entry-into-force date."
     },
     {
       "id": "territory-1991-belovezha-ussr",
