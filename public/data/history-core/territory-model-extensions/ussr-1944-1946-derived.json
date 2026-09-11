@@ -2,21 +2,21 @@
   "schema_version": 1,
   "fragments": [
     {
-      "id": "frag-ussr-tuva-1944-derived-difference",
+      "id": "frag-ussr-tuva-1944-admin1-corroborated",
       "polityId": "ussr",
       "track": "russian-legal-border",
       "role": "territory-area",
       "territorialModel": "mixed",
-      "geometryFile": "geometry/ussr-tuva-1944-derived-difference.geojson",
+      "geometryFile": "geometry/ussr-tuva-1944-admin1-corroborated.geojson",
       "evidenceDocumentIds": [
-        "doc-historical-basemaps-ussr-1945",
-        "doc-cliopatria-ussr-1941",
-        "doc-tuva-ussr-1944-ebid"
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "uncertaintyMeters": 50000,
-      "derivationNote": "Local historical acquisition component derived from verified 1945-minus-1941 USSR state difference; exact legal activation is the 11 October 1944 Soviet admission act."
+      "derivationNote": "Official 11 October 1944 admission act plus pinned public-domain Tuva admin-1 spatial realization, cross-checked against an independent public-domain Tuvan People's Republic reconstruction. Generalized historical area, not surveyed border precision."
     },
     {
       "id": "frag-ussr-zakarpattia-1946-derived-difference",
