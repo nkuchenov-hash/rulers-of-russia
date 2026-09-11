@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-tuva-1944-derived-difference",
+      "fragmentId": "frag-ussr-tuva-1944-derived-difference",
+      "archivePath": "public/data/territory/world-history/snapshots/1945.geojson",
+      "archiveBlobSha1": "060cd2882b9b96d4f5dde7aa300e38f1791ec15f",
+      "selector": {
+        "NAME": "USSR"
+      },
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/archive/ussr.geojson",
+          "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+          "selector": {
+            "start_date": 1941,
+            "end_date": 1941
+          },
+          "expectedFeatureCount": 1,
+          "note": "Subtract the verified 1941 USSR state; retain only the newly present post-1941 component in the Tuva locality."
+        }
+      ],
+      "resultComponentBboxFilter": {
+        "minLon": 87.5,
+        "minLat": 48,
+        "maxLon": 100.5,
+        "maxLat": 55
+      },
+      "output": "geometry/ussr-tuva-1944-derived-difference.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-cliopatria-ussr-1941",
+        "doc-tuva-ussr-1944-ebid"
+      ],
+      "controls": [
+        {
+          "id": "kyzyl",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "abakan",
+          "lonLat": [
+            91.4424,
+            53.7209
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ulaangom",
+          "lonLat": [
+            91.6406,
+            49.9811
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Historical Tuva acquisition fragment derived reproducibly as the local post-1941 component present in the independently verified 1945 USSR state but absent from the verified 1941 USSR state. The exact legal date comes from the 11 October 1944 Soviet admission act. This avoids substituting the modern Tuva administrative border."
+    },
+    {
+      "id": "recipe-ussr-zakarpattia-1946-derived-difference",
+      "fragmentId": "frag-ussr-zakarpattia-1946-derived-difference",
+      "archivePath": "public/data/territory/world-history/snapshots/1945.geojson",
+      "archiveBlobSha1": "060cd2882b9b96d4f5dde7aa300e38f1791ec15f",
+      "selector": {
+        "NAME": "USSR"
+      },
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/archive/ussr.geojson",
+          "archiveBlobSha1": "574de5060c4cbfd2bb777c9e78b908cc2a2067d3",
+          "selector": {
+            "start_date": 1941,
+            "end_date": 1941
+          },
+          "expectedFeatureCount": 1,
+          "note": "Subtract the verified 1941 USSR state; retain only the newly present post-1941 component in Trans-Carpathian Ukraine."
+        }
+      ],
+      "resultComponentBboxFilter": {
+        "minLon": 21,
+        "minLat": 46.5,
+        "maxLon": 26,
+        "maxLat": 50.5
+      },
+      "output": "geometry/ussr-zakarpattia-1946-derived-difference.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-cliopatria-ussr-1941",
+        "doc-zakarpattia-1945-unts",
+        "doc-zakarpattia-demarcation-1974-unts"
+      ],
+      "controls": [
+        {
+          "id": "uzhhorod",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "mukachevo",
+          "lonLat": [
+            22.7178,
+            48.4392
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lviv",
+          "lonLat": [
+            24.0316,
+            49.8429
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kosice",
+          "lonLat": [
+            21.2611,
+            48.7164
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "nyiregyhaza",
+          "lonLat": [
+            21.7244,
+            47.9554
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Trans-Carpathian Ukraine fragment derived reproducibly as the local post-1941 component of the verified 1945 USSR state. Legal activation is the treaty's entry into force on 30 January 1946; the UNTS treaty and later demarcation agreement independently establish the legal boundary lineage."
+    }
+  ]
+}
