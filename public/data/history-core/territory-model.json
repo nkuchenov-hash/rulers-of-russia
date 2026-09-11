@@ -36,7 +36,8 @@
     "territory-changes/dprk-boundary-1991-2013.json",
     "territory-changes/lithuania-maritime-2003.json",
     "territory-changes/norway-varanger-2008.json",
-    "territory-changes/norway-delimitation-2011.json"
+    "territory-changes/norway-delimitation-2011.json",
+    "territory-changes/russian-republic-1917-finland.json"
   ],
   "baseStates": [
     {
