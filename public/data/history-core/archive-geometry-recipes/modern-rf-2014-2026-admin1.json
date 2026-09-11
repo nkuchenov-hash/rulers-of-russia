@@ -59,8 +59,8 @@
         {
           "id": "sevastopol",
           "lonLat": [
-            33.5224,
-            44.6166
+            33.6446928,
+            44.6265935
           ],
           "expected": "inside"
         },
@@ -73,7 +73,7 @@
           "expected": "outside"
         }
       ],
-      "note": "Pinned Natural Earth Sevastopol federal-city polygon. Used only as the spatial realization of the territory referenced by the 21 March 2014 Russian legal act."
+      "note": "Pinned Natural Earth Sevastopol federal-city polygon. Used only as the spatial realization of the territory referenced by the 21 March 2014 Russian legal act. Sevastopol control uses a point-on-surface derived from the pinned polygon rather than a generic city-centre coordinate, avoiding coastal-boundary ambiguity."
     },
     {
       "id": "recipe-rf-donetsk-2022-admin1",
