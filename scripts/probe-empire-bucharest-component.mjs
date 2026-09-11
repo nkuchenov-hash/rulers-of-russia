@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+function ringContains([x,y],ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>y)!=(yj>y))&&x<((xj-xi)*(y-yi))/((yj-yi)||Number.EPSILON)+xi)inside=!inside}return inside}
+function poly(p,pp){return Boolean(pp?.length&&ringContains(p,pp[0])&&!pp.slice(1).some(h=>ringContains(p,h)))}
+function gc(p,g){return g?.type==='Polygon'?poly(p,g.coordinates):g?.type==='MultiPolygon'&&g.coordinates.some(x=>poly(p,x))}
+function bbox(polyCoords){const pts=polyCoords.flat();const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);return[Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)]}
+const d=JSON.parse(fs.readFileSync('public/data/territory/archive/russian-empire.geojson','utf8'));
+const targets=[[34,1830,1833],[40,1849,1852],[41,1853,1855]];
+const controls=[['moscow',[37.6173,55.7558],'inside'],['warsaw',[21.0122,52.2297],'inside'],['chisinau',[28.8353,47.0105],'inside'],['tbilisi',[44.793,41.7151],'inside'],['baku',[49.8671,40.4093],'inside'],['yerevan',[44.5152,40.1872],'inside'],['bucharest',[26.1025,44.4268],'outside'],['tehran',[51.389,35.6892],'outside'],['istanbul',[28.9784,41.0082],'outside']];
+const rows=[];
+for(const [index,s,e] of targets){const f=d.features[index];const polys=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;const hits=polys.map((p,j)=>({j,bbox:bbox(p),bucharest:poly([26.1025,44.4268],p)}));const filtered=polys.filter(p=>!poly([26.1025,44.4268],p));const g={type:'MultiPolygon',coordinates:filtered};const results=controls.map(([id,p,exp])=>{const actual=gc(p,g)?'inside':'outside';return{id,expected:exp,actual,pass:actual===exp}});rows.push({index,start:s,end:e,polygonCount:polys.length,bucharestParts:hits.filter(x=>x.bucharest),remaining:filtered.length,controls:results,allPass:results.every(x=>x.pass)})}
+const out={schema_version:1,rows};fs.writeFileSync('empire-bucharest-component-probe.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));
