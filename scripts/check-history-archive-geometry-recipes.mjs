@@ -131,6 +131,31 @@ for (const recipe of recipes) {
     });
   }
 
+  const validatedUnionMasks = [];
+  for (const mask of recipe.unionMasks ?? []) {
+    if (!mask?.archivePath || !mask?.archiveBlobSha1 || !mask?.selector) fail(`Archive recipe ${recipe.id} has incomplete union mask`);
+    const maskFile = path.join(root, mask.archivePath);
+    if (!fs.existsSync(maskFile)) fail(`Archive recipe ${recipe.id} union mask source missing: ${mask.archivePath}`);
+    const maskBytes = fs.readFileSync(maskFile);
+    const maskDigest = gitBlobSha1(maskBytes);
+    if (maskDigest !== mask.archiveBlobSha1) fail(`Archive recipe ${recipe.id} union mask blob SHA mismatch: ${maskDigest}`);
+    const maskArchive = JSON.parse(maskBytes.toString('utf8'));
+    const maskFeatures = (maskArchive.features ?? []).filter(feature => matchesSelector(feature, mask.selector));
+    if (mask.expectedFeatureCount != null && maskFeatures.length !== Number(mask.expectedFeatureCount)) fail(`Archive recipe ${recipe.id} union mask expected ${mask.expectedFeatureCount} features, got ${maskFeatures.length}`);
+    if (maskFeatures.length < 1) fail(`Archive recipe ${recipe.id} union mask selected no features`);
+    const maskPolygons = maskFeatures.flatMap(feature => geometryPolygons(feature.geometry));
+    if (maskPolygons.length < 1) fail(`Archive recipe ${recipe.id} union mask has no polygon geometry`);
+    polygons = polygonClipping.union(polygons, ...maskPolygons);
+    if (!Array.isArray(polygons) || polygons.length < 1) fail(`Archive recipe ${recipe.id} union mask produced no geometry`);
+    validatedUnionMasks.push({
+      archivePath: mask.archivePath,
+      archiveBlobSha1: mask.archiveBlobSha1,
+      selector: mask.selector,
+      expectedFeatureCount: mask.expectedFeatureCount ?? null,
+      note: mask.note ?? null,
+    });
+  }
+
   if (recipe.resultComponentBboxFilter) {
     const f = recipe.resultComponentBboxFilter;
     if (![f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite)) fail(`Archive recipe ${recipe.id} has invalid resultComponentBboxFilter`);
@@ -164,6 +189,7 @@ for (const recipe of recipes) {
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.resultComponentBboxFilter ?? null) !== JSON.stringify(recipe.resultComponentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost resultComponentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.differenceMasks ?? []) !== JSON.stringify(validatedDifferenceMasks)) fail(`Archive output ${recipe.output} lost difference-mask provenance`);
+  if (JSON.stringify(generated.metadata?.unionMasks ?? []) !== JSON.stringify(validatedUnionMasks)) fail(`Archive output ${recipe.output} lost union-mask provenance`);
 }
 
 console.log(`History archive geometry recipe check passed: ${recipes.length} pinned/corroborated recipes.`);

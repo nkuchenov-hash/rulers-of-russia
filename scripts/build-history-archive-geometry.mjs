@@ -134,6 +134,34 @@ for (const recipe of recipes) {
     assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} resultComponentBboxFilter selected no polygon components`);
   }
 
+  const appliedUnionMasks = [];
+  for (const mask of recipe.unionMasks ?? []) {
+    assert(mask?.archivePath && mask?.archiveBlobSha1 && mask?.selector, `Archive geometry recipe ${recipe.id} has incomplete union mask`);
+    const maskFile = path.join(root, mask.archivePath);
+    assert(fs.existsSync(maskFile), `Archive geometry recipe ${recipe.id} union mask source missing: ${mask.archivePath}`);
+    const maskBytes = fs.readFileSync(maskFile);
+    const maskDigest = gitBlobSha1(maskBytes);
+    assert(maskDigest === mask.archiveBlobSha1, `Archive geometry recipe ${recipe.id} union mask blob SHA mismatch: expected ${mask.archiveBlobSha1}, got ${maskDigest}`);
+    const maskArchive = JSON.parse(maskBytes.toString('utf8'));
+    const maskFeatures = (maskArchive.features ?? []).filter(feature => matchesSelector(feature, mask.selector));
+    if (mask.expectedFeatureCount != null) {
+      assert(maskFeatures.length === Number(mask.expectedFeatureCount), `Archive geometry recipe ${recipe.id} union mask expected ${mask.expectedFeatureCount} features, got ${maskFeatures.length}`);
+    } else {
+      assert(maskFeatures.length >= 1, `Archive geometry recipe ${recipe.id} union mask selected no features`);
+    }
+    const maskPolygons = maskFeatures.flatMap(feature => geometryPolygons(feature.geometry));
+    assert(maskPolygons.length >= 1, `Archive geometry recipe ${recipe.id} union mask has no polygon geometry`);
+    polygons = polygonClipping.union(polygons, ...maskPolygons);
+    assert(Array.isArray(polygons) && polygons.length >= 1, `Archive geometry recipe ${recipe.id} union mask produced no geometry`);
+    appliedUnionMasks.push({
+      archivePath: mask.archivePath,
+      archiveBlobSha1: mask.archiveBlobSha1,
+      selector: mask.selector,
+      expectedFeatureCount: mask.expectedFeatureCount ?? null,
+      note: mask.note ?? null,
+    });
+  }
+
   const sourceGeometry = {type:'MultiPolygon', coordinates:polygons};
 
   for (const control of recipe.controls ?? []) {
@@ -159,6 +187,7 @@ for (const recipe of recipes) {
       componentBboxFilter: recipe.componentBboxFilter ?? null,
       resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
+      unionMasks: appliedUnionMasks,
       sourceCrs: recipe.sourceCrs ?? 'RFC 7946 longitude/latitude',
       evidenceDocumentIds: recipe.evidenceDocumentIds,
       independentControls: recipe.controls ?? [],
@@ -174,6 +203,7 @@ for (const recipe of recipes) {
         evidence_document_ids: recipe.evidenceDocumentIds,
         corroboration_controls: recipe.controls ?? [],
         difference_masks: appliedDifferenceMasks,
+        union_masks: appliedUnionMasks,
         note: recipe.note ?? null,
       },
       geometry: sourceGeometry,

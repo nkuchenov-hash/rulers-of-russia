@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-ussr-post-1951-poland-exchange",
+      "fragmentId": "frag-ussr-post-1951-poland-exchange",
+      "archivePath": "public/data/territory/world-history/snapshots/1945.geojson",
+      "archiveBlobSha1": "060cd2882b9b96d4f5dde7aa300e38f1791ec15f",
+      "selector": {
+        "NAME": "USSR"
+      },
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADMIN": "Poland"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Remove territory lying in the modern Polish polygon. Against the verified 1945 USSR exterior this affects the Ustrzyki Dolne sector ceded to Poland by the 1951 exchange, plus only sub-resolution/generalization slivers dominated by the source uncertainty."
+        }
+      ],
+      "unionMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADMIN": "Ukraine"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Add the modern Ukraine polygon. Nearly all of it is already inside the USSR source state; the external-area delta is the Belz/Chervonohrad sector acquired from Poland in the 1951 exchange, with any simplification slivers dominated by the declared source uncertainty."
+        }
+      ],
+      "output": "geometry/ussr-post-1951-poland-exchange.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-ussr-poland-territorial-exchange-1951-unts",
+        "doc-natural-earth-poland-ukraine-admin0-50m"
+      ],
+      "controls": [
+        {
+          "id": "moscow",
+          "lonLat": [
+            37.6173,
+            55.7558
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kyiv",
+          "lonLat": [
+            30.5234,
+            50.4501
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "lviv",
+          "lonLat": [
+            24.0316,
+            49.8429
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "belz",
+          "lonLat": [
+            24.006,
+            50.3823
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "chervonohrad",
+          "lonLat": [
+            24.229,
+            50.391
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "ustrzyki-dolne",
+          "lonLat": [
+            22.5947,
+            49.4303
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "warsaw",
+          "lonLat": [
+            21.0122,
+            52.2297
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "kaliningrad",
+          "lonLat": [
+            20.4522,
+            54.7104
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "yuzhno-sakhalinsk",
+          "lonLat": [
+            142.738,
+            46.9591
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "helsinki",
+          "lonLat": [
+            24.9384,
+            60.1699
+          ],
+          "expected": "outside"
+        }
+      ],
+      "note": "Reproducible post-5-June-1951 USSR exterior. Starts from the verified 1945/post-war USSR state, removes the Polish side and unions the Ukrainian side using pinned public-domain Natural Earth polygons. Legal timing and meaning come exclusively from UNTS No. 6222. The result is bounded before the 20 May 1955 USSR–Iran settlement so no later southern-border state is projected backward."
+    }
+  ]
+}
