@@ -1,0 +1,17 @@
+name: Empire 1801-1804 controls
+on:
+  push:
+    paths:
+      - 'scripts/analyze-empire-1801-1804-controls.mjs'
+      - '.github/workflows/empire-1801-1804-controls.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-empire-1801-1804-controls.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1801-1804-controls
+          path: empire-1801-1804-controls.json
