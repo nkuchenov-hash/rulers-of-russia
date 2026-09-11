@@ -140,11 +140,11 @@
   ],
   "baseStates": [
     {
-      "id": "base-russian-empire-composite-1887-12",
+      "id": "base-russian-empire-composite-1885-01",
       "polityId": "russian-empire",
       "track": "russian-legal-border",
       "territorialModel": "mixed",
-      "coverageAnchorMonth": "1887-12",
+      "coverageAnchorMonth": "1885-01",
       "historicalDate": {
         "original": "1885–1894 dated main state plus historically continuous Grand Duchy of Finland component",
         "normalized": "1885",
@@ -166,7 +166,7 @@
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "validThroughMonth": "1894-12",
-      "notes": "The 1885–1894 main state is not used from its first year: activation waits until December 1887, after the 1886 Ussuri implementation and 1887-era frontier stabilization, avoiding back-projection across changes within the source range. Finland is added as a separately evidenced component."
+      "notes": "The pinned 1885–1894 main-Empire state is activated at the declared start of its source interval. The 1886 South-Ussuri N/O action corrected misplaced physical markers back onto the already-defined 1861 treaty line and therefore is metadata-only for sovereign-area replay, not a new legal territorial mutation. Finland is added as the separately evidenced Grand Duchy component. State remains bounded to 1894-12; no forward proxy."
     },
     {
       "id": "base-russian-empire-composite-1895-12",
