@@ -15,14 +15,21 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
+      "evidenceDocumentIds": [
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
       "geometry": {
-        "method": "source-verified-inter-island-boundary-area-pending",
-        "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
-        "derivationNote": "The treaty source-verifies that the state boundary passes between Iturup/Etorofu and Urup/Uruppu, with Iturup on the Japanese side and Urup plus the Kurils to the north on the Russian side. The effective chronology is independently fixed by the 7 December 1856 ratification exchange. Exact inter-island maritime line and period coastlines remain pending; this must not be expanded into a modern EEZ-style boundary."
+        "method": "source-verified-inter-island-demarcation-no-area-mutation",
+        "evidenceDocumentIds": [
+          "doc-shimoda-1855-avpri",
+          "doc-shimoda-ratifications-1856-mofa"
+        ],
+        "derivationNote": "The ratified treaty fixes the legal boundary between Iturup and Urup but does not create a new Russian sovereign-area acquisition/cession for the territory-area replay: the existing verified Empire state already contains the Russian northern Kurils and excludes Iturup. Preserve the exact inter-island boundary as a separate boundary-display/georeference dependency; do not replay a second area mutation."
       },
       "reviewStatus": "source-verified",
-      "notes": "Legal boundary status is source-verified at ratification exchange; no exact modern maritime geometry is asserted."
+      "notes": "Metadata-only for territory-area replay; exact inter-island boundary geometry remains required for detailed boundary visualization.",
+      "geometryAction": "metadata-only"
     },
     {
       "id": "territory-1856-shimoda-sakhalin-undivided",
@@ -38,10 +45,16 @@
       "territorialModel": "mixed",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
+      "evidenceDocumentIds": [
+        "doc-shimoda-1855-avpri",
+        "doc-shimoda-ratifications-1856-mofa"
+      ],
       "geometry": {
         "method": "source-verified-undivided-island-status",
-        "evidenceDocumentIds": ["doc-shimoda-1855-avpri", "doc-shimoda-ratifications-1856-mofa"],
+        "evidenceDocumentIds": [
+          "doc-shimoda-1855-avpri",
+          "doc-shimoda-ratifications-1856-mofa"
+        ],
         "derivationNote": "The treaty source-verifies that Sakhalin/Karafuto remained unpartitioned rather than assigning the entire island to either state. This is shared/undivided legal-status metadata on the claim track, not a Russian sovereign-territory mutation: it must not add Sakhalin to the Russian core-territory replay or require a Russian territory-area polygon. Any optional visualization of the shared status belongs to a separate claim layer and must use period coastline, settlement and control geometry independently of core territorial materialization."
       },
       "reviewStatus": "source-verified",

@@ -18,14 +18,15 @@
         "doc-nerchinsk-1689-mfa"
       ],
       "geometry": {
-        "method": "uncertain-zone",
+        "method": "source-verified-demarcation-with-uncertain-line",
         "evidenceDocumentIds": [
           "doc-nerchinsk-1689-mfa"
         ],
-        "derivationNote": "The legal treaty event is source-verified, but an exact single line is not. The official source record notes divergent source-language formulations, ambiguous landmarks, inadequate contemporary mapping and no physical demarcation. Identifiable river/watershed portions may be reconstructed; unresolved portions must remain uncertainty corridors rather than an invented line."
+        "derivationNote": "The treaty legally delimits the Russia–Qing frontier, but the official source itself records divergent language versions, ambiguous landmarks, inadequate contemporary mapping and no physical demarcation. For sovereign-area replay this event is metadata-only because no reliable area delta can be reconstructed at the treaty month without inventing a line. The independently verified low-confidence 1689 full-state reconstruction remains a separate December anchor; exact Nerchinsk boundary geometry remains an explicit boundary-layer uncertainty."
       },
       "reviewStatus": "source-verified",
-      "notes": "Source verification applies to the treaty and its intentionally uncertain boundary model, not to exact geometry."
+      "notes": "Metadata-only for territory-area replay; the treaty is source-verified, while exact line geometry remains uncertain and must not be fabricated.",
+      "geometryAction": "metadata-only"
     },
     {
       "id": "territory-1727-kyakhta-demarcation",

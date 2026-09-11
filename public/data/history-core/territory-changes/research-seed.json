@@ -4,7 +4,7 @@
     {
       "id": "territory-1721-nystad-russia",
       "eventId": "evt-1721-nystad-effective",
-      "polityId": "russian-tsardom",
+      "polityId": "russian-empire",
       "effectiveDate": {
         "original": "19/30 сентября 1721 г. — размен ратификационных грамот в Ништадте",
         "normalized": "1721-09-30",
@@ -28,7 +28,7 @@
         "derivationNote": "The Treaty of Nystad and verified exchange of ratifications establish the exact legal transition. The pinned 1721–1726 Cliopatria/Seshat state is independently spatially controlled and corroborated by those treaty sources; for replay the Nystad transition replaces the pre-treaty full state with that verified post-ratification full state rather than approximating the acquisition as a modern regional polygon."
       },
       "reviewStatus": "geometry-verified",
-      "notes": "Geometry-verified as a full-state replacement on the verified ratification-exchange date; detailed surveyed line precision remains medium-confidence.",
+      "notes": "Geometry-verified as a full-state replacement on the verified ratification-exchange date. The History Core coverage ontology assigns all of 1721 to russian-empire, so replay uses that polity id even though the imperial title was formally adopted later in 1721; title/regime chronology is modeled separately.",
       "geometryAction": "replace",
       "geometryFragmentIds": [
         "frag-russian-empire-1721-1726-corroborated-cliopatria"
