@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-rf-crimea-2014-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-crimea-2014-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-crimea-2014-6fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    },
+    {
+      "id": "frag-rf-sevastopol-2014-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-sevastopol-2014-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-crimea-2014-6fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    },
+    {
+      "id": "frag-rf-donetsk-2022-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-donetsk-2022-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-dnr-2022-5fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    },
+    {
+      "id": "frag-rf-luhansk-2022-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-luhansk-2022-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-lnr-2022-6fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    },
+    {
+      "id": "frag-rf-zaporizhzhia-2022-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-zaporizhzhia-2022-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-zaporozhye-2022-7fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    },
+    {
+      "id": "frag-rf-kherson-2022-admin1",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "linear-border",
+      "geometryFile": "geometry/rf-kherson-2022-admin1.geojson",
+      "evidenceDocumentIds": [
+        "doc-kherson-2022-8fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "uncertaintyMeters": 1500,
+      "derivationNote": "Official Russian legal act establishes the russian-legal-border scope and effective date; the pinned public-domain Natural Earth admin-1 feature provides the independently reproducible administrative polygon."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-rf-2014-03-through-2022-09-russian-legal",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "2014-03",
+      "historicalDate": {
+        "original": "21 марта 2014 г.",
+        "normalized": "2014-03-21",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-rf-2005-2014-corroborated-archive",
+        "frag-rf-crimea-2014-admin1",
+        "frag-rf-sevastopol-2014-admin1"
+      ],
+      "evidenceDocumentIds": [
+        "doc-rf-china-east-border-2004-2005-pravo",
+        "doc-crimea-2014-6fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "validThroughMonth": "2022-09",
+      "notes": "Russian domestic legal-border track only. Retains the already verified pre-2014 RF exterior and unions only the separately pinned Crimea and Sevastopol administrative polygons. Bounded through September 2022, immediately before the four October 2022 Russian legal additions."
+    },
+    {
+      "id": "base-rf-2022-10-through-2026-12-russian-legal",
+      "polityId": "russian-federation",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "2022-10",
+      "historicalDate": {
+        "original": "4 октября 2022 г.",
+        "normalized": "2022-10-04",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-rf-2005-2014-corroborated-archive",
+        "frag-rf-crimea-2014-admin1",
+        "frag-rf-sevastopol-2014-admin1",
+        "frag-rf-donetsk-2022-admin1",
+        "frag-rf-luhansk-2022-admin1",
+        "frag-rf-zaporizhzhia-2022-admin1",
+        "frag-rf-kherson-2022-admin1"
+      ],
+      "evidenceDocumentIds": [
+        "doc-rf-china-east-border-2004-2005-pravo",
+        "doc-crimea-2014-6fkz-pravo",
+        "doc-dnr-2022-5fkz-pravo",
+        "doc-lnr-2022-6fkz-pravo",
+        "doc-zaporozhye-2022-7fkz-pravo",
+        "doc-kherson-2022-8fkz-pravo",
+        "doc-natural-earth-rf-legal-admin1-selected-10m"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "high",
+      "validThroughMonth": "2026-12",
+      "notes": "Russian domestic legal-border track only; no assertion of international recognition or de-facto control. Retains the verified pre-2014 RF exterior and unions only the six separately evidenced administrative polygons. Bounded to the History Core coverage endpoint."
+    }
+  ]
+}
