@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "natural-earth-public-domain",
+      "title": "Natural Earth vector data — 1:50m Admin 0 countries",
+      "institution": "Natural Earth",
+      "url": "https://www.naturalearthdata.com/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Modern global administrative-0 geometry; vendored project snapshot pinned to nvkelso/natural-earth-vector ca96624a",
+      "canonicalUse": [
+        "boundary-geometry",
+        "geometry-corroboration"
+      ],
+      "notes": "Natural Earth data are public domain. In History Core this source is used only as a spatial realization/corroboration layer where an independent historical legal source establishes the effective date and legal meaning."
+    }
+  ]
+}
