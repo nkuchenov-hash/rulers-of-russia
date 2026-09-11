@@ -16,23 +16,27 @@
       "operation": "acquire",
       "evidenceDocumentIds": [
         "doc-tuva-ussr-1944-ebid",
-        "doc-tuva-tnr-digital-corpus-national-archive"
+        "doc-tuva-tnr-digital-corpus-national-archive",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "geometry": {
-        "method": "derived-local-state-difference",
+        "method": "official-admission-act-plus-pinned-corroborated-admin1-polygon",
         "evidenceDocumentIds": [
           "doc-tuva-ussr-1944-ebid",
           "doc-tuva-tnr-digital-corpus-national-archive",
           "doc-historical-basemaps-ussr-1945",
-          "doc-cliopatria-ussr-1941"
+          "doc-cliopatria-ussr-1941",
+          "doc-natural-earth-tuva-admin1-10m",
+          "doc-tuvan-peoples-republic-map-commons"
         ],
-        "derivationNote": "The 11 October 1944 act admits the whole Tuvan People's Republic. Its production polygon is reconstructed as the Tuva-local component present in the independently verified 1945 USSR state and absent from the verified 1941 USSR state, with spatial controls around Kyzyl and neighboring non-Tuvan locations. This avoids silently substituting the modern Tuva Republic boundary."
+        "derivationNote": "The 11 October 1944 act legally admits the entire Tuvan People's Republic. The production area is a pinned public-domain Natural Earth Tuva polygon, independently cross-checked against a public-domain Tuvan People's Republic map, with 50 km uncertainty. This is a generalized historical reconstruction; the legal date is not inferred from modern cartography."
       },
       "reviewStatus": "geometry-verified",
       "geometryFragmentIds": [
-        "frag-ussr-tuva-1944-derived-difference"
+        "frag-ussr-tuva-1944-admin1-corroborated"
       ],
-      "notes": "Geometry-verified low/medium-resolution historical acquisition fragment; exact legal date remains 11 October 1944."
+      "notes": "Geometry-verified at generalized regional precision for sovereign-area replay; exact historical surveyed boundary remains lower precision."
     },
     {
       "id": "territory-1944-tuva-rsfsr-internal",
