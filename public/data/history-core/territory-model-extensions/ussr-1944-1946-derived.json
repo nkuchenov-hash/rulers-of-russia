@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-ussr-tuva-1944-admin1-corroborated",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/ussr-tuva-1944-admin1-corroborated.geojson",
+      "evidenceDocumentIds": [
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Official 11 October 1944 admission act plus pinned public-domain Tuva admin-1 spatial realization, cross-checked against an independent public-domain Tuvan People's Republic reconstruction. Generalized historical area, not surveyed border precision."
+    },
+    {
+      "id": "frag-ussr-zakarpattia-1946-derived-difference",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/ussr-zakarpattia-1946-derived-difference.geojson",
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-cliopatria-ussr-1941",
+        "doc-zakarpattia-1945-unts",
+        "doc-zakarpattia-demarcation-1974-unts"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Local Trans-Carpathian acquisition component derived from verified 1945-minus-1941 USSR state difference and bounded by the 30 January 1946 treaty entry into force."
+    }
+  ],
+  "baseStates": []
+}

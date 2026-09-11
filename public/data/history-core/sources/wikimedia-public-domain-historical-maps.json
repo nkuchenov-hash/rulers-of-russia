@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "wikimedia-public-domain-historical-maps",
+      "title": "Wikimedia Commons public-domain historical map files",
+      "institution": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/",
+      "tier": "B1-russian-academic-interpretation",
+      "coverage": "Public-domain historical map/reconstruction files used only when the individual file page documents reusable rights and the History Core record pins the exact file.",
+      "canonicalUse": [
+        "geometry-corroboration",
+        "historical-cartographic-reconstruction"
+      ],
+      "notes": "Each concrete document must retain its own file URL and rights note. Commons hosting alone is not treated as historical authority."
+    }
+  ]
+}

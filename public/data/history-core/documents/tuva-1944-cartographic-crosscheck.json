@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-natural-earth-tuva-admin1-10m",
+      "sourceCollectionId": "natural-earth-admin1-public-domain",
+      "title": "Natural Earth 1:10m admin-1 polygon — Tuva (RUS-2605)",
+      "institution": "Natural Earth; project-vendored pinned selection",
+      "url": "https://github.com/nvkelso/natural-earth-vector/tree/ca96624a",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "modern-cartographic-reference",
+      "publicationCitation": "Natural Earth ne_10m_admin_1_states_provinces, RUS-2605 Tuva, upstream commit ca96624a.",
+      "digitalVector": {
+        "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+        "gitBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+        "upstreamSha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+        "adm1Code": "RUS-2605",
+        "license": "Public domain"
+      },
+      "notes": "Spatial realization only. It is not used to establish the 1944 legal date or sovereignty; those come from the official Soviet admission act."
+    },
+    {
+      "id": "doc-tuvan-peoples-republic-map-commons",
+      "sourceCollectionId": "wikimedia-public-domain-historical-maps",
+      "title": "Tuva map.png — Tuvan People's Republic reconstruction",
+      "institution": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Tuva_map.png",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "31 May 2010 upload; depicts Tuvan People's Republic",
+        "normalized": "2010-05-31",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Wikimedia Commons File:Tuva map.png; 1000×1000 public-domain reconstruction, corrected-boundary revision by Bogomolov.PL.",
+      "notes": "Independent low-precision cartographic cross-check that the admitted polity is spatially centered on Kyzyl and corresponds broadly to the Tuva outline. Commons marks the file public domain. It is not treated as a surveyed 1944 boundary."
+    }
+  ]
+}

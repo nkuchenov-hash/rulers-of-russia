@@ -119,6 +119,21 @@ for (const recipe of recipes) {
     });
   }
 
+  if (recipe.resultComponentBboxFilter) {
+    const f = recipe.resultComponentBboxFilter;
+    assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid resultComponentBboxFilter`);
+    const polygonBbox = polygon => {
+      const pts = polygon.flat();
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+    };
+    polygons = polygons.filter(polygon => {
+      const [minX,minY,maxX,maxY] = polygonBbox(polygon);
+      return minX >= f.minLon && minY >= f.minLat && maxX <= f.maxLon && maxY <= f.maxLat;
+    });
+    assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} resultComponentBboxFilter selected no polygon components`);
+  }
+
   const sourceGeometry = {type:'MultiPolygon', coordinates:polygons};
 
   for (const control of recipe.controls ?? []) {
@@ -142,6 +157,7 @@ for (const recipe of recipes) {
       selector: recipe.selector ?? null,
       featureIndices: recipe.featureIndices ?? null,
       componentBboxFilter: recipe.componentBboxFilter ?? null,
+      resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
       sourceCrs: recipe.sourceCrs ?? 'RFC 7946 longitude/latitude',
       evidenceDocumentIds: recipe.evidenceDocumentIds,

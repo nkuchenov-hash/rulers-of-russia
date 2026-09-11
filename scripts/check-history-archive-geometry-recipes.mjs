@@ -131,6 +131,21 @@ for (const recipe of recipes) {
     });
   }
 
+  if (recipe.resultComponentBboxFilter) {
+    const f = recipe.resultComponentBboxFilter;
+    if (![f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite)) fail(`Archive recipe ${recipe.id} has invalid resultComponentBboxFilter`);
+    const polygonBbox = polygon => {
+      const pts = polygon.flat();
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+    };
+    polygons = polygons.filter(polygon => {
+      const [minX,minY,maxX,maxY] = polygonBbox(polygon);
+      return minX >= f.minLon && minY >= f.minLat && maxX <= f.maxLon && maxY <= f.maxLat;
+    });
+    if (polygons.length < 1) fail(`Archive recipe ${recipe.id} resultComponentBboxFilter selected no polygon components`);
+  }
+
   const sourceGeometry = {type: 'MultiPolygon', coordinates: polygons};
   for (const control of recipe.controls ?? []) {
     if (!['inside', 'outside'].includes(control.expected)) fail(`Archive recipe ${recipe.id} control ${control.id} has invalid expectation`);
@@ -147,6 +162,7 @@ for (const recipe of recipes) {
   if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact derived geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
+  if (JSON.stringify(generated.metadata?.resultComponentBboxFilter ?? null) !== JSON.stringify(recipe.resultComponentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost resultComponentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.differenceMasks ?? []) !== JSON.stringify(validatedDifferenceMasks)) fail(`Archive output ${recipe.output} lost difference-mask provenance`);
 }
 
