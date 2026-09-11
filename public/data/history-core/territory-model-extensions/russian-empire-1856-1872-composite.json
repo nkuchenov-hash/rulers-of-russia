@@ -222,15 +222,15 @@
   ],
   "baseStates": [
     {
-      "id": "base-russian-empire-composite-1856-12-kurils",
+      "id": "base-russian-empire-composite-post-paris-1856-03-kurils",
       "polityId": "russian-empire",
       "track": "russian-legal-border",
       "territorialModel": "mixed",
-      "coverageAnchorMonth": "1856-12",
+      "coverageAnchorMonth": "1856-03",
       "historicalDate": {
-        "original": "Conservative source-supported state at 1856-12",
-        "normalized": "1856-12",
-        "precision": "month",
+        "original": "30 марта 1856 г. — Парижский мир",
+        "normalized": "1856-03-30",
+        "precision": "day",
         "calendar": "gregorian"
       },
       "geometryFragmentIds": [
@@ -256,7 +256,7 @@
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "validThroughMonth": "1856-12",
-      "notes": "Composite of the checked main Empire state, separately verified Finland, and separately extracted northern Kurils. Activation is delayed to a conservative month after any treaty change occurring inside the archive interval; no state is back-projected across those changes."
+      "notes": "The pinned 1856 main-Empire geometry is independently required to exclude Izmail, Cahul and Bolhrad, proving it represents the post-Paris southern-Bessarabia cession state. It is therefore activated from the exact March 1856 treaty month and remains bounded to 1856-12; Finland and northern Kurils stay separately evidenced."
     },
     {
       "id": "base-russian-empire-composite-1857-12-pre-aigun-kurils",
