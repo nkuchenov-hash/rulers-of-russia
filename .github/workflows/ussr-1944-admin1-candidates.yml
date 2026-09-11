@@ -1,0 +1,17 @@
+name: USSR 1944-1946 admin1 candidates
+on:
+  push:
+    paths:
+      - 'scripts/analyze-ussr-1944-admin1.mjs'
+      - '.github/workflows/ussr-1944-admin1-candidates.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-ussr-1944-admin1.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ussr-1944-admin1-candidates
+          path: ussr-1944-admin1-candidates.json
