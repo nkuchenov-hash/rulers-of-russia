@@ -5,40 +5,108 @@
       "id": "territory-1772-first-partition-russia",
       "eventId": "evt-1772-first-partition-poland",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"16 августа 1772 г. (старый стиль)","normalized":"1772-08-27","precision":"day","calendar":"julian","note":"PSZRI No. 13850; unilateral Russian incorporation/effective-possession act. Bilateral Polish cession is modeled separately in 1773."},
+      "effectiveDate": {
+        "original": "16 августа 1772 г. (старый стиль)",
+        "normalized": "1772-08-27",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "PSZRI No. 13850; unilateral Russian incorporation/effective-possession act. Bilateral Polish cession is modeled separately in 1773."
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-first-partition-russian-incorporation-1772-pszri"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-first-partition-russian-incorporation-1772-pszri"],"routeSemantics":[{"type":"river-boundary","waterbody":"Western Dvina/Daugava","note":"The act makes the Dvina a natural boundary over the stated interval."},{"type":"administrative-boundary","note":"Existing Vitebsk/Polotsk and three-voivodeship junction boundaries are invoked."},{"type":"straight","from":"three-voivodeship junction","to":"source of Drut/Druec near Ordva"},{"type":"river-boundary","waterbody":"Drut/Druec","to":"Dnieper"},{"type":"river-boundary","waterbody":"Dnieper","note":"Continues to the pre-existing Russia–Poland boundary while preserving the Kyiv district exception."}],"derivationNote":"The Russian legal act supplies a source-verified route grammar and expressly orders boundary posts. Exact geometry still requires reconstruction of the 1772 administrative-boundary junctions, the identified Drut source/Ordva point and period river courses; modern lines must not be substituted silently."},
-      "reviewStatus": "source-verified",
-      "notes": "Exact monthly chronology resolved. This is Russia's unilateral incorporation/effective-possession transition, not bilateral Polish recognition."
+      "evidenceDocumentIds": [
+        "doc-first-partition-russian-incorporation-1772-pszri"
+      ],
+      "geometry": {
+        "method": "source-verified-transition-plus-corroborated-post-event-full-state",
+        "evidenceDocumentIds": [
+          "doc-first-partition-russian-incorporation-1772-pszri"
+        ],
+        "routeSemantics": [
+          {
+            "type": "river-boundary",
+            "waterbody": "Western Dvina/Daugava",
+            "note": "The act makes the Dvina a natural boundary over the stated interval."
+          },
+          {
+            "type": "administrative-boundary",
+            "note": "Existing Vitebsk/Polotsk and three-voivodeship junction boundaries are invoked."
+          },
+          {
+            "type": "straight",
+            "from": "three-voivodeship junction",
+            "to": "source of Drut/Druec near Ordva"
+          },
+          {
+            "type": "river-boundary",
+            "waterbody": "Drut/Druec",
+            "to": "Dnieper"
+          },
+          {
+            "type": "river-boundary",
+            "waterbody": "Dnieper",
+            "note": "Continues to the pre-existing Russia–Poland boundary while preserving the Kyiv district exception."
+          }
+        ],
+        "derivationNote": "The 27 August 1772 Russian incorporation act fixes the transition date and boundary grammar. History Core already accepts the independently controlled 1772–1774 archive geometry as the post-incorporation legal-border state from that exact month. Replay therefore uses that verified full-state fragment as a replacement at the exact transition rather than inventing a delta polygon."
+      },
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified by exact legal transition plus already accepted post-event full-state replacement; no separate hand-drawn acquisition polygon is introduced.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-russian-empire-1772-1774-corroborated-cliopatria"
+      ]
     },
     {
       "id": "territory-1773-first-partition-polish-recognition",
       "eventId": "evt-1773-first-partition-russia-poland-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"7/18 сентября 1773 г.","normalized":"1773-09-18","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "7/18 сентября 1773 г.",
+        "normalized": "1773-09-18",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "recognize",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-first-partition-russia-poland-treaty-1773-avpri"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-first-partition-russia-poland-treaty-1773-avpri"],"derivationNote":"Article II repeats substantially the same Dvina–voivodeship junction–Druec–Dnieper boundary, while Article X creates commissioners for orderly marking. This change records bilateral cession/recognition and does not double-add territory already represented by the 1772 Russian-law acquisition."},
+      "evidenceDocumentIds": [
+        "doc-first-partition-russia-poland-treaty-1773-avpri"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": [
+          "doc-first-partition-russia-poland-treaty-1773-avpri"
+        ],
+        "derivationNote": "Article II repeats substantially the same Dvina–voivodeship junction–Druec–Dnieper boundary, while Article X creates commissioners for orderly marking. This change records bilateral cession/recognition and does not double-add territory already represented by the 1772 Russian-law acquisition."
+      },
       "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1793-second-partition-de-facto",
       "eventId": "evt-1793-second-partition-control",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"23 января (3 февраля) 1793 г.","normalized":"1793-02-03","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "23 января (3 февраля) 1793 г.",
+        "normalized": "1793-02-03",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "de-facto-control",
       "territorialModel": "mixed",
       "operation": "occupy",
-      "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology", "doc-second-partition-russia-prussia-1793-martens"],
+      "evidenceDocumentIds": [
+        "doc-polish-partitions-prlib-chronology",
+        "doc-second-partition-russia-prussia-1793-martens"
+      ],
       "geometry": {
         "method": "source-verified-control-area-pending",
-        "evidenceDocumentIds": ["doc-polish-partitions-prlib-chronology", "doc-second-partition-russia-prussia-1793-martens"],
+        "evidenceDocumentIds": [
+          "doc-polish-partitions-prlib-chronology",
+          "doc-second-partition-russia-prussia-1793-martens"
+        ],
         "derivationNote": "The Presidential Library institutional chronology source-verifies the 23 Jan/3 Feb partition/control milestone, while the official foreign-ministry corpus independently anchors the preceding Russia-Prussia partition convention. Exact occupied-area geometry must be reconstructed from the convention/Grodno settlement and contemporary administrative cartography rather than inferred from later guberniya borders."
       },
       "reviewStatus": "source-verified",
@@ -48,29 +116,59 @@
       "id": "territory-1793-grodno-russian-legal-border",
       "eventId": "evt-1793-grodno-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"11/22 июля 1793 г.","normalized":"1793-07-22","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "11/22 июля 1793 г.",
+        "normalized": "1793-07-22",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "recognize",
-      "evidenceDocumentIds": ["doc-grodno-partition-treaty-1793-prlib"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-grodno-partition-treaty-1793-prlib"],"derivationNote":"The official treaty printing source-verifies the legal settlement. Exact geometry still requires clause-by-clause extraction and reconciliation with period Russian administrative/cartographic material before georeferencing."},
+      "evidenceDocumentIds": [
+        "doc-grodno-partition-treaty-1793-prlib"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": [
+          "doc-grodno-partition-treaty-1793-prlib"
+        ],
+        "derivationNote": "The official treaty printing source-verifies the legal settlement. Exact geometry still requires clause-by-clause extraction and reconciliation with period Russian administrative/cartographic material before georeferencing."
+      },
       "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1795-third-partition-russian-control",
       "eventId": "evt-1795-third-partition-convention",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"13 (24) октября 1795 г.","normalized":"1795-10-24","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "13 (24) октября 1795 г.",
+        "normalized": "1795-10-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "de-facto-control",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-third-partition-russia-prussia-austria-1795-martens", "doc-polish-partitions-prlib-chronology"],
+      "evidenceDocumentIds": [
+        "doc-third-partition-russia-prussia-austria-1795-martens",
+        "doc-polish-partitions-prlib-chronology"
+      ],
       "geometry": {
         "method": "source-verified-control-area-pending",
-        "evidenceDocumentIds": ["doc-third-partition-russia-prussia-austria-1795-martens", "doc-polish-partitions-prlib-chronology"],
+        "evidenceDocumentIds": [
+          "doc-third-partition-russia-prussia-austria-1795-martens",
+          "doc-polish-partitions-prlib-chronology"
+        ],
         "routeSemantics": [
-          {"type":"possession-guarantee","note":"The convention guarantees the partition powers' new possessions and treats the Russian acquisitions described in the prior declaration as retained in Russian possession."},
-          {"type":"occupied-territory-transfer","note":"The treaty separately orders evacuation/transfer where Russian, Prussian or Austrian troops occupy territory assigned to another power."}
+          {
+            "type": "possession-guarantee",
+            "note": "The convention guarantees the partition powers' new possessions and treats the Russian acquisitions described in the prior declaration as retained in Russian possession."
+          },
+          {
+            "type": "occupied-territory-transfer",
+            "note": "The treaty separately orders evacuation/transfer where Russian, Prussian or Austrian troops occupy territory assigned to another power."
+          }
         ],
         "derivationNote": "The official MFA treaty corpus source-verifies the 13/24 Oct 1795 control/possession settlement. Exact Russian-share polygon geometry still requires the declaration/convention boundary descriptions and period demarcation/administrative maps. The later 1797 convention remains the final legal settlement."
       },
@@ -81,13 +179,26 @@
       "id": "territory-1797-final-partition-legal-settlement",
       "eventId": "evt-1797-final-partition-convention",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"15/26 января 1797 г.","normalized":"1797-01-26","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "15/26 января 1797 г.",
+        "normalized": "1797-01-26",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "recognize",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-final-partition-convention-1797-prlib"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-final-partition-convention-1797-prlib"],"derivationNote":"The official final convention source-verifies the concluding legal recognition of possessions already established by the earlier partition settlements. It is a validation/recognition layer over the existing Russian legal-border state, not a fresh 1797 area delta; use its referenced possessions to cross-check the external boundary without adding territory again."},
+      "evidenceDocumentIds": [
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": [
+          "doc-final-partition-convention-1797-prlib"
+        ],
+        "derivationNote": "The official final convention source-verifies the concluding legal recognition of possessions already established by the earlier partition settlements. It is a validation/recognition layer over the existing Russian legal-border state, not a fresh 1797 area delta; use its referenced possessions to cross-check the external boundary without adding territory again."
+      },
       "reviewStatus": "source-verified",
       "notes": "Final recognition/settlement only. Territorial changes already legally effective under the earlier partition acts and treaties must not be replayed a second time in January 1797."
     },
@@ -95,25 +206,62 @@
       "id": "territory-1809-finland-effective",
       "eventId": "evt-1809-fredrikshamn-ratification",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"1 (13) октября 1809 г.","normalized":"1809-10-13","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "1 (13) октября 1809 г.",
+        "normalized": "1809-10-13",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-fredrikshamn-treaty-1809-prlib", "doc-finland-historical-boundary-maps-1909-rgia"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-fredrikshamn-treaty-1809-prlib","doc-finland-historical-boundary-maps-1909-rgia"],"derivationNote":"Treaty entry into force is precise and source-verified. Geometry must be reconstructed from treaty clauses plus period/contemporary boundary evidence; the 1909 RGIA maps are retrospective cross-checks only."},
+      "evidenceDocumentIds": [
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "geometry": {
+        "method": "derived-from-boundary-text",
+        "evidenceDocumentIds": [
+          "doc-fredrikshamn-treaty-1809-prlib",
+          "doc-finland-historical-boundary-maps-1909-rgia"
+        ],
+        "derivationNote": "Treaty entry into force is precise and source-verified. Geometry must be reconstructed from treaty clauses plus period/contemporary boundary evidence; the 1909 RGIA maps are retrospective cross-checks only."
+      },
       "reviewStatus": "source-verified"
     },
     {
       "id": "territory-1856-southern-bessarabia-cession",
       "eventId": "evt-1856-paris-peace",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"18 (30) марта 1856 г.","normalized":"1856-03-30","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "18 (30) марта 1856 г.",
+        "normalized": "1856-03-30",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "cede",
-      "evidenceDocumentIds": ["doc-paris-bessarabia-1856-ebid", "doc-bessarabia-boundary-implementation-1856-rgia"],
-      "geometry": {"method":"derived-from-boundary-text","evidenceDocumentIds":["doc-paris-bessarabia-1856-ebid","doc-bessarabia-boundary-implementation-1856-rgia"],"derivationNote":"Treaty clauses source-verify the cession; the 1856 RGIA Ignatiev file documents actual boundary determination. Exact folio-level boundary descriptions/plans remain the geometry-verification dependency."},
-      "reviewStatus": "source-verified"
+      "evidenceDocumentIds": [
+        "doc-paris-bessarabia-1856-ebid",
+        "doc-bessarabia-boundary-implementation-1856-rgia"
+      ],
+      "geometry": {
+        "method": "source-verified-transition-plus-controlled-post-paris-full-state",
+        "evidenceDocumentIds": [
+          "doc-paris-bessarabia-1856-ebid",
+          "doc-bessarabia-boundary-implementation-1856-rgia"
+        ],
+        "derivationNote": "The 30 March 1856 Paris settlement fixes the legal cession date. History Core already rejects the raw 1856 archive capture and accepts the controlled 1857–1858 state because it excludes Izmail, Cahul and Bolhrad while remaining pre-Aigun. The production replay therefore replaces the pre-Paris state at the exact treaty month with that already verified post-Paris/pre-Aigun composite."
+      },
+      "reviewStatus": "geometry-verified",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1857-1858-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ],
+      "notes": "Geometry-verified through the exact Paris transition and the already accepted post-Paris composite used by the current monthly model."
     }
   ]
 }

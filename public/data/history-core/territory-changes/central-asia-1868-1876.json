@@ -5,15 +5,27 @@
       "id": "territory-1868-bukhara-protectorate",
       "eventId": "evt-1868-bukhara-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"23 июня 1868 г. (старый стиль)","normalized":"1868-07-05","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "23 июня 1868 г. (старый стиль)",
+        "normalized": "1868-07-05",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-bukhara-protection-supplement-1868-imperial-publication", "doc-bukhara-1868-prlib-chronology", "doc-bukhara-peace-conditions-1868-imperial-publication"],
+      "evidenceDocumentIds": [
+        "doc-bukhara-protection-supplement-1868-imperial-publication",
+        "doc-bukhara-1868-prlib-chronology",
+        "doc-bukhara-peace-conditions-1868-imperial-publication"
+      ],
       "geometry": {
         "method": "source-verified-dependency-status",
-        "evidenceDocumentIds": ["doc-bukhara-protection-supplement-1868-imperial-publication", "doc-bukhara-peace-conditions-1868-imperial-publication"],
+        "evidenceDocumentIds": [
+          "doc-bukhara-protection-supplement-1868-imperial-publication",
+          "doc-bukhara-peace-conditions-1868-imperial-publication"
+        ],
         "derivationNote": "The 1868 secret supplement expressly frames the emir's obligations as a sign of his wish to acquire the protection of the Russian Emperor, while the peace terms leave Bukhara as a distinct polity. This verifies a Russian protection/dependency relationship on the claim/sphere-of-control track. It does not justify treating Bukhara as core Russian sovereign territory or asserting a geometry-bearing annexation."
       },
       "reviewStatus": "source-verified",
@@ -23,37 +35,81 @@
       "id": "territory-1868-zeravshan-acquisition",
       "eventId": "evt-1868-bukhara-treaty",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"23 июня 1868 г. (старый стиль)","normalized":"1868-07-05","precision":"day","calendar":"julian","note":"This change is narrowed to the initial 1868 Samarkand/Zarafshan acquisition evidenced by the peace settlement. Later Penjikent and 1870–1871 upper-Zarafshan/Kashkadarya additions require separate dated acts."},
+      "effectiveDate": {
+        "original": "23 июня 1868 г. (старый стиль)",
+        "normalized": "1868-07-05",
+        "precision": "day",
+        "calendar": "julian",
+        "note": "This change is narrowed to the initial 1868 Samarkand/Zarafshan acquisition evidenced by the peace settlement. Later Penjikent and 1870–1871 upper-Zarafshan/Kashkadarya additions require separate dated acts."
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia", "doc-kaufman-central-asia-rgia-inventory"],
+      "evidenceDocumentIds": [
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-samarkand-incorporation-proclamation-1868-rgia",
+        "doc-kaufman-central-asia-rgia-inventory"
+      ],
       "geometry": {
-        "method": "source-verified-boundary-rule-period-map-pending",
-        "evidenceDocumentIds": ["doc-bukhara-peace-conditions-1868-imperial-publication", "doc-samarkand-incorporation-proclamation-1868-rgia"],
-        "routeSemantics": [
-          {"type":"territorial-inclusion","area":"Samarkand and dependent settlements","source":"1868 peace conditions"},
-          {"type":"mountain-boundary","side":"south","feature":"Shahrisabz range","source":"peace conditions"},
-          {"type":"pending-commission-line","from":"Shahrisabz range","to":"Nuratau range","across":"Zarafshan valley","source":"peace conditions state this boundary was to be fixed precisely after acceptance"}
+        "method": "source-verified-transition-plus-corroborated-post-event-full-state",
+        "evidenceDocumentIds": [
+          "doc-bukhara-peace-conditions-1868-imperial-publication",
+          "doc-samarkand-incorporation-proclamation-1868-rgia"
         ],
-        "derivationNote": "The initial 1868 legal acquisition and its boundary grammar are source-verified. Exact polygon geometry still requires the subsequent boundary-fixing documentation and period survey/cartography. The former broad 1868–1870 range has been removed because it conflated later expansions with the initial acquisition."
+        "routeSemantics": [
+          {
+            "type": "territorial-inclusion",
+            "area": "Samarkand and dependent settlements",
+            "source": "1868 peace conditions"
+          },
+          {
+            "type": "mountain-boundary",
+            "side": "south",
+            "feature": "Shahrisabz range",
+            "source": "peace conditions"
+          },
+          {
+            "type": "pending-commission-line",
+            "from": "Shahrisabz range",
+            "to": "Nuratau range",
+            "across": "Zarafshan valley",
+            "source": "peace conditions state this boundary was to be fixed precisely after acceptance"
+          }
+        ],
+        "derivationNote": "The 5 July 1868 peace settlement and Samarkand incorporation evidence fix the initial acquisition date. History Core already activates the controlled 1868–1869 main-Empire state at that exact month, combined with the separately verified Finland and northern-Kurils components. Replay therefore uses the accepted post-event composite as a full-state replacement and does not manufacture a separate delta polygon."
       },
-      "reviewStatus": "source-verified",
-      "notes": "Exact monthly transition resolved for the initial acquisition only. Later additions are not silently backdated to 5 July 1868."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified from the exact July 1868 legal transition plus the already accepted post-event composite. Later 1870–1871 additions are not backdated.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1868-1869-1856-1872",
+        "frag-russian-empire-finland-component-1887-1917",
+        "frag-russian-empire-northern-kurils-1856-1875"
+      ]
     },
     {
       "id": "territory-1873-khiva-protectorate",
       "eventId": "evt-1873-gandimyan-khiva",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"12 августа 1873 г. (старый стиль)","normalized":"1873-08-24","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "12 августа 1873 г. (старый стиль)",
+        "normalized": "1873-08-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "claim",
       "territorialModel": "sphere-of-control",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa", "doc-khiva-1873-prlib-chronology"],
+      "evidenceDocumentIds": [
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-khiva-1873-prlib-chronology"
+      ],
       "geometry": {
         "method": "source-verified-dependent-polity-status",
-        "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa"],
+        "evidenceDocumentIds": [
+          "doc-khiva-gandymyan-1873-imperial-mfa"
+        ],
         "derivationNote": "Article 1 places Khiva's direct foreign relations, treaty-making and military action under Russian authority. This is represented as a dependent-polity/control sphere, not as core Russian territory. The treaty does not justify filling the whole khanate as Russian sovereign territory."
       },
       "reviewStatus": "source-verified",
@@ -63,19 +119,49 @@
       "id": "territory-1873-amudarya-right-bank-acquisition",
       "eventId": "evt-1873-gandimyan-khiva",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"12 августа 1873 г. (старый стиль)","normalized":"1873-08-24","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "12 августа 1873 г. (старый стиль)",
+        "normalized": "1873-08-24",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa", "doc-khiva-1873-prlib-chronology"],
+      "evidenceDocumentIds": [
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-khiva-1873-prlib-chronology"
+      ],
       "geometry": {
         "method": "derived-from-boundary-text",
-        "evidenceDocumentIds": ["doc-khiva-gandymyan-1873-imperial-mfa"],
+        "evidenceDocumentIds": [
+          "doc-khiva-gandymyan-1873-imperial-mfa"
+        ],
         "routeSemantics": [
-          {"from":"Kukertli","to":"westernmost Amu Darya channel split","type":"river-boundary","waterbody":"Amu Darya"},
-          {"from":"westernmost Amu Darya channel split","to":"Aral Sea","type":"river-channel-boundary","waterbody":"westernmost Amu Darya channel"},
-          {"from":"channel mouth","to":"Cape Urgu","type":"shoreline","waterbody":"Aral Sea"},
-          {"from":"Cape Urgu","to":"old Amu channel sector","type":"escarpment-foot/old-channel-boundary","feature":"southern Ust-Urt chink / old Amu channel"}
+          {
+            "from": "Kukertli",
+            "to": "westernmost Amu Darya channel split",
+            "type": "river-boundary",
+            "waterbody": "Amu Darya"
+          },
+          {
+            "from": "westernmost Amu Darya channel split",
+            "to": "Aral Sea",
+            "type": "river-channel-boundary",
+            "waterbody": "westernmost Amu Darya channel"
+          },
+          {
+            "from": "channel mouth",
+            "to": "Cape Urgu",
+            "type": "shoreline",
+            "waterbody": "Aral Sea"
+          },
+          {
+            "from": "Cape Urgu",
+            "to": "old Amu channel sector",
+            "type": "escarpment-foot/old-channel-boundary",
+            "feature": "southern Ust-Urt chink / old Amu channel"
+          }
         ],
         "derivationNote": "Articles 2-3 source-verify both the route grammar and the transfer of all right-bank Khivan lands to Russia. Exact geometry requires historical Amu Darya distributaries, the 1873 Aral shoreline, the identification of Kukertli/Cape Urgu and the old Amu channel; modern hydrography must not be substituted."
       },
@@ -85,14 +171,26 @@
       "id": "territory-1876-kokand-fergana-acquisition",
       "eventId": "evt-1876-kokand-annexation",
       "polityId": "russian-empire",
-      "effectiveDate": {"original":"19 февраля 1876 г. (старый стиль)","normalized":"1876-03-02","precision":"day","calendar":"julian"},
+      "effectiveDate": {
+        "original": "19 февраля 1876 г. (старый стиль)",
+        "normalized": "1876-03-02",
+        "precision": "day",
+        "calendar": "julian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-kokand-annexation-decree-1876-rgvia", "doc-kokand-1876-prlib-administrative", "doc-fergana-map-1876-general-staff"],
+      "evidenceDocumentIds": [
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-kokand-1876-prlib-administrative",
+        "doc-fergana-map-1876-general-staff"
+      ],
       "geometry": {
         "method": "contemporary-official-map-pending-georeference",
-        "evidenceDocumentIds": ["doc-kokand-annexation-decree-1876-rgvia", "doc-fergana-map-1876-general-staff"],
+        "evidenceDocumentIds": [
+          "doc-kokand-annexation-decree-1876-rgvia",
+          "doc-fergana-map-1876-general-staff"
+        ],
         "derivationNote": "The RGVIA original/PSZRI decree source-verifies the legal inclusion of the territory constituting the former Kokand Khanate and creation of Fergana Oblast. The 1876 Asian Department of the General Staff map is the contemporary official geometry source, but the historical oblast/khanate boundary must be georeferenced and reconciled with adjacent treaty boundaries before polygon promotion."
       },
       "reviewStatus": "source-verified",
