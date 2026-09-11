@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-natural-earth-baltic-admin0-50m",
+      "sourceCollectionId": "natural-earth-public-domain",
+      "title": "Natural Earth 1:50m admin-0 polygons — Lithuania, Latvia and Estonia",
+      "institution": "Natural Earth; vendored project snapshot",
+      "url": "https://github.com/nvkelso/natural-earth-vector/tree/ca96624a",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "modern-cartographic-reference",
+      "publicationCitation": "Natural Earth vector, ne_50m_admin_0_countries.geojson, pinned source commit ca96624a; vendored as public/data/territory/cultural/countries_50m.geojson.",
+      "digitalVector": {
+        "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+        "gitBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+        "license": "Public domain"
+      },
+      "notes": "Used only to cut the three Baltic republic polygons out of the already verified pre-recognition USSR exterior after the USSR State Council's 6 September 1991 recognition. The official Soviet resolutions establish timing/legal status; the modern public-domain polygons provide the spatial realization of the republic boundary segments. No other part of the USSR exterior is replaced by modern geometry."
+    }
+  ]
+}
