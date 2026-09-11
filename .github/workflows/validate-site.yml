@@ -53,6 +53,13 @@ jobs:
           path: public/data/history-core/generated/completion-audit.json
           if-no-files-found: error
 
+      - name: Upload History Core month index
+        uses: actions/upload-artifact@v4
+        with:
+          name: history-core-month-index
+          path: public/data/history-core/generated/month-index.json
+          if-no-files-found: error
+
       - name: Typecheck
         run: npm run typecheck
 
