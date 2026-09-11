@@ -93,8 +93,8 @@
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
-      "validThroughMonth": "1944-09",
-      "notes": "The period-correct 1941 USSR state is activated from January 1941 and carried only through September 1944. No russian-legal-border sovereign-area mutation occurs after the completed 1939–1940 annexation sequence until the USSR admission of Tuva on 11 October 1944. Wartime occupation changes de-facto control, not this legal-border track. The state stops before Tuva and is not projected across that acquisition."
+      "validThroughMonth": "1946-02",
+      "notes": "The period-correct 1941 USSR state is activated from January 1941 and carried as the legal-border baseline through February 1946 solely so exact subsequent geometry-verified changes can replay on it. No sovereign-area mutation occurs until Tuva on 11 October 1944; Tuva and later Zakarpattia are added by their own verified fragments, and the state is replaced by the independently verified post-war USSR state at the 5 February 1946 Soviet-Polish frontier entry into force. Wartime occupation changes de-facto control, not this legal-border track."
     }
   ]
 }
