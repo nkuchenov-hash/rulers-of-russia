@@ -8,7 +8,12 @@
       "role": "territory-area",
       "territorialModel": "linear-border",
       "geometryFile": "geometry/ussr-1946-1950-world.geojson",
-      "evidenceDocumentIds": ["doc-historical-basemaps-ussr-1945", "doc-ussr-poland-border-1945-unts", "doc-ussr-poland-border-1945-eif-untc", "doc-south-sakhalin-kurils-1946-ebid"],
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-poland-border-1945-eif-untc",
+        "doc-south-sakhalin-kurils-1946-ebid"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
       "uncertaintyMeters": 50000,
@@ -22,13 +27,26 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "coverageAnchorMonth": "1946-02",
-      "historicalDate": {"original": "Soviet-Polish frontier treaty entered into force 5 February 1946", "normalized": "1946-02-05", "precision": "day", "calendar": "gregorian"},
-      "geometryFragmentIds": ["frag-ussr-1946-1950-world"],
-      "evidenceDocumentIds": ["doc-historical-basemaps-ussr-1945", "doc-ussr-poland-border-1945-unts", "doc-ussr-poland-border-1945-eif-untc", "doc-south-sakhalin-kurils-1946-ebid"],
+      "historicalDate": {
+        "original": "Soviet-Polish frontier treaty entered into force 5 February 1946",
+        "normalized": "1946-02-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1946-1950-world"
+      ],
+      "evidenceDocumentIds": [
+        "doc-historical-basemaps-ussr-1945",
+        "doc-ussr-poland-border-1945-unts",
+        "doc-ussr-poland-border-1945-eif-untc",
+        "doc-south-sakhalin-kurils-1946-ebid",
+        "doc-ussr-poland-territorial-exchange-1951-unts"
+      ],
       "reviewStatus": "geometry-verified",
       "confidence": "medium",
-      "validThroughMonth": "1950-12",
-      "notes": "Bounded from February 1946 through December 1950; stops before the 1951 Soviet-Polish territorial exchange. No forward proxy beyond the validated interval."
+      "validThroughMonth": "1951-05",
+      "notes": "Bounded from February 1946 through May 1951. The verified post-war state remains legally continuous until the USSR–Poland territorial-exchange agreement entered into force on 5 June 1951; this base stops before that month and is not projected across the exchange."
     }
   ]
 }
