@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-poland-territorial-exchange-1951-unts",
+      "sourceCollectionId": "un-treaty-series",
+      "title": "Agreement between the Polish Republic and the Union of Soviet Socialist Republics concerning the exchange of sectors of their State territories",
+      "institution": "United Nations Treaty Series",
+      "url": "https://treaties.un.org/doc/Publication/UNTS/Volume%20432/volume-432-I-6222-English.pdf",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "15 February 1951; entered into force 5 June 1951",
+        "normalized": "1951-06-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "authority": [
+        "Polish Republic",
+        "Union of Soviet Socialist Republics"
+      ],
+      "publicationCitation": "United Nations Treaty Series, Vol. 432, No. 6222, pp. 199 ff.",
+      "notes": "Article 1 and Article 2 exchange two 480 km² sectors and amend the state frontier. UNTS records entry into force on 5 June 1951 by exchange of ratifications. Used here to bound the preceding verified USSR legal-border state through May 1951; the post-exchange geometry remains a separate reconstruction task."
+    }
+  ]
+}
