@@ -1,0 +1,9 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const file='public/data/territory/archive/ussr.geojson';
+const bytes=fs.readFileSync(file); const data=JSON.parse(bytes.toString('utf8'));
+function ringContains([x,y],ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>y)!==(yj>y))&&x<((xj-xi)*(y-yi))/((yj-yi)||Number.EPSILON)+xi)inside=!inside}return inside}
+function contains(pt,g){const poly=p=>p?.length&&ringContains(pt,p[0])&&!p.slice(1).some(h=>ringContains(pt,h));return g?.type==='Polygon'?!!poly(g.coordinates):g?.type==='MultiPolygon'?g.coordinates.some(poly):false}
+const controls={moscow:[37.6173,55.7558],kyiv:[30.5234,50.4501],minsk:[27.5615,53.9045],chisinau:[28.8353,47.0105],tbilisi:[44.793,41.7151],yerevan:[44.5152,40.1872],baku:[49.8671,40.4093],tashkent:[69.2401,41.2995],almaty:[76.886,43.2389],bishkek:[74.5698,42.8746],dushanbe:[68.787,38.5598],ashgabat:[58.3261,37.9601],vilnius:[25.2797,54.6872],riga:[24.1052,56.9496],tallinn:[24.7536,59.437],kaliningrad:[20.4522,54.7104],vladivostok:[131.8855,43.1155],yuzhno_sakhalinsk:[142.738,46.9591],helsinki:[24.9384,60.1699],warsaw:[21.0122,52.2297],beijing:[116.4074,39.9042],ankara:[32.8597,39.9334]};
+const rows=(data.features??[]).map((f,index)=>({index,p:f.properties??{},g:f.geometry})).filter(x=>Number(x.p.start_date)<=1991&&Number(x.p.end_date)>=1991).map(x=>({index:x.index,properties:x.p,geometry_sha256:crypto.createHash('sha256').update(JSON.stringify(x.g)).digest('hex'),controls:Object.fromEntries(Object.entries(controls).map(([k,p])=>[k,contains(p,x.g)]))}));
+const out={schema_version:1,archive:file,rows}; fs.writeFileSync('ussr-1991-candidate.json',JSON.stringify(out,null,2)+'\n'); console.log(JSON.stringify(out,null,2));
