@@ -18,20 +18,15 @@
         "doc-nerchinsk-1689-mfa"
       ],
       "geometry": {
-        "method": "treaty-corroborated-verified-full-state",
+        "method": "source-verified-demarcation-with-uncertain-line",
         "evidenceDocumentIds": [
-          "doc-nerchinsk-1689-mfa",
-          "doc-ohm-tsardom-1689-relation-2851290",
-          "doc-andrusovo-smolensk-implementation-1667-ebid"
+          "doc-nerchinsk-1689-mfa"
         ],
-        "derivationNote": "The exact 6 September 1689 legal transition is paired with the already geometry-verified low-confidence 1689 OHM full-state reconstruction, independently corroborated by the Nerchinsk treaty and the 1667 Smolensk implementation record. For monthly replay this event replaces the prior state with that verified 1689 full state. The fragment retains 150 km uncertainty and does not claim a surveyed exact Nerchinsk line; unresolved line precision remains a boundary-detail uncertainty, not an unclassified area mutation."
+        "derivationNote": "The treaty legally delimits the Russia–Qing frontier, but the official source itself records divergent language versions, ambiguous landmarks, inadequate contemporary mapping and no physical demarcation. For sovereign-area replay this event is metadata-only because no reliable area delta can be reconstructed at the treaty month without inventing a line. The independently verified low-confidence 1689 full-state reconstruction remains a separate December anchor; exact Nerchinsk boundary geometry remains an explicit boundary-layer uncertainty."
       },
-      "reviewStatus": "geometry-verified",
-      "notes": "Geometry-verified as a low-confidence full-state replacement on the exact treaty date; detailed Nerchinsk line precision remains intentionally uncertain.",
-      "geometryAction": "replace",
-      "geometryFragmentIds": [
-        "frag-tsardom-1689-corroborated-ohm"
-      ]
+      "reviewStatus": "source-verified",
+      "notes": "Metadata-only for territory-area replay; the treaty is source-verified, while exact line geometry remains uncertain and must not be fabricated.",
+      "geometryAction": "metadata-only"
     },
     {
       "id": "territory-1727-kyakhta-demarcation",
