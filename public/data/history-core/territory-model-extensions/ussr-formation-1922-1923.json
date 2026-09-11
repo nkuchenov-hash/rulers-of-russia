@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "fragments": [],
+  "baseStates": [
+    {
+      "id": "base-ussr-formation-1922-12-through-1923",
+      "polityId": "ussr",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "coverageAnchorMonth": "1922-12",
+      "historicalDate": {
+        "original": "30 декабря 1922 г. — образование СССР",
+        "normalized": "1922-12-30",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-ussr-1924-1925-early"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-ussr-1924-1925-early",
+        "doc-ussr-formation-treaty-1922-ebid",
+        "doc-rsfsr-estonia-tartu-1920-ebid",
+        "doc-rsfsr-latvia-riga-1920-ebid",
+        "doc-rsfsr-finland-tartu-1920-ebid",
+        "doc-rsfsr-ukraine-belarus-poland-riga-1921-ebid",
+        "doc-aigun-1858-mfa",
+        "doc-peking-1860-mfa",
+        "doc-turkmenchay-1828-mfa-border-collection",
+        "doc-portsmouth-1905-ebid"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1923-12",
+      "notes": "Bounded backward continuity of the independently verified 1924–1925 external-border geometry to the USSR formation month. The Union treaty establishes the 30 December 1922 state transition, while the pre-existing Tartu/Riga and imperial Far-East/Caucasus treaty lineages corroborate the same external perimeter. This state stops at 1923-12, immediately before the source-declared 1924–1925 archive interval; it does not infer any internal republican boundary."
+    }
+  ]
+}
