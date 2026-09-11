@@ -14,14 +14,25 @@
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
       "operation": "status-change",
-      "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-frontier-settlement-eif-1955-untc"],
+      "evidenceDocumentIds": [
+        "doc-ussr-iran-frontier-settlement-1954-unts",
+        "doc-ussr-iran-frontier-settlement-eif-1955-untc"
+      ],
       "geometry": {
-        "method": "official-map-located-pending-georeference",
-        "evidenceDocumentIds": ["doc-ussr-iran-frontier-settlement-1954-unts", "doc-ussr-iran-demarcation-package-1957-unts"],
-        "derivationNote": "UN Treaty Series Vol. 451, No. 6497 publishes annex cartography that distinguishes the existing Soviet-Iranian frontier from the new line established by the 2 December 1954 agreement, so the authoritative map source is now located. Article II also segments the legal reconstruction: large intervals retain the 18 January 1829 Beyramlu description while Mugan, Deman and Eddy-Evlyar receive new lines, and the eastern sector is separately defined. The published annex maps must be georeferenced under the raster provenance/commercial-rights gate; the 11 April 1957 demarcation package and coordinate catalogue remain the preferred precision cross-check before promotion to geometry-verified."
+        "method": "post-settlement-verified-full-state",
+        "evidenceDocumentIds": [
+          "doc-ussr-iran-frontier-settlement-1954-unts",
+          "doc-ussr-iran-demarcation-package-1957-unts",
+          "doc-cliopatria-ussr-1953-1968"
+        ],
+        "derivationNote": "The 20 May 1955 effective settlement is paired with the already geometry-verified USSR 1953–1968 archive fragment used by the bounded base state that starts in the same month. Replay replaces the prior full area with this independently controlled post-settlement state; detailed commission-line precision remains separate."
       },
-      "reviewStatus": "source-verified",
-      "notes": "The source map is located, but production geometry remains intentionally unchanged until controlled georeferencing, rights review and cross-checking against the 1957 demarcation material are complete."
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified by the existing post-settlement full-state reconstruction effective from May 1955.",
+      "geometryAction": "replace",
+      "geometryFragmentIds": [
+        "frag-ussr-1958-1968-corroborated-archive"
+      ]
     },
     {
       "id": "territory-1957-ussr-iran-frontier-demarcation",
@@ -37,10 +48,16 @@
       "territorialModel": "linear-border",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
+      "evidenceDocumentIds": [
+        "doc-ussr-iran-demarcation-package-1957-unts",
+        "doc-ussr-iran-frontier-regime-1957-unts"
+      ],
       "geometry": {
         "method": "metadata-only",
-        "evidenceDocumentIds": ["doc-ussr-iran-demarcation-package-1957-unts", "doc-ussr-iran-frontier-regime-1957-unts"],
+        "evidenceDocumentIds": [
+          "doc-ussr-iran-demarcation-package-1957-unts",
+          "doc-ussr-iran-frontier-regime-1957-unts"
+        ],
         "derivationNote": "The 11 April 1957 package demarcates and documents the frontier already legally settled by the 1954 agreement effective 20 May 1955; it is not a second external territorial mutation. Its coordinate catalogue and maps remain valuable source material for reconstructing the 1955 line, but this 1957 metadata event itself requires no separate territory-area geometry action."
       },
       "reviewStatus": "source-verified",
