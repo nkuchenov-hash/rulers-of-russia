@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const url='https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_10m_admin_1_states_provinces.geojson';
+const expectedSha256='22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5';
+const res=await fetch(url,{headers:{'user-agent':'rulers-of-russia-history-core/1.0'}});
+if(!res.ok) throw new Error('Natural Earth fetch failed '+res.status);
+const bytes=Buffer.from(await res.arrayBuffer());
+const sha256=crypto.createHash('sha256').update(bytes).digest('hex');
+if(sha256!==expectedSha256) throw new Error('Natural Earth SHA256 mismatch: '+sha256);
+const data=JSON.parse(bytes.toString('utf8'));
+const features=(data.features??[]).filter(f=>f.properties?.adm1_code==='RUS-2605');
+if(features.length!==1) throw new Error('Expected exactly one RUS-2605 Tuva feature, got '+features.length);
+const out={type:'FeatureCollection',metadata:{dataset:'Natural Earth 1:10m admin-1 Tuva spatial reference',upstream:url,upstream_sha256:sha256,upstream_commit:'ca96624a',license:'public domain',selection:['RUS-2605']},features};
+const path='public/data/territory/cultural/tuva_admin1_selected_10m.geojson';
+fs.mkdirSync('public/data/territory/cultural',{recursive:true});
+fs.writeFileSync(path,JSON.stringify(out,null,2)+'\n');
+console.log('Wrote',path,features[0].properties.name_en,features[0].properties.admin);
