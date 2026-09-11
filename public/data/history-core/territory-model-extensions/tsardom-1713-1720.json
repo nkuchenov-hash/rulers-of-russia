@@ -48,11 +48,11 @@
       ],
       "reviewStatus": "geometry-verified",
       "confidence": "low",
-      "validThroughMonth": "1720-12",
+      "validThroughMonth": "1721-08",
       "derivedFromChangeIds": [
         "territory-1713-adrianople-settlement"
       ],
-      "notes": "Starts only in the exact month of the 1713 follow-up settlement, after the post-Pruth southern state is fixed. Stops at the end of the Tsardom coverage period and never crosses the 1721 Nystad change."
+      "notes": "Starts only in the exact month of the 1713 follow-up settlement, after the post-Pruth southern state is fixed. The same external legal contour is retained through August 1721 solely to provide continuous replay up to the Nystad ratification exchange; Russian Empire coverage for January–August 1721 reuses the same verified geometry in a separate base state. No geometry is carried across the September 1721 Nystad change."
     }
   ]
 }
