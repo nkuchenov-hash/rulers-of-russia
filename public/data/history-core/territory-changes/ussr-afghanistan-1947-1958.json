@@ -5,32 +5,53 @@
       "id": "territory-1947-ussr-afghanistan-river-frontier",
       "eventId": "evt-1947-ussr-afghanistan-frontier-effective",
       "polityId": "ussr",
-      "effectiveDate": {"original":"17 января 1947 г.","normalized":"1947-01-17","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "17 января 1947 г.",
+        "normalized": "1947-01-17",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "river-boundary",
       "operation": "demarcate",
-      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-1946-unts"],
+      "evidenceDocumentIds": [
+        "doc-ussr-afghanistan-frontier-1946-unts"
+      ],
       "geometry": {
-        "method": "river-rule-plus-pending-commission-map",
-        "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-1946-unts"],
-        "derivationNote": "Article 1 legally fixes the Amu-Darya and navigable Pyandzh frontier to the thalweg, with the median line of the principal fairway where a thalweg cannot be established, and the median line of the unnavigable Pyandzh. Article 2 requires a Mixed Commission to map Khamiab–Lake Sar-i-Kul and prepare a detailed description and post record. Do not substitute a modern river centerline for the historical 1947 channel or infer the commission geometry before the 1948 documents are obtained."
+        "method": "river-frontier-demarcation-no-area-mutation",
+        "evidenceDocumentIds": [
+          "doc-ussr-afghanistan-frontier-1946-unts"
+        ],
+        "derivationNote": "The 1946/1947 agreement formalizes the river frontier by thalweg/median-line rules and commissions its detailed mapping; it does not record an acquisition or cession of sovereign area. The already verified post-war USSR area state remains continuous. Exact historical channel and commission geometry remain mandatory for high-detail boundary rendering and must not be substituted by a modern river centerline."
       },
       "reviewStatus": "source-verified",
-      "notes": "Aral-Pagambar is expressly retained by the USSR and Urta-Tagai by Afghanistan; island ownership elsewhere follows the river-rule framework subject to the commission."
+      "notes": "Metadata-only for sovereign-area replay; exact historical river-frontier geometry remains a boundary-layer dependency.",
+      "geometryAction": "metadata-only"
     },
     {
       "id": "territory-1948-ussr-afghanistan-demarcation-package",
       "eventId": "evt-1948-ussr-afghanistan-demarcation-package",
       "polityId": "ussr",
-      "effectiveDate": {"original":"29 сентября 1948 г.","normalized":"1948-09-29","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "29 сентября 1948 г.",
+        "normalized": "1948-09-29",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "demarcate",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
+      "evidenceDocumentIds": [
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-afghanistan-frontier-1946-unts"
+      ],
       "geometry": {
         "method": "metadata-only",
-        "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
+        "evidenceDocumentIds": [
+          "doc-ussr-afghanistan-frontier-regime-1958-unts",
+          "doc-ussr-afghanistan-frontier-1946-unts"
+        ],
         "derivationNote": "The authentic 1958 treaty explicitly identifies demarcation and re-demarcation documents dated 29 September 1948 and states that the re-demarcation was drafted on the basis of the 1885–1888 protocol. Those documents remain a required geometry source for reconstructing the frontier legally effective from 17 January 1947, but the 29 September 1948 package itself records implementation/demarcation of that existing frontier rather than a second external territorial mutation."
       },
       "reviewStatus": "source-verified",
@@ -40,15 +61,25 @@
       "id": "territory-1958-ussr-afghanistan-frontier-continuity",
       "eventId": "evt-1958-ussr-afghanistan-frontier-regime-effective",
       "polityId": "ussr",
-      "effectiveDate": {"original":"5 октября 1958 г.","normalized":"1958-10-05","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "5 октября 1958 г.",
+        "normalized": "1958-10-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-ussr-afghanistan-frontier-1946-unts"],
+      "evidenceDocumentIds": [
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-ussr-afghanistan-frontier-1946-unts"
+      ],
       "geometry": {
         "method": "documentary-continuity",
-        "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts"],
+        "evidenceDocumentIds": [
+          "doc-ussr-afghanistan-frontier-regime-1958-unts"
+        ],
         "derivationNote": "Article 1 of the 1958 treaty confirms that Zulfikar–Zor-Kul is determined by the 1946 Agreement and 29 September 1948 demarcation/re-demarcation documents, while Zor-Kul–China is determined by the 1895 demarcation protocols. This is a continuity/status event, not a territorial transfer."
       },
       "reviewStatus": "source-verified"
@@ -57,17 +88,30 @@
       "id": "territory-1958-ussr-afghanistan-pamir-controls",
       "eventId": "evt-1958-ussr-afghanistan-frontier-regime-effective",
       "polityId": "ussr",
-      "effectiveDate": {"original":"5 октября 1958 г.","normalized":"1958-10-05","precision":"day","calendar":"gregorian"},
+      "effectiveDate": {
+        "original": "5 октября 1958 г.",
+        "normalized": "1958-10-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
       "track": "russian-legal-border",
       "territorialModel": "boundary-control-network",
       "operation": "status-change",
       "geometryAction": "metadata-only",
-      "geometryFragmentIds": ["frag-ussr-afghanistan-pamir-1958-inherited-controls"],
-      "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+      "geometryFragmentIds": [
+        "frag-ussr-afghanistan-pamir-1958-inherited-controls"
+      ],
+      "evidenceDocumentIds": [
+        "doc-ussr-afghanistan-frontier-regime-1958-unts",
+        "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"
+      ],
       "geometry": {
         "method": "derived-from-boundary-control-points",
         "file": "geometry/ussr-afghanistan-pamir-1958-inherited-controls.geojson",
-        "evidenceDocumentIds": ["doc-ussr-afghanistan-frontier-regime-1958-unts", "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"],
+        "evidenceDocumentIds": [
+          "doc-ussr-afghanistan-frontier-regime-1958-unts",
+          "doc-afghanistan-ussr-boundary-ibs26-usdos-1983"
+        ],
         "derivationNote": "The 1958 treaty explicitly carries the Lake Zor-Kul–China frontier forward under the 1895 demarcation protocols. U.S. Department of State IBS No. 26 publishes the official WGS 72 realization of the same control network. The generated MultiPoint therefore represents inherited verified geodetic controls only and does not assert straight inter-pillar boundary segments."
       },
       "reviewStatus": "geometry-verified",
