@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+function ringContains([x,y],ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>y)!=(yj>y))&&x<((xj-xi)*(y-yi))/((yj-yi)||Number.EPSILON)+xi)inside=!inside}return inside}
+function poly(p,pp){return Boolean(pp?.length&&ringContains(p,pp[0])&&!pp.slice(1).some(h=>ringContains(p,h)))}
+function contains(p,g){if(g?.type==='Polygon')return poly(p,g.coordinates);if(g?.type==='MultiPolygon')return g.coordinates.some(x=>poly(p,x));return false}
+const d=JSON.parse(fs.readFileSync('public/data/territory/archive/russian-empire.geojson','utf8'));
+const pre=[['moscow',[37.6173,55.7558],'inside'],['st-petersburg',[30.3351,59.9343],'inside'],['riga',[24.1052,56.9496],'inside'],['tallinn',[24.7536,59.437],'inside'],['vyborg',[28.7528,60.7076],'inside'],['hamina',[27.1979,60.5697],'outside'],['lappeenranta',[28.1887,61.0587],'outside'],['helsinki',[24.9384,60.1699],'outside'],['warsaw',[21.0122,52.2297],'outside'],['vilnius',[25.2797,54.6872],'outside'],['bakhchysarai',[33.857,44.75],'outside'],['baku',[49.8671,40.4093],'outside']];
+const post=[['moscow',[37.6173,55.7558],'inside'],['st-petersburg',[30.3351,59.9343],'inside'],['riga',[24.1052,56.9496],'inside'],['tallinn',[24.7536,59.437],'inside'],['vyborg',[28.7528,60.7076],'inside'],['hamina',[27.1979,60.5697],'inside'],['lappeenranta',[28.1887,61.0587],'inside'],['helsinki',[24.9384,60.1699],'outside'],['warsaw',[21.0122,52.2297],'outside'],['vilnius',[25.2797,54.6872],'outside'],['bakhchysarai',[33.857,44.75],'outside'],['baku',[49.8671,40.4093],'outside']];
+const specs=[{year:1738,index:3,c:pre},{year:1744,index:4,c:post},{year:1748,index:5,c:post},{year:1752,index:6,c:post},{year:1757,index:7,c:post},{year:1763,index:9,c:post},{year:1769,index:10,c:post}];
+const report={schema_version:1,profiles:{}};
+for(const s of specs){const f=d.features[s.index];const r=s.c.map(([id,ll,e])=>{const a=contains(ll,f.geometry)?'inside':'outside';return{id,expected:e,actual:a,pass:a===e}});report.profiles[s.year]={index:s.index,start:f.properties.start_date,end:f.properties.end_date,controls:r,allPass:r.every(x=>x.pass)}}
+fs.writeFileSync('empire-1738-1771-controls.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
