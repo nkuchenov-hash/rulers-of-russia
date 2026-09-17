@@ -6,8 +6,10 @@ on:
       - main
     paths:
       - scripts/analyze-tornau-medieval-registration.py
+      - scripts/audit-tornau-medieval-independent-gcps.py
       - scripts/analyze-grand-moscow-archive-controls.py
       - scripts/capture-tornau-medieval-diagnostics.py
+      - public/data/history-core/research/tornau-medieval-independent-gcps.json
       - public/data/history-core/raster-geometry-recipes/**
       - .github/workflows/tornau-medieval-registration.yml
   workflow_dispatch:
@@ -33,6 +35,9 @@ jobs:
       - name: Analyze Tornau medieval raster registration
         run: python scripts/analyze-tornau-medieval-registration.py
 
+      - name: Audit independent target-sheet GCPs
+        run: python scripts/audit-tornau-medieval-independent-gcps.py
+
       - name: Analyze Grand Moscow archive controls
         run: python scripts/analyze-grand-moscow-archive-controls.py
 
@@ -44,6 +49,13 @@ jobs:
         with:
           name: tornau-medieval-registration-report
           path: tornau-medieval-registration-report.json
+          if-no-files-found: error
+
+      - name: Upload independent GCP audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: tornau-medieval-independent-gcp-audit
+          path: tornau-medieval-independent-gcp-audit.json
           if-no-files-found: error
 
       - name: Upload Grand Moscow control report
