@@ -1,0 +1,18 @@
+name: OHM Tsardom 1711 relation check
+on:
+  pull_request:
+    paths:
+      - scripts/check-ohm-tsardom-2851289.mjs
+      - .github/workflows/ohm-tsardom-2851289-check.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/check-ohm-tsardom-2851289.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ohm-tsardom-relation-2851289
+          path: ohm-tsardom-2851289.json
