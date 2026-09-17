@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const relationId='2851290';
+const url=`https://api.openhistoricalmap.org/api/0.6/relation/${relationId}`;
+const res=await fetch(url,{headers:{'User-Agent':'rulers-of-russia-history-core/1.0'}});
+if(!res.ok) throw new Error(`OHM relation fetch failed: ${res.status}`);
+const xml=await res.text();
+const rel=xml.match(/<relation\s+([^>]+)>/);
+if(!rel) throw new Error('relation missing');
+const attr=k=>rel[1].match(new RegExp(`${k}="([^"]*)"`))?.[1]??null;
+const tags={}; for(const m of xml.matchAll(/<tag\s+k="([^"]+)"\s+v="([^"]*)"\s*\/>/g)) tags[m[1]]=m[2];
+const out={schema_version:1,relation_id:relationId,url,version:attr('version'),timestamp:attr('timestamp'),changeset:attr('changeset'),tags,explicit_license_tag:tags.license??null,source:tags.source??null,source_ref:tags['source:ref']??null,source_url:tags['source:url']??null};
+fs.writeFileSync('ohm-tsardom-2851290.json',JSON.stringify(out,null,2)+'\n'); console.log(JSON.stringify(out,null,2));
