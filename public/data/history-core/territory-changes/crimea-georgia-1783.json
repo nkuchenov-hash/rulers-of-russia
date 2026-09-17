@@ -9,13 +9,16 @@
       "track": "russian-legal-border",
       "territorialModel": "mixed",
       "operation": "acquire",
-      "evidenceDocumentIds": ["doc-crimea-manifest-1783-rusarchives-original", "doc-crimea-manifest-1783-pszri"],
+      "geometryAction": "replace",
+      "geometryFragmentIds": ["frag-russian-empire-post-crimea-1783-1787"],
+      "evidenceDocumentIds": ["doc-crimea-manifest-1783-rusarchives-original", "doc-crimea-manifest-1783-pszri", "doc-cliopatria-russian-empire-1783-1787"],
       "geometry": {
-        "method": "source-verified-territorial-scope-period-geometry-pending",
-        "evidenceDocumentIds": ["doc-crimea-manifest-1783-rusarchives-original", "doc-crimea-manifest-1783-pszri"],
-        "derivationNote": "The signed archival original and official PSZRI printing source-verify the legal inclusion of the Crimean Peninsula, Taman and the Kuban side. Exact territory-area geometry must reconstruct the 1783 Crimean/Kuban political scope and coastline from contemporary official cartography; modern Crimea/Krasnodar administrative polygons are not substitutes."
+        "method": "official-territorial-scope-plus-period-corroborated-full-state",
+        "evidenceDocumentIds": ["doc-crimea-manifest-1783-rusarchives-original", "doc-crimea-manifest-1783-pszri", "doc-cliopatria-russian-empire-1783-1787"],
+        "derivationNote": "The signed archival original and official PSZRI printing source-verify the legal inclusion of Crimea, Taman and the Kuban side on 19 April 1783. The independently pinned 1783–1787 full-state reconstruction has already passed distributed period controls and is the same geometry used by the verified post-Crimea base state. Replaying the change as a full-state replacement therefore materializes the legal acquisition without substituting modern administrative polygons or inferring a synthetic delta."
       },
-      "reviewStatus": "source-verified"
+      "reviewStatus": "geometry-verified",
+      "notes": "Geometry-verified on the russian-legal-border track by the already accepted post-Crimea 1783–1787 full-state fragment. International recognition and protectorate/claim layers remain separate."
     },
     {
       "id": "territory-1783-georgievsk-protectorate",
