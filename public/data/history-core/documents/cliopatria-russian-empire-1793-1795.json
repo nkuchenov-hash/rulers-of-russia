@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-cliopatria-russian-empire-post-grodno-1793",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture labelled 1792–1793, accepted only as post-Grodno 1793 state",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "source capture label 1792–1793; operational use begins only after 22 July 1793 Grodno settlement",
+        "normalized": "1793-07-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "post-Grodno Second Partition Russian legal-border state",
+        "normalized": "1793-07-22",
+        "precision": "day"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "The archive feature itself is not trusted at its nominal 1792 start because it already contains Minsk and therefore backdates the Second Partition. History Core uses the same pinned geometry only from the independently source-verified Grodno settlement of 22 July 1793, after which its west/south controls are period-correct."
+    },
+    {
+      "id": "doc-cliopatria-russian-empire-post-third-partition-1795",
+      "sourceCollectionId": "cliopatria-seshat-historical-boundaries",
+      "title": "Russian Empire boundary capture labelled 1794–1795, retained as post-Third-Partition spatial cross-check",
+      "institution": "Cliopatria / Seshat Global History Databank; vendored project archive",
+      "url": "https://github.com/Seshat-Global-History-Databank",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "source capture label 1794–1795; spatially plausible only after the October 1795 partition convention",
+        "normalized": "1795-10-24",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Cliopatria / Seshat Global History Databank, Russian Empire historical polity capture; vendored as public/data/territory/archive/russian-empire.geojson.",
+      "representedDate": {
+        "original": "post-Third-Partition spatial state",
+        "normalized": "1795-10-24",
+        "precision": "day"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/archive/russian-empire.geojson",
+        "gitBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2"
+      },
+      "notes": "The archive feature is explicitly not used for russian-legal-border replay before an independently justified legal transition. It is retained as a controlled spatial cross-check for the 1795 possession/control settlement and future geometry work."
+    }
+  ]
+}

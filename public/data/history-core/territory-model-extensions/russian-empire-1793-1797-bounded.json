@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "fragments": [
+    {
+      "id": "frag-russian-empire-post-grodno-1793",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "role": "territory-area",
+      "territorialModel": "mixed",
+      "geometryFile": "geometry/russian-empire-post-grodno-1793.geojson",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-post-grodno-1793",
+        "doc-grodno-partition-treaty-1793-prlib",
+        "doc-second-partition-russia-prussia-1793-martens"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "uncertaintyMeters": 50000,
+      "derivationNote": "Pinned archive full-state geometry promoted only after the independently dated Grodno legal settlement. Distributed controls require Minsk inside and Vilnius outside, preventing use before the Second Partition or after the Third Partition."
+    }
+  ],
+  "baseStates": [
+    {
+      "id": "base-russian-empire-post-grodno-1793",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1793-07",
+      "historicalDate": {
+        "original": "11/22 июля 1793 г. — Гродненский договор",
+        "normalized": "1793-07-22",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-post-grodno-1793"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-post-grodno-1793",
+        "doc-grodno-partition-treaty-1793-prlib",
+        "doc-second-partition-russia-prussia-1793-martens"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1795-09",
+      "derivedFromChangeIds": [
+        "territory-1793-grodno-russian-legal-border"
+      ],
+      "notes": "Begins only in the exact Grodno legal-settlement month and ends before the October 1795 Third Partition. The archive feature's nominal 1792 label is explicitly not used as a legal start date."
+    },
+    {
+      "id": "base-russian-empire-final-partition-1797-01",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1797-01",
+      "historicalDate": {
+        "original": "15/26 января 1797 г. — финальная конвенция о разделе",
+        "normalized": "1797-01-26",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-1797-1798-corroborated-cliopatria"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1797-1798",
+        "doc-final-partition-convention-1797-prlib"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1797-11",
+      "derivedFromChangeIds": [
+        "territory-1797-final-partition-legal-settlement"
+      ],
+      "notes": "Uses the already verified 1797–1798 post-partition full state from the exact January 1797 final settlement month through November, immediately before the existing conservative December 1797 archive anchor. No earlier 1795 control milestone is reclassified as legal-border acquisition."
+    }
+  ]
+}

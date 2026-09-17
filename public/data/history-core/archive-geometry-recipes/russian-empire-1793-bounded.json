@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "recipe-russian-empire-post-grodno-1793",
+      "fragmentId": "frag-russian-empire-post-grodno-1793",
+      "archivePath": "public/data/territory/archive/russian-empire.geojson",
+      "archiveBlobSha1": "b05fc0f9fa340897c84eff6f416fe7c01777b0d2",
+      "selector": {
+        "start_date": 1792,
+        "end_date": 1793
+      },
+      "output": "geometry/russian-empire-post-grodno-1793.geojson",
+      "track": "russian-legal-border",
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-post-grodno-1793",
+        "doc-grodno-partition-treaty-1793-prlib",
+        "doc-second-partition-russia-prussia-1793-martens"
+      ],
+      "controls": [
+        {"id":"moscow","lonLat":[37.6173,55.7558],"expected":"inside"},
+        {"id":"riga","lonLat":[24.1052,56.9496],"expected":"inside"},
+        {"id":"kyiv","lonLat":[30.5234,50.4501],"expected":"inside"},
+        {"id":"minsk","lonLat":[27.5615,53.9045],"expected":"inside"},
+        {"id":"bakhchysarai","lonLat":[33.857,44.75],"expected":"inside"},
+        {"id":"odesa","lonLat":[30.7233,46.4825],"expected":"inside"},
+        {"id":"vilnius","lonLat":[25.2797,54.6872],"expected":"outside"},
+        {"id":"warsaw","lonLat":[21.0122,52.2297],"expected":"outside"},
+        {"id":"helsinki","lonLat":[24.9384,60.1699],"expected":"outside"},
+        {"id":"chisinau","lonLat":[28.8353,47.0105],"expected":"outside"},
+        {"id":"tbilisi","lonLat":[44.793,41.7151],"expected":"outside"},
+        {"id":"baku","lonLat":[49.8671,40.4093],"expected":"outside"}
+      ],
+      "note": "The source feature's nominal 1792 start is rejected because it already includes Minsk. It is promoted only from the independently dated 22 July 1793 Grodno legal settlement, when the feature's Second-Partition west/south spatial controls become period-correct. It is bounded before the October 1795 Third Partition and is never back-projected into 1792 or early 1793."
+    }
+  ]
+}
