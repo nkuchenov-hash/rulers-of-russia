@@ -1,0 +1,25 @@
+name: Empire 1727-1737 current candidate analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/analyze-empire-1727-1737-current.mjs
+      - .github/workflows/empire-1727-1737-current.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze 1727-1737 archive candidates
+        run: node scripts/analyze-empire-1727-1737-current.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1727-1737-current
+          path: empire-1727-1737-current.json
+          if-no-files-found: error
