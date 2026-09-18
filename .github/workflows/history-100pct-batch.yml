@@ -11,5 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: node scripts/sync-historical-world.mjs
+      - run: npm run materialize:history-geometry
+      - run: npm run validate:history-geometry
+      - run: npm run validate:history
+      - run: npm run materialize:history
       - name: Report exact remaining ranges and blockers
         run: node scripts/report-history-remaining.mjs
