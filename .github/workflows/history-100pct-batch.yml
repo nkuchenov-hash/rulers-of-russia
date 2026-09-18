@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/report-history-remaining.mjs'
+      - 'scripts/report-history-archive-features.mjs'
       - '.github/workflows/history-100pct-batch.yml'
   workflow_dispatch:
 jobs:
@@ -16,6 +17,8 @@ jobs:
           node-version: 22
       - run: npm install
       - run: node scripts/sync-historical-world.mjs
+      - name: Report archive feature intervals
+        run: node scripts/report-history-archive-features.mjs
       - run: npm run materialize:history-geometry
       - run: npm run validate:history-geometry
       - run: npm run validate:history
