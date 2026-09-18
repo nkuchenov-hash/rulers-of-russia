@@ -26,11 +26,6 @@ const unresolvedDates = changes.filter(item => !['day', 'month'].includes(item.e
 const notYetGeoreferenced = changes.filter(item => item.geometry?.method === 'not-yet-georeferenced' && !certifiedSpatialChangeIds.has(item.id));
 const geometryVerifiedChanges = changes.filter(item => item.reviewStatus === 'geometry-verified');
 const sourceVerifiedChanges = changes.filter(item => item.reviewStatus === 'source-verified');
-
-// A documentary-only change is unresolved only when it has neither an exact geometry mutation,
-// metadata-only semantics, nor an explicit document-corroborated reconstruction certification.
-// Certified reconstruction envelopes carry finite uncertainty and remain distinguishable from
-// surveyed/exact boundary geometry in completion-certifications.json and the month index.
 const unclassifiedSourceVerifiedChanges = sourceVerifiedChanges.filter(item =>
   item.geometryAction !== 'metadata-only' && !certifiedSpatialChangeIds.has(item.id)
 );
@@ -50,7 +45,7 @@ const certifiedMonths = months.filter(item => item.verificationClass === 'docume
 const countBy = (items, getter) => Object.fromEntries(
   [...items.reduce((map, item) => {
     const key = getter(item) ?? 'unspecified';
-    map.set(key, (map.get(key) ?? 0) + 1;
+    map.set(key, (map.get(key) ?? 0) + 1);
     return map;
   }, new Map()).entries()].sort(([a], [b]) => String(a).localeCompare(String(b))),
 );
