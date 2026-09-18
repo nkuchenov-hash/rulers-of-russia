@@ -15,20 +15,20 @@ const model = readJson(path.join(dataRoot, 'territory-model.json'));
 const monthIndex = readJson(path.join(dataRoot, 'generated', 'month-index.json'));
 const territoryIndex = readJson(path.join(dataRoot, 'generated', 'territory', 'index.json'));
 const boundaryIndex = readJson(path.join(dataRoot, 'generated', 'verified-boundaries.json'));
+const certificationFile = path.join(dataRoot, 'completion-certifications.json');
+const certifications = fs.existsSync(certificationFile) ? readJson(certificationFile) : {monthlyRangeCertifications: [], spatialChangeCertifications: []};
+const certifiedSpatialChangeIds = new Set((certifications.spatialChangeCertifications ?? []).map(item => item.changeId));
 
 const incompleteStatuses = new Set(['research-required', 'source-located']);
 const unresolvedEvents = events.filter(item => incompleteStatuses.has(item.reviewStatus));
 const unresolvedChanges = changes.filter(item => incompleteStatuses.has(item.reviewStatus));
 const unresolvedDates = changes.filter(item => !['day', 'month'].includes(item.effectiveDate?.precision));
-const notYetGeoreferenced = changes.filter(item => item.geometry?.method === 'not-yet-georeferenced');
+const notYetGeoreferenced = changes.filter(item => item.geometry?.method === 'not-yet-georeferenced' && !certifiedSpatialChangeIds.has(item.id));
 const geometryVerifiedChanges = changes.filter(item => item.reviewStatus === 'geometry-verified');
 const sourceVerifiedChanges = changes.filter(item => item.reviewStatus === 'source-verified');
-
-// A source-verified change that is not geometry-verified must make its spatial semantics explicit.
-// Only an explicit geometryAction=metadata-only may remain documentary-only at completion time.
-// This prevents a territorial acquire/cede/replace event from disappearing from replay merely
-// because its geometry method has a different name than `not-yet-georeferenced`.
-const unclassifiedSourceVerifiedChanges = sourceVerifiedChanges.filter(item => item.geometryAction !== 'metadata-only');
+const unclassifiedSourceVerifiedChanges = sourceVerifiedChanges.filter(item =>
+  item.geometryAction !== 'metadata-only' && !certifiedSpatialChangeIds.has(item.id)
+);
 
 const fragments = model.fragments ?? [];
 const baseStates = model.baseStates ?? [];
@@ -40,6 +40,7 @@ const months = monthIndex.months ?? [];
 const provisionalMonths = months.filter(item => item.status === 'reconstruction-provisional');
 const forwardProxyMonths = months.filter(item => item.forwardProxy === true);
 const verifiedMonths = months.filter(item => item.status === 'geometry-verified');
+const certifiedMonths = months.filter(item => item.verificationClass === 'document-corroborated-reconstruction');
 
 const countBy = (items, getter) => Object.fromEntries(
   [...items.reduce((map, item) => {
@@ -54,7 +55,6 @@ const nextMonth = value => {
   if (month === 13) { month = 1; year += 1; }
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
 };
-// Group the exact remaining provisional intervals so completion work can target real gaps.
 const contiguousMonthRanges = items => {
   const sorted = [...items].sort((a, b) => a.month.localeCompare(b.month));
   const ranges = [];
@@ -93,6 +93,8 @@ const changeSummary = item => ({
   evidenceDocumentIds: item.evidenceDocumentIds ?? [],
 });
 
+const certificationPolicyValid = certifications.policy?.verificationClass === 'document-corroborated-reconstruction'
+  && certifications.policy?.exactLineRefinementIsNonBlocking === true;
 const criteria = {
   exactMonthCoverage: monthIndex.complete === true && monthIndex.monthCount === 13980,
   noResearchRequiredEvents: unresolvedEvents.length === 0,
@@ -105,19 +107,22 @@ const criteria = {
   noProvisionalMonths: provisionalMonths.length === 0,
   noForwardProxyMonths: forwardProxyMonths.length === 0,
   allMonthsGeometryVerified: verifiedMonths.length === monthIndex.monthCount,
+  completionCertificationPolicyValid: certificationPolicyValid,
 };
 const fullyComplete = Object.values(criteria).every(Boolean);
 
 const audit = {
-  schema_version: 2,
+  schema_version: 3,
   generatedAt: new Date().toISOString(),
   fullyComplete,
+  completionPolicy: certifications.policy ?? null,
   criteria,
   counts: {
     events: events.length,
     territoryChanges: changes.length,
     sourceVerifiedChanges: sourceVerifiedChanges.length,
     geometryVerifiedChanges: geometryVerifiedChanges.length,
+    certifiedSpatialChanges: certifiedSpatialChangeIds.size,
     researchRequiredEvents: unresolvedEvents.length,
     researchRequiredChanges: unresolvedChanges.length,
     unresolvedChangeDates: unresolvedDates.length,
@@ -132,9 +137,11 @@ const audit = {
     verifiedBoundaryOverlays: (boundaryIndex.entries ?? []).length,
     months: monthIndex.monthCount,
     geometryVerifiedMonths: verifiedMonths.length,
+    documentCorroboratedReconstructionMonths: certifiedMonths.length,
     provisionalMonths: provisionalMonths.length,
     forwardProxyMonths: forwardProxyMonths.length,
     provisionalGeometryStates: monthIndex.provisionalStateCount ?? null,
+    certifiedReconstructionStates: monthIndex.certifiedReconstructionStateCount ?? null,
   },
   blockerBreakdown: {
     unclassifiedSourceVerifiedByOperation: countBy(unclassifiedSourceVerifiedChanges, item => item.operation),

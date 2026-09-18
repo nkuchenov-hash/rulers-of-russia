@@ -44,7 +44,7 @@ jobs:
         run: npm run materialize:history
 
       - name: Audit History Core completion state
-        run: node scripts/audit-history-completion.mjs
+        run: node scripts/audit-history-completion.mjs --require-complete
 
       - name: Upload strict completion audit
         uses: actions/upload-artifact@v4
