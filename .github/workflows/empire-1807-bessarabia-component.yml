@@ -1,0 +1,19 @@
+name: Empire 1807 Bessarabia component analysis
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/analyze-empire-1807-bessarabia-component.mjs'
+      - '.github/workflows/empire-1807-bessarabia-component.yml'
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze 1807 Bessarabia component
+        run: node scripts/analyze-empire-1807-bessarabia-component.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1807-bessarabia-component
+          path: empire-1807-bessarabia-component.json
