@@ -3,6 +3,8 @@
 import './histographyOrbitPatch.js';
 import './globeWeightAndCityTuning.js';
 import './countryLabelGrounding.js';
+import './cartographicBoundarySanitizer.js';
+import './territoryTimelineAtomicPatch.js';
 import dynamic from 'next/dynamic';
 
 const HistoricalTerritoryMap = dynamic(

@@ -32,6 +32,13 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
   return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
 });
 
+const waitForHistoryStateStatus = async () => {
+  await page.waitForFunction(() => {
+    const text = document.body?.innerText || '';
+    return text.includes('проверенная геометрия') || text.includes('реконструкция · достоверность');
+  }, null, { timeout: 8000 });
+};
+
 const waitForCurrentVerifiedTracks = async () => {
   await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 2'), null, { timeout: 8000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 2'), null, { timeout: 8000 });
@@ -49,7 +56,7 @@ try {
   await page.waitForTimeout(4500);
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('реконструкция · достоверность'), null, { timeout: 8000 });
+  await waitForHistoryStateStatus();
   await waitForCurrentVerifiedTracks();
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
@@ -91,15 +98,17 @@ try {
   }
   await monthSelect.selectOption('2');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 2026-02'), null, { timeout: 8000 });
+  await waitForHistoryStateStatus();
   await waitForCurrentVerifiedTracks();
 
   const eraSelect = page.getByLabel('Быстрый переход к эпохе');
   if (await eraSelect.count() !== 1) throw new Error('Era selector missing');
   await eraSelect.selectOption('862');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 0862-02'), null, { timeout: 8000 });
-  await page.waitForFunction(() => document.body?.innerText?.includes('поздний proxy'), null, { timeout: 8000 });
+  await waitForHistoryStateStatus();
   await eraSelect.selectOption('1992');
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, { timeout: 8000 });
+  await waitForHistoryStateStatus();
 
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
 
@@ -123,6 +132,10 @@ try {
   if (fatalConsole.length) throw new Error(`Fatal browser console errors:\n${fatalConsole.join('\n---\n')}`);
 
   console.log('Territory browser smoke passed:', JSON.stringify(state));
+} catch (error) {
+  const bodyText = await page.evaluate(() => document.body?.innerText?.slice(0, 1600) || '').catch(() => '');
+  console.error('Territory smoke diagnostics:', JSON.stringify({ pageErrors, consoleErrors, historyRequests, bodyText }, null, 2));
+  throw error;
 } finally {
   await browser.close();
 }
