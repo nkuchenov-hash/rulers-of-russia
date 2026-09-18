@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/report-history-remaining.mjs'
       - 'scripts/report-history-archive-features.mjs'
+      - 'scripts/report-world-history-russia.mjs'
       - '.github/workflows/history-100pct-batch.yml'
   workflow_dispatch:
 jobs:
@@ -17,6 +18,8 @@ jobs:
           node-version: 22
       - run: npm install
       - run: node scripts/sync-historical-world.mjs
+      - name: Report pinned world-history Russia candidates
+        run: node scripts/report-world-history-russia.mjs
       - name: Report archive feature intervals
         run: node scripts/report-history-archive-features.mjs
       - run: npm run materialize:history-geometry
