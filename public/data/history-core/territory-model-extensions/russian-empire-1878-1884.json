@@ -28,6 +28,44 @@
   ],
   "baseStates": [
     {
+      "id": "base-russian-empire-post-berlin-1878-bounded",
+      "polityId": "russian-empire",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "coverageAnchorMonth": "1878-08",
+      "historicalDate": {
+        "original": "3 августа 1878 г. — обмен ратификациями Берлинского трактата",
+        "normalized": "1878-08-03",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "geometryFragmentIds": [
+        "frag-russian-empire-main-1880-1884",
+        "frag-russian-empire-finland-component-1887-1917"
+      ],
+      "evidenceDocumentIds": [
+        "doc-cliopatria-russian-empire-1880-1884",
+        "doc-berlin-1878-ebid",
+        "doc-berlin-ratifications-1878-frus",
+        "doc-petersburg-japan-1875-ebid",
+        "doc-petersburg-japan-1875-ratifications-mofa",
+        "doc-kokand-annexation-decree-1876-rgvia",
+        "doc-bukhara-peace-conditions-1868-imperial-publication",
+        "doc-khiva-gandymyan-1873-imperial-mfa",
+        "doc-peking-1860-mfa",
+        "doc-fredrikshamn-treaty-1809-prlib",
+        "doc-historical-basemaps-finland-1914",
+        "doc-finland-historical-boundary-maps-1909-rgia"
+      ],
+      "reviewStatus": "geometry-verified",
+      "confidence": "medium",
+      "validThroughMonth": "1879-12",
+      "derivedFromChangeIds": [
+        "territory-1878-berlin-caucasus"
+      ],
+      "notes": "The independently controlled 1880–1884 full-state geometry is used backward only to the exact 3 August 1878 Berlin ratification transition that establishes its verified Caucasus state. The same fragment already passes post-1875 Sakhalin/Kuril, post-1876 Fergana, Central Asian, Far Eastern, Alaska and neighboring-state controls. Strict History Core records no later russian-legal-border territorial mutation before the source interval begins in 1880, so this bounded state closes only 1878-08 through 1879-12 and does not cross San Stefano or any earlier transition."
+    },
+    {
       "id": "base-russian-empire-composite-1880-1884",
       "polityId": "russian-empire",
       "track": "russian-legal-border",
