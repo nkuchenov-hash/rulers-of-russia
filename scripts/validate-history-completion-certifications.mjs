@@ -4,20 +4,32 @@ import path from 'node:path';
 const root=process.cwd();
 const dataRoot=path.join(root,'public','data','history-core');
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const listJson=dir=>fs.existsSync(dir)?fs.readdirSync(dir).filter(x=>x.endsWith('.json')).sort().map(x=>path.join(dir,x)):[];
 const certFile=path.join(dataRoot,'completion-certifications.json');
 if(!fs.existsSync(certFile)) throw new Error('Missing History Core completion certifications');
 const cert=read(certFile);
 if(cert.schema_version!==1) throw new Error(`Unsupported completion certification schema ${cert.schema_version}`);
 if(cert.policy?.verificationClass!=='document-corroborated-reconstruction') throw new Error('Completion certification policy must declare document-corroborated-reconstruction');
 
-const documents=read(path.join(dataRoot,'documents.json')).documents??[];
-const documentIds=new Set(documents.map(x=>x.id));
+const documents=[...(read(path.join(dataRoot,'documents.json')).documents??[])];
+for(const file of listJson(path.join(dataRoot,'documents'))) documents.push(...(read(file).documents??[]));
+const documentById=new Map(documents.map(x=>[x.id,x]));
+const documentIds=new Set(documentById.keys());
+const allowedEvidenceTiers=new Set(['A1-archival-original','A2-official-document-publication','A3-contemporary-official-map','B1-russian-academic-interpretation']);
 const coverage=read(path.join(dataRoot,'coverage-periods.json')).periods??[];
 const changes=[];
 const changeDir=path.join(dataRoot,'territory-changes');
 for(const name of fs.readdirSync(changeDir).filter(x=>x.endsWith('.json')).sort()) changes.push(...(read(path.join(changeDir,name)).territoryChanges??[]));
 const changeById=new Map(changes.map(x=>[x.id,x]));
 const assertMonth=(v,label)=>{if(!/^\d{4}-\d{2}$/.test(v??'')) throw new Error(`${label} must be YYYY-MM`);const m=Number(v.slice(5));if(m<1||m>12)throw new Error(`${label} has invalid month ${v}`)};
+const validateEvidence=(owner,ids)=>{
+ if(!Array.isArray(ids)||!ids.length) throw new Error(`${owner} has no evidence documents`);
+ for(const id of ids){
+   const doc=documentById.get(id);
+   if(!doc) throw new Error(`${owner} references unknown document ${id}`);
+   if(!allowedEvidenceTiers.has(doc.tier)) throw new Error(`${owner} uses non-canonical evidence tier ${doc.tier} for ${id}`);
+ }
+};
 const seenIds=new Set();
 const ranges=cert.monthlyRangeCertifications??[];
 for(const row of ranges){
@@ -27,8 +39,7 @@ for(const row of ranges){
  if(!row.polityId) throw new Error(`${row.id} has no polityId`);
  if(!['low','medium','high'].includes(row.confidence)) throw new Error(`${row.id} has invalid confidence`);
  if(!Number.isFinite(row.uncertaintyMeters)||row.uncertaintyMeters<=0) throw new Error(`${row.id} must have positive uncertaintyMeters`);
- if(!Array.isArray(row.evidenceDocumentIds)||!row.evidenceDocumentIds.length) throw new Error(`${row.id} has no evidence documents`);
- for(const id of row.evidenceDocumentIds) if(!documentIds.has(id)) throw new Error(`${row.id} references unknown document ${id}`);
+ validateEvidence(row.id,row.evidenceDocumentIds);
  const period=coverage.find(p=>p.polityId===row.polityId&&row.startMonth>=p.startMonth&&row.endMonth<=p.endMonth);
  if(!period) throw new Error(`${row.id} is not contained by a matching coverage period`);
  if(row.allowBoundedContinuity===true&&!row.notes) throw new Error(`${row.id} bounded continuity requires an explanatory note`);
@@ -46,10 +57,9 @@ for(const row of changeCerts){
  const change=changeById.get(row.changeId); if(!change) throw new Error(`Unknown certified spatial change ${row.changeId}`);
  if(row.representation!=='document-corroborated-reconstruction-envelope') throw new Error(`${row.changeId} has unsupported representation ${row.representation}`);
  if(!Number.isFinite(row.uncertaintyMeters)||row.uncertaintyMeters<=0) throw new Error(`${row.changeId} must have positive uncertaintyMeters`);
- if(!Array.isArray(row.evidenceDocumentIds)||!row.evidenceDocumentIds.length) throw new Error(`${row.changeId} has no evidence documents`);
- for(const id of row.evidenceDocumentIds) if(!documentIds.has(id)) throw new Error(`${row.changeId} references unknown document ${id}`);
+ validateEvidence(row.changeId,row.evidenceDocumentIds);
  const changeEvidence=new Set(change.evidenceDocumentIds??[]);
  if(!row.evidenceDocumentIds.some(id=>changeEvidence.has(id))) throw new Error(`${row.changeId} certification does not cite the change's own evidence lineage`);
 }
 
-console.log(`History completion certifications valid: ${ranges.length} monthly ranges, ${changeCerts.length} spatial changes.`);
+console.log(`History completion certifications valid: ${ranges.length} monthly ranges, ${changeCerts.length} spatial changes, ${documentIds.size} registered documents.`);
