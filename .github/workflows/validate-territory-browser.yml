@@ -56,6 +56,22 @@ jobs:
         if: github.event_name != 'workflow_run'
         run: node scripts/sync-historical-world.mjs
 
+      - name: Materialize History Core geometry
+        if: github.event_name != 'workflow_run'
+        run: npm run materialize:history-geometry
+
+      - name: Validate History Core geometry recipes
+        if: github.event_name != 'workflow_run'
+        run: npm run validate:history-geometry
+
+      - name: Validate History Core provenance
+        if: github.event_name != 'workflow_run'
+        run: npm run validate:history
+
+      - name: Materialize monthly History Core
+        if: github.event_name != 'workflow_run'
+        run: npm run materialize:history
+
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
