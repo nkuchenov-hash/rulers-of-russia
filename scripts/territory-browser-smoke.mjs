@@ -123,6 +123,9 @@ try {
   if (fatalConsole.length) throw new Error(`Fatal browser console errors:\n${fatalConsole.join('\n---\n')}`);
 
   console.log('Territory browser smoke passed:', JSON.stringify(state));
+} catch (error) {
+  console.error('Territory smoke diagnostics:', JSON.stringify({ pageErrors, consoleErrors, historyRequests }, null, 2));
+  throw error;
 } finally {
   await browser.close();
 }
