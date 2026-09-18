@@ -1,0 +1,32 @@
+name: Audit shared border topology
+
+on:
+  push:
+    branches:
+      - fix/shared-border-topology
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Prepare historical world snapshots
+        run: node scripts/sync-historical-world.mjs
+
+      - name: Measure shared-border topology
+        run: node scripts/audit-world-boundary-topology.mjs
