@@ -39,24 +39,26 @@ async function selectHistoricalDate(year, month) {
   const monthSelect = page.getByLabel('Месяц');
   await monthSelect.selectOption(String(month), { timeout: 12000 });
 
-  // Use the same scrollable timeline viewport that the production UI uses. Do
-  // not scope this search through the select element: the timeline and controls
-  // are siblings in the rendered layout, and the old scoped search could pick a
-  // different long scroller without actually changing the selected year.
+  // Move the exact ruler viewport used by the production timeline. CSS modules
+  // preserve the semantic "rulerViewport" part of this class name, which is
+  // also what the production atomic-scroll patch uses to identify the ruler.
   const changed = await page.evaluate(({year, minYear, yearPx}) => {
-    const candidates = [...document.querySelectorAll('div')]
-      .filter(el => el.scrollWidth - el.clientWidth > 5000 && el.clientWidth > 500);
-    const timeline = candidates.sort((a,b) => (b.scrollWidth-b.clientWidth) - (a.scrollWidth-a.clientWidth))[0];
+    const timeline = [...document.querySelectorAll('div')].find(el =>
+      [...el.classList].some(name => String(name).includes('rulerViewport'))
+    );
     if (!timeline) return null;
     const left = (year - minYear) * yearPx;
-    timeline.scrollLeft = left;
-    timeline.dispatchEvent(new Event('scroll', {bubbles: true}));
-    return {scrollLeft: timeline.scrollLeft, max: timeline.scrollWidth - timeline.clientWidth, left};
+    timeline.scrollTo({ left, behavior: 'auto' });
+    return {
+      className: timeline.className,
+      scrollLeft: timeline.scrollLeft,
+      max: timeline.scrollWidth - timeline.clientWidth,
+      left
+    };
   }, {year, minYear: 862, yearPx: 6});
-  if (!changed) throw new Error(`Historical timeline scroll viewport not found for ${year}-${month}`);
+  if (!changed) throw new Error(`Historical timeline ruler not found for ${year}-${month}`);
 
-  // The rendered History Core key is the authoritative selected date. Avoid
-  // coupling the test to an incidental <b> element in the aside.
+  // The rendered History Core key is the authoritative selected date.
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
   await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, { timeout: 12000 });
   if (pageCrashes.length) throw new Error(`${expectedKey}: ${pageCrashes.join('; ')}`);
