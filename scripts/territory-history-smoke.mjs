@@ -34,31 +34,29 @@ const required1988Geometry = [
 async function selectHistoricalDate(year, month) {
   if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
 
-  // Change the month while the current timeline DOM is still stable. Moving the
-  // year can trigger a large WebGL/texture refresh; selecting the month after that
-  // made the acceptance test wait on a transiently replaced control.
+  // Select the month before moving the year. A year move triggers a heavy map
+  // refresh and can temporarily replace the control tree.
   const monthSelect = page.getByLabel('Месяц');
   await monthSelect.selectOption(String(month), { timeout: 12000 });
 
+  // Use the same scrollable timeline viewport that the production UI uses. Do
+  // not scope this search through the select element: the timeline and controls
+  // are siblings in the rendered layout, and the old scoped search could pick a
+  // different long scroller without actually changing the selected year.
   const changed = await page.evaluate(({year, minYear, yearPx}) => {
-    const monthSelect = document.querySelector('select[aria-label="Месяц"]');
-    const timelineSection = monthSelect?.closest('section');
-    const candidates = [...(timelineSection?.querySelectorAll('div') ?? [])]
+    const candidates = [...document.querySelectorAll('div')]
       .filter(el => el.scrollWidth - el.clientWidth > 5000 && el.clientWidth > 500);
     const timeline = candidates.sort((a,b) => (b.scrollWidth-b.clientWidth) - (a.scrollWidth-a.clientWidth))[0];
     if (!timeline) return null;
     const left = (year - minYear) * yearPx;
-    timeline.scrollTo({left, behavior: 'auto'});
+    timeline.scrollLeft = left;
     timeline.dispatchEvent(new Event('scroll', {bubbles: true}));
     return {scrollLeft: timeline.scrollLeft, max: timeline.scrollWidth - timeline.clientWidth, left};
   }, {year, minYear: 862, yearPx: 6});
   if (!changed) throw new Error(`Historical timeline scroll viewport not found for ${year}-${month}`);
 
-  await page.waitForFunction((expectedYear) => {
-    const text = document.querySelector('main aside b')?.textContent ?? '';
-    return new RegExp(`\\b${expectedYear}$`).test(text.trim());
-  }, year, {timeout: 12000});
-
+  // The rendered History Core key is the authoritative selected date. Avoid
+  // coupling the test to an incidental <b> element in the aside.
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
   await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, { timeout: 12000 });
   if (pageCrashes.length) throw new Error(`${expectedKey}: ${pageCrashes.join('; ')}`);
