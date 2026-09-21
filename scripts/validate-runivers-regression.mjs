@@ -15,10 +15,11 @@ const EARTH_RADIUS_M = 6371008.8;
 const SAMPLE_STEP_M = 25000;
 const MAX_SAMPLES = 7000;
 const FETCH_TIMEOUT_MS = 30000;
-const FETCH_CONCURRENCY = 6;
+const FETCH_RETRIES = 3;
 
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 const monthToYear = (month) => Number(String(month).slice(0, 4));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const percentile = (values, p) => {
   if (!values.length) return Infinity;
   const sorted = [...values].sort((a, b) => a - b);
@@ -67,15 +68,22 @@ function overrideFor(registry, state, resourceId) {
 }
 
 async function getJson(url) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    const response = await fetch(url, {signal: controller.signal, headers: {accept: 'application/json,*/*'}, redirect: 'follow'});
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.json();
-  } finally {
-    clearTimeout(timer);
+  let lastError = null;
+  for (let attempt = 1; attempt <= FETCH_RETRIES; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(url, {signal: controller.signal, headers: {accept: 'application/json,*/*'}, redirect: 'follow'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < FETCH_RETRIES) await delay(500 * attempt);
+    } finally {
+      clearTimeout(timer);
+    }
   }
+  throw lastError ?? new Error(`Unable to fetch ${url}`);
 }
 
 async function fetchRuniversGeoJson(host, id) {
@@ -225,11 +233,8 @@ function directedDistances(sourcePoints, targetPoints) {
   return sourcePoints.map((point) => chordSquaredToMeters(nearestChordSquared(tree, unitVector(point))));
 }
 
-function compareGeometry(reference, current) {
-  const referencePoints = samplePayload(reference);
-  const currentPoints = samplePayload(current);
+function compareSampledGeometry(referencePoints, referenceClass, currentPoints) {
   if (!referencePoints.length || !currentPoints.length) return {usable: false, referenceSamples: referencePoints.length, currentSamples: currentPoints.length};
-  const referenceClass = classifyGeometry(reference);
   const refToCurrent = directedDistances(referencePoints, currentPoints);
   const currentToRef = referenceClass.hasPolygon ? directedDistances(currentPoints, referencePoints) : [];
   const refP95 = percentile(refToCurrent, .95);
@@ -298,20 +303,6 @@ function referenceOverlapsState(layer, state) {
   return layer.fromYear <= lastYear && layer.toYear >= firstYear;
 }
 
-async function mapConcurrent(items, limit, fn) {
-  const results = new Array(items.length);
-  let cursor = 0;
-  async function worker() {
-    while (true) {
-      const index = cursor++;
-      if (index >= items.length) return;
-      results[index] = await fn(items[index], index);
-    }
-  }
-  await Promise.all(Array.from({length: Math.min(limit, items.length)}, () => worker()));
-  return results;
-}
-
 async function main() {
   if (!fs.existsSync(discoveryFile)) throw new Error(`Runivers discovery report missing: ${discoveryFile}`);
   if (!fs.existsSync(monthIndexFile)) throw new Error('History Core month index missing; run npm run materialize:history first');
@@ -332,44 +323,56 @@ async function main() {
   if (!layers.length) throw new Error('Runivers discovery found no dated vector layers overlapping 1462-2020');
 
   const relevantLayers = layers.filter((layer) => states.some((state) => referenceOverlapsState(layer, state)));
-  const referenceRecords = await mapConcurrent(relevantLayers, FETCH_CONCURRENCY, async (layer) => {
-    try {
-      const geojson = await fetchRuniversGeoJson(discovery.host, layer.id);
-      const classification = classifyGeometry(geojson);
-      return {layer, geojson, classification, approximate: isReferenceApproximate(geojson), error: null};
-    } catch (error) {
-      return {layer, geojson: null, classification: {usable: false, types: []}, approximate: false, error: error?.message ?? String(error)};
-    }
-  });
-
-  const usableReferences = referenceRecords.filter((record) => record.geojson && record.classification.usable);
-  const referenceFailures = referenceRecords.filter((record) => record.error);
   const coverage = new Map(states.map((state) => [state.key, []]));
-  const historyGeometryCache = new Map();
+  const historySamplesCache = new Map();
   const comparisons = [];
+  const referenceFailures = [];
+  let usableReferenceCount = 0;
 
-  for (const record of usableReferences) {
-    for (const state of states.filter((item) => referenceOverlapsState(record.layer, item))) {
-      let current = historyGeometryCache.get(state.key);
-      if (!current) {
-        current = loadHistoryGeometry(state);
-        historyGeometryCache.set(state.key, current);
+  // Runivers contains hundreds of large polygon resources. Process one dated
+  // resource at a time and immediately discard its raw GeoJSON after sampling.
+  // The previous all-at-once fetch retained every payload and exceeded the
+  // GitHub runner's ~4 GB Node heap before any report could be produced.
+  for (let index = 0; index < relevantLayers.length; index += 1) {
+    const layer = relevantLayers[index];
+    let geojson;
+    try {
+      geojson = await fetchRuniversGeoJson(discovery.host, layer.id);
+    } catch (error) {
+      referenceFailures.push({layer, error: error?.message ?? String(error)});
+      continue;
+    }
+
+    const classification = classifyGeometry(geojson);
+    if (!classification.usable) continue;
+    usableReferenceCount += 1;
+    const approximate = isReferenceApproximate(geojson);
+    const referencePoints = samplePayload(geojson);
+    geojson = null;
+    if (!referencePoints.length) continue;
+
+    const overlappingStates = states.filter((state) => referenceOverlapsState(layer, state));
+    for (const state of overlappingStates) {
+      let currentPoints = historySamplesCache.get(state.key);
+      if (!currentPoints) {
+        currentPoints = samplePayload(loadHistoryGeometry(state));
+        historySamplesCache.set(state.key, currentPoints);
       }
-      const metric = compareGeometry(record.geojson, current);
+      const metric = compareSampledGeometry(referencePoints, classification, currentPoints);
       if (!metric.usable) continue;
-      const comparisonYear = Math.max(record.layer.fromYear, monthToYear(state.firstMonth));
-      const tolerance = toleranceMeters(comparisonYear, record.approximate);
+      const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
+      const tolerance = toleranceMeters(comparisonYear, approximate);
       const maxTolerance = tolerance * 4;
-      const override = overrideFor(overrides, state, record.layer.id);
+      const override = overrideFor(overrides, state, layer.id);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
       const row = {
         status,
-        runiversResourceId: record.layer.id,
-        runiversName: record.layer.displayName,
-        runiversFromYear: record.layer.fromYear,
-        runiversToYear: record.layer.toYear,
-        runiversApproximate: record.approximate,
+        runiversResourceId: layer.id,
+        runiversName: layer.displayName,
+        runiversFromYear: layer.fromYear,
+        runiversToYear: layer.toYear,
+        runiversApproximate: approximate,
         historyGeometryFile: state.geometryFile,
         polityId: state.polityId,
         snapshotId: state.snapshotId,
@@ -386,6 +389,10 @@ async function main() {
       comparisons.push(row);
       coverage.get(state.key).push(row);
     }
+
+    if ((index + 1) % 20 === 0 || index + 1 === relevantLayers.length) {
+      console.log(`Runivers regression progress: ${index + 1}/${relevantLayers.length} dated layers; ${comparisons.length} comparisons.`);
+    }
   }
 
   const stateCoverage = states.map((state) => {
@@ -400,10 +407,11 @@ async function main() {
   });
   const missingStates = stateCoverage.filter((state) => state.referenceComparisons === 0);
   const failedComparisons = comparisons.filter((row) => row.status === 'fail');
+  const stateCoverageByGeometry = new Map(stateCoverage.map((state) => [state.geometryFile, state]));
   const uncoveredMonths = [];
   for (const month of monthIndex.months ?? []) {
     if (month.month < START_MONTH || month.month > END_MONTH || month.status !== 'geometry-verified') continue;
-    const state = stateCoverage.find((item) => item.geometryFile === month.geometryFile);
+    const state = stateCoverageByGeometry.get(month.geometryFile);
     if (!state || state.referenceComparisons === 0) uncoveredMonths.push(month.month);
   }
 
@@ -421,7 +429,7 @@ async function main() {
       schemaVersion: discovery.schemaVersion,
       vectorLayerCount: discovery.vectorLayerCount,
       datedLayerCount: layers.length,
-      usableReferenceCount: usableReferences.length,
+      usableReferenceCount,
       referenceExportFailures: referenceFailures,
     },
     historyStateCount: states.length,
@@ -440,7 +448,7 @@ async function main() {
 
   fs.mkdirSync(reportDir, {recursive: true});
   fs.writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n');
-  console.log(`Runivers regression: ${states.length} History Core states, ${usableReferences.length} usable dated reference layers, ${comparisons.length} comparisons.`);
+  console.log(`Runivers regression: ${states.length} History Core states, ${usableReferenceCount} usable dated reference layers, ${comparisons.length} comparisons.`);
   console.log(`Pass=${report.passCount}; override=${report.overrideCount}; fail=${report.failureCount}; missing states=${report.missingStateCount}; uncovered months=${report.uncoveredMonthCount}.`);
   if (referenceFailures.length) console.log(`Reference export failures: ${referenceFailures.length}`);
   for (const row of failedComparisons.slice(0, 30)) {
