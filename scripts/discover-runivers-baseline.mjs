@@ -188,6 +188,14 @@ function summarizeVectors(items) {
   });
 }
 
+function baselineRange(layers) {
+  if (!layers.length) return {minYear: null, maxYear: null};
+  return {
+    minYear: Math.min(...layers.map((item) => item.fromYear)),
+    maxYear: Math.max(...layers.map((item) => item.toYear)),
+  };
+}
+
 async function main() {
   const {host, resource} = await findHost();
   const parents = await walkParents(host, resource);
@@ -196,18 +204,10 @@ async function main() {
   if (!Number.isInteger(root?.id)) throw new Error('Could not locate Runivers boundary root resource');
   if (!Number.isInteger(preferredParent?.id)) throw new Error('Could not locate current Runivers dated-layer parent from the known live seed resource');
 
-  const searched = await searchVectorLayers(host);
-  let vectors = [];
-  let resources = [];
-  let crawlErrors = [];
-  let discoveryMode = 'resource-search';
-  if (searched.ok) {
-    vectors = summarizeVectors(searched.vectors).filter((item) => item.ancestorIds.includes(root.id) || item.parentId === root.id || item.parentId === preferredParent.id);
-  }
-
-  // Search results on older NGW builds may omit nested ancestry or be disabled.
-  // Always query the live seed's direct parent separately; this is the current
-  // dated reconstruction set and must not be lost behind a timeout in a full tree crawl.
+  // The accepted baseline is defined by the direct parent of a known live
+  // current Runivers boundary layer. Query that exact collection first. The
+  // former implementation performed an expensive global resource search before
+  // reaching the same parent, making CI depend on unrelated GIS catalogue size.
   let preferredChildren = [];
   let preferredParentError = null;
   try {
@@ -215,32 +215,66 @@ async function main() {
   } catch (error) {
     preferredParentError = error?.message ?? String(error);
   }
-  const preferredVectors = summarizeVectors(preferredChildren.filter((item) => rawResource(item).cls === 'vector_layer'));
-
-  if (!vectors.length) {
-    discoveryMode = 'tree-crawl';
-    const crawled = await crawlTree(host, root.id);
-    resources = crawled.resources;
-    crawlErrors = crawled.errors;
-    vectors = resources.filter((item) => item.cls === 'vector_layer');
-  }
-
-  // Prefer the direct parent of a known current live Runivers boundary layer.
-  // This prevents regression CI from mixing obsolete copies of the same interval
-  // from Нарезка / Нарезка_новая / сентябрь / октябрь with the current set.
-  const preferredPolygonLayers = preferredVectors
+  let preferredVectors = summarizeVectors(preferredChildren.filter((item) => rawResource(item).cls === 'vector_layer'));
+  let preferredPolygonLayers = preferredVectors
     .filter((item) => item.historicalPolygon)
     .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
+  let {minYear: preferredMinYear, maxYear: preferredMaxYear} = baselineRange(preferredPolygonLayers);
+
+  let vectors = preferredVectors;
+  let resources = [];
+  let crawlErrors = [];
+  let searchAttempts = [];
+  let discoveryMode = 'preferred-parent';
+
+  // Only fall back to the global catalogue/tree when the canonical direct
+  // parent cannot be enumerated or no longer exposes the expected date range.
+  // This is diagnostic recovery, not a way to silently select another baseline.
+  const needsFallbackDiscovery = Boolean(preferredParentError)
+    || !preferredPolygonLayers.length
+    || preferredMinYear > 1462
+    || preferredMaxYear < 2018;
+
+  if (needsFallbackDiscovery) {
+    discoveryMode = 'preferred-parent-with-global-diagnostic';
+    const searched = await searchVectorLayers(host);
+    searchAttempts = searched.attempts;
+    if (searched.ok) {
+      vectors = summarizeVectors(searched.vectors).filter((item) =>
+        item.ancestorIds.includes(root.id) || item.parentId === root.id || item.parentId === preferredParent.id);
+    }
+    if (!vectors.length || vectors === preferredVectors) {
+      const crawled = await crawlTree(host, root.id);
+      resources = crawled.resources;
+      crawlErrors = crawled.errors;
+      vectors = resources.filter((item) => item.cls === 'vector_layer');
+    }
+  }
+
+  // Re-read the direct parent after diagnostic discovery if the first request
+  // failed transiently. The baseline itself is never substituted from global
+  // search results.
+  if (preferredParentError) {
+    try {
+      preferredChildren = await listChildren(host, preferredParent.id);
+      preferredParentError = null;
+      preferredVectors = summarizeVectors(preferredChildren.filter((item) => rawResource(item).cls === 'vector_layer'));
+      preferredPolygonLayers = preferredVectors
+        .filter((item) => item.historicalPolygon)
+        .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
+      ({minYear: preferredMinYear, maxYear: preferredMaxYear} = baselineRange(preferredPolygonLayers));
+    } catch (error) {
+      preferredParentError = error?.message ?? String(error);
+    }
+  }
+
   const allHistoricalPolygons = vectors
     .filter((item) => item.historicalPolygon)
     .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
-
   const seedGeoJson = await probeGeoJson(host, seedResourceId);
-  const preferredMinYear = preferredPolygonLayers.length ? Math.min(...preferredPolygonLayers.map((item) => item.fromYear)) : null;
-  const preferredMaxYear = preferredPolygonLayers.length ? Math.max(...preferredPolygonLayers.map((item) => item.toYear)) : null;
 
   const output = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     discoveredAt: new Date().toISOString(),
     host,
     root,
@@ -248,7 +282,7 @@ async function main() {
     parentChain: parents,
     preferredParent,
     discoveryMode,
-    searchAttempts: searched.attempts,
+    searchAttempts,
     preferredParentError,
     resourceCount: resources.length || null,
     vectorLayerCount: vectors.length,
@@ -270,7 +304,7 @@ async function main() {
   console.log(`Runivers host: ${host}`);
   console.log(`Boundary root: ${root.id}:${root.displayName}`);
   console.log(`Current baseline parent: ${preferredParent.id}:${preferredParent.displayName}`);
-  console.log(`Discovery mode: ${discoveryMode}; search attempts: ${JSON.stringify(searched.attempts)}`);
+  console.log(`Discovery mode: ${discoveryMode}; search attempts: ${JSON.stringify(searchAttempts)}`);
   console.log(`All historical polygon layers discovered: ${allHistoricalPolygons.length}`);
   console.log(`Current baseline polygon layers: ${preferredPolygonLayers.length}; range: ${preferredMinYear}..${preferredMaxYear}`);
   console.log(`Seed GeoJSON probe: ${JSON.stringify(seedGeoJson.ok ? {ok: true, endpoint: seedGeoJson.endpoint, featureCount: seedGeoJson.featureCount} : seedGeoJson)}`);
