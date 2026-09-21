@@ -4,14 +4,11 @@ import {LineSegments2} from 'three/examples/jsm/lines/LineSegments2.js';
 // Accuracy guard for the production /territory globe.
 //
 // 1. Never fall back from History Core to the legacy bootstrap archive.
-//    Missing/corrupt canonical geometry must be visible as missing, not replaced
-//    by an older OHM/Cliopatria-derived contour.
 // 2. Historical Basemaps world snapshots are contextual. When the snapshot year
 //    differs from the selected year, visually soften the border and label the
-//    temporal offset in the UI instead of presenting it as an exact-year border.
+//    temporal offset instead of presenting it as an exact-year border.
 // 3. A document-corroborated reconstruction with a material uncertainty envelope
-//    must remain visibly approximate even after it has passed History Core's
-//    evidence/completion validation.
+//    stays visibly approximate after History Core completion certification.
 
 const PATCH_KEY = Symbol.for('rulers-of-russia.map-historical-accuracy.v1');
 const STATE_KEY = Symbol.for('rulers-of-russia.map-historical-accuracy.state.v1');
@@ -19,6 +16,8 @@ const LEGACY_MANIFEST_RE = /\/data\/territory\/archive\/manifest\.json(?:\?|$)/;
 const MONTH_INDEX_RE = /\/data\/history-core\/generated\/month-index\.json(?:\?|$)/;
 const WORLD_SNAPSHOT_RE = /\/data\/territory\/world-history\/snapshots\/(\d+)\.geojson(?:\?|$)/;
 const MATERIAL_UNCERTAINTY_METERS = 25000;
+const CAPTION_ATTR = 'data-history-accuracy-caption';
+const CAPTION_STYLE_ID = 'history-accuracy-caption-style';
 
 function jsonResponse(payload) {
   return new Response(JSON.stringify(payload), {
@@ -49,13 +48,13 @@ function monthKey(date) {
 }
 
 function activeMonthState(state) {
-  const key = monthKey(selectedDate());
-  if (!key || !state.monthIndex?.months?.length) return null;
+  const selected = selectedDate();
+  const key = monthKey(selected);
+  if (!selected || !key || !state.monthIndex?.months?.length) return null;
   const min = state.monthIndex.minMonth;
   if (/^\d{4}-\d{2}$/.test(min ?? '')) {
     const minYear = Number(min.slice(0, 4));
     const minMonth = Number(min.slice(5, 7));
-    const selected = selectedDate();
     const offset = (selected.year - minYear) * 12 + (selected.month - minMonth);
     const item = state.monthIndex.months[offset];
     if (item?.month === key) return item;
@@ -119,6 +118,22 @@ function certifiedUncertaintyHalo(object, state) {
   return halo;
 }
 
+function ensureCaptionStyle() {
+  if (typeof document === 'undefined' || document.getElementById(CAPTION_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = CAPTION_STYLE_ID;
+  style.textContent = `
+    main aside p[${CAPTION_ATTR}] { font-size: 0 !important; }
+    main aside p[${CAPTION_ATTR}]::after {
+      content: attr(${CAPTION_ATTR});
+      font-size: 12px;
+      line-height: 1.45;
+      letter-spacing: normal;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function updateAccuracyCaption(state) {
   if (typeof document === 'undefined') return;
   const paragraph = document.querySelector('main aside p');
@@ -142,7 +157,8 @@ function updateAccuracyCaption(state) {
     text += ` · неопределённость реконструкции ≈${rounded} км`;
   }
 
-  if (paragraph.textContent !== text) paragraph.textContent = text;
+  ensureCaptionStyle();
+  if (paragraph.getAttribute(CAPTION_ATTR) !== text) paragraph.setAttribute(CAPTION_ATTR, text);
 }
 
 if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
@@ -155,8 +171,6 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
     const url = requestUrl(input);
 
     if (LEGACY_MANIFEST_RE.test(url)) {
-      // V21's legacy loader sees an empty archive and therefore clears Russia
-      // instead of silently substituting bootstrap geometry.
       return jsonResponse({schema_version: 1, polities: [], disabledBy: 'mapHistoricalAccuracyPatch'});
     }
 
