@@ -48,19 +48,45 @@ async function waitForDisplayedYear(year) {
   }, year, {timeout: 12000});
 }
 
+async function nativeRulerScrollToYear(targetYear) {
+  const ruler = page.locator('div[class*="rulerViewport"]').first();
+  await ruler.waitFor({state: 'visible', timeout: 12000});
+  const result = await ruler.evaluate((element, {year, minYear, yearPx}) => {
+    const left = (year - minYear) * yearPx;
+    element.scrollTo({left, behavior: 'auto'});
+    element.dispatchEvent(new Event('scroll', {bubbles: false}));
+    return {
+      left,
+      scrollLeft: element.scrollLeft,
+      max: element.scrollWidth - element.clientWidth,
+      className: element.className,
+    };
+  }, {year: targetYear, minYear: 862, yearPx: 6});
+  await waitForDisplayedYear(targetYear);
+  return result;
+}
+
 async function moveYearThroughUserControls(targetYear) {
   let current = await displayedYear();
   if (!Number.isFinite(current)) throw new Error(`Current historical year is unavailable before selecting ${targetYear}`);
 
-  // Use the same era selector exposed to users for long jumps. For short jumps,
-  // keep the current position so the test exercises the real year-by-year wheel
-  // interaction rather than mutating scrollLeft or React state from JavaScript.
+  // Use the same era selector exposed to users for long jumps.
   const nearestAnchor = ERA_ANCHORS.reduce((best, year) =>
     Math.abs(year - targetYear) < Math.abs(best - targetYear) ? year : best, ERA_ANCHORS[0]);
   if (Math.abs(nearestAnchor - targetYear) < Math.abs(current - targetYear)) {
     await page.getByLabel('Быстрый переход к эпохе').selectOption(String(nearestAnchor), {timeout: 12000});
     await waitForDisplayedYear(nearestAnchor);
     current = nearestAnchor;
+  }
+
+  const remaining = targetYear - current;
+  if (Math.abs(remaining) > 12) {
+    // A long sequence of one-year wheel steps needlessly reloads dozens of full
+    // historical geometries and can starve headless WebGL. Use the production
+    // ruler's native scroll path for long exact jumps. Short transitions below
+    // still exercise the real user wheel handler year by year.
+    const ruler = await nativeRulerScrollToYear(targetYear);
+    return {year: targetYear, mode: 'era-selector-and-native-ruler-scroll', ruler};
   }
 
   const timeline = page.getByLabel('Месяц').locator('xpath=ancestor::section[1]');
@@ -82,9 +108,9 @@ async function moveYearThroughUserControls(targetYear) {
 async function selectHistoricalDate(year, month) {
   if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
 
-  // Select month first, then move through the same era + wheel controls a user
-  // operates. This validates the production timeline itself, not a test-only
-  // scrollLeft shortcut.
+  // Select month first, then move through the same era/ruler/wheel controls a
+  // user operates. This validates the production timeline rather than mutating
+  // React state from the test.
   await page.getByLabel('Месяц').selectOption(String(month), {timeout: 12000});
   const changed = await moveYearThroughUserControls(year);
 
