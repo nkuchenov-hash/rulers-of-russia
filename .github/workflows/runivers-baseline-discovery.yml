@@ -1,34 +1,65 @@
-name: Runivers baseline discovery
+name: Runivers geometric regression
 
 on:
   pull_request:
     branches: [main]
     paths:
+      - 'public/data/history-core/**'
       - 'scripts/discover-runivers-baseline.mjs'
+      - 'scripts/validate-runivers-regression.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  discover:
+  regression:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Discover Runivers NextGIS resources
+
+      - name: Discover Runivers NextGIS reference layers
         id: discover
         continue-on-error: true
         run: node scripts/discover-runivers-baseline.mjs
-      - name: Upload discovery report
+
+      - name: Install project dependencies
+        if: steps.discover.outcome == 'success'
+        run: npm install
+
+      - name: Materialize canonical History Core
+        if: steps.discover.outcome == 'success'
+        run: npm run materialize:history
+
+      - name: Validate Runivers geometric regression
+        if: steps.discover.outcome == 'success'
+        id: regression
+        continue-on-error: true
+        run: node scripts/validate-runivers-regression.mjs
+
+      - name: Upload Runivers audit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: runivers-baseline-discovery
-          path: tmp/runivers-discovery
+          name: runivers-geometric-regression
+          path: |
+            tmp/runivers-discovery
+            tmp/runivers-regression
           if-no-files-found: warn
-      - name: Require successful discovery
+
+      - name: Require Runivers discovery
         if: steps.discover.outcome != 'success'
         run: |
-          echo 'Runivers baseline discovery failed; geometric regression certification cannot be completed.' >&2
+          echo 'Runivers baseline discovery failed; historical map completion cannot be certified.' >&2
+          exit 1
+
+      - name: Require geometric regression acceptance
+        if: steps.discover.outcome == 'success' && steps.regression.outcome != 'success'
+        run: |
+          echo 'Runivers geometric regression failed. Resolve the contour regression or add an A1/A2/A3 evidence-backed override.' >&2
           exit 1
