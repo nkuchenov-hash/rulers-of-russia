@@ -30,18 +30,27 @@ const required1988Geometry = [
 ];
 
 async function selectHistoricalDate(year, month) {
-  const monthSelect = page.getByLabel('Месяц');
-  await monthSelect.selectOption(String(month));
   const changed = await page.evaluate(({year, minYear, yearPx}) => {
-    const candidates = [...document.querySelectorAll('div')]
+    const monthSelect = document.querySelector('select[aria-label="Месяц"]');
+    const timelineSection = monthSelect?.closest('section');
+    const candidates = [...(timelineSection?.querySelectorAll('div') ?? [])]
       .filter(el => el.scrollWidth - el.clientWidth > 5000 && el.clientWidth > 500);
     const timeline = candidates.sort((a,b) => (b.scrollWidth-b.clientWidth) - (a.scrollWidth-a.clientWidth))[0];
     if (!timeline) return null;
-    timeline.scrollLeft = (year - minYear) * yearPx;
+    const left = (year - minYear) * yearPx;
+    timeline.scrollTo({left, behavior: 'auto'});
     timeline.dispatchEvent(new Event('scroll', {bubbles: true}));
-    return {scrollLeft: timeline.scrollLeft, max: timeline.scrollWidth - timeline.clientWidth};
+    return {scrollLeft: timeline.scrollLeft, max: timeline.scrollWidth - timeline.clientWidth, left};
   }, {year, minYear: 862, yearPx: 6});
   if (!changed) throw new Error('Historical timeline scroll viewport not found');
+
+  await page.waitForFunction((expectedYear) => {
+    const text = document.querySelector('main aside b')?.textContent ?? '';
+    return new RegExp(`\\b${expectedYear}$`).test(text.trim());
+  }, year, {timeout: 12000});
+
+  const monthSelect = page.getByLabel('Месяц');
+  await monthSelect.selectOption(String(month));
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
   await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, { timeout: 12000 });
   return changed;
