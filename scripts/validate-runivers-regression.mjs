@@ -167,6 +167,24 @@ function interpolateLonLat(a, b, t) {
 
 function samplePayload(payload) {
   const points = [];
+  let seen = 0;
+  let randomState = 0x9e3779b9;
+  const random = () => {
+    randomState ^= randomState << 13;
+    randomState ^= randomState >>> 17;
+    randomState ^= randomState << 5;
+    return (randomState >>> 0) / 0x100000000;
+  };
+  const offer = (point) => {
+    seen += 1;
+    if (points.length < MAX_SAMPLES) {
+      points.push(point);
+      return;
+    }
+    const slot = Math.floor(random() * seen);
+    if (slot < MAX_SAMPLES) points[slot] = point;
+  };
+
   for (const feature of featureCollectionsFeatures(payload)) {
     for (const line of geometryLines(feature?.geometry, true)) {
       for (let i = 0; i + 1 < line.length; i += 1) {
@@ -176,15 +194,13 @@ function samplePayload(payload) {
         if (!Number.isFinite(a[0]) || !Number.isFinite(a[1]) || !Number.isFinite(b[0]) || !Number.isFinite(b[1])) continue;
         const distance = haversineMeters(a, b);
         const steps = Math.max(1, Math.ceil(distance / SAMPLE_STEP_M));
-        for (let step = 0; step < steps; step += 1) points.push(interpolateLonLat(a, b, step / steps));
+        for (let step = 0; step < steps; step += 1) offer(interpolateLonLat(a, b, step / steps));
       }
       const last = line[line.length - 1];
-      if (Array.isArray(last) && last.length >= 2) points.push([last[0], last[1]]);
+      if (Array.isArray(last) && last.length >= 2 && Number.isFinite(last[0]) && Number.isFinite(last[1])) offer([last[0], last[1]]);
     }
   }
-  if (points.length <= MAX_SAMPLES) return points;
-  const stride = points.length / MAX_SAMPLES;
-  return Array.from({length: MAX_SAMPLES}, (_, i) => points[Math.floor(i * stride)]);
+  return points;
 }
 
 function unitVector(point) {
@@ -331,8 +347,8 @@ async function main() {
 
   // Runivers contains hundreds of large polygon resources. Process one dated
   // resource at a time and immediately discard its raw GeoJSON after sampling.
-  // The previous all-at-once fetch retained every payload and exceeded the
-  // GitHub runner's ~4 GB Node heap before any report could be produced.
+  // Sampling itself is a bounded deterministic reservoir, so even a very dense
+  // single resource never allocates millions of intermediate sample points.
   for (let index = 0; index < relevantLayers.length; index += 1) {
     const layer = relevantLayers[index];
     let geojson;
