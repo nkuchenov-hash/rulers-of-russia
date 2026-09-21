@@ -6,6 +6,7 @@ on:
     paths:
       - 'public/data/history-core/**'
       - 'scripts/discover-runivers-baseline.mjs'
+      - 'scripts/select-runivers-current-baseline.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   workflow_dispatch:
@@ -28,18 +29,26 @@ jobs:
         continue-on-error: true
         run: node scripts/discover-runivers-baseline.mjs
 
-      - name: Install project dependencies
+      - name: Pin current Runivers polygon baseline
         if: steps.discover.outcome == 'success'
+        id: baseline
+        continue-on-error: true
+        run: node scripts/select-runivers-current-baseline.mjs
+
+      - name: Install project dependencies
+        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
         run: npm install
 
       - name: Materialize canonical History Core
-        if: steps.discover.outcome == 'success'
+        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
         run: npm run materialize:history
 
       - name: Validate Runivers geometric regression
-        if: steps.discover.outcome == 'success'
+        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
         id: regression
         continue-on-error: true
+        env:
+          RUNIVERS_DISCOVERY_FILE: tmp/runivers-discovery/runivers-current-baseline.json
         run: node scripts/validate-runivers-regression.mjs
 
       - name: Upload Runivers audit reports
@@ -58,8 +67,14 @@ jobs:
           echo 'Runivers baseline discovery failed; historical map completion cannot be certified.' >&2
           exit 1
 
+      - name: Require current baseline selection
+        if: steps.discover.outcome == 'success' && steps.baseline.outcome != 'success'
+        run: |
+          echo 'Current Runivers polygon baseline could not be pinned unambiguously.' >&2
+          exit 1
+
       - name: Require geometric regression acceptance
-        if: steps.discover.outcome == 'success' && steps.regression.outcome != 'success'
+        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success' && steps.regression.outcome != 'success'
         run: |
           echo 'Runivers geometric regression failed. Resolve the contour regression or add an A1/A2/A3 evidence-backed override.' >&2
           exit 1
