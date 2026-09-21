@@ -39,16 +39,17 @@ async function selectHistoricalDate(year, month) {
   const monthSelect = page.getByLabel('Месяц');
   await monthSelect.selectOption(String(month), { timeout: 12000 });
 
-  // Move the exact ruler viewport used by the production timeline. CSS modules
-  // preserve the semantic "rulerViewport" part of this class name, which is
-  // also what the production atomic-scroll patch uses to identify the ruler.
+  // Drive the exact production ruler and explicitly emit its native scroll
+  // event. Setting scrollLeft alone is not guaranteed to notify React in
+  // headless Chromium, while a user drag/wheel always produces this event.
   const changed = await page.evaluate(({year, minYear, yearPx}) => {
     const timeline = [...document.querySelectorAll('div')].find(el =>
       [...el.classList].some(name => String(name).includes('rulerViewport'))
     );
     if (!timeline) return null;
     const left = (year - minYear) * yearPx;
-    timeline.scrollTo({ left, behavior: 'auto' });
+    timeline.scrollLeft = left;
+    timeline.dispatchEvent(new Event('scroll', { bubbles: false }));
     return {
       className: timeline.className,
       scrollLeft: timeline.scrollLeft,
