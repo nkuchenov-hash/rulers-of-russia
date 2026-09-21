@@ -9,12 +9,14 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, dev
 const historyRequests = [];
 const legacyArchiveRequests = [];
 const pageErrors = [];
+const pageCrashes = [];
 page.on('request', request => {
   const requestUrl = request.url();
   if (requestUrl.includes('/data/history-core/')) historyRequests.push(requestUrl);
   if (requestUrl.includes('/data/territory/archive/manifest.json')) legacyArchiveRequests.push(requestUrl);
 });
 page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
+page.on('crash', () => pageCrashes.push('Chromium page crashed'));
 
 const required1988Geometry = [
   'ussr-norway-varanger-1958-p1-p4.geojson',
@@ -30,6 +32,14 @@ const required1988Geometry = [
 ];
 
 async function selectHistoricalDate(year, month) {
+  if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
+
+  // Change the month while the current timeline DOM is still stable. Moving the
+  // year can trigger a large WebGL/texture refresh; selecting the month after that
+  // made the acceptance test wait on a transiently replaced control.
+  const monthSelect = page.getByLabel('Месяц');
+  await monthSelect.selectOption(String(month), { timeout: 12000 });
+
   const changed = await page.evaluate(({year, minYear, yearPx}) => {
     const monthSelect = document.querySelector('select[aria-label="Месяц"]');
     const timelineSection = monthSelect?.closest('section');
@@ -42,17 +52,16 @@ async function selectHistoricalDate(year, month) {
     timeline.dispatchEvent(new Event('scroll', {bubbles: true}));
     return {scrollLeft: timeline.scrollLeft, max: timeline.scrollWidth - timeline.clientWidth, left};
   }, {year, minYear: 862, yearPx: 6});
-  if (!changed) throw new Error('Historical timeline scroll viewport not found');
+  if (!changed) throw new Error(`Historical timeline scroll viewport not found for ${year}-${month}`);
 
   await page.waitForFunction((expectedYear) => {
     const text = document.querySelector('main aside b')?.textContent ?? '';
     return new RegExp(`\\b${expectedYear}$`).test(text.trim());
   }, year, {timeout: 12000});
 
-  const monthSelect = page.getByLabel('Месяц');
-  await monthSelect.selectOption(String(month));
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
   await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, { timeout: 12000 });
+  if (pageCrashes.length) throw new Error(`${expectedKey}: ${pageCrashes.join('; ')}`);
   return changed;
 }
 
@@ -103,7 +112,9 @@ try {
     throw new Error(`Historical globe attempted legacy archive fallback: ${JSON.stringify(legacyArchiveRequests)}`);
   }
 
-  if (pageErrors.length) throw new Error(`Historical browser page errors:\n${pageErrors.join('\n---\n')}`);
+  if (pageErrors.length || pageCrashes.length) {
+    throw new Error(`Historical browser errors:\n${[...pageErrors, ...pageCrashes].join('\n---\n')}`);
+  }
 
   const summary = await page.evaluate(() => ({
     text: document.body?.innerText?.slice(0, 1600) || '',
