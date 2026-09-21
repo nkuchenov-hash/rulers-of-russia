@@ -18,6 +18,7 @@ page.on('request', request => {
 page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
 page.on('crash', () => pageCrashes.push('Chromium page crashed'));
 
+const ERA_ANCHORS = [862, 882, 1125, 1263, 1547, 1721, 1917, 1918, 1922, 1992];
 const required1988Geometry = [
   'ussr-norway-varanger-1958-p1-p4.geojson',
   'ussr-finland-sea-frontier-1966.geojson',
@@ -31,37 +32,64 @@ const required1988Geometry = [
   'ussr-sweden-maritime-1988-a1-a17.geojson'
 ];
 
+async function displayedYear() {
+  return page.evaluate(() => {
+    const month = document.querySelector('select[aria-label="Месяц"]');
+    const value = month?.parentElement?.querySelector('b')?.textContent?.trim();
+    const year = Number(value);
+    return Number.isFinite(year) ? year : null;
+  });
+}
+
+async function waitForDisplayedYear(year) {
+  await page.waitForFunction((expected) => {
+    const month = document.querySelector('select[aria-label="Месяц"]');
+    return month?.parentElement?.querySelector('b')?.textContent?.trim() === String(expected);
+  }, year, {timeout: 12000});
+}
+
+async function moveYearThroughUserControls(targetYear) {
+  let current = await displayedYear();
+  if (!Number.isFinite(current)) throw new Error(`Current historical year is unavailable before selecting ${targetYear}`);
+
+  // Use the same era selector exposed to users for long jumps. For short jumps,
+  // keep the current position so the test exercises the real year-by-year wheel
+  // interaction rather than mutating scrollLeft or React state from JavaScript.
+  const nearestAnchor = ERA_ANCHORS.reduce((best, year) =>
+    Math.abs(year - targetYear) < Math.abs(best - targetYear) ? year : best, ERA_ANCHORS[0]);
+  if (Math.abs(nearestAnchor - targetYear) < Math.abs(current - targetYear)) {
+    await page.getByLabel('Быстрый переход к эпохе').selectOption(String(nearestAnchor), {timeout: 12000});
+    await waitForDisplayedYear(nearestAnchor);
+    current = nearestAnchor;
+  }
+
+  const timeline = page.getByLabel('Месяц').locator('xpath=ancestor::section[1]');
+  await timeline.hover({timeout: 12000});
+  const direction = targetYear > current ? 1 : -1;
+  while (current !== targetYear) {
+    const expected = current + direction;
+    await page.mouse.wheel(0, direction * 120);
+    await waitForDisplayedYear(expected);
+    // Production throttles wheel navigation at 62 ms; stay above it so every
+    // event represents one deliberate user year step.
+    await page.waitForTimeout(75);
+    current = expected;
+  }
+
+  return {year: current, mode: 'era-selector-and-wheel'};
+}
+
 async function selectHistoricalDate(year, month) {
   if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
 
-  // Select the month before moving the year. A year move triggers a heavy map
-  // refresh and can temporarily replace the control tree.
-  const monthSelect = page.getByLabel('Месяц');
-  await monthSelect.selectOption(String(month), { timeout: 12000 });
+  // Select month first, then move through the same era + wheel controls a user
+  // operates. This validates the production timeline itself, not a test-only
+  // scrollLeft shortcut.
+  await page.getByLabel('Месяц').selectOption(String(month), {timeout: 12000});
+  const changed = await moveYearThroughUserControls(year);
 
-  // Drive the exact production ruler and explicitly emit its native scroll
-  // event. Setting scrollLeft alone is not guaranteed to notify React in
-  // headless Chromium, while a user drag/wheel always produces this event.
-  const changed = await page.evaluate(({year, minYear, yearPx}) => {
-    const timeline = [...document.querySelectorAll('div')].find(el =>
-      [...el.classList].some(name => String(name).includes('rulerViewport'))
-    );
-    if (!timeline) return null;
-    const left = (year - minYear) * yearPx;
-    timeline.scrollLeft = left;
-    timeline.dispatchEvent(new Event('scroll', { bubbles: false }));
-    return {
-      className: timeline.className,
-      scrollLeft: timeline.scrollLeft,
-      max: timeline.scrollWidth - timeline.clientWidth,
-      left
-    };
-  }, {year, minYear: 862, yearPx: 6});
-  if (!changed) throw new Error(`Historical timeline ruler not found for ${year}-${month}`);
-
-  // The rendered History Core key is the authoritative selected date.
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
-  await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, { timeout: 12000 });
+  await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, {timeout: 18000});
   if (pageCrashes.length) throw new Error(`${expectedKey}: ${pageCrashes.join('; ')}`);
   return changed;
 }
