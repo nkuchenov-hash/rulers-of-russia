@@ -47,6 +47,10 @@ async function selectHistoricalDate(year, month) {
   return changed;
 }
 
+async function accuracyCaption() {
+  return page.evaluate(() => document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '');
+}
+
 try {
   const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   if (!response?.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
@@ -63,27 +67,29 @@ try {
     }
   }
 
-  // Historical Basemaps has 1530 then 1600; 1573 must not visually claim that
-  // the 1530 context is an exact 1573 world border.
+  // Historical Basemaps has 1530 then 1600; 1573 must visibly identify 1530
+  // as approximate temporal context rather than an exact 1573 world border.
   const changed1573 = await selectHistoricalDate(1573, 7);
   await page.waitForFunction(() => {
-    const text = document.body?.innerText ?? '';
+    const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
     return text.includes('Мировой контекст: приблизительный срез 1530 года') && text.includes('43 лет до выбранной даты');
   }, null, {timeout: 12000});
-  const text1573 = await page.locator('body').innerText();
-  if (text1573.includes('Исторический мировой срез 1530 года')) {
-    throw new Error('1573 still presents the 1530 Historical Basemaps snapshot as an exact historical world slice');
+  const caption1573 = await accuracyCaption();
+  if (caption1573.includes('Исторический мировой срез 1530 года')) {
+    throw new Error(`1573 accuracy caption still claims exact 1530 slice: ${caption1573}`);
   }
 
   // The 1581-1689 Tsardom certification has a 220 km uncertainty envelope. It
   // must stay explicit in the production UI even though completion certification
   // promotes the month into the geometry-verified History Core path.
   const changed1581 = await selectHistoricalDate(1581, 7);
-  await page.waitForFunction(() => (document.body?.innerText ?? '').includes('неопределённость реконструкции ≈220 км'), null, {timeout: 12000});
+  await page.waitForFunction(() => {
+    const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
+    return text.includes('неопределённость реконструкции ≈220 км');
+  }, null, {timeout: 12000});
 
   // A successful canonical historical path must not touch the legacy bootstrap
-  // archive at all. The accuracy guard also intercepts any attempted fallback,
-  // so a network request here is a regression in fail-closed behavior.
+  // archive. The accuracy guard intercepts any attempted fallback before network.
   if (legacyArchiveRequests.length) {
     throw new Error(`Historical globe attempted legacy archive fallback: ${JSON.stringify(legacyArchiveRequests)}`);
   }
@@ -92,6 +98,7 @@ try {
 
   const summary = await page.evaluate(() => ({
     text: document.body?.innerText?.slice(0, 1600) || '',
+    accuracyCaption: document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '',
     canvas: (() => { const c = document.querySelector('canvas'); return c ? [c.width,c.height] : null; })()
   }));
   if (!summary.canvas) throw new Error('Historical WebGL canvas missing');
