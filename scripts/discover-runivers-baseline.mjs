@@ -42,6 +42,17 @@ function rawResource(item) {
 function parentId(resource) {
   return rawResource(resource)?.parent?.id ?? null;
 }
+function ancestorIds(resource) {
+  const ids = [];
+  let cursor = rawResource(resource)?.parent ?? null;
+  const seen = new Set();
+  while (cursor && Number.isInteger(cursor.id) && !seen.has(cursor.id)) {
+    ids.push(cursor.id);
+    seen.add(cursor.id);
+    cursor = cursor.parent ?? null;
+  }
+  return ids;
+}
 function resourceSummary(item) {
   const resource = rawResource(item);
   return {
@@ -50,6 +61,7 @@ function resourceSummary(item) {
     displayName: resource.display_name ?? null,
     keyname: resource.keyname ?? null,
     parentId: resource.parent?.id ?? null,
+    ancestorIds: ancestorIds(resource),
     children: resource.children ?? null,
   };
 }
@@ -85,6 +97,30 @@ function intervalFromName(value) {
   return {fromYear: null, toYear: null};
 }
 
+async function bulkVectorLayers(host, rootId) {
+  const urls = [
+    `${host}/api/resource/?cls=vector_layer`,
+    `${host}/api/resource/?resource_cls=vector_layer`,
+  ];
+  const attempts = [];
+  for (const url of urls) {
+    try {
+      const data = await getJson(url);
+      if (!Array.isArray(data)) throw new Error('response is not an array');
+      const allVectors = data.filter((item) => rawResource(item).cls === 'vector_layer');
+      const underRoot = allVectors.filter((item) => {
+        const summary = resourceSummary(item);
+        return summary.id === rootId || summary.parentId === rootId || summary.ancestorIds.includes(rootId);
+      });
+      attempts.push({url, ok: true, total: data.length, vectors: allVectors.length, underRoot: underRoot.length});
+      if (underRoot.length) return {ok: true, url, vectors: underRoot, attempts};
+    } catch (error) {
+      attempts.push({url, ok: false, error: error?.message ?? String(error)});
+    }
+  }
+  return {ok: false, attempts};
+}
+
 async function crawlTree(host, rootId) {
   const resources = [];
   const errors = [];
@@ -92,7 +128,7 @@ async function crawlTree(host, rootId) {
   const visitedParents = new Set();
 
   while (queue.length) {
-    const batch = queue.splice(0, 8);
+    const batch = queue.splice(0, 24);
     const results = await Promise.all(batch.map(async (node) => {
       if (visitedParents.has(node.id)) return {node, children: []};
       visitedParents.add(node.id);
@@ -122,18 +158,18 @@ async function crawlTree(host, rootId) {
 async function probeGeoJson(host, resourceId) {
   const candidates = [
     `${host}/api/resource/${resourceId}/geojson`,
-    `${host}/api/resource/${resourceId}/feature/?limit=2`,
+    `${host}/api/resource/${resourceId}/feature/?srs=4326&limit=2`,
+    `${host}/api/resource/${resourceId}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
   ];
   const attempts = [];
   for (const url of candidates) {
     try {
       const payload = await getJson(url);
-      const featureCount = Array.isArray(payload?.features) ? payload.features.length
-        : Array.isArray(payload) ? payload.length
-          : null;
+      const features = Array.isArray(payload?.features) ? payload.features : Array.isArray(payload) ? payload : null;
+      const featureCount = features?.length ?? null;
       attempts.push({url, ok: true, type: payload?.type ?? null, featureCount});
-      if (payload?.type === 'FeatureCollection' || Array.isArray(payload?.features)) {
-        return {ok: true, endpoint: url, featureCount, sample: payload.features?.slice?.(0, 1) ?? []};
+      if (payload?.type === 'FeatureCollection' || Array.isArray(features)) {
+        return {ok: true, endpoint: url, featureCount, sample: features?.slice?.(0, 1) ?? []};
       }
     } catch (error) {
       attempts.push({url, ok: false, error: error?.message ?? String(error)});
@@ -148,19 +184,37 @@ async function main() {
   const root = parents.find((item) => item.displayName === expectedRootName) ?? parents[parents.length - 1];
   if (!Number.isInteger(root?.id)) throw new Error('Could not locate Runivers boundary root resource');
 
-  const {resources, errors} = await crawlTree(host, root.id);
-  const vectors = resources.filter((item) => item.cls === 'vector_layer');
+  const bulk = await bulkVectorLayers(host, root.id);
+  let vectors;
+  let resources = [];
+  let errors = [];
+  let discoveryMode = 'bulk';
+  if (bulk.ok) {
+    vectors = bulk.vectors.map((item) => {
+      const summary = resourceSummary(item);
+      return {...summary, ...intervalFromName(`${summary.displayName ?? ''} ${summary.keyname ?? ''}`)};
+    });
+  } else {
+    discoveryMode = 'tree-crawl';
+    const crawled = await crawlTree(host, root.id);
+    resources = crawled.resources;
+    errors = crawled.errors;
+    vectors = resources.filter((item) => item.cls === 'vector_layer');
+  }
+
   const intervalVectors = vectors.filter((item) => Number.isInteger(item.fromYear) && Number.isInteger(item.toYear));
   const seedGeoJson = await probeGeoJson(host, seedResourceId);
 
   const output = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     discoveredAt: new Date().toISOString(),
     host,
     root,
     seedResource: resourceSummary(resource),
     parentChain: parents,
-    resourceCount: resources.length,
+    discoveryMode,
+    bulkAttempts: bulk.attempts,
+    resourceCount: resources.length || null,
     vectorLayerCount: vectors.length,
     intervalVectorLayerCount: intervalVectors.length,
     crawlErrors: errors,
@@ -175,12 +229,13 @@ async function main() {
 
   console.log(`Runivers host: ${host}`);
   console.log(`Boundary root: ${root.id}:${root.displayName}`);
-  console.log(`Resources crawled: ${resources.length}`);
-  console.log(`Vector layers: ${vectors.length}; interval-like vectors: ${intervalVectors.length}`);
+  console.log(`Discovery mode: ${discoveryMode}; bulk attempts: ${JSON.stringify(bulk.attempts)}`);
+  if (resources.length) console.log(`Resources crawled: ${resources.length}`);
+  console.log(`Vector layers under boundary root: ${vectors.length}; interval-like vectors: ${intervalVectors.length}`);
   console.log(`Seed GeoJSON probe: ${JSON.stringify(seedGeoJson.ok ? {ok: true, endpoint: seedGeoJson.endpoint, featureCount: seedGeoJson.featureCount} : seedGeoJson)}`);
   console.log('Sample interval vector layers:');
-  for (const item of intervalVectors.slice(0, 120)) {
-    console.log(`${item.fromYear}-${item.toYear}\t${item.id}\t${item.path}`);
+  for (const item of intervalVectors.slice(0, 160)) {
+    console.log(`${item.fromYear}-${item.toYear}\t${item.id}\t${item.displayName}`);
   }
   if (errors.length) console.log(`Crawl errors: ${JSON.stringify(errors.slice(0, 20))}`);
   console.log(`Discovery written to ${outFile}`);
