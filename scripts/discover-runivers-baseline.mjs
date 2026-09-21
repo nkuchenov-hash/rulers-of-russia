@@ -4,12 +4,13 @@ import path from 'node:path';
 const hosts = ['https://gis.runivers.ru', 'http://gis.runivers.ru'];
 const seedResourceId = 5455;
 const expectedRootName = 'Границы';
-const timeoutMs = 30000;
+const timeoutMs = 45000;
 const maxResources = 20000;
+const historicalPolygonRe = /from[_\s-]*(\d{3,4})[_\s-]*to[_\s-]*(\d{3,4}).*\bPolygon\b/i;
 
-async function getJson(url) {
+async function getJson(url, timeout = timeoutMs) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const timer = setTimeout(() => controller.abort(), timeout);
   try {
     const response = await fetch(url, {
       signal: controller.signal,
@@ -21,6 +22,19 @@ async function getJson(url) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function retryJson(url, attempts = 4) {
+  const errors = [];
+  for (let i = 0; i < attempts; i += 1) {
+    try {
+      return await getJson(url, timeoutMs + i * 15000);
+    } catch (error) {
+      errors.push(error?.message ?? String(error));
+      if (i + 1 < attempts) await new Promise((resolve) => setTimeout(resolve, 1200 * (i + 1)));
+    }
+  }
+  throw new Error(`${url}: ${errors.join(' | ')}`);
 }
 
 async function findHost() {
@@ -66,7 +80,7 @@ function resourceSummary(item) {
   };
 }
 async function listChildren(host, id) {
-  const data = await getJson(`${host}/api/resource/?parent=${id}`);
+  const data = await retryJson(`${host}/api/resource/?parent=${id}`);
   if (!Array.isArray(data)) throw new Error(`Unexpected child listing for ${id}`);
   return data;
 }
@@ -84,36 +98,26 @@ async function walkParents(host, resource) {
   return chain;
 }
 
-function yearsFromText(value) {
-  return [...String(value ?? '').matchAll(/(?:^|\D)(8\d{2}|9\d{2}|1\d{3}|20[0-2]\d)(?=\D|$)/g)].map((match) => Number(match[1]));
-}
 function intervalFromName(value) {
-  const text = String(value ?? '');
-  const explicit = text.match(/from[_\s-]*(\d{3,4})[_\s-]*to[_\s-]*(\d{3,4})/i);
-  if (explicit) return {fromYear: Number(explicit[1]), toYear: Number(explicit[2])};
-  const years = yearsFromText(text);
-  if (years.length >= 2) return {fromYear: years[0], toYear: years[1]};
-  if (years.length === 1) return {fromYear: years[0], toYear: years[0]};
-  return {fromYear: null, toYear: null};
+  const match = String(value ?? '').match(historicalPolygonRe);
+  if (!match) return {fromYear: null, toYear: null, historicalPolygon: false};
+  return {fromYear: Number(match[1]), toYear: Number(match[2]), historicalPolygon: true};
 }
 
-async function bulkVectorLayers(host, rootId) {
+async function searchVectorLayers(host) {
   const urls = [
-    `${host}/api/resource/?cls=vector_layer`,
-    `${host}/api/resource/?resource_cls=vector_layer`,
+    `${host}/api/resource/search/?cls=vector_layer&serialization=full`,
+    `${host}/api/resource/search/?cls=vector_layer`,
   ];
   const attempts = [];
   for (const url of urls) {
     try {
-      const data = await getJson(url);
-      if (!Array.isArray(data)) throw new Error('response is not an array');
-      const allVectors = data.filter((item) => rawResource(item).cls === 'vector_layer');
-      const underRoot = allVectors.filter((item) => {
-        const summary = resourceSummary(item);
-        return summary.id === rootId || summary.parentId === rootId || summary.ancestorIds.includes(rootId);
-      });
-      attempts.push({url, ok: true, total: data.length, vectors: allVectors.length, underRoot: underRoot.length});
-      if (underRoot.length) return {ok: true, url, vectors: underRoot, attempts};
+      const data = await retryJson(url, 2);
+      const rows = Array.isArray(data) ? data : Array.isArray(data?.resources) ? data.resources : null;
+      if (!rows) throw new Error('response is not a resource array');
+      const vectors = rows.filter((item) => rawResource(item).cls === 'vector_layer');
+      attempts.push({url, ok: true, total: rows.length, vectors: vectors.length});
+      if (vectors.length) return {ok: true, url, vectors, attempts};
     } catch (error) {
       attempts.push({url, ok: false, error: error?.message ?? String(error)});
     }
@@ -159,7 +163,6 @@ async function probeGeoJson(host, resourceId) {
   const candidates = [
     `${host}/api/resource/${resourceId}/geojson`,
     `${host}/api/resource/${resourceId}/feature/?srs=4326&limit=2`,
-    `${host}/api/resource/${resourceId}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
   ];
   const attempts = [];
   for (const url of candidates) {
@@ -178,47 +181,84 @@ async function probeGeoJson(host, resourceId) {
   return {ok: false, attempts};
 }
 
+function summarizeVectors(items) {
+  return items.map((item) => {
+    const summary = resourceSummary(item);
+    return {...summary, ...intervalFromName(`${summary.displayName ?? ''} ${summary.keyname ?? ''}`)};
+  });
+}
+
 async function main() {
   const {host, resource} = await findHost();
   const parents = await walkParents(host, resource);
   const root = parents.find((item) => item.displayName === expectedRootName) ?? parents[parents.length - 1];
+  const preferredParent = parents[1] ?? null;
   if (!Number.isInteger(root?.id)) throw new Error('Could not locate Runivers boundary root resource');
+  if (!Number.isInteger(preferredParent?.id)) throw new Error('Could not locate current Runivers dated-layer parent from the known live seed resource');
 
-  const bulk = await bulkVectorLayers(host, root.id);
-  let vectors;
+  const searched = await searchVectorLayers(host);
+  let vectors = [];
   let resources = [];
-  let errors = [];
-  let discoveryMode = 'bulk';
-  if (bulk.ok) {
-    vectors = bulk.vectors.map((item) => {
-      const summary = resourceSummary(item);
-      return {...summary, ...intervalFromName(`${summary.displayName ?? ''} ${summary.keyname ?? ''}`)};
-    });
-  } else {
+  let crawlErrors = [];
+  let discoveryMode = 'resource-search';
+  if (searched.ok) {
+    vectors = summarizeVectors(searched.vectors).filter((item) => item.ancestorIds.includes(root.id) || item.parentId === root.id || item.parentId === preferredParent.id);
+  }
+
+  // Search results on older NGW builds may omit nested ancestry or be disabled.
+  // Always query the live seed's direct parent separately; this is the current
+  // dated reconstruction set and must not be lost behind a timeout in a full tree crawl.
+  let preferredChildren = [];
+  let preferredParentError = null;
+  try {
+    preferredChildren = await listChildren(host, preferredParent.id);
+  } catch (error) {
+    preferredParentError = error?.message ?? String(error);
+  }
+  const preferredVectors = summarizeVectors(preferredChildren.filter((item) => rawResource(item).cls === 'vector_layer'));
+
+  if (!vectors.length) {
     discoveryMode = 'tree-crawl';
     const crawled = await crawlTree(host, root.id);
     resources = crawled.resources;
-    errors = crawled.errors;
+    crawlErrors = crawled.errors;
     vectors = resources.filter((item) => item.cls === 'vector_layer');
   }
 
-  const intervalVectors = vectors.filter((item) => Number.isInteger(item.fromYear) && Number.isInteger(item.toYear));
+  // Prefer the direct parent of a known current live Runivers boundary layer.
+  // This prevents regression CI from mixing obsolete copies of the same interval
+  // from Нарезка / Нарезка_новая / сентябрь / октябрь with the current set.
+  const preferredPolygonLayers = preferredVectors
+    .filter((item) => item.historicalPolygon)
+    .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
+  const allHistoricalPolygons = vectors
+    .filter((item) => item.historicalPolygon)
+    .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
+
   const seedGeoJson = await probeGeoJson(host, seedResourceId);
+  const preferredMinYear = preferredPolygonLayers.length ? Math.min(...preferredPolygonLayers.map((item) => item.fromYear)) : null;
+  const preferredMaxYear = preferredPolygonLayers.length ? Math.max(...preferredPolygonLayers.map((item) => item.toYear)) : null;
 
   const output = {
-    schemaVersion: 3,
+    schemaVersion: 4,
     discoveredAt: new Date().toISOString(),
     host,
     root,
     seedResource: resourceSummary(resource),
     parentChain: parents,
+    preferredParent,
     discoveryMode,
-    bulkAttempts: bulk.attempts,
+    searchAttempts: searched.attempts,
+    preferredParentError,
     resourceCount: resources.length || null,
     vectorLayerCount: vectors.length,
-    intervalVectorLayerCount: intervalVectors.length,
-    crawlErrors: errors,
+    historicalPolygonLayerCount: allHistoricalPolygons.length,
+    preferredPolygonLayerCount: preferredPolygonLayers.length,
+    preferredMinYear,
+    preferredMaxYear,
+    crawlErrors,
     seedGeoJson,
+    preferredPolygonLayers,
     vectorLayers: vectors,
   };
 
@@ -229,19 +269,23 @@ async function main() {
 
   console.log(`Runivers host: ${host}`);
   console.log(`Boundary root: ${root.id}:${root.displayName}`);
-  console.log(`Discovery mode: ${discoveryMode}; bulk attempts: ${JSON.stringify(bulk.attempts)}`);
-  if (resources.length) console.log(`Resources crawled: ${resources.length}`);
-  console.log(`Vector layers under boundary root: ${vectors.length}; interval-like vectors: ${intervalVectors.length}`);
+  console.log(`Current baseline parent: ${preferredParent.id}:${preferredParent.displayName}`);
+  console.log(`Discovery mode: ${discoveryMode}; search attempts: ${JSON.stringify(searched.attempts)}`);
+  console.log(`All historical polygon layers discovered: ${allHistoricalPolygons.length}`);
+  console.log(`Current baseline polygon layers: ${preferredPolygonLayers.length}; range: ${preferredMinYear}..${preferredMaxYear}`);
   console.log(`Seed GeoJSON probe: ${JSON.stringify(seedGeoJson.ok ? {ok: true, endpoint: seedGeoJson.endpoint, featureCount: seedGeoJson.featureCount} : seedGeoJson)}`);
-  console.log('Sample interval vector layers:');
-  for (const item of intervalVectors.slice(0, 160)) {
-    console.log(`${item.fromYear}-${item.toYear}\t${item.id}\t${item.displayName}`);
+  for (const item of preferredPolygonLayers.slice(0, 180)) {
+    console.log(`BASELINE\t${item.fromYear}-${item.toYear}\t${item.id}\t${item.displayName}`);
   }
-  if (errors.length) console.log(`Crawl errors: ${JSON.stringify(errors.slice(0, 20))}`);
+  if (preferredParentError) console.log(`Preferred parent fetch error: ${preferredParentError}`);
+  if (crawlErrors.length) console.log(`Fallback crawl errors: ${JSON.stringify(crawlErrors.slice(0, 20))}`);
   console.log(`Discovery written to ${outFile}`);
 
-  if (!vectors.length) throw new Error('Runivers boundary tree contains no discoverable vector layers');
   if (!seedGeoJson.ok) throw new Error('Runivers vector layer is discoverable but no supported GeoJSON/feature export endpoint was found');
+  if (preferredParentError) throw new Error(`Current Runivers baseline parent ${preferredParent.id} could not be enumerated: ${preferredParentError}`);
+  if (!preferredPolygonLayers.length) throw new Error(`Current Runivers baseline parent ${preferredParent.id} contains no dated historical polygon layers`);
+  if (preferredMinYear > 1462) throw new Error(`Current Runivers baseline starts at ${preferredMinYear}; expected coverage by 1462`);
+  if (preferredMaxYear < 2018) throw new Error(`Current Runivers baseline ends at ${preferredMaxYear}; expected coverage through at least 2018`);
 }
 
 main().catch((error) => {
