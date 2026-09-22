@@ -127,6 +127,19 @@ if (fs.existsSync(discoveryFile)) {
               headers: {'content-type': 'application/geo+json'},
             });
           }
+          if (cached.error) {
+            // The bounded prefetch already exhausted both public export routes.
+            // Return a deterministic failure so the validator records the
+            // reference outage instead of repeating another 3x30s network loop.
+            return new Response(JSON.stringify({
+              error: 'runivers-prefetch-exhausted',
+              resourceId: id,
+              detail: String(cached.error?.message ?? cached.error),
+            }), {
+              status: 503,
+              headers: {'content-type': 'application/json'},
+            });
+          }
         }
       }
       return originalFetch(input, init);
