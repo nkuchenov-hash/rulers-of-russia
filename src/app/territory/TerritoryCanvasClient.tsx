@@ -7,12 +7,17 @@ import './cartographicBoundarySanitizer.js';
 import './mapHistoricalAccuracyPatch.js';
 import './territoryTimelineAtomicPatch.js';
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { TERRITORY_MAX_YEAR, TERRITORY_MIN_YEAR } from './territoryChronology';
 
 type HistoricalTerritoryMapProps = {
   initialYear?: number;
   initialMonth?: number | null;
+};
+
+type RequestedDate = {
+  year: number;
+  month: number | null;
 };
 
 const HistoricalTerritoryMap = dynamic<HistoricalTerritoryMapProps>(
@@ -27,18 +32,32 @@ function boundedInteger(value: string | null, min: number, max: number) {
   return Math.min(max, Math.max(min, parsed));
 }
 
+function dateFromLocation(): RequestedDate {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    year: boundedInteger(params.get('year'), TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR) ?? TERRITORY_MAX_YEAR,
+    month: boundedInteger(params.get('month'), 1, 12),
+  };
+}
+
 export function TerritoryCanvasClient() {
-  const params = useSearchParams();
-  const requestedYear = boundedInteger(params.get('year'), TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR);
-  const requestedMonth = boundedInteger(params.get('month'), 1, 12);
-  const initialYear = requestedYear ?? TERRITORY_MAX_YEAR;
-  const dateKey = `${initialYear}-${requestedMonth ?? 'auto'}`;
+  const [requestedDate, setRequestedDate] = useState<RequestedDate | null>(null);
+
+  useEffect(() => {
+    const sync = () => setRequestedDate(dateFromLocation());
+    sync();
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
+  }, []);
+
+  if (!requestedDate) return null;
+  const dateKey = `${requestedDate.year}-${requestedDate.month ?? 'auto'}`;
 
   return (
     <HistoricalTerritoryMap
       key={dateKey}
-      initialYear={initialYear}
-      initialMonth={requestedMonth}
+      initialYear={requestedDate.year}
+      initialMonth={requestedDate.month}
     />
   );
 }
