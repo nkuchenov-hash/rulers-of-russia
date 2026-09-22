@@ -7,6 +7,7 @@ on:
       - 'public/data/history-core/**'
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
+      - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   workflow_dispatch:
@@ -16,8 +17,31 @@ permissions:
 
 jobs:
   regression:
+    name: regression ${{ matrix.id }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: 1462-1599
+            start: 1462-01
+            end: 1599-12
+          - id: 1600-1699
+            start: 1600-01
+            end: 1699-12
+          - id: 1700-1799
+            start: 1700-01
+            end: 1799-12
+          - id: 1800-1899
+            start: 1800-01
+            end: 1899-12
+          - id: 1900-1945
+            start: 1900-01
+            end: 1945-12
+          - id: 1946-2020
+            start: 1946-01
+            end: 2020-12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,22 +61,25 @@ jobs:
         if: steps.baseline.outcome == 'success'
         run: npm run materialize:history
 
-      - name: Validate live Runivers geometry against History Core
+      - name: Validate Runivers geometry against History Core
         if: steps.baseline.outcome == 'success'
         id: regression
         continue-on-error: true
         env:
           RUNIVERS_DISCOVERY_FILE: tmp/runivers-discovery/runivers-current-baseline.json
           RUNIVERS_FETCH_CONCURRENCY: '6'
-        run: node --import ./scripts/runivers-fetch-cache.mjs scripts/validate-runivers-regression.mjs
+          RUNIVERS_START_MONTH: ${{ matrix.start }}
+          RUNIVERS_END_MONTH: ${{ matrix.end }}
+        run: node scripts/runivers-regression-shard-runner.mjs
 
       - name: Upload Runivers audit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: runivers-geometric-regression
+          name: runivers-geometric-regression-${{ matrix.id }}
           path: |
             tmp/runivers-discovery
+            tmp/runivers-shards
             tmp/runivers-regression/report.json
           if-no-files-found: warn
 
