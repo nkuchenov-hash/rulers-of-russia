@@ -13,6 +13,7 @@ const concurrency = Math.max(1, Math.min(8, Number(process.env.RUNIVERS_FETCH_CO
 const originalFetch = globalThis.fetch.bind(globalThis);
 const PREFETCH_TIMEOUT_MS = 12000;
 const PREFETCH_ATTEMPTS = 2;
+const COORDINATE_CHECK_LIMIT = 5000;
 
 function requestUrl(input) {
   if (typeof input === 'string') return input;
@@ -42,15 +43,51 @@ function limiter(max) {
   });
 }
 
+function geometryLooksWgs84(payload) {
+  let checked = 0;
+  let invalid = false;
+
+  const inspect = (value) => {
+    if (invalid || checked >= COORDINATE_CHECK_LIMIT || !Array.isArray(value)) return;
+    if (value.length >= 2 && Number.isFinite(value[0]) && Number.isFinite(value[1])) {
+      checked += 1;
+      const lon = Number(value[0]);
+      const lat = Number(value[1]);
+      if (Math.abs(lon) > 180.000001 || Math.abs(lat) > 90.000001) invalid = true;
+      return;
+    }
+    for (const child of value) inspect(child);
+  };
+
+  for (const feature of payload?.features ?? []) {
+    if (checked >= COORDINATE_CHECK_LIMIT || invalid) break;
+    const geometry = feature?.geometry;
+    if (geometry?.coordinates) inspect(geometry.coordinates);
+    if (geometry?.type === 'GeometryCollection') {
+      for (const item of geometry.geometries ?? []) {
+        if (item?.coordinates) inspect(item.coordinates);
+      }
+    }
+  }
+
+  return checked > 0 && !invalid;
+}
+
 function normalizePayload(parsed) {
-  if (parsed?.type === 'FeatureCollection' && Array.isArray(parsed.features)) return parsed;
-  if (Array.isArray(parsed)) {
+  let payload = null;
+  if (parsed?.type === 'FeatureCollection' && Array.isArray(parsed.features)) {
+    payload = parsed;
+  } else if (Array.isArray(parsed)) {
     const features = parsed.map((item) => item?.type === 'Feature' ? item : item?.geom
       ? {type: 'Feature', geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
       : null).filter(Boolean);
-    if (features.length) return {type: 'FeatureCollection', features};
+    if (features.length) payload = {type: 'FeatureCollection', features};
   }
-  throw new Error('response has no usable feature geometry');
+  if (!payload) throw new Error('response has no usable feature geometry');
+  if (!geometryLooksWgs84(payload)) {
+    throw new Error('geometry is not EPSG:4326 lon/lat');
+  }
+  return payload;
 }
 
 async function fetchJsonOnce(url) {
@@ -70,9 +107,12 @@ async function fetchJsonOnce(url) {
 }
 
 async function fetchLayerWithRetry(host, id) {
+  // NextGIS /geojson may use the layer's native projected CRS. Prefer the
+  // feature endpoint with an explicit WGS84 request and accept /geojson only
+  // when its coordinate range proves that it is already lon/lat.
   const urls = [
-    `${host}/api/resource/${id}/geojson`,
     `${host}/api/resource/${id}/feature/?srs=4326`,
+    `${host}/api/resource/${id}/geojson`,
   ];
   const errors = [];
   for (let attempt = 1; attempt <= PREFETCH_ATTEMPTS; attempt += 1) {
@@ -130,7 +170,7 @@ if (fs.existsSync(discoveryFile)) {
           if (cached.error) {
             // The bounded prefetch already exhausted both public export routes.
             // Return a deterministic failure so the validator records the
-            // reference outage instead of repeating another 3x30s network loop.
+            // reference outage instead of repeating another network retry loop.
             return new Response(JSON.stringify({
               error: 'runivers-prefetch-exhausted',
               resourceId: id,
@@ -145,6 +185,6 @@ if (fs.existsSync(discoveryFile)) {
       return originalFetch(input, init);
     };
 
-    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; GeoJSON + feature endpoint fallback.`);
+    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; WGS84 feature endpoint first, coordinate-range validation enabled.`);
   }
 }
