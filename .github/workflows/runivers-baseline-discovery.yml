@@ -90,7 +90,7 @@ jobs:
         continue-on-error: true
         env:
           RUNIVERS_DISCOVERY_FILE: tmp/runivers-discovery/runivers-current-baseline.json
-          RUNIVERS_FETCH_CONCURRENCY: '6'
+          RUNIVERS_FETCH_CONCURRENCY: '2'
           RUNIVERS_START_MONTH: ${{ matrix.start }}
           RUNIVERS_END_MONTH: ${{ matrix.end }}
         run: node scripts/runivers-regression-shard-runner.mjs
