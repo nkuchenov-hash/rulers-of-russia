@@ -7,6 +7,7 @@ on:
       - 'public/data/history-core/**'
       - 'scripts/discover-runivers-baseline.mjs'
       - 'scripts/select-runivers-current-baseline.mjs'
+      - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
@@ -25,27 +26,35 @@ jobs:
         with:
           node-version: 22
 
-      - name: Discover Runivers NextGIS reference layers
+      - name: Discover current Runivers NextGIS metadata
         id: discover
         continue-on-error: true
         run: node scripts/discover-runivers-baseline.mjs
 
-      - name: Pin current Runivers polygon baseline
-        if: steps.discover.outcome == 'success'
+      - name: Select verified Runivers baseline metadata
         id: baseline
         continue-on-error: true
-        run: node scripts/select-runivers-current-baseline.mjs
+        run: |
+          if [ "${{ steps.discover.outcome }}" = "success" ]; then
+            if node scripts/select-runivers-current-baseline.mjs; then
+              exit 0
+            fi
+            echo 'Live Runivers metadata was ambiguous; falling back to the pinned verified metadata set.' >&2
+          else
+            echo 'Live Runivers metadata API is unavailable; using pinned verified metadata. Geometry will still be fetched live.' >&2
+          fi
+          node scripts/use-pinned-runivers-baseline.mjs
 
       - name: Install project dependencies
-        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
+        if: steps.baseline.outcome == 'success'
         run: npm install
 
       - name: Materialize canonical History Core
-        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
+        if: steps.baseline.outcome == 'success'
         run: npm run materialize:history
 
       - name: Validate Runivers geometric regression
-        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success'
+        if: steps.baseline.outcome == 'success'
         id: regression
         continue-on-error: true
         env:
@@ -63,20 +72,14 @@ jobs:
             tmp/runivers-regression/report.json
           if-no-files-found: warn
 
-      - name: Require Runivers discovery
-        if: steps.discover.outcome != 'success'
+      - name: Require baseline metadata
+        if: steps.baseline.outcome != 'success'
         run: |
-          echo 'Runivers baseline discovery failed; historical map completion cannot be certified.' >&2
-          exit 1
-
-      - name: Require current baseline selection
-        if: steps.discover.outcome == 'success' && steps.baseline.outcome != 'success'
-        run: |
-          echo 'Current Runivers polygon baseline could not be pinned unambiguously.' >&2
+          echo 'Neither live nor pinned Runivers baseline metadata could be selected.' >&2
           exit 1
 
       - name: Require geometric regression acceptance
-        if: steps.discover.outcome == 'success' && steps.baseline.outcome == 'success' && steps.regression.outcome != 'success'
+        if: steps.baseline.outcome == 'success' && steps.regression.outcome != 'success'
         run: |
           echo 'Runivers geometric regression failed. Resolve the contour regression or add an A1/A2/A3 evidence-backed override.' >&2
           exit 1
