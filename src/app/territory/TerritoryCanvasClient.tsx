@@ -10,7 +10,12 @@ import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { TERRITORY_MAX_YEAR, TERRITORY_MIN_YEAR } from './territoryChronology';
 
-const HistoricalTerritoryMap = dynamic(
+type HistoricalTerritoryMapProps = {
+  initialYear?: number;
+  initialMonth?: number | null;
+};
+
+const HistoricalTerritoryMap = dynamic<HistoricalTerritoryMapProps>(
   () => import('./HistoricalTerritoryGlobeWebGLV21').then((module) => module.HistoricalTerritoryGlobeWebGLV21),
   {ssr:false},
 );
