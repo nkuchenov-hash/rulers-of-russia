@@ -38,10 +38,16 @@ if (!monthIndex.months.length) throw new Error(`No History Core months overlap $
 fs.writeFileSync(monthIndexFile, JSON.stringify(monthIndex, null, 2));
 
 let validatorSource = fs.readFileSync(validatorFile, 'utf8');
+const startDeclaration = /const START_MONTH = '[^']+';/;
+const endDeclaration = /const END_MONTH = '[^']+';/;
+if (!startDeclaration.test(validatorSource) || !endDeclaration.test(validatorSource)) {
+  throw new Error('Unable to locate Runivers validator range declarations');
+}
 validatorSource = validatorSource
-  .replace("const START_MONTH = '1462-01';", `const START_MONTH = '${startMonth}';`)
-  .replace("const END_MONTH = '2020-12';", `const END_MONTH = '${endMonth}';`);
-if (validatorSource.includes("const START_MONTH = '1462-01';") || validatorSource.includes("const END_MONTH = '2020-12';")) {
+  .replace(startDeclaration, `const START_MONTH = '${startMonth}';`)
+  .replace(endDeclaration, `const END_MONTH = '${endMonth}';`);
+if (!validatorSource.includes(`const START_MONTH = '${startMonth}';`)
+  || !validatorSource.includes(`const END_MONTH = '${endMonth}';`)) {
   throw new Error('Unable to parameterize Runivers validator range');
 }
 const shardValidatorFile = path.join(shardDir, 'validate-runivers-regression.mjs');
