@@ -195,9 +195,16 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
       const halo = certifiedUncertaintyHalo(object, state);
       if (halo) halos.push(halo);
     }
-    const result = halos.length ? originalAdd.apply(this, [...halos, ...objects]) : originalAdd.apply(this, objects);
+
+    // Object3D.add(...many) recursively calls this.add() for each argument.
+    // Calling the saved implementation variadically from this patch would then
+    // re-enter the patch and generate the same halo forever. Add each object
+    // through the original single-object path instead.
+    for (const halo of halos) originalAdd.call(this, halo);
+    for (const object of objects) originalAdd.call(this, object);
+
     queueMicrotask(() => updateAccuracyCaption(state));
-    return result;
+    return this;
   };
 
   const observer = new MutationObserver(() => updateAccuracyCaption(state));
