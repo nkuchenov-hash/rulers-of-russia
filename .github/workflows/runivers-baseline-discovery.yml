@@ -5,8 +5,6 @@ on:
     branches: [main]
     paths:
       - 'public/data/history-core/**'
-      - 'scripts/discover-runivers-baseline.mjs'
-      - 'scripts/select-runivers-current-baseline.mjs'
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
       - 'scripts/validate-runivers-regression.mjs'
@@ -26,24 +24,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Discover current Runivers NextGIS metadata
-        id: discover
-        continue-on-error: true
-        run: node scripts/discover-runivers-baseline.mjs
-
-      - name: Select verified Runivers baseline metadata
+      - name: Load verified Runivers baseline metadata
         id: baseline
         continue-on-error: true
-        run: |
-          if [ "${{ steps.discover.outcome }}" = "success" ]; then
-            if node scripts/select-runivers-current-baseline.mjs; then
-              exit 0
-            fi
-            echo 'Live Runivers metadata was ambiguous; falling back to the pinned verified metadata set.' >&2
-          else
-            echo 'Live Runivers metadata API is unavailable; using pinned verified metadata. Geometry will still be fetched live.' >&2
-          fi
-          node scripts/use-pinned-runivers-baseline.mjs
+        run: node scripts/use-pinned-runivers-baseline.mjs
 
       - name: Install project dependencies
         if: steps.baseline.outcome == 'success'
@@ -53,7 +37,7 @@ jobs:
         if: steps.baseline.outcome == 'success'
         run: npm run materialize:history
 
-      - name: Validate Runivers geometric regression
+      - name: Validate live Runivers geometry against History Core
         if: steps.baseline.outcome == 'success'
         id: regression
         continue-on-error: true
@@ -75,7 +59,7 @@ jobs:
       - name: Require baseline metadata
         if: steps.baseline.outcome != 'success'
         run: |
-          echo 'Neither live nor pinned Runivers baseline metadata could be selected.' >&2
+          echo 'Pinned Runivers baseline metadata could not be loaded.' >&2
           exit 1
 
       - name: Require geometric regression acceptance
