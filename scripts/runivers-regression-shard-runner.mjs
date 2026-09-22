@@ -14,6 +14,7 @@ if (!/^\d{4}-\d{2}$/.test(startMonth || '') || !/^\d{4}-\d{2}$/.test(endMonth ||
 }
 if (!fs.existsSync(sourceDiscoveryFile)) throw new Error(`Runivers discovery report missing: ${sourceDiscoveryFile}`);
 if (!fs.existsSync(monthIndexFile)) throw new Error(`History month index missing: ${monthIndexFile}`);
+if (!fs.existsSync(validatorFile)) throw new Error(`Runivers validator missing: ${validatorFile}`);
 
 const startYear = Number(startMonth.slice(0, 4));
 const endYear = Number(endMonth.slice(0, 4));
@@ -37,25 +38,9 @@ monthIndex.months = (monthIndex.months ?? []).filter((row) => row.month >= start
 if (!monthIndex.months.length) throw new Error(`No History Core months overlap ${startMonth}..${endMonth}`);
 fs.writeFileSync(monthIndexFile, JSON.stringify(monthIndex, null, 2));
 
-let validatorSource = fs.readFileSync(validatorFile, 'utf8');
-const startDeclaration = /const START_MONTH = '[^']+';/;
-const endDeclaration = /const END_MONTH = '[^']+';/;
-if (!startDeclaration.test(validatorSource) || !endDeclaration.test(validatorSource)) {
-  throw new Error('Unable to locate Runivers validator range declarations');
-}
-validatorSource = validatorSource
-  .replace(startDeclaration, `const START_MONTH = '${startMonth}';`)
-  .replace(endDeclaration, `const END_MONTH = '${endMonth}';`);
-if (!validatorSource.includes(`const START_MONTH = '${startMonth}';`)
-  || !validatorSource.includes(`const END_MONTH = '${endMonth}';`)) {
-  throw new Error('Unable to parameterize Runivers validator range');
-}
-const shardValidatorFile = path.join(shardDir, 'validate-runivers-regression.mjs');
-fs.writeFileSync(shardValidatorFile, validatorSource);
-
 console.log(`Runivers shard ${startMonth}..${endMonth}: ${discovery.vectorLayers.length}/${originalLayers.length} layers; ${monthIndex.months.length}/${originalMonthCount} History Core months.`);
 
-const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts', 'runivers-fetch-cache.mjs'), shardValidatorFile], {
+const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts', 'runivers-fetch-cache.mjs'), validatorFile], {
   cwd: root,
   stdio: 'inherit',
   env: {
@@ -64,4 +49,13 @@ const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts'
   },
 });
 if (child.error) throw child.error;
+
+const reportFile = path.join(root, 'tmp', 'runivers-regression', 'report.json');
+if (fs.existsSync(reportFile)) {
+  const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+  report.shard = {startMonth, endMonth};
+  if (report.summary) report.summary.auditedRange = {startMonth, endMonth};
+  fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
+}
+
 process.exitCode = child.status ?? 1;
