@@ -165,39 +165,61 @@ function interpolateLonLat(a, b, t) {
   return [lon, a[1] + (b[1] - a[1]) * t];
 }
 
-function samplePayload(payload) {
-  const points = [];
-  let seen = 0;
-  let randomState = 0x9e3779b9;
-  const random = () => {
-    randomState ^= randomState << 13;
-    randomState ^= randomState >>> 17;
-    randomState ^= randomState << 5;
-    return (randomState >>> 0) / 0x100000000;
-  };
-  const offer = (point) => {
-    seen += 1;
-    if (points.length < MAX_SAMPLES) {
-      points.push(point);
-      return;
-    }
-    const slot = Math.floor(random() * seen);
-    if (slot < MAX_SAMPLES) points[slot] = point;
-  };
+function validCoordinate(point) {
+  return Array.isArray(point) && point.length >= 2 && Number.isFinite(point[0]) && Number.isFinite(point[1]);
+}
 
+function samplingLines(payload) {
+  const lines = [];
   for (const feature of featureCollectionsFeatures(payload)) {
     for (const line of geometryLines(feature?.geometry, true)) {
-      for (let i = 0; i + 1 < line.length; i += 1) {
-        const a = line[i];
-        const b = line[i + 1];
-        if (!Array.isArray(a) || !Array.isArray(b) || a.length < 2 || b.length < 2) continue;
-        if (!Number.isFinite(a[0]) || !Number.isFinite(a[1]) || !Number.isFinite(b[0]) || !Number.isFinite(b[1])) continue;
-        const distance = haversineMeters(a, b);
-        const steps = Math.max(1, Math.ceil(distance / SAMPLE_STEP_M));
-        for (let step = 0; step < steps; step += 1) offer(interpolateLonLat(a, b, step / steps));
+      if (Array.isArray(line) && line.length >= 2) lines.push(line);
+    }
+  }
+  return lines;
+}
+
+function samplePayload(payload) {
+  const lines = samplingLines(payload);
+  let candidateCount = 0;
+
+  // Count the exact 25 km candidate stream without allocating its points.
+  for (const line of lines) {
+    for (let i = 0; i + 1 < line.length; i += 1) {
+      const a = line[i];
+      const b = line[i + 1];
+      if (!validCoordinate(a) || !validCoordinate(b)) continue;
+      candidateCount += Math.max(1, Math.ceil(haversineMeters(a, b) / SAMPLE_STEP_M));
+    }
+    if (validCoordinate(line[line.length - 1])) candidateCount += 1;
+  }
+  if (!candidateCount) return [];
+
+  const stride = Math.max(1, Math.ceil(candidateCount / MAX_SAMPLES));
+  const points = [];
+  let candidateIndex = 0;
+
+  // Select evenly from that same candidate stream. For dense segments jump
+  // directly between retained indices instead of looping over discarded points.
+  for (const line of lines) {
+    for (let i = 0; i + 1 < line.length; i += 1) {
+      const a = line[i];
+      const b = line[i + 1];
+      if (!validCoordinate(a) || !validCoordinate(b)) continue;
+      const steps = Math.max(1, Math.ceil(haversineMeters(a, b) / SAMPLE_STEP_M));
+      const segmentStart = candidateIndex;
+      const segmentEnd = segmentStart + steps;
+      let selected = segmentStart + ((stride - (segmentStart % stride)) % stride);
+      while (selected < segmentEnd && points.length < MAX_SAMPLES) {
+        points.push(interpolateLonLat(a, b, (selected - segmentStart) / steps));
+        selected += stride;
       }
-      const last = line[line.length - 1];
-      if (Array.isArray(last) && last.length >= 2 && Number.isFinite(last[0]) && Number.isFinite(last[1])) offer([last[0], last[1]]);
+      candidateIndex = segmentEnd;
+    }
+    const last = line[line.length - 1];
+    if (validCoordinate(last)) {
+      if (candidateIndex % stride === 0 && points.length < MAX_SAMPLES) points.push([last[0], last[1]]);
+      candidateIndex += 1;
     }
   }
   return points;
@@ -243,16 +265,20 @@ function chordSquaredToMeters(d2) {
   return 2 * EARTH_RADIUS_M * Math.asin(chord / 2);
 }
 
-function directedDistances(sourcePoints, targetPoints) {
-  if (!sourcePoints.length || !targetPoints.length) return [];
-  const tree = buildKdTree(targetPoints.map((point) => ({point, xyz: unitVector(point)})));
-  return sourcePoints.map((point) => chordSquaredToMeters(nearestChordSquared(tree, unitVector(point))));
+function buildPointIndex(points) {
+  return buildKdTree(points.map((point) => ({point, xyz: unitVector(point)})));
 }
 
-function compareSampledGeometry(referencePoints, referenceClass, currentPoints) {
+function directedDistancesToIndex(sourcePoints, targetIndex) {
+  if (!sourcePoints.length || !targetIndex) return [];
+  return sourcePoints.map((point) => chordSquaredToMeters(nearestChordSquared(targetIndex, unitVector(point))));
+}
+
+function compareSampledGeometry(referencePoints, referenceClass, currentPoints, currentIndex = null) {
   if (!referencePoints.length || !currentPoints.length) return {usable: false, referenceSamples: referencePoints.length, currentSamples: currentPoints.length};
-  const refToCurrent = directedDistances(referencePoints, currentPoints);
-  const currentToRef = referenceClass.hasPolygon ? directedDistances(currentPoints, referencePoints) : [];
+  const referenceIndex = buildPointIndex(referencePoints);
+  const refToCurrent = directedDistancesToIndex(referencePoints, currentIndex ?? buildPointIndex(currentPoints));
+  const currentToRef = referenceClass.hasPolygon ? directedDistancesToIndex(currentPoints, referenceIndex) : [];
   const refP95 = percentile(refToCurrent, .95);
   const refMax = Math.max(...refToCurrent);
   const curP95 = currentToRef.length ? percentile(currentToRef, .95) : null;
@@ -341,14 +367,11 @@ async function main() {
   const relevantLayers = layers.filter((layer) => states.some((state) => referenceOverlapsState(layer, state)));
   const coverage = new Map(states.map((state) => [state.key, []]));
   const historySamplesCache = new Map();
+  const historyIndexCache = new Map();
   const comparisons = [];
   const referenceFailures = [];
   let usableReferenceCount = 0;
 
-  // Runivers contains hundreds of large polygon resources. Process one dated
-  // resource at a time and immediately discard its raw GeoJSON after sampling.
-  // Sampling itself is a bounded deterministic reservoir, so even a very dense
-  // single resource never allocates millions of intermediate sample points.
   for (let index = 0; index < relevantLayers.length; index += 1) {
     const layer = relevantLayers[index];
     let geojson;
@@ -373,8 +396,9 @@ async function main() {
       if (!currentPoints) {
         currentPoints = samplePayload(loadHistoryGeometry(state));
         historySamplesCache.set(state.key, currentPoints);
+        historyIndexCache.set(state.key, buildPointIndex(currentPoints));
       }
-      const metric = compareSampledGeometry(referencePoints, classification, currentPoints);
+      const metric = compareSampledGeometry(referencePoints, classification, currentPoints, historyIndexCache.get(state.key));
       if (!metric.usable) continue;
       const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
       const tolerance = toleranceMeters(comparisonYear, approximate);
@@ -426,59 +450,54 @@ async function main() {
   const stateCoverageByGeometry = new Map(stateCoverage.map((state) => [state.geometryFile, state]));
   const uncoveredMonths = [];
   for (const month of monthIndex.months ?? []) {
-    if (month.month < START_MONTH || month.month > END_MONTH || month.status !== 'geometry-verified') continue;
-    const state = stateCoverageByGeometry.get(month.geometryFile);
-    if (!state || state.referenceComparisons === 0) uncoveredMonths.push(month.month);
+    if (month.month < START_MONTH || month.month > END_MONTH) continue;
+    if (month.status !== 'geometry-verified' || !month.geometryFile) {
+      uncoveredMonths.push({month: month.month, reason: 'History Core is not geometry-verified', geometryFile: month.geometryFile ?? null});
+      continue;
+    }
+    const coverageRow = stateCoverageByGeometry.get(month.geometryFile);
+    if (!coverageRow || coverageRow.referenceComparisons === 0) {
+      uncoveredMonths.push({month: month.month, reason: 'No overlapping Runivers reference comparison', geometryFile: month.geometryFile});
+      continue;
+    }
+    const overlappingRows = (coverage.get(coverageRow.key) ?? []).filter((row) => {
+      const year = monthToYear(month.month);
+      return row.runiversFromYear <= year && row.runiversToYear >= year;
+    });
+    if (!overlappingRows.length) uncoveredMonths.push({month: month.month, reason: 'No dated Runivers layer covers this month year', geometryFile: month.geometryFile});
   }
 
-  const report = {
-    schema_version: 1,
-    generatedAt: new Date().toISOString(),
-    policy: {
-      baseline: 'Runivers / Institute of World History RAS / NextGIS — Границы России и предшественников',
-      range: `${START_MONTH}..${END_MONTH}`,
-      rule: 'Every canonical Russian state must be cross-checked against an overlapping dated Runivers vector. Deviations beyond the reference tolerance require an A1/A2/A3 documentary override.',
-      sampleStepMeters: SAMPLE_STEP_M,
-    },
-    discovery: {
-      host: discovery.host,
-      schemaVersion: discovery.schemaVersion,
-      vectorLayerCount: discovery.vectorLayerCount,
-      datedLayerCount: layers.length,
-      usableReferenceCount,
-      referenceExportFailures: referenceFailures,
-    },
-    historyStateCount: states.length,
-    comparisonCount: comparisons.length,
-    passCount: comparisons.filter((row) => row.status === 'pass').length,
-    overrideCount: comparisons.filter((row) => row.status === 'override').length,
-    failureCount: failedComparisons.length,
-    missingStateCount: missingStates.length,
-    uncoveredMonthCount: uncoveredMonths.length,
-    missingStates,
-    uncoveredMonths,
-    failedComparisons,
-    stateCoverage,
-    comparisons,
+  const summary = {
+    auditedRange: {startMonth: START_MONTH, endMonth: END_MONTH},
+    runiversHost: discovery.host,
+    runiversBoundaryRoot: discovery.boundaryRoot ?? null,
+    runiversBaselineParent: discovery.currentBaselineParent ?? null,
+    runiversLayersDiscovered: discovery.vectorLayers?.length ?? 0,
+    datedLayersAudited: relevantLayers.length,
+    usableReferenceLayers: usableReferenceCount,
+    historyStates: states.length,
+    comparisons: comparisons.length,
+    passingComparisons: comparisons.filter((row) => row.status === 'pass').length,
+    overrides: comparisons.filter((row) => row.status === 'override').length,
+    failedComparisons: failedComparisons.length,
+    referenceFailures: referenceFailures.length,
+    missingStates: missingStates.length,
+    uncoveredMonths: uncoveredMonths.length,
+    sampleStepMeters: SAMPLE_STEP_M,
+    maxSamplesPerGeometry: MAX_SAMPLES,
   };
 
   fs.mkdirSync(reportDir, {recursive: true});
-  fs.writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n');
-  console.log(`Runivers regression: ${states.length} History Core states, ${usableReferenceCount} usable dated reference layers, ${comparisons.length} comparisons.`);
-  console.log(`Pass=${report.passCount}; override=${report.overrideCount}; fail=${report.failureCount}; missing states=${report.missingStateCount}; uncovered months=${report.uncoveredMonthCount}.`);
-  if (referenceFailures.length) console.log(`Reference export failures: ${referenceFailures.length}`);
-  for (const row of failedComparisons.slice(0, 30)) {
-    console.log(`FAIL Runivers ${row.runiversResourceId} ${row.runiversName} vs ${row.historyGeometryFile}: p95=${Math.round(row.symmetricP95Meters / 1000)}km max=${Math.round(row.symmetricMaxMeters / 1000)}km tolerance=${Math.round(row.toleranceMeters / 1000)}km`);
-  }
-  for (const state of missingStates.slice(0, 30)) console.log(`MISSING ${state.firstMonth}..${state.lastMonth} ${state.polityId} ${state.geometryFile}`);
-  console.log(`Report written to ${reportFile}`);
+  fs.writeFileSync(reportFile, JSON.stringify({schema_version: 1, generatedAt: new Date().toISOString(), summary, stateCoverage, failedComparisons, referenceFailures, uncoveredMonths}, null, 2));
+  console.log('Runivers geometric regression summary:', JSON.stringify(summary));
+  console.log(`Report: ${reportFile}`);
 
-  if (referenceFailures.length) throw new Error(`${referenceFailures.length} dated Runivers reference layer(s) could not be exported`);
-  if (missingStates.length) throw new Error(`${missingStates.length} History Core state(s) have no Runivers geometric comparison`);
-  if (failedComparisons.length) throw new Error(`${failedComparisons.length} Runivers geometric regression comparison(s) exceed tolerance without evidence-backed override`);
+  if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) {
+    process.exitCode = 1;
+  }
 }
 
 main().catch((error) => {
-  console.error(error?.stack ?? error);
+  console.error(error);
   process.exitCode = 1;
 });
