@@ -31,6 +31,21 @@ const required1988Geometry = [
   'ussr-sweden-maritime-1988-a1-a17.geojson'
 ];
 
+async function exactDateDebug(expectedKey) {
+  return page.evaluate((key) => {
+    const monthSelect = document.querySelector('select[aria-label="Месяц"]');
+    return {
+      expectedKey: key,
+      href: window.location.href,
+      search: window.location.search,
+      shownYear: monthSelect?.parentElement?.querySelector('b')?.textContent?.trim() ?? null,
+      shownMonth: monthSelect?.value ?? null,
+      bodyText: document.body?.innerText?.slice(0, 2200) ?? '',
+      accuracyCaption: document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? null,
+    };
+  }, expectedKey);
+}
+
 async function loadHistoricalDate(year, month) {
   if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
   const target = new URL(url);
@@ -40,7 +55,12 @@ async function loadHistoricalDate(year, month) {
   if (!response?.ok()) throw new Error(`Territory HTTP failed for ${year}-${month}: ${response?.status()}`);
 
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
-  await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, {timeout: 30000});
+  try {
+    await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, {timeout: 30000});
+  } catch (error) {
+    const debug = await exactDateDebug(expectedKey);
+    throw new Error(`Exact-date link did not reach ${expectedKey}: ${JSON.stringify(debug)}\nPage errors: ${JSON.stringify(pageErrors)}\nRequests: ${JSON.stringify(historyRequests.slice(-30))}`, {cause: error});
+  }
   await page.waitForFunction(({expectedYear, expectedMonth}) => {
     const monthSelect = document.querySelector('select[aria-label="Месяц"]');
     const shownYear = monthSelect?.parentElement?.querySelector('b')?.textContent?.trim();
