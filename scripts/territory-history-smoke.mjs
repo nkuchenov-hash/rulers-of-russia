@@ -108,8 +108,9 @@ try {
   }, null, {timeout: 12000});
 
   // Prove fail-closed behavior. Block the canonical full-state geometry for a
-  // fresh date. The UI must explicitly hide Russia rather than make any legacy
-  // archive request or silently substitute bootstrap geometry.
+  // state not loaded by the successful checks above. The UI must explicitly hide
+  // Russia rather than make any legacy archive request or substitute bootstrap
+  // geometry.
   let blockedCanonicalGeometry = 0;
   const generatedTerritoryPattern = '**/data/history-core/generated/territory/**';
   await page.route(generatedTerritoryPattern, async route => {
@@ -121,7 +122,7 @@ try {
     });
   });
   const failClosedTarget = new URL(url);
-  failClosedTarget.searchParams.set('year', '1987');
+  failClosedTarget.searchParams.set('year', '1992');
   failClosedTarget.searchParams.set('month', '7');
   const failClosedResponse = await page.goto(failClosedTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
   if (!failClosedResponse?.ok()) throw new Error(`Fail-closed territory page HTTP failed: ${failClosedResponse?.status()}`);
