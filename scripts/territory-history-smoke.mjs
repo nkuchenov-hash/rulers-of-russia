@@ -13,7 +13,7 @@ const pageCrashes = [];
 page.on('request', request => {
   const requestUrl = request.url();
   if (requestUrl.includes('/data/history-core/')) historyRequests.push(requestUrl);
-  if (requestUrl.includes('/data/territory/archive/manifest.json')) legacyArchiveRequests.push(requestUrl);
+  if (requestUrl.includes('/data/territory/archive/')) legacyArchiveRequests.push(requestUrl);
 });
 page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
 page.on('crash', () => pageCrashes.push('Chromium page crashed'));
@@ -107,10 +107,35 @@ try {
     return text.includes('неопределённость реконструкции ≈220 км');
   }, null, {timeout: 12000});
 
-  // A successful canonical historical path must not touch the legacy bootstrap
-  // archive. The accuracy guard intercepts any attempted fallback before network.
+  // Prove fail-closed behavior. Block the canonical full-state geometry for a
+  // fresh date. The UI must explicitly hide Russia rather than make any legacy
+  // archive request or silently substitute bootstrap geometry.
+  let blockedCanonicalGeometry = 0;
+  const generatedTerritoryPattern = '**/data/history-core/generated/territory/**';
+  await page.route(generatedTerritoryPattern, async route => {
+    blockedCanonicalGeometry += 1;
+    await route.fulfill({
+      status: 503,
+      contentType: 'application/json',
+      body: JSON.stringify({error: 'intentional-history-core-smoke-failure'})
+    });
+  });
+  const failClosedTarget = new URL(url);
+  failClosedTarget.searchParams.set('year', '1987');
+  failClosedTarget.searchParams.set('month', '7');
+  const failClosedResponse = await page.goto(failClosedTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+  if (!failClosedResponse?.ok()) throw new Error(`Fail-closed territory page HTTP failed: ${failClosedResponse?.status()}`);
+  await page.waitForFunction(() => {
+    const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
+    return text.includes('History Core: геометрия недоступна — граница России скрыта');
+  }, null, {timeout: 30000});
+  await page.unroute(generatedTerritoryPattern);
+  if (!blockedCanonicalGeometry) {
+    throw new Error('Fail-closed smoke did not intercept canonical generated territory geometry');
+  }
+
   if (legacyArchiveRequests.length) {
-    throw new Error(`Historical globe attempted legacy archive fallback: ${JSON.stringify(legacyArchiveRequests)}`);
+    throw new Error(`Historical globe reached legacy archive over the network: ${JSON.stringify(legacyArchiveRequests)}`);
   }
 
   if (pageErrors.length || pageCrashes.length) {
@@ -123,7 +148,7 @@ try {
     canvas: (() => { const c = document.querySelector('canvas'); return c ? [c.width,c.height] : null; })()
   }));
   if (!summary.canvas) throw new Error('Historical WebGL canvas missing');
-  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, changed1573, changed1581, summary}));
+  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, changed1573, changed1581, blockedCanonicalGeometry, summary}));
 } finally {
   await browser.close();
 }
