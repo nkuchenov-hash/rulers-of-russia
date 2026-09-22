@@ -18,7 +18,6 @@ page.on('request', request => {
 page.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
 page.on('crash', () => pageCrashes.push('Chromium page crashed'));
 
-const ERA_ANCHORS = [862, 882, 1125, 1263, 1547, 1721, 1917, 1918, 1922, 1992];
 const required1988Geometry = [
   'ussr-norway-varanger-1958-p1-p4.geojson',
   'ussr-finland-sea-frontier-1966.geojson',
@@ -32,72 +31,23 @@ const required1988Geometry = [
   'ussr-sweden-maritime-1988-a1-a17.geojson'
 ];
 
-async function displayedYear() {
-  return page.evaluate(() => {
-    const month = document.querySelector('select[aria-label="Месяц"]');
-    const value = month?.parentElement?.querySelector('b')?.textContent?.trim();
-    const year = Number(value);
-    return Number.isFinite(year) ? year : null;
-  });
-}
-
-async function waitForDisplayedYear(year) {
-  await page.waitForFunction((expected) => {
-    const month = document.querySelector('select[aria-label="Месяц"]');
-    return month?.parentElement?.querySelector('b')?.textContent?.trim() === String(expected);
-  }, year, {timeout: 12000});
-}
-
-async function nativeRulerScrollToYear(targetYear) {
-  const ruler = page.locator('div[class*="rulerViewport"]').first();
-  await ruler.waitFor({state: 'visible', timeout: 12000});
-  const result = await ruler.evaluate((element, {year, minYear, yearPx}) => {
-    const left = (year - minYear) * yearPx;
-    element.scrollTo({left, behavior: 'auto'});
-    element.dispatchEvent(new Event('scroll', {bubbles: false}));
-    return {
-      left,
-      scrollLeft: element.scrollLeft,
-      max: element.scrollWidth - element.clientWidth,
-      className: element.className,
-    };
-  }, {year: targetYear, minYear: 862, yearPx: 6});
-  await waitForDisplayedYear(targetYear);
-  return result;
-}
-
-async function moveYearThroughTimeline(targetYear) {
-  let current = await displayedYear();
-  if (!Number.isFinite(current)) throw new Error(`Current historical year is unavailable before selecting ${targetYear}`);
-
-  // Exercise the actual era selector for large navigation, then use the actual
-  // scrollable year ruler for the exact year. Replaying many wheel events in a
-  // headless software-WebGL runner is timing-sensitive because every event can
-  // trigger a complete historical geometry refresh; that does not add accuracy
-  // coverage beyond asserting the selected History Core month below.
-  const nearestAnchor = ERA_ANCHORS.reduce((best, year) =>
-    Math.abs(year - targetYear) < Math.abs(best - targetYear) ? year : best, ERA_ANCHORS[0]);
-  if (Math.abs(nearestAnchor - targetYear) < Math.abs(current - targetYear)) {
-    await page.getByLabel('Быстрый переход к эпохе').selectOption(String(nearestAnchor), {timeout: 12000});
-    await waitForDisplayedYear(nearestAnchor);
-    current = nearestAnchor;
-  }
-
-  if (current === targetYear) return {year: current, mode: 'era-selector'};
-  const ruler = await nativeRulerScrollToYear(targetYear);
-  return {year: targetYear, mode: 'era-selector-and-native-ruler-scroll', ruler};
-}
-
-async function selectHistoricalDate(year, month) {
+async function loadHistoricalDate(year, month) {
   if (page.isClosed()) throw new Error(`Historical page closed before selecting ${year}-${month}`);
-
-  await page.getByLabel('Месяц').selectOption(String(month), {timeout: 12000});
-  const changed = await moveYearThroughTimeline(year);
+  const target = new URL(url);
+  target.searchParams.set('year', String(year));
+  target.searchParams.set('month', String(month));
+  const response = await page.goto(target.href, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  if (!response?.ok()) throw new Error(`Territory HTTP failed for ${year}-${month}: ${response?.status()}`);
 
   const expectedKey = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
-  await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, {timeout: 18000});
+  await page.waitForFunction((key) => document.body?.innerText?.includes(`History Core ${key}`), expectedKey, {timeout: 30000});
+  await page.waitForFunction(({expectedYear, expectedMonth}) => {
+    const monthSelect = document.querySelector('select[aria-label="Месяц"]');
+    const shownYear = monthSelect?.parentElement?.querySelector('b')?.textContent?.trim();
+    return shownYear === String(expectedYear) && monthSelect?.value === String(expectedMonth);
+  }, {expectedYear: year, expectedMonth: month}, {timeout: 12000});
   if (pageCrashes.length) throw new Error(`${expectedKey}: ${pageCrashes.join('; ')}`);
-  return changed;
+  return {year, month, mode: 'exact-date-link', url: target.href};
 }
 
 async function accuracyCaption() {
@@ -105,11 +55,7 @@ async function accuracyCaption() {
 }
 
 try {
-  const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  if (!response?.ok()) throw new Error(`Territory HTTP failed: ${response?.status()}`);
-  await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 30000 });
-
-  const changed1988 = await selectHistoricalDate(1988, 7);
+  const changed1988 = await loadHistoricalDate(1988, 7);
   await page.waitForFunction(() => document.body?.innerText?.includes('проверенная госграница: 4'), null, { timeout: 12000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('морское разграничение: 6'), null, { timeout: 12000 });
   await page.waitForTimeout(1200);
@@ -122,7 +68,7 @@ try {
 
   // Historical Basemaps has 1530 then 1600; 1573 must visibly identify 1530
   // as approximate temporal context rather than an exact 1573 world border.
-  const changed1573 = await selectHistoricalDate(1573, 7);
+  const changed1573 = await loadHistoricalDate(1573, 7);
   await page.waitForFunction(() => {
     const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
     return text.includes('Мировой контекст: приблизительный срез 1530 года') && text.includes('43 лет до выбранной даты');
@@ -135,7 +81,7 @@ try {
   // The 1581-1689 Tsardom certification has a 220 km uncertainty envelope. It
   // must stay explicit in the production UI even though completion certification
   // promotes the month into the geometry-verified History Core path.
-  const changed1581 = await selectHistoricalDate(1581, 7);
+  const changed1581 = await loadHistoricalDate(1581, 7);
   await page.waitForFunction(() => {
     const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
     return text.includes('неопределённость реконструкции ≈220 км');
