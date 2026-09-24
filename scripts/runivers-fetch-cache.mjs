@@ -127,7 +127,15 @@ async function fetchVectorTile(host, id, z, x, y) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), VECTOR_TILE_TIMEOUT_MS);
   try {
-    const response = await originalFetch(`${host}/api/resource/${id}/${z}/${x}/${y}.mvt`, {
+    const tileUrl = new URL('/api/component/feature_layer/mvt', `${host}/`);
+    tileUrl.searchParams.set('resource', String(id));
+    tileUrl.searchParams.set('z', String(z));
+    tileUrl.searchParams.set('x', String(x));
+    tileUrl.searchParams.set('y', String(y));
+    // Current NextGIS Web defaults to simplification=8. The regression needs the
+    // least-generalized reference geometry available from the tile service.
+    tileUrl.searchParams.set('simplification', '0');
+    const response = await originalFetch(tileUrl, {
       signal: controller.signal,
       headers: {accept: 'application/vnd.mapbox-vector-tile,application/x-protobuf,*/*'},
       redirect: 'follow',
@@ -183,8 +191,9 @@ async function fetchLayerFromVectorTiles(host, id) {
     features: [{
       type: 'Feature',
       properties: {
-        runiversReferenceTransport: 'mvt',
+        runiversReferenceTransport: 'mvt-current-api',
         vectorTileZoom: z,
+        vectorTileSimplification: 0,
         polygonFeatures,
         sourceProperties,
       },
@@ -217,10 +226,10 @@ async function fetchLayerWithRetry(host, id) {
 
   try {
     const payload = await fetchLayerFromVectorTiles(host, id);
-    console.log(`Runivers resource ${id}: full-layer exports unavailable; using production MVT transport.`);
+    console.log(`Runivers resource ${id}: full-layer exports unavailable; using current NextGIS MVT transport.`);
     return payload;
   } catch (error) {
-    errors.push(`MVT z${VECTOR_TILE_ZOOM}: ${error?.message ?? error}`);
+    errors.push(`MVT-current z${VECTOR_TILE_ZOOM}: ${error?.message ?? error}`);
   }
   throw new Error(`Runivers resource ${id} prefetch failed: ${errors.join(' | ')}`);
 }
@@ -266,7 +275,7 @@ if (fs.existsSync(discoveryFile)) {
           }
           if (cached.error) {
             // The bounded prefetch already exhausted every supported public
-            // transport, including the same MVT path used by Runivers' web map.
+            // transport, including the same MVT service used by current NextGIS.
             return new Response(JSON.stringify({
               error: 'runivers-prefetch-exhausted',
               resourceId: id,
@@ -281,6 +290,6 @@ if (fs.existsSync(discoveryFile)) {
       return originalFetch(input, init);
     };
 
-    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; WGS84 exports first, production MVT fallback enabled.`);
+    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; WGS84 exports first, current NextGIS MVT fallback enabled.`);
   }
 }
