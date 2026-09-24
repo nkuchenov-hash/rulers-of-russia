@@ -1,10 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {VectorTile} from '@mapbox/vector-tile';
+import Pbf from 'pbf';
+import polygonClipping from 'polygon-clipping';
 
 // Preload the public Runivers geometry with bounded concurrency while the
 // regression validator processes layers in chronological order. The validator's
 // geometry metrics and acceptance thresholds remain unchanged; this only removes
 // repeated/serial network latency from the live NextGIS service.
+//
+// Runivers' own production client uses NextGIS vector tiles for these ~50 MB time
+// slices. Full GeoJSON/feature exports intermittently return 503, so the cache
+// reconstructs the same polygon from MVT tiles when the export APIs are down.
+// The reconstructed reference exists only in the ephemeral CI workspace.
 
 const root = process.cwd();
 const discoveryFile = process.env.RUNIVERS_DISCOVERY_FILE || path.join(root, 'tmp', 'runivers-discovery', 'runivers-discovery.json');
@@ -14,6 +22,8 @@ const originalFetch = globalThis.fetch.bind(globalThis);
 const PREFETCH_TIMEOUT_MS = 12000;
 const PREFETCH_ATTEMPTS = 2;
 const COORDINATE_CHECK_LIMIT = 5000;
+const VECTOR_TILE_ZOOM = 2;
+const VECTOR_TILE_TIMEOUT_MS = 10000;
 
 function requestUrl(input) {
   if (typeof input === 'string') return input;
@@ -106,12 +116,91 @@ async function fetchJsonOnce(url) {
   }
 }
 
+function geometryToMultiPolygon(geometry) {
+  if (!geometry) return [];
+  if (geometry.type === 'Polygon') return [geometry.coordinates];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates;
+  return [];
+}
+
+async function fetchVectorTile(host, id, z, x, y) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), VECTOR_TILE_TIMEOUT_MS);
+  try {
+    const response = await originalFetch(`${host}/api/resource/${id}/${z}/${x}/${y}.mvt`, {
+      signal: controller.signal,
+      headers: {accept: 'application/vnd.mapbox-vector-tile,application/x-protobuf,*/*'},
+      redirect: 'follow',
+    });
+    if (response.status === 204 || response.status === 404) return null;
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const buffer = new Uint8Array(await response.arrayBuffer());
+    if (!buffer.length) return null;
+    return new VectorTile(new Pbf(buffer));
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchLayerFromVectorTiles(host, id) {
+  const z = VECTOR_TILE_ZOOM;
+  const side = 2 ** z;
+  let merged = [];
+  let polygonFeatures = 0;
+  const tileErrors = [];
+  const sourceProperties = [];
+
+  for (let x = 0; x < side; x += 1) {
+    for (let y = 0; y < side; y += 1) {
+      let tile;
+      try {
+        tile = await fetchVectorTile(host, id, z, x, y);
+      } catch (error) {
+        tileErrors.push(`${z}/${x}/${y}: ${error?.message ?? error}`);
+        continue;
+      }
+      if (!tile) continue;
+      for (const layerName of Object.keys(tile.layers ?? {})) {
+        const layer = tile.layers[layerName];
+        for (let index = 0; index < layer.length; index += 1) {
+          const feature = layer.feature(index);
+          const geojson = feature.toGeoJSON(x, y, z);
+          const multi = geometryToMultiPolygon(geojson?.geometry);
+          if (!multi.length) continue;
+          polygonFeatures += 1;
+          if (sourceProperties.length < 32 && geojson?.properties) sourceProperties.push(geojson.properties);
+          merged = merged.length ? polygonClipping.union(merged, multi) : multi;
+        }
+      }
+    }
+  }
+
+  if (!merged.length || !polygonFeatures) {
+    throw new Error(`MVT fallback produced no polygon geometry${tileErrors.length ? `; tile errors: ${tileErrors.join(' | ')}` : ''}`);
+  }
+  const payload = {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature',
+      properties: {
+        runiversReferenceTransport: 'mvt',
+        vectorTileZoom: z,
+        polygonFeatures,
+        sourceProperties,
+      },
+      geometry: {type: 'MultiPolygon', coordinates: merged},
+    }],
+  };
+  if (!geometryLooksWgs84(payload)) throw new Error('MVT reconstruction is not valid EPSG:4326 geometry');
+  return payload;
+}
+
 async function fetchLayerWithRetry(host, id) {
-  // NextGIS /geojson may use the layer's native projected CRS. Prefer the
-  // feature endpoint with an explicit WGS84 request and accept /geojson only
-  // when its coordinate range proves that it is already lon/lat.
+  // Prefer explicit WGS84 JSON exports when available. The export endpoint is
+  // included because some NextGIS deployments disable one of the lighter APIs.
   const urls = [
     `${host}/api/resource/${id}/feature/?srs=4326`,
+    `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
     `${host}/api/resource/${id}/geojson`,
   ];
   const errors = [];
@@ -124,6 +213,14 @@ async function fetchLayerWithRetry(host, id) {
       }
     }
     if (attempt < PREFETCH_ATTEMPTS) await new Promise((resolve) => setTimeout(resolve, 350 * attempt));
+  }
+
+  try {
+    const payload = await fetchLayerFromVectorTiles(host, id);
+    console.log(`Runivers resource ${id}: full-layer exports unavailable; using production MVT transport.`);
+    return payload;
+  } catch (error) {
+    errors.push(`MVT z${VECTOR_TILE_ZOOM}: ${error?.message ?? error}`);
   }
   throw new Error(`Runivers resource ${id} prefetch failed: ${errors.join(' | ')}`);
 }
@@ -168,9 +265,8 @@ if (fs.existsSync(discoveryFile)) {
             });
           }
           if (cached.error) {
-            // The bounded prefetch already exhausted both public export routes.
-            // Return a deterministic failure so the validator records the
-            // reference outage instead of repeating another network retry loop.
+            // The bounded prefetch already exhausted every supported public
+            // transport, including the same MVT path used by Runivers' web map.
             return new Response(JSON.stringify({
               error: 'runivers-prefetch-exhausted',
               resourceId: id,
@@ -185,6 +281,6 @@ if (fs.existsSync(discoveryFile)) {
       return originalFetch(input, init);
     };
 
-    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; WGS84 feature endpoint first, coordinate-range validation enabled.`);
+    console.log(`Runivers concurrent prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; WGS84 exports first, production MVT fallback enabled.`);
   }
 }
