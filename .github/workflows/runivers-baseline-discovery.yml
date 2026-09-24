@@ -5,10 +5,13 @@ on:
     branches: [main]
     paths:
       - 'public/data/history-core/**'
+      - 'src/app/territory/**'
+      - 'package.json'
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
       - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
+      - 'scripts/territory-history-smoke.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   workflow_dispatch:
 
