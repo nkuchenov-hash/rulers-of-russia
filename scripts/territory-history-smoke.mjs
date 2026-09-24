@@ -107,14 +107,19 @@ try {
     return text.includes('неопределённость реконструкции ≈220 км');
   }, null, {timeout: 12000});
 
-  // Prove fail-closed behavior. Block the canonical full-state geometry for a
-  // state not loaded by the successful checks above. The UI must explicitly hide
-  // Russia rather than make any legacy archive request or substitute bootstrap
-  // geometry.
+  // Prove fail-closed behavior by first observing and blocking an actual request
+  // for the canonical generated full-state geometry. Only after that request has
+  // been intercepted may the UI assertion pass; this prevents the transient
+  // pre-History-Core caption from producing a false positive.
   let blockedCanonicalGeometry = 0;
-  const generatedTerritoryPattern = '**/data/history-core/generated/territory/**';
+  let interceptedGeometryUrl = null;
+  let resolveIntercept;
+  const intercepted = new Promise(resolve => { resolveIntercept = resolve; });
+  const generatedTerritoryPattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
   await page.route(generatedTerritoryPattern, async route => {
     blockedCanonicalGeometry += 1;
+    interceptedGeometryUrl = route.request().url();
+    resolveIntercept?.(interceptedGeometryUrl);
     await route.fulfill({
       status: 503,
       contentType: 'application/json',
@@ -126,12 +131,16 @@ try {
   failClosedTarget.searchParams.set('month', '7');
   const failClosedResponse = await page.goto(failClosedTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
   if (!failClosedResponse?.ok()) throw new Error(`Fail-closed territory page HTTP failed: ${failClosedResponse?.status()}`);
+  await Promise.race([
+    intercepted,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Fail-closed smoke saw no canonical generated geometry request. Recent History Core requests: ${JSON.stringify(historyRequests.slice(-30))}`)), 30000)),
+  ]);
   await page.waitForFunction(() => {
     const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
     return text.includes('History Core: геометрия недоступна — граница России скрыта');
   }, null, {timeout: 30000});
   await page.unroute(generatedTerritoryPattern);
-  if (!blockedCanonicalGeometry) {
+  if (!blockedCanonicalGeometry || !interceptedGeometryUrl) {
     throw new Error('Fail-closed smoke did not intercept canonical generated territory geometry');
   }
 
@@ -149,7 +158,7 @@ try {
     canvas: (() => { const c = document.querySelector('canvas'); return c ? [c.width,c.height] : null; })()
   }));
   if (!summary.canvas) throw new Error('Historical WebGL canvas missing');
-  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, changed1573, changed1581, blockedCanonicalGeometry, summary}));
+  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, changed1573, changed1581, blockedCanonicalGeometry, interceptedGeometryUrl, summary}));
 } finally {
   await browser.close();
 }
