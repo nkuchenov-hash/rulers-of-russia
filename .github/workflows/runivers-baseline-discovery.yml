@@ -1,0 +1,122 @@
+name: Runivers geometric regression
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/data/history-core/**'
+      - 'src/app/territory/**'
+      - 'package.json'
+      - 'scripts/use-pinned-runivers-baseline.mjs'
+      - 'scripts/runivers-fetch-cache.mjs'
+      - 'scripts/runivers-regression-shard-runner.mjs'
+      - 'scripts/validate-runivers-regression.mjs'
+      - 'scripts/territory-history-smoke.mjs'
+      - '.github/workflows/runivers-baseline-discovery.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: runivers-regression-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: regression ${{ matrix.id }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - id: 1462-1519
+            start: 1462-01
+            end: 1519-12
+          - id: 1520-1599
+            start: 1520-01
+            end: 1599-12
+          - id: 1600-1649
+            start: 1600-01
+            end: 1649-12
+          - id: 1650-1699
+            start: 1650-01
+            end: 1699-12
+          - id: 1700-1749
+            start: 1700-01
+            end: 1749-12
+          - id: 1750-1799
+            start: 1750-01
+            end: 1799-12
+          - id: 1800-1849
+            start: 1800-01
+            end: 1849-12
+          - id: 1850-1899
+            start: 1850-01
+            end: 1899-12
+          - id: 1900-1922
+            start: 1900-01
+            end: 1922-12
+          - id: 1923-1945
+            start: 1923-01
+            end: 1945-12
+          - id: 1946-1991
+            start: 1946-01
+            end: 1991-12
+          - id: 1992-2020
+            start: 1992-01
+            end: 2020-12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Load verified Runivers baseline metadata
+        id: baseline
+        continue-on-error: true
+        run: node scripts/use-pinned-runivers-baseline.mjs
+
+      - name: Install project dependencies
+        if: steps.baseline.outcome == 'success'
+        run: npm install
+
+      - name: Materialize canonical History Core
+        if: steps.baseline.outcome == 'success'
+        run: npm run materialize:history
+
+      - name: Validate Runivers geometry against History Core
+        if: steps.baseline.outcome == 'success'
+        id: regression
+        continue-on-error: true
+        env:
+          RUNIVERS_DISCOVERY_FILE: tmp/runivers-discovery/runivers-current-baseline.json
+          RUNIVERS_FETCH_CONCURRENCY: '2'
+          RUNIVERS_START_MONTH: ${{ matrix.start }}
+          RUNIVERS_END_MONTH: ${{ matrix.end }}
+        run: node scripts/runivers-regression-shard-runner.mjs
+
+      - name: Upload Runivers audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runivers-geometric-regression-${{ matrix.id }}
+          path: |
+            tmp/runivers-discovery
+            tmp/runivers-shards
+            tmp/runivers-regression/report.json
+          if-no-files-found: warn
+
+      - name: Require baseline metadata
+        if: steps.baseline.outcome != 'success'
+        run: |
+          echo 'Pinned Runivers baseline metadata could not be loaded.' >&2
+          exit 1
+
+      - name: Require geometric regression acceptance
+        if: steps.baseline.outcome == 'success' && steps.regression.outcome != 'success'
+        run: |
+          echo 'Runivers geometric regression failed. Resolve the contour regression or add an A1/A2/A3 evidence-backed override.' >&2
+          exit 1
