@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "policy": "Differences from the Runivers reference baseline are allowed only when stronger canonical documentary evidence explicitly justifies the differing geometry. Blanket or undocumented exemptions are forbidden.",
+  "overrides": []
+}
