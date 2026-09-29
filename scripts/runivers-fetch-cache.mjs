@@ -8,10 +8,15 @@ import polygonClipping from 'polygon-clipping';
 // its large historical polygons through NextGIS MVT in production; full-layer
 // JSON exports are only a fallback because they frequently return 503.
 //
+// The Runivers/NextGIS project documentation publishes the canonical tile route
+// as /api/resource/{id}/{z}/{x}/{y}.mvt. Try that route first. The newer
+// /api/component/feature_layer/mvt route is retained only as a compatibility
+// fallback because it can be unavailable while the public map tile endpoint is
+// still healthy.
+//
 // IMPORTANT: use the single z=0 world tile. Reassembling a layer from many MVT
 // tiles introduces clipping seams at tile edges; those seams are rendering
 // artifacts, not political borders, and must never enter the regression metric.
-// simplification=0 disables NextGIS' optional extra geometry simplification.
 // Reference geometry remains ephemeral in CI and is never committed to the repo.
 
 const root = process.cwd();
@@ -119,20 +124,11 @@ function geometryToMultiPolygon(geometry) {
   return [];
 }
 
-async function fetchVectorTileOnce(host, id) {
-  const z = VECTOR_TILE_ZOOM;
-  const x = 0;
-  const y = 0;
+async function fetchTileBytes(url) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), VECTOR_TILE_TIMEOUT_MS);
   try {
-    const tileUrl = new URL('/api/component/feature_layer/mvt', `${host}/`);
-    tileUrl.searchParams.set('resource', String(id));
-    tileUrl.searchParams.set('z', String(z));
-    tileUrl.searchParams.set('x', String(x));
-    tileUrl.searchParams.set('y', String(y));
-    tileUrl.searchParams.set('simplification', '0');
-    const response = await originalFetch(tileUrl, {
+    const response = await originalFetch(url, {
       signal: controller.signal,
       headers: {accept: 'application/vnd.mapbox-vector-tile,application/x-protobuf,*/*'},
       redirect: 'follow',
@@ -140,27 +136,45 @@ async function fetchVectorTileOnce(host, id) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const bytes = new Uint8Array(await response.arrayBuffer());
     if (!bytes.length) throw new Error('empty vector tile');
-    return new VectorTile(new Pbf(bytes));
+    return bytes;
   } finally {
     clearTimeout(timer);
   }
 }
 
+function vectorTileUrls(host, id) {
+  const z = VECTOR_TILE_ZOOM, x = 0, y = 0;
+  const canonical = new URL(`/api/resource/${id}/${z}/${x}/${y}.mvt`, `${host}/`);
+  const component = new URL('/api/component/feature_layer/mvt', `${host}/`);
+  component.searchParams.set('resource', String(id));
+  component.searchParams.set('z', String(z));
+  component.searchParams.set('x', String(x));
+  component.searchParams.set('y', String(y));
+  component.searchParams.set('simplification', '0');
+  return [
+    {kind: 'canonical-resource-mvt', url: canonical},
+    {kind: 'component-feature-layer-mvt', url: component},
+  ];
+}
+
 async function fetchVectorTile(host, id) {
-  let lastError = null;
+  const errors = [];
   for (let attempt = 1; attempt <= VECTOR_TILE_ATTEMPTS; attempt += 1) {
-    try {
-      return await fetchVectorTileOnce(host, id);
-    } catch (error) {
-      lastError = error;
-      if (attempt < VECTOR_TILE_ATTEMPTS) await sleep(650 * attempt);
+    for (const candidate of vectorTileUrls(host, id)) {
+      try {
+        const bytes = await fetchTileBytes(candidate.url);
+        return {tile: new VectorTile(new Pbf(bytes)), transport: candidate.kind};
+      } catch (error) {
+        errors.push(`${candidate.kind} attempt ${attempt}: ${error?.message ?? error}`);
+      }
     }
+    if (attempt < VECTOR_TILE_ATTEMPTS) await sleep(650 * attempt);
   }
-  throw lastError ?? new Error(`MVT fetch failed for ${id}`);
+  throw new Error(errors.join(' | '));
 }
 
 async function fetchLayerFromVectorTile(host, id) {
-  const tile = await fetchVectorTile(host, id);
+  const {tile, transport} = await fetchVectorTile(host, id);
   let merged = [];
   let polygonFeatures = 0;
   const sourceProperties = [];
@@ -182,9 +196,8 @@ async function fetchLayerFromVectorTile(host, id) {
     features: [{
       type: 'Feature',
       properties: {
-        runiversReferenceTransport: 'mvt-current-api-single-world-tile',
+        runiversReferenceTransport: transport,
         vectorTileZoom: VECTOR_TILE_ZOOM,
-        vectorTileSimplification: 0,
         polygonFeatures,
         sourceProperties,
       },
@@ -192,17 +205,17 @@ async function fetchLayerFromVectorTile(host, id) {
     }],
   };
   if (!geometryLooksWgs84(payload)) throw new Error('MVT reconstruction is not valid EPSG:4326 geometry');
-  return payload;
+  return {payload, transport};
 }
 
 async function fetchLayer(host, id) {
   const errors = [];
   try {
-    const payload = await fetchLayerFromVectorTile(host, id);
-    console.log(`Runivers resource ${id}: using seam-free z=0 current NextGIS MVT reference.`);
+    const {payload, transport} = await fetchLayerFromVectorTile(host, id);
+    console.log(`Runivers resource ${id}: using ${transport} z=0 reference.`);
     return payload;
   } catch (error) {
-    errors.push(`MVT z0 after ${VECTOR_TILE_ATTEMPTS} attempts: ${error?.message ?? error}`);
+    errors.push(`MVT after ${VECTOR_TILE_ATTEMPTS} attempts: ${error?.message ?? error}`);
   }
   const urls = [
     `${host}/api/resource/${id}/feature/?srs=4326`,
@@ -216,12 +229,14 @@ async function fetchLayer(host, id) {
         console.log(`Runivers resource ${id}: MVT unavailable; using WGS84 JSON export.`);
         return payload;
       } catch (error) {
-        errors.push(`${url}: ${error?.message ?? error}`);
+        errors.push(`JSON attempt ${attempt} ${url}: ${error?.message ?? error}`);
       }
     }
     if (attempt < JSON_ATTEMPTS) await sleep(700 * attempt);
   }
-  throw new Error(`Runivers resource ${id} prefetch failed: ${errors.join(' | ')}`);
+  const detail = errors.join(' | ');
+  console.error(`Runivers resource ${id} prefetch exhausted: ${detail}`);
+  throw new Error(`Runivers resource ${id} prefetch failed: ${detail}`);
 }
 
 if (fs.existsSync(discoveryFile)) {
@@ -267,6 +282,6 @@ if (fs.existsSync(discoveryFile)) {
       }
       return originalFetch(input, init);
     };
-    console.log(`Runivers prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; seam-free z=0 NextGIS MVT first with ${VECTOR_TILE_ATTEMPTS} attempts, WGS84 JSON fallback.`);
+    console.log(`Runivers prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; canonical project MVT first, component MVT + WGS84 JSON fallbacks.`);
   }
 }
