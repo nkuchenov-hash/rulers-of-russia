@@ -4,22 +4,17 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [closed]
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: rulers-merged-main-${{ github.event.pull_request.merge_commit_sha || github.sha }}
+  group: rulers-merged-main-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   validate-main:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current main
@@ -27,17 +22,6 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-
-      - name: Confirm merged revision is present on main
-        if: github.event_name == 'pull_request'
-        shell: bash
-        env:
-          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
-        run: |
-          git fetch origin main
-          git merge-base --is-ancestor "$MERGE_SHA" origin/main
-          echo "Merged SHA: $MERGE_SHA"
-          echo "Current main: $(git rev-parse HEAD)"
 
       - name: Setup Node
         uses: actions/setup-node@v4
