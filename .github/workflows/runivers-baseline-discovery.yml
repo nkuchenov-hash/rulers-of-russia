@@ -11,8 +11,11 @@ on:
       - 'scripts/runivers-fetch-cache.mjs'
       - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
+      - 'scripts/require-runivers-regression.mjs'
       - 'scripts/territory-history-smoke.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
+  schedule:
+    - cron: '17 3 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -115,8 +118,6 @@ jobs:
           echo 'Pinned Runivers baseline metadata could not be loaded.' >&2
           exit 1
 
-      - name: Require geometric regression acceptance
-        if: steps.baseline.outcome == 'success' && steps.regression.outcome != 'success'
-        run: |
-          echo 'Runivers geometric regression failed. Resolve the contour regression or add an A1/A2/A3 evidence-backed override.' >&2
-          exit 1
+      - name: Classify geometric regression result
+        if: steps.baseline.outcome == 'success'
+        run: node scripts/require-runivers-regression.mjs
