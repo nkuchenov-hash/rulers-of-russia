@@ -20,16 +20,19 @@ const cacheDir = path.join(root, 'tmp', 'runivers-regression', 'reference-cache'
 const concurrency = Math.max(1, Math.min(8, Number(process.env.RUNIVERS_FETCH_CONCURRENCY || 2)));
 const originalFetch = globalThis.fetch.bind(globalThis);
 const JSON_TIMEOUT_MS = 12000;
-const JSON_ATTEMPTS = 1;
+const JSON_ATTEMPTS = 2;
 const COORDINATE_CHECK_LIMIT = 5000;
 const VECTOR_TILE_ZOOM = 0;
 const VECTOR_TILE_TIMEOUT_MS = 15000;
+const VECTOR_TILE_ATTEMPTS = 3;
 
 function requestUrl(input) {
   if (typeof input === 'string') return input;
   if (input instanceof URL) return input.href;
   return input?.url ?? '';
 }
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function limiter(max) {
   let active = 0;
@@ -47,7 +50,7 @@ function limiter(max) {
         });
     }
   };
-  return (task) => new Promise((resolve, reject) => {
+  return task => new Promise((resolve, reject) => {
     queue.push({task, resolve, reject});
     pump();
   });
@@ -56,7 +59,7 @@ function limiter(max) {
 function geometryLooksWgs84(payload) {
   let checked = 0;
   let invalid = false;
-  const inspect = (value) => {
+  const inspect = value => {
     if (invalid || checked >= COORDINATE_CHECK_LIMIT || !Array.isArray(value)) return;
     if (value.length >= 2 && Number.isFinite(value[0]) && Number.isFinite(value[1])) {
       checked += 1;
@@ -83,7 +86,7 @@ function normalizePayload(parsed) {
   if (parsed?.type === 'FeatureCollection' && Array.isArray(parsed.features)) {
     payload = parsed;
   } else if (Array.isArray(parsed)) {
-    const features = parsed.map((item) => item?.type === 'Feature' ? item : item?.geom
+    const features = parsed.map(item => item?.type === 'Feature' ? item : item?.geom
       ? {type: 'Feature', geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
       : null).filter(Boolean);
     if (features.length) payload = {type: 'FeatureCollection', features};
@@ -116,7 +119,7 @@ function geometryToMultiPolygon(geometry) {
   return [];
 }
 
-async function fetchVectorTile(host, id) {
+async function fetchVectorTileOnce(host, id) {
   const z = VECTOR_TILE_ZOOM;
   const x = 0;
   const y = 0;
@@ -143,12 +146,24 @@ async function fetchVectorTile(host, id) {
   }
 }
 
+async function fetchVectorTile(host, id) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= VECTOR_TILE_ATTEMPTS; attempt += 1) {
+    try {
+      return await fetchVectorTileOnce(host, id);
+    } catch (error) {
+      lastError = error;
+      if (attempt < VECTOR_TILE_ATTEMPTS) await sleep(650 * attempt);
+    }
+  }
+  throw lastError ?? new Error(`MVT fetch failed for ${id}`);
+}
+
 async function fetchLayerFromVectorTile(host, id) {
   const tile = await fetchVectorTile(host, id);
   let merged = [];
   let polygonFeatures = 0;
   const sourceProperties = [];
-
   for (const layerName of Object.keys(tile.layers ?? {})) {
     const layer = tile.layers[layerName];
     for (let index = 0; index < layer.length; index += 1) {
@@ -161,7 +176,6 @@ async function fetchLayerFromVectorTile(host, id) {
       merged = merged.length ? polygonClipping.union(merged, multi) : multi;
     }
   }
-
   if (!merged.length || !polygonFeatures) throw new Error('z=0 MVT produced no polygon geometry');
   const payload = {
     type: 'FeatureCollection',
@@ -188,9 +202,8 @@ async function fetchLayer(host, id) {
     console.log(`Runivers resource ${id}: using seam-free z=0 current NextGIS MVT reference.`);
     return payload;
   } catch (error) {
-    errors.push(`MVT z0: ${error?.message ?? error}`);
+    errors.push(`MVT z0 after ${VECTOR_TILE_ATTEMPTS} attempts: ${error?.message ?? error}`);
   }
-
   const urls = [
     `${host}/api/resource/${id}/feature/?srs=4326`,
     `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
@@ -206,6 +219,7 @@ async function fetchLayer(host, id) {
         errors.push(`${url}: ${error?.message ?? error}`);
       }
     }
+    if (attempt < JSON_ATTEMPTS) await sleep(700 * attempt);
   }
   throw new Error(`Runivers resource ${id} prefetch failed: ${errors.join(' | ')}`);
 }
@@ -214,11 +228,10 @@ if (fs.existsSync(discoveryFile)) {
   const discovery = JSON.parse(fs.readFileSync(discoveryFile, 'utf8'));
   const host = String(discovery.host || '').replace(/\/$/, '');
   const ids = [...new Set((discovery.vectorLayers ?? [])
-    .filter((layer) => Number.isInteger(layer.fromYear) && Number.isInteger(layer.toYear))
-    .filter((layer) => layer.toYear >= 1462 && layer.fromYear <= 2020)
-    .map((layer) => Number(layer.id))
+    .filter(layer => Number.isInteger(layer.fromYear) && Number.isInteger(layer.toYear))
+    .filter(layer => layer.toYear >= 1462 && layer.fromYear <= 2020)
+    .map(layer => Number(layer.id))
     .filter(Number.isInteger))];
-
   if (host && ids.length) {
     fs.mkdirSync(cacheDir, {recursive: true});
     const limit = limiter(concurrency);
@@ -230,9 +243,8 @@ if (fs.existsSync(discoveryFile)) {
         const payload = await fetchLayer(host, id);
         fs.writeFileSync(file, JSON.stringify(payload));
         return {file};
-      }).catch((error) => ({error})));
+      }).catch(error => ({error})));
     }
-
     globalThis.fetch = async function runiversCachedFetch(input, init) {
       const url = requestUrl(input);
       const match = url.match(/\/api\/resource\/(\d+)\/(?:geojson|feature\/)(?:\?|$)/);
@@ -243,17 +255,10 @@ if (fs.existsSync(discoveryFile)) {
           const cached = await pending;
           if (!cached.error && cached.file && fs.existsSync(cached.file)) {
             if (init?.signal?.aborted) throw init.signal.reason ?? new DOMException('Aborted', 'AbortError');
-            return new Response(fs.readFileSync(cached.file), {
-              status: 200,
-              headers: {'content-type': 'application/geo+json'},
-            });
+            return new Response(fs.readFileSync(cached.file), {status: 200, headers: {'content-type': 'application/geo+json'}});
           }
           if (cached.error) {
-            return new Response(JSON.stringify({
-              error: 'runivers-prefetch-exhausted',
-              resourceId: id,
-              detail: String(cached.error?.message ?? cached.error),
-            }), {
+            return new Response(JSON.stringify({error: 'runivers-prefetch-exhausted', resourceId: id, detail: String(cached.error?.message ?? cached.error)}), {
               status: 503,
               headers: {'content-type': 'application/json'},
             });
@@ -262,7 +267,6 @@ if (fs.existsSync(discoveryFile)) {
       }
       return originalFetch(input, init);
     };
-
-    console.log(`Runivers prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; seam-free z=0 NextGIS MVT first, WGS84 JSON fallback.`);
+    console.log(`Runivers prefetch enabled: ${ids.length} layers, concurrency ${concurrency}; seam-free z=0 NextGIS MVT first with ${VECTOR_TILE_ATTEMPTS} attempts, WGS84 JSON fallback.`);
   }
 }
