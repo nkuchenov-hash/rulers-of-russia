@@ -6,6 +6,10 @@ on:
       - territory-v31-restore-stable-single-surface
     paths:
       - 'src/app/territory/**'
+      - 'public/data/history-core/**'
+      - 'scripts/history-archive-coastline.mjs'
+      - 'scripts/build-history-archive-geometry.mjs'
+      - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
@@ -13,6 +17,10 @@ on:
   pull_request:
     paths:
       - 'src/app/territory/**'
+      - 'public/data/history-core/**'
+      - 'scripts/history-archive-coastline.mjs'
+      - 'scripts/build-history-archive-geometry.mjs'
+      - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
