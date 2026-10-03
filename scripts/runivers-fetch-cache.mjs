@@ -218,7 +218,7 @@ async function fetchLayer(host, id) {
     errors.push(`MVT after ${VECTOR_TILE_ATTEMPTS} attempts: ${error?.message ?? error}`);
   }
   const urls = [
-    `${host}/api/resource/${id}/feature/?srs=4326`,
+    `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson`,
     `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
     `${host}/api/resource/${id}/geojson`,
   ];

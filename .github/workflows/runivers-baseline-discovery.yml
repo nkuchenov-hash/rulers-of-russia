@@ -12,6 +12,9 @@ on:
       - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - 'scripts/require-runivers-regression.mjs'
+      - 'scripts/test-runivers-shard-runner.mjs'
+      - 'scripts/test-runivers-geometry.mjs'
+      - 'scripts/test-runivers-json-fallback.mjs'
       - 'scripts/territory-history-smoke.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   schedule:
@@ -26,7 +29,21 @@ permissions:
   contents: read
 
 jobs:
+  integrity:
+    name: regression integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: node scripts/test-runivers-shard-runner.mjs
+      - run: node scripts/test-runivers-geometry.mjs
+      - run: node scripts/test-runivers-json-fallback.mjs
+
   regression:
+    needs: integrity
     name: regression ${{ matrix.id }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
