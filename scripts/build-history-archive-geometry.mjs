@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import polygonClipping from 'polygon-clipping';
+import {repairArchiveCoastline} from './history-archive-coastline.mjs';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
@@ -90,6 +91,8 @@ for (const recipe of recipes) {
     });
     assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} componentBboxFilter selected no polygon components`);
   }
+
+  polygons = repairArchiveCoastline(polygons, recipe.coastlineRepair, root);
 
   const appliedDifferenceMasks = [];
   for (const mask of recipe.differenceMasks ?? []) {
@@ -185,6 +188,7 @@ for (const recipe of recipes) {
       selector: recipe.selector ?? null,
       featureIndices: recipe.featureIndices ?? null,
       componentBboxFilter: recipe.componentBboxFilter ?? null,
+      coastlineRepair: recipe.coastlineRepair ?? null,
       resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
       unionMasks: appliedUnionMasks,

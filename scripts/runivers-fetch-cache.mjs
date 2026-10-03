@@ -111,7 +111,21 @@ async function fetchJsonOnce(url) {
       redirect: 'follow',
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return normalizePayload(await response.json());
+    const payload = normalizePayload(await response.json());
+    // Match the MVT path: internal edges between adjacent source features are
+    // not national boundaries and must not enter a whole-state comparison.
+    if (payload.features.every(feature => geometryToMultiPolygon(feature.geometry).length)) {
+      let merged = [];
+      for (const feature of payload.features) {
+        const polygons = geometryToMultiPolygon(feature.geometry);
+        merged = merged.length ? polygonClipping.union(merged, polygons) : polygons;
+      }
+      return {type: 'FeatureCollection', features: [{type: 'Feature',
+        properties: {runiversReferenceTransport: 'wgs84-json',
+          sourceProperties: payload.features.map(feature => feature.properties)},
+        geometry: {type: 'MultiPolygon', coordinates: merged}}]};
+    }
+    return payload;
   } finally {
     clearTimeout(timer);
   }

@@ -7,7 +7,8 @@ const cwd = process.cwd();
 const originalFetch = globalThis.fetch;
 const previousDiscovery = process.env.RUNIVERS_DISCOVERY_FILE;
 const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'runivers-json-'));
-const geometry = {type: 'Polygon', coordinates: [[[30, 50], [31, 50], [31, 51], [30, 50]]]};
+const geometry = {type: 'Polygon', coordinates: [[[30, 50], [31, 50], [31, 51], [30, 51], [30, 50]]]};
+const adjacent = {type: 'Polygon', coordinates: [[[31, 50], [32, 50], [32, 51], [31, 51], [31, 50]]]};
 try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
@@ -18,7 +19,10 @@ try {
     const url = new URL(input);
     if (url.pathname === '/api/resource/1/feature/') {
       requestedGeojson = url.searchParams.get('geom_format') === 'geojson' && url.searchParams.get('srs') === '4326';
-      return Response.json([{geom: requestedGeojson ? geometry : 'POLYGON ((30 50,31 50,31 51,30 50))', fields: {name: 'test'}}]);
+      return Response.json([
+        {geom: requestedGeojson ? geometry : 'POLYGON ((30 50,31 50,31 51,30 50))', fields: {name: 'test'}},
+        {geom: requestedGeojson ? adjacent : 'POLYGON ((31 50,32 50,32 51,31 50))', fields: {name: 'adjacent'}},
+      ]);
     }
     return new Response('', {status: 404});
   };
@@ -27,7 +31,10 @@ try {
   assert.equal(response.status, 200, await response.clone().text());
   assert.equal(requestedGeojson, true, 'NextGIS otherwise defaults to WKT');
   const data = await response.json();
-  assert.deepEqual(data.features[0].geometry, geometry);
+  assert.equal(data.features.length, 1);
+  assert.deepEqual(data.features[0].geometry, {type: 'MultiPolygon', coordinates:
+    [[[[30, 50], [32, 50], [32, 51], [30, 51], [30, 50]]]]});
+  assert.equal(data.features[0].properties.sourceProperties.length, 2);
   assert.deepEqual(JSON.parse(fs.readFileSync('tmp/runivers-regression/reference-cache/1.geojson')), data);
   console.log('Runivers JSON fallback passed with MVT unavailable and an explicit GeoJSON geometry request.');
 } finally {

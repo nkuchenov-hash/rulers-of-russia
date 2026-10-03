@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import polygonClipping from 'polygon-clipping';
+import {repairArchiveCoastline} from './history-archive-coastline.mjs';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
@@ -65,6 +66,8 @@ for (const recipe of recipes) {
   if (!Array.isArray(recipe.evidenceDocumentIds) || recipe.evidenceDocumentIds.length === 0) fail(`Archive recipe ${recipe.id} has no evidence documents`);
   for (const id of recipe.evidenceDocumentIds) if (!documentIds.has(id)) fail(`Archive recipe ${recipe.id} references unknown document ${id}`);
 
+  if (recipe.coastlineRepair && !recipe.evidenceDocumentIds.includes(recipe.coastlineRepair.evidenceDocumentId)) fail(`Archive recipe ${recipe.id} lacks coastline evidence`);
+
   const archiveFile = path.join(root, recipe.archivePath ?? '');
   if (!fs.existsSync(archiveFile)) fail(`Archive recipe ${recipe.id} source missing: ${recipe.archivePath}`);
   const bytes = fs.readFileSync(archiveFile);
@@ -105,6 +108,8 @@ for (const recipe of recipes) {
     });
     if (polygons.length < 1) fail(`Archive recipe ${recipe.id} componentBboxFilter selected no polygon components`);
   }
+
+  polygons = repairArchiveCoastline(polygons, recipe.coastlineRepair, root);
 
   const validatedDifferenceMasks = [];
   for (const mask of recipe.differenceMasks ?? []) {
@@ -186,6 +191,7 @@ for (const recipe of recipes) {
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
   if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact derived geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
+  if (JSON.stringify(generated.metadata?.coastlineRepair ?? null) !== JSON.stringify(recipe.coastlineRepair ?? null)) fail(`Archive output ${recipe.output} lost coastline repair provenance`);
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.resultComponentBboxFilter ?? null) !== JSON.stringify(recipe.resultComponentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost resultComponentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.differenceMasks ?? []) !== JSON.stringify(validatedDifferenceMasks)) fail(`Archive output ${recipe.output} lost difference-mask provenance`);
