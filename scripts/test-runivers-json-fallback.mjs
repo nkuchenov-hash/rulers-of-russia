@@ -32,6 +32,8 @@ try {
   assert.equal(requestedGeojson, true, 'NextGIS otherwise defaults to WKT');
   const data = await response.json();
   assert.equal(data.features.length, 1);
+  assert.deepEqual(data.referenceSourceFeatures.map(f => f.geometry), [geometry, adjacent]);
+  assert.deepEqual(data.referenceSourceFeatures.map(f => f.properties.name), ['test', 'adjacent']);
   assert.deepEqual(data.features[0].geometry, {type: 'MultiPolygon', coordinates:
     [[[[30, 50], [32, 50], [32, 51], [30, 51], [30, 50]]]]});
   assert.equal(data.features[0].properties.sourceProperties.length, 2);

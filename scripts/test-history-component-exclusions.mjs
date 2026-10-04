@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {excludeArchiveComponents} from './history-archive-component-exclusions.mjs';
+const square=x=>[[[x,0],[x+1,0],[x+1,1],[x,1],[x,0]]];
+const polygons=[square(0),square(3)];
+const exclusion={index:1,expectedBbox:[3,0,4,1],evidenceDocumentId:'primary',note:'Occupied territory is not sovereign territory'};
+const result=excludeArchiveComponents(polygons,[exclusion],['primary']);
+assert.deepEqual(result,[polygons[0]]);
+assert.equal(result[0],polygons[0],'The retained mainland must be unchanged');
+assert.equal(polygons.length,2,'The archived input is not modified');
+assert.throws(()=>excludeArchiveComponents(polygons,[exclusion],[]),/documentary evidence/);
+assert.throws(()=>excludeArchiveComponents(polygons,[{...exclusion,index:0}],['primary']),/identity changed/);
+assert.throws(()=>excludeArchiveComponents(polygons,[exclusion,exclusion],['primary']),/Duplicate/);
+console.log('Component exclusion tests passed: evidence, exact identity, retained geometry and source immutability.');

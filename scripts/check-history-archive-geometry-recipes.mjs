@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import polygonClipping from 'polygon-clipping';
+import {excludeArchiveComponents} from './history-archive-component-exclusions.mjs';
 import {repairArchiveCoastline} from './history-archive-coastline.mjs';
 
 const root = process.cwd();
@@ -94,6 +95,7 @@ for (const recipe of recipes) {
     if (!['Polygon', 'MultiPolygon'].includes(sourceFeature.geometry?.type)) fail(`Archive recipe ${recipe.id} selected unsupported geometry`);
   }
   let polygons = candidates.flatMap(sourceFeature => geometryPolygons(sourceFeature.geometry));
+  polygons = excludeArchiveComponents(polygons, recipe.componentExclusions, recipe.evidenceDocumentIds);
   if (recipe.componentBboxFilter) {
     const f = recipe.componentBboxFilter;
     if (![f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite)) fail(`Archive recipe ${recipe.id} has invalid componentBboxFilter`);
@@ -191,6 +193,7 @@ for (const recipe of recipes) {
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
   if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact derived geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
+  if (JSON.stringify(generated.metadata?.componentExclusions ?? []) !== JSON.stringify(recipe.componentExclusions ?? [])) fail(`Archive output ${recipe.output} lost component exclusion provenance`);
   if (JSON.stringify(generated.metadata?.coastlineRepair ?? null) !== JSON.stringify(recipe.coastlineRepair ?? null)) fail(`Archive output ${recipe.output} lost coastline repair provenance`);
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
   if (JSON.stringify(generated.metadata?.resultComponentBboxFilter ?? null) !== JSON.stringify(recipe.resultComponentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost resultComponentBboxFilter provenance`);

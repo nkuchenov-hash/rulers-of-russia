@@ -120,7 +120,7 @@ async function fetchJsonOnce(url) {
         const polygons = geometryToMultiPolygon(feature.geometry);
         merged = merged.length ? polygonClipping.union(merged, polygons) : polygons;
       }
-      return {type: 'FeatureCollection', features: [{type: 'Feature',
+      return {type: 'FeatureCollection', referenceSourceFeatures: payload.features, features: [{type: 'Feature',
         properties: {runiversReferenceTransport: 'wgs84-json',
           sourceProperties: payload.features.map(feature => feature.properties)},
         geometry: {type: 'MultiPolygon', coordinates: merged}}]};
@@ -192,6 +192,7 @@ async function fetchLayerFromVectorTile(host, id) {
   let merged = [];
   let polygonFeatures = 0;
   const sourceProperties = [];
+  const referenceSourceFeatures = [];
   for (const layerName of Object.keys(tile.layers ?? {})) {
     const layer = tile.layers[layerName];
     for (let index = 0; index < layer.length; index += 1) {
@@ -200,13 +201,15 @@ async function fetchLayerFromVectorTile(host, id) {
       const multi = geometryToMultiPolygon(geojson?.geometry);
       if (!multi.length) continue;
       polygonFeatures += 1;
-      if (sourceProperties.length < 32 && geojson?.properties) sourceProperties.push(geojson.properties);
+      sourceProperties.push(geojson.properties ?? {});
+      referenceSourceFeatures.push(geojson);
       merged = merged.length ? polygonClipping.union(merged, multi) : multi;
     }
   }
   if (!merged.length || !polygonFeatures) throw new Error('z=0 MVT produced no polygon geometry');
   const payload = {
     type: 'FeatureCollection',
+    referenceSourceFeatures,
     features: [{
       type: 'Feature',
       properties: {
@@ -268,7 +271,12 @@ if (fs.existsSync(discoveryFile)) {
     for (const id of ids) {
       const file = path.join(cacheDir, `${id}.geojson`);
       prefetched.set(id, limit(async () => {
-        if (fs.existsSync(file)) return {file};
+        if (fs.existsSync(file)) {
+          try {
+            const cached = JSON.parse(fs.readFileSync(file, 'utf8'));
+            if (Array.isArray(cached.referenceSourceFeatures) && cached.referenceSourceFeatures.length) return {file};
+          } catch { /* Refresh obsolete or incomplete reference caches. */ }
+        }
         const payload = await fetchLayer(host, id);
         fs.writeFileSync(file, JSON.stringify(payload));
         return {file};

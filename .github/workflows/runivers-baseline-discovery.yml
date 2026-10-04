@@ -9,6 +9,9 @@ on:
       - 'package.json'
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
+      - 'scripts/runivers-reference-scope.mjs'
+      - 'scripts/history-archive-component-exclusions.mjs'
+      - 'scripts/test-history-component-exclusions.mjs'
       - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - 'scripts/require-runivers-regression.mjs'
@@ -40,6 +43,7 @@ jobs:
       - run: npm install
       - run: node scripts/test-runivers-shard-runner.mjs
       - run: node scripts/test-runivers-geometry.mjs
+      - run: node scripts/test-history-component-exclusions.mjs
       - run: node scripts/test-runivers-json-fallback.mjs
 
   regression:

@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import polygonClipping from 'polygon-clipping';
+import {excludeArchiveComponents} from './history-archive-component-exclusions.mjs';
 import {repairArchiveCoastline} from './history-archive-coastline.mjs';
 
 const root = process.cwd();
@@ -77,6 +78,7 @@ for (const recipe of recipes) {
     assert(['Polygon', 'MultiPolygon'].includes(feature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${feature.geometry?.type}`);
   }
   let polygons = candidates.flatMap(feature => geometryPolygons(feature.geometry));
+  polygons = excludeArchiveComponents(polygons, recipe.componentExclusions, recipe.evidenceDocumentIds);
   if (recipe.componentBboxFilter) {
     const f = recipe.componentBboxFilter;
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid componentBboxFilter`);
@@ -189,6 +191,7 @@ for (const recipe of recipes) {
       featureIndices: recipe.featureIndices ?? null,
       componentBboxFilter: recipe.componentBboxFilter ?? null,
       coastlineRepair: recipe.coastlineRepair ?? null,
+      componentExclusions: recipe.componentExclusions ?? [],
       resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
       unionMasks: appliedUnionMasks,

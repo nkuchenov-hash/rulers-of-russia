@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {referenceForPolity} from './runivers-reference-scope.mjs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
@@ -373,7 +374,7 @@ async function main() {
     const classification = classifyGeometry(geojson);
     if (!classification.usable) continue;
     usableReferenceCount += 1;
-    const approximate = isReferenceApproximate(geojson);
+    const referenceSamplesByPolity = new Map();
     const referenceSamples = politicalBorderSamples(geojson, coast.index);
     if (referenceSamples.points.length < 20) {
       referenceFailures.push({layer, error: `Runivers resource ${layer.id} has too few inland political-boundary samples after coastline masking (${referenceSamples.points.length})`});
@@ -381,12 +382,26 @@ async function main() {
     }
     const overlappingStates = states.filter(state => referenceOverlapsState(layer, state, maxRuniversYear));
     for (const state of overlappingStates) {
+      let scoped = referenceSamplesByPolity.get(state.polityId);
+      if (!scoped) {
+        try {
+          const selected = referenceForPolity(geojson, state.polityId);
+          scoped = {samples: politicalBorderSamples(selected.payload, coast.index),
+            approximate: isReferenceApproximate(selected.payload), scope: selected.scope};
+          if (scoped.samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
+          referenceSamplesByPolity.set(state.polityId, scoped);
+        } catch (error) {
+          referenceFailures.push({layer, polityId: state.polityId, error: error.message});
+          continue;
+        }
+      }
+      const approximate = scoped.approximate;
       let currentSamples = historySamplesCache.get(state.key);
       if (!currentSamples) {
         currentSamples = politicalBorderSamples(loadHistoryGeometry(state), coast.index);
         historySamplesCache.set(state.key, currentSamples);
       }
-      const metric = comparePoliticalGeometry(referenceSamples, currentSamples, classification);
+      const metric = comparePoliticalGeometry(scoped.samples, currentSamples, classification);
       if (!metric.usable) continue;
       const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
       const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
@@ -394,7 +409,7 @@ async function main() {
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
       const row = {
-        status, runiversResourceId: layer.id, runiversName: layer.displayName,
+        referenceScope: scoped.scope, status, runiversResourceId: layer.id, runiversName: layer.displayName,
         runiversFromYear: layer.fromYear, runiversToYear: layer.toYear,
         runiversIntervalSemantics: layer.toYear === maxRuniversYear ? 'terminal-inclusive' : 'half-open',
         runiversApproximate: approximate, historyGeometryFile: state.geometryFile, polityId: state.polityId,

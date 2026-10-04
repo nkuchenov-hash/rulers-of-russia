@@ -18,7 +18,8 @@
         "doc-ussr-iran-frontier-settlement-1954-unts",
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
-        "doc-ussr-finland-gulf-1965"
+        "doc-ussr-finland-gulf-1965",
+        "doc-germany-control-non-annexation-1945-ebid"
       ],
       "controls": [
         {
@@ -188,9 +189,30 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "componentExclusions": [
+        {
+          "index": 3,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1975-corroborated-archive",
@@ -210,7 +232,8 @@
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
-        "doc-ussr-turkey-territorial-sea-1973"
+        "doc-ussr-turkey-territorial-sea-1973",
+        "doc-germany-control-non-annexation-1945-ebid"
       ],
       "controls": [
         {
@@ -380,9 +403,30 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "componentExclusions": [
+        {
+          "index": 3,
+          "expectedBbox": [
+            13.436897277832031,
+            52.4518928527832,
+            13.689833641052246,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1976-1978-corroborated-archive",
@@ -402,7 +446,8 @@
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
-        "doc-ussr-turkey-territorial-sea-1973"
+        "doc-ussr-turkey-territorial-sea-1973",
+        "doc-germany-control-non-annexation-1945-ebid"
       ],
       "controls": [
         {
@@ -572,9 +617,30 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "componentExclusions": [
+        {
+          "index": 9,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1987-1989-corroborated-archive",
@@ -595,7 +661,8 @@
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-poland-maritime-1985",
-        "doc-ussr-turkey-eez-notes-1986-1987"
+        "doc-ussr-turkey-eez-notes-1986-1987",
+        "doc-germany-control-non-annexation-1945-ebid"
       ],
       "controls": [
         {
@@ -765,9 +832,30 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "componentExclusions": [
+        {
+          "index": 6,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ]
     }
   ]
 }
