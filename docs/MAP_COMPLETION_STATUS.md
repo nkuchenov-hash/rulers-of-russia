@@ -49,3 +49,29 @@ claim, not proof of agreement with an independent historical map.
 
 The local full-range cached diagnostic is incomplete because 56 references were
 not cached. Its totals must not be reported as a complete external audit.
+
+## Follow-up — 2026-10-05 (Tbilisi)
+
+PR #307 now also preserves all original Runivers feature identities (the old
+transport truncated source properties at 32 features) and selects the explicitly
+named Moscow polity before dissolving the early reference. The 1462 live JSON
+sample contains 22 features, only 2 named Moscow. The corrected comparison still
+fails: p95 about 181 km and maximum about 277 km. The selector repairs comparison
+scope; it does not certify the current early reconstruction.
+
+Eight USSR archive recipes now exclude the isolated East Berlin component,
+pinned by component index and exact bounding box under the existing archive SHA.
+The source is the 5 June 1945 four-power declaration, explicitly stating that
+assumption of authority in Germany is not annexation (EBID node 379991,
+page 1445194, printed p. 335). Every affected recipe checks East Berlin outside;
+all 75 archive recipes and the 255-document core validation pass locally.
+
+A further readiness-gate defect was found: a total reference outage returned a
+successful exit status. The gate now fails on total/partial outage, missing
+coverage, invalid counters and inconsistent totals. A green historical CI job
+from an older run can therefore NOT be treated as a successful geometric audit
+without checking that it actually made and passed comparisons. In particular,
+run 37231076438's 1923–1945 job was an outage, not a geographic pass.
+
+These changes remain unmerged and undeployed. Remaining historical source and
+date errors are not covered by exceptions or increased tolerances.

@@ -15,6 +15,7 @@ on:
       - 'scripts/runivers-regression-shard-runner.mjs'
       - 'scripts/validate-runivers-regression.mjs'
       - 'scripts/require-runivers-regression.mjs'
+      - 'scripts/test-require-runivers-regression.mjs'
       - 'scripts/test-runivers-shard-runner.mjs'
       - 'scripts/test-runivers-geometry.mjs'
       - 'scripts/test-runivers-json-fallback.mjs'
@@ -44,6 +45,7 @@ jobs:
       - run: node scripts/test-runivers-shard-runner.mjs
       - run: node scripts/test-runivers-geometry.mjs
       - run: node scripts/test-history-component-exclusions.mjs
+      - run: node scripts/test-require-runivers-regression.mjs
       - run: node scripts/test-runivers-json-fallback.mjs
 
   regression:
