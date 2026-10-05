@@ -13,7 +13,8 @@
       "output": "geometry/russian-federation-1992-2004-corroborated.geojson",
       "track": "russian-legal-border",
       "evidenceDocumentIds": [
-        "doc-belovezha-1991-rosarchiv"
+        "doc-belovezha-1991-rosarchiv",
+        "doc-natural-earth-rf-physical-coastline-50m"
       ],
       "controls": [
         {
@@ -159,9 +160,173 @@
             48.574
           ],
           "expected": "outside"
+        },
+        {
+          "id": "open-arctic-sea",
+          "lonLat": [
+            90,
+            80
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "sea-of-okhotsk",
+          "lonLat": [
+            150,
+            56
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "ghost-island-north-east",
+          "lonLat": [
+            157.8,
+            76.75
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "sakhalin-interior",
+          "lonLat": [
+            142.7,
+            50.5
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "novaya-zemlya-interior",
+          "lonLat": [
+            56,
+            73.5
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "wrangel-interior",
+          "lonLat": [
+            179.5,
+            71.1
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact project-archived RF vector state is pinned by Git blob SHA and independently checked against geographically distributed inside/outside controls. It is used only for the pre-2004-10 interval and does not encode Crimea or later contested claims."
+      "note": "Exact project-archived RF vector state is pinned by Git blob SHA and independently checked against geographically distributed inside/outside controls. It is used only for the pre-2004-10 interval and does not encode Crimea or later contested claims. Maritime envelopes are removed by the pinned physical-land coastline repair; the result is not an unchanged copy of the archive.",
+      "coastlineRepair": {
+        "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+        "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+        "expectedSourceComponentCount": 28,
+        "preserveComponentIndices": [
+          22,
+          23,
+          25,
+          27
+        ],
+        "islandSelector": {
+          "ADM0_A3": "RUS"
+        },
+        "expectedIslandSourceComponentCount": 101,
+        "islandComponentIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98
+        ],
+        "evidenceDocumentId": "doc-natural-earth-rf-physical-coastline-50m",
+        "note": "The archived source includes maritime envelopes and displaced offshore components. Clip the dated mainland and Kaliningrad against the dissolved full-world physical land surface, retaining the historical international boundary. Replace offshore outlines with pinned physical island components. Explicitly exclude both modern mainland components, Kaliningrad and Crimea. Legal dates and track attribution remain supplied by independent official documents; Runivers geometry is never used."
+      }
     }
   ]
 }

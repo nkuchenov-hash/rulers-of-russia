@@ -1,18 +1,23 @@
 import fs from 'node:fs';
-import path from 'node:path';
+import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
+import {referenceForPolity} from './runivers-reference-scope.mjs';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+import {feature as topologyFeature} from 'topojson-client';
 
 const root = process.cwd();
 const publicRoot = path.join(root, 'public');
 const dataRoot = path.join(publicRoot, 'data', 'history-core');
 const discoveryFile = process.env.RUNIVERS_DISCOVERY_FILE || path.join(root, 'tmp', 'runivers-discovery', 'runivers-discovery.json');
-const monthIndexFile = path.join(dataRoot, 'generated', 'month-index.json');
+const monthIndexFile = process.env.RUNIVERS_MONTH_INDEX_FILE || path.join(dataRoot, 'generated', 'month-index.json');
 const overrideFile = path.join(dataRoot, 'references', 'runivers-overrides.json');
-const coastlineFile = path.join(publicRoot, 'data', 'territory', 'world-history', 'snapshots', '2010.geojson');
+const coastlineFile = createRequire(import.meta.url).resolve('world-atlas/land-50m.json');
 const reportDir = path.join(root, 'tmp', 'runivers-regression');
 const reportFile = path.join(reportDir, 'report.json');
-const START_MONTH = '1462-01';
-const END_MONTH = '2020-12';
+const START_MONTH = process.env.RUNIVERS_START_MONTH || '1462-01';
+const END_MONTH = process.env.RUNIVERS_END_MONTH || '2020-12';
 const EARTH_RADIUS_M = 6371008.8;
 const BORDER_SAMPLE_STEP_M = 5000;
 const COAST_SAMPLE_STEP_M = 20000;
@@ -92,7 +97,7 @@ async function getJson(url) {
 }
 
 async function fetchRuniversGeoJson(host, id) {
-  const urls = [`${host}/api/resource/${id}/geojson`, `${host}/api/resource/${id}/feature/?srs=4326`];
+  const urls = [`${host}/api/resource/${id}/geojson`, `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson`];
   const errors = [];
   for (const url of urls) {
     try {
@@ -126,13 +131,6 @@ function geometryLines(geometry, outerOnly = true) {
   if (type === 'Polygon') return outerOnly ? (coordinates[0] ? [coordinates[0]] : []) : coordinates;
   if (type === 'MultiPolygon') return coordinates.flatMap(polygon => outerOnly ? (polygon[0] ? [polygon[0]] : []) : polygon);
   if (type === 'GeometryCollection') return (geometry.geometries ?? []).flatMap(item => geometryLines(item, outerOnly));
-  return [];
-}
-
-function geometryToMultiPolygon(geometry) {
-  if (!geometry) return [];
-  if (geometry.type === 'Polygon') return [geometry.coordinates];
-  if (geometry.type === 'MultiPolygon') return geometry.coordinates;
   return [];
 }
 
@@ -172,16 +170,16 @@ function interpolateLonLat(a, b, t) {
 
 const validCoordinate = point => Array.isArray(point) && point.length >= 2 && Number.isFinite(point[0]) && Number.isFinite(point[1]);
 
-function samplingLines(payload) {
+function samplingLines(payload, outerOnly = true) {
   const lines = [];
   for (const feature of payloadFeatures(payload)) {
-    for (const line of geometryLines(feature?.geometry, true)) if (Array.isArray(line) && line.length >= 2) lines.push(line);
+    for (const line of geometryLines(feature?.geometry, outerOnly)) if (Array.isArray(line) && line.length >= 2) lines.push(line);
   }
   return lines;
 }
 
-function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES) {
-  const lines = samplingLines(payload);
+function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true) {
+  const lines = samplingLines(payload, outerOnly);
   let candidateCount = 0;
   for (const line of lines) {
     for (let i = 0; i + 1 < line.length; i += 1) {
@@ -253,32 +251,49 @@ const directedDistancesToIndex = (sourcePoints, targetIndex) => sourcePoints.len
 
 function buildCoastIndex() {
   if (!fs.existsSync(coastlineFile)) throw new Error(`Coastline reference missing: ${coastlineFile}`);
-  const world = readJson(coastlineFile);
-  let land = [];
-  for (const feature of payloadFeatures(world)) {
-    const mp = geometryToMultiPolygon(feature?.geometry);
-    if (!mp.length) continue;
-    try { land = land.length ? polygonClipping.union(land, mp) : mp; } catch {}
-  }
-  if (!land.length) throw new Error('Unable to build land union for coastline masking');
-  const payload = {type: 'FeatureCollection', features: [{type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: land}}]};
-  const coastPoints = samplePayload(payload, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES);
+  // Physical land has no political seams and does not inherit the historical
+  // snapshots' reconstructed or displaced coastlines.
+  const topology = readJson(coastlineFile);
+  const payload = topologyFeature(topology, topology.objects.land);
+  // Inland water rings (e.g. the Caspian) are physical shores too.
+  // Keep outer-only sampling for political polygons, but include all land rings here.
+  const lakeBytes = fs.readFileSync(path.join(publicRoot, 'data/territory/cultural/lakes_50m.geojson'));
+  if (crypto.createHash('sha256').update(lakeBytes).digest('hex') !== 'd350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52') throw new Error('Physical lakes source hash mismatch');
+  const shores = {type: 'FeatureCollection', features: [...payloadFeatures(payload), ...payloadFeatures(JSON.parse(lakeBytes))]};
+  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
   if (coastPoints.length < 100) throw new Error(`Coastline reference produced too few samples: ${coastPoints.length}`);
   return {index: buildPointIndex(coastPoints), samples: coastPoints.length};
 }
 
 function politicalBorderSamples(payload, coastIndex) {
-  const all = samplePayload(payload, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
+  // This metric compares exterior polity boundaries. Fill the ignored holes
+  // before dissolving, so islands inside those holes cannot reappear as borders.
+  const polygons = [], lines = [];
+  const collect = geometry => {
+    if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
+    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
+    else if (geometry?.type === 'GeometryCollection') geometry.geometries.forEach(collect);
+    else if (geometry) lines.push({type: 'Feature', geometry, properties: {}});
+  };
+  payloadFeatures(payload).forEach(f => collect(f.geometry));
+  const features = [...lines];
+  if (polygons.length) features.push({type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}});
+  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
   const inland = all.filter(point => distanceToIndex(point, coastIndex) > COAST_EXCLUSION_M);
-  return {allCount: all.length, points: inland};
+  return {allCount: all.length, allPoints: all, points: inland};
 }
 
 function comparePoliticalGeometry(reference, current, referenceClass) {
   if (!reference.points.length || !current.points.length) return {usable: false, referenceSamples: reference.points.length, currentSamples: current.points.length};
-  const referenceIndex = buildPointIndex([...reference.points]);
-  const currentIndex = buildPointIndex([...current.points]);
+  // Mask only the measured source samples. Keep target boundary points near
+  // the coast cutoff, otherwise tiny mask differences create artificial gaps.
+  const referenceIndex = buildPointIndex([...(reference.allPoints ?? reference.points)]);
+  const currentIndex = buildPointIndex([...(current.allPoints ?? current.points)]);
   const refToCurrent = directedDistancesToIndex(reference.points, currentIndex);
   const currentToRef = referenceClass.hasPolygon ? directedDistancesToIndex(current.points, referenceIndex) : [];
+  const worstSamples = (points, distances) => distances
+    .map((distance, index) => ({lonLat: points[index], distanceMeters: Math.round(distance)}))
+    .sort((a, b) => b.distanceMeters - a.distanceMeters).slice(0, 5);
   const refP95 = percentile(refToCurrent, .95), refMax = Math.max(...refToCurrent);
   const curP95 = currentToRef.length ? percentile(currentToRef, .95) : null;
   const curMax = currentToRef.length ? Math.max(...currentToRef) : null;
@@ -298,6 +313,8 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
     currentToReferenceMaxMeters: curMax === null ? null : Math.round(curMax),
     symmetricP95Meters: Math.round(Math.max(refP95, curP95 ?? 0)),
     symmetricMaxMeters: Math.round(Math.max(refMax, curMax ?? 0)),
+    worstReferenceSamples: worstSamples(reference.points, refToCurrent),
+    worstCurrentSamples: worstSamples(current.points, currentToRef),
   };
 }
 
@@ -362,7 +379,7 @@ async function main() {
     .sort((a, b) => a.fromYear - b.fromYear || a.toYear - b.toYear || a.id - b.id);
   if (!states.length) throw new Error('No History Core geometry-verified states in 1462-2020');
   if (!layers.length) throw new Error('Runivers discovery found no dated vector layers overlapping 1462-2020');
-  const maxRuniversYear = Math.max(...layers.map(layer => layer.toYear));
+  const maxRuniversYear = discovery.preferredMaxYear ?? Math.max(...layers.map(layer => layer.toYear));
 
   const relevantLayers = layers.filter(layer => states.some(state => referenceOverlapsState(layer, state, maxRuniversYear)));
   const coverage = new Map(states.map(state => [state.key, []]));
@@ -378,7 +395,7 @@ async function main() {
     const classification = classifyGeometry(geojson);
     if (!classification.usable) continue;
     usableReferenceCount += 1;
-    const approximate = isReferenceApproximate(geojson);
+    const referenceSamplesByPolity = new Map();
     const referenceSamples = politicalBorderSamples(geojson, coast.index);
     if (referenceSamples.points.length < 20) {
       referenceFailures.push({layer, error: `Runivers resource ${layer.id} has too few inland political-boundary samples after coastline masking (${referenceSamples.points.length})`});
@@ -386,12 +403,26 @@ async function main() {
     }
     const overlappingStates = states.filter(state => referenceOverlapsState(layer, state, maxRuniversYear));
     for (const state of overlappingStates) {
+      let scoped = referenceSamplesByPolity.get(state.polityId);
+      if (!scoped) {
+        try {
+          const selected = referenceForPolity(geojson, state.polityId);
+          scoped = {samples: politicalBorderSamples(selected.payload, coast.index),
+            approximate: isReferenceApproximate(selected.payload), scope: selected.scope};
+          if (scoped.samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
+          referenceSamplesByPolity.set(state.polityId, scoped);
+        } catch (error) {
+          referenceFailures.push({layer, polityId: state.polityId, error: error.message});
+          continue;
+        }
+      }
+      const approximate = scoped.approximate;
       let currentSamples = historySamplesCache.get(state.key);
       if (!currentSamples) {
         currentSamples = politicalBorderSamples(loadHistoryGeometry(state), coast.index);
         historySamplesCache.set(state.key, currentSamples);
       }
-      const metric = comparePoliticalGeometry(referenceSamples, currentSamples, classification);
+      const metric = comparePoliticalGeometry(scoped.samples, currentSamples, classification);
       if (!metric.usable) continue;
       const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
       const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
@@ -399,7 +430,7 @@ async function main() {
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
       const row = {
-        status, runiversResourceId: layer.id, runiversName: layer.displayName,
+        referenceScope: scoped.scope, status, runiversResourceId: layer.id, runiversName: layer.displayName,
         runiversFromYear: layer.fromYear, runiversToYear: layer.toYear,
         runiversIntervalSemantics: layer.toYear === maxRuniversYear ? 'terminal-inclusive' : 'half-open',
         runiversApproximate: approximate, historyGeometryFile: state.geometryFile, polityId: state.polityId,
@@ -448,7 +479,7 @@ async function main() {
     overrides: comparisons.filter(row => row.status === 'override').length, failedComparisons: failedComparisons.length,
     referenceFailures: referenceFailures.length, missingStates: missingStates.length, uncoveredMonths: uncoveredMonths.length,
     metric: 'coast-masked-political-boundary-v2', borderSampleStepMeters: BORDER_SAMPLE_STEP_M,
-    coastlineReference: 'Natural Earth-derived 2010 world snapshot union', coastlineSamples: coast.samples,
+    coastlineReference: 'Natural Earth physical land 1:50m (world-atlas 2.0.2)', coastlineSamples: coast.samples,
     coastlineExclusionMeters: COAST_EXCLUSION_M, maxSamplesPerGeometry: MAX_BORDER_SAMPLES,
     runiversIntervalSemantics: 'half-open chained ranges; terminal year inclusive',
   };
@@ -459,4 +490,8 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-main().catch(error => { console.error(error); process.exitCode = 1; });
+export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main().catch(error => { console.error(error); process.exitCode = 1; });
+}

@@ -10,6 +10,8 @@ const monthIndexFile = path.join(root, 'public', 'data', 'history-core', 'genera
 const validatorFile = path.join(root, 'scripts', 'validate-runivers-regression.mjs');
 const reportDir = path.join(root, 'tmp', 'runivers-regression');
 const reportFile = path.join(reportDir, 'report.json');
+// Even an early input failure must not leave an older passing report.
+fs.rmSync(reportFile, {force: true});
 
 if (!/^\d{4}-\d{2}$/.test(startMonth || '') || !/^\d{4}-\d{2}$/.test(endMonth || '') || startMonth > endMonth) {
   throw new Error(`Invalid Runivers shard range: ${startMonth || '<missing>'}..${endMonth || '<missing>'}`);
@@ -73,8 +75,16 @@ const comparableMonths = rangeMonths.filter((row) => comparableYears.has(row.mon
 if (!comparableMonths.length) {
   throw new Error(`No full-calendar-year History Core states can be compared to year-granular Runivers in ${startMonth}..${endMonth}`);
 }
-monthIndex.months = comparableMonths;
-fs.writeFileSync(monthIndexFile, JSON.stringify(monthIndex, null, 2));
+// A regression shard must never replace the canonical 13,980-month index.
+const shardMonthIndexFile = path.join(shardDir, 'month-index.json');
+fs.writeFileSync(shardMonthIndexFile, JSON.stringify({
+  ...monthIndex,
+  months: comparableMonths,
+  monthCount: comparableMonths.length,
+  minMonth: comparableMonths[0].month,
+  maxMonth: comparableMonths.at(-1).month,
+  complete: false,
+}, null, 2));
 
 const excludedMonthCount = rangeMonths.length - comparableMonths.length;
 console.log(`Runivers shard ${startMonth}..${endMonth}: ${discovery.vectorLayers.length}/${originalLayers.length} layers; ${comparableMonths.length}/${rangeMonths.length} shard months are unambiguous full-year comparisons (${excludedMonthCount} boundary/transition months excluded from the year-granular cross-check).`);
@@ -98,7 +108,8 @@ async function runiversHealthy() {
   if (!host || !Number.isInteger(probeId)) return false;
   const urls = [
     `${host}/api/resource/${probeId}/0/0/0.mvt`,
-    `${host}/api/resource/${probeId}/feature/?srs=4326&limit=1`,
+    `${host}/api/component/feature_layer/mvt?resource=${probeId}&z=0&x=0&y=0&simplification=0`,
+    `${host}/api/resource/${probeId}/feature/?srs=4326&geom_format=geojson&limit=1`,
   ];
   const results = await Promise.all(urls.map((url) => probe(url)));
   return results.some(Boolean);
@@ -127,7 +138,7 @@ if (!sourceHealthy) {
     },
     stateCoverage: [],
     failedComparisons: [],
-    referenceFailures: [{error: 'Runivers preflight failed on both canonical MVT and WGS84 feature endpoints'}],
+    referenceFailures: [{error: 'Runivers preflight failed on canonical MVT, component MVT and WGS84 feature endpoints'}],
     uncoveredMonths: [],
     shard: {
       startMonth,
@@ -151,6 +162,7 @@ if (!sourceHealthy) {
     env: {
       ...process.env,
       RUNIVERS_DISCOVERY_FILE: shardDiscoveryFile,
+      RUNIVERS_MONTH_INDEX_FILE: shardMonthIndexFile,
     },
   });
   if (child.error) throw child.error;

@@ -2,6 +2,8 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import polygonClipping from 'polygon-clipping';
+import {excludeArchiveComponents} from './history-archive-component-exclusions.mjs';
+import {repairArchiveCoastline} from './history-archive-coastline.mjs';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
@@ -76,6 +78,7 @@ for (const recipe of recipes) {
     assert(['Polygon', 'MultiPolygon'].includes(feature.geometry?.type), `Archive geometry recipe ${recipe.id} selected unsupported geometry ${feature.geometry?.type}`);
   }
   let polygons = candidates.flatMap(feature => geometryPolygons(feature.geometry));
+  polygons = excludeArchiveComponents(polygons, recipe.componentExclusions, recipe.evidenceDocumentIds);
   if (recipe.componentBboxFilter) {
     const f = recipe.componentBboxFilter;
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid componentBboxFilter`);
@@ -90,6 +93,8 @@ for (const recipe of recipes) {
     });
     assert(polygons.length >= 1, `Archive geometry recipe ${recipe.id} componentBboxFilter selected no polygon components`);
   }
+
+  polygons = repairArchiveCoastline(polygons, recipe.coastlineRepair, root);
 
   const appliedDifferenceMasks = [];
   for (const mask of recipe.differenceMasks ?? []) {
@@ -118,6 +123,8 @@ for (const recipe of recipes) {
       note: mask.note ?? null,
     });
   }
+
+  polygons = excludeArchiveComponents(polygons, recipe.resultComponentExclusions, recipe.evidenceDocumentIds);
 
   if (recipe.resultComponentBboxFilter) {
     const f = recipe.resultComponentBboxFilter;
@@ -185,6 +192,9 @@ for (const recipe of recipes) {
       selector: recipe.selector ?? null,
       featureIndices: recipe.featureIndices ?? null,
       componentBboxFilter: recipe.componentBboxFilter ?? null,
+      coastlineRepair: recipe.coastlineRepair ?? null,
+      componentExclusions: recipe.componentExclusions ?? [],
+      resultComponentExclusions: recipe.resultComponentExclusions ?? [],
       resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
       unionMasks: appliedUnionMasks,
