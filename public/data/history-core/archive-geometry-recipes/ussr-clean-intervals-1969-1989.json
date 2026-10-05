@@ -19,7 +19,9 @@
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -197,9 +199,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 3,
@@ -211,6 +237,26 @@
           ],
           "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
           "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ]
     },
@@ -233,7 +279,9 @@
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-turkey-territorial-sea-1973",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -411,9 +459,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 3,
@@ -425,6 +497,26 @@
           ],
           "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
           "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ]
     },
@@ -447,7 +539,9 @@
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-turkey-territorial-sea-1973",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -625,9 +719,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 9,
@@ -639,6 +757,26 @@
           ],
           "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
           "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ]
     },
@@ -662,7 +800,9 @@
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-poland-maritime-1985",
         "doc-ussr-turkey-eez-notes-1986-1987",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -840,9 +980,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy.",
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 6,
@@ -854,6 +1018,26 @@
           ],
           "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
           "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ]
     }

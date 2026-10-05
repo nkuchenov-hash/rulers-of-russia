@@ -19,6 +19,24 @@
           },
           "expectedFeatureCount": 1,
           "note": "Subtract the independently pinned Afghanistan polygon from the contaminated Cliopatria mainland component."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ],
       "output": "geometry/ussr-1979-1982-corrected.geojson",
@@ -32,7 +50,9 @@
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-turkey-territorial-sea-1973",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -138,9 +158,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Cliopatria dated interval corrected by a pinned Afghanistan subtraction mask; primary treaty corpus corroborates the international frontier. No forward proxy.",
+      "note": "Cliopatria dated interval corrected by a pinned Afghanistan subtraction mask; primary treaty corpus corroborates the international frontier. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 9,
@@ -173,6 +217,24 @@
           },
           "expectedFeatureCount": 1,
           "note": "Subtract the independently pinned Afghanistan polygon from the contaminated Cliopatria mainland component."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ],
       "output": "geometry/ussr-1983-1986-corrected.geojson",
@@ -187,7 +249,9 @@
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-turkey-territorial-sea-1973",
         "doc-ussr-poland-maritime-1985",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -293,9 +357,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Cliopatria dated interval corrected by a pinned Afghanistan subtraction mask; primary treaty corpus corroborates the international frontier. No forward proxy.",
+      "note": "Cliopatria dated interval corrected by a pinned Afghanistan subtraction mask; primary treaty corpus corroborates the international frontier. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 10,

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "czech-parliament-digital-library",
+      "title": "Digitální knihovna Parlamentu České republiky",
+      "institution": "Parliament of the Czech Republic",
+      "url": "https://www.psp.cz/eknih/",
+      "tier": "A2-official-document-publication",
+      "coverage": "Parliamentary treaty texts and ratification records",
+      "canonicalUse": [
+        "legal-basis",
+        "interpretation"
+      ]
+    }
+  ]
+}

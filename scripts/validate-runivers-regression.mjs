@@ -168,16 +168,16 @@ function interpolateLonLat(a, b, t) {
 
 const validCoordinate = point => Array.isArray(point) && point.length >= 2 && Number.isFinite(point[0]) && Number.isFinite(point[1]);
 
-function samplingLines(payload) {
+function samplingLines(payload, outerOnly = true) {
   const lines = [];
   for (const feature of payloadFeatures(payload)) {
-    for (const line of geometryLines(feature?.geometry, true)) if (Array.isArray(line) && line.length >= 2) lines.push(line);
+    for (const line of geometryLines(feature?.geometry, outerOnly)) if (Array.isArray(line) && line.length >= 2) lines.push(line);
   }
   return lines;
 }
 
-function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES) {
-  const lines = samplingLines(payload);
+function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true) {
+  const lines = samplingLines(payload, outerOnly);
   let candidateCount = 0;
   for (const line of lines) {
     for (let i = 0; i + 1 < line.length; i += 1) {
@@ -253,7 +253,9 @@ function buildCoastIndex() {
   // snapshots' reconstructed or displaced coastlines.
   const topology = readJson(coastlineFile);
   const payload = topologyFeature(topology, topology.objects.land);
-  const coastPoints = samplePayload(payload, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES);
+  // Inland water rings (e.g. the Caspian) are physical shores too.
+  // Keep outer-only sampling for political polygons, but include all land rings here.
+  const coastPoints = samplePayload(payload, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
   if (coastPoints.length < 100) throw new Error(`Coastline reference produced too few samples: ${coastPoints.length}`);
   return {index: buildPointIndex(coastPoints), samples: coastPoints.length};
 }

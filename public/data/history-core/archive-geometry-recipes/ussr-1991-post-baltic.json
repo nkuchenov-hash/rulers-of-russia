@@ -37,6 +37,24 @@
           },
           "expectedFeatureCount": 1,
           "note": "Remove Estonia after USSR recognition of independence on 6 September 1991."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
         }
       ],
       "output": "geometry/ussr-1991-post-baltic-recognition.geojson",
@@ -45,7 +63,9 @@
         "doc-cliopatria-ussr-1987-1989",
         "doc-ussr-baltic-independence-recognition-1991-vedomosti",
         "doc-natural-earth-baltic-admin0-50m",
-        "doc-germany-control-non-annexation-1945-ebid"
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -231,9 +251,33 @@
             52.55
           ],
           "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Post-6-September-1991 USSR legal-border geometry: retain the verified 1987–1989 USSR exterior everywhere except the three Baltic republics formally recognized as independent by the USSR State Council. Natural Earth masks affect only Lithuania, Latvia and Estonia; all other Soviet external-border geometry remains the previously verified archive state.",
+      "note": "Post-6-September-1991 USSR legal-border geometry: retain the verified 1987–1989 USSR exterior everywhere except the three Baltic republics formally recognized as independent by the USSR State Council. Natural Earth masks affect only Lithuania, Latvia and Estonia; all other Soviet external-border geometry remains the previously verified archive state. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
       "componentExclusions": [
         {
           "index": 6,

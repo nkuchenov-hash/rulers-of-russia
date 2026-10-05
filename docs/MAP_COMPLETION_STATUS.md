@@ -75,3 +75,10 @@ run 37231076438's 1923–1945 job was an outage, not a geographic pass.
 
 These changes remain unmerged and undeployed. Remaining historical source and
 date errors are not covered by exceptions or increased tolerances.
+
+## Further corrections under verification
+
+- Soviet Runivers comparisons now select original named USSR/Russia features with territorial status 1; separately named occupation and lease zones are excluded by identity, not geometric similarity.
+- Seven archive recipes from 1969 onward subtract Czechia and Slovakia occupation contamination, with the 16 October 1968 treaty article 2 as primary sovereignty evidence and pinned Natural Earth masks as generalized spatial realization. Prague and Bratislava must be outside; Uzhhorod remains inside.
+- Physical shoreline sampling includes interior land rings, fixing omitted Caspian shores. This does not resolve absent lake geometry such as Lake Baikal.
+- Local recipe and source validation passes; external historical geometry regression remains unresolved. These changes do not certify complete geographic readiness.
