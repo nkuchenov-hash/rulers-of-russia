@@ -124,6 +124,8 @@ for (const recipe of recipes) {
     });
   }
 
+  polygons = excludeArchiveComponents(polygons, recipe.resultComponentExclusions, recipe.evidenceDocumentIds);
+
   if (recipe.resultComponentBboxFilter) {
     const f = recipe.resultComponentBboxFilter;
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid resultComponentBboxFilter`);
@@ -192,6 +194,7 @@ for (const recipe of recipes) {
       componentBboxFilter: recipe.componentBboxFilter ?? null,
       coastlineRepair: recipe.coastlineRepair ?? null,
       componentExclusions: recipe.componentExclusions ?? [],
+      resultComponentExclusions: recipe.resultComponentExclusions ?? [],
       resultComponentBboxFilter: recipe.resultComponentBboxFilter ?? null,
       differenceMasks: appliedDifferenceMasks,
       unionMasks: appliedUnionMasks,

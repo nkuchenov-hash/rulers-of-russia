@@ -80,5 +80,7 @@ date errors are not covered by exceptions or increased tolerances.
 
 - Soviet Runivers comparisons now select original named USSR/Russia features with territorial status 1; separately named occupation and lease zones are excluded by identity, not geometric similarity.
 - Seven archive recipes from 1969 onward subtract Czechia and Slovakia occupation contamination, with the 16 October 1968 treaty article 2 as primary sovereignty evidence and pinned Natural Earth masks as generalized spatial realization. Prague and Bratislava must be outside; Uzhhorod remains inside.
-- Physical shoreline sampling includes interior land rings, fixing omitted Caspian shores. This does not resolve absent lake geometry such as Lake Baikal.
+- Physical shoreline sampling includes interior land rings, fixing omitted Caspian shores. Pinned Natural Earth 1:50m lakes now supply all 412 inland-water features, including Baikal; the validator verifies their source SHA-256.
 - Local recipe and source validation passes; external historical geometry regression remains unresolved. These changes do not certify complete geographic readiness.
+
+Local live-MVT diagnostic for resource 5821 after the latest changes: all eight 1956–1990 sampled states satisfy the unchanged 15 km p95 / 60 km maximum limits (p95 9.5–10.9 km, maximum 19.2–20.8 km). This is not a full-range CI pass. Detached Czech and Afghan occupation fringes are excluded with exact component identities and documentary evidence; the Afghanistan correction now covers the 1987 source used through 1991. The exterior-boundary metric dissolves redundant interior components and keeps all target boundary points when measuring coast-masked source points, avoiding artificial gaps at the coast cutoff.

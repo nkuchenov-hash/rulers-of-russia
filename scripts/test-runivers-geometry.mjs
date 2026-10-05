@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, layerContainsYear} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -7,6 +7,7 @@ assert.ok(distanceToIndex([37.62, 55.75], coast.index) > 100000, 'Moscow must be
 assert.ok(distanceToIndex([131.89, 43.12], coast.index) < 100000, 'Vladivostok must be coastal');
 assert.ok(distanceToIndex([158.65, 53.04], coast.index) < 100000, 'Kamchatka must be present');
 assert.ok(distanceToIndex([54.713, 41.164], coast.index) < 100000, 'Caspian physical lake shore must be excluded too');
+assert.ok(distanceToIndex([109.10588, 53.93523], coast.index) < 100000, 'Baikal shores must not become international borders');
 const points = [[40, 50], [41, 50], [42, 50]];
 const same = comparePoliticalGeometry({points, allCount: 3}, {points, allCount: 3}, {hasPolygon: true, types: ['Polygon']});
 assert.equal(same.symmetricMaxMeters, 0);
@@ -36,3 +37,16 @@ assert.deepEqual(sovietScope.scope.excludedNames, [occupation.properties.name, l
 assert.throws(() => referenceForPolity({referenceSourceFeatures:[occupation]}, 'ussr'), /no named USSR/);
 assert.equal(referenceForPolity(source,'russian-empire').payload,source);
 console.log('Runivers scope tests passed: independent polities remain separate, missing identity fails closed.');
+
+// A corresponding target point just inside the coast cutoff must remain a
+// distance target, even though it is not itself a measured inland sample.
+const cutoffMetric = comparePoliticalGeometry(
+  {points:[[40,50]],allPoints:[[40,50],[41,50]],allCount:2},
+  {points:[[41,50]],allPoints:[[40,50],[41,50]],allCount:2},
+  {hasPolygon:true,types:['Polygon']});
+assert.equal(cutoffMetric.symmetricMaxMeters,0);
+const outer = feature('state', 40);
+const inner = {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[[40.2,50.2],[40.3,50.2],[40.3,50.3],[40.2,50.3],[40.2,50.2]]]}};
+const alone = politicalBorderSamples(outer, coast.index);
+const nested = politicalBorderSamples({type:'FeatureCollection',features:[outer,inner]},coast.index);
+assert.deepEqual(nested,alone,'Interior components cannot add an exterior sovereign border');

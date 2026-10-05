@@ -1,4 +1,6 @@
 import fs from 'node:fs';
+import crypto from 'node:crypto';
+import polygonClipping from 'polygon-clipping';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -255,21 +257,38 @@ function buildCoastIndex() {
   const payload = topologyFeature(topology, topology.objects.land);
   // Inland water rings (e.g. the Caspian) are physical shores too.
   // Keep outer-only sampling for political polygons, but include all land rings here.
-  const coastPoints = samplePayload(payload, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
+  const lakeBytes = fs.readFileSync(path.join(publicRoot, 'data/territory/cultural/lakes_50m.geojson'));
+  if (crypto.createHash('sha256').update(lakeBytes).digest('hex') !== 'd350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52') throw new Error('Physical lakes source hash mismatch');
+  const shores = {type: 'FeatureCollection', features: [...payloadFeatures(payload), ...payloadFeatures(JSON.parse(lakeBytes))]};
+  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
   if (coastPoints.length < 100) throw new Error(`Coastline reference produced too few samples: ${coastPoints.length}`);
   return {index: buildPointIndex(coastPoints), samples: coastPoints.length};
 }
 
 function politicalBorderSamples(payload, coastIndex) {
-  const all = samplePayload(payload, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
+  // This metric compares exterior polity boundaries. Fill the ignored holes
+  // before dissolving, so islands inside those holes cannot reappear as borders.
+  const polygons = [], lines = [];
+  const collect = geometry => {
+    if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
+    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
+    else if (geometry?.type === 'GeometryCollection') geometry.geometries.forEach(collect);
+    else if (geometry) lines.push({type: 'Feature', geometry, properties: {}});
+  };
+  payloadFeatures(payload).forEach(f => collect(f.geometry));
+  const features = [...lines];
+  if (polygons.length) features.push({type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}});
+  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
   const inland = all.filter(point => distanceToIndex(point, coastIndex) > COAST_EXCLUSION_M);
-  return {allCount: all.length, points: inland};
+  return {allCount: all.length, allPoints: all, points: inland};
 }
 
 function comparePoliticalGeometry(reference, current, referenceClass) {
   if (!reference.points.length || !current.points.length) return {usable: false, referenceSamples: reference.points.length, currentSamples: current.points.length};
-  const referenceIndex = buildPointIndex([...reference.points]);
-  const currentIndex = buildPointIndex([...current.points]);
+  // Mask only the measured source samples. Keep target boundary points near
+  // the coast cutoff, otherwise tiny mask differences create artificial gaps.
+  const referenceIndex = buildPointIndex([...(reference.allPoints ?? reference.points)]);
+  const currentIndex = buildPointIndex([...(current.allPoints ?? current.points)]);
   const refToCurrent = directedDistancesToIndex(reference.points, currentIndex);
   const currentToRef = referenceClass.hasPolygon ? directedDistancesToIndex(current.points, referenceIndex) : [];
   const worstSamples = (points, distances) => distances

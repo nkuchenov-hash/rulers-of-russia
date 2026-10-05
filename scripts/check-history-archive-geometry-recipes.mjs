@@ -138,6 +138,8 @@ for (const recipe of recipes) {
     });
   }
 
+  polygons = excludeArchiveComponents(polygons, recipe.resultComponentExclusions, recipe.evidenceDocumentIds);
+
   const validatedUnionMasks = [];
   for (const mask of recipe.unionMasks ?? []) {
     if (!mask?.archivePath || !mask?.archiveBlobSha1 || !mask?.selector) fail(`Archive recipe ${recipe.id} has incomplete union mask`);
@@ -193,6 +195,7 @@ for (const recipe of recipes) {
   if (generated.metadata?.archiveBlobSha1 !== recipe.archiveBlobSha1) fail(`Archive output ${recipe.output} lost source blob identity`);
   if (JSON.stringify(generated.features?.[0]?.geometry) !== JSON.stringify(sourceGeometry)) fail(`Archive output ${recipe.output} does not preserve exact derived geometry`);
   if (Array.isArray(recipe.featureIndices) && JSON.stringify(generated.metadata?.featureIndices) !== JSON.stringify(recipe.featureIndices)) fail(`Archive output ${recipe.output} lost selected feature indices`);
+  if (JSON.stringify(generated.metadata?.resultComponentExclusions ?? []) !== JSON.stringify(recipe.resultComponentExclusions ?? [])) fail(`Archive output ${recipe.output} lost result exclusion provenance`);
   if (JSON.stringify(generated.metadata?.componentExclusions ?? []) !== JSON.stringify(recipe.componentExclusions ?? [])) fail(`Archive output ${recipe.output} lost component exclusion provenance`);
   if (JSON.stringify(generated.metadata?.coastlineRepair ?? null) !== JSON.stringify(recipe.coastlineRepair ?? null)) fail(`Archive output ${recipe.output} lost coastline repair provenance`);
   if (JSON.stringify(generated.metadata?.componentBboxFilter ?? null) !== JSON.stringify(recipe.componentBboxFilter ?? null)) fail(`Archive output ${recipe.output} lost componentBboxFilter provenance`);
