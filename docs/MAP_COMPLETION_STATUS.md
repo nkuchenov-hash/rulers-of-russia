@@ -1,7 +1,23 @@
-# Map completion status — 2026-10-03
+# Map completion status — checked 2026-10-22
 
 The map is **not yet fully geographically verified**. The History Core documentary
 completion audit and a successful site build are necessary but insufficient.
+
+## Latest measured readiness
+
+The last complete remote run remains 37373905487, dated 2026-10-05, at
+commit a1f687df80fe9813c771c632e0cee167c297be81. Checked on 2026-10-22:
+site validation and Chromium validation succeeded, geographic regression failed.
+Only 1946–1991 and 1992–2020 fully passed: 15/15 comparisons combined.
+Across all 12 periods there were 247 comparisons, 26 passed, 221 failed,
+plus 2 reference failures leaving 2 states / 24 months without comparison.
+These counters measure comparison results, not the percentage of project work done.
+
+Ten periods before 1946 still require investigation and correction. This audit
+also does not cover 862–1461, 2021–2026, or excluded within-year transition months.
+PR #307 remains open and unmerged; these changes are not on the main site.
+Local Tuva/Xinjiang work is unfinished and must not be counted as a passed period.
+Exact per-period counters are in MAP_PROGRESS_AUDIT_2026-10-22.json.
 
 ## Verified changes in PR #307
 
@@ -33,18 +49,18 @@ claim, not proof of agreement with an independent historical map.
 
 ## Remaining work
 
-- Resolve external comparison failures before 1992. Do not relax tolerances or
+- Resolve external comparison failures before 1946. Do not relax tolerances or
   add blanket overrides to produce green checks.
 - Correct reference scope before interpreting every early-period difference as
   a production geometry error: e.g. the 1462 reference includes separately named
-  Tver, Novgorod, Ryazan and dependent territories alongside Moscow. The current
-  reference loader unions those features. Status/name selection must be grounded
+  Tver, Novgorod, Ryazan and dependent territories alongside Moscow. The original
+  reference loader unioned those features; Moscow selection is now fixed. Status/name selection must be grounded
   in the source's semantics and the historical track being compared, not fitted
   to the desired result.
 - Verify within-year transition dates independently: Runivers year-level layers
   cannot resolve which side of a monthly transition they represent. Excluded
   transition years are explicitly reported by each shard.
-- Complete Chromium interaction checks on the changed data, then rerun all
+- Repeat Chromium interaction checks after the remaining data corrections, then rerun all
   gates and deploy only a reviewed result. PR #307 has not been merged or deployed.
 
 The local full-range cached diagnostic is incomplete because 56 references were
