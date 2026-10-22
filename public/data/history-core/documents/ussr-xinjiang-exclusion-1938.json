@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-china-nonaggression-1937-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Договор о ненападении СССР и Китайской Республики, 21 августа 1937 года",
+      "institution": "ЭБИД / Архив внешней политики РФ",
+      "url": "https://docs.historyrussia.org/ru/nodes/247192",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "21 августа 1937",
+        "normalized": "1937-08-21",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "АВП РФ. Ф. 3-а (Китай). Оп. 1, 3. Д. 52. Л. 1–3; ДВП. Т. XX. С. 466–468; League of Nations Treaty Series vol. 181, No. 4180.",
+      "notes": "Mutual non-aggression treaty between distinct sovereign parties; it is not a territorial cession. Combined with the independent 1938 Xinjiang map to distinguish Soviet influence from sovereign territory. The 1945 exchange of notes (UNTS vol. 10, No. 68, p. 340) subsequently explicitly treats events in Sinkiang as Chinese internal affairs; it is corroboration, not a retroactive date for this correction."
+    },
+    {
+      "id": "doc-historical-basemaps-xinjiang-1938-mask",
+      "sourceCollectionId": "historical-basemaps-aourednik",
+      "title": "Historical Basemaps Xinjiang 1938 correction mask",
+      "institution": "A. Ourednik / historical-basemaps",
+      "url": "https://github.com/aourednik/historical-basemaps",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "historical-cartographic-reconstruction",
+      "date": {
+        "original": "1938",
+        "normalized": "1938",
+        "precision": "year",
+        "calendar": "gregorian"
+      },
+      "digitalVector": {
+        "archivePath": "public/data/territory/world-history/snapshots/1938.geojson",
+        "gitBlobSha1": "c4ab02f9cf16691873992aa17f5052fb66ed13c4",
+        "license": "GPL-3.0"
+      },
+      "notes": "Named Xinjiang feature supplies a dated exclusion mask for contamination in the Soviet 1940–1941 archive. Its independent political label is not interpreted as a Soviet territorial acquisition. This mask is a generalized reconstruction, not a demarcation survey."
+    }
+  ]
+}

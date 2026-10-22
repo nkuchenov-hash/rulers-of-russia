@@ -100,3 +100,19 @@ date errors are not covered by exceptions or increased tolerances.
 - Local recipe and source validation passes; external historical geometry regression remains unresolved. These changes do not certify complete geographic readiness.
 
 Local live-MVT diagnostic for resource 5821 after the latest changes: all eight 1956–1990 sampled states satisfy the unchanged 15 km p95 / 60 km maximum limits (p95 9.5–10.9 km, maximum 19.2–20.8 km). This is not a full-range CI pass. Detached Czech and Afghan occupation fringes are excluded with exact component identities and documentary evidence; the Afghanistan correction now covers the 1987 source used through 1991. The exterior-boundary metric dissolves redundant interior components and keeps all target boundary points when measuring coast-masked source points, avoiding artificial gaps at the coast cutoff.
+
+## Prewar correction — 2026-10-22
+
+Seven 1924–1941 recipes now exclude Tuva before its documented October 1944
+admission. The 1940–1941 captures also exclude Xinjiang influence contamination,
+using the independently pinned 1938 snapshot and the 1937 non-aggression treaty.
+Detached fringes from differing generalized outlines are pinned by exact component
+identity and documentary evidence. Kyzyl, Urumqi and Kashgar exclusion controls pass.
+
+The Soviet reference selector no longer mistakes numeric source styling status
+for sovereignty: named Russia features with status 6 are retained. Identified
+unnamed additions are matched by source cat/date; explicitly named occupation,
+lease and independent Tuva polygons remain excluded. Local MVT diagnostics now
+pass the tested 1924, 1932, 1936 and 1941 states under the unchanged 15 km p95 /
+60 km maximum limits. The 1945 comparison still fails and is not overridden.
+The earlier complete-run counters remain the release status until new CI finishes.

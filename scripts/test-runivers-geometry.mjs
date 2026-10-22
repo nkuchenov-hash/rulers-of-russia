@@ -31,8 +31,9 @@ assert.throws(()=>referenceForPolity({...source,referenceSourceFeatures:[feature
 const soviet = feature('СССР', 50); soviet.properties.status = 1;
 const occupation = feature('Советская зона оккупации Германии', 51); occupation.properties.status = 2;
 const lease = feature('Аренда Россией района Порккала', 52); lease.properties.status = 3;
-const sovietScope = referenceForPolity({referenceSourceFeatures:[soviet, occupation, lease]}, 'ussr');
-assert.equal(sovietScope.scope.selectedFeatures, 1);
+const inheritedMainland = feature('Россия', 53); inheritedMainland.properties.status = 6;
+const sovietScope = referenceForPolity({referenceSourceFeatures:[soviet, inheritedMainland, occupation, lease]}, 'ussr');
+assert.equal(sovietScope.scope.selectedFeatures, 2);
 assert.deepEqual(sovietScope.scope.excludedNames, [occupation.properties.name, lease.properties.name]);
 assert.throws(() => referenceForPolity({referenceSourceFeatures:[occupation]}, 'ussr'), /no named USSR/);
 assert.equal(referenceForPolity(source,'russian-empire').payload,source);
@@ -50,3 +51,9 @@ const inner = {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates
 const alone = politicalBorderSamples(outer, coast.index);
 const nested = politicalBorderSamples({type:'FeatureCollection',features:[outer,inner]},coast.index);
 assert.deepEqual(nested,alone,'Interior components cannot add an exterior sovereign border');
+
+const addition = feature('', 54); addition.properties = {cat:578,status:6,lwdate:'1924-10-27'};
+const cession = feature('', 55); cession.properties = {cat:712,status:7,lwdate:'1945-08-16'};
+const transitional = referenceForPolity({referenceSourceFeatures:[soviet,addition,cession]}, 'ussr');
+assert.equal(transitional.scope.selectedFeatures,2,'Identified unnamed addition is retained, cession is not');
+assert.equal(referenceForPolity({referenceSourceFeatures:[soviet,{...addition,properties:{...addition.properties,lwdate:'1900-01-01'}}]},'ussr').scope.selectedFeatures,1,'Addition identity must match its date');
