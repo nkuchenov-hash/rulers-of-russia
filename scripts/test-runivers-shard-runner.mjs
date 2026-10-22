@@ -13,7 +13,8 @@ try {
   fs.writeFileSync(path.join(fixture, 'scripts/runivers-fetch-cache.mjs'), '');
   fs.writeFileSync(path.join(fixture, 'probe.mjs'), `
     globalThis.fetch = async url => new Response('', {status:
-      !process.env.TEST_OUTAGE && String(url).includes('/api/component/feature_layer/mvt') ? 200 : 503});
+      !process.env.TEST_OUTAGE && String(url).includes('/api/component/feature_layer/mvt') &&
+      (!process.env.TEST_FIRST_LAYER_DOWN || String(url).includes('resource=2')) ? 200 : 503});
   `);
   fs.writeFileSync(path.join(fixture, 'scripts/validate-runivers-regression.mjs'), `
     import fs from 'node:fs';
@@ -58,10 +59,20 @@ try {
   fs.writeFileSync(reportPath, JSON.stringify({summary: {comparisons: 1}}));
   assert.equal(run({RUNIVERS_START_MONTH: 'invalid'}).status, 1);
   assert.equal(fs.existsSync(reportPath), false, 'invalid input must also remove an old report');
+  // The first Runivers layer may be unavailable even while a later layer
+  // is reachable. That is not a whole-service outage.
+  fs.writeFileSync(discoveryPath, JSON.stringify({host: 'https://example.invalid',
+    vectorLayers: [
+      {id: 1, fromYear: 1991, toYear: 2000},
+      {id: 2, fromYear: 1991, toYear: 2000},
+    ]}));
+  assert.equal(run({TEST_FIRST_LAYER_DOWN: '1'}).status, 0,
+    'a reachable second layer must prevent a false whole-service outage');
+  assert.equal(JSON.parse(fs.readFileSync(reportPath)).summary.comparisons, 1);
   assert.equal(run({TEST_OUTAGE: '1'}).status, 1);
   assert.equal(JSON.parse(fs.readFileSync(reportPath)).summary.externalOutage, true);
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'outage must not mutate canonical data');
-  console.log('Runivers shard tests passed: component-only availability, canonical isolation, transition exclusion, failure propagation, stale-report removal, outage.');
+  console.log('Runivers shard tests passed: component-only availability, canonical isolation, transition exclusion, failure propagation, stale-report removal, multi-layer preflight, outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
