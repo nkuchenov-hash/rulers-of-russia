@@ -1,0 +1,9 @@
+{
+  "source": "Natural Earth ne_50m_lakes",
+  "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a/geojson/ne_50m_lakes.geojson",
+  "sourceCommit": "ca96624a",
+  "sha256": "d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52",
+  "license": "Public domain",
+  "featureCount": 412,
+  "use": "Physical inland-water shore exclusion in external boundary regression only; not a source of historical sovereignty."
+}

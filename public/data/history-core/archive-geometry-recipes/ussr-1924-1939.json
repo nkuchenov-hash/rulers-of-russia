@@ -23,7 +23,10 @@
         "doc-aigun-1858-mfa",
         "doc-peking-1860-mfa",
         "doc-turkmenchay-1828-mfa-border-collection",
-        "doc-portsmouth-1905-ebid"
+        "doc-portsmouth-1905-ebid",
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -193,9 +196,283 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "kyzyl-before-admission",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start.",
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+          "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+          "selector": {
+            "adm1_code": "RUS-2605"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Tuva remains a separate polity before the documented October 1944 admission; reuse the same spatial realization as the admission event."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 16,
+          "expectedBbox": [
+            90.36267244845632,
+            50.17946243286133,
+            90.54715401548354,
+            50.218383
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 17,
+          "expectedBbox": [
+            90.71756528521242,
+            50.27677033199567,
+            90.83517404042009,
+            50.3198735289936
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 18,
+          "expectedBbox": [
+            90.84613011987781,
+            50.32388889375414,
+            91.12512447903268,
+            50.426139349536356
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 20,
+          "expectedBbox": [
+            91.62862569174824,
+            50.61067078107863,
+            91.89010924932052,
+            50.706503589391716
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 21,
+          "expectedBbox": [
+            92.30038747327345,
+            50.81199301128649,
+            92.41886057653635,
+            50.868369
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 22,
+          "expectedBbox": [
+            92.52729034423828,
+            50.71213912963867,
+            92.57735599546892,
+            50.74623918237162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 23,
+          "expectedBbox": [
+            92.75289729453688,
+            50.68692490266049,
+            92.9768554142275,
+            50.795505
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 24,
+          "expectedBbox": [
+            93.12194061279297,
+            50.578861236572266,
+            93.7471132238051,
+            50.609367
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 25,
+          "expectedBbox": [
+            94.13605146416117,
+            50.312522888183594,
+            94.33172757164839,
+            50.56805581401385
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 26,
+          "expectedBbox": [
+            94.39780506649348,
+            50.15701462072042,
+            94.48379699886266,
+            50.18388247791805
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 27,
+          "expectedBbox": [
+            94.86709594726562,
+            49.98000717163086,
+            95.01381946696212,
+            50.045887
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 29,
+          "expectedBbox": [
+            95.74476007983556,
+            49.98000717163086,
+            95.89777405537475,
+            50.020152
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 30,
+          "expectedBbox": [
+            96.00430394770585,
+            49.98000717163086,
+            96.13006418121932,
+            49.99881
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 31,
+          "expectedBbox": [
+            96.44792951953458,
+            49.91355895996094,
+            96.52629987515729,
+            49.922122
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 33,
+          "expectedBbox": [
+            96.7009030858442,
+            49.91355895996094,
+            96.70381763672502,
+            49.91375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 34,
+          "expectedBbox": [
+            96.93849825552222,
+            49.78071212768555,
+            97.12649332940879,
+            49.88978269702162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            97.563171,
+            49.8489818408436,
+            97.78682153142167,
+            49.961499
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 37,
+          "expectedBbox": [
+            97.80636,
+            50.90712423049833,
+            97.92337799072266,
+            51.112430572509766
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            97.915708,
+            51.25000639341219,
+            98.07226686982318,
+            51.471187365599185
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            97.944026,
+            50.7421966549945,
+            97.96324920654297,
+            50.77880859375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            98.02121363267662,
+            50.57314137630064,
+            98.13161230461778,
+            50.64549255371094
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            98.261836,
+            50.3313472746181,
+            98.30039978027344,
+            50.40442710341636
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            98.26850088690519,
+            51.645111224837805,
+            98.48431051150988,
+            51.756763783300215
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1926-1928-early",
@@ -219,7 +496,10 @@
         "doc-aigun-1858-mfa",
         "doc-peking-1860-mfa",
         "doc-turkmenchay-1828-mfa-border-collection",
-        "doc-portsmouth-1905-ebid"
+        "doc-portsmouth-1905-ebid",
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -389,9 +669,283 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "kyzyl-before-admission",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start.",
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+          "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+          "selector": {
+            "adm1_code": "RUS-2605"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Tuva remains a separate polity before the documented October 1944 admission; reuse the same spatial realization as the admission event."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 34,
+          "expectedBbox": [
+            90.36267244845632,
+            50.17946243286133,
+            90.54715401548354,
+            50.218383
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            90.71756528521242,
+            50.27677033199567,
+            90.83517404042009,
+            50.3198735289936
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            90.84613011987781,
+            50.32388889375414,
+            91.12512447903268,
+            50.426139349536356
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            91.62862569174824,
+            50.61067078107863,
+            91.89010924932052,
+            50.706503589391716
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            92.30038747327345,
+            50.81199301128649,
+            92.41886057653635,
+            50.868369
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            92.52729034423828,
+            50.71213912963867,
+            92.57735599546892,
+            50.74623918237162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            92.75289729453688,
+            50.68692490266049,
+            92.9768554142275,
+            50.795505
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            93.12194061279297,
+            50.578861236572266,
+            93.7471132238051,
+            50.609367
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            94.13605146416117,
+            50.312522888183594,
+            94.33172757164839,
+            50.56805581401385
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 44,
+          "expectedBbox": [
+            94.39780506649348,
+            50.15701462072042,
+            94.48379699886266,
+            50.18388247791805
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            94.86709594726562,
+            49.98000717163086,
+            95.01381946696212,
+            50.045887
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 47,
+          "expectedBbox": [
+            95.74476007983556,
+            49.98000717163086,
+            95.89777405537475,
+            50.020152
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 48,
+          "expectedBbox": [
+            96.00430394770585,
+            49.98000717163086,
+            96.13006418121932,
+            49.99881
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 49,
+          "expectedBbox": [
+            96.44792951953458,
+            49.91355895996094,
+            96.52629987515729,
+            49.922122
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 51,
+          "expectedBbox": [
+            96.7009030858442,
+            49.91355895996094,
+            96.70381763672502,
+            49.91375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 52,
+          "expectedBbox": [
+            96.93849825552222,
+            49.78071212768555,
+            97.12649332940879,
+            49.88978269702162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 54,
+          "expectedBbox": [
+            97.563171,
+            49.8489818408436,
+            97.78682153142167,
+            49.961499
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 55,
+          "expectedBbox": [
+            97.80636,
+            50.90712423049833,
+            97.92337799072266,
+            51.112430572509766
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 56,
+          "expectedBbox": [
+            97.915708,
+            51.25000639341219,
+            98.07226686982318,
+            51.471187365599185
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 57,
+          "expectedBbox": [
+            97.944026,
+            50.7421966549945,
+            97.96324920654297,
+            50.77880859375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 58,
+          "expectedBbox": [
+            98.02121363267662,
+            50.57314137630064,
+            98.13161230461778,
+            50.64549255371094
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 59,
+          "expectedBbox": [
+            98.261836,
+            50.3313472746181,
+            98.30039978027344,
+            50.40442710341636
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 60,
+          "expectedBbox": [
+            98.26850088690519,
+            51.645111224837805,
+            98.48431051150988,
+            51.756763783300215
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1929-1931-early",
@@ -415,7 +969,10 @@
         "doc-aigun-1858-mfa",
         "doc-peking-1860-mfa",
         "doc-turkmenchay-1828-mfa-border-collection",
-        "doc-portsmouth-1905-ebid"
+        "doc-portsmouth-1905-ebid",
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -585,9 +1142,283 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "kyzyl-before-admission",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start.",
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+          "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+          "selector": {
+            "adm1_code": "RUS-2605"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Tuva remains a separate polity before the documented October 1944 admission; reuse the same spatial realization as the admission event."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 34,
+          "expectedBbox": [
+            90.36267244845632,
+            50.17946243286133,
+            90.54715401548354,
+            50.218383
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            90.71756528521242,
+            50.27677033199567,
+            90.83517404042009,
+            50.3198735289936
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            90.84613011987781,
+            50.32388889375414,
+            91.12512447903268,
+            50.426139349536356
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            91.62862569174824,
+            50.61067078107863,
+            91.89010924932052,
+            50.706503589391716
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            92.30038747327345,
+            50.81199301128649,
+            92.41886057653635,
+            50.868369
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            92.52729034423828,
+            50.71213912963867,
+            92.57735599546892,
+            50.74623918237162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            92.75289729453688,
+            50.68692490266049,
+            92.9768554142275,
+            50.795505
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            93.12194061279297,
+            50.578861236572266,
+            93.7471132238051,
+            50.609367
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            94.13605146416117,
+            50.312522888183594,
+            94.33172757164839,
+            50.56805581401385
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 44,
+          "expectedBbox": [
+            94.39780506649348,
+            50.15701462072042,
+            94.48379699886266,
+            50.18388247791805
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            94.86709594726562,
+            49.98000717163086,
+            95.01381946696212,
+            50.045887
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 47,
+          "expectedBbox": [
+            95.74476007983556,
+            49.98000717163086,
+            95.89777405537475,
+            50.020152
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 48,
+          "expectedBbox": [
+            96.00430394770585,
+            49.98000717163086,
+            96.13006418121932,
+            49.99881
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 49,
+          "expectedBbox": [
+            96.44792951953458,
+            49.91355895996094,
+            96.52629987515729,
+            49.922122
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 51,
+          "expectedBbox": [
+            96.7009030858442,
+            49.91355895996094,
+            96.70381763672502,
+            49.91375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 52,
+          "expectedBbox": [
+            96.93849825552222,
+            49.78071212768555,
+            97.12649332940879,
+            49.88978269702162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 54,
+          "expectedBbox": [
+            97.563171,
+            49.8489818408436,
+            97.78682153142167,
+            49.961499
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 55,
+          "expectedBbox": [
+            97.80636,
+            50.90712423049833,
+            97.92337799072266,
+            51.112430572509766
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 56,
+          "expectedBbox": [
+            97.915708,
+            51.25000639341219,
+            98.07226686982318,
+            51.471187365599185
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 57,
+          "expectedBbox": [
+            97.944026,
+            50.7421966549945,
+            97.96324920654297,
+            50.77880859375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 58,
+          "expectedBbox": [
+            98.02121363267662,
+            50.57314137630064,
+            98.13161230461778,
+            50.64549255371094
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 59,
+          "expectedBbox": [
+            98.261836,
+            50.3313472746181,
+            98.30039978027344,
+            50.40442710341636
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 60,
+          "expectedBbox": [
+            98.26850088690519,
+            51.645111224837805,
+            98.48431051150988,
+            51.756763783300215
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1932-1935-early",
@@ -611,7 +1442,10 @@
         "doc-aigun-1858-mfa",
         "doc-peking-1860-mfa",
         "doc-turkmenchay-1828-mfa-border-collection",
-        "doc-portsmouth-1905-ebid"
+        "doc-portsmouth-1905-ebid",
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -781,9 +1615,283 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "kyzyl-before-admission",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start."
+      "note": "All period-correct controls pass; bounded strictly to the dated source interval with a conservative December start.",
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+          "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+          "selector": {
+            "adm1_code": "RUS-2605"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Tuva remains a separate polity before the documented October 1944 admission; reuse the same spatial realization as the admission event."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 34,
+          "expectedBbox": [
+            90.36267244845632,
+            50.17946243286133,
+            90.54715401548354,
+            50.218383
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            90.71756528521242,
+            50.27677033199567,
+            90.83517404042009,
+            50.3198735289936
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            90.84613011987781,
+            50.32388889375414,
+            91.12512447903268,
+            50.426139349536356
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            91.62862569174824,
+            50.61067078107863,
+            91.89010924932052,
+            50.706503589391716
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            92.30038747327345,
+            50.81199301128649,
+            92.41886057653635,
+            50.868369
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            92.52729034423828,
+            50.71213912963867,
+            92.57735599546892,
+            50.74623918237162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            92.75289729453688,
+            50.68692490266049,
+            92.9768554142275,
+            50.795505
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            93.12194061279297,
+            50.578861236572266,
+            93.7471132238051,
+            50.609367
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            94.13605146416117,
+            50.312522888183594,
+            94.33172757164839,
+            50.56805581401385
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 44,
+          "expectedBbox": [
+            94.39780506649348,
+            50.15701462072042,
+            94.48379699886266,
+            50.18388247791805
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            94.86709594726562,
+            49.98000717163086,
+            95.01381946696212,
+            50.045887
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 47,
+          "expectedBbox": [
+            95.74476007983556,
+            49.98000717163086,
+            95.89777405537475,
+            50.020152
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 48,
+          "expectedBbox": [
+            96.00430394770585,
+            49.98000717163086,
+            96.13006418121932,
+            49.99881
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 49,
+          "expectedBbox": [
+            96.44792951953458,
+            49.91355895996094,
+            96.52629987515729,
+            49.922122
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 51,
+          "expectedBbox": [
+            96.7009030858442,
+            49.91355895996094,
+            96.70381763672502,
+            49.91375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 52,
+          "expectedBbox": [
+            96.93849825552222,
+            49.78071212768555,
+            97.12649332940879,
+            49.88978269702162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 54,
+          "expectedBbox": [
+            97.563171,
+            49.8489818408436,
+            97.78682153142167,
+            49.961499
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 55,
+          "expectedBbox": [
+            97.80636,
+            50.90712423049833,
+            97.92337799072266,
+            51.112430572509766
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 56,
+          "expectedBbox": [
+            97.915708,
+            51.25000639341219,
+            98.07226686982318,
+            51.471187365599185
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 57,
+          "expectedBbox": [
+            97.944026,
+            50.7421966549945,
+            97.96324920654297,
+            50.77880859375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 58,
+          "expectedBbox": [
+            98.02121363267662,
+            50.57314137630064,
+            98.13161230461778,
+            50.64549255371094
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 59,
+          "expectedBbox": [
+            98.261836,
+            50.3313472746181,
+            98.30039978027344,
+            50.40442710341636
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 60,
+          "expectedBbox": [
+            98.26850088690519,
+            51.645111224837805,
+            98.48431051150988,
+            51.756763783300215
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1936-1939-early",
@@ -807,7 +1915,10 @@
         "doc-aigun-1858-mfa",
         "doc-peking-1860-mfa",
         "doc-turkmenchay-1828-mfa-border-collection",
-        "doc-portsmouth-1905-ebid"
+        "doc-portsmouth-1905-ebid",
+        "doc-tuva-ussr-1944-ebid",
+        "doc-natural-earth-tuva-admin1-10m",
+        "doc-tuvan-peoples-republic-map-commons"
       ],
       "controls": [
         {
@@ -985,9 +2096,283 @@
             49.8429
           ],
           "expected": "outside"
+        },
+        {
+          "id": "kyzyl-before-admission",
+          "lonLat": [
+            94.4534,
+            51.7191
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Pre-September-1939 USSR state: all period controls pass and Lviv remains outside. Use ends at 1939-08 before the western territorial transition."
+      "note": "Pre-September-1939 USSR state: all period controls pass and Lviv remains outside. Use ends at 1939-08 before the western territorial transition.",
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/tuva_admin1_selected_10m.geojson",
+          "archiveBlobSha1": "b46de679d556dfa3f2e0c167ac970486be43c9f8",
+          "selector": {
+            "adm1_code": "RUS-2605"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Tuva remains a separate polity before the documented October 1944 admission; reuse the same spatial realization as the admission event."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 34,
+          "expectedBbox": [
+            90.36267244845632,
+            50.17946243286133,
+            90.54715401548354,
+            50.218383
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            90.71756528521242,
+            50.27677033199567,
+            90.83517404042009,
+            50.3198735289936
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            90.84613011987781,
+            50.32388889375414,
+            91.12512447903268,
+            50.426139349536356
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            91.62862569174824,
+            50.61067078107863,
+            91.89010924932052,
+            50.706503589391716
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            92.30038747327345,
+            50.81199301128649,
+            92.41886057653635,
+            50.868369
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            92.52729034423828,
+            50.71213912963867,
+            92.57735599546892,
+            50.74623918237162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            92.75289729453688,
+            50.68692490266049,
+            92.9768554142275,
+            50.795505
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            93.12194061279297,
+            50.578861236572266,
+            93.7471132238051,
+            50.609367
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            94.13605146416117,
+            50.312522888183594,
+            94.33172757164839,
+            50.56805581401385
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 44,
+          "expectedBbox": [
+            94.39780506649348,
+            50.15701462072042,
+            94.48379699886266,
+            50.18388247791805
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            94.86709594726562,
+            49.98000717163086,
+            95.01381946696212,
+            50.045887
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 47,
+          "expectedBbox": [
+            95.74476007983556,
+            49.98000717163086,
+            95.89777405537475,
+            50.020152
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 48,
+          "expectedBbox": [
+            96.00430394770585,
+            49.98000717163086,
+            96.13006418121932,
+            49.99881
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 49,
+          "expectedBbox": [
+            96.44792951953458,
+            49.91355895996094,
+            96.52629987515729,
+            49.922122
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 51,
+          "expectedBbox": [
+            96.7009030858442,
+            49.91355895996094,
+            96.70381763672502,
+            49.91375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 52,
+          "expectedBbox": [
+            96.93849825552222,
+            49.78071212768555,
+            97.12649332940879,
+            49.88978269702162
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 54,
+          "expectedBbox": [
+            97.563171,
+            49.8489818408436,
+            97.78682153142167,
+            49.961499
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 55,
+          "expectedBbox": [
+            97.80636,
+            50.90712423049833,
+            97.92337799072266,
+            51.112430572509766
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 56,
+          "expectedBbox": [
+            97.915708,
+            51.25000639341219,
+            98.07226686982318,
+            51.471187365599185
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 57,
+          "expectedBbox": [
+            97.944026,
+            50.7421966549945,
+            97.96324920654297,
+            50.77880859375
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 58,
+          "expectedBbox": [
+            98.02121363267662,
+            50.57314137630064,
+            98.13161230461778,
+            50.64549255371094
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 59,
+          "expectedBbox": [
+            98.261836,
+            50.3313472746181,
+            98.30039978027344,
+            50.40442710341636
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        },
+        {
+          "index": 60,
+          "expectedBbox": [
+            98.26850088690519,
+            51.645111224837805,
+            98.48431051150988,
+            51.756763783300215
+          ],
+          "evidenceDocumentId": "doc-tuva-ussr-1944-ebid",
+          "note": "Detached Tuva fringe left by different generalized archive outlines; Tuva was not admitted until October 1944. The retained Soviet mainland is unchanged."
+        }
+      ]
     }
   ]
 }

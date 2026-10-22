@@ -18,7 +18,10 @@
         "doc-ussr-iran-frontier-settlement-1954-unts",
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
-        "doc-ussr-finland-gulf-1965"
+        "doc-ussr-finland-gulf-1965",
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -188,9 +191,560 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
+      "componentExclusions": [
+        {
+          "index": 3,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 0,
+          "expectedBbox": [
+            12.139461135558975,
+            49.677840342455404,
+            12.5125,
+            50.20415832058289
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 1,
+          "expectedBbox": [
+            12.22971421797931,
+            50.181445,
+            12.517354256138098,
+            50.37908172607422
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 2,
+          "expectedBbox": [
+            12.532414436340332,
+            49.44910779194181,
+            12.644774001669793,
+            49.60084602644314
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 3,
+          "expectedBbox": [
+            12.84766551815046,
+            49.02045801239009,
+            13.373227304958725,
+            49.330469
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 4,
+          "expectedBbox": [
+            12.872115658642644,
+            50.406445,
+            14.377051,
+            50.979982567691415
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 5,
+          "expectedBbox": [
+            13.480887352711843,
+            48.786521911621094,
+            13.79684445923417,
+            48.959668
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 6,
+          "expectedBbox": [
+            14.321236828866182,
+            51.01910346383838,
+            14.428453681510177,
+            51.04566955566406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 7,
+          "expectedBbox": [
+            14.386447693647778,
+            48.5881233215332,
+            14.630435172797181,
+            48.625537
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 8,
+          "expectedBbox": [
+            14.54806814085911,
+            50.814697,
+            14.989941,
+            50.987337678815855
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 9,
+          "expectedBbox": [
+            14.70034173387521,
+            48.642052610513765,
+            14.867944306559178,
+            48.774023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 10,
+          "expectedBbox": [
+            14.971905528328469,
+            48.96723634477816,
+            15.141747810395692,
+            49.001123
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 11,
+          "expectedBbox": [
+            15.208387236936062,
+            50.795991569407214,
+            15.403077442270153,
+            50.97892379760742
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 12,
+          "expectedBbox": [
+            15.23592611795752,
+            48.93978521485626,
+            15.451604832049457,
+            48.974023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 13,
+          "expectedBbox": [
+            15.761018991534641,
+            50.611621,
+            16.27484607254021,
+            50.72904848123959
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 14,
+          "expectedBbox": [
+            15.822551937799373,
+            48.85747984074313,
+            15.83994858435176,
+            48.86449592625457
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 15,
+          "expectedBbox": [
+            16.10607665491684,
+            48.72037124633789,
+            16.344791550454946,
+            48.75015011518622
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 16,
+          "expectedBbox": [
+            16.210352,
+            50.38821372638001,
+            16.28008208528345,
+            50.48135610673762
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 17,
+          "expectedBbox": [
+            16.288807367995137,
+            50.63272961759487,
+            16.338764190673828,
+            50.652717518386574
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 18,
+          "expectedBbox": [
+            16.371766887418747,
+            48.742084764566066,
+            16.626652923509596,
+            48.800098
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 19,
+          "expectedBbox": [
+            16.547050400242128,
+            50.097461,
+            16.993359,
+            50.37644682693923
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 20,
+          "expectedBbox": [
+            16.829010009765625,
+            48.21211149517759,
+            16.96469687806294,
+            48.43972128951512
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 21,
+          "expectedBbox": [
+            16.85874456754528,
+            48.67628002364369,
+            16.89847390900952,
+            48.70894654900749
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 22,
+          "expectedBbox": [
+            16.86370971313651,
+            48.44291385541806,
+            16.953125,
+            48.63625998221936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 23,
+          "expectedBbox": [
+            16.911229439081726,
+            50.254785,
+            17.480621547537055,
+            50.445655822753906
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 24,
+          "expectedBbox": [
+            17.064254760742188,
+            47.730003356933594,
+            18.594797559721602,
+            48.08322145601839
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 25,
+          "expectedBbox": [
+            17.589355,
+            50.06080425959011,
+            17.750011444091797,
+            50.2459831237793
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 26,
+          "expectedBbox": [
+            17.764980237982016,
+            49.972266,
+            17.905619972623665,
+            50.036318007037096
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 27,
+          "expectedBbox": [
+            18.247510671746518,
+            49.914062,
+            18.347512913596614,
+            49.940890254896814
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 28,
+          "expectedBbox": [
+            18.357374303105846,
+            49.90552445192369,
+            18.49706544832208,
+            49.92837237570093
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 29,
+          "expectedBbox": [
+            18.568848,
+            49.50770152021294,
+            18.858415160783764,
+            49.83952976116824
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 30,
+          "expectedBbox": [
+            18.749699850861333,
+            47.9288590169173,
+            18.850497242556358,
+            48.02451564370074
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 31,
+          "expectedBbox": [
+            18.950932744546243,
+            49.39624,
+            19.380473836584763,
+            49.5609627146193
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 32,
+          "expectedBbox": [
+            19.055069015502358,
+            48.059749603271484,
+            19.33621180592956,
+            48.08630246627046
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 33,
+          "expectedBbox": [
+            19.471011613779368,
+            49.578889366295414,
+            19.47518585159212,
+            49.58156967163086
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 34,
+          "expectedBbox": [
+            19.486768727769704,
+            49.39981991672302,
+            19.652087462911204,
+            49.56716454792819
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            19.525629596611765,
+            48.1257438659668,
+            20.308566676763085,
+            48.286517206059436
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            19.756641,
+            49.192334,
+            19.848983151840198,
+            49.265147686011936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            19.926154021235465,
+            49.181299,
+            20.35480520932728,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            20.486795656840638,
+            48.52004874705721,
+            20.49726064141237,
+            48.52797942915348
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            20.52532823242099,
+            49.381201,
+            20.545309458273223,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            20.66336673425362,
+            49.314697,
+            21.04380533866775,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            21.20458338949419,
+            48.46468977106487,
+            21.601383398119882,
+            48.553467
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            21.710541449239535,
+            49.350917498561294,
+            21.855618257949676,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            21.977863249549006,
+            49.14752958726717,
+            22.22395207062359,
+            49.283415812177786
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1975-corroborated-archive",
@@ -210,7 +764,10 @@
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
-        "doc-ussr-turkey-territorial-sea-1973"
+        "doc-ussr-turkey-territorial-sea-1973",
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -380,9 +937,560 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
+      "componentExclusions": [
+        {
+          "index": 3,
+          "expectedBbox": [
+            13.436897277832031,
+            52.4518928527832,
+            13.689833641052246,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 0,
+          "expectedBbox": [
+            12.139461135558975,
+            49.677840342455404,
+            12.5125,
+            50.20415832058289
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 1,
+          "expectedBbox": [
+            12.22971421797931,
+            50.181445,
+            12.517354256138098,
+            50.37908172607422
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 2,
+          "expectedBbox": [
+            12.532414436340332,
+            49.44910779194181,
+            12.644774001669793,
+            49.60084602644314
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 3,
+          "expectedBbox": [
+            12.84766551815046,
+            49.02045801239009,
+            13.373227304958725,
+            49.330469
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 4,
+          "expectedBbox": [
+            12.872115658642644,
+            50.406445,
+            14.377051,
+            50.979982567691415
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 5,
+          "expectedBbox": [
+            13.480887352711843,
+            48.786521911621094,
+            13.79684445923417,
+            48.959668
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 6,
+          "expectedBbox": [
+            14.321236828866182,
+            51.01910346383838,
+            14.428453681510177,
+            51.04566955566406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 7,
+          "expectedBbox": [
+            14.386447693647778,
+            48.5881233215332,
+            14.630435172797181,
+            48.625537
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 8,
+          "expectedBbox": [
+            14.54806814085911,
+            50.814697,
+            14.989941,
+            50.987337678815855
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 9,
+          "expectedBbox": [
+            14.70034173387521,
+            48.642052610513765,
+            14.867944306559178,
+            48.774023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 10,
+          "expectedBbox": [
+            14.971905528328469,
+            48.96723634477816,
+            15.141747810395692,
+            49.001123
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 11,
+          "expectedBbox": [
+            15.208387236936062,
+            50.795991569407214,
+            15.403077442270153,
+            50.97892379760742
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 12,
+          "expectedBbox": [
+            15.23592611795752,
+            48.93978521485626,
+            15.451604832049457,
+            48.974023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 13,
+          "expectedBbox": [
+            15.761018991534641,
+            50.611621,
+            16.27484607254021,
+            50.72904848123959
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 14,
+          "expectedBbox": [
+            15.822551937799373,
+            48.85747984074313,
+            15.83994858435176,
+            48.86449592625457
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 15,
+          "expectedBbox": [
+            16.10607665491684,
+            48.72037124633789,
+            16.344791550454946,
+            48.75015011518622
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 16,
+          "expectedBbox": [
+            16.210352,
+            50.38821372638001,
+            16.28008208528345,
+            50.48135610673762
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 17,
+          "expectedBbox": [
+            16.288807367995137,
+            50.63272961759487,
+            16.338764190673828,
+            50.652717518386574
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 18,
+          "expectedBbox": [
+            16.371766887418747,
+            48.742084764566066,
+            16.626652923509596,
+            48.800098
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 19,
+          "expectedBbox": [
+            16.547050400242128,
+            50.097461,
+            16.993359,
+            50.37644682693923
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 20,
+          "expectedBbox": [
+            16.829010009765625,
+            48.21211149517759,
+            16.96469687806294,
+            48.43972128951512
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 21,
+          "expectedBbox": [
+            16.85874456754528,
+            48.67628002364369,
+            16.89847390900952,
+            48.70894654900749
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 22,
+          "expectedBbox": [
+            16.86370971313651,
+            48.44291385541806,
+            16.953125,
+            48.63625998221936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 23,
+          "expectedBbox": [
+            16.911229439081726,
+            50.254785,
+            17.480621547537055,
+            50.445655822753906
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 24,
+          "expectedBbox": [
+            17.064254760742188,
+            47.730003356933594,
+            18.594797559721602,
+            48.08322145601839
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 25,
+          "expectedBbox": [
+            17.589355,
+            50.06080425959011,
+            17.750011444091797,
+            50.2459831237793
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 26,
+          "expectedBbox": [
+            17.764980237982016,
+            49.972266,
+            17.905619972623665,
+            50.036318007037096
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 27,
+          "expectedBbox": [
+            18.247510671746518,
+            49.914062,
+            18.347512913596614,
+            49.940890254896814
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 28,
+          "expectedBbox": [
+            18.357374303105846,
+            49.90552445192369,
+            18.49706544832208,
+            49.92837237570093
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 29,
+          "expectedBbox": [
+            18.568848,
+            49.50770152021294,
+            18.858415160783764,
+            49.83952976116824
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 30,
+          "expectedBbox": [
+            18.749699850861333,
+            47.9288590169173,
+            18.850497242556358,
+            48.02451564370074
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 31,
+          "expectedBbox": [
+            18.950932744546243,
+            49.39624,
+            19.380473836584763,
+            49.5609627146193
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 32,
+          "expectedBbox": [
+            19.055069015502358,
+            48.059749603271484,
+            19.33621180592956,
+            48.08630246627046
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 33,
+          "expectedBbox": [
+            19.471011613779368,
+            49.578889366295414,
+            19.47518585159212,
+            49.58156967163086
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 34,
+          "expectedBbox": [
+            19.486768727769704,
+            49.39981991672302,
+            19.652087462911204,
+            49.56716454792819
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            19.525629596611765,
+            48.1257438659668,
+            20.308566676763085,
+            48.286517206059436
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            19.756641,
+            49.192334,
+            19.848983151840198,
+            49.265147686011936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            19.926154021235465,
+            49.181299,
+            20.35480520932728,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            20.486795656840638,
+            48.52004874705721,
+            20.49726064141237,
+            48.52797942915348
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            20.52532823242099,
+            49.381201,
+            20.545309458273223,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            20.66336673425362,
+            49.314697,
+            21.04380533866775,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            21.20458338949419,
+            48.46468977106487,
+            21.601383398119882,
+            48.553467
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            21.710541449239535,
+            49.350917498561294,
+            21.855618257949676,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            21.977863249549006,
+            49.14752958726717,
+            22.22395207062359,
+            49.283415812177786
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1976-1978-corroborated-archive",
@@ -402,7 +1510,10 @@
         "doc-ussr-afghanistan-frontier-regime-1958-unts",
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
-        "doc-ussr-turkey-territorial-sea-1973"
+        "doc-ussr-turkey-territorial-sea-1973",
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask"
       ],
       "controls": [
         {
@@ -572,9 +1683,560 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
+      "componentExclusions": [
+        {
+          "index": 9,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 0,
+          "expectedBbox": [
+            12.139461135558975,
+            49.677840342455404,
+            12.5125,
+            50.20415832058289
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 1,
+          "expectedBbox": [
+            12.22971421797931,
+            50.181445,
+            12.517354256138098,
+            50.37908172607422
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 2,
+          "expectedBbox": [
+            12.532414436340332,
+            49.44910779194181,
+            12.644774001669793,
+            49.60084602644314
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 3,
+          "expectedBbox": [
+            12.84766551815046,
+            49.02045801239009,
+            13.373227304958725,
+            49.330469
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 4,
+          "expectedBbox": [
+            12.872115658642644,
+            50.406445,
+            14.377051,
+            50.979982567691415
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 5,
+          "expectedBbox": [
+            13.480887352711843,
+            48.786521911621094,
+            13.79684445923417,
+            48.959668
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 6,
+          "expectedBbox": [
+            14.321236828866182,
+            51.01910346383838,
+            14.428453681510177,
+            51.04566955566406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 7,
+          "expectedBbox": [
+            14.386447693647778,
+            48.5881233215332,
+            14.630435172797181,
+            48.625537
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 8,
+          "expectedBbox": [
+            14.54806814085911,
+            50.814697,
+            14.989941,
+            50.987337678815855
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 9,
+          "expectedBbox": [
+            14.70034173387521,
+            48.642052610513765,
+            14.867944306559178,
+            48.774023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 10,
+          "expectedBbox": [
+            14.971905528328469,
+            48.96723634477816,
+            15.141747810395692,
+            49.001123
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 11,
+          "expectedBbox": [
+            15.208387236936062,
+            50.795991569407214,
+            15.403077442270153,
+            50.97892379760742
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 12,
+          "expectedBbox": [
+            15.23592611795752,
+            48.93978521485626,
+            15.451604832049457,
+            48.974023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 13,
+          "expectedBbox": [
+            15.761018991534641,
+            50.611621,
+            16.27484607254021,
+            50.72904848123959
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 14,
+          "expectedBbox": [
+            15.822551937799373,
+            48.85747984074313,
+            15.83994858435176,
+            48.86449592625457
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 15,
+          "expectedBbox": [
+            16.10607665491684,
+            48.72037124633789,
+            16.344791550454946,
+            48.75015011518622
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 16,
+          "expectedBbox": [
+            16.210352,
+            50.38821372638001,
+            16.28008208528345,
+            50.48135610673762
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 17,
+          "expectedBbox": [
+            16.288807367995137,
+            50.63272961759487,
+            16.338764190673828,
+            50.652717518386574
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 18,
+          "expectedBbox": [
+            16.371766887418747,
+            48.742084764566066,
+            16.626652923509596,
+            48.800098
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 19,
+          "expectedBbox": [
+            16.547050400242128,
+            50.097461,
+            16.993359,
+            50.37644682693923
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 20,
+          "expectedBbox": [
+            16.829010009765625,
+            48.21211149517759,
+            16.96469687806294,
+            48.43972128951512
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 21,
+          "expectedBbox": [
+            16.85874456754528,
+            48.67628002364369,
+            16.89847390900952,
+            48.70894654900749
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 22,
+          "expectedBbox": [
+            16.86370971313651,
+            48.44291385541806,
+            16.953125,
+            48.63625998221936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 23,
+          "expectedBbox": [
+            16.911229439081726,
+            50.254785,
+            17.480621547537055,
+            50.445655822753906
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 24,
+          "expectedBbox": [
+            17.064254760742188,
+            47.730003356933594,
+            18.594797559721602,
+            48.08322145601839
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 25,
+          "expectedBbox": [
+            17.589355,
+            50.06080425959011,
+            17.750011444091797,
+            50.2459831237793
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 26,
+          "expectedBbox": [
+            17.764980237982016,
+            49.972266,
+            17.905619972623665,
+            50.036318007037096
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 27,
+          "expectedBbox": [
+            18.247510671746518,
+            49.914062,
+            18.347512913596614,
+            49.940890254896814
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 28,
+          "expectedBbox": [
+            18.357374303105846,
+            49.90552445192369,
+            18.49706544832208,
+            49.92837237570093
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 29,
+          "expectedBbox": [
+            18.568848,
+            49.50770152021294,
+            18.858415160783764,
+            49.83952976116824
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 30,
+          "expectedBbox": [
+            18.749699850861333,
+            47.9288590169173,
+            18.850497242556358,
+            48.02451564370074
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 31,
+          "expectedBbox": [
+            18.950932744546243,
+            49.39624,
+            19.380473836584763,
+            49.5609627146193
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 32,
+          "expectedBbox": [
+            19.055069015502358,
+            48.059749603271484,
+            19.33621180592956,
+            48.08630246627046
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 33,
+          "expectedBbox": [
+            19.471011613779368,
+            49.578889366295414,
+            19.47518585159212,
+            49.58156967163086
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 34,
+          "expectedBbox": [
+            19.486768727769704,
+            49.39981991672302,
+            19.652087462911204,
+            49.56716454792819
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            19.525629596611765,
+            48.1257438659668,
+            20.308566676763085,
+            48.286517206059436
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            19.756641,
+            49.192334,
+            19.848983151840198,
+            49.265147686011936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            19.926154021235465,
+            49.181299,
+            20.35480520932728,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            20.486795656840638,
+            48.52004874705721,
+            20.49726064141237,
+            48.52797942915348
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            20.52532823242099,
+            49.381201,
+            20.545309458273223,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            20.66336673425362,
+            49.314697,
+            21.04380533866775,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            21.20458338949419,
+            48.46468977106487,
+            21.601383398119882,
+            48.553467
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            21.710541449239535,
+            49.350917498561294,
+            21.855618257949676,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            21.977863249549006,
+            49.14752958726717,
+            22.22395207062359,
+            49.283415812177786
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        }
+      ]
     },
     {
       "id": "recipe-ussr-1987-1989-corroborated-archive",
@@ -595,7 +2257,11 @@
         "doc-ussr-norway-varanger-protocol-1957",
         "doc-ussr-finland-gulf-1965",
         "doc-ussr-poland-maritime-1985",
-        "doc-ussr-turkey-eez-notes-1986-1987"
+        "doc-ussr-turkey-eez-notes-1986-1987",
+        "doc-germany-control-non-annexation-1945-ebid",
+        "doc-ussr-czechoslovakia-temporary-troops-1968",
+        "doc-natural-earth-czechoslovakia-exclusion-mask",
+        "doc-historical-basemaps-afghanistan-1960-mask"
       ],
       "controls": [
         {
@@ -765,9 +2431,577 @@
             39.9334
           ],
           "expected": "outside"
+        },
+        {
+          "id": "east-berlin-not-ussr-territory",
+          "lonLat": [
+            13.5,
+            52.55
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "prague-not-ussr",
+          "lonLat": [
+            14.4378,
+            50.0755
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "bratislava-not-ussr",
+          "lonLat": [
+            17.1077,
+            48.1486
+          ],
+          "expected": "outside"
+        },
+        {
+          "id": "uzhhorod-retained",
+          "lonLat": [
+            22.2879,
+            48.6208
+          ],
+          "expected": "inside"
+        },
+        {
+          "id": "kabul-not-ussr",
+          "lonLat": [
+            69.2075,
+            34.5553
+          ],
+          "expected": "outside"
         }
       ],
-      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy."
+      "note": "Exact dated USSR archive feature promoted only inside its own represented interval after distributed spatial controls and primary treaty corroboration. No forward proxy. Czechoslovakia occupation is subtracted using an independently pinned post-1945 mask and the 1968 treaty sovereignty provision.",
+      "componentExclusions": [
+        {
+          "index": 6,
+          "expectedBbox": [
+            13.433555603027344,
+            52.4518928527832,
+            13.691634178161621,
+            52.720787048339844
+          ],
+          "evidenceDocumentId": "doc-germany-control-non-annexation-1945-ebid",
+          "note": "East Berlin occupation/administration is not USSR sovereign territory. The 5 June 1945 declaration explicitly distinguishes assumption of authority in Germany from annexation. Exclude this isolated Berlin component from the russian-legal-border track; retain the source archive unchanged."
+        }
+      ],
+      "differenceMasks": [
+        {
+          "archivePath": "public/data/territory/world-history/snapshots/1960.geojson",
+          "archiveBlobSha1": "5120220da4499d10042caf1a50d0223a06336a57",
+          "selector": {
+            "NAME": "Afghanistan"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Subtract the independently pinned Afghanistan polygon from the contaminated Cliopatria mainland component."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "CZE"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        },
+        {
+          "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+          "archiveBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+          "selector": {
+            "ADM0_A3": "SVK"
+          },
+          "expectedFeatureCount": 1,
+          "note": "Generalized exclusion of Czechoslovak occupation territory, independently supported by treaty article 2; historical source frontier retained elsewhere."
+        }
+      ],
+      "resultComponentExclusions": [
+        {
+          "index": 0,
+          "expectedBbox": [
+            12.139461135558975,
+            49.677840342455404,
+            12.5125,
+            50.20415832058289
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 1,
+          "expectedBbox": [
+            12.22971421797931,
+            50.181445,
+            12.517354256138098,
+            50.37908172607422
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 2,
+          "expectedBbox": [
+            12.532414436340332,
+            49.44910779194181,
+            12.644774001669793,
+            49.60084602644314
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 3,
+          "expectedBbox": [
+            12.84766551815046,
+            49.02045801239009,
+            13.373227304958725,
+            49.330469
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 4,
+          "expectedBbox": [
+            12.872115658642644,
+            50.406445,
+            14.377051,
+            50.979982567691415
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 5,
+          "expectedBbox": [
+            13.480887352711843,
+            48.786521911621094,
+            13.79684445923417,
+            48.959668
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 6,
+          "expectedBbox": [
+            14.321236828866182,
+            51.01910346383838,
+            14.428453681510177,
+            51.04566955566406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 7,
+          "expectedBbox": [
+            14.386447693647778,
+            48.5881233215332,
+            14.630435172797181,
+            48.625537
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 8,
+          "expectedBbox": [
+            14.54806814085911,
+            50.814697,
+            14.989941,
+            50.987337678815855
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 9,
+          "expectedBbox": [
+            14.70034173387521,
+            48.642052610513765,
+            14.867944306559178,
+            48.774023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 10,
+          "expectedBbox": [
+            14.971905528328469,
+            48.96723634477816,
+            15.141747810395692,
+            49.001123
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 11,
+          "expectedBbox": [
+            15.208387236936062,
+            50.795991569407214,
+            15.403077442270153,
+            50.97892379760742
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 12,
+          "expectedBbox": [
+            15.23592611795752,
+            48.93978521485626,
+            15.451604832049457,
+            48.974023
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 13,
+          "expectedBbox": [
+            15.761018991534641,
+            50.611621,
+            16.27484607254021,
+            50.72904848123959
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 14,
+          "expectedBbox": [
+            15.822551937799373,
+            48.85747984074313,
+            15.83994858435176,
+            48.86449592625457
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 15,
+          "expectedBbox": [
+            16.10607665491684,
+            48.72037124633789,
+            16.344791550454946,
+            48.75015011518622
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 16,
+          "expectedBbox": [
+            16.210352,
+            50.38821372638001,
+            16.28008208528345,
+            50.48135610673762
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 17,
+          "expectedBbox": [
+            16.288807367995137,
+            50.63272961759487,
+            16.338764190673828,
+            50.652717518386574
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 18,
+          "expectedBbox": [
+            16.371766887418747,
+            48.742084764566066,
+            16.626652923509596,
+            48.800098
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 19,
+          "expectedBbox": [
+            16.547050400242128,
+            50.097461,
+            16.993359,
+            50.37644682693923
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 20,
+          "expectedBbox": [
+            16.829010009765625,
+            48.21211149517759,
+            16.96469687806294,
+            48.43972128951512
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 21,
+          "expectedBbox": [
+            16.85874456754528,
+            48.67628002364369,
+            16.89847390900952,
+            48.70894654900749
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 22,
+          "expectedBbox": [
+            16.86370971313651,
+            48.44291385541806,
+            16.953125,
+            48.63625998221936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 23,
+          "expectedBbox": [
+            16.911229439081726,
+            50.254785,
+            17.480621547537055,
+            50.445655822753906
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 24,
+          "expectedBbox": [
+            17.064254760742188,
+            47.730003356933594,
+            18.594797559721602,
+            48.08322145601839
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 25,
+          "expectedBbox": [
+            17.589355,
+            50.06080425959011,
+            17.750011444091797,
+            50.2459831237793
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 26,
+          "expectedBbox": [
+            17.764980237982016,
+            49.972266,
+            17.905619972623665,
+            50.036318007037096
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 27,
+          "expectedBbox": [
+            18.247510671746518,
+            49.914062,
+            18.347512913596614,
+            49.940890254896814
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 28,
+          "expectedBbox": [
+            18.357374303105846,
+            49.90552445192369,
+            18.49706544832208,
+            49.92837237570093
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 29,
+          "expectedBbox": [
+            18.568848,
+            49.50770152021294,
+            18.858415160783764,
+            49.83952976116824
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 30,
+          "expectedBbox": [
+            18.749699850861333,
+            47.9288590169173,
+            18.850497242556358,
+            48.02451564370074
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 31,
+          "expectedBbox": [
+            18.950932744546243,
+            49.39624,
+            19.380473836584763,
+            49.5609627146193
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 32,
+          "expectedBbox": [
+            19.055069015502358,
+            48.059749603271484,
+            19.33621180592956,
+            48.08630246627046
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 33,
+          "expectedBbox": [
+            19.471011613779368,
+            49.578889366295414,
+            19.47518585159212,
+            49.58156967163086
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 34,
+          "expectedBbox": [
+            19.486768727769704,
+            49.39981991672302,
+            19.652087462911204,
+            49.56716454792819
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 35,
+          "expectedBbox": [
+            19.525629596611765,
+            48.1257438659668,
+            20.308566676763085,
+            48.286517206059436
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 36,
+          "expectedBbox": [
+            19.756641,
+            49.192334,
+            19.848983151840198,
+            49.265147686011936
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 38,
+          "expectedBbox": [
+            19.926154021235465,
+            49.181299,
+            20.35480520932728,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 39,
+          "expectedBbox": [
+            20.486795656840638,
+            48.52004874705721,
+            20.49726064141237,
+            48.52797942915348
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 40,
+          "expectedBbox": [
+            20.52532823242099,
+            49.381201,
+            20.545309458273223,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 41,
+          "expectedBbox": [
+            20.66336673425362,
+            49.314697,
+            21.04380533866775,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 42,
+          "expectedBbox": [
+            21.20458338949419,
+            48.46468977106487,
+            21.601383398119882,
+            48.553467
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 43,
+          "expectedBbox": [
+            21.710541449239535,
+            49.350917498561294,
+            21.855618257949676,
+            49.38258361816406
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        },
+        {
+          "index": 45,
+          "expectedBbox": [
+            21.977863249549006,
+            49.14752958726717,
+            22.22395207062359,
+            49.283415812177786
+          ],
+          "evidenceDocumentId": "doc-ussr-czechoslovakia-temporary-troops-1968",
+          "note": "Detached Czechoslovak occupation fringe left by differing generalized source outlines; not Soviet sovereign territory. Mainland and Kaliningrad remain untouched."
+        }
+      ]
     }
   ]
 }

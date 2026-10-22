@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-ussr-czechoslovakia-temporary-troops-1968",
+      "sourceCollectionId": "czech-parliament-digital-library",
+      "title": "Договор об условиях временного пребывания советских войск в ЧССР, 16 октября 1968 года",
+      "institution": "Parliament of the Czech Republic",
+      "url": "https://www.psp.cz/eknih/1964ns/tisky/t0208_00.htm",
+      "tier": "A2-official-document-publication",
+      "documentType": "treaty",
+      "date": {
+        "original": "16 October 1968",
+        "normalized": "1968-10-16",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "National Assembly 1964–1968, parliamentary print 208, treaty articles 1–2; ratification record 18 October 1968.",
+      "notes": "Articles 1–2 distinguish temporary Soviet troop deployment from Czechoslovak sovereignty. Pinned Natural Earth Czechia and Slovakia polygons supply generalized spatial exclusion masks; the treaty supplies the historical legal meaning."
+    },
+    {
+      "id": "doc-natural-earth-czechoslovakia-exclusion-mask",
+      "sourceCollectionId": "natural-earth-public-domain",
+      "title": "Natural Earth Czechia and Slovakia exclusion masks",
+      "institution": "Natural Earth; pinned project archive",
+      "url": "https://github.com/nvkelso/natural-earth-vector/tree/ca96624a",
+      "tier": "B1-russian-academic-interpretation",
+      "documentType": "modern-cartographic-reference",
+      "digitalVector": {
+        "archivePath": "public/data/territory/cultural/countries_50m.geojson",
+        "gitBlobSha1": "3e5768fbd00fb36f7a7ca91a1c97ea54a61938c1",
+        "license": "Public domain"
+      },
+      "notes": "Czechia and Slovakia provide a generalized spatial exclusion for occupation contamination. The 1968 treaty supplies the independent sovereignty evidence. These modern masks cannot establish the historical Soviet frontier; dated source geometry and Uzhhorod retention controls remain mandatory. No Runivers geometry is used."
+    }
+  ]
+}

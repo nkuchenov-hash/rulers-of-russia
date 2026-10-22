@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "id": "doc-germany-control-non-annexation-1945-ebid",
+      "sourceCollectionId": "ebid-historyrussia",
+      "title": "Декларация о поражении Германии и принятии верховной власти — положение об отсутствии аннексии, 5 июня 1945 г.",
+      "institution": "ЭБИД / публикация документов СССР, США, Великобритании и Франции",
+      "url": "https://docs.historyrussia.org/ru/nodes/379991",
+      "tier": "A2-official-document-publication",
+      "documentType": "declaration",
+      "date": {
+        "original": "5 июня 1945 г.",
+        "normalized": "1945-06-05",
+        "precision": "day",
+        "calendar": "gregorian"
+      },
+      "publicationCitation": "Советско-французские отношения во время Великой Отечественной войны, 1941–1945. Т. 2. М.: Политиздат, 1983. Док. 162; первая публикация: Правда, 6 июня 1945 г.",
+      "pagesOrFolios": "С. 334–335; ЭБИД pages 1445193–1445194",
+      "notes": "The preamble explicitly states that assuming supreme authority, rights and powers in Germany does not constitute annexation. This distinguishes an occupation/control footprint from Soviet sovereign territory. Used to exclude the isolated East Berlin component mistakenly included in the secondary USSR archive, not to alter the USSR mainland frontier or the separate Königsberg settlement."
+    }
+  ]
+}

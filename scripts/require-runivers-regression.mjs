@@ -10,7 +10,18 @@ if (!fs.existsSync(reportFile)) {
 
 const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
 const s = report.summary ?? {};
-const usable = Number(s.usableReferenceLayers ?? 0);
+const counters = ['usableReferenceLayers','comparisons','passingComparisons','overrides','failedComparisons','referenceFailures','missingStates','uncoveredMonths'];
+for (const name of counters) {
+  if (!Number.isInteger(s[name]) || s[name] < 0) {
+    console.error(`Runivers report has an invalid or missing ${name} counter.`);
+    process.exit(1);
+  }
+}
+if (s.passingComparisons + s.overrides + s.failedComparisons !== s.comparisons) {
+  console.error('Runivers report comparison totals are inconsistent.');
+  process.exit(1);
+}
+const usable = s.usableReferenceLayers;
 const comparisons = Number(s.comparisons ?? 0);
 const failed = Number(s.failedComparisons ?? 0);
 const referenceFailures = Number(s.referenceFailures ?? 0);
@@ -23,8 +34,8 @@ const totalExternalOutage = usable === 0
   && referenceFailures > 0;
 
 if (totalExternalOutage) {
-  console.log(`::warning::Runivers live geometry is unavailable (${referenceFailures} reference exports failed). Canonical History Core validation remains authoritative; the live Runivers cross-check produced no comparison and is classified as an external-source outage, not a geometry pass.`);
-  process.exit(0);
+  console.error(`Runivers verification is incomplete: ${referenceFailures} reference exports failed and no comparison was made. An external-source outage cannot pass the geographic readiness gate.`);
+  process.exit(1);
 }
 
 if (usable === 0) {

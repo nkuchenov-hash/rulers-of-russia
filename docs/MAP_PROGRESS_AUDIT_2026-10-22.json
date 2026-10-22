@@ -1,0 +1,144 @@
+{
+  "checkedOn": "2026-10-22",
+  "remoteHead": "a1f687df80fe9813c771c632e0cee167c297be81",
+  "lastFullRun": 37373905487,
+  "lastFullRunDate": "2026-10-05",
+  "pr": 307,
+  "merged": false,
+  "totals": {
+    "comparisons": 247,
+    "passed": 26,
+    "failed": 221,
+    "referenceFailures": 2,
+    "missingStates": 2,
+    "uncoveredMonths": 24
+  },
+  "periods": [
+    {
+      "period": "1462-1519",
+      "jobId": 111981348611,
+      "comparisons": 21,
+      "passed": 0,
+      "failed": 21,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1520-1599",
+      "jobId": 111981348593,
+      "comparisons": 26,
+      "passed": 0,
+      "failed": 26,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1600-1649",
+      "jobId": 111981348666,
+      "comparisons": 30,
+      "passed": 0,
+      "failed": 30,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1650-1699",
+      "jobId": 111981348626,
+      "comparisons": 24,
+      "passed": 0,
+      "failed": 24,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1700-1749",
+      "jobId": 111981348549,
+      "comparisons": 25,
+      "passed": 0,
+      "failed": 25,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1750-1799",
+      "jobId": 111981348701,
+      "comparisons": 21,
+      "passed": 0,
+      "failed": 21,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1800-1849",
+      "jobId": 111981348733,
+      "comparisons": 40,
+      "passed": 0,
+      "failed": 40,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1850-1899",
+      "jobId": 111981348585,
+      "comparisons": 25,
+      "passed": 5,
+      "failed": 20,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1900-1922",
+      "jobId": 111981348521,
+      "comparisons": 11,
+      "passed": 6,
+      "failed": 5,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1923-1945",
+      "jobId": 111981348693,
+      "comparisons": 9,
+      "passed": 0,
+      "failed": 9,
+      "referenceFailures": 2,
+      "missingStates": 2,
+      "uncoveredMonths": 24
+    },
+    {
+      "period": "1946-1991",
+      "jobId": 111981348507,
+      "comparisons": 11,
+      "passed": 11,
+      "failed": 0,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    },
+    {
+      "period": "1992-2020",
+      "jobId": 111981348606,
+      "comparisons": 4,
+      "passed": 4,
+      "failed": 0,
+      "referenceFailures": 0,
+      "missingStates": 0,
+      "uncoveredMonths": 0
+    }
+  ],
+  "limitations": [
+    "Comparison window is 1462–2020, not the entire 862–2026 map.",
+    "Transition months are separately excluded from year-granular comparison.",
+    "Passing comparisons are not a percentage of total project completion.",
+    "Uncommitted local Tuva/Xinjiang fixes have not completed a full independent regression."
+  ]
+}
