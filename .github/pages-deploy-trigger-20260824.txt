@@ -1,0 +1,1 @@
+Trigger trusted GitHub Pages production deployment after restoring pull_request_target workflow.
