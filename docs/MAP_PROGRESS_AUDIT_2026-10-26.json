@@ -1,0 +1,121 @@
+{
+  "checkedOn": "2026-10-26",
+  "runId": 40333911423,
+  "runUrl": "https://github.com/nkuchenov-hash/rulers-of-russia/actions/runs/40333911423",
+  "sourceHead": "2f681fb62d8ce01e6f495955891e49b5ec76c4de",
+  "completeIndependentAudit": false,
+  "summary": {
+    "periods": 12,
+    "shardsWithComparisons": 6,
+    "shardsWithFullPreflightOutage": 6,
+    "comparisons": 102,
+    "passed": 0,
+    "failed": 102,
+    "referenceFailuresInPartiallyAvailableShards": 40
+  },
+  "periods": [
+    {
+      "period": "1462-1519",
+      "comparisons": 10,
+      "passed": 0,
+      "failed": 10,
+      "referenceFailures": 11,
+      "externalOutage": false
+    },
+    {
+      "period": "1520-1599",
+      "comparisons": 26,
+      "passed": 0,
+      "failed": 26,
+      "referenceFailures": 0,
+      "externalOutage": false
+    },
+    {
+      "period": "1600-1649",
+      "comparisons": 14,
+      "passed": 0,
+      "failed": 14,
+      "referenceFailures": 16,
+      "externalOutage": false
+    },
+    {
+      "period": "1650-1699",
+      "comparisons": 24,
+      "passed": 0,
+      "failed": 24,
+      "referenceFailures": 0,
+      "externalOutage": false
+    },
+    {
+      "period": "1700-1749",
+      "comparisons": 25,
+      "passed": 0,
+      "failed": 25,
+      "referenceFailures": 0,
+      "externalOutage": false
+    },
+    {
+      "period": "1750-1799",
+      "comparisons": 3,
+      "passed": 0,
+      "failed": 3,
+      "referenceFailures": 13,
+      "externalOutage": false
+    },
+    {
+      "period": "1800-1849",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    },
+    {
+      "period": "1850-1899",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    },
+    {
+      "period": "1900-1922",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    },
+    {
+      "period": "1923-1945",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    },
+    {
+      "period": "1946-1991",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    },
+    {
+      "period": "1992-2020",
+      "comparisons": 0,
+      "passed": 0,
+      "failed": 0,
+      "referenceFailures": null,
+      "externalOutage": true
+    }
+  ],
+  "caveats": [
+    "Full preflight outages provide zero independent comparisons; null referenceFailures means the outage counter was not transcribed here, not that there were zero failures.",
+    "These are incomplete-run counters, not a regression trend or a percentage of geographical accuracy.",
+    "Runivers uses year-granular layers and cannot verify within-year transition dates.",
+    "The 13,980-month History Core documentary coverage is not a geographic accuracy score.",
+    "No geometry or tolerance change is authorized by this report."
+  ]
+}
