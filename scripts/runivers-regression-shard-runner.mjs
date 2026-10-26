@@ -13,7 +13,8 @@ const reportFile = path.join(reportDir, 'report.json');
 // Even an early input failure must not leave an older passing report.
 fs.rmSync(reportFile, {force: true});
 
-if (!/^\d{4}-\d{2}$/.test(startMonth || '') || !/^\d{4}-\d{2}$/.test(endMonth || '') || startMonth > endMonth) {
+const validMonth = value => /^\d{4}-(0[1-9]|1[0-2])$/.test(value || '');
+if (!validMonth(startMonth) || !validMonth(endMonth) || startMonth > endMonth) {
   throw new Error(`Invalid Runivers shard range: ${startMonth || '<missing>'}..${endMonth || '<missing>'}`);
 }
 if (!fs.existsSync(sourceDiscoveryFile)) throw new Error(`Runivers discovery report missing: ${sourceDiscoveryFile}`);
@@ -39,6 +40,21 @@ fs.writeFileSync(shardDiscoveryFile, JSON.stringify(discovery, null, 2));
 const monthIndex = JSON.parse(fs.readFileSync(monthIndexFile, 'utf8'));
 const rangeMonths = (monthIndex.months ?? []).filter((row) => row.month >= startMonth && row.month <= endMonth);
 if (!rangeMonths.length) throw new Error(`No History Core months overlap ${startMonth}..${endMonth}`);
+// Excluding within-year transitions is intentional; silently dropping entire
+// missing years is not. Check the calendar range before computing comparable
+// years, so an incomplete index cannot produce a misleading green regression.
+const expectedMonths = [];
+for (let year = startYear, month = Number(startMonth.slice(5)); year < endYear || (year === endYear && month <= Number(endMonth.slice(5))); month += 1) {
+  if (month > 12) { month = 1; year += 1; }
+  expectedMonths.push(`${year}-${String(month).padStart(2, '0')}`);
+}
+const seenMonths = new Set();
+for (const row of rangeMonths) {
+  if (seenMonths.has(row.month)) throw new Error(`Duplicate History Core month in Runivers shard: ${row.month}`);
+  seenMonths.add(row.month);
+}
+const missingMonths = expectedMonths.filter(key => !seenMonths.has(key));
+if (missingMonths.length) throw new Error(`History Core Runivers shard is missing ${missingMonths.length} months (${missingMonths.slice(0, 5).join(', ')}); comparison cannot certify the requested range.`);
 
 // Runivers reference intervals are year-granular. Do not pretend they identify
 // which side of a within-year History Core transition is the corresponding
