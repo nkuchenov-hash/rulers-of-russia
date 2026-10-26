@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear, requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -65,3 +65,27 @@ assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',fea
 assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{}}]}, 5385), /resource 5385.*types: Point/);
 assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[feature('Moscow',30)]}, 5387).hasPolygon,true);
 console.log('Runivers empty/unsupported reference exports fail closed.');
+
+
+// The same file can reappear after a different state, a missing month, or a
+// change in historical certification. These must remain distinct comparisons.
+const testMonth = (month, geometryFile, polityId = 'ussr', certificationId = 'cert-1') =>
+  ({month, geometryFile, polityId, certificationId, status: 'geometry-verified'});
+const recurring = historyStates({months: [
+  testMonth('1991-11','A.geojson'), testMonth('1991-12','A.geojson'),
+  testMonth('1992-01','A.geojson'), testMonth('1992-02','B.geojson'),
+  testMonth('1992-03','A.geojson'), testMonth('1992-04','A.geojson'),
+  testMonth('1992-06','A.geojson'), testMonth('1992-07','A.geojson','ussr','cert-2'),
+  testMonth('1992-08','A.geojson','russian-empire','cert-2'),
+]});
+assert.deepEqual(recurring.map(s => [s.firstMonth, s.lastMonth]), [
+  ['1991-11','1992-01'], ['1992-02','1992-02'], ['1992-03','1992-04'],
+  ['1992-06','1992-06'], ['1992-07','1992-07'], ['1992-08','1992-08'],
+]);
+assert.equal(new Set(recurring.map(s => s.key)).size, recurring.length, 'each historical interval needs a unique comparison key');
+const byMonth = indexStateCoverageByMonth(recurring);
+assert.equal(byMonth.get('1992-01').firstMonth,'1991-11');
+assert.equal(byMonth.get('1992-03').firstMonth,'1992-03','a reused geometry must not inherit an earlier comparison');
+assert.equal(byMonth.get('1992-05'),undefined,'missing months must not be treated as covered');
+assert.throws(() => indexStateCoverageByMonth([recurring[0], recurring[0]]), /Overlapping Runivers history states/);
+console.log('Runivers temporal-state tests passed: year rollover, repeated geometry, missing months, certification and polity changes, no coverage aliasing.');
