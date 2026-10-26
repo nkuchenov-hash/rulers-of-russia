@@ -12,8 +12,21 @@ try {
   fs.copyFileSync(new URL('./runivers-regression-shard-runner.mjs', import.meta.url), path.join(fixture, 'scripts/runner.mjs'));
   fs.writeFileSync(path.join(fixture, 'scripts/runivers-fetch-cache.mjs'), '');
   fs.writeFileSync(path.join(fixture, 'probe.mjs'), `
-    globalThis.fetch = async url => new Response('', {status:
-      !process.env.TEST_OUTAGE && String(url).includes('/api/component/feature_layer/mvt') && (!process.env.TEST_FIRST_RESOURCE_DOWN || String(url).includes('resource=2')) ? 200 : 503});
+    import fs from 'node:fs';
+    let active = 0, peak = 0, requests = 0, cancelled = 0;
+    process.on('exit', () => fs.writeFileSync('probe-stats.json', JSON.stringify({peak, requests, cancelled})));
+    globalThis.fetch = async url => {
+      active += 1;
+      requests += 1;
+      peak = Math.max(peak, active);
+      // Force overlapping requests to expose excessive parallelism.
+      await new Promise(resolve => setTimeout(resolve, 3));
+      active -= 1;
+      const ok = !process.env.TEST_OUTAGE
+        && String(url).includes('/api/component/feature_layer/mvt')
+        && (!process.env.TEST_FIRST_RESOURCE_DOWN || String(url).includes('resource=2'));
+      return {ok, body: {cancel: async () => { cancelled += 1; }}};
+    };
   `);
   fs.writeFileSync(path.join(fixture, 'scripts/validate-runivers-regression.mjs'), `
     import fs from 'node:fs';
@@ -63,9 +76,13 @@ try {
   assert.match(firstDown.stdout, /responsive resource 2/, 'the second layer must recover a shard with a failed first layer');
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'a recovered shard must not mutate canonical data');
   assert.equal(run({TEST_OUTAGE: '1'}).status, 1);
+  const stats = JSON.parse(fs.readFileSync(path.join(fixture, 'probe-stats.json')));
+  assert.ok(stats.requests >= 6, 'a total outage must probe all available transports and resources');
+  assert.ok(stats.peak <= 2, `preflight request peak must not exceed two, got ${stats.peak}`);
+  assert.equal(stats.cancelled, stats.requests, 'every preflight response body must be closed');
   assert.equal(JSON.parse(fs.readFileSync(reportPath)).summary.externalOutage, true);
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'outage must not mutate canonical data');
-  console.log('Runivers shard tests passed: component-only availability, recovery after first layer outage, canonical isolation, transition exclusion, failure propagation, stale-report removal, total outage.');
+  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, transition exclusion, failure propagation, stale-report removal, total outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
