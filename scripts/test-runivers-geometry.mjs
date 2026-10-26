@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -152,3 +152,42 @@ for (const [field, value] of [
     `${field}: source or interpretation change must split history state coverage`);
 }
 console.log('Runivers temporal-state tests passed: year rollover, repeated geometry, missing months, provenance changes, certification and polity changes, no coverage aliasing.');
+
+
+// Regression: NextGIS may return HTTP 200 with an empty or point-only
+// GeoJSON export while its WGS84 feature endpoint still has usable borders.
+// The first successful HTTP status must never suppress the second endpoint.
+const originalReferenceFetch = globalThis.fetch;
+const validReference = {type:'FeatureCollection',features:[feature('Россия',30)]};
+const emptyReference = {type:'FeatureCollection',features:[]};
+const pointReference = {type:'FeatureCollection',features:[
+  {type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{name:'Россия'}},
+]};
+try {
+  for (const unusable of [emptyReference, pointReference]) {
+    const requested = [];
+    globalThis.fetch = async input => {
+      const pathname = new URL(input).pathname;
+      requested.push(pathname);
+      return Response.json(pathname.endsWith('/geojson') ? unusable : validReference);
+    };
+    const recovered = await fetchRuniversGeoJson('https://runivers.invalid',5383);
+    assert.deepEqual(recovered,validReference);
+    assert.deepEqual(requested, ['/api/resource/5383/geojson','/api/resource/5383/feature/'],
+      'HTTP 200 without a usable border must fall back to the WGS84 feature endpoint');
+  }
+  const requested = [];
+  globalThis.fetch = async input => {
+    requested.push(new URL(input).pathname);
+    return Response.json(emptyReference);
+  };
+  await assert.rejects(
+    fetchRuniversGeoJson('https://runivers.invalid',5383),
+    error => error.message.includes('/geojson:') && error.message.includes('/feature/?srs=4326')
+      && error.message.includes('no usable polygon or line geometry'),
+    'two unusable HTTP 200 responses must produce an explicit reference failure');
+  assert.equal(requested.length,2,'both JSON transports must be checked before declaring a reference failure');
+} finally {
+  globalThis.fetch = originalReferenceFetch;
+}
+console.log('Runivers JSON fallback regression passed: empty/point-only HTTP 200 cannot hide an alternate reference.');

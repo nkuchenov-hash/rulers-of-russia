@@ -102,13 +102,20 @@ async function fetchRuniversGeoJson(host, id) {
   for (const url of urls) {
     try {
       const payload = await getJson(url);
-      if (payload?.type === 'FeatureCollection' && Array.isArray(payload.features)) return payload;
+      let normalized = null;
+      if (payload?.type === 'FeatureCollection' && Array.isArray(payload.features)) normalized = payload;
       if (Array.isArray(payload)) {
         const list = payload.map(item => item?.type === 'Feature' ? item : item?.geom
           ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
           : null).filter(Boolean);
-        if (list.length) return {type: 'FeatureCollection', features: list};
+        if (list.length) normalized = {type: 'FeatureCollection', features: list};
       }
+      // A 200 response with an empty or point-only export must not prevent
+      // trying the alternate WGS84 endpoint. Both failures remain visible if
+      // neither endpoint supplies a usable independent border.
+      if (!normalized) throw new Error('no valid GeoJSON feature collection');
+      requireUsableReferenceGeometry(normalized, id);
+      return normalized;
     } catch (error) {
       errors.push(`${url}: ${error?.message ?? error}`);
     }
@@ -556,7 +563,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth};
+export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
