@@ -113,6 +113,8 @@ try {
   const pending1992Pattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
   let release1992Geometry = null;
   let resolve1992Intercept = null;
+  let resolve1992RequestCompletion = null;
+  const request1992Completed = new Promise(resolve => { resolve1992RequestCompletion = resolve; });
   const saw1992Intercept = new Promise(resolve => { resolve1992Intercept = resolve; });
   await page.route(pending1992Pattern, async route => {
     if (route.request().url().includes('/generated/territory/')) {
@@ -121,7 +123,8 @@ try {
         resolve1992Intercept?.();
       });
     }
-    await route.continue();
+    try { await route.continue(); }
+    finally { resolve1992RequestCompletion?.(); }
   });
   try {
     await page.evaluate(() => {
@@ -143,7 +146,10 @@ try {
     }, null, {timeout: 15000});
     console.log('In-page 1581 -> 1992 transition hides stale Russian geometry until the new file loads.');
   } finally {
-    release1992Geometry?.();
+    if (release1992Geometry) {
+      release1992Geometry();
+      await request1992Completed;
+    }
     await page.unroute(pending1992Pattern);
   }
   await page.waitForFunction(() => {
