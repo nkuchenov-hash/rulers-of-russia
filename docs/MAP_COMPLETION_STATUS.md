@@ -1,4 +1,20 @@
-# Map completion status — checked 2026-10-22
+# Map completion status — checked 2026-10-26
+
+**NOT geographically accepted.** The canonical History Core contains 13,980/13,980 months under its internal documentary audit, but this is not independent validation of those boundaries.
+
+## Latest checked GitHub state (2026-10-26, 14:39 UTC)
+
+- Main SHA: `6177289459d2e0177a40e1c7426606aa7fe79a47` (PR #320 merged: unusable Runivers exports now fail closed). Main validation and new Pages deployment were still pending at this checkpoint; the last **verified live** SHA was `bb0180309d5afc1975a090c90695fdac2eae40b2`, from Pages run [40334291524](https://github.com/nkuchenov-hash/rulers-of-russia/actions/runs/40334291524).
+- PRs #307, #310, #311, #313–#316, #318–#320 are merged. PR #308 remains an open draft; older exploratory PRs are not evidence of accepted geometry.
+- The latest **incomplete** independent Runivers matrix, [run 40333911423](https://github.com/nkuchenov-hash/rulers-of-russia/actions/runs/40333911423), made **102 comparisons: 0 passed, 102 failed** in six shards. The other six shards had full external preflight outages and **zero comparisons**. The six partially available shards also recorded 40 reference-export failures. No unavailable reference is counted as a pass.
+- This incomplete matrix **does not supersede the last full 2026-10-05 audit** (247 comparisons: 26 passed, 221 failed); see the archived snapshot below. The new shard diagnostics are in [MAP_PROGRESS_AUDIT_2026-10-26.json](./MAP_PROGRESS_AUDIT_2026-10-26.json).
+- The Runivers check is year-granular and excludes ambiguous within-year transitions. It also does not independently certify 0862–1461 or 2021–2026. Do not change tolerances, invent boundary polygons or claim historical accuracy based on month coverage.
+
+## Historical status and investigation notes (superseded; preserved for provenance)
+
+The following October 22 notes are a historical snapshot. Statements below about PR #307 being open or local fixes not merged are no longer current.
+
+
 
 The map is **not yet fully geographically verified**. The History Core documentary
 completion audit and a successful site build are necessary but insufficient.
