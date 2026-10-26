@@ -110,7 +110,7 @@ try {
   // Navigating without a page reload must never show 1581 contours under
   // a 1992 timeline. Hold the 1992 geometry request so this loading window
   // can be inspected deterministically.
-  const pending1992Pattern = /\\/data\\/history-core\\/generated\\/territory\\/[^?]+\\.geojson(?:\\?|$)/;
+  const pending1992Pattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
   let release1992Geometry = null;
   let resolve1992Intercept = null;
   const saw1992Intercept = new Promise(resolve => { resolve1992Intercept = resolve; });
