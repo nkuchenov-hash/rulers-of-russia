@@ -50,8 +50,8 @@ try {
     if (url.pathname === '/api/resource/1/feature/') {
       requestedGeojson = url.searchParams.get('geom_format') === 'geojson' && url.searchParams.get('srs') === '4326';
       return Response.json([
-        {geom: requestedGeojson ? geometry : 'POLYGON ((30 50,31 50,31 51,30 50))', fields: {name: 'test'}},
-        {geom: requestedGeojson ? adjacent : 'POLYGON ((31 50,32 50,32 51,31 50))', fields: {name: 'adjacent'}},
+        {id: 101, geom: requestedGeojson ? geometry : 'POLYGON ((30 50,31 50,31 51,30 50))', fields: {name: 'Россия', cat: 767}},
+        {id: 102, geom: requestedGeojson ? adjacent : 'POLYGON ((31 50,32 50,32 51,31 50))', fields: {name: 'adjacent', cat: 912}},
       ]);
     }
     return new Response('', {status: 404});
@@ -63,7 +63,13 @@ try {
   const data = await response.json();
   assert.equal(data.features.length, 1);
   assert.deepEqual(data.referenceSourceFeatures.map(f => f.geometry), [geometry, adjacent]);
-  assert.deepEqual(data.referenceSourceFeatures.map(f => f.properties.name), ['test', 'adjacent']);
+  assert.deepEqual(data.referenceSourceFeatures.map(f => f.properties.name), ['Россия', 'adjacent']);
+  assert.deepEqual(data.referenceSourceFeatures.map(f => f.id), [101, 102],
+    'NextGIS JSON feature IDs must survive normalization for source-level mismatch diagnostics');
+  const {referenceForPolity} = await import('./runivers-reference-scope.mjs');
+  const scoped = referenceForPolity(data, 'russian-tsardom');
+  assert.deepEqual(scoped.scope.selectedSourceRecords.map(f => [f.featureId, f.cat, f.name]),
+    [[101, 767, 'Россия']], 'JSON fallback must retain original source record identity after polity scoping');
   assert.deepEqual(data.features[0].geometry, {type: 'MultiPolygon', coordinates:
     [[[[30, 50], [32, 50], [32, 51], [30, 51], [30, 50]]]]});
   assert.equal(data.features[0].properties.sourceProperties.length, 2);
