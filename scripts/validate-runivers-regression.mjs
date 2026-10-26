@@ -370,7 +370,13 @@ function historyStates(monthIndex) {
       && state.snapshotId === (month.snapshotId ?? null)
       && state.certificationId === (month.certificationId ?? null)
       && state.verificationClass === (month.verificationClass ?? null)
-      && state.uncertaintyMeters === (month.uncertaintyMeters ?? null);
+      && state.uncertaintyMeters === (month.uncertaintyMeters ?? null)
+      && state.track === (month.track ?? null)
+      && state.territorialModel === (month.territorialModel ?? null)
+      && state.uncertaintyGeometryFile === (month.uncertaintyGeometryFile ?? null)
+      && state.confidence === (month.confidence ?? null)
+      && JSON.stringify([...state.evidenceDocumentIds].sort()) === JSON.stringify([...(month.evidenceDocumentIds ?? [])].sort())
+      && JSON.stringify([...state.derivedFromChangeIds].sort()) === JSON.stringify([...(month.derivedFromChangeIds ?? [])].sort());
     if (!sameState) {
       state = {
         key: `${month.geometryFile}@${month.month}`,
@@ -379,7 +385,12 @@ function historyStates(monthIndex) {
         certificationId: month.certificationId ?? null,
         verificationClass: month.verificationClass ?? null,
         uncertaintyMeters: month.uncertaintyMeters ?? null,
+        track: month.track ?? null,
+        territorialModel: month.territorialModel ?? null,
+        uncertaintyGeometryFile: month.uncertaintyGeometryFile ?? null,
+        confidence: month.confidence ?? null,
         evidenceDocumentIds: month.evidenceDocumentIds ?? [],
+        derivedFromChangeIds: month.derivedFromChangeIds ?? [],
         firstMonth: month.month, lastMonth: month.month, months: 0,
       };
       states.push(state);
