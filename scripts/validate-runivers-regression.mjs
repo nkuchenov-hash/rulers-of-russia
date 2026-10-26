@@ -294,6 +294,16 @@ function politicalBorderSamples(payload, coastIndex) {
   return {allCount: all.length, allPoints: all, points: inland};
 }
 
+// Scope by source polity identity BEFORE checking inland sample availability.
+// Dissolving an entire multi-polity layer can erase the internal border of the
+// target state. A whole-layer coast mask is therefore not a valid early gate.
+function prepareScopedReference(payload, polityId, coastIndex) {
+  const selected = referenceForPolity(payload, polityId);
+  const samples = politicalBorderSamples(selected.payload, coastIndex);
+  if (samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
+  return {samples, approximate: isReferenceApproximate(selected.payload), scope: selected.scope};
+}
+
 function comparePoliticalGeometry(reference, current, referenceClass) {
   if (!reference.points.length || !current.points.length) return {usable: false, referenceSamples: reference.points.length, currentSamples: current.points.length};
   // Mask only the measured source samples. Keep target boundary points near
@@ -446,27 +456,20 @@ async function main() {
       continue;
     }
     const referenceSamplesByPolity = new Map();
-    const referenceSamples = politicalBorderSamples(geojson, coast.index);
-    if (referenceSamples.points.length < 20) {
-      referenceFailures.push({layer, error: `Runivers resource ${layer.id} has too few inland political-boundary samples after coastline masking (${referenceSamples.points.length})`});
-      continue;
-    }
-    usableReferenceCount += 1;
+    let hasUsableScopedReference = false;
     const overlappingStates = states.filter(state => referenceOverlapsState(layer, state, maxRuniversYear));
     for (const state of overlappingStates) {
       let scoped = referenceSamplesByPolity.get(state.polityId);
       if (!scoped) {
         try {
-          const selected = referenceForPolity(geojson, state.polityId);
-          scoped = {samples: politicalBorderSamples(selected.payload, coast.index),
-            approximate: isReferenceApproximate(selected.payload), scope: selected.scope};
-          if (scoped.samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
+          scoped = prepareScopedReference(geojson, state.polityId, coast.index);
           referenceSamplesByPolity.set(state.polityId, scoped);
         } catch (error) {
           referenceFailures.push({layer, polityId: state.polityId, error: error.message});
           continue;
         }
       }
+      hasUsableScopedReference = true;
       const approximate = scoped.approximate;
       let currentSamples = historySamplesCache.get(state.geometryFile);
       if (!currentSamples) {
@@ -493,6 +496,7 @@ async function main() {
       comparisons.push(row);
       coverage.get(state.key).push(row);
     }
+    if (hasUsableScopedReference) usableReferenceCount += 1;
     if ((index + 1) % 20 === 0 || index + 1 === relevantLayers.length) console.log(`Runivers regression progress: ${index + 1}/${relevantLayers.length} dated layers; ${comparisons.length} comparisons.`);
   }
 
@@ -541,7 +545,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth};
+export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
