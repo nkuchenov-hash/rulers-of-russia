@@ -105,7 +105,26 @@ try {
   assert.equal(stats.cancelled, stats.requests, 'every preflight response body must be closed');
   assert.equal(JSON.parse(fs.readFileSync(reportPath)).summary.externalOutage, true);
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'outage must not mutate canonical data');
-  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, transition exclusion, failure propagation, stale-report removal, total outage.');
+  // The map starts in 0862. Even though the present Runivers baseline starts
+  // in 1462, shard integrity must preserve the zero-padded early-year keys.
+  const originalDiscovery = fs.readFileSync(discoveryPath, 'utf8');
+  const earlyMonths = Array.from({length: 12}, (_, i) => ({
+    month: `0862-${String(i + 1).padStart(2, '0')}`,
+    status: 'geometry-verified',
+    geometryFile: 'early.geojson',
+  }));
+  fs.writeFileSync(canonicalPath, JSON.stringify({complete: false, monthCount: 12, months: earlyMonths}));
+  fs.writeFileSync(discoveryPath, JSON.stringify({host: 'https://example.invalid', preferredMaxYear: 2020,
+    vectorLayers: [{id: 2, fromYear: 862, toYear: 863}]}));
+  const early = run({RUNIVERS_START_MONTH: '0862-01', RUNIVERS_END_MONTH: '0862-12'});
+  assert.equal(early.status, 0, early.stderr);
+  const earlyShard = JSON.parse(fs.readFileSync(path.join(fixture, 'child-input.json')));
+  assert.equal(earlyShard.minMonth, '0862-01');
+  assert.equal(earlyShard.maxMonth, '0862-12');
+  assert.equal(earlyShard.months.length, 12);
+  fs.writeFileSync(canonicalPath, canonical);
+  fs.writeFileSync(discoveryPath, originalDiscovery);
+  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
