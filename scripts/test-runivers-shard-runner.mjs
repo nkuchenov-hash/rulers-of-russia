@@ -74,6 +74,12 @@ try {
     ['certificationId', 'different-certificate'],
     ['verificationClass', 'reconstruction'],
     ['uncertaintyMeters', 25000],
+    ['track', 'different-track'],
+    ['territorialModel', 'different-territorial-model'],
+    ['uncertaintyGeometryFile', 'uncertainty-different.geojson'],
+    ['confidence', 'reconstructed'],
+    ['evidenceDocumentIds', ['different-evidence']],
+    ['derivedFromChangeIds', ['different-change']],
   ]) {
     const changed = JSON.parse(canonical);
     for (const row of changed.months) {

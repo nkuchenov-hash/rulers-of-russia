@@ -79,7 +79,11 @@ for (const [year, rows] of [...monthsByYear.entries()].sort(([a], [b]) => a.loca
   const states = new Set(verifiedRows.map((row) => JSON.stringify([
     row.geometryFile, row.polityId ?? null, row.snapshotId ?? null,
     row.certificationId ?? null, row.verificationClass ?? null,
-    row.uncertaintyMeters ?? null,
+    row.uncertaintyMeters ?? null, row.track ?? null,
+    row.territorialModel ?? null, row.uncertaintyGeometryFile ?? null,
+    row.confidence ?? null,
+    [...(row.evidenceDocumentIds ?? [])].sort(),
+    [...(row.derivedFromChangeIds ?? [])].sort(),
   ])));
   const months = new Set(verifiedRows.map((row) => row.month.slice(5, 7)));
   if (rows.length === 12 && verifiedRows.length === 12 && states.size === 1 && months.size === 12) {
@@ -91,7 +95,7 @@ for (const [year, rows] of [...monthsByYear.entries()].sort(([a], [b]) => a.loca
       verifiedMonthCount: verifiedRows.length,
       geometryCount: geometries.size,
       historicalStateCount: states.size,
-      reason: 'Runivers is year-granular; History Core changes geometry, polity, snapshot, certification or uncertainty within this calendar year, or lacks one full-year verified state',
+      reason: 'Runivers is year-granular; History Core changes geometry, polity, snapshot, evidence, territorial model, confidence or uncertainty within this calendar year, or lacks one full-year verified state',
     });
   }
 }

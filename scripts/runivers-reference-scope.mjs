@@ -43,6 +43,16 @@ export function referenceForPolity(payload, polityId) {
     scope: {kind: 'named-polity', polityId, selectedFeatures: selected.length, totalFeatures: features.length,
       selectedNames: [...new Set(selected.map(f => f.properties.name ?? null))],
       selectedSourceCats: [...new Set(selected.map(f => f.properties.cat).filter(x => x != null))],
+      // Diagnostic source identifiers only; never export or promote reference geometry.
+      // Preserve feature-level identity so mismatches can be traced to dated
+      // Runivers records instead of attributing an entire layer to one polity.
+      selectedSourceRecords: selected.map(f => ({
+        featureId: f.id ?? null,
+        cat: f.properties?.cat ?? null,
+        name: f.properties?.name ?? null,
+        lwdate: f.properties?.lwdate ?? null,
+        status: f.properties?.status ?? null,
+      })),
       excludedNames: [...new Set(features.filter(f => !selected.includes(f)).map(f => f.properties?.name ?? null))]},
   };
 }

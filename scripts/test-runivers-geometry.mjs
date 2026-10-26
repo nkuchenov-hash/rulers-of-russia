@@ -39,6 +39,13 @@ assert.equal(tsardomScope.scope.kind,'named-polity');
 assert.equal(tsardomScope.scope.selectedFeatures,2);
 assert.deepEqual(tsardomScope.scope.selectedNames,['Россия','Русское царство']);
 assert.deepEqual(tsardomScope.scope.excludedNames,['Казанское ханство','Ногайская Орда']);
+const sourceRecord = feature('Россия',30);
+sourceRecord.id = 777;
+sourceRecord.properties = {...sourceRecord.properties,cat:767,lwdate:'1557-01-01',status:6};
+const provenanceScope = referenceForPolity({referenceSourceFeatures:[sourceRecord]},'russian-tsardom');
+assert.deepEqual(provenanceScope.scope.selectedSourceRecords,[
+  {featureId:777,cat:767,name:'Россия',lwdate:'1557-01-01',status:6},
+], 'each selected contour must retain its original dated source identity');
 assert.deepEqual(tsardomScope.payload.features[0].geometry.coordinates,
   [tsardomSource.referenceSourceFeatures[0].geometry.coordinates,
     tsardomSource.referenceSourceFeatures[3].geometry.coordinates]);
@@ -131,4 +138,17 @@ assert.equal(byMonth.get('1992-01').firstMonth,'1991-11');
 assert.equal(byMonth.get('1992-03').firstMonth,'1992-03','a reused geometry must not inherit an earlier comparison');
 assert.equal(byMonth.get('1992-05'),undefined,'missing months must not be treated as covered');
 assert.throws(() => indexStateCoverageByMonth([recurring[0], recurring[0]]), /Overlapping Runivers history states/);
-console.log('Runivers temporal-state tests passed: year rollover, repeated geometry, missing months, certification and polity changes, no coverage aliasing.');
+for (const [field, value] of [
+  ['track', 'different-track'],
+  ['territorialModel', 'different-model'],
+  ['uncertaintyGeometryFile', 'uncertainty.geojson'],
+  ['confidence', 'reconstruction'],
+  ['evidenceDocumentIds', ['new-document']],
+  ['derivedFromChangeIds', ['new-event']],
+]) {
+  const months = [testMonth('1992-01','A.geojson'),testMonth('1992-02','A.geojson')];
+  months[1][field] = value;
+  assert.equal(historyStates({months}).length,2,
+    `${field}: source or interpretation change must split history state coverage`);
+}
+console.log('Runivers temporal-state tests passed: year rollover, repeated geometry, missing months, provenance changes, certification and polity changes, no coverage aliasing.');
