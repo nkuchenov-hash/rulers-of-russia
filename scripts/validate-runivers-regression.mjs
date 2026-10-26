@@ -337,23 +337,60 @@ function toleranceMeters(year, referenceApproximate) {
   return 15000;
 }
 
+// A geometry file can recur after a different historical state. Grouping by
+// filename alone would bridge the intervening years and falsely compare the
+// earlier polygon against references for dates when it was not active.
+function nextHistoryMonth(value) {
+  let year = Number(value.slice(0, 4)), month = Number(value.slice(5, 7)) + 1;
+  if (month === 13) { year += 1; month = 1; }
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
+}
+
 function historyStates(monthIndex) {
-  const grouped = new Map();
-  for (const month of monthIndex.months ?? []) {
-    if (month.month < START_MONTH || month.month > END_MONTH || !month.geometryFile || month.status !== 'geometry-verified') continue;
-    const key = month.geometryFile;
-    const row = grouped.get(key) ?? {
-      key, geometryFile: month.geometryFile, polityId: month.polityId, snapshotId: month.snapshotId ?? null,
-      certificationId: month.certificationId ?? null, verificationClass: month.verificationClass ?? null,
-      uncertaintyMeters: month.uncertaintyMeters ?? null, evidenceDocumentIds: month.evidenceDocumentIds ?? [],
-      firstMonth: month.month, lastMonth: month.month, months: 0,
-    };
-    if (month.month < row.firstMonth) row.firstMonth = month.month;
-    if (month.month > row.lastMonth) row.lastMonth = month.month;
-    row.months += 1;
-    grouped.set(key, row);
+  const rows = (monthIndex.months ?? [])
+    .filter(month => month.month >= START_MONTH && month.month <= END_MONTH
+      && month.geometryFile && month.status === 'geometry-verified')
+    .sort((a, b) => a.month.localeCompare(b.month));
+  const states = [];
+  let previous = null, state = null;
+  for (const month of rows) {
+    const sameState = state && previous && nextHistoryMonth(previous.month) === month.month
+      && state.geometryFile === month.geometryFile
+      && state.polityId === month.polityId
+      && state.snapshotId === (month.snapshotId ?? null)
+      && state.certificationId === (month.certificationId ?? null)
+      && state.verificationClass === (month.verificationClass ?? null)
+      && state.uncertaintyMeters === (month.uncertaintyMeters ?? null);
+    if (!sameState) {
+      state = {
+        key: `${month.geometryFile}@${month.month}`,
+        geometryFile: month.geometryFile, polityId: month.polityId,
+        snapshotId: month.snapshotId ?? null,
+        certificationId: month.certificationId ?? null,
+        verificationClass: month.verificationClass ?? null,
+        uncertaintyMeters: month.uncertaintyMeters ?? null,
+        evidenceDocumentIds: month.evidenceDocumentIds ?? [],
+        firstMonth: month.month, lastMonth: month.month, months: 0,
+      };
+      states.push(state);
+    }
+    state.lastMonth = month.month;
+    state.months += 1;
+    previous = month;
   }
-  return [...grouped.values()].sort((a, b) => a.firstMonth.localeCompare(b.firstMonth));
+  return states;
+}
+
+// Coverage is keyed by the actual month, not by a reusable geometry filename.
+function indexStateCoverageByMonth(states) {
+  const result = new Map();
+  for (const state of states) {
+    for (let month = state.firstMonth; month <= state.lastMonth; month = nextHistoryMonth(month)) {
+      if (result.has(month)) throw new Error(`Overlapping Runivers history states at ${month}`);
+      result.set(month, state);
+    }
+  }
+  return result;
 }
 
 function loadHistoryGeometry(state) {
@@ -431,10 +468,10 @@ async function main() {
         }
       }
       const approximate = scoped.approximate;
-      let currentSamples = historySamplesCache.get(state.key);
+      let currentSamples = historySamplesCache.get(state.geometryFile);
       if (!currentSamples) {
         currentSamples = politicalBorderSamples(loadHistoryGeometry(state), coast.index);
-        historySamplesCache.set(state.key, currentSamples);
+        historySamplesCache.set(state.geometryFile, currentSamples);
       }
       const metric = comparePoliticalGeometry(scoped.samples, currentSamples, classification);
       if (!metric.usable) continue;
@@ -466,7 +503,7 @@ async function main() {
   });
   const missingStates = stateCoverage.filter(state => state.referenceComparisons === 0);
   const failedComparisons = comparisons.filter(row => row.status === 'fail');
-  const stateCoverageByGeometry = new Map(stateCoverage.map(state => [state.geometryFile, state]));
+  const stateCoverageByMonth = indexStateCoverageByMonth(stateCoverage);
   const uncoveredMonths = [];
   for (const month of monthIndex.months ?? []) {
     if (month.month < START_MONTH || month.month > END_MONTH) continue;
@@ -474,8 +511,8 @@ async function main() {
       uncoveredMonths.push({month: month.month, reason: 'History Core is not geometry-verified', geometryFile: month.geometryFile ?? null});
       continue;
     }
-    const coverageRow = stateCoverageByGeometry.get(month.geometryFile);
-    if (!coverageRow || coverageRow.referenceComparisons === 0) {
+    const coverageRow = stateCoverageByMonth.get(month.month);
+    if (!coverageRow || coverageRow.geometryFile !== month.geometryFile || coverageRow.polityId !== month.polityId || coverageRow.referenceComparisons === 0) {
       uncoveredMonths.push({month: month.month, reason: 'No overlapping Runivers reference comparison', geometryFile: month.geometryFile});
       continue;
     }
@@ -504,7 +541,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry};
+export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
