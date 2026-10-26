@@ -183,7 +183,7 @@ try {
   };
   await assert.rejects(
     fetchRuniversGeoJson('https://runivers.invalid',5383),
-    error => error.message.includes('/geojson:') && error.message.includes('/feature/:')
+    error => error.message.includes('/geojson:') && error.message.includes('/feature/?srs=4326')
       && error.message.includes('no usable polygon or line geometry'),
     'two unusable HTTP 200 responses must produce an explicit reference failure');
   assert.equal(requested.length,2,'both JSON transports must be checked before declaring a reference failure');
