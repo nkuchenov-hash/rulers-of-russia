@@ -177,7 +177,24 @@ async function fetchVectorTile(host, id) {
     for (const candidate of vectorTileUrls(host, id)) {
       try {
         const bytes = await fetchTileBytes(candidate.url);
-        return {tile: new VectorTile(new Pbf(bytes)), transport: candidate.kind};
+        const tile = new VectorTile(new Pbf(bytes));
+        // A 200 response with a valid but empty MVT is not usable geometry.
+        // Try the other MVT transport before falling back to expensive JSON.
+        // Otherwise an empty canonical tile can hide a populated component tile.
+        let hasPolygon = false;
+        for (const layer of Object.values(tile.layers ?? {})) {
+          for (let index = 0; index < layer.length; index += 1) {
+            const feature = layer.feature(index);
+            if (feature.type === 3 && geometryToMultiPolygon(
+              feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM)?.geometry).length) {
+              hasPolygon = true;
+              break;
+            }
+          }
+          if (hasPolygon) break;
+        }
+        if (!hasPolygon) throw new Error('z=0 MVT contains no polygon features');
+        return {tile, transport: candidate.kind};
       } catch (error) {
         errors.push(`${candidate.kind} attempt ${attempt}: ${error?.message ?? error}`);
       }
