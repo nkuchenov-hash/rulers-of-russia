@@ -107,6 +107,51 @@ try {
     return text.includes('неопределённость реконструкции ≈220 км');
   }, null, {timeout: 12000});
 
+  // Navigating without a page reload must never show 1581 contours under
+  // a 1992 timeline. Hold the 1992 geometry request so this loading window
+  // can be inspected deterministically.
+  const pending1992Pattern = /\\/data\\/history-core\\/generated\\/territory\\/[^?]+\\.geojson(?:\\?|$)/;
+  let release1992Geometry = null;
+  let resolve1992Intercept = null;
+  const saw1992Intercept = new Promise(resolve => { resolve1992Intercept = resolve; });
+  await page.route(pending1992Pattern, async route => {
+    if (route.request().url().includes('/generated/territory/')) {
+      await new Promise(resolve => {
+        release1992Geometry = resolve;
+        resolve1992Intercept?.();
+      });
+    }
+    await route.continue();
+  });
+  try {
+    await page.evaluate(() => {
+      const ruler = document.querySelector('div[class*="rulerViewport"]');
+      if (!ruler) throw new Error('Historical timeline missing');
+      ruler.scrollLeft = (1992 - 862) * 6;
+      ruler.dispatchEvent(new Event('scroll'));
+    });
+    await Promise.race([
+      saw1992Intercept,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('1992 geometry request not intercepted during in-page timeline change')), 25000)),
+    ]);
+    await page.waitForFunction(() => {
+      const aside = document.querySelector('main aside');
+      return aside?.textContent?.includes('Июл 1992')
+        && aside.getAttribute('data-history-loaded-month') === ''
+        && aside.getAttribute('aria-busy') === 'true'
+        && aside.textContent.includes('загрузка геометрии');
+    }, null, {timeout: 15000});
+    console.log('In-page 1581 -> 1992 transition hides stale Russian geometry until the new file loads.');
+  } finally {
+    release1992Geometry?.();
+    await page.unroute(pending1992Pattern);
+  }
+  await page.waitForFunction(() => {
+    const aside = document.querySelector('main aside');
+    return aside?.getAttribute('data-history-loaded-month') === '1992-07'
+      && aside.getAttribute('aria-busy') === 'false';
+  }, null, {timeout: 30000});
+
   // Prove fail-closed behavior by first observing and blocking an actual request
   // for the canonical generated full-state geometry. Only after that request has
   // been intercepted may the UI assertion pass; this prevents the transient
