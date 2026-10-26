@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear, requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -57,3 +57,11 @@ const cession = feature('', 55); cession.properties = {cat:712,status:7,lwdate:'
 const transitional = referenceForPolity({referenceSourceFeatures:[soviet,addition,cession]}, 'ussr');
 assert.equal(transitional.scope.selectedFeatures,2,'Identified unnamed addition is retained, cession is not');
 assert.equal(referenceForPolity({referenceSourceFeatures:[soviet,{...addition,properties:{...addition.properties,lwdate:'1900-01-01'}}]},'ussr').scope.selectedFeatures,1,'Addition identity must match its date');
+
+
+// HTTP 200 may contain an empty or point-only export. Such references must
+// remain visible as failed exports, never silently disappear from the audit.
+assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[]}, 5383), /resource 5383.*no usable.*types: none/);
+assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{}}]}, 5385), /resource 5385.*types: Point/);
+assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[feature('Moscow',30)]}, 5387).hasPolygon,true);
+console.log('Runivers empty/unsupported reference exports fail closed.');
