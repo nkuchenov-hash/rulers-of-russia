@@ -94,7 +94,11 @@ async function probe(url, timeoutMs = 6000) {
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(url, {signal: controller.signal, redirect: 'follow'});
-    return response.ok;
+    const available = response.ok;
+    // Preflight needs only the HTTP status. Release the unread response body so
+    // many large MVT/GeoJSON probes cannot exhaust sockets or retain buffers.
+    try { await response.body?.cancel(); } catch { /* Already closed by the server. */ }
+    return available;
   } catch {
     return false;
   } finally {
@@ -113,15 +117,21 @@ async function runiversHealthy() {
   const order = [...new Set([ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)]),
     ...ids.filter(id => ![ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)].includes(id))];
   const probedResourceIds = [];
-  for (let offset = 0; offset < order.length; offset += 4) {
-    const batch = order.slice(offset, offset + 4);
+  // Keep preflight no more concurrent than the actual geometry fetcher.
+  // The former four resources x three endpoints produced twelve simultaneous
+  // requests and could itself trigger throttling / false external outages.
+  for (let offset = 0; offset < order.length; offset += 2) {
+    const batch = order.slice(offset, offset + 2);
     const results = await Promise.all(batch.map(async id => {
       const urls = [
         `${host}/api/resource/${id}/0/0/0.mvt`,
         `${host}/api/component/feature_layer/mvt?resource=${id}&z=0&x=0&y=0&simplification=0`,
         `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson&limit=1`,
       ];
-      return (await Promise.all(urls.map(url => probe(url)))).some(Boolean);
+      // Try the transports in order. Do not hammer all three at once when the
+      // first transport is already healthy; fallbacks remain fully checked.
+      for (const url of urls) if (await probe(url)) return true;
+      return false;
     }));
     probedResourceIds.push(...batch);
     const successfulIndex = results.indexOf(true);
