@@ -141,6 +141,17 @@ function classifyGeometry(payload) {
   return {types: [...types], hasPolygon, hasLine, usable: hasPolygon || hasLine};
 }
 
+// A successful HTTP response is not proof of usable geographic reference.
+// Treat empty, point-only, or otherwise unsupported exports as reference
+// failures, rather than silently removing them from the readiness denominator.
+function requireUsableReferenceGeometry(payload, resourceId) {
+  const classification = classifyGeometry(payload);
+  if (!classification.usable) {
+    throw new Error(`Runivers resource ${resourceId} export has no usable polygon or line geometry (types: ${classification.types.join(', ') || 'none'})`);
+  }
+  return classification;
+}
+
 function isReferenceApproximate(payload) {
   const text = payloadFeatures(payload).map(feature => JSON.stringify(feature?.properties ?? {})).join(' ').toLowerCase();
   return /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i.test(text);
@@ -389,18 +400,21 @@ async function main() {
 
   for (let index = 0; index < relevantLayers.length; index += 1) {
     const layer = relevantLayers[index];
-    let geojson;
-    try { geojson = await fetchRuniversGeoJson(discovery.host, layer.id); }
-    catch (error) { referenceFailures.push({layer, error: error?.message ?? String(error)}); continue; }
-    const classification = classifyGeometry(geojson);
-    if (!classification.usable) continue;
-    usableReferenceCount += 1;
+    let geojson, classification;
+    try {
+      geojson = await fetchRuniversGeoJson(discovery.host, layer.id);
+      classification = requireUsableReferenceGeometry(geojson, layer.id);
+    } catch (error) {
+      referenceFailures.push({layer, error: error?.message ?? String(error)});
+      continue;
+    }
     const referenceSamplesByPolity = new Map();
     const referenceSamples = politicalBorderSamples(geojson, coast.index);
     if (referenceSamples.points.length < 20) {
       referenceFailures.push({layer, error: `Runivers resource ${layer.id} has too few inland political-boundary samples after coastline masking (${referenceSamples.points.length})`});
       continue;
     }
+    usableReferenceCount += 1;
     const overlappingStates = states.filter(state => referenceOverlapsState(layer, state, maxRuniversYear));
     for (const state of overlappingStates) {
       let scoped = referenceSamplesByPolity.get(state.polityId);
@@ -490,7 +504,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex};
+export {buildCoastIndex, politicalBorderSamples, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
