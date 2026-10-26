@@ -106,7 +106,7 @@ async function fetchRuniversGeoJson(host, id) {
       if (payload?.type === 'FeatureCollection' && Array.isArray(payload.features)) normalized = payload;
       if (Array.isArray(payload)) {
         const list = payload.map(item => item?.type === 'Feature' ? item : item?.geom
-          ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? {}}
+          ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
           : null).filter(Boolean);
         if (list.length) normalized = {type: 'FeatureCollection', features: list};
       }
