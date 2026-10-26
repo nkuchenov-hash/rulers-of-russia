@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, layerContainsYear, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -54,6 +54,33 @@ assert.deepEqual(sovietScope.scope.excludedNames, [occupation.properties.name, l
 assert.throws(() => referenceForPolity({referenceSourceFeatures:[occupation]}, 'ussr'), /no named USSR/);
 assert.equal(referenceForPolity(source,'russian-empire').payload,source);
 console.log('Runivers scope tests passed: independent polities remain separate, missing identity fails closed.');
+
+// A surrounding independent polity can hide the target's entire border when
+// the unscoped polygons are dissolved first. The whole-layer outer border is
+// masked as coast in this synthetic fixture, but the named Russian-state
+// border is inland and must still be compared.
+const rectangle = (name, min, max) => ({type:'Feature',properties:{name},
+  geometry:{type:'Polygon',coordinates:[[[min,min],[max,min],[max,max],[min,max],[min,min]]]}});
+const syntheticCoastPoints = [];
+for (let n = 0; n <= 40; n += 1) {
+  const p = n / 4;
+  syntheticCoastPoints.push([p,0],[p,10],[0,p],[10,p]);
+}
+const syntheticCoastIndex = buildPointIndex(syntheticCoastPoints);
+const nestedPolities = {referenceSourceFeatures:[
+  rectangle('Россия',4,6), rectangle('Ногайская Орда',0,10),
+]};
+const wholePolities = {type:'FeatureCollection',features:nestedPolities.referenceSourceFeatures};
+assert.equal(politicalBorderSamples(wholePolities,syntheticCoastIndex).points.length,0,
+  'dissolving the entire layer erases the target border behind the surrounding polity');
+const scopedInland = prepareScopedReference(nestedPolities,'russian-tsardom',syntheticCoastIndex);
+assert.equal(scopedInland.scope.selectedFeatures,1);
+assert.ok(scopedInland.samples.points.length >= 20,
+  'named Russian border must remain available even when the whole-layer border is coast-masked');
+assert.throws(()=>prepareScopedReference({referenceSourceFeatures:[
+  rectangle('Ногайская Орда',0,10)]},'russian-tsardom',syntheticCoastIndex),/no named Tsardom/);
+console.log('Runivers pre-scope coast-mask regression passed: independent surrounding polity cannot hide Russian inland border.');
+
 
 // A corresponding target point just inside the coast cutoff must remain a
 // distance target, even though it is not itself a measured inland sample.
