@@ -1,12 +1,17 @@
 import polygonClipping from 'polygon-clipping';
 
 // Runivers's early layers contain multiple separately named polities. Moscow
-// must not be compared with the union of Moscow, Novgorod, Tver and Ryazan.
+// and the Tsardom must not be compared with the union of Russia, independent
+// khanates, neighboring principalities and other territories in the layer.
 // USSR layers likewise include explicitly named occupation and lease zones;
 // select named Soviet/Russian territory, without treating the source styling
 // status as sovereignty: some mainland features named Russia have status 6.
 // This is selection by source identity, not a geometric fit or an override.
 const moscowNames = new Set(['Московское княжество', 'Великое княжество Московское', 'Московское государство', 'Россия']);
+// The Tsardom continues Moscow's state identity. Select only explicitly named
+// Russian-state features; unknown and independently named polities must never
+// be silently unioned into a sovereign border. Missing identity fails closed.
+const tsardomNames = new Set([...moscowNames, 'Русское царство', 'Российское царство', 'Царство Русское', 'Царство Московское']);
 // Identified unnamed Soviet additions in the original source records. Source
 // The selected status-6 records explicitly describe Soviet additions; the
 // inspected status-7 Polish transfers are cessions, not resulting territory.
@@ -15,9 +20,11 @@ const sovietAdditions = new Set(['369:1922-12-30','731:1922-12-30',
   '578:1924-10-27','709:1945-08-02','713:1945-09-02',
   '710:1945-06-29','205:1944-09-19']);
 export function referenceForPolity(payload, polityId) {
-  if (!['grand-moscow', 'ussr'].includes(polityId)) return {payload, scope: {kind: 'whole-reference-layer'}};
-  const names = polityId === 'grand-moscow' ? moscowNames : new Set(['СССР', 'Россия', 'РСФСР']);
-  const label = polityId === 'grand-moscow' ? 'Moscow' : 'USSR';
+  const names = polityId === 'grand-moscow' ? moscowNames
+    : polityId === 'russian-tsardom' ? tsardomNames
+    : polityId === 'ussr' ? new Set(['СССР', 'Россия', 'РСФСР']) : null;
+  if (!names) return {payload, scope: {kind: 'whole-reference-layer'}};
+  const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom' : 'USSR';
   const features = payload.referenceSourceFeatures;
   if (!Array.isArray(features) || !features.length) throw new Error(`${label} reference requires original named source features; refresh the reference cache`);
   const selected = features.filter(f => {

@@ -28,6 +28,22 @@ assert.deepEqual(scoped.scope.excludedNames,['Тверское княжеств�
 assert.deepEqual(scoped.payload.features[0].geometry.coordinates, [source.referenceSourceFeatures[0].geometry.coordinates]);
 assert.throws(()=>referenceForPolity({features:[]},'grand-moscow'),/original named/);
 assert.throws(()=>referenceForPolity({...source,referenceSourceFeatures:[feature('Тверское княжество',31)]},'grand-moscow'),/no named Moscow/);
+// Runivers's Tsardom-era layers may include independent khanates and other
+// polities. Comparing the entire layer would invent sovereign territory.
+const tsardomSource = {type:'FeatureCollection',referenceSourceFeatures:[
+  feature('Россия',30), feature('Казанское ханство',31),
+  feature('Ногайская Орда',32), feature('Русское царство',33),
+],features:[feature('union-of-all-polities',40)]};
+const tsardomScope = referenceForPolity(tsardomSource,'russian-tsardom');
+assert.equal(tsardomScope.scope.kind,'named-polity');
+assert.equal(tsardomScope.scope.selectedFeatures,2);
+assert.deepEqual(tsardomScope.scope.selectedNames,['Россия','Русское царство']);
+assert.deepEqual(tsardomScope.scope.excludedNames,['Казанское ханство','Ногайская Орда']);
+assert.deepEqual(tsardomScope.payload.features[0].geometry.coordinates,
+  [tsardomSource.referenceSourceFeatures[0].geometry.coordinates,
+    tsardomSource.referenceSourceFeatures[3].geometry.coordinates]);
+assert.throws(()=>referenceForPolity({features:[feature('Россия',30)]},'russian-tsardom'),/original named/);
+assert.throws(()=>referenceForPolity({referenceSourceFeatures:[feature('Казанское ханство',31)]},'russian-tsardom'),/no named Tsardom/);
 const soviet = feature('СССР', 50); soviet.properties.status = 1;
 const occupation = feature('Советская зона оккупации Германии', 51); occupation.properties.status = 2;
 const lease = feature('Аренда Россией района Порккала', 52); lease.properties.status = 3;
