@@ -116,6 +116,30 @@ assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',fea
 assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[feature('Moscow',30)]}, 5387).hasPolygon,true);
 console.log('Runivers empty/unsupported reference exports fail closed.');
 
+// A declared polygon/line with no actual geographic border must not suppress
+// the alternative WGS84 export. Nested valid polygons remain usable.
+const collection = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]},
+    feature('nested',30).geometry]}}]};
+const nestedClass = requireUsableReferenceGeometry(collection,5390);
+assert.equal(nestedClass.hasPolygon,true);
+assert.ok(nestedClass.types.includes('GeometryCollection') && nestedClass.types.includes('Polygon'));
+const emptyPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'Polygon',coordinates:[]}}]};
+const collapsedLine = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'LineString',coordinates:[[37,55],[37,55]]}}]};
+const projectedPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'Polygon',coordinates:[[[4000000,7000000],[4001000,7000000],
+    [4001000,7001000],[4000000,7001000],[4000000,7000000]]]}}]};
+const collinearPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'Polygon',coordinates:[[[30,50],[31,50],[32,50],[30,50]]]}}]};
+for (const [label, payload] of Object.entries({emptyPolygon,collapsedLine,projectedPolygon,collinearPolygon})) {
+  assert.throws(() => requireUsableReferenceGeometry(payload,5391), /no usable polygon or line geometry/,
+    label + ' must not be accepted on type label alone');
+}
+console.log('Runivers coordinate validity tests passed: nested GeometryCollection, empty/collapsed, projected and collinear borders.');
+
+
 
 // The same file can reappear after a different state, a missing month, or a
 // change in historical certification. These must remain distinct comparisons.
@@ -164,7 +188,7 @@ const pointReference = {type:'FeatureCollection',features:[
   {type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{name:'Россия'}},
 ]};
 try {
-  for (const unusable of [emptyReference, pointReference]) {
+  for (const unusable of [emptyReference, pointReference, emptyPolygon, collapsedLine, projectedPolygon, collinearPolygon]) {
     const requested = [];
     globalThis.fetch = async input => {
       const pathname = new URL(input).pathname;
