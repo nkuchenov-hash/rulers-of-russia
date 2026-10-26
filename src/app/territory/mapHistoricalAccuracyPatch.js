@@ -17,6 +17,7 @@ const MONTH_INDEX_RE = /\/data\/history-core\/generated\/month-index\.json(?:\?|
 const WORLD_SNAPSHOT_RE = /\/data\/territory\/world-history\/snapshots\/(\d+)\.geojson(?:\?|$)/;
 const MATERIAL_UNCERTAINTY_METERS = 25000;
 const CAPTION_ATTR = 'data-history-accuracy-caption';
+const MOBILE_CAPTION_ATTR = 'data-history-mobile-caption';
 const CAPTION_STYLE_ID = 'history-accuracy-caption-style';
 
 function jsonResponse(payload) {
@@ -126,9 +127,26 @@ function ensureCaptionStyle() {
     main aside p[${CAPTION_ATTR}] { font-size: 0 !important; }
     main aside p[${CAPTION_ATTR}]::after {
       content: attr(${CAPTION_ATTR});
-      font-size: 12px;
+      font-size: 16px;
       line-height: 1.45;
       letter-spacing: normal;
+    }
+    @media (max-width: 720px) {
+      main aside p[${CAPTION_ATTR}] {
+        display: block !important;
+        box-sizing: border-box;
+        max-width: min(300px, calc(100vw - 112px));
+        padding: 10px 12px;
+        margin-top: 12px;
+        background: rgba(2, 12, 16, .9);
+        border-left: 2px solid #c8ab66;
+      }
+      main aside p[${CAPTION_ATTR}]::after {
+        content: attr(${MOBILE_CAPTION_ATTR});
+        display: block;
+        font-size: 16px;
+        line-height: 1.35;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -157,8 +175,33 @@ function updateAccuracyCaption(state) {
     text += ` · неопределённость реконструкции ≈${rounded} км`;
   }
 
+  // A compact but explicit accuracy statement must remain readable on phones.
+  // Never hide reconstruction uncertainty behind the desktop-only long caption.
+  const monthState = activeMonthState(state);
+  const mobileParts = [];
+  if (text.includes('граница России скрыта')) {
+    mobileParts.push('Граница России недоступна');
+  } else if (monthState?.verificationClass === 'document-corroborated-reconstruction') {
+    if (profile) {
+      const km = profile.km >= 100 ? Math.round(profile.km / 10) * 10 : Math.round(profile.km);
+      mobileParts.push(`Реконструкция · неопределённость ≈${km} км`);
+    } else {
+      mobileParts.push('Документальная реконструкция границы');
+    }
+  } else if (monthState?.status === 'geometry-verified') {
+    mobileParts.push('Историческая геометрия проверена');
+  } else {
+    mobileParts.push('Исторические границы пока не проверены');
+  }
+  if (selected && Number.isFinite(state.worldSnapshotYear) && selected.year !== state.worldSnapshotYear) {
+    mobileParts.push(`Мировой фон: приблизительно ${state.worldSnapshotYear} г.`);
+  }
+
   ensureCaptionStyle();
+  const compact = mobileParts.join(' · ');
+  if (paragraph.getAttribute(MOBILE_CAPTION_ATTR) !== compact) paragraph.setAttribute(MOBILE_CAPTION_ATTR, compact);
   if (paragraph.getAttribute(CAPTION_ATTR) !== text) paragraph.setAttribute(CAPTION_ATTR, text);
+  if (paragraph.getAttribute('aria-label') !== text) paragraph.setAttribute('aria-label', text);
 }
 
 if (typeof window !== 'undefined' && !window[PATCH_KEY]) {

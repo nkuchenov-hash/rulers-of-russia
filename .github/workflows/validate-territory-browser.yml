@@ -12,6 +12,7 @@ on:
       - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
+      - 'scripts/territory-mobile-accuracy-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   pull_request:
@@ -23,6 +24,7 @@ on:
       - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
+      - 'scripts/territory-mobile-accuracy-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   workflow_run:
@@ -116,6 +118,11 @@ jobs:
         env:
           TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?history_smoke={0}', github.run_id) || '' }}
         run: node scripts/territory-history-smoke.mjs
+
+      - name: Verify 390px and 360px mobile uncertainty and controls
+        env:
+          TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?mobile_smoke={0}', github.run_id) || '' }}
+        run: node scripts/territory-mobile-accuracy-smoke.mjs
 
       - name: Show server log on failure
         if: failure() && github.event_name != 'workflow_run'
