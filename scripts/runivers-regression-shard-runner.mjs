@@ -104,19 +104,36 @@ async function probe(url, timeoutMs = 6000) {
 
 async function runiversHealthy() {
   const host = String(discovery.host || '').replace(/\/$/, '');
-  const probeId = discovery.vectorLayers[0]?.id;
-  if (!host || !Number.isInteger(probeId)) return false;
-  const urls = [
-    `${host}/api/resource/${probeId}/0/0/0.mvt`,
-    `${host}/api/component/feature_layer/mvt?resource=${probeId}&z=0&x=0&y=0&simplification=0`,
-    `${host}/api/resource/${probeId}/feature/?srs=4326&geom_format=geojson&limit=1`,
-  ];
-  const results = await Promise.all(urls.map((url) => probe(url)));
-  return results.some(Boolean);
+  const ids = [...new Set(discovery.vectorLayers.map(layer => layer.id).filter(Number.isInteger))];
+  if (!host || !ids.length) return {healthy: false, probedResourceIds: [], responsiveResourceId: null};
+
+  // A Runivers shard may have dozens of dated layers. The first layer can be
+  // temporarily unavailable while later layers still provide valid reference
+  // data. Never classify the *whole* shard as an external outage from one id.
+  const order = [...new Set([ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)]),
+    ...ids.filter(id => ![ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)].includes(id))];
+  const probedResourceIds = [];
+  for (let offset = 0; offset < order.length; offset += 4) {
+    const batch = order.slice(offset, offset + 4);
+    const results = await Promise.all(batch.map(async id => {
+      const urls = [
+        `${host}/api/resource/${id}/0/0/0.mvt`,
+        `${host}/api/component/feature_layer/mvt?resource=${id}&z=0&x=0&y=0&simplification=0`,
+        `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson&limit=1`,
+      ];
+      return (await Promise.all(urls.map(url => probe(url)))).some(Boolean);
+    }));
+    probedResourceIds.push(...batch);
+    const successfulIndex = results.indexOf(true);
+    if (successfulIndex !== -1) return {
+      healthy: true, probedResourceIds, responsiveResourceId: batch[successfulIndex],
+    };
+  }
+  return {healthy: false, probedResourceIds, responsiveResourceId: null};
 }
 
-const sourceHealthy = await runiversHealthy();
-if (!sourceHealthy) {
+const preflight = await runiversHealthy();
+if (!preflight.healthy) {
   fs.mkdirSync(reportDir, {recursive: true});
   const report = {
     schema_version: 1,
@@ -135,10 +152,11 @@ if (!sourceHealthy) {
       missingStates: 0,
       uncoveredMonths: 0,
       externalOutage: true,
+      preflightResourceIds: preflight.probedResourceIds,
     },
     stateCoverage: [],
     failedComparisons: [],
-    referenceFailures: [{error: 'Runivers preflight failed on canonical MVT, component MVT and WGS84 feature endpoints'}],
+    referenceFailures: [{error: 'Runivers preflight failed on canonical MVT, component MVT and WGS84 feature endpoints for every dated resource', probedResourceIds: preflight.probedResourceIds}],
     uncoveredMonths: [],
     shard: {
       startMonth,
@@ -153,9 +171,10 @@ if (!sourceHealthy) {
     },
   };
   fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
-  console.error(`Runivers preflight failed for ${startMonth}..${endMonth}; recording external outage without attempting ${discovery.vectorLayers.length} doomed live exports.`);
+  console.error(`Runivers preflight failed for ${startMonth}..${endMonth} across ${preflight.probedResourceIds.length} resources; recording external outage without attempting ${discovery.vectorLayers.length} doomed live exports.`);
   process.exitCode = 1;
 } else {
+  console.log(`Runivers preflight: responsive resource ${preflight.responsiveResourceId} among ${preflight.probedResourceIds.length} probed, proceeding with the complete shard.`);
   const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts', 'runivers-fetch-cache.mjs'), validatorFile], {
     cwd: root,
     stdio: 'inherit',
