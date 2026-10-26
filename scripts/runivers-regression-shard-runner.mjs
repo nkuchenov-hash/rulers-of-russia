@@ -73,8 +73,16 @@ const excludedYears = [];
 for (const [year, rows] of [...monthsByYear.entries()].sort(([a], [b]) => a.localeCompare(b))) {
   const verifiedRows = rows.filter((row) => row.status === 'geometry-verified' && row.geometryFile);
   const geometries = new Set(verifiedRows.map((row) => row.geometryFile));
+  // Reusing the same polygon does not prove the same historical state.
+  // A polity, source snapshot, certification, or uncertainty change inside
+  // the year cannot be dated by Runivers's year-granular reference.
+  const states = new Set(verifiedRows.map((row) => JSON.stringify([
+    row.geometryFile, row.polityId ?? null, row.snapshotId ?? null,
+    row.certificationId ?? null, row.verificationClass ?? null,
+    row.uncertaintyMeters ?? null,
+  ])));
   const months = new Set(verifiedRows.map((row) => row.month.slice(5, 7)));
-  if (rows.length === 12 && verifiedRows.length === 12 && geometries.size === 1 && months.size === 12) {
+  if (rows.length === 12 && verifiedRows.length === 12 && states.size === 1 && months.size === 12) {
     comparableYears.add(year);
   } else {
     excludedYears.push({
@@ -82,7 +90,8 @@ for (const [year, rows] of [...monthsByYear.entries()].sort(([a], [b]) => a.loca
       monthCount: rows.length,
       verifiedMonthCount: verifiedRows.length,
       geometryCount: geometries.size,
-      reason: 'Runivers is year-granular; History Core changes within this calendar year or lacks one full-year verified state',
+      historicalStateCount: states.size,
+      reason: 'Runivers is year-granular; History Core changes geometry, polity, snapshot, certification or uncertainty within this calendar year, or lacks one full-year verified state',
     });
   }
 }
