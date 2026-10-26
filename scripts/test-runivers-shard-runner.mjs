@@ -66,6 +66,36 @@ try {
     assert.equal(report.shard.excludedMonthCount, 12);
     assert.equal(report.shard.excludedYears[0].year, 1993);
   }
+  // A full year with unchanged polygon coordinates can still contain a
+  // political or evidentiary transition. Runivers cannot date that transition.
+  for (const [field, value] of [
+    ['polityId', 'russian-empire'],
+    ['snapshotId', 'different-snapshot'],
+    ['certificationId', 'different-certificate'],
+    ['verificationClass', 'reconstruction'],
+    ['uncertaintyMeters', 25000],
+  ]) {
+    const changed = JSON.parse(canonical);
+    for (const row of changed.months) {
+      if (row.month.startsWith('1993-')) row.geometryFile = 'old.geojson';
+      if (row.month >= '1992-07' && row.month <= '1992-12') row[field] = value;
+    }
+    fs.writeFileSync(canonicalPath, JSON.stringify(changed));
+    const result = run({});
+    assert.equal(result.status, 0, `${field}: ${result.stderr}`);
+    const input = JSON.parse(fs.readFileSync(path.join(fixture, 'child-input.json')));
+    assert.equal(input.monthCount, 12, `${field}: changed state must not count as a full-year match`);
+    assert.equal(input.minMonth, '1993-01');
+    assert.equal(input.maxMonth, '1993-12');
+    const report = JSON.parse(fs.readFileSync(reportPath));
+    assert.equal(report.shard.excludedYears[0].year, 1992);
+    assert.equal(report.shard.excludedYears[0].geometryCount, 1,
+      `${field}: same polygon must not hide a historical transition`);
+    assert.equal(report.shard.excludedYears[0].historicalStateCount, 2);
+    assert.equal(fs.readFileSync(canonicalPath, 'utf8'), JSON.stringify(changed),
+      'the comparison must not modify canonical history');
+  }
+  fs.writeFileSync(canonicalPath, canonical);
   assert.equal(run({TEST_EXIT: '1', TEST_NO_REPORT: '1'}).status, 1);
   assert.equal(fs.existsSync(reportPath), false, 'failed validator must not reuse a stale report');
   fs.writeFileSync(reportPath, JSON.stringify({summary: {comparisons: 1}}));
@@ -124,7 +154,7 @@ try {
   assert.equal(earlyShard.months.length, 12);
   fs.writeFileSync(canonicalPath, canonical);
   fs.writeFileSync(discoveryPath, originalDiscovery);
-  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
+  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, full-state transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
