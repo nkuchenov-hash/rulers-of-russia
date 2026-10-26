@@ -142,9 +142,46 @@ function geometryLines(geometry, outerOnly = true) {
 }
 
 function classifyGeometry(payload) {
-  const types = new Set(payloadFeatures(payload).map(feature => feature?.geometry?.type).filter(Boolean));
-  const hasPolygon = [...types].some(type => type === 'Polygon' || type === 'MultiPolygon');
-  const hasLine = [...types].some(type => type === 'LineString' || type === 'MultiLineString');
+  // A type label alone is not a border. NextGIS can return HTTP 200 with an
+  // empty Polygon, a collapsed LineString, or coordinates in projected metres.
+  // Reject those before they prevent a WGS84 fallback from being attempted.
+  // GeometryCollection members must be inspected recursively: a valid nested
+  // polygon is still a usable independent reference.
+  const types = new Set();
+  let hasPolygon = false, hasLine = false;
+  const wgs84Point = point => validCoordinate(point)
+    && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
+  const validLine = line => Array.isArray(line) && line.length >= 2
+    && line.every(wgs84Point)
+    && line.some(point => point[0] !== line[0][0] || point[1] !== line[0][1]);
+  const validRing = ring => {
+    if (!validLine(ring) || ring.length < 4) return false;
+    const first = ring[0], last = ring.at(-1);
+    if (first[0] !== last[0] || first[1] !== last[1]) return false;
+    // A closed but collinear ring encloses no territory.
+    let twiceArea = 0;
+    for (let i = 0; i < ring.length - 1; i += 1) {
+      twiceArea += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1];
+    }
+    return Math.abs(twiceArea) > 1e-12;
+  };
+  const inspect = geometry => {
+    if (!geometry?.type) return;
+    types.add(geometry.type);
+    const c = geometry.coordinates;
+    if (geometry.type === 'GeometryCollection') {
+      for (const member of geometry.geometries ?? []) inspect(member);
+    } else if (geometry.type === 'Polygon') {
+      if (validRing(c?.[0])) hasPolygon = true;
+    } else if (geometry.type === 'MultiPolygon') {
+      if (Array.isArray(c) && c.some(polygon => validRing(polygon?.[0]))) hasPolygon = true;
+    } else if (geometry.type === 'LineString') {
+      if (validLine(c)) hasLine = true;
+    } else if (geometry.type === 'MultiLineString') {
+      if (Array.isArray(c) && c.some(validLine)) hasLine = true;
+    }
+  };
+  for (const feature of payloadFeatures(payload)) inspect(feature?.geometry);
   return {types: [...types], hasPolygon, hasLine, usable: hasPolygon || hasLine};
 }
 
