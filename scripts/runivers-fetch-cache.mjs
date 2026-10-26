@@ -92,7 +92,7 @@ function normalizePayload(parsed) {
     payload = parsed;
   } else if (Array.isArray(parsed)) {
     const features = parsed.map(item => item?.type === 'Feature' ? item : item?.geom
-      ? {type: 'Feature', geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
+      ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
       : null).filter(Boolean);
     if (features.length) payload = {type: 'FeatureCollection', features};
   }
