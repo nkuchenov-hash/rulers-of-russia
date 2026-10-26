@@ -46,7 +46,7 @@ if (!rangeMonths.length) throw new Error(`No History Core months overlap ${start
 const expectedMonths = [];
 for (let year = startYear, month = Number(startMonth.slice(5)); year < endYear || (year === endYear && month <= Number(endMonth.slice(5))); month += 1) {
   if (month > 12) { month = 1; year += 1; }
-  expectedMonths.push(`${year}-${String(month).padStart(2, '0')}`);
+  expectedMonths.push(`${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`);
 }
 const seenMonths = new Set();
 for (const row of rangeMonths) {
