@@ -171,6 +171,41 @@ try {
   const fatalConsole = consoleErrors.filter(x => /ReferenceError|TypeError|SyntaxError|Uncaught|WebGL context lost|out of memory/i.test(x));
   if (fatalConsole.length) throw new Error(`Fatal browser console errors:\n${fatalConsole.join('\n---\n')}`);
 
+  // Regression: a year change inside the same historical world snapshot must
+  // not abort its pending fetch and permanently leave the world context blank.
+  // 2025 and 2026 both use the 2010 archive snapshot.
+  const racePage = await browser.newPage({viewport:{width:1280,height:800}});
+  let releaseWorldFetch = () => {};
+  const holdWorldFetch = new Promise(resolve => {releaseWorldFetch = resolve;});
+  try {
+    await racePage.route(/\/data\/territory\/world-history\/snapshots\/2010\.geojson(?:\?|$)/,
+      async route => {await holdWorldFetch; await route.continue();});
+    const raceUrl = new URL(url);
+    raceUrl.searchParams.set('year','2026');
+    raceUrl.searchParams.set('month','7');
+    const pendingSnapshot = racePage.waitForRequest(
+      request => /\/data\/territory\/world-history\/snapshots\/2010\.geojson(?:\?|$)/.test(request.url()),
+      {timeout:20000});
+    await racePage.goto(raceUrl.href,{waitUntil:'domcontentloaded',timeout:45000});
+    await pendingSnapshot;
+    await racePage.evaluate(() => {
+      const timeline = document.querySelector('div[class*="rulerViewport"]');
+      if(!timeline)throw new Error('Timeline viewport missing in snapshot race test');
+      timeline.scrollLeft = (2025 - 862) * 6;
+      timeline.dispatchEvent(new Event('scroll',{bubbles:true}));
+    });
+    await racePage.waitForFunction(() =>
+      /2025/.test(document.querySelector('aside[class*="story"] b')?.textContent??''),
+      null,{timeout:10000});
+    releaseWorldFetch();
+    await racePage.waitForFunction(() =>
+      document.body?.innerText?.includes('Исторический мировой срез 2010 года'),
+      null,{timeout:20000});
+  } finally {
+    releaseWorldFetch();
+    await racePage.close();
+  }
+
   console.log('Territory browser smoke passed:', JSON.stringify(state));
 } catch (error) {
   const bodyText = await page.evaluate(() => document.body?.innerText?.slice(0, 1600) || '').catch(() => '');
