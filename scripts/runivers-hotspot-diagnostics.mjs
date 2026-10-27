@@ -32,11 +32,17 @@ function pointOnSegment(p, a, b) {
 // Boundary is reported separately because the five hotspots are contour
 // samples and exact on-edge inclusion is not a meaningful sovereignty verdict.
 function ringLocation(point, ring) {
-  if (!Array.isArray(ring) || ring.length < 4) return 'unavailable';
+  if (!Array.isArray(point) || point.length < 2 || !point.slice(0, 2).every(Number.isFinite)
+    || Math.abs(point[0]) > 180 || Math.abs(point[1]) > 90
+    || !Array.isArray(ring) || ring.length < 4) return 'unavailable';
+  const first = ring[0], last = ring.at(-1);
+  if (!Array.isArray(first) || !Array.isArray(last)
+    || first[0] !== last[0] || first[1] !== last[1]) return 'unavailable';
   const vertices = [];
   let previousLon = null;
   for (const coordinate of ring) {
-    if (!Array.isArray(coordinate) || !Number.isFinite(coordinate[0]) || !Number.isFinite(coordinate[1])) return 'unavailable';
+    if (!Array.isArray(coordinate) || !Number.isFinite(coordinate[0]) || !Number.isFinite(coordinate[1])
+      || Math.abs(coordinate[0]) > 180 || Math.abs(coordinate[1]) > 90) return 'unavailable';
     let lon = coordinate[0];
     if (previousLon !== null) {
       while (lon - previousLon > 180) lon -= 360;
@@ -45,6 +51,13 @@ function ringLocation(point, ring) {
     vertices.push([lon, coordinate[1]]);
     previousLon = lon;
   }
+  // A collapsed ring has no sovereign area. Use unwrapped longitudes so a
+  // legitimate antimeridian crossing is not mistaken for a world-wide edge.
+  let twiceArea = 0;
+  for (let i = 0; i < vertices.length - 1; i += 1) {
+    twiceArea += vertices[i][0] * vertices[i + 1][1] - vertices[i + 1][0] * vertices[i][1];
+  }
+  if (!Number.isFinite(twiceArea) || Math.abs(twiceArea) <= 1e-12) return 'unavailable';
   let low = Infinity, high = -Infinity;
   for (const vertex of vertices) {
     low = Math.min(low, vertex[0]);
@@ -76,9 +89,11 @@ function polygonLocation(point, rings) {
 }
 
 function combineLocations(locations) {
+  // Never describe a partial or empty source as definitively inside/outside.
+  // A valid feature cannot hide an invalid sibling in a collection.
+  if (!locations.length || locations.includes('unavailable')) return 'unavailable';
   if (locations.includes('inside')) return 'inside';
   if (locations.includes('boundary')) return 'boundary';
-  if (locations.includes('unavailable')) return 'unavailable';
   return 'outside';
 }
 
