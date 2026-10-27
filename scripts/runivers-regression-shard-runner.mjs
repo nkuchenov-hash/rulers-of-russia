@@ -162,7 +162,7 @@ async function runiversHealthy() {
         `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
         `${host}/api/resource/${id}/geojson`,
       ];
-      // Try the transports in order. Do not hammer all three at once when the
+      // Try the transports in order. Do not hammer all five at once when the
       // first transport is already healthy; fallbacks remain fully checked.
       for (const url of urls) if (await probe(url)) return true;
       return false;
