@@ -126,6 +126,7 @@ try {
   fs.mkdirSync(path.dirname(staleCachePath), {recursive: true});
   fs.writeFileSync(staleCachePath, JSON.stringify({
     type: 'FeatureCollection',
+    referenceCacheProvenance: {host: 'https://example.invalid', resourceId: 1},
     referenceSourceFeatures: [feature(geometry)],
     features: [feature({type: 'Polygon', coordinates: [
       [[4000000, 7000000], [4001000, 7000000], [4001000, 7001000],
@@ -142,6 +143,7 @@ try {
   ]};
   fs.writeFileSync(staleSourceCachePath, JSON.stringify({
     type: 'FeatureCollection',
+    referenceCacheProvenance: {host: 'https://example.invalid', resourceId: 7},
     features: [feature(geometry)],
     referenceSourceFeatures: [{
       type: 'Feature', id: 799, geometry: malformedSourcePolygon,
