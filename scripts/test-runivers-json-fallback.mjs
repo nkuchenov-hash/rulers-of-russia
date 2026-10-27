@@ -32,7 +32,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5, 6].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6, 7, 8].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -85,6 +85,23 @@ try {
       requestedRecovery.add(referenceId);
       return Response.json({type: 'FeatureCollection', features: [feature(geometry)]});
     }
+    if (url.pathname === '/api/resource/7/feature/') {
+      return Response.json([
+        {id: 701, geom: geometry, fields: {name: 'Россия', cat: 767}},
+        {id: 702, geom: {type: 'Point', coordinates: [37, 55]},
+          fields: {name: 'auxiliary label', cat: 912}},
+        {id: 703, geom: adjacent, fields: {name: 'Ногайская Орда', cat: 913}},
+      ]);
+    }
+    if (url.pathname === '/api/resource/8/feature/') {
+      return Response.json([
+        {id: 801, geom: {type: 'GeometryCollection', geometries: [
+          {type: 'Point', coordinates: [37, 55]}, geometry]},
+          fields: {name: 'Россия', cat: 767}},
+        {id: 802, geom: {type: 'LineString', coordinates: [[34, 55], [35, 55]]},
+          fields: {name: 'auxiliary line', cat: 914}},
+      ]);
+    }
     if (url.pathname === '/api/resource/1/feature/') {
       requestedGeojson = url.searchParams.get('geom_format') === 'geojson' && url.searchParams.get('srs') === '4326';
       return Response.json([
@@ -129,6 +146,24 @@ try {
   assert.equal(requestedDegenerateJson, false,
     'a usable alternate MVT should not require a JSON export');
   assert.equal(degenerateMvt.features[0].properties.runiversReferenceTransport, 'component-feature-layer-mvt');
+  // Mixed polygon + point/line exports must retain all original source
+  // records, but compare only actual polygon borders. Nested collections
+  // must contribute their polygons without turning point labels into borders.
+  for (const id of [7, 8]) {
+    const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
+    assert.equal(response.status, 200, await response.clone().text());
+    const mixed = await response.json();
+    assert.equal(mixed.features.length, 1, 'mixed geometry must dissolve to one polygon boundary');
+    assert.equal(mixed.features[0].geometry.type, 'MultiPolygon');
+    assert.deepEqual(mixed.referenceSourceFeatures.map(f => f.id),
+      id === 7 ? [701, 702, 703] : [801, 802],
+      'original source records, including auxiliary features, must survive JSON fallback');
+    const scopedMixed = referenceForPolity(mixed, 'russian-tsardom');
+    assert.deepEqual(scopedMixed.scope.selectedSourceRecords.map(record => record.featureId),
+      [id === 7 ? 701 : 801], 'only named Russian features may define the scoped border');
+    assert.deepEqual(scopedMixed.payload.features[0].geometry.coordinates, [geometry.coordinates],
+      'scoped border must match the Russian polygon, not the adjacent polity or annotations');
+  }
   for (const id of [3, 4, 5]) {
     const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
     assert.equal(response.status, 200, await response.clone().text());
@@ -138,7 +173,7 @@ try {
     assert.equal(recovered.referenceSourceFeatures.length, 1);
     assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
   }
-  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, nested projected features and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, nested projected features, mixed-source scoping and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
