@@ -3,6 +3,7 @@ import path from 'node:path';
 import {VectorTile} from '@mapbox/vector-tile';
 import Pbf from 'pbf';
 import polygonClipping from 'polygon-clipping';
+import {requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
 
 // Preload Runivers reference geometry with bounded concurrency. Runivers serves
 // its large historical polygons through NextGIS MVT in production; full-layer
@@ -26,7 +27,6 @@ const concurrency = Math.max(1, Math.min(8, Number(process.env.RUNIVERS_FETCH_CO
 const originalFetch = globalThis.fetch.bind(globalThis);
 const JSON_TIMEOUT_MS = 12000;
 const JSON_ATTEMPTS = 2;
-const COORDINATE_CHECK_LIMIT = 5000;
 const VECTOR_TILE_ZOOM = 0;
 const VECTOR_TILE_TIMEOUT_MS = 15000;
 const VECTOR_TILE_ATTEMPTS = 3;
@@ -62,28 +62,30 @@ function limiter(max) {
 }
 
 function geometryLooksWgs84(payload) {
+  // Inspect every coordinate in every source feature, including nested
+  // GeometryCollections. A 5,000-point prefix check could accept a projected
+  // or malformed later feature and silently cache a false WGS84 reference.
   let checked = 0;
-  let invalid = false;
-  const inspect = value => {
-    if (invalid || checked >= COORDINATE_CHECK_LIMIT || !Array.isArray(value)) return;
-    if (value.length >= 2 && Number.isFinite(value[0]) && Number.isFinite(value[1])) {
+  const inspectCoordinates = value => {
+    if (!Array.isArray(value) || !value.length) return false;
+    if (!Array.isArray(value[0])) {
+      if (value.length < 2 || !Number.isFinite(value[0]) || !Number.isFinite(value[1])) return false;
       checked += 1;
-      const lon = Number(value[0]);
-      const lat = Number(value[1]);
-      if (Math.abs(lon) > 180.000001 || Math.abs(lat) > 90.000001) invalid = true;
-      return;
+      return Math.abs(value[0]) <= 180.000001 && Math.abs(value[1]) <= 90.000001;
     }
-    for (const child of value) inspect(child);
+    return value.every(inspectCoordinates);
   };
-  for (const feature of payload?.features ?? []) {
-    if (checked >= COORDINATE_CHECK_LIMIT || invalid) break;
-    const geometry = feature?.geometry;
-    if (geometry?.coordinates) inspect(geometry.coordinates);
-    if (geometry?.type === 'GeometryCollection') {
-      for (const item of geometry.geometries ?? []) if (item?.coordinates) inspect(item.coordinates);
+  const inspectGeometry = geometry => {
+    if (!geometry) return false;
+    if (geometry.type === 'GeometryCollection') {
+      return Array.isArray(geometry.geometries) && geometry.geometries.length > 0
+        && geometry.geometries.every(inspectGeometry);
     }
-  }
-  return checked > 0 && !invalid;
+    return inspectCoordinates(geometry.coordinates);
+  };
+  return Array.isArray(payload?.features) && payload.features.length > 0
+    && payload.features.every(feature => inspectGeometry(feature?.geometry))
+    && checked > 0;
 }
 
 function normalizePayload(parsed) {
@@ -98,6 +100,9 @@ function normalizePayload(parsed) {
   }
   if (!payload) throw new Error('response has no usable feature geometry');
   if (!geometryLooksWgs84(payload)) throw new Error('geometry is not EPSG:4326 lon/lat');
+  // HTTP 200 with only points, collapsed lines or degenerate polygons is not
+  // a border. Continue to the next WGS84 endpoint instead of caching it.
+  requireUsableReferenceGeometry(payload, 'JSON fallback');
   return payload;
 }
 
