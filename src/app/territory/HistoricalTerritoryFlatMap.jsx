@@ -24,7 +24,7 @@ export function HistoricalTerritoryFlatMap({
   const dragRef=useRef(null);
   const [size,setSize]=useState({width:1,height:1});
   const [terrain,setTerrain]=useState(null);
-  const focusLon=focus[0];
+  const focusLon=focus[0],focusLat=focus[1];
 
   useEffect(()=>{
     const node=hostRef.current;
@@ -64,7 +64,10 @@ export function HistoricalTerritoryFlatMap({
 
     // All camera actions affect the two-dimensional plane, not a second globe.
     const scale=Math.min(width/TWO_PI,height/Math.PI)*camera.zoom;
-    const tx=width/2+camera.dx,ty=height/2+camera.dy;
+    // Center both longitude and latitude on the selected Russian period.
+    // The equirectangular map itself remains north-up: pan the projected
+    // y-origin instead of rotating the terrestrial latitude axis.
+    const tx=width/2+camera.dx,ty=height/2+camera.dy+scale*focusLat*Math.PI/180;
     const projection=geoEquirectangular()
       .rotate([-focusLon,0])
       .translate([tx,ty])
@@ -154,7 +157,7 @@ export function HistoricalTerritoryFlatMap({
     // No geometry means no Russian territory is painted. The existing
     // History Core accuracy caption reports that state explicitly.
   },[size,terrain,world,russiaFeatures,verifiedBoundaries,historyLoading,
-    worldYear,year,focusLon,mode,camera,mobile]);
+    worldYear,year,focusLon,focusLat,mode,camera,mobile]);
 
   const onPointerDown=useCallback(e=>{
     if(e.button!==0&&e.pointerType==='mouse')return;
