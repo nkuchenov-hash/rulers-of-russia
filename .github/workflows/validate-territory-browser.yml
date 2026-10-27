@@ -66,6 +66,9 @@ jobs:
       - name: Install project dependencies
         run: npm install
 
+      - name: Test globe texture antimeridian clipping and holes
+        run: node scripts/test-globe-texture-fill.mjs
+
       - name: Prepare local historical world archive
         if: github.event_name != 'workflow_run'
         run: node scripts/sync-historical-world.mjs
