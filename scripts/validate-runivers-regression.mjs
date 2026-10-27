@@ -148,7 +148,7 @@ function classifyGeometry(payload) {
   // GeometryCollection members must be inspected recursively: a valid nested
   // polygon is still a usable independent reference.
   const types = new Set();
-  let hasPolygon = false, hasLine = false;
+  let hasPolygon = false, hasLine = false, invalidPolygon = false;
   const wgs84Point = point => validCoordinate(point)
     && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
   const validLine = line => Array.isArray(line) && line.length >= 2
@@ -165,6 +165,10 @@ function classifyGeometry(payload) {
     }
     return Math.abs(twiceArea) > 1e-12;
   };
+  // Every ring matters: an otherwise valid exterior with a malformed hole
+  // can break polygon dissolution or create a false national boundary.
+  // Reject the entire transport instead of silently dropping bad members.
+  const validPolygon = polygon => Array.isArray(polygon) && polygon.length > 0 && polygon.every(validRing);
   const inspect = geometry => {
     if (!geometry?.type) return;
     types.add(geometry.type);
@@ -172,9 +176,11 @@ function classifyGeometry(payload) {
     if (geometry.type === 'GeometryCollection') {
       for (const member of geometry.geometries ?? []) inspect(member);
     } else if (geometry.type === 'Polygon') {
-      if (validRing(c?.[0])) hasPolygon = true;
+      if (validPolygon(c)) hasPolygon = true;
+      else invalidPolygon = true;
     } else if (geometry.type === 'MultiPolygon') {
-      if (Array.isArray(c) && c.some(polygon => validRing(polygon?.[0]))) hasPolygon = true;
+      if (Array.isArray(c) && c.length > 0 && c.every(validPolygon)) hasPolygon = true;
+      else invalidPolygon = true;
     } else if (geometry.type === 'LineString') {
       if (validLine(c)) hasLine = true;
     } else if (geometry.type === 'MultiLineString') {
@@ -182,7 +188,7 @@ function classifyGeometry(payload) {
     }
   };
   for (const feature of payloadFeatures(payload)) inspect(feature?.geometry);
-  return {types: [...types], hasPolygon, hasLine, usable: hasPolygon || hasLine};
+  return {types: [...types], hasPolygon, hasLine, invalidPolygon, usable: hasPolygon || hasLine};
 }
 
 // A successful HTTP response is not proof of usable geographic reference.
@@ -192,6 +198,9 @@ function requireUsableReferenceGeometry(payload, resourceId) {
   const classification = classifyGeometry(payload);
   if (!classification.usable) {
     throw new Error(`Runivers resource ${resourceId} export has no usable polygon or line geometry (types: ${classification.types.join(', ') || 'none'})`);
+  }
+  if (classification.invalidPolygon) {
+    throw new Error(`Runivers resource ${resourceId} export contains malformed polygon rings; cannot certify a complete border`);
   }
   // A line-only map can match one edge of a state while omitting every other
   // sovereign border. It cannot certify a complete territorial polygon.
