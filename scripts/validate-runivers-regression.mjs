@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
+import {diagnoseEarlyRussiaHotspots} from './runivers-hotspot-diagnostics.mjs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
@@ -364,7 +365,9 @@ function prepareScopedReference(payload, polityId, coastIndex) {
   const selected = referenceForPolity(payload, polityId);
   const samples = politicalBorderSamples(selected.payload, coastIndex);
   if (samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
-  return {samples, approximate: isReferenceApproximate(selected.payload), scope: selected.scope};
+  return {samples, approximate: isReferenceApproximate(selected.payload), scope: selected.scope,
+    // Research-only in-memory geometry; never serialized into the report.
+    referencePayload: selected.payload, sourceFeatures: selected.sourceFeatures};
 }
 
 function comparePoliticalGeometry(reference, current, referenceClass) {
@@ -558,6 +561,18 @@ async function main() {
       const override = overrideFor(overrides, state, layer.id);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
+      // Attribute the five documented 1520-1599 clusters to original named
+      // and excluded source records. Point probes cannot certify a border;
+      // retain the existing symmetric distance gate and failure status.
+      const hotspotDiagnostics = status === 'fail'
+        && (state.polityId === 'grand-moscow' || state.polityId === 'russian-tsardom')
+        ? diagnoseEarlyRussiaHotspots({
+          year: comparisonYear,
+          referencePayload: scoped.referencePayload,
+          historyPayload: loadHistoryGeometry(state),
+          selectedSourceFeatures: scoped.sourceFeatures?.selected ?? [],
+          excludedSourceFeatures: scoped.sourceFeatures?.excluded ?? [],
+        }) : [];
       const row = {
         referenceScope: scoped.scope, status, runiversResourceId: layer.id, runiversName: layer.displayName,
         runiversFromYear: layer.fromYear, runiversToYear: layer.toYear,
@@ -567,6 +582,7 @@ async function main() {
         historyFirstMonth: state.firstMonth, historyLastMonth: state.lastMonth,
         historyVerificationClass: state.verificationClass, historyUncertaintyMeters: state.uncertaintyMeters,
         toleranceMeters: tolerance, maxToleranceMeters: maxTolerance, ...metric, overrideId: override?.id ?? null,
+        ...(hotspotDiagnostics.length ? {hotspotDiagnostics} : {}),
       };
       comparisons.push(row);
       coverage.get(state.key).push(row);
