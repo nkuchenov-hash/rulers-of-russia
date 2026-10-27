@@ -12,14 +12,16 @@ const geometry = {type: 'Polygon', coordinates: [[[30, 50], [31, 50], [31, 51], 
 const adjacent = {type: 'Polygon', coordinates: [[[31, 50], [32, 50], [32, 51], [31, 51], [31, 50]]]};
 // Minimal real MVT wire format: an empty layer or a rectangle encoded using
 // MoveTo, LineTo and ClosePath commands. No external tile service is needed.
-const makeTile = withPolygon => {
+const makeTile = (withPolygon, degenerate = false) => {
   const pbf = new Pbf();
   pbf.writeMessage(3, (data, writer) => {
     writer.writeStringField(1, 'historical');
     if (data) writer.writeMessage(2, (_, feature) => {
       feature.writeVarintField(1, 1);
       feature.writeVarintField(3, 3); // POLYGON
-      feature.writePackedVarint(4, [9, 4600, 3000, 26, 200, 0, 0, 200, 199, 0, 15]);
+      feature.writePackedVarint(4, degenerate
+        ? [9, 4600, 3000, 26, 200, 0, 200, 0, 399, 0, 15] // closed, collinear: zero area
+        : [9, 4600, 3000, 26, 200, 0, 0, 200, 199, 0, 15]);
     }, null);
     writer.writeVarintField(5, 4096);
     writer.writeVarintField(15, 2);
@@ -30,7 +32,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -48,6 +50,8 @@ try {
   process.env.RUNIVERS_DISCOVERY_FILE = discovery;
   let requestedGeojson = false;
   let requestedComponentMvt = false;
+  let requestedDegenerateRecovery = false;
+  let requestedDegenerateJson = false;
   let requestedSecondJson = false;
   globalThis.fetch = async input => {
     const url = new URL(input);
@@ -57,6 +61,17 @@ try {
     if (url.pathname === '/api/component/feature_layer/mvt' && url.searchParams.get('resource') === '2') {
       requestedComponentMvt = true;
       return new Response(makeTile(true), {status: 200});
+    }
+    if (url.pathname === '/api/resource/6/0/0/0.mvt') {
+      return new Response(makeTile(true, true), {status: 200}); // A polygon label with zero enclosed area
+    }
+    if (url.pathname === '/api/component/feature_layer/mvt' && url.searchParams.get('resource') === '6') {
+      requestedDegenerateRecovery = true;
+      return new Response(makeTile(true), {status: 200});
+    }
+    if (url.pathname.startsWith('/api/resource/6/')) {
+      requestedDegenerateJson = true;
+      return new Response('', {status: 404});
     }
     if (url.pathname.startsWith('/api/resource/2/')) {
       requestedSecondJson = true;
@@ -106,6 +121,14 @@ try {
   assert.equal(mvt.referenceSourceFeatures.length, 1);
   assert.equal(mvt.features[0].geometry.type, 'MultiPolygon');
   assert.ok(mvt.features[0].geometry.coordinates.length > 0);
+  const degenerateResponse = await fetch('https://example.invalid/api/resource/6/geojson');
+  assert.equal(degenerateResponse.status, 200, await degenerateResponse.clone().text());
+  const degenerateMvt = await degenerateResponse.json();
+  assert.equal(requestedDegenerateRecovery, true,
+    'a non-empty but zero-area canonical polygon must trigger the component MVT fallback');
+  assert.equal(requestedDegenerateJson, false,
+    'a usable alternate MVT should not require a JSON export');
+  assert.equal(degenerateMvt.features[0].properties.runiversReferenceTransport, 'component-feature-layer-mvt');
   for (const id of [3, 4, 5]) {
     const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
     assert.equal(response.status, 200, await response.clone().text());
@@ -115,7 +138,7 @@ try {
     assert.equal(recovered.referenceSourceFeatures.length, 1);
     assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
   }
-  console.log('Runivers fallbacks passed: MVT alternatives, complete WGS84 coordinate scan, nested projected features and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, nested projected features and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
