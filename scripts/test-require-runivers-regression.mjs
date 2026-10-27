@@ -11,6 +11,14 @@ try {
  const completeShard={rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
  const run=(s,shard=completeShard)=>{fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard}));return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8'});};
  assert.equal(run(summary).status,0);
+ assert.equal(run(summary,null).status,1,
+   'A validator report without shard metadata must not certify complete dated coverage');
+ assert.equal(run(summary,{}).status,1,
+   'A shard with no coverage counters must fail closed');
+ assert.equal(run(summary,{rangeMonthCount:0,comparedMonthCount:0,excludedMonthCount:0}).status,1,
+   'Zero audited months must never pass geographic acceptance');
+ assert.equal(run(summary,{rangeMonthCount:12,comparedMonthCount:0,excludedMonthCount:12}).status,1,
+   'A shard with no compared months must not pass geographic acceptance');
  assert.equal(run({...summary,usableReferenceLayers:0,comparisons:0,passingComparisons:0,referenceFailures:5}).status,1,'A source outage must not pass readiness');
  assert.equal(run({...summary,referenceFailures:1}).status,1);
  assert.equal(run({...summary,passingComparisons:0,failedComparisons:1}).status,1);

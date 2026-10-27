@@ -33,11 +33,19 @@ if (s.overrides > 0) {
 // with within-year transitions, and the validator sees only the filtered index.
 // Without this check, a report could be green while entire transition years
 // were never compared. They require a separate dated independent check.
-if (report.shard) {
+// Only the shard runner records how many canonical months were actually
+// compared. A standalone validator report lacks that evidence and must not
+// be accepted as a complete independent geographic audit.
+if (!report.shard || typeof report.shard !== 'object' || Array.isArray(report.shard)) {
+  console.error('Runivers shard coverage metadata is missing; full dated geographic coverage cannot be certified.');
+  process.exit(1);
+}
+{
   const {rangeMonthCount, comparedMonthCount, excludedMonthCount} = report.shard;
   if (![rangeMonthCount, comparedMonthCount, excludedMonthCount].every(
     count => Number.isInteger(count) && count >= 0,
-  ) || rangeMonthCount !== comparedMonthCount + excludedMonthCount) {
+  ) || rangeMonthCount === 0 || comparedMonthCount === 0
+    || rangeMonthCount !== comparedMonthCount + excludedMonthCount) {
     console.error('Runivers shard month coverage counters are invalid or inconsistent.');
     process.exit(1);
   }
