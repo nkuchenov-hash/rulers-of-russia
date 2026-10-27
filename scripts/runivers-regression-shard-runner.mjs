@@ -123,13 +123,17 @@ async function probe(url, timeoutMs = 6000) {
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(url, {signal: controller.signal, redirect: 'follow'});
-    const available = response.ok;
+    // An HTTP response is evidence of transport reachability, not proof that
+    // its body contains a usable historical polygon. Keep the distinction in
+    // the outage report; the full validator remains the geographic gate.
+    const result = {available: response.ok, outcome: response.ok
+      ? 'http-2xx' : `http-${response.status ?? 'unknown'}`};
     // Preflight needs only the HTTP status. Release the unread response body so
     // many large MVT/GeoJSON probes cannot exhaust sockets or retain buffers.
     try { await response.body?.cancel(); } catch { /* Already closed by the server. */ }
-    return available;
+    return result;
   } catch {
-    return false;
+    return {available: false, outcome: controller.signal.aborted ? 'timeout' : 'network-error'};
   } finally {
     clearTimeout(timer);
   }
@@ -138,7 +142,7 @@ async function probe(url, timeoutMs = 6000) {
 async function runiversHealthy() {
   const host = String(discovery.host || '').replace(/\/$/, '');
   const ids = [...new Set(discovery.vectorLayers.map(layer => layer.id).filter(Number.isInteger))];
-  if (!host || !ids.length) return {healthy: false, probedResourceIds: [], responsiveResourceId: null};
+  if (!host || !ids.length) return {healthy: false, probedResourceIds: [], responsiveResourceId: null, preflightProbeResults: []};
 
   // A Runivers shard may have dozens of dated layers. The first layer can be
   // temporarily unavailable while later layers still provide valid reference
@@ -146,6 +150,7 @@ async function runiversHealthy() {
   const order = [...new Set([ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)]),
     ...ids.filter(id => ![ids[0], ids[Math.floor(ids.length / 2)], ids.at(-1)].includes(id))];
   const probedResourceIds = [];
+  const preflightProbeResults = [];
   // Keep preflight no more concurrent than the actual geometry fetcher.
   // The former four resources x three endpoints produced twelve simultaneous
   // requests and could itself trigger throttling / false external outages.
@@ -153,27 +158,36 @@ async function runiversHealthy() {
     const batch = order.slice(offset, offset + 2);
     const results = await Promise.all(batch.map(async id => {
       const urls = [
-        `${host}/api/resource/${id}/0/0/0.mvt`,
-        `${host}/api/component/feature_layer/mvt?resource=${id}&z=0&x=0&y=0&simplification=0`,
+        ['resource-mvt', `${host}/api/resource/${id}/0/0/0.mvt`],
+        ['component-mvt', `${host}/api/component/feature_layer/mvt?resource=${id}&z=0&x=0&y=0&simplification=0`],
         // Match all transports used by runivers-fetch-cache.mjs. An outage
         // must not be inferred when the feature, export or GeoJSON fallback
         // is healthy; the old preflight omitted two and changed the feature URL.
-        `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson`,
-        `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`,
-        `${host}/api/resource/${id}/geojson`,
+        ['feature-json', `${host}/api/resource/${id}/feature/?srs=4326&geom_format=geojson`],
+        ['export-json', `${host}/api/resource/${id}/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8`],
+        ['geojson', `${host}/api/resource/${id}/geojson`],
       ];
+      const probes = [];
       // Try the transports in order. Do not hammer all five at once when the
       // first transport is already healthy; fallbacks remain fully checked.
-      for (const url of urls) if (await probe(url)) return true;
-      return false;
+      for (const [transport, url] of urls) {
+        const result = await probe(url);
+        probes.push({transport, outcome: result.outcome});
+        if (result.available) return {id, available: true, transport, probes};
+      }
+      return {id, available: false, transport: null, probes};
     }));
     probedResourceIds.push(...batch);
-    const successfulIndex = results.indexOf(true);
-    if (successfulIndex !== -1) return {
-      healthy: true, probedResourceIds, responsiveResourceId: batch[successfulIndex],
+    // Preserve each transport's status or timeout without storing any
+    // reference geometry, response body, or URL in the public CI artifact.
+    preflightProbeResults.push(...results.map(({id, probes}) => ({resourceId: id, probes})));
+    const responsive = results.find(result => result.available);
+    if (responsive) return {
+      healthy: true, probedResourceIds, responsiveResourceId: responsive.id,
+      responsiveTransport: responsive.transport, preflightProbeResults,
     };
   }
-  return {healthy: false, probedResourceIds, responsiveResourceId: null};
+  return {healthy: false, probedResourceIds, responsiveResourceId: null, preflightProbeResults};
 }
 
 const preflight = await runiversHealthy();
@@ -197,10 +211,11 @@ if (!preflight.healthy) {
       uncoveredMonths: 0,
       externalOutage: true,
       preflightResourceIds: preflight.probedResourceIds,
+      preflightProbeResults: preflight.preflightProbeResults,
     },
     stateCoverage: [],
     failedComparisons: [],
-    referenceFailures: [{error: 'Runivers preflight failed on canonical MVT, component MVT and WGS84 feature endpoints for every dated resource', probedResourceIds: preflight.probedResourceIds}],
+    referenceFailures: [{error: 'Runivers preflight found no HTTP-success transport across all five MVT/JSON endpoints for any dated resource; this is not a geometry comparison', probedResourceIds: preflight.probedResourceIds}],
     uncoveredMonths: [],
     shard: {
       startMonth,
@@ -218,7 +233,7 @@ if (!preflight.healthy) {
   console.error(`Runivers preflight failed for ${startMonth}..${endMonth} across ${preflight.probedResourceIds.length} resources; recording external outage without attempting ${discovery.vectorLayers.length} doomed live exports.`);
   process.exitCode = 1;
 } else {
-  console.log(`Runivers preflight: responsive resource ${preflight.responsiveResourceId} among ${preflight.probedResourceIds.length} probed, proceeding with the complete shard.`);
+  console.log(`Runivers preflight: responsive resource ${preflight.responsiveResourceId} via ${preflight.responsiveTransport} among ${preflight.probedResourceIds.length} probed, proceeding with the complete shard (HTTP reachability only).`);
   const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts', 'runivers-fetch-cache.mjs'), validatorFile], {
     cwd: root,
     stdio: 'inherit',
