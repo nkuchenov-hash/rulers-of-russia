@@ -49,6 +49,27 @@ assert.deepEqual(provenanceScope.scope.selectedSourceRecords,[
 assert.deepEqual(tsardomScope.payload.features[0].geometry.coordinates,
   [tsardomSource.referenceSourceFeatures[0].geometry.coordinates,
     tsardomSource.referenceSourceFeatures[3].geometry.coordinates]);
+// Nested GeometryCollections are accepted by the Runivers geometry validator.
+// Scoping must retain their polygons, while ignoring points and other polities.
+const nestedRussian = {type:'Feature',id:901,properties:{name:'Россия',cat:767},
+  geometry:{type:'GeometryCollection',geometries:[
+    {type:'Point',coordinates:[37,55]},
+    {type:'GeometryCollection',geometries:[feature('nested-Russia',36).geometry]},
+  ]}};
+const nestedPolityScope = referenceForPolity({referenceSourceFeatures:[
+  nestedRussian,feature('Казанское ханство',42),
+]},'russian-tsardom');
+assert.equal(nestedPolityScope.scope.selectedFeatures,1);
+assert.deepEqual(nestedPolityScope.scope.excludedNames,['Казанское ханство']);
+assert.deepEqual(nestedPolityScope.scope.selectedSourceRecords.map(f => [f.featureId,f.cat,f.name]),
+  [[901,767,'Россия']]);
+assert.deepEqual(nestedPolityScope.payload.features[0].geometry.coordinates,
+  [feature('nested-Russia',36).geometry.coordinates],
+  'nested Russian polygon must survive named-polity scoping');
+assert.throws(()=>referenceForPolity({referenceSourceFeatures:[{
+  ...nestedRussian,geometry:{type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]}]},
+}]},'russian-tsardom'),/contains no polygon geometry/,
+  'a point-only named feature must not masquerade as a national boundary');
 assert.throws(()=>referenceForPolity({features:[feature('Россия',30)]},'russian-tsardom'),/original named/);
 assert.throws(()=>referenceForPolity({referenceSourceFeatures:[feature('Казанское ханство',31)]},'russian-tsardom'),/no named Tsardom/);
 const soviet = feature('СССР', 50); soviet.properties.status = 1;
