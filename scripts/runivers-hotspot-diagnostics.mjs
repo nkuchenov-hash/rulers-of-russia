@@ -101,18 +101,20 @@ function combineLocations(locations) {
 export function geometryLocation(point, geometry) {
   if (!geometry) return 'unavailable';
   if (geometry.type === 'Polygon') return polygonLocation(point, geometry.coordinates);
-  if (geometry.type === 'MultiPolygon') return combineLocations((geometry.coordinates ?? [])
-    .map(rings => polygonLocation(point, rings)));
-  if (geometry.type === 'GeometryCollection') return combineLocations((geometry.geometries ?? [])
-    .map(item => geometryLocation(point, item)));
-  // Points and lines do not establish sovereign area.
-  return 'outside';
+  if (geometry.type === 'MultiPolygon') return Array.isArray(geometry.coordinates)
+    ? combineLocations(geometry.coordinates.map(rings => polygonLocation(point, rings))) : 'unavailable';
+  if (geometry.type === 'GeometryCollection') return Array.isArray(geometry.geometries)
+    ? combineLocations(geometry.geometries.map(item => geometryLocation(point, item))) : 'unavailable';
+  // Valid non-area geometry cannot establish sovereign area. An unknown type
+  // is malformed evidence, not evidence that the territory is absent.
+  if (['Point', 'MultiPoint', 'LineString', 'MultiLineString'].includes(geometry.type)) return 'outside';
+  return 'unavailable';
 }
 
 export function geojsonLocation(point, payload) {
   if (!payload) return 'unavailable';
-  if (payload.type === 'FeatureCollection') return combineLocations((payload.features ?? [])
-    .map(feature => geometryLocation(point, feature.geometry)));
+  if (payload.type === 'FeatureCollection') return Array.isArray(payload.features)
+    ? combineLocations(payload.features.map(feature => geometryLocation(point, feature?.geometry))) : 'unavailable';
   if (payload.type === 'Feature') return geometryLocation(point, payload.geometry);
   return geometryLocation(point, payload);
 }
@@ -175,9 +177,14 @@ export function diagnoseFailedBoundarySamples({
   referenceSamples = [], currentSamples = [], referencePayload, historyPayload,
   selectedSourceFeatures = [], excludedSourceFeatures = [],
 }) {
-  const annotate = (samples, sampledBoundary) => (samples ?? []).slice(0, 3)
+  // Reject unusable samples before limiting the report to three: otherwise
+  // a malformed first sample hides a valid fourth worst-distance point.
+  const annotate = (samples, sampledBoundary) => (Array.isArray(samples) ? samples : [])
     .filter(sample => Array.isArray(sample?.lonLat) && sample.lonLat.length === 2
-      && sample.lonLat.every(Number.isFinite) && Number.isFinite(sample.distanceMeters))
+      && sample.lonLat.every(Number.isFinite)
+      && Math.abs(sample.lonLat[0]) <= 180 && Math.abs(sample.lonLat[1]) <= 90
+      && Number.isFinite(sample.distanceMeters) && sample.distanceMeters >= 0)
+    .slice(0, 3)
     .map(sample => ({
       sampledBoundary,
       lonLat: sample.lonLat,

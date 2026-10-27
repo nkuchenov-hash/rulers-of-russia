@@ -392,6 +392,20 @@ assert.equal(geojsonLocation([45,54], {type:'MultiPolygon',coordinates:[
   donut.coordinates,brokenDonut.coordinates,
 ]}), 'unavailable', 'an invalid sibling polygon cannot hide behind a valid exterior');
 
+assert.equal(geojsonLocation([41.5,54], {type:'UnrecognizedPolygon',coordinates:donut.coordinates}),
+  'unavailable', 'unknown geometry types must not be reported as sovereign absence');
+assert.equal(geojsonLocation([41.5,54], {type:'MultiPolygon',coordinates:{invalid:true}}),
+  'unavailable', 'malformed multipolygon coordinates must not crash diagnostics');
+assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:{invalid:true}}),
+  'unavailable', 'malformed geometry collections must not crash diagnostics');
+assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:{invalid:true}}),
+  'unavailable', 'malformed feature collections must not crash diagnostics');
+assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:[null]}),
+  'unavailable', 'null source features must fail closed');
+assert.equal(geojsonLocation([41.5,54], {type:'Point',coordinates:[41.5,54]}),
+  'outside', 'valid non-area source features still cannot establish territory');
+
+
 
 console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
 
@@ -431,4 +445,23 @@ assert.ok(!JSON.stringify(worstAttribution).includes('"coordinates"'),
 assert.deepEqual(diagnoseFailedBoundarySamples({
   referenceSamples: [{lonLat: [NaN, 54], distanceMeters: 1}],
 }), [], 'invalid sample coordinates cannot be attributed');
+
+const retainedValidSamples = diagnoseFailedBoundarySamples({
+  referenceSamples: [
+    {lonLat:[NaN,54],distanceMeters:900000},
+    {lonLat:[181,54],distanceMeters:800000},
+    {lonLat:[40,54],distanceMeters:-1},
+    {lonLat:[40.25,54],distanceMeters:700000},
+    {lonLat:[40.5,54],distanceMeters:600000},
+    {lonLat:[40.75,54],distanceMeters:500000},
+    {lonLat:[41,54],distanceMeters:400000},
+  ],
+  referencePayload: diagnosticScope.payload,
+  historyPayload: diagnosticHistory,
+});
+assert.deepEqual(retainedValidSamples.map(row => row.lonLat),
+  [[40.25,54],[40.5,54],[40.75,54]],
+  'invalid leading samples must not suppress three valid worst-distance records');
+assert.ok(retainedValidSamples.every(row => row.diagnosticOnly));
+
 console.log('Runivers live worst-sample attribution passed: both directions, overlap, cap, invalid points, no geometry export.');
