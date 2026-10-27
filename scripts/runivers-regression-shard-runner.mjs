@@ -271,8 +271,6 @@ if (!preflight.healthy) {
       report.summary.runiversReferenceGranularity = 'year';
     }
     fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
-  }
-
     process.exitCode = child.status ?? 1;
   }
 }
