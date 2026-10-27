@@ -122,6 +122,15 @@ const inner = {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates
 const alone = politicalBorderSamples(outer, coast.index);
 const nested = politicalBorderSamples({type:'FeatureCollection',features:[outer,inner]},coast.index);
 assert.deepEqual(nested,alone,'Interior components cannot add an exterior sovereign border');
+const unrelatedAnnotation = {type:'Feature',properties:{name:'label/road'},
+  geometry:{type:'LineString',coordinates:[[80,50],[81,50]]}};
+const mixedWithAnnotation = politicalBorderSamples(
+  {type:'FeatureCollection',features:[outer,unrelatedAnnotation]},coast.index);
+assert.deepEqual(mixedWithAnnotation,alone,
+  'an auxiliary line in a polygon layer must not become a sovereign border');
+const lineOnlySamples = politicalBorderSamples(boundaryLineOnly,coast.index);
+assert.equal(lineOnlySamples.points.length,0,
+  'a line-only layer must never supply certifiable territorial exterior samples');
 
 const addition = feature('', 54); addition.properties = {cat:578,status:6,lwdate:'1924-10-27'};
 const cession = feature('', 55); cession.properties = {cat:712,status:7,lwdate:'1945-08-16'};
@@ -135,7 +144,14 @@ assert.equal(referenceForPolity({referenceSourceFeatures:[soviet,{...addition,pr
 assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[]}, 5383), /resource 5383.*no usable.*types: none/);
 assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[{type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{}}]}, 5385), /resource 5385.*types: Point/);
 assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[feature('Moscow',30)]}, 5387).hasPolygon,true);
-console.log('Runivers empty/unsupported reference exports fail closed.');
+const boundaryLineOnly = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'LineString',coordinates:[[30,50],[31,50]]}}]};
+assert.throws(() => requireUsableReferenceGeometry(boundaryLineOnly,5389), /line-only reference/,
+  'a valid line cannot certify an entire sovereign polygon');
+assert.equal(comparePoliticalGeometry({points:[[30,50]],allPoints:[[30,50]]},
+  {points:[[30,50]],allPoints:[[30,50]]},{hasPolygon:false}).usable,false,
+  'the comparison API must not allow a line-only reference to pass');
+console.log('Runivers empty/unsupported and line-only reference exports fail closed.');
 
 // A declared polygon/line with no actual geographic border must not suppress
 // the alternative WGS84 export. Nested valid polygons remain usable.
