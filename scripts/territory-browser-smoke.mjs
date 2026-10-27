@@ -130,6 +130,18 @@ try {
   await monthSelect.selectOption('3');
   await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1992-03', null, {timeout: 12000});
   await page.getByRole('button', {name: 'Государства', exact: true}).click();
+  // Assert that the month-selected Russian territory is actually drawn in
+  // the center of the atlas, not a blank ocean/equator despite a live canvas.
+  // 60E,58N (period focus for 1992) is inside Russia, in the Urals.
+  const centerRgb = await flatCanvas.evaluate(canvas => {
+    const ctx = canvas.getContext('2d');
+    const {data} = ctx.getImageData(Math.floor(canvas.width/2), Math.floor(canvas.height/2), 1, 1);
+    return [...data].slice(0, 3);
+  });
+  if (!(centerRgb[1] > centerRgb[0]+12 && centerRgb[1] > centerRgb[2]+20
+    && centerRgb[0] >= 95 && centerRgb[0] <= 160)) {
+    throw new Error(`Flat map did not paint the historical Russian polygon at its own focus: RGB ${JSON.stringify(centerRgb)}`);
+  }
   await page.getByRole('button', {name: 'Рельеф', exact: true}).click();
   await page.getByRole('button', {name: 'Показать глобус'}).click();
   if (await flatCanvas.count()) throw new Error('Planar canvas persisted after switching to globe');
