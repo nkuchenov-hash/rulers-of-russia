@@ -348,6 +348,26 @@ assert.equal(geojsonLocation([0,15], {type:'Polygon',coordinates:[
 assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[
   {type:'Point',coordinates:[40,53]},donut,
 ]}), 'inside', 'nested geometry must retain polygon containment');
+
+assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:[]}), 'unavailable',
+  'an empty independent reference must not be reported as outside');
+assert.equal(geojsonLocation([41.5,54], {type:'MultiPolygon',coordinates:[]}), 'unavailable',
+  'an empty multipolygon must not imply absence of sovereignty');
+assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[]}), 'unavailable');
+assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:[
+  diagnosticSelected, {type:'Feature',geometry:null,properties:{}},
+]}), 'unavailable', 'a valid feature cannot conceal an unusable sibling');
+assert.equal(geojsonLocation([41.5,54], {type:'Polygon',coordinates:[
+  [[40,53],[42,53],[42,55],[40,55]],
+]}), 'unavailable', 'unclosed polygon rings cannot establish a territory');
+assert.equal(geojsonLocation([41.5,54], {type:'Polygon',coordinates:[
+  [[4000000,7000000],[4001000,7000000],[4001000,7001000],[4000000,7000000]],
+]}), 'unavailable', 'projected metres must not be treated as WGS84');
+assert.equal(geojsonLocation([41.5,54], {type:'Polygon',coordinates:[
+  [[40,53],[41,53],[42,53],[40,53]],
+]}), 'unavailable', 'collinear rings cannot establish sovereign area');
+assert.equal(geojsonLocation([NaN,54], donut), 'unavailable', 'invalid probe coordinates are not outside');
+
 console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
 
 
