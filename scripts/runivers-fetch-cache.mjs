@@ -190,11 +190,18 @@ async function fetchVectorTile(host, id) {
         for (const layer of Object.values(tile.layers ?? {})) {
           for (let index = 0; index < layer.length; index += 1) {
             const feature = layer.feature(index);
-            if (feature.type === 3 && geometryToMultiPolygon(
-              feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM)?.geometry).length) {
-              hasPolygon = true;
-              break;
-            }
+            if (feature.type !== 3) continue;
+            const geojson = feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM);
+            if (!geometryToMultiPolygon(geojson?.geometry).length) continue;
+            // A polygon type and non-empty coordinates do not prove a border.
+            // A z=0 tile may contain a collapsed/collinear polygon while the
+            // alternate transport still has usable geometry. Reject that tile
+            // instead of caching a false independent reference.
+            const classification = requireUsableReferenceGeometry(
+              {type: 'FeatureCollection', features: [geojson]},
+              `${id} ${candidate.kind} MVT`,
+            );
+            if (classification.hasPolygon) hasPolygon = true;
           }
           if (hasPolygon) break;
         }
