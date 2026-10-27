@@ -332,3 +332,41 @@ assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[
   {type:'Point',coordinates:[40,53]},donut,
 ]}), 'inside', 'nested geometry must retain polygon containment');
 console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
+
+
+// Fixed hotspots can become stale after source-scope corrections. Attribute
+// both actual worst-distance directions, with bounded source IDs and no source
+// geometry in the report. An excluded feature overlapping the selected one
+// must remain visible as an investigation lead, not silently be called Russian.
+const {diagnoseFailedBoundarySamples} = await import('./runivers-hotspot-diagnostics.mjs');
+const worstAttribution = diagnoseFailedBoundarySamples({
+  referenceSamples: [
+    {lonLat: [40.75, 54], distanceMeters: 900000},
+    {lonLat: [40.25, 54], distanceMeters: 700000},
+    {lonLat: [40.5, 54], distanceMeters: 600000},
+    {lonLat: [40.9, 54], distanceMeters: 500000},
+  ],
+  currentSamples: [{lonLat: [39.5, 54], distanceMeters: 400000}],
+  referencePayload: diagnosticScope.payload,
+  historyPayload: diagnosticHistory,
+  selectedSourceFeatures: diagnosticScope.sourceFeatures.selected,
+  excludedSourceFeatures: diagnosticScope.sourceFeatures.excluded,
+});
+assert.equal(worstAttribution.length, 4, 'limit to three actual worst samples in each direction');
+assert.deepEqual(worstAttribution.map(row => row.sampledBoundary),
+  ['runivers-reference','runivers-reference','runivers-reference','history-core']);
+assert.equal(worstAttribution[0].distanceMeters, 900000, 'retain measured distances without changing tolerances');
+assert.equal(worstAttribution[0].scopedReferenceLocation, 'inside');
+assert.equal(worstAttribution[0].historyLocation, 'inside');
+assert.deepEqual(worstAttribution[0].selectedSourceRecords.map(row => row.featureId), [7701]);
+assert.deepEqual(worstAttribution[0].excludedSourceRecords.map(row => row.featureId), [7702],
+  'overlapping excluded source identities must be retained for scrutiny');
+assert.equal(worstAttribution[3].scopedReferenceLocation, 'outside');
+assert.equal(worstAttribution[3].historyLocation, 'boundary');
+assert.ok(worstAttribution.every(row => row.diagnosticOnly));
+assert.ok(!JSON.stringify(worstAttribution).includes('"coordinates"'),
+  'do not copy unlicensed reference polygons into diagnostic reports');
+assert.deepEqual(diagnoseFailedBoundarySamples({
+  referenceSamples: [{lonLat: [NaN, 54], distanceMeters: 1}],
+}), [], 'invalid sample coordinates cannot be attributed');
+console.log('Runivers live worst-sample attribution passed: both directions, overlap, cap, invalid points, no geometry export.');
