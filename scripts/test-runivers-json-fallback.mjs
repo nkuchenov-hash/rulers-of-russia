@@ -225,10 +225,10 @@ try {
     'a valid cached merged border must not hide an invalid original source ring');
   assert.equal(requestedForeignHostRecovery, true,
     'valid polygons cached from another NextGIS host must be fetched again');
-  assert.equal(requestedWrongResourceRecovery, true,
-    'valid polygons tagged with another resource ID must be fetched again');
   const corrected = await fetch('https://example.invalid/api/resource/9/geojson');
   assert.equal(corrected.status, 200);
+  assert.equal(requestedWrongResourceRecovery, true,
+    'valid polygons tagged with another resource ID must be fetched again');
   const correctedPayload = await corrected.json();
   assert.deepEqual(correctedPayload.referenceSourceFeatures.map(f => f.id), [901],
     'stale foreign-resource source identities must not survive cache refresh');
