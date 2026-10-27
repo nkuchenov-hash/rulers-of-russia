@@ -193,6 +193,11 @@ function requireUsableReferenceGeometry(payload, resourceId) {
   if (!classification.usable) {
     throw new Error(`Runivers resource ${resourceId} export has no usable polygon or line geometry (types: ${classification.types.join(', ') || 'none'})`);
   }
+  // A line-only map can match one edge of a state while omitting every other
+  // sovereign border. It cannot certify a complete territorial polygon.
+  if (!classification.hasPolygon) {
+    throw new Error(`Runivers resource ${resourceId} export has no usable polygon geometry (line-only reference; types: ${classification.types.join(', ')})`);
+  }
   return classification;
 }
 
@@ -323,16 +328,21 @@ function buildCoastIndex() {
 function politicalBorderSamples(payload, coastIndex) {
   // This metric compares exterior polity boundaries. Fill the ignored holes
   // before dissolving, so islands inside those holes cannot reappear as borders.
-  const polygons = [], lines = [];
+  const polygons = [];
   const collect = geometry => {
     if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
     else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
-    else if (geometry?.type === 'GeometryCollection') geometry.geometries.forEach(collect);
-    else if (geometry) lines.push({type: 'Feature', geometry, properties: {}});
+    else if (geometry?.type === 'GeometryCollection') (geometry.geometries ?? []).forEach(collect);
+    // Point/line annotations are never a territorial exterior.
   };
   payloadFeatures(payload).forEach(f => collect(f.geometry));
-  const features = [...lines];
-  if (polygons.length) features.push({type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}});
+  // Political territory is an area. Auxiliary line annotations in a mixed
+  // source are not sovereign borders: including them can manufacture a false
+  // discrepancy far from the polygon. A line-only source has no certifiable
+  // territorial exterior and therefore yields no comparison samples.
+  const features = polygons.length
+    ? [{type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}}]
+    : [];
   const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
   const inland = all.filter(point => distanceToIndex(point, coastIndex) > COAST_EXCLUSION_M);
   return {allCount: all.length, allPoints: all, points: inland};
@@ -349,7 +359,8 @@ function prepareScopedReference(payload, polityId, coastIndex) {
 }
 
 function comparePoliticalGeometry(reference, current, referenceClass) {
-  if (!reference.points.length || !current.points.length) return {usable: false, referenceSamples: reference.points.length, currentSamples: current.points.length};
+  // Do not allow a direct caller to bypass the polygon-only acceptance gate.
+  if (!referenceClass.hasPolygon || !reference.points.length || !current.points.length) return {usable: false, referenceSamples: reference.points.length, currentSamples: current.points.length};
   // Mask only the measured source samples. Keep target boundary points near
   // the coast cutoff, otherwise tiny mask differences create artificial gaps.
   const referenceIndex = buildPointIndex([...(reference.allPoints ?? reference.points)]);
