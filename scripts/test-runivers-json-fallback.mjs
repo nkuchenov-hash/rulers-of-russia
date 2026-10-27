@@ -111,6 +111,18 @@ try {
     }
     return new Response('', {status: 404});
   };
+  // A previous run may leave a nonempty cache with invalid or partial
+  // geometry. The source identity alone must not make it trustworthy.
+  const staleCachePath = path.join(fixture, 'tmp/runivers-regression/reference-cache/1.geojson');
+  fs.mkdirSync(path.dirname(staleCachePath), {recursive: true});
+  fs.writeFileSync(staleCachePath, JSON.stringify({
+    type: 'FeatureCollection',
+    referenceSourceFeatures: [feature(geometry)],
+    features: [feature({type: 'Polygon', coordinates: [
+      [[4000000, 7000000], [4001000, 7000000], [4001000, 7001000],
+        [4000000, 7001000], [4000000, 7000000]],
+    ]})],
+  }));
   await import('./runivers-fetch-cache.mjs');
   const response = await fetch('https://example.invalid/api/resource/1/geojson');
   assert.equal(response.status, 200, await response.clone().text());
