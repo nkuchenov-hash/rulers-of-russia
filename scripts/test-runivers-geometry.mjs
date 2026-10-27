@@ -176,6 +176,26 @@ for (const [label, payload] of Object.entries({emptyPolygon,collapsedLine,projec
 }
 console.log('Runivers coordinate validity tests passed: nested GeometryCollection, empty/collapsed, projected and collinear borders.');
 
+// One sound outer ring does not make malformed holes or a second broken
+// polygon safe to dissolve. These must fail closed before the distance metric.
+const malformedHole = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'Polygon',coordinates:[feature('Россия',30).geometry.coordinates[0],
+    [[30.2,50.2],[30.4,50.2],[30.4,50.4]]]} // unclosed interior ring
+}]};
+const mixedBrokenPolygon = {type:'FeatureCollection',features:[
+  feature('Россия',30),
+  {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[]}},
+]};
+const brokenMultiPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'MultiPolygon',coordinates:[feature('Россия',30).geometry.coordinates, []]}}]};
+for (const [label, payload] of Object.entries({malformedHole,mixedBrokenPolygon,brokenMultiPolygon})) {
+  assert.throws(() => requireUsableReferenceGeometry(payload,5392), /malformed polygon rings/,
+    label + ' must not pass because another ring or feature is valid');
+}
+console.log('Runivers malformed-ring regression passed: invalid holes and mixed polygon parts cannot certify borders.');
+
+
+
 
 
 // The same file can reappear after a different state, a missing month, or a
@@ -225,7 +245,7 @@ const pointReference = {type:'FeatureCollection',features:[
   {type:'Feature',geometry:{type:'Point',coordinates:[37,55]},properties:{name:'Россия'}},
 ]};
 try {
-  for (const unusable of [emptyReference, pointReference, emptyPolygon, collapsedLine, projectedPolygon, collinearPolygon]) {
+  for (const unusable of [emptyReference, pointReference, emptyPolygon, collapsedLine, projectedPolygon, collinearPolygon, malformedHole, mixedBrokenPolygon, brokenMultiPolygon]) {
     const requested = [];
     globalThis.fetch = async input => {
       const pathname = new URL(input).pathname;
