@@ -18,6 +18,7 @@ on:
       - 'scripts/require-runivers-regression.mjs'
       - 'scripts/test-require-runivers-regression.mjs'
       - 'scripts/test-runivers-shard-runner.mjs'
+      - 'scripts/test-runivers-matrix.mjs'
       - 'scripts/test-runivers-geometry.mjs'
       - 'scripts/test-runivers-json-fallback.mjs'
       - 'scripts/territory-history-smoke.mjs'
@@ -44,6 +45,7 @@ jobs:
           node-version: 22
       - run: npm install
       - run: node scripts/test-runivers-shard-runner.mjs
+      - run: node scripts/test-runivers-matrix.mjs
       - run: node scripts/test-runivers-geometry.mjs
       - run: node scripts/test-history-component-exclusions.mjs
       - run: node scripts/test-require-runivers-regression.mjs
@@ -74,8 +76,17 @@ jobs:
           - id: 1850-1899
             start: 1850-01
             end: 1899-12
-          - id: 1800-1849
+          # The former 39-layer 1800–1849 shard exhausted the 30-minute
+          # job limit after a healthy preflight (run 40576855305).
+          # Split by full calendar years: no historical month is dropped.
+          - id: 1800-1816
             start: 1800-01
+            end: 1816-12
+          - id: 1817-1833
+            start: 1817-01
+            end: 1833-12
+          - id: 1834-1849
+            start: 1834-01
             end: 1849-12
           - id: 1750-1799
             start: 1750-01
