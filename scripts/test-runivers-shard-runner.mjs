@@ -33,9 +33,12 @@ try {
             : address.includes('/api/component/feature_layer/mvt');
       const resourceId = address.match(/\\/api\\/resource\\/(\\d+)\\//)?.[1]
         ?? new URL(address).searchParams.get('resource');
+      if (process.env.TEST_NETWORK_ERROR && address.endsWith('/geojson')) {
+        throw new Error('simulated network failure');
+      }
       const ok = !process.env.TEST_OUTAGE && transportMatches
         && (!process.env.TEST_FIRST_RESOURCE_DOWN || resourceId === '2');
-      return {ok, body: {cancel: async () => { cancelled += 1; }}};
+      return {ok, status: ok ? 200 : 503, body: {cancel: async () => { cancelled += 1; }}};
     };
   `);
   fs.writeFileSync(path.join(fixture, 'scripts/validate-runivers-regression.mjs'), `
@@ -142,7 +145,8 @@ try {
   fs.writeFileSync(canonicalPath, canonical);
   const firstDown = run({TEST_FIRST_RESOURCE_DOWN: '1'});
   assert.equal(firstDown.status, 0, firstDown.stderr);
-  assert.match(firstDown.stdout, /responsive resource 2/, 'the second layer must recover a shard with a failed first layer');
+  assert.match(firstDown.stdout, /responsive resource 2 via component-mvt/,
+    'the second layer must recover a shard and identify its successful transport');
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'a recovered shard must not mutate canonical data');
   // A complete outage is only real when EVERY transport the fetcher uses is
   // unavailable. Earlier preflight omitted export and /geojson, and its
@@ -160,7 +164,27 @@ try {
   assert.ok(stats.requests >= 6, 'a total outage must probe all available transports and resources');
   assert.ok(stats.peak <= 2, `preflight request peak must not exceed two, got ${stats.peak}`);
   assert.equal(stats.cancelled, stats.requests, 'every preflight response body must be closed');
-  assert.equal(JSON.parse(fs.readFileSync(reportPath)).summary.externalOutage, true);
+  const outageReport = JSON.parse(fs.readFileSync(reportPath));
+  assert.equal(outageReport.summary.externalOutage, true);
+  assert.deepEqual(outageReport.summary.preflightProbeResults.map(row => row.resourceId), [1, 2],
+    'every probed source must be identified, including later fallbacks');
+  for (const row of outageReport.summary.preflightProbeResults) {
+    assert.deepEqual(row.probes.map(probe => probe.transport),
+      ['resource-mvt', 'component-mvt', 'feature-json', 'export-json', 'geojson'],
+      'all five transport outcomes must survive a complete outage');
+    assert.ok(row.probes.every(probe => probe.outcome === 'http-503'),
+      'failed HTTP responses must be recorded as failures, not geometry passes');
+  }
+  assert.match(outageReport.referenceFailures[0].error, /all five MVT\/JSON endpoints/,
+    'outage description must not omit the export and GeoJSON fallbacks');
+  assert.ok(!JSON.stringify(outageReport.summary.preflightProbeResults).includes('coordinates'),
+    'preflight evidence must not include reference geometry');
+  const networkFailure = run({TEST_OUTAGE: '1', TEST_NETWORK_ERROR: '1'});
+  assert.equal(networkFailure.status, 1);
+  const networkReport = JSON.parse(fs.readFileSync(reportPath));
+  assert.ok(networkReport.summary.preflightProbeResults.every(row =>
+    row.probes.at(-1).outcome === 'network-error'),
+    'network failures must be distinguishable from HTTP failures');
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'outage must not mutate canonical data');
   // The map starts in 0862. Even though the present Runivers baseline starts
   // in 1462, shard integrity must preserve the zero-padded early-year keys.
@@ -181,7 +205,7 @@ try {
   assert.equal(earlyShard.months.length, 12);
   fs.writeFileSync(canonicalPath, canonical);
   fs.writeFileSync(discoveryPath, originalDiscovery);
-  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component/JSON/export fallback parity, first-layer recovery, canonical isolation, full-state transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
+  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, all five transport outcomes and network errors, fallback parity, first-layer recovery, canonical isolation, full-state transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
