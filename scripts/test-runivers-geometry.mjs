@@ -272,3 +272,63 @@ try {
   globalThis.fetch = originalReferenceFetch;
 }
 console.log('Runivers JSON fallback regression passed: empty/point-only HTTP 200 cannot hide an alternate reference.');
+
+
+// Research diagnostics for issue #326: identify which ORIGINAL Runivers
+// source records contain a failed contour hotspot. These are not geographic
+// passes, legal sovereignty tests, or a replacement for licensed cartography.
+const {geojsonLocation, diagnoseEarlyRussiaHotspots} = await import('./runivers-hotspot-diagnostics.mjs');
+const diagnosticPolygon = (name, id, left, bottom, right, top) => ({
+  type: 'Feature', id, properties: {name, cat: 767, lwdate: '1553-01-01', status: 6},
+  geometry: {type: 'Polygon', coordinates: [[
+    [left,bottom],[right,bottom],[right,top],[left,top],[left,bottom],
+  ]]},
+});
+const diagnosticSelected = diagnosticPolygon('Россия', 7701, 40, 53, 42, 55);
+const diagnosticExcluded = diagnosticPolygon('Ногайская Орда', 7702, 40.5, 53, 41, 55);
+const diagnosticHistory = {type: 'FeatureCollection', features: [
+  diagnosticPolygon('History Core', 7703, 39.5, 53, 40.9, 55),
+]};
+const diagnosticScope = referenceForPolity({
+  referenceSourceFeatures: [diagnosticSelected, diagnosticExcluded],
+}, 'russian-tsardom');
+assert.equal(diagnosticScope.sourceFeatures.selected.length, 1);
+assert.equal(diagnosticScope.sourceFeatures.excluded.length, 1);
+const hotspotDiagnostics = diagnoseEarlyRussiaHotspots({
+  year: 1553, referencePayload: diagnosticScope.payload,
+  historyPayload: diagnosticHistory,
+  selectedSourceFeatures: diagnosticScope.sourceFeatures.selected,
+  excludedSourceFeatures: diagnosticScope.sourceFeatures.excluded,
+});
+assert.equal(hotspotDiagnostics.length, 1);
+assert.equal(hotspotDiagnostics[0].clusterId, 'central-1553-1556');
+assert.equal(hotspotDiagnostics[0].diagnosticOnly, true);
+assert.equal(hotspotDiagnostics[0].probes[0].scopedReferenceLocation, 'inside');
+assert.equal(hotspotDiagnostics[0].probes[0].historyLocation, 'inside');
+assert.equal(hotspotDiagnostics[0].probes[1].scopedReferenceLocation, 'inside');
+assert.equal(hotspotDiagnostics[0].probes[1].historyLocation, 'outside',
+  'a 0.25-degree east probe must expose the synthetic border discrepancy');
+assert.deepEqual(hotspotDiagnostics[0].selectedSourceRecordsAtCenter.map(row => row.featureId), [7701]);
+assert.deepEqual(hotspotDiagnostics[0].excludedSourceRecordsAtCenter.map(row => row.featureId), [7702]);
+assert.ok(!JSON.stringify(hotspotDiagnostics).includes('"coordinates"'),
+  'the report must contain source identifiers and point probes, never original source geometry');
+assert.deepEqual(diagnoseEarlyRussiaHotspots({
+  year: 1600, referencePayload: diagnosticScope.payload, historyPayload: diagnosticHistory,
+}), [], 'fixed early-Russia hotspots must not be projected into unrelated epochs');
+const donut = {type: 'Polygon', coordinates: [
+  [[40,53],[42,53],[42,55],[40,55],[40,53]],
+  [[40.5,53.25],[41,53.25],[41,54],[40.5,54],[40.5,53.25]],
+]};
+assert.equal(geojsonLocation([40.75,53.5], donut), 'outside', 'polygon holes must remain outside');
+assert.equal(geojsonLocation([40,54], donut), 'boundary', 'exact contour probes are ambiguous');
+assert.equal(geojsonLocation([41.5,54], donut), 'inside');
+assert.equal(geojsonLocation([179,15], {type:'Polygon',coordinates:[
+  [[170,10],[-170,10],[-170,20],[170,20],[170,10]],
+]}), 'inside', 'antimeridian crossing must not become a world-spanning polygon');
+assert.equal(geojsonLocation([0,15], {type:'Polygon',coordinates:[
+  [[170,10],[-170,10],[-170,20],[170,20],[170,10]],
+]}), 'outside');
+assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[
+  {type:'Point',coordinates:[40,53]},donut,
+]}), 'inside', 'nested geometry must retain polygon containment');
+console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
