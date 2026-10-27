@@ -119,10 +119,15 @@ async function fetchJsonOnce(url) {
     const payload = normalizePayload(await response.json());
     // Match the MVT path: internal edges between adjacent source features are
     // not national boundaries and must not enter a whole-state comparison.
-    if (payload.features.every(feature => geometryToMultiPolygon(feature.geometry).length)) {
+    // A mixed NextGIS export can include valid polity polygons alongside
+    // point labels or line annotations. Those auxiliary features must not
+    // disable polygon dissolution OR erase the original named source records:
+    // the latter are required to scope Moscow/Tsardom/USSR comparisons.
+    const polygonParts = payload.features.map(feature => geometryToMultiPolygon(feature.geometry))
+      .filter(polygons => polygons.length);
+    if (polygonParts.length) {
       let merged = [];
-      for (const feature of payload.features) {
-        const polygons = geometryToMultiPolygon(feature.geometry);
+      for (const polygons of polygonParts) {
         merged = merged.length ? polygonClipping.union(merged, polygons) : polygons;
       }
       return {type: 'FeatureCollection', referenceSourceFeatures: payload.features, features: [{type: 'Feature',
@@ -130,7 +135,9 @@ async function fetchJsonOnce(url) {
           sourceProperties: payload.features.map(feature => feature.properties)},
         geometry: {type: 'MultiPolygon', coordinates: merged}}]};
     }
-    return payload;
+    // Even line-only references must retain source identities. The downstream
+    // validator will reject unusable borders; do not silently mark them passed.
+    return {...payload, referenceSourceFeatures: payload.features};
   } finally {
     clearTimeout(timer);
   }
@@ -140,6 +147,8 @@ function geometryToMultiPolygon(geometry) {
   if (!geometry) return [];
   if (geometry.type === 'Polygon') return [geometry.coordinates];
   if (geometry.type === 'MultiPolygon') return geometry.coordinates;
+  if (geometry.type === 'GeometryCollection') return Array.isArray(geometry.geometries)
+    ? geometry.geometries.flatMap(geometryToMultiPolygon) : [];
   return [];
 }
 
