@@ -32,6 +32,40 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
   return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
 });
 
+// Require the actual visible WebGL surface, not an arbitrary canvas that
+// might belong to the flat view during the projection transition.
+const waitForGlobeCanvas = async stage => {
+  try {
+    await page.waitForFunction(() => {
+      const canvas = document.querySelector('canvas[data-territory-globe="true"]');
+      if (!canvas) return false;
+      const rect = canvas.getBoundingClientRect();
+      const style = getComputedStyle(canvas);
+      return canvas.isConnected && canvas.width > 300 && canvas.height > 200
+        && rect.width > 300 && rect.height > 200
+        && style.visibility === 'visible' && style.display !== 'none';
+    }, null, {timeout: 8000});
+  } catch (error) {
+    const canvases = await page.evaluate(() => [...document.querySelectorAll('canvas')].map(canvas => {
+      const rect = canvas.getBoundingClientRect();
+      const style = getComputedStyle(canvas);
+      const gl = canvas.dataset.territoryGlobe === 'true' ? canvas.getContext('webgl2') : null;
+      return {
+        globe: canvas.dataset.territoryGlobe === 'true',
+        flat: canvas.dataset.territoryFlatMap === 'true',
+        connected: canvas.isConnected,
+        buffer: [canvas.width, canvas.height],
+        rect: [Math.round(rect.width), Math.round(rect.height)],
+        display: style.display,
+        visibility: style.visibility,
+        hostVisibility: canvas.parentElement ? getComputedStyle(canvas.parentElement).visibility : null,
+        contextLost: gl ? gl.isContextLost() : null
+      };
+    })).catch(e => ({diagnosticError: String(e)}));
+    throw new Error(`Globe canvas not ready at ${stage}: ${JSON.stringify(canvases)}`, {cause: error});
+  }
+};
+
 const waitForHistoryStateStatus = async () => {
   await page.waitForFunction(() => {
     const text = document.body?.innerText || '';
@@ -54,6 +88,7 @@ try {
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200);
   }, null, { timeout: 30000 });
   await page.waitForTimeout(4500);
+  await waitForGlobeCanvas('initial load');
   await page.waitForFunction(visibleCountryLabel, null, { timeout: 5000 });
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
   await waitForHistoryStateStatus();
@@ -145,10 +180,17 @@ try {
   await page.getByRole('button', {name: 'Рельеф', exact: true}).click();
   await page.getByRole('button', {name: 'Показать глобус'}).click();
   if (await flatCanvas.count()) throw new Error('Planar canvas persisted after switching to globe');
-  await page.waitForFunction(() => {
-    const canvas = document.querySelector('canvas');
-    return Boolean(canvas&&canvas.width>300&&canvas.height>200);
-  }, null, {timeout: 8000});
+  await waitForGlobeCanvas('first 2D to 3D return');
+
+  // Exercise the same visibility-only transition repeatedly: the WebGL
+  // surface must remain attached, visible, and correctly sized each time.
+  for (let cycle = 1; cycle <= 3; cycle++) {
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await flatCanvas.waitFor({state: 'visible', timeout: 10000});
+    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    if (await flatCanvas.count()) throw new Error(`Planar canvas persisted after cycle ${cycle}`);
+    await waitForGlobeCanvas(`repeat 2D to 3D cycle ${cycle}`);
+  }
 
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
 
