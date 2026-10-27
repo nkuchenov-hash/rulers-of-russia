@@ -328,12 +328,12 @@ function buildCoastIndex() {
 function politicalBorderSamples(payload, coastIndex) {
   // This metric compares exterior polity boundaries. Fill the ignored holes
   // before dissolving, so islands inside those holes cannot reappear as borders.
-  const polygons = [], lines = [];
+  const polygons = [];
   const collect = geometry => {
     if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
     else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
-    else if (geometry?.type === 'GeometryCollection') geometry.geometries.forEach(collect);
-    else if (geometry) lines.push({type: 'Feature', geometry, properties: {}});
+    else if (geometry?.type === 'GeometryCollection') (geometry.geometries ?? []).forEach(collect);
+    // Point/line annotations are never a territorial exterior.
   };
   payloadFeatures(payload).forEach(f => collect(f.geometry));
   // Political territory is an area. Auxiliary line annotations in a mixed
