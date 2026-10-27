@@ -53,6 +53,7 @@ try {
   let requestedDegenerateRecovery = false;
   let requestedDegenerateJson = false;
   let requestedSecondJson = false;
+  let requestedMalformedSourceRecovery = false;
   globalThis.fetch = async input => {
     const url = new URL(input);
     if (url.pathname === '/api/resource/2/0/0/0.mvt') {
@@ -86,6 +87,7 @@ try {
       return Response.json({type: 'FeatureCollection', features: [feature(geometry)]});
     }
     if (url.pathname === '/api/resource/7/feature/') {
+      requestedMalformedSourceRecovery = true;
       return Response.json([
         {id: 701, geom: geometry, fields: {name: 'Россия', cat: 767}},
         {id: 702, geom: {type: 'Point', coordinates: [37, 55]},
@@ -122,6 +124,22 @@ try {
       [[4000000, 7000000], [4001000, 7000000], [4001000, 7001000],
         [4000000, 7001000], [4000000, 7000000]],
     ]})],
+  }));
+  // A stale cache can have a valid merged border but an unclosed hole in
+  // an original named polity polygon. Source scoping would later consume that
+  // malformed original feature, bypassing the merged-border validation.
+  const staleSourceCachePath = path.join(fixture, 'tmp/runivers-regression/reference-cache/7.geojson');
+  const malformedSourcePolygon = {type: 'Polygon', coordinates: [
+    geometry.coordinates[0],
+    [[30.2, 50.2], [30.4, 50.2], [30.4, 50.4], [30.2, 50.4]],
+  ]};
+  fs.writeFileSync(staleSourceCachePath, JSON.stringify({
+    type: 'FeatureCollection',
+    features: [feature(geometry)],
+    referenceSourceFeatures: [{
+      type: 'Feature', id: 799, geometry: malformedSourcePolygon,
+      properties: {name: 'Россия', cat: 767},
+    }],
   }));
   await import('./runivers-fetch-cache.mjs');
   const response = await fetch('https://example.invalid/api/resource/1/geojson');
@@ -176,6 +194,8 @@ try {
     assert.deepEqual(scopedMixed.payload.features[0].geometry.coordinates, [geometry.coordinates],
       'scoped border must match the Russian polygon, not the adjacent polity or annotations');
   }
+  assert.equal(requestedMalformedSourceRecovery, true,
+    'a valid cached merged border must not hide an invalid original source ring');
   for (const id of [3, 4, 5]) {
     const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
     assert.equal(response.status, 200, await response.clone().text());
@@ -185,7 +205,7 @@ try {
     assert.equal(recovered.referenceSourceFeatures.length, 1);
     assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
   }
-  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, nested projected features, mixed-source scoping and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
