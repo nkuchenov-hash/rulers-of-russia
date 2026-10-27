@@ -64,7 +64,10 @@ export function HistoricalTerritoryFlatMap({
 
     // All camera actions affect the two-dimensional plane, not a second globe.
     const scale=Math.min(width/TWO_PI,height/Math.PI)*camera.zoom;
-    const tx=width/2+camera.dx,ty=height/2+camera.dy;
+    // Center both longitude and latitude on the selected Russian period.
+    // The equirectangular map itself remains north-up: pan the projected
+    // y-origin instead of rotating the terrestrial latitude axis.
+    const tx=width/2+camera.dx,ty=height/2+camera.dy+scale*focus[1]*Math.PI/180;
     const projection=geoEquirectangular()
       .rotate([-focusLon,0])
       .translate([tx,ty])
