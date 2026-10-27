@@ -148,3 +148,32 @@ export function diagnoseEarlyRussiaHotspots({
       };
     });
 }
+
+// Attribute the *actual* worst boundary samples in each failed comparison.
+// Fixed hotspot coordinates from an earlier run may no longer lie on the
+// current scoped reference boundary (especially after source-scope changes).
+// Keep both directions: reference-to-History and History-to-reference can
+// identify entirely different missing or extra territorial components.
+// This is diagnostic-only; no distance threshold or geometry is modified.
+export function diagnoseFailedBoundarySamples({
+  referenceSamples = [], currentSamples = [], referencePayload, historyPayload,
+  selectedSourceFeatures = [], excludedSourceFeatures = [],
+}) {
+  const annotate = (samples, sampledBoundary) => (samples ?? []).slice(0, 3)
+    .filter(sample => Array.isArray(sample?.lonLat) && sample.lonLat.length === 2
+      && sample.lonLat.every(Number.isFinite) && Number.isFinite(sample.distanceMeters))
+    .map(sample => ({
+      sampledBoundary,
+      lonLat: sample.lonLat,
+      distanceMeters: sample.distanceMeters,
+      scopedReferenceLocation: geojsonLocation(sample.lonLat, referencePayload),
+      historyLocation: geojsonLocation(sample.lonLat, historyPayload),
+      selectedSourceRecords: sourceRecordsAtPoint(sample.lonLat, selectedSourceFeatures),
+      excludedSourceRecords: sourceRecordsAtPoint(sample.lonLat, excludedSourceFeatures),
+      diagnosticOnly: true,
+    }));
+  return [
+    ...annotate(referenceSamples, 'runivers-reference'),
+    ...annotate(currentSamples, 'history-core'),
+  ];
+}
