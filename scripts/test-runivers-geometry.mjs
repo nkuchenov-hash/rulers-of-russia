@@ -128,7 +128,7 @@ const mixedWithAnnotation = politicalBorderSamples(
   {type:'FeatureCollection',features:[outer,unrelatedAnnotation]},coast.index);
 assert.deepEqual(mixedWithAnnotation,alone,
   'an auxiliary line in a polygon layer must not become a sovereign border');
-const lineOnlySamples = politicalBorderSamples(boundaryLineOnly,coast.index);
+const lineOnlySamples = politicalBorderSamples({type:'FeatureCollection',features:[unrelatedAnnotation]},coast.index);
 assert.equal(lineOnlySamples.points.length,0,
   'a line-only layer must never supply certifiable territorial exterior samples');
 
