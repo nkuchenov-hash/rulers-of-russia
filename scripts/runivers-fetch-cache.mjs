@@ -203,9 +203,8 @@ async function fetchVectorTile(host, id) {
             );
             if (classification.hasPolygon) hasPolygon = true;
           }
-          if (hasPolygon) break;
         }
-        if (!hasPolygon) throw new Error('z=0 MVT contains no polygon features');
+        if (!hasPolygon) throw new Error('z=0 MVT contains no usable polygon features');
         return {tile, transport: candidate.kind};
       } catch (error) {
         errors.push(`${candidate.kind} attempt ${attempt}: ${error?.message ?? error}`);
