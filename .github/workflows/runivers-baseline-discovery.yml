@@ -10,6 +10,7 @@ on:
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
       - 'scripts/runivers-reference-scope.mjs'
+      - 'scripts/runivers-hotspot-diagnostics.mjs'
       - 'scripts/history-archive-component-exclusions.mjs'
       - 'scripts/test-history-component-exclusions.mjs'
       - 'scripts/runivers-regression-shard-runner.mjs'
