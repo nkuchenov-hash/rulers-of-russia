@@ -19,6 +19,18 @@ const tsardomNames = new Set([...moscowNames, 'Русское царство', '
 const sovietAdditions = new Set(['369:1922-12-30','731:1922-12-30',
   '578:1924-10-27','709:1945-08-02','713:1945-09-02',
   '710:1945-06-29','205:1944-09-19']);
+// GeoJSON permits nested GeometryCollections. The reference validator accepts
+// their polygons, so polity scoping must not silently discard those borders.
+// Non-polygon members are not sovereign areas and are intentionally ignored.
+function polygonsFromGeometry(geometry) {
+  if (!geometry) return [];
+  if (geometry.type === 'Polygon') return [geometry.coordinates];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates ?? [];
+  if (geometry.type === 'GeometryCollection') return Array.isArray(geometry.geometries)
+    ? geometry.geometries.flatMap(polygonsFromGeometry) : [];
+  return [];
+}
+
 export function referenceForPolity(payload, polityId) {
   const names = polityId === 'grand-moscow' ? moscowNames
     : polityId === 'russian-tsardom' ? tsardomNames
@@ -33,8 +45,7 @@ export function referenceForPolity(payload, polityId) {
       && !p.name && Number(p.status) === 6 && sovietAdditions.has(`${p.cat}:${p.lwdate}`));
   });
   if (!selected.length) throw new Error(`Runivers layer has no named ${label} polity; source scope needs review`);
-  const polygons = selected.flatMap(f => f.geometry?.type === 'Polygon' ? [f.geometry.coordinates]
-    : f.geometry?.type === 'MultiPolygon' ? f.geometry.coordinates : []);
+  const polygons = selected.flatMap(f => polygonsFromGeometry(f.geometry));
   if (!polygons.length) throw new Error(`Named ${label} reference contains no polygon geometry`);
   return {
     payload: {type: 'FeatureCollection', features: [{type: 'Feature',
