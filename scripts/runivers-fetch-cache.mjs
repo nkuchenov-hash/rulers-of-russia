@@ -318,7 +318,12 @@ if (fs.existsSync(discoveryFile)) {
               && geometryLooksWgs84(cached)
               && geometryLooksWgs84({features: cached.referenceSourceFeatures})
               && requireUsableReferenceGeometry(cached, `${id} cached reference`).hasPolygon
-              && cached.referenceSourceFeatures.some(feature => geometryToMultiPolygon(feature.geometry).length)) {
+              // A valid dissolved border cannot excuse malformed source rings:
+              // scoping by polity later uses these ORIGINAL features, not only
+              // the merged polygon. Recheck all source rings before cache reuse.
+              && requireUsableReferenceGeometry({
+                type: 'FeatureCollection', features: cached.referenceSourceFeatures,
+              }, `${id} cached source features`).hasPolygon) {
               return {file};
             }
           } catch { /* Refresh obsolete or incomplete reference caches. */ }
