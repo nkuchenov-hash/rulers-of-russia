@@ -368,6 +368,31 @@ assert.equal(geojsonLocation([41.5,54], {type:'Polygon',coordinates:[
 ]}), 'unavailable', 'collinear rings cannot establish sovereign area');
 assert.equal(geojsonLocation([NaN,54], donut), 'unavailable', 'invalid probe coordinates are not outside');
 
+// A malformed interior ring invalidates the entire source polygon, not only
+// probes that happen to fall inside the outer ring. A second malformed hole
+// must not be hidden by an earlier valid hole containing the probe.
+const brokenHole = [[40.2,53.2],[40.4,53.2],[40.4,53.4]];
+const brokenDonut = {type:'Polygon',coordinates:[
+  [[40,53],[42,53],[42,55],[40,55],[40,53]], brokenHole,
+]};
+assert.equal(geojsonLocation([45,54], brokenDonut), 'unavailable',
+  'outside an otherwise valid exterior cannot hide an invalid hole');
+assert.equal(geojsonLocation([41.5,54], brokenDonut), 'unavailable',
+  'inside an exterior cannot hide an invalid hole');
+const brokenSecondHole = {type:'Polygon',coordinates:[
+  [[40,53],[42,53],[42,55],[40,55],[40,53]],
+  [[40.5,53.25],[41,53.25],[41,54],[40.5,54],[40.5,53.25]],
+  brokenHole,
+]};
+assert.equal(geojsonLocation([40.75,53.5], brokenSecondHole), 'unavailable',
+  'an earlier valid hole containing the probe cannot hide a later malformed hole');
+assert.equal(geojsonLocation([45,54], donut), 'outside',
+  'valid polygon holes still allow a definitive exterior result');
+assert.equal(geojsonLocation([45,54], {type:'MultiPolygon',coordinates:[
+  donut.coordinates,brokenDonut.coordinates,
+]}), 'unavailable', 'an invalid sibling polygon cannot hide behind a valid exterior');
+
+
 console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
 
 
