@@ -45,12 +45,17 @@ export function referenceForPolity(payload, polityId) {
       && !p.name && Number(p.status) === 6 && sovietAdditions.has(`${p.cat}:${p.lwdate}`));
   });
   if (!selected.length) throw new Error(`Runivers layer has no named ${label} polity; source scope needs review`);
+  // Keep the original selected/excluded source records in memory for research
+  // attribution. The public regression report receives only identifiers,
+  // never the licensed reference geometry itself.
+  const excluded = features.filter(f => !selected.includes(f));
   const polygons = selected.flatMap(f => polygonsFromGeometry(f.geometry));
   if (!polygons.length) throw new Error(`Named ${label} reference contains no polygon geometry`);
   return {
     payload: {type: 'FeatureCollection', features: [{type: 'Feature',
       properties: {sourceProperties: selected.map(f => f.properties)},
       geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}}]},
+    sourceFeatures: {selected, excluded},
     scope: {kind: 'named-polity', polityId, selectedFeatures: selected.length, totalFeatures: features.length,
       selectedNames: [...new Set(selected.map(f => f.properties.name ?? null))],
       selectedSourceCats: [...new Set(selected.map(f => f.properties.cat).filter(x => x != null))],
