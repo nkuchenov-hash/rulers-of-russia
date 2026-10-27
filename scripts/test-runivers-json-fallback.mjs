@@ -32,7 +32,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5, 6, 7, 8].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6, 7, 8, 9].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -54,6 +54,8 @@ try {
   let requestedDegenerateJson = false;
   let requestedSecondJson = false;
   let requestedMalformedSourceRecovery = false;
+  let requestedForeignHostRecovery = false;
+  let requestedWrongResourceRecovery = false;
   globalThis.fetch = async input => {
     const url = new URL(input);
     if (url.pathname === '/api/resource/2/0/0/0.mvt') {
@@ -96,6 +98,7 @@ try {
       ]);
     }
     if (url.pathname === '/api/resource/8/feature/') {
+      requestedForeignHostRecovery = true;
       return Response.json([
         {id: 801, geom: {type: 'GeometryCollection', geometries: [
           {type: 'Point', coordinates: [37, 55]}, geometry]},
@@ -103,6 +106,10 @@ try {
         {id: 802, geom: {type: 'LineString', coordinates: [[34, 55], [35, 55]]},
           fields: {name: 'auxiliary line', cat: 914}},
       ]);
+    }
+    if (url.pathname === '/api/resource/9/feature/') {
+      requestedWrongResourceRecovery = true;
+      return Response.json([{id: 901, geom: geometry, fields: {name: 'Россия', cat: 767}}]);
     }
     if (url.pathname === '/api/resource/1/feature/') {
       requestedGeojson = url.searchParams.get('geom_format') === 'geojson' && url.searchParams.get('srs') === '4326';
@@ -141,12 +148,30 @@ try {
       properties: {name: 'Россия', cat: 767},
     }],
   }));
+  // A geometrically valid cache is still untrustworthy when its source
+  // server or numeric resource ID differs from the active discovery.
+  // Neither case may silently replace an independent dated reference.
+  const cacheDir = path.join(fixture, 'tmp/runivers-regression/reference-cache');
+  for (const [id, provenance] of [
+    [8, {host: 'https://different.invalid', resourceId: 8}],
+    [9, {host: 'https://example.invalid', resourceId: 999}],
+  ]) {
+    fs.writeFileSync(path.join(cacheDir, `${id}.geojson`), JSON.stringify({
+      type: 'FeatureCollection',
+      referenceCacheProvenance: provenance,
+      features: [feature(geometry)],
+      referenceSourceFeatures: [{...feature(geometry), id: 899}],
+    }));
+  }
   await import('./runivers-fetch-cache.mjs');
   const response = await fetch('https://example.invalid/api/resource/1/geojson');
   assert.equal(response.status, 200, await response.clone().text());
   assert.equal(requestedGeojson, true, 'NextGIS otherwise defaults to WKT');
   const data = await response.json();
   assert.equal(data.features.length, 1);
+  assert.deepEqual(data.referenceCacheProvenance,
+    {host: 'https://example.invalid', resourceId: 1},
+    'newly fetched reference must retain its host and resource provenance');
   assert.deepEqual(data.referenceSourceFeatures.map(f => f.geometry), [geometry, adjacent]);
   assert.deepEqual(data.referenceSourceFeatures.map(f => f.properties.name), ['Россия', 'adjacent']);
   assert.deepEqual(data.referenceSourceFeatures.map(f => f.id), [101, 102],
@@ -196,6 +221,15 @@ try {
   }
   assert.equal(requestedMalformedSourceRecovery, true,
     'a valid cached merged border must not hide an invalid original source ring');
+  assert.equal(requestedForeignHostRecovery, true,
+    'valid polygons cached from another NextGIS host must be fetched again');
+  assert.equal(requestedWrongResourceRecovery, true,
+    'valid polygons tagged with another resource ID must be fetched again');
+  const corrected = await fetch('https://example.invalid/api/resource/9/geojson');
+  assert.equal(corrected.status, 200);
+  const correctedPayload = await corrected.json();
+  assert.deepEqual(correctedPayload.referenceSourceFeatures.map(f => f.id), [901],
+    'stale foreign-resource source identities must not survive cache refresh');
   for (const id of [3, 4, 5]) {
     const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
     assert.equal(response.status, 200, await response.clone().text());
@@ -205,7 +239,7 @@ try {
     assert.equal(recovered.referenceSourceFeatures.length, 1);
     assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
   }
-  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
