@@ -61,9 +61,24 @@ try {
     assert(metrics.buttons.every(box => box.left >= -1 && box.right <= width + 1),
       `mobile ${width}: top actions clipped: ${JSON.stringify(metrics)}`);
 
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    const flat = page.locator('canvas[data-territory-flat-map="true"]');
+    await flat.waitFor({state: 'visible', timeout: 10000});
+    await page.waitForFunction(() => {
+      const node=document.querySelector('canvas[data-territory-flat-map="true"]');
+      return node?.width > 300 && node?.height > 100 && node?.dataset.historyMonth === '1581-07';
+    }, null, {timeout: 15000});
+    const mapBounds = await flat.boundingBox();
+    assert(mapBounds && mapBounds.width >= width - 1,
+      `mobile ${width}: flat map fails to fill the viewport: ${JSON.stringify(mapBounds)}`);
+    assert(await page.getByRole('button', {name: 'Показать глобус'}).isVisible(),
+      `mobile ${width}: cannot switch back to globe`);
+
     const month = page.getByLabel('Месяц');
     await month.selectOption('8');
     await page.waitForFunction(() => (document.body?.innerText || '').includes('History Core 1581-08'), null, {timeout: 30000});
+    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1581-08', null, {timeout: 12000});
+    await page.getByRole('button', {name: 'Показать глобус'}).click();
     assert.equal(errors.length, 0, `mobile ${width}: page errors ${errors.join('; ')}`);
     console.log(`Mobile territory ${width}px passed:`, JSON.stringify(metrics));
     await page.close();
