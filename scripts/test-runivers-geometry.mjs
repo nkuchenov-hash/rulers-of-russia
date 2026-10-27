@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
@@ -11,6 +11,23 @@ assert.ok(distanceToIndex([109.10588, 53.93523], coast.index) < 100000, 'Baikal 
 const points = [[40, 50], [41, 50], [42, 50]];
 const same = comparePoliticalGeometry({points, allCount: 3}, {points, allCount: 3}, {hasPolygon: true, types: ['Polygon']});
 assert.equal(same.symmetricMaxMeters, 0);
+// A valid Runivers polygon does not imply a usable bilateral comparison.
+// In a multi-layer shard, silently skipping a coast-masked History Core state
+// could allow other layers to hide this missing geographic evidence.
+assert.throws(() => requireComparablePoliticalGeometry(
+  {points: [[40, 50]], allCount: 1},
+  {points: [], allCount: 0},
+  {hasPolygon: true, types: ['Polygon']},
+), /No bilateral political-border comparison: 1 Runivers inland samples and 0 History Core inland samples/);
+assert.throws(() => requireComparablePoliticalGeometry(
+  {points: [], allCount: 0},
+  {points: [[40, 50]], allCount: 1},
+  {hasPolygon: true, types: ['Polygon']},
+), /No bilateral political-border comparison: 0 Runivers inland samples and 1 History Core inland samples/);
+assert.equal(requireComparablePoliticalGeometry(
+  {points, allCount: 3}, {points, allCount: 3},
+  {hasPolygon: true, types: ['Polygon']},
+).symmetricMaxMeters, 0, 'complete bilateral sampling must still pass');
 const extra = [...points, [60, 50]];
 const mismatch = comparePoliticalGeometry({points, allCount: 3}, {points: extra, allCount: 4}, {hasPolygon: true, types: ['Polygon']});
 assert.ok(mismatch.currentToReferenceMaxMeters > 1000000, 'extra distant boundaries must still fail');

@@ -406,6 +406,18 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
   };
 }
 
+// A reference can have valid polygons but zero comparable inland border
+// samples on the History Core side (for example after coast masking). Do not
+// silently skip that layer: another successful layer could otherwise hide
+// incomplete independent geographic coverage in the aggregate audit.
+function requireComparablePoliticalGeometry(reference, current, referenceClass) {
+  const metric = comparePoliticalGeometry(reference, current, referenceClass);
+  if (!metric.usable) {
+    throw new Error(`No bilateral political-border comparison: ${metric.referenceSamples} Runivers inland samples and ${metric.currentSamples} History Core inland samples`);
+  }
+  return metric;
+}
+
 function toleranceMeters(year, referenceApproximate) {
   if (referenceApproximate) return 100000;
   if (year < 1700) return 50000;
@@ -547,15 +559,21 @@ async function main() {
           continue;
         }
       }
-      hasUsableScopedReference = true;
       const approximate = scoped.approximate;
       let currentSamples = historySamplesCache.get(state.geometryFile);
       if (!currentSamples) {
         currentSamples = politicalBorderSamples(loadHistoryGeometry(state), coast.index);
         historySamplesCache.set(state.geometryFile, currentSamples);
       }
-      const metric = comparePoliticalGeometry(scoped.samples, currentSamples, classification);
-      if (!metric.usable) continue;
+      let metric;
+      try {
+        metric = requireComparablePoliticalGeometry(scoped.samples, currentSamples, classification);
+      } catch (error) {
+        referenceFailures.push({layer, polityId: state.polityId,
+          historyGeometryFile: state.geometryFile, error: error.message});
+        continue;
+      }
+      hasUsableScopedReference = true;
       const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
       const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
       const override = overrideFor(overrides, state, layer.id);
@@ -648,7 +666,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
+export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
