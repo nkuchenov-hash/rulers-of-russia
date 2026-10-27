@@ -110,6 +110,34 @@ try {
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, { timeout: 8000 });
   await waitForHistoryStateStatus();
 
+  const flatButton = page.getByRole('button', {name: 'Показать плоскую карту'});
+  await flatButton.click();
+  const flatCanvas = page.locator('canvas[data-territory-flat-map="true"]');
+  await flatCanvas.waitFor({state: 'visible', timeout: 10000});
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
+    return canvas?.width > 300 && canvas?.height > 200
+      && canvas.dataset.historyMonth === '1992-02';
+  }, null, {timeout: 15000});
+  const zoomBefore = Number(await flatCanvas.getAttribute('data-camera-zoom'));
+  await page.getByRole('button', {name: '+', exact: true}).click();
+  await page.waitForFunction(oldZoom => {
+    const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
+    return Number(canvas?.dataset.cameraZoom) > oldZoom;
+  }, zoomBefore, {timeout: 8000});
+
+  // The flat view must use the same month-resolved Russian polygon as the globe.
+  await monthSelect.selectOption('3');
+  await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1992-03', null, {timeout: 12000});
+  await page.getByRole('button', {name: 'Государства', exact: true}).click();
+  await page.getByRole('button', {name: 'Рельеф', exact: true}).click();
+  await page.getByRole('button', {name: 'Показать глобус'}).click();
+  if (await flatCanvas.count()) throw new Error('Planar canvas persisted after switching to globe');
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('canvas');
+    return Boolean(canvas&&canvas.width>300&&canvas.height>200);
+  }, null, {timeout: 8000});
+
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
 
   await zoomIn.click();
