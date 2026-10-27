@@ -22,9 +22,19 @@ try {
       // Force overlapping requests to expose excessive parallelism.
       await new Promise(resolve => setTimeout(resolve, 3));
       active -= 1;
-      const ok = !process.env.TEST_OUTAGE
-        && String(url).includes('/api/component/feature_layer/mvt')
-        && (!process.env.TEST_FIRST_RESOURCE_DOWN || String(url).includes('resource=2'));
+      const address = String(url);
+      const requested = process.env.TEST_ONLY_TRANSPORT;
+      const transportMatches = requested === 'feature'
+        ? address.includes('/feature/?srs=4326&geom_format=geojson') && !address.includes('limit=')
+        : requested === 'export'
+          ? address.includes('/export?format=GeoJSON&srs=4326&zipped=False&fid=ngw_id&encoding=UTF-8')
+          : requested === 'geojson'
+            ? address.endsWith('/geojson')
+            : address.includes('/api/component/feature_layer/mvt');
+      const resourceId = address.match(/\\/api\\/resource\\/(\\d+)\\//)?.[1]
+        ?? new URL(address).searchParams.get('resource');
+      const ok = !process.env.TEST_OUTAGE && transportMatches
+        && (!process.env.TEST_FIRST_RESOURCE_DOWN || resourceId === '2');
       return {ok, body: {cancel: async () => { cancelled += 1; }}};
     };
   `);
@@ -134,6 +144,17 @@ try {
   assert.equal(firstDown.status, 0, firstDown.stderr);
   assert.match(firstDown.stdout, /responsive resource 2/, 'the second layer must recover a shard with a failed first layer');
   assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'a recovered shard must not mutate canonical data');
+  // A complete outage is only real when EVERY transport the fetcher uses is
+  // unavailable. Earlier preflight omitted export and /geojson, and its
+  // feature URL added a limit parameter not used by the actual fetcher.
+  for (const transport of ['feature', 'export', 'geojson']) {
+    const fallback = run({TEST_ONLY_TRANSPORT: transport, TEST_FIRST_RESOURCE_DOWN: '1'});
+    assert.equal(fallback.status, 0, `${transport}: ${fallback.stderr}`);
+    assert.match(fallback.stdout, /responsive resource 2/,
+      `${transport}: later resource with a usable fallback must prevent a false outage`);
+    assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical,
+      `${transport}: fallback preflight must not modify canonical history`);
+  }
   assert.equal(run({TEST_OUTAGE: '1'}).status, 1);
   const stats = JSON.parse(fs.readFileSync(path.join(fixture, 'probe-stats.json')));
   assert.ok(stats.requests >= 6, 'a total outage must probe all available transports and resources');
@@ -160,7 +181,7 @@ try {
   assert.equal(earlyShard.months.length, 12);
   fs.writeFileSync(canonicalPath, canonical);
   fs.writeFileSync(discoveryPath, originalDiscovery);
-  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component fallback, first-layer recovery, canonical isolation, full-state transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
+  console.log('Runivers shard tests passed: bounded preflight concurrency, released probe bodies, component/JSON/export fallback parity, first-layer recovery, canonical isolation, full-state transition exclusion, missing-month/whole-year rejection, early-year keys, failure propagation, stale-report removal, total outage.');
 } finally {
   fs.rmSync(fixture, {recursive: true, force: true});
 }
