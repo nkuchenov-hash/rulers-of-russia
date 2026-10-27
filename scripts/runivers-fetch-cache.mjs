@@ -311,7 +311,16 @@ if (fs.existsSync(discoveryFile)) {
         if (fs.existsSync(file)) {
           try {
             const cached = JSON.parse(fs.readFileSync(file, 'utf8'));
-            if (Array.isArray(cached.referenceSourceFeatures) && cached.referenceSourceFeatures.length) return {file};
+            // A nonempty source-feature list is not proof that a cache has a
+            // usable WGS84 boundary. Revalidate cached and original geometry:
+            // stale/incomplete files must not bypass today's reference checks.
+            if (Array.isArray(cached.referenceSourceFeatures) && cached.referenceSourceFeatures.length
+              && geometryLooksWgs84(cached)
+              && geometryLooksWgs84({features: cached.referenceSourceFeatures})
+              && requireUsableReferenceGeometry(cached, `${id} cached reference`).hasPolygon
+              && cached.referenceSourceFeatures.some(feature => geometryToMultiPolygon(feature.geometry).length)) {
+              return {file};
+            }
           } catch { /* Refresh obsolete or incomplete reference caches. */ }
         }
         const payload = await fetchLayer(host, id);
