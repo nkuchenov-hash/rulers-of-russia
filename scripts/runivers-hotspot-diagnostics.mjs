@@ -78,13 +78,14 @@ function ringLocation(point, ring) {
 function polygonLocation(point, rings) {
   if (!Array.isArray(rings) || !rings.length) return 'unavailable';
   const exterior = ringLocation(point, rings[0]);
-  if (exterior !== 'inside' && exterior !== 'boundary') return exterior;
-  for (const hole of rings.slice(1)) {
-    const location = ringLocation(point, hole);
-    if (location === 'unavailable') return 'unavailable';
-    if (location === 'boundary') return 'boundary';
-    if (location === 'inside') return 'outside';
-  }
+  // Validate every interior ring even when this particular probe is outside
+  // the exterior or already inside another hole. Otherwise malformed holes
+  // can be misreported as definitive "outside" rather than "unavailable".
+  const holeLocations = rings.slice(1).map(hole => ringLocation(point, hole));
+  if (exterior === 'unavailable' || holeLocations.includes('unavailable')) return 'unavailable';
+  if (exterior === 'outside') return 'outside';
+  if (holeLocations.includes('boundary')) return 'boundary';
+  if (holeLocations.includes('inside')) return 'outside';
   return exterior;
 }
 
