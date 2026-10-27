@@ -1,7 +1,7 @@
 'use client';
 
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
-import {geoArea,geoCentroid,geoEquirectangular} from 'd3-geo';
+import {geoArea,geoCentroid,geoEquirectangular,geoPath} from 'd3-geo';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {CSS2DObject,CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
@@ -12,6 +12,7 @@ import {POLITY_TRANSITION_YEARS,TERRITORY_MAX_YEAR,TERRITORY_MIN_YEAR,territoryP
 import {TERRITORY_PLACES} from './territoryPlaces';
 import styles from './territory-webgl.module.css';
 import {HistoricalTerritoryFlatMap} from './HistoricalTerritoryFlatMap';
+import {fillProjectedFeature} from './globeTextureFill.mjs';
 
 const TWO_PI=Math.PI*2;
 const MAX_FEATURE_AREA=2.2;
@@ -48,7 +49,35 @@ function buildRiverBuckets(collection,radius=1.00028){const buckets=[[],[],[]];f
 function buildVerifiedBoundarySegments(collection,radius=1.00062){const pos=[];for(const f of collection?.features??[])for(const line of lineStrings(f)){if(!Array.isArray(line)||line.length<2)continue;for(let i=0;i<line.length-1;i++){const a=line[i],b=line[i+1];if(!a||!b)continue;const p1=latLonVector(a[1],a[0],radius),p2=latLonVector(b[1],b[0],radius);pos.push(p1.x,p1.y,p1.z,p2.x,p2.y,p2.z)}}return pos}
 function makeWideLines(positions,color,linewidth,opacity,kind='wide',tier=null){const g=new LineSegmentsGeometry();g.setPositions(positions);const m=new LineMaterial({color,linewidth,transparent:true,opacity,depthWrite:false,depthTest:true});m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1.5;const line=new LineSegments2(g,m);line.computeLineDistances();line.userData={kind,tier};return{line,material:m,geometry:g}}
 function makeThinLines(positions,color,opacity,tier){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));const m=new THREE.LineBasicMaterial({color,transparent:true,opacity,depthWrite:false,depthTest:true});m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1;const line=new THREE.LineSegments(g,m);line.userData={kind:'river',tier};return{line,material:m,geometry:g}}
-function buildStateTexture(world,russiaFeatures,width=4096){const height=Math.round(width/2),canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d'),projection=geoEquirectangular().translate([width/2,height/2]).scale(width/(2*Math.PI)).precision(.22);ctx.clearRect(0,0,width,height);const draw=f=>{const path=new Path2D();const rings=polygonRings(f);for(const ring of rings){let started=false;for(const pt of ring){const p=projection(pt);if(!p)continue;if(!started){path.moveTo(p[0],p[1]);started=true}else path.lineTo(p[0],p[1])}path.closePath()}return path};(world?.features??[]).filter(f=>!isRussianWorldFeature(f)).forEach((f,i)=>{ctx.globalAlpha=.84;ctx.fillStyle=countryColor(f,i);ctx.fill(draw(f),'evenodd')});for(const f of russiaFeatures){ctx.globalAlpha=.94;ctx.fillStyle='#78905f';ctx.fill(draw(f),'evenodd')}ctx.globalAlpha=1;const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=true;t.needsUpdate=true;return t}
+function buildStateTexture(world, russiaFeatures, width=4096) {
+  const height = Math.round(width / 2);
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  const projection = geoEquirectangular()
+    .translate([width / 2, height / 2])
+    .scale(width / TWO_PI)
+    .precision(.22);
+  // geoPath clips polygons at ±180° and preserves holes. The former
+  // raw-vertex Path2D renderer connected Chukotka's +179°/-179° edges
+  // across the entire world texture, inventing a filled territorial band.
+  const path = geoPath(projection, ctx);
+  ctx.clearRect(0, 0, width, height);
+  (world?.features ?? []).filter(f => !isRussianWorldFeature(f))
+    .forEach((feature, i) => fillProjectedFeature(ctx, path, feature, countryColor(feature, i), .84));
+  for (const feature of russiaFeatures ?? []) {
+    fillProjectedFeature(ctx, path, feature, '#78905f', .94);
+  }
+  ctx.globalAlpha = 1;
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = true;
+  texture.needsUpdate = true;
+  return texture;
+}
 function monochromeTexture(sourceTexture,renderer,maxWidth){const image=sourceTexture.image;if(!image)return sourceTexture;const srcW=image.width||maxWidth,srcH=image.height||Math.round(srcW/2),width=Math.min(maxWidth,srcW),height=Math.max(1,Math.round(width*srcH/srcW));const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.filter='grayscale(100%) sepia(7%) saturate(46%) contrast(121%) brightness(101%)';ctx.drawImage(image,0,0,width,height);ctx.filter='none';const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=true;t.anisotropy=Math.min(16,renderer.capabilities.getMaxAnisotropy());t.needsUpdate=true;sourceTexture.dispose();return t}
 function makeCountryLabel(feature){const name=featureName(feature);if(!name)return null;const c=geoCentroid(feature);if(!Number.isFinite(c?.[0])||!Number.isFinite(c?.[1]))return null;const area=geoArea(feature);if(!Number.isFinite(area)||area<=0)return null;const el=document.createElement('div');el.textContent=name;const size=clamp(10+Math.sqrt(area)*12,11,17);el.style.cssText=`white-space:nowrap;font:600 ${size}px/1.05 Georgia,serif;letter-spacing:.025em;color:rgba(241,236,220,.84);text-shadow:0 1px 2px #061014,0 0 5px rgba(3,10,13,.9);transform:translate(-50%,-50%);pointer-events:none;user-select:none`;const obj=new CSS2DObject(el);obj.visible=false;obj.position.copy(latLonVector(c[1],c[0],1.023));obj.userData={area,kind:'country'};return obj}
 function makeCityLabel(place){const el=document.createElement('div');el.textContent=`${place.kind==='capital'?'★':'•'} ${place.name}`;el.style.cssText='white-space:nowrap;font:600 13px/1 Georgia,serif;color:#eee8d8;text-shadow:0 1px 2px #080b0b,0 0 5px #080b0b;transform:translate(8px,-50%);pointer-events:none;user-select:none';if(place.kind==='capital')el.style.color='#e2d3a8';const obj=new CSS2DObject(el);obj.visible=false;obj.position.copy(latLonVector(place.lat,place.lon,1.027));obj.userData={place,kind:'city'};return obj}
