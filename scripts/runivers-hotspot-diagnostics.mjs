@@ -45,8 +45,11 @@ function ringLocation(point, ring) {
     vertices.push([lon, coordinate[1]]);
     previousLon = lon;
   }
-  const low = Math.min(...vertices.map(p => p[0]));
-  const high = Math.max(...vertices.map(p => p[0]));
+  let low = Infinity, high = -Infinity;
+  for (const vertex of vertices) {
+    low = Math.min(low, vertex[0]);
+    high = Math.max(high, vertex[0]);
+  }
   const x = point[0] + 360 * Math.round(((low + high) / 2 - point[0]) / 360);
   const p = [x, point[1]];
   let inside = false;
