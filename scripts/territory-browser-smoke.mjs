@@ -132,7 +132,7 @@ try {
   await page.getByRole('button', {name: 'Государства', exact: true}).click();
   // Assert that the month-selected Russian territory is actually drawn in
   // the center of the atlas, not a blank ocean/equator despite a live canvas.
-  // 60E,58N (period focus for 1992) is inside Russia, in the Urals.
+  // 88E,61N (1992 Russian Federation focus) is inside Russia, in Siberia.
   const centerRgb = await flatCanvas.evaluate(canvas => {
     const ctx = canvas.getContext('2d');
     const {data} = ctx.getImageData(Math.floor(canvas.width/2), Math.floor(canvas.height/2), 1, 1);
