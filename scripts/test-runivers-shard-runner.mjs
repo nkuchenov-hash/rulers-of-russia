@@ -117,6 +117,13 @@ try {
   fs.writeFileSync(canonicalPath, canonical);
   assert.equal(run({TEST_EXIT: '1', TEST_NO_REPORT: '1'}).status, 1);
   assert.equal(fs.existsSync(reportPath), false, 'failed validator must not reuse a stale report');
+  const missingSuccessfulReport = run({TEST_EXIT: '0', TEST_NO_REPORT: '1'});
+  assert.equal(missingSuccessfulReport.status, 1,
+    'a zero-exit validator without an audit report must fail closed');
+  assert.match(missingSuccessfulReport.stderr, /validator produced no report/,
+    'missing report should be diagnosed explicitly');
+  assert.equal(fs.existsSync(reportPath), false,
+    'zero-exit validator must not leave or reuse an old audit report');
   fs.writeFileSync(reportPath, JSON.stringify({summary: {comparisons: 1}}));
   assert.equal(run({RUNIVERS_START_MONTH: 'invalid'}).status, 1);
   assert.equal(fs.existsSync(reportPath), false, 'invalid input must also remove an old report');

@@ -245,7 +245,13 @@ if (!preflight.healthy) {
   });
   if (child.error) throw child.error;
 
-  if (fs.existsSync(reportFile)) {
+  // A child that exits successfully without producing its own audit is not
+  // evidence of a successful geographic comparison. Fail closed even if the
+  // validator's exit code is zero (for example after an early return).
+  if (!fs.existsSync(reportFile)) {
+    console.error(`Runivers validator produced no report for ${startMonth}..${endMonth}; cannot certify the shard.`);
+    process.exitCode = 1;
+  } else {
     const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
     report.shard = {
       startMonth,
@@ -265,7 +271,6 @@ if (!preflight.healthy) {
       report.summary.runiversReferenceGranularity = 'year';
     }
     fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
+    process.exitCode = child.status ?? 1;
   }
-
-  process.exitCode = child.status ?? 1;
 }
