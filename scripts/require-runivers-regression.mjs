@@ -21,6 +21,32 @@ if (s.passingComparisons + s.overrides + s.failedComparisons !== s.comparisons) 
   console.error('Runivers report comparison totals are inconsistent.');
   process.exit(1);
 }
+// An evidence-backed exception is useful for explaining a disagreement, but
+// it is not an independent geometric pass. Never certify a shard by replacing
+// failed comparisons with overrides.
+if (s.overrides > 0) {
+  console.error(`Runivers verification has ${s.overrides} evidence-backed override(s); these are documented disagreements, not passing independent geometry comparisons.`);
+  process.exit(1);
+}
+
+// Runivers references are year-granular. The shard runner excludes full years
+// with within-year transitions, and the validator sees only the filtered index.
+// Without this check, a report could be green while entire transition years
+// were never compared. They require a separate dated independent check.
+if (report.shard) {
+  const {rangeMonthCount, comparedMonthCount, excludedMonthCount} = report.shard;
+  if (![rangeMonthCount, comparedMonthCount, excludedMonthCount].every(
+    count => Number.isInteger(count) && count >= 0,
+  ) || rangeMonthCount !== comparedMonthCount + excludedMonthCount) {
+    console.error('Runivers shard month coverage counters are invalid or inconsistent.');
+    process.exit(1);
+  }
+  if (excludedMonthCount > 0) {
+    console.error(`Runivers shard excluded ${excludedMonthCount}/${rangeMonthCount} months in transition/ambiguous years; year-granular comparisons cannot certify complete dated geographic coverage.`);
+    process.exit(1);
+  }
+}
+
 const usable = s.usableReferenceLayers;
 const comparisons = Number(s.comparisons ?? 0);
 const failed = Number(s.failedComparisons ?? 0);
