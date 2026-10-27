@@ -315,6 +315,11 @@ if (fs.existsSync(discoveryFile)) {
             // usable WGS84 boundary. Revalidate cached and original geometry:
             // stale/incomplete files must not bypass today's reference checks.
             if (Array.isArray(cached.referenceSourceFeatures) && cached.referenceSourceFeatures.length
+              // Numeric NextGIS resource IDs are not globally unique. A valid
+              // cached polygon from a different server is not an independent
+              // reference for this discovery. Older untagged caches fail closed.
+              && cached.referenceCacheProvenance?.host === host
+              && cached.referenceCacheProvenance?.resourceId === id
               && geometryLooksWgs84(cached)
               && geometryLooksWgs84({features: cached.referenceSourceFeatures})
               && requireUsableReferenceGeometry(cached, `${id} cached reference`).hasPolygon
@@ -328,7 +333,10 @@ if (fs.existsSync(discoveryFile)) {
             }
           } catch { /* Refresh obsolete or incomplete reference caches. */ }
         }
-        const payload = await fetchLayer(host, id);
+        const payload = {
+          ...(await fetchLayer(host, id)),
+          referenceCacheProvenance: {host, resourceId: id},
+        };
         fs.writeFileSync(file, JSON.stringify(payload));
         return {file};
       }).catch(error => ({error})));
