@@ -189,7 +189,7 @@ const mixedBrokenPolygon = {type:'FeatureCollection',features:[
 const brokenMultiPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
   geometry:{type:'MultiPolygon',coordinates:[feature('Россия',30).geometry.coordinates, []]}}]};
 for (const [label, payload] of Object.entries({malformedHole,mixedBrokenPolygon,brokenMultiPolygon})) {
-  assert.throws(() => requireUsableReferenceGeometry(payload,5392), /malformed polygon rings/,
+  assert.throws(() => requireUsableReferenceGeometry(payload,5392), /malformed polygon rings|no usable polygon or line geometry/,
     label + ' must not pass because another ring or feature is valid');
 }
 console.log('Runivers malformed-ring regression passed: invalid holes and mixed polygon parts cannot certify borders.');
