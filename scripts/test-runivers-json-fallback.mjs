@@ -29,7 +29,22 @@ const makeTile = withPolygon => {
 try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
-  fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers: [{id: 1, fromYear: 1992, toYear: 2020}, {id: 2, fromYear: 1992, toYear: 2020}]}));
+  fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
+    [1, 2, 3, 4, 5].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+  // The first 5,001 WGS84 points are valid, but the next source feature
+  // contains projected metres. A prefix-only coordinate check missed it.
+  const longLine = {type: 'MultiLineString',
+    coordinates: [Array.from({length: 5001}, (_, i) => [30 + i / 100000, 50])]};
+  const badPoint = {type: 'Point', coordinates: [4000000, 7000000]};
+  const feature = geom => ({type: 'Feature', geometry: geom, properties: {name: 'Россия'}});
+  const invalidExports = {
+    3: {type: 'FeatureCollection', features: [feature(longLine), feature(badPoint)]},
+    4: {type: 'FeatureCollection', features: [feature({type: 'Point', coordinates: [37, 55]})]},
+    5: {type: 'FeatureCollection', features: [feature(geometry),
+      feature({type: 'GeometryCollection', geometries: [
+        {type: 'GeometryCollection', geometries: [badPoint]}]})]},
+  };
+  const requestedRecovery = new Set();
   process.env.RUNIVERS_DISCOVERY_FILE = discovery;
   let requestedGeojson = false;
   let requestedComponentMvt = false;
@@ -46,6 +61,14 @@ try {
     if (url.pathname.startsWith('/api/resource/2/')) {
       requestedSecondJson = true;
       return new Response('', {status: 404});
+    }
+    const referenceId = Number(url.pathname.match(/^\/api\/resource\/(\d+)\//)?.[1]);
+    if (invalidExports[referenceId] && url.pathname.endsWith('/feature/')) {
+      return Response.json(invalidExports[referenceId]);
+    }
+    if (invalidExports[referenceId] && url.pathname.endsWith('/export')) {
+      requestedRecovery.add(referenceId);
+      return Response.json({type: 'FeatureCollection', features: [feature(geometry)]});
     }
     if (url.pathname === '/api/resource/1/feature/') {
       requestedGeojson = url.searchParams.get('geom_format') === 'geojson' && url.searchParams.get('srs') === '4326';
@@ -83,7 +106,16 @@ try {
   assert.equal(mvt.referenceSourceFeatures.length, 1);
   assert.equal(mvt.features[0].geometry.type, 'MultiPolygon');
   assert.ok(mvt.features[0].geometry.coordinates.length > 0);
-  console.log('Runivers fallbacks passed: WGS84 JSON when MVT unavailable, populated component MVT after an empty canonical MVT.');
+  for (const id of [3, 4, 5]) {
+    const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
+    assert.equal(response.status, 200, await response.clone().text());
+    assert.ok(requestedRecovery.has(id),
+      `resource ${id}: invalid/point-only first export must trigger the next WGS84 endpoint`);
+    const recovered = await response.json();
+    assert.equal(recovered.referenceSourceFeatures.length, 1);
+    assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
+  }
+  console.log('Runivers fallbacks passed: MVT alternatives, complete WGS84 coordinate scan, nested projected features and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
