@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {LineSegments2} from 'three/examples/jsm/lines/LineSegments2.js';
+import {historicalGeometryCaveat} from './historicalGeometryCaveats.mjs';
 
 // Accuracy guard for the production /territory globe.
 //
@@ -168,19 +169,27 @@ function updateAccuracyCaption(state) {
     text = text.replace(exact, replacement);
   }
 
-  const profile = uncertaintyProfile(activeMonthState(state));
+  const monthState = activeMonthState(state);
+  const caveat = historicalGeometryCaveat(selected, monthState);
+  const profile = uncertaintyProfile(monthState);
   text = text.replace(/ · неопределённость реконструкции ≈[^·]+(?= ·|$)/g, '');
   if (profile) {
     const rounded = profile.km >= 100 ? Math.round(profile.km / 10) * 10 : Math.round(profile.km);
     text += ` · неопределённость реконструкции ≈${rounded} км`;
   }
 
+  if (caveat) {
+    text = text.replace('проверенная геометрия', 'геометрия с непроверенной актуальностью');
+    text += ` · ${caveat.desktop}`;
+  }
+
   // A compact but explicit accuracy statement must remain readable on phones.
   // Never hide reconstruction uncertainty behind the desktop-only long caption.
-  const monthState = activeMonthState(state);
   const mobileParts = [];
   if (text.includes('граница России скрыта')) {
     mobileParts.push('Граница России недоступна');
+  } else if (caveat) {
+    mobileParts.push(caveat.mobile);
   } else if (monthState?.verificationClass === 'document-corroborated-reconstruction') {
     if (profile) {
       const km = profile.km >= 100 ? Math.round(profile.km / 10) * 10 : Math.round(profile.km);
@@ -198,6 +207,11 @@ function updateAccuracyCaption(state) {
   }
 
   ensureCaptionStyle();
+  if (caveat && paragraph.getAttribute('data-history-geometry-gap') !== caveat.code) {
+    paragraph.setAttribute('data-history-geometry-gap', caveat.code);
+  } else if (!caveat && paragraph.hasAttribute('data-history-geometry-gap')) {
+    paragraph.removeAttribute('data-history-geometry-gap');
+  }
   const compact = mobileParts.join(' · ');
   if (paragraph.getAttribute(MOBILE_CAPTION_ATTR) !== compact) paragraph.setAttribute(MOBILE_CAPTION_ATTR, compact);
   if (paragraph.getAttribute(CAPTION_ATTR) !== text) paragraph.setAttribute(CAPTION_ATTR, text);
