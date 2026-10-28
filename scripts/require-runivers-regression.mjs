@@ -26,11 +26,15 @@ if (!Array.isArray(evidence) || evidence.length !== s.comparisons) {
   process.exit(1);
 }
 const evidenceCounts = {pass: 0, fail: 0, override: 0};
+const seenEvidence = new Set();
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
     || !Number.isInteger(row.runiversResourceId) || row.runiversResourceId <= 0
     || !Number.isInteger(row.runiversFromYear) || row.runiversFromYear < 1
+    || !Number.isInteger(row.runiversToYear) || row.runiversToYear < row.runiversFromYear
+    || !['half-open', 'terminal-inclusive'].includes(row.runiversIntervalSemantics)
     || typeof row.historyFirstMonth !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(row.historyFirstMonth)
+    || typeof row.historyLastMonth !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(row.historyLastMonth)
     || typeof row.runiversApproximate !== 'boolean'
     || typeof row.historyGeometryFile !== 'string' || !row.historyGeometryFile
     || !Number.isInteger(row.referenceSamples) || row.referenceSamples <= 0
@@ -41,9 +45,33 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence contains an invalid or incomplete metric row.');
     process.exit(1);
   }
+  // A numeric border metric from another era must not certify this shard.
+  // A source interval can start before the History Core state or vice versa,
+  // but the two intervals must overlap under Runivers's half-open semantics.
+  const shardStart = report.shard?.startMonth;
+  const shardEnd = report.shard?.endMonth;
+  const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
+  const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
+  const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
+  if (row.historyFirstMonth > row.historyLastMonth
+    || (shardStart && row.historyFirstMonth < shardStart)
+    || (shardEnd && row.historyLastMonth > shardEnd)
+    || sourceLastYear < row.runiversFromYear
+    || row.runiversFromYear > historyEndYear || sourceLastYear < historyStartYear) {
+    console.error('Runivers comparison evidence refers to an out-of-shard or non-overlapping historical interval.');
+    process.exit(1);
+  }
+  const identity = JSON.stringify([row.runiversResourceId, row.runiversFromYear, row.runiversToYear,
+    row.historyFirstMonth, row.historyLastMonth, row.historyGeometryFile]);
+  if (seenEvidence.has(identity)) {
+    console.error('Runivers comparison evidence repeats a source/state pair instead of independent comparisons.');
+    process.exit(1);
+  }
+  seenEvidence.add(identity);
+
   // Recompute the original validator tolerance policy from the dated
   // comparison, rather than trusting potentially inflated report numbers.
-  const comparisonYear = Math.max(row.runiversFromYear, Number(row.historyFirstMonth.slice(0, 4)));
+  const comparisonYear = Math.max(row.runiversFromYear, historyStartYear);
   const expectedTolerance = row.runiversApproximate ? 100000
     : comparisonYear < 1700 ? 50000
       : comparisonYear < 1850 ? 35000

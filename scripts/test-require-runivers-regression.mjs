@@ -5,15 +5,17 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'runivers-gate-'));
 const script=path.resolve('scripts/require-runivers-regression.mjs');
-const summary={auditedRange:{startMonth:'1520-01',endMonth:'1520-12'},runiversLayersDiscovered:1,datedLayersAudited:1,usableReferenceLayers:1,comparisons:1,passingComparisons:1,overrides:0,failedComparisons:0,referenceFailures:0,missingStates:0,uncoveredMonths:0};
+const summary={auditedRange:{startMonth:'1920-01',endMonth:'1920-12'},runiversLayersDiscovered:1,datedLayersAudited:1,usableReferenceLayers:1,comparisons:1,passingComparisons:1,overrides:0,failedComparisons:0,referenceFailures:0,missingStates:0,uncoveredMonths:0};
 try {
  fs.mkdirSync(path.join(root,'tmp/runivers-regression'),{recursive:true});
- const completeShard={startMonth:'1520-01',endMonth:'1520-12',rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
+ const completeShard={startMonth:'1920-01',endMonth:'1920-12',rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
  // Synthetic reports must carry the same coordinate-free distance ledger
  // that the real validator emits. This is NOT a real geographic pass.
  const metricRow = status => ({
    status, runiversResourceId: 5455, runiversFromYear: 1920,
-   historyFirstMonth: '1920-01', runiversApproximate: false,
+   runiversToYear: 1921, runiversIntervalSemantics: 'half-open',
+   historyFirstMonth: '1920-01', historyLastMonth: '1920-12',
+   runiversApproximate: false,
    historyGeometryFile: 'test-only.geojson',
    referenceSamples: 100, currentSamples: 100,
    symmetricP95Meters: status === 'pass' ? 10000 : 16000,
@@ -24,10 +26,10 @@ try {
    ...Array.from({length: s.passingComparisons ?? 0}, () => metricRow('pass')),
    ...Array.from({length: s.failedComparisons ?? 0}, () => metricRow('fail')),
    ...Array.from({length: s.overrides ?? 0}, () => metricRow('override')),
- ];
+ ].map((row, index) => ({...row, runiversResourceId: row.runiversResourceId + index}));
  const run=(s,shard=completeShard,expected={},comparisonEvidence=evidenceFor(s))=>{
    fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard,comparisonEvidence}));
-   return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1520-01',RUNIVERS_END_MONTH:'1520-12',...expected}});
+   return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
  };
  assert.equal(run(summary).status,0);
  // A successful summary without independently inspectable numeric comparisons
@@ -60,12 +62,38 @@ try {
    'the source comparison date must be independently inspectable');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversApproximate:null}]).status,1,
    'missing approximation class must not allow unverified tolerances');
+ // Numeric metrics from a different century must not certify this
+ // shard even if the report's summary counters and dates look consistent.
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),historyFirstMonth:'1919-01'}]).status,1,
+   'a comparison beginning before the requested shard must fail');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),historyLastMonth:'1921-01'}]).status,1,
+   'a comparison ending after the requested shard must fail');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversFromYear:1910,runiversToYear:1911}]).status,1,
+   'an older non-overlapping source layer cannot certify a later historical state');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversFromYear:1921,runiversToYear:1922}]).status,1,
+   'a future non-overlapping source layer cannot certify an earlier state');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversToYear:1920}]).status,1,
+   'a half-open source ending in 1920 does not cover 1920');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversToYear:1920,
+   runiversIntervalSemantics:'terminal-inclusive'}]).status,0,
+   'a terminal-inclusive source ending in 1920 may cover that year');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversFromYear:1910}]).status,0,
+   'a dated source beginning before the state may still overlap it');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversToYear:undefined}]).status,1,
+   'source end year must be present');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),historyLastMonth:undefined}]).status,1,
+   'history state end month must be present');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversIntervalSemantics:undefined}]).status,1,
+   'source interval semantics must be present');
+ assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},[
+   metricRow('pass'),metricRow('pass'),
+ ]).status,1,'duplicate source/state evidence must not inflate successful comparisons');
  // The matrix provides its expected interval independently of the report.
  // A self-consistent report from another shard must not be accepted.
- const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1521-01',RUNIVERS_END_MONTH:'1521-12'});
+ const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1921-01',RUNIVERS_END_MONTH:'1921-12'});
  assert.equal(wrongExpectedShard.status,1);
  assert.match(wrongExpectedShard.stderr,/not the requested shard/);
- assert.equal(run(summary,completeShard,{RUNIVERS_END_MONTH:'1520-13'}).status,1,
+ assert.equal(run(summary,completeShard,{RUNIVERS_END_MONTH:'1920-13'}).status,1,
    'Invalid expected dates must not be accepted as a shard identity');
  assert.equal(run(summary,completeShard,{RUNIVERS_END_MONTH:''}).status,1,
    'Missing expected end date must not certify the interval');
@@ -122,20 +150,20 @@ try {
    'Negative exclusion counters must fail closed');
  // Reject a green report that actually covers a different or shorter
  // calendar interval, even when its compared/excluded counters add up.
- const wrongDates=run(summary,{...completeShard,startMonth:'1519-01'});
+ const wrongDates=run(summary,{...completeShard,startMonth:'1919-01'});
  assert.equal(wrongDates.status,1);
  assert.match(wrongDates.stderr,/disagrees with the validator audited range/);
- const truncatedRange=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1521-12'}},
-   {...completeShard,endMonth:'1521-12'},{RUNIVERS_END_MONTH:'1521-12'});
+ const truncatedRange=run({...summary,auditedRange:{startMonth:'1920-01',endMonth:'1921-12'}},
+   {...completeShard,endMonth:'1921-12'},{RUNIVERS_END_MONTH:'1921-12'});
  assert.equal(truncatedRange.status,1);
  assert.match(truncatedRange.stderr,/12 reported months but 24 calendar months/);
- const invalidEnd=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1520-13'}},
-   {...completeShard,endMonth:'1520-13'});
+ const invalidEnd=run({...summary,auditedRange:{startMonth:'1920-01',endMonth:'1920-13'}},
+   {...completeShard,endMonth:'1920-13'});
  assert.equal(invalidEnd.status,1);
  assert.match(invalidEnd.stderr,/date range is invalid/);
  assert.equal(run({...summary,auditedRange:undefined}).status,1,
    'Missing validator date metadata cannot certify a shard');
- assert.equal(run(summary,{...completeShard,startMonth:'1521-01',endMonth:'1520-12'}).status,1,
+ assert.equal(run(summary,{...completeShard,startMonth:'1921-01',endMonth:'1920-12'}).status,1,
    'Reversed shard dates cannot pass geographic acceptance');
  console.log('Runivers gate tests passed: complete dated-layer inventory, success, outage, partial coverage, contour failure, override-only comparisons, unverified transition months and malformed totals.');
 } finally {fs.rmSync(root,{recursive:true,force:true});}
