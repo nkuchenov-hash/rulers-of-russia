@@ -37,6 +37,9 @@ jobs:
       - name: Verify monthly territory polity chronology
         run: node --experimental-strip-types scripts/test-territory-chronology.mjs
 
+      - name: Reject invalid territory deep-link dates
+        run: node --experimental-strip-types scripts/test-territory-query-date.mjs
+
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 

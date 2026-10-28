@@ -9,15 +9,11 @@ import './territoryTimelineAtomicPatch.js';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { TERRITORY_MAX_YEAR, TERRITORY_MIN_YEAR } from './territoryChronology';
+import { parseTerritoryQueryDate, type ParsedTerritoryQueryDate } from './territoryQueryDate';
 
 type HistoricalTerritoryMapProps = {
   initialYear?: number;
   initialMonth?: number | null;
-};
-
-type RequestedDate = {
-  year: number;
-  month: number | null;
 };
 
 const HistoricalTerritoryMap = dynamic<HistoricalTerritoryMapProps>(
@@ -25,32 +21,28 @@ const HistoricalTerritoryMap = dynamic<HistoricalTerritoryMapProps>(
   {ssr:false},
 );
 
-function boundedInteger(value: string | null, min: number, max: number) {
-  if (value === null || !/^-?\d+$/.test(value)) return null;
-  const parsed = Number(value);
-  if (!Number.isSafeInteger(parsed)) return null;
-  return Math.min(max, Math.max(min, parsed));
-}
-
-function dateFromLocation(): RequestedDate {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    year: boundedInteger(params.get('year'), TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR) ?? TERRITORY_MAX_YEAR,
-    month: boundedInteger(params.get('month'), 1, 12),
-  };
-}
-
 export function TerritoryCanvasClient() {
-  const [requestedDate, setRequestedDate] = useState<RequestedDate | null>(null);
+  const [requestedDate, setRequestedDate] = useState<ParsedTerritoryQueryDate | null>(null);
 
   useEffect(() => {
-    const sync = () => setRequestedDate(dateFromLocation());
+    const sync = () => setRequestedDate(parseTerritoryQueryDate(window.location.search, TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR));
     sync();
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
   if (!requestedDate) return null;
+  if (!requestedDate.valid) {
+    return (
+      <main role="alert" style={{minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: '#071821', color: '#f7ecd8'}}>
+        <div style={{maxWidth: 560, fontSize: 18, lineHeight: 1.5}}>
+          <h1 style={{fontSize: 26}}>Некорректная дата карты</h1>
+          <p>{requestedDate.error}</p>
+          <a href="./" style={{color: '#f0d48b'}}>Открыть карту без параметров</a>
+        </div>
+      </main>
+    );
+  }
   const dateKey = `${requestedDate.year}-${requestedDate.month ?? 'auto'}`;
 
   return (
