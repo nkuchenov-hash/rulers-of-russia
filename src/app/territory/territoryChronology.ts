@@ -1,6 +1,8 @@
 export type TerritoryPeriod = {
   start: number;
   end: number;
+  startMonth?: number;
+  endMonth?: number;
   polityId: string;
   label: string;
   shortLabel: string;
@@ -72,14 +74,15 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
     start: 1917,
     end: 1917,
     polityId: 'russian-republic',
-    label: 'Российская республика',
-    shortLabel: 'Республика',
-    era: '1917',
+    label: 'Россия в 1917 году',
+    shortLabel: 'Россия, 1917',
+    era: 'Революционный 1917 год',
     focus: [72, 58]
   },
   {
     start: 1918,
-    end: 1921,
+    end: 1922,
+    endMonth: 11,
     polityId: 'rsfsr',
     label: 'Российская СФСР',
     shortLabel: 'РСФСР',
@@ -88,6 +91,7 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
   },
   {
     start: 1922,
+    startMonth: 12,
     end: 1991,
     polityId: 'ussr',
     label: 'Союз Советских Социалистических Республик',
@@ -108,6 +112,16 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
 
 export const POLITY_TRANSITION_YEARS = TERRITORY_PERIODS.map((period) => period.start);
 
-export function territoryPeriodAt(year: number) {
-  return TERRITORY_PERIODS.find((period) => year >= period.start && year <= period.end) ?? TERRITORY_PERIODS[0];
+// History Core resolves the month-end state: January–November 1922 are RSFSR,
+// while the USSR begins in December after the 30 December founding act.
+// Keep the default month at December for legacy year-only callers.
+export function territoryPeriodAt(year: number, month = 12) {
+  if (!Number.isInteger(month) || month < 1 || month > 12) {
+    throw new RangeError(`Invalid territory month: ${month}`);
+  }
+  const selected = year * 12 + month;
+  return TERRITORY_PERIODS.find((period) =>
+    selected >= period.start * 12 + (period.startMonth ?? 1)
+    && selected <= period.end * 12 + (period.endMonth ?? 12)
+  ) ?? TERRITORY_PERIODS[0];
 }
