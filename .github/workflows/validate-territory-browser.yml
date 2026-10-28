@@ -97,6 +97,10 @@ jobs:
         if: github.event_name != 'workflow_run'
         run: npm run materialize:history
 
+      - name: Verify month-by-month political title vs geometry lineage
+        if: github.event_name != 'workflow_run'
+        run: node scripts/test-history-month-political-track.mjs
+
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
