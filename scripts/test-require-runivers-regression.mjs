@@ -77,7 +77,7 @@ try {
  assert.equal(wrongDates.status,1);
  assert.match(wrongDates.stderr,/disagrees with the validator audited range/);
  const truncatedRange=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1521-12'}},
-   {...completeShard,endMonth:'1521-12'});
+   {...completeShard,endMonth:'1521-12'},{RUNIVERS_END_MONTH:'1521-12'});
  assert.equal(truncatedRange.status,1);
  assert.match(truncatedRange.stderr,/12 reported months but 24 calendar months/);
  const invalidEnd=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1520-13'}},
