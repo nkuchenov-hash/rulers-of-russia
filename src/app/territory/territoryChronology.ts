@@ -112,7 +112,9 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
   }
 ];
 
-export const POLITY_TRANSITION_YEARS = TERRITORY_PERIODS.map((period) => period.start);
+// Month-granular transitions can share a calendar year (1721, 1922).
+// Expose each transition year only once to avoid duplicate year markers.
+export const POLITY_TRANSITION_YEARS = [...new Set(TERRITORY_PERIODS.map((period) => period.start))];
 
 // Monthly polity labels follow the Gregorian month-end state. Peter I accepted
 // the imperial title on 22 October 1721 Julian = 2 November Gregorian:
@@ -121,12 +123,17 @@ export const POLITY_TRANSITION_YEARS = TERRITORY_PERIODS.map((period) => period.
 // Likewise, January–November 1922 are RSFSR and December is USSR.
 // Keep the default month at December for legacy year-only callers.
 export function territoryPeriodAt(year: number, month = 12) {
+  if (!Number.isInteger(year) || year < TERRITORY_MIN_YEAR || year > TERRITORY_MAX_YEAR) {
+    throw new RangeError(`Invalid territory year: ${year}`);
+  }
   if (!Number.isInteger(month) || month < 1 || month > 12) {
     throw new RangeError(`Invalid territory month: ${month}`);
   }
   const selected = year * 12 + month;
-  return TERRITORY_PERIODS.find((period) =>
-    selected >= period.start * 12 + (period.startMonth ?? 1)
-    && selected <= period.end * 12 + (period.endMonth ?? 12)
-  ) ?? TERRITORY_PERIODS[0];
+  const period = TERRITORY_PERIODS.find((candidate) =>
+    selected >= candidate.start * 12 + (candidate.startMonth ?? 1)
+    && selected <= candidate.end * 12 + (candidate.endMonth ?? 12)
+  );
+  if (!period) throw new RangeError(`No territory period covers ${year}-${String(month).padStart(2, '0')}`);
+  return period;
 }
