@@ -15,6 +15,12 @@ export function historicalGeometryCaveat(date, monthState) {
   // Only name an omitted event after its entire calendar year has passed.
   if (date.year > 1510) missing.push('Псков (1510)');
   if (date.year > 1514) missing.push('Смоленск (1514)');
+  // The 1505 Moscow contour also predates the annexation of Ryazan in 1521.
+  // As with Pskov/Smolensk, year-only evidence is insufficient to assert an
+  // exact transition month, so report it only from the following calendar year.
+  // https://bigenc.ru/c/rossiia-istoriia-russkoe-gosudarstvo-obrazovanie-stanovlenie-formirovanie-territorii-i-ebc93b
+  // https://nationalatlas.ru/tom1/20-22.html
+  if (date.year > 1521) missing.push('Рязань (1521)');
   const changes = missing.length ? `; не отражены изменения: ${missing.join(', ')}` : '';
   return {
     code: 'muscovy-1505-reused',
