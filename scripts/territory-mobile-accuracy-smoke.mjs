@@ -90,7 +90,8 @@ try {
       const p = document.querySelector('main aside p[data-history-accuracy-caption]');
       return (document.body?.innerText || '').includes('History Core 1514-07')
         && p?.getAttribute('data-history-geometry-gap') === 'muscovy-1505-reused'
-        && (p?.getAttribute('data-history-mobile-caption') || '').includes('Смоленск (1514)')
+        && (p?.getAttribute('data-history-mobile-caption') || '').includes('Псков (1510)')
+        && !(p?.getAttribute('data-history-mobile-caption') || '').includes('Смоленск (1514)')
         && (p?.getAttribute('data-history-accuracy-caption') || '').includes('не подтверждено');
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
