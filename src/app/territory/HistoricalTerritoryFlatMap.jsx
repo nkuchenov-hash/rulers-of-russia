@@ -32,8 +32,9 @@ export function HistoricalTerritoryFlatMap({
   // Filtering, area ranking and geographic centroids must not run on every
   // pointer move, wheel step or zoom-button redraw.
   const worldFeatures=useMemo(()=>(world?.features??[])
+    .filter(feature=>feature?.geometry)
     .map((feature,index)=>({feature,index}))
-    .filter(({feature})=>feature?.geometry&&!isRussianWorldFeature(feature,year)),[world,year]);
+    .filter(({feature})=>!isRussianWorldFeature(feature,year)),[world,year]);
   const worldLabels=useMemo(()=>worldFeatures
     .map(({feature})=>({feature,area:geoArea(feature)}))
     .filter(({area})=>Number.isFinite(area)&&area>0)
