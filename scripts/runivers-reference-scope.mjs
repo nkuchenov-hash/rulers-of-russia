@@ -35,7 +35,17 @@ export function referenceForPolity(payload, polityId) {
   const names = polityId === 'grand-moscow' ? moscowNames
     : polityId === 'russian-tsardom' ? tsardomNames
     : polityId === 'ussr' ? new Set(['СССР', 'Россия', 'РСФСР']) : null;
-  if (!names) return {payload, scope: {kind: 'whole-reference-layer'}};
+  if (!names) {
+    // For later historical polities the entire reference layer is selected.
+    // Preserve its ORIGINAL source features for diagnostic attribution too:
+    // otherwise non-Moscow failures show coordinates but no source IDs.
+    // This stays in memory; only bounded feature identities enter reports.
+    const features = Array.isArray(payload.referenceSourceFeatures)
+      ? payload.referenceSourceFeatures
+      : Array.isArray(payload.features) ? payload.features : [];
+    return {payload, scope: {kind: 'whole-reference-layer'},
+      sourceFeatures: {selected: features, excluded: []}};
+  }
   const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom' : 'USSR';
   const features = payload.referenceSourceFeatures;
   if (!Array.isArray(features) || !features.length) throw new Error(`${label} reference requires original named source features; refresh the reference cache`);
