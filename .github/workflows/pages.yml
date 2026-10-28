@@ -5,7 +5,6 @@ on:
     workflows:
       - Validate merged main
     types: [completed]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,9 +18,8 @@ concurrency:
 jobs:
   build-and-deploy:
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == 'main')
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -33,7 +31,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Wait until validated revision is present in main
+      - name: Pin the exact validated main revision
         if: github.event_name == 'workflow_run'
         shell: bash
         env:
@@ -43,8 +41,13 @@ jobs:
           for attempt in $(seq 1 60); do
             git fetch origin main --prune
             if git merge-base --is-ancestor "$VALIDATED_SHA" origin/main; then
-              git checkout --detach origin/main
-              echo "Validated SHA $VALIDATED_SHA is now contained in main."
+              CURRENT_MAIN_SHA="$(git rev-parse origin/main)"
+              if [ "$CURRENT_MAIN_SHA" != "$VALIDATED_SHA" ]; then
+                echo "::error::Validated $VALIDATED_SHA was superseded by $CURRENT_MAIN_SHA. Refusing to publish unvalidated main or an obsolete revision."
+                exit 1
+              fi
+              git checkout --detach "$VALIDATED_SHA"
+              echo "Pinned Pages build to validated main SHA $VALIDATED_SHA."
               exit 0
             fi
             echo "Waiting for validated SHA $VALIDATED_SHA to reach main ($attempt/60)..."
@@ -52,13 +55,6 @@ jobs:
           done
           echo "Validated SHA $VALIDATED_SHA did not reach main within 10 minutes."
           exit 1
-
-      - name: Ensure manual deploy uses current main
-        if: github.event_name == 'workflow_dispatch'
-        shell: bash
-        run: |
-          git fetch origin main --prune
-          git checkout --detach origin/main
 
       - name: Resolve deployed revision
         id: revision
@@ -130,6 +126,21 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+
+      - name: Refuse superseded Pages deployment
+        if: github.event_name == 'workflow_run'
+        shell: bash
+        env:
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin main --prune
+          BUILT_SHA="$(git rev-parse HEAD)"
+          CURRENT_MAIN_SHA="$(git rev-parse origin/main)"
+          if [ "$BUILT_SHA" != "$VALIDATED_SHA" ] || [ "$CURRENT_MAIN_SHA" != "$VALIDATED_SHA" ]; then
+            echo "::error::Pages build $BUILT_SHA, validated $VALIDATED_SHA, current main $CURRENT_MAIN_SHA. A newer main must pass its own validation before deployment."
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         id: deployment

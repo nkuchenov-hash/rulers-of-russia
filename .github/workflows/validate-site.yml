@@ -31,6 +31,9 @@ jobs:
       - name: Reject critical production dependency vulnerabilities
         run: npm audit --audit-level=critical --omit=dev
 
+      - name: Test Pages deployment SHA pinning
+        run: node scripts/test-pages-validated-deploy.mjs
+
       - name: Test historical geometry chronology caveats
         run: node scripts/test-historical-geometry-caveats.mjs
 
