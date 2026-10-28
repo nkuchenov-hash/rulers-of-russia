@@ -12,6 +12,7 @@ on:
       - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
+      - 'scripts/test-territory-chronology.mjs'
       - 'scripts/territory-mobile-accuracy-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
@@ -24,6 +25,7 @@ on:
       - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
+      - 'scripts/test-territory-chronology.mjs'
       - 'scripts/territory-mobile-accuracy-smoke.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
@@ -68,6 +70,9 @@ jobs:
 
       - name: Test historical geometry chronology caveats
         run: node scripts/test-historical-geometry-caveats.mjs
+
+      - name: Verify monthly territory polity chronology
+        run: node --experimental-strip-types scripts/test-territory-chronology.mjs
 
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
