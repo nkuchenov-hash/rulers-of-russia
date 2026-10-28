@@ -102,7 +102,7 @@ try {
     assert.equal(report.shard.endMonth, '1993-12');
     assert.notDeepEqual(report.summary.auditedRange, {
       startMonth: '1992-01', endMonth: '1993-12',
-    }, 'the runner must preserve the child's original audit dates');
+    }, 'the runner must preserve the original validator audit dates');
   }
   // A full year with unchanged polygon coordinates can still contain a
   // political or evidentiary transition. Runivers cannot date that transition.
