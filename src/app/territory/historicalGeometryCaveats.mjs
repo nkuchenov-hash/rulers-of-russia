@@ -1,6 +1,6 @@
 // A History Core "geometry-verified" snapshot is not evidence that a reused
-// contour reflects all later territorial transitions. Keep this warning tied
-// to the actual 1505 geometry file so a future dated replacement clears it.
+// contour reflects all later territorial transitions. Keep these warnings tied
+// to the actual 1462/1505 geometry files so dated replacements clear them.
 const MOSCOW_1462_FILE = /(?:^|\/)base-grand-moscow-end-1462-1462-12-01\.geojson$/;
 const MOSCOW_1505_FILE = /(?:^|\/)base-grand-moscow-end-1505-1505-12-01\.geojson$/;
 
