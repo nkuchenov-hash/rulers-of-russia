@@ -136,7 +136,7 @@ export function HistoricalTerritoryFlatMap({
     ctx.globalAlpha=1;
 
     if(camera.zoom>=1.5){
-      const ranked=worldFeatures.map(f=>({f,a:geoArea(f)}))
+      const ranked=worldFeatures.filter(f=>!isRussianWorldFeature(f)).map(f=>({f,a:geoArea(f)}))
         .filter(item=>Number.isFinite(item.a)&&item.a>0)
         .sort((a,b)=>b.a-a.a).slice(0,mobile?18:35);
       ctx.font='600 16px Georgia,serif';
