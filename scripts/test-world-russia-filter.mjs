@@ -70,6 +70,14 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
   'Novgorod-Seversky is a distinct polity, not an alias for Novgorod Republic');
+assert.equal(isRussianWorldFeature(seversky1500, 1502), false,
+  'the 1500 year-level world feature remains context before the 1503 peace');
+assert.equal(isRussianWorldFeature(seversky1500, 1503), true,
+  'after the 1503 peace the reused 1500 world polygon must not depict a separate state');
+assert.equal(isRussianWorldFeature(seversky1500, 1520), true,
+  'the stale 1500 snapshot must not redraw Novgorod-Seversky as independent in 1520');
+assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгород-Северское княжество'}}, 1520), true,
+  'Russian spelling of Novgorod-Seversky must follow the same 1503 guard');
 assert.equal(isRussianWorldFeature(archivedFeature(1300, 'Grand Duchy of Moscow'), 1300), true,
   'the current Moscow state must still be suppressed in the background');
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгородская республика'}}, 1462), false);
