@@ -23,6 +23,13 @@ if (s.datedLayersAudited === 0 || s.datedLayersAudited > s.runiversLayersDiscove
   console.error('Runivers report dated-layer coverage is invalid or exceeds discovered layers.');
   process.exit(1);
 }
+// The shard runner discovers only dated layers overlapping the requested
+// calendar interval. Auditing a proper subset cannot certify the whole shard,
+// even if every audited layer has a passing comparison.
+if (s.datedLayersAudited !== s.runiversLayersDiscovered) {
+  console.error(`Runivers regression discovered ${s.runiversLayersDiscovered} overlapping dated layers but audited only ${s.datedLayersAudited}; incomplete reference inventory cannot pass.`);
+  process.exit(1);
+}
 if (s.passingComparisons + s.overrides + s.failedComparisons !== s.comparisons) {
   console.error('Runivers report comparison totals are inconsistent.');
   process.exit(1);
@@ -118,6 +125,18 @@ if (startOrdinal === null || endOrdinal === null || endOrdinal < startOrdinal
   || s.auditedRange?.startMonth !== shardStart || s.auditedRange?.endMonth !== shardEnd) {
   console.error('Runivers shard date range is invalid or disagrees with the validator audited range.');
   process.exit(1);
+}
+// The report and its own validator metadata can be mutually consistent while
+// both describe the wrong matrix shard. CI supplies the requested dates as an
+// independent input; never certify a different interval by self-attestation.
+const expectedStart = process.env.RUNIVERS_START_MONTH;
+const expectedEnd = process.env.RUNIVERS_END_MONTH;
+if (expectedStart !== undefined || expectedEnd !== undefined) {
+  if (parseMonth(expectedStart) === null || parseMonth(expectedEnd) === null
+    || expectedStart !== shardStart || expectedEnd !== shardEnd) {
+    console.error(`Runivers report covers ${shardStart}..${shardEnd}, not the requested shard ${expectedStart ?? '<missing>'}..${expectedEnd ?? '<missing>'}.`);
+    process.exit(1);
+  }
 }
 if (report.shard.rangeMonthCount !== endOrdinal - startOrdinal + 1) {
   console.error(`Runivers shard range has ${report.shard.rangeMonthCount} reported months but ${endOrdinal - startOrdinal + 1} calendar months between ${shardStart} and ${shardEnd}.`);
