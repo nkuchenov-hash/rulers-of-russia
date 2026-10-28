@@ -7,6 +7,10 @@ import {execFileSync, spawnSync} from 'node:child_process';
 // Exercise the actual shell bodies in pages.yml against a local Git remote.
 // No GitHub token, network access or historical geometry is needed.
 const workflow = fs.readFileSync(new URL('../.github/workflows/pages.yml', import.meta.url), 'utf8');
+assert.doesNotMatch(workflow, /^  workflow_dispatch:\\s*$/m,
+  'manual Pages dispatch must not bypass successful main validation');
+assert.match(workflow, /github\\.event\\.workflow_run\\.conclusion == 'success'/,
+  'Pages deployment must require a successful main validation');
 function stepScript(name) {
   const marker = `      - name: ${name}\n`;
   const start = workflow.indexOf(marker);
