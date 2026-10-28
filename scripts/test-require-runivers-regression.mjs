@@ -9,8 +9,45 @@ const summary={auditedRange:{startMonth:'1520-01',endMonth:'1520-12'},runiversLa
 try {
  fs.mkdirSync(path.join(root,'tmp/runivers-regression'),{recursive:true});
  const completeShard={startMonth:'1520-01',endMonth:'1520-12',rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
- const run=(s,shard=completeShard,expected={})=>{fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard}));return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1520-01',RUNIVERS_END_MONTH:'1520-12',...expected}});};
+ // Synthetic reports must carry the same coordinate-free distance ledger
+ // that the real validator emits. This is NOT a real geographic pass.
+ const metricRow = status => ({
+   status, runiversResourceId: 5455, historyGeometryFile: 'test-only.geojson',
+   referenceSamples: 100, currentSamples: 100,
+   symmetricP95Meters: status === 'pass' ? 10000 : 16000,
+   symmetricMaxMeters: status === 'pass' ? 30000 : 61000,
+   toleranceMeters: 15000, maxToleranceMeters: 60000,
+ });
+ const evidenceFor = s => [
+   ...Array.from({length: s.passingComparisons ?? 0}, () => metricRow('pass')),
+   ...Array.from({length: s.failedComparisons ?? 0}, () => metricRow('fail')),
+   ...Array.from({length: s.overrides ?? 0}, () => metricRow('override')),
+ ];
+ const run=(s,shard=completeShard,expected={},comparisonEvidence=evidenceFor(s))=>{
+   fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard,comparisonEvidence}));
+   return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1520-01',RUNIVERS_END_MONTH:'1520-12',...expected}});
+ };
  assert.equal(run(summary).status,0);
+ // A successful summary without independently inspectable numeric comparisons
+ // must fail, even if every counter and date is internally consistent.
+ assert.equal(run(summary,completeShard,{},undefined).status,0,
+   'default ledger should be accepted only with valid symmetric distances');
+ assert.equal(run(summary,completeShard,{},[]).status,1,
+   'green counts with no actual comparison evidence cannot certify geography');
+ assert.equal(run(summary,completeShard,{},[metricRow('fail')]).status,1,
+   'passing summary cannot be backed by a failed metric row');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricMaxMeters:61000}]).status,1,
+   'a pass outside the unchanged maximum tolerance must be rejected');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:16000}]).status,1,
+   'a pass outside the unchanged p95 tolerance must be rejected');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceSamples:0}]).status,1,
+   'a comparison without actual source border samples cannot pass');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),currentSamples:0}]).status,1,
+   'a comparison without History Core border samples cannot pass');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversResourceId:null}]).status,1,
+   'every comparison must identify its source layer');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:NaN}]).status,1,
+   'non-finite metric evidence must fail closed');
  // The matrix provides its expected interval independently of the report.
  // A self-consistent report from another shard must not be accepted.
  const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1521-01',RUNIVERS_END_MONTH:'1521-12'});
