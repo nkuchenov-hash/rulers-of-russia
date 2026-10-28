@@ -56,6 +56,7 @@ try {
   assert.equal(run(pin, a).status, 0, 'matching validated main must be pinned');
   assert.equal(git('rev-parse', 'HEAD'), a);
   assert.equal(run(guard, a).status, 0, 'matching validated main may deploy');
+  git('checkout', 'main');
 
   const b = commit('unvalidated B');
   const obsoletePin = run(pin, a);
@@ -63,6 +64,7 @@ try {
   assert.match(obsoletePin.stderr, /superseded/);
   assert.equal(run(pin, b).status, 0, 'newly validated main can be pinned');
   assert.equal(git('rev-parse', 'HEAD'), b);
+  git('checkout', 'main');
 
   commit('unvalidated C');
   const staleDeploy = run(guard, b);
