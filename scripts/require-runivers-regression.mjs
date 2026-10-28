@@ -102,6 +102,28 @@ if (comparisons === 0) {
   process.exit(1);
 }
 
+// A green report for a different date range must not certify this shard.
+// Check both its declared dates and the inclusive calendar-month arithmetic;
+// a self-consistent but shortened counter pair is not coverage evidence.
+const parseMonth = value => {
+  if (typeof value !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(value)) return null;
+  const year = Number(value.slice(0, 4)), month = Number(value.slice(5));
+  return year >= 1 ? year * 12 + month - 1 : null;
+};
+const shardStart = report.shard.startMonth;
+const shardEnd = report.shard.endMonth;
+const startOrdinal = parseMonth(shardStart);
+const endOrdinal = parseMonth(shardEnd);
+if (startOrdinal === null || endOrdinal === null || endOrdinal < startOrdinal
+  || s.auditedRange?.startMonth !== shardStart || s.auditedRange?.endMonth !== shardEnd) {
+  console.error('Runivers shard date range is invalid or disagrees with the validator audited range.');
+  process.exit(1);
+}
+if (report.shard.rangeMonthCount !== endOrdinal - startOrdinal + 1) {
+  console.error(`Runivers shard range has ${report.shard.rangeMonthCount} reported months but ${endOrdinal - startOrdinal + 1} calendar months between ${shardStart} and ${shardEnd}.`);
+  process.exit(1);
+}
+
 if (report.shard.excludedMonthCount > 0) {
   console.error(`Runivers shard excluded ${report.shard.excludedMonthCount}/${report.shard.rangeMonthCount} months in transition/ambiguous years; year-granular comparisons cannot certify complete dated geographic coverage.`);
   process.exit(1);

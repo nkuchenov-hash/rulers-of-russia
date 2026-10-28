@@ -5,10 +5,10 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'runivers-gate-'));
 const script=path.resolve('scripts/require-runivers-regression.mjs');
-const summary={runiversLayersDiscovered:1,datedLayersAudited:1,usableReferenceLayers:1,comparisons:1,passingComparisons:1,overrides:0,failedComparisons:0,referenceFailures:0,missingStates:0,uncoveredMonths:0};
+const summary={auditedRange:{startMonth:'1520-01',endMonth:'1520-12'},runiversLayersDiscovered:1,datedLayersAudited:1,usableReferenceLayers:1,comparisons:1,passingComparisons:1,overrides:0,failedComparisons:0,referenceFailures:0,missingStates:0,uncoveredMonths:0};
 try {
  fs.mkdirSync(path.join(root,'tmp/runivers-regression'),{recursive:true});
- const completeShard={rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
+ const completeShard={startMonth:'1520-01',endMonth:'1520-12',rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
  const run=(s,shard=completeShard)=>{fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard}));return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8'});};
  assert.equal(run(summary).status,0);
  const skippedLayer=run({...summary,runiversLayersDiscovered:2,datedLayersAudited:2});
@@ -58,5 +58,22 @@ try {
    'Inconsistent shard coverage counters must fail closed');
  assert.equal(run(summary,{rangeMonthCount:12,comparedMonthCount:13,excludedMonthCount:-1}).status,1,
    'Negative exclusion counters must fail closed');
+ // Reject a green report that actually covers a different or shorter
+ // calendar interval, even when its compared/excluded counters add up.
+ const wrongDates=run(summary,{...completeShard,startMonth:'1519-01'});
+ assert.equal(wrongDates.status,1);
+ assert.match(wrongDates.stderr,/disagrees with the validator audited range/);
+ const truncatedRange=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1521-12'}},
+   {...completeShard,endMonth:'1521-12'});
+ assert.equal(truncatedRange.status,1);
+ assert.match(truncatedRange.stderr,/12 reported months but 24 calendar months/);
+ const invalidEnd=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1520-13'}},
+   {...completeShard,endMonth:'1520-13'});
+ assert.equal(invalidEnd.status,1);
+ assert.match(invalidEnd.stderr,/date range is invalid/);
+ assert.equal(run({...summary,auditedRange:undefined}).status,1,
+   'Missing validator date metadata cannot certify a shard');
+ assert.equal(run(summary,{...completeShard,startMonth:'1521-01',endMonth:'1520-12'}).status,1,
+   'Reversed shard dates cannot pass geographic acceptance');
  console.log('Runivers gate tests passed: complete dated-layer inventory, success, outage, partial coverage, contour failure, override-only comparisons, unverified transition months and malformed totals.');
 } finally {fs.rmSync(root,{recursive:true,force:true});}
