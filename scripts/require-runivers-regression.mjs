@@ -49,10 +49,6 @@ if (!report.shard || typeof report.shard !== 'object' || Array.isArray(report.sh
     console.error('Runivers shard month coverage counters are invalid or inconsistent.');
     process.exit(1);
   }
-  if (excludedMonthCount > 0) {
-    console.error(`Runivers shard excluded ${excludedMonthCount}/${rangeMonthCount} months in transition/ambiguous years; year-granular comparisons cannot certify complete dated geographic coverage.`);
-    process.exit(1);
-  }
 }
 
 const usable = s.usableReferenceLayers;
@@ -89,6 +85,11 @@ if (failed > 0 || missingStates > 0 || uncoveredMonths > 0) {
 
 if (comparisons === 0) {
   console.error('Runivers regression had usable reference layers but made zero comparisons.');
+  process.exit(1);
+}
+
+if (report.shard.excludedMonthCount > 0) {
+  console.error(`Runivers shard excluded ${report.shard.excludedMonthCount}/${report.shard.rangeMonthCount} months in transition/ambiguous years; year-granular comparisons cannot certify complete dated geographic coverage.`);
   process.exit(1);
 }
 
