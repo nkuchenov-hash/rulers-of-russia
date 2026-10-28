@@ -79,6 +79,26 @@ try {
     await page.waitForFunction(() => (document.body?.innerText || '').includes('History Core 1581-08'), null, {timeout: 30000});
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1581-08', null, {timeout: 12000});
     await page.getByRole('button', {name: 'Показать глобус'}).click();
+    // The 1462 contour is reused across the 1478 annexation of Novgorod.
+    // Both projections must disclose the missing transition on phones.
+    const novgorodTarget = new URL(url);
+    novgorodTarget.searchParams.set('year', '1479');
+    novgorodTarget.searchParams.set('month', '1');
+    const novgorodResponse = await page.goto(novgorodTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+    assert(novgorodResponse?.ok(), `mobile ${width}: 1479 HTTP ${novgorodResponse?.status()}`);
+    await page.waitForFunction(() => {
+      const p = document.querySelector('main aside p[data-history-accuracy-caption]');
+      return (document.body?.innerText || '').includes('History Core 1479-01')
+        && p?.getAttribute('data-history-geometry-gap') === 'muscovy-1462-reused'
+        && (p?.getAttribute('data-history-mobile-caption') || '').includes('Новгород (1478)')
+        && (p?.getAttribute('data-history-accuracy-caption') || '').includes('не подтверждено');
+    }, null, {timeout: 45000});
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1479-01', null, {timeout: 15000});
+    assert.equal(await page.locator('main aside p').getAttribute('data-history-geometry-gap'),
+      'muscovy-1462-reused', `mobile ${width}: 1479 warning lost in 2D`);
+    await page.getByRole('button', {name: 'Показать глобус'}).click();
+
     // The 1505 Muscovy contour is still reused for 1514: do not call it
     // geographically verified in either projection or on a phone.
     const staleTarget = new URL(url);
