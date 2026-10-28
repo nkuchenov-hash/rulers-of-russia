@@ -9,13 +9,26 @@ const summary={auditedRange:{startMonth:'1520-01',endMonth:'1520-12'},runiversLa
 try {
  fs.mkdirSync(path.join(root,'tmp/runivers-regression'),{recursive:true});
  const completeShard={startMonth:'1520-01',endMonth:'1520-12',rangeMonthCount:12,comparedMonthCount:12,excludedMonthCount:0};
- const run=(s,shard=completeShard)=>{fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard}));return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8'});};
+ const run=(s,shard=completeShard,expected={})=>{fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard}));return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1520-01',RUNIVERS_END_MONTH:'1520-12',...expected}});};
  assert.equal(run(summary).status,0);
+ // The matrix provides its expected interval independently of the report.
+ // A self-consistent report from another shard must not be accepted.
+ const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1521-01',RUNIVERS_END_MONTH:'1521-12'});
+ assert.equal(wrongExpectedShard.status,1);
+ assert.match(wrongExpectedShard.stderr,/not the requested shard/);
+ assert.equal(run(summary,completeShard,{RUNIVERS_END_MONTH:'1520-13'}).status,1,
+   'Invalid expected dates must not be accepted as a shard identity');
+ assert.equal(run(summary,completeShard,{RUNIVERS_END_MONTH:''}).status,1,
+   'Missing expected end date must not certify the interval');
  const skippedLayer=run({...summary,runiversLayersDiscovered:2,datedLayersAudited:2});
  assert.equal(skippedLayer.status,1,
    'A passing comparison with one untested dated reference layer cannot certify the shard');
  assert.match(skippedLayer.stderr,/only 1 yielded comparable borders/,
    'The incomplete dated-layer coverage must be diagnosed explicitly');
+ const omittedDiscoveredLayer=run({...summary,runiversLayersDiscovered:2});
+ assert.equal(omittedDiscoveredLayer.status,1,
+   'Auditing one passing layer out of two overlapping discovered layers cannot certify the shard');
+ assert.match(omittedDiscoveredLayer.stderr,/discovered 2 overlapping dated layers but audited only 1/);
  assert.equal(run({...summary,datedLayersAudited:0}).status,1,
    'A shard with zero audited dated reference layers must fail closed');
  assert.equal(run({...summary,datedLayersAudited:2}).status,1,
@@ -64,7 +77,7 @@ try {
  assert.equal(wrongDates.status,1);
  assert.match(wrongDates.stderr,/disagrees with the validator audited range/);
  const truncatedRange=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1521-12'}},
-   {...completeShard,endMonth:'1521-12'});
+   {...completeShard,endMonth:'1521-12'},{RUNIVERS_END_MONTH:'1521-12'});
  assert.equal(truncatedRange.status,1);
  assert.match(truncatedRange.stderr,/12 reported months but 24 calendar months/);
  const invalidEnd=run({...summary,auditedRange:{startMonth:'1520-01',endMonth:'1520-13'}},
