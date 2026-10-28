@@ -29,6 +29,9 @@ const evidenceCounts = {pass: 0, fail: 0, override: 0};
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
     || !Number.isInteger(row.runiversResourceId) || row.runiversResourceId <= 0
+    || !Number.isInteger(row.runiversFromYear) || row.runiversFromYear < 1
+    || typeof row.historyFirstMonth !== 'string' || !/^\\d{4}-(0[1-9]|1[0-2])$/.test(row.historyFirstMonth)
+    || typeof row.runiversApproximate !== 'boolean'
     || typeof row.historyGeometryFile !== 'string' || !row.historyGeometryFile
     || !Number.isInteger(row.referenceSamples) || row.referenceSamples <= 0
     || !Number.isInteger(row.currentSamples) || row.currentSamples <= 0
@@ -36,6 +39,19 @@ for (const row of evidence) {
       .every(key => Number.isFinite(row[key]) && row[key] >= 0)
     || row.toleranceMeters === 0 || row.maxToleranceMeters === 0) {
     console.error('Runivers comparison evidence contains an invalid or incomplete metric row.');
+    process.exit(1);
+  }
+  // Recompute the original validator tolerance policy from the dated
+  // comparison, rather than trusting potentially inflated report numbers.
+  const comparisonYear = Math.max(row.runiversFromYear, Number(row.historyFirstMonth.slice(0, 4)));
+  const expectedTolerance = row.runiversApproximate ? 100000
+    : comparisonYear < 1700 ? 50000
+      : comparisonYear < 1850 ? 35000
+        : comparisonYear < 1900 ? 25000 : 15000;
+  if (row.toleranceMeters !== expectedTolerance
+    || row.maxToleranceMeters !== expectedTolerance * 4
+    || row.symmetricP95Meters > row.symmetricMaxMeters) {
+    console.error('Runivers comparison evidence changes the historical distance limits or violates p95/max ordering.');
     process.exit(1);
   }
   const withinLimits = row.symmetricP95Meters <= row.toleranceMeters
