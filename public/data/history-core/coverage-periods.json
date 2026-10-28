@@ -82,9 +82,9 @@
       "notes": "The period contains many incremental accessions, inheritances, conquests and treaty changes; the fallback keeps it visible until those are replayed from documents."
     },
     {
-      "id": "coverage-1547-1720-tsardom",
+      "id": "coverage-1547-1721-10-tsardom",
       "startMonth": "1547-01",
-      "endMonth": "1720-12",
+      "endMonth": "1721-10",
       "polityId": "russian-tsardom",
       "label": "Русское царство",
       "track": "russian-legal-border",
@@ -97,11 +97,11 @@
         "doc-sgdd-vol1-1813",
         "doc-stolbovo-1617-ebid"
       ],
-      "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry."
+      "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry. The imperial title was accepted on 22 October 1721 Julian / 2 November 1721 Gregorian; month-end Gregorian polity coverage remains Tsardom through October 1721. This title transition alone does not change geometry."
     },
     {
-      "id": "coverage-1721-1916-empire",
-      "startMonth": "1721-01",
+      "id": "coverage-1721-11-1916-empire",
+      "startMonth": "1721-11",
       "endMonth": "1916-12",
       "polityId": "russian-empire",
       "label": "Российская империя",
@@ -115,7 +115,7 @@
         "doc-nystad-1721-ebid",
         "doc-bucharest-1812-ebid"
       ],
-      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry."
+      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry. The Empire label begins in November 1721 (Gregorian month-end), following Peter I's acceptance of the imperial title on 22 October Julian / 2 November Gregorian. This is political chronology only; no border polygon is added, removed or promoted to verified status by this title change."
     },
     {
       "id": "coverage-1917-01-08-revolutionary-russia-predecessor",
