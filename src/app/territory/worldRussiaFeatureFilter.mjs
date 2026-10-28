@@ -15,6 +15,13 @@ const ENGLISH = /\b(?:russia|russian|ussr|rsfsr|union of soviet socialist republ
 const CYRILLIC = /(?:^|[^а-яё])(?:россия|российск[а-яё]*|русск[а-яё]*|русь|ссср|рсфср|советский союз|советская россия|союз советских социалистических республик|московия|московск[а-яё]*|владимирск[а-яё]*)(?=$|[^а-яё])/i;
 const NOVGOROD_ENGLISH = /^(?:the )?(?:(?:principality|republic|land) of )?novgorod(?: (?:republic|principality|land))?$/i;
 const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ской)?(?: (?:земля|республика|княжество))?$/i;
+// The 1500 snapshot also names Novgorod-Seversky. This is a different
+// polity from Novgorod Republic, but the same 1500 snapshot is reused through
+// 1529. The 1503 Lithuanian–Muscovite peace formally recognized its transfer;
+// suppress that stale separate background polygon from 1503 onward.
+// This is a year-level visual guard, not a month-accurate sovereignty claim.
+const SEVERSKY_ENGLISH = /^novgorod[- ](?:seversky|seversk|siversky|siversk)$/i;
+const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*$/i;
 
 // Use the selected historical year, not the older world-snapshot year.
 // This controls BACKGROUND rendering only; it never certifies or changes
@@ -27,6 +34,9 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
     const name = properties[key];
     if (typeof name !== 'string') return false;
     if (ENGLISH.test(name) || CYRILLIC.test(name)) return true;
+    if (SEVERSKY_ENGLISH.test(name.trim()) || SEVERSKY_CYRILLIC.test(name.trim())) {
+      return Number.isInteger(selectedYear) && selectedYear >= 1503;
+    }
     if (NOVGOROD_ENGLISH.test(name.trim()) || NOVGOROD_CYRILLIC.test(name.trim())) {
       // 1136–1477: the Novgorod Republic is separate world context.
       // 1478+: do not paint a stale Novgorod world polygon over Moscow.
