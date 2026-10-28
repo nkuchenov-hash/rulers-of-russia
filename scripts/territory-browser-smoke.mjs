@@ -34,17 +34,25 @@ const visibleCountryLabel = () => [...document.querySelectorAll('[data-country-l
 
 // Require the actual visible WebGL surface, not an arbitrary canvas that
 // might belong to the flat view during the projection transition.
-const waitForGlobeCanvas = async stage => {
+// The globe remains mounted while the flat view is shown. Verify a fresh
+// renderer.render call after returning, not merely the existence of a canvas.
+// Interval polling avoids RAF-dependent Playwright checks stalling during
+// projection transitions while preserving the original 8-second deadline.
+const globeRenderCount = async () => Number(
+  await page.locator('canvas[data-territory-globe="true"]').getAttribute('data-territory-render-count') || 0
+);
+const waitForGlobeCanvas = async (stage, minRenderCount = 0) => {
   try {
-    await page.waitForFunction(() => {
+    await page.waitForFunction(previousRenderCount => {
       const canvas = document.querySelector('canvas[data-territory-globe="true"]');
       if (!canvas) return false;
       const rect = canvas.getBoundingClientRect();
       const style = getComputedStyle(canvas);
       return canvas.isConnected && canvas.width > 300 && canvas.height > 200
         && rect.width > 300 && rect.height > 200
-        && style.visibility === 'visible' && style.display !== 'none';
-    }, null, {timeout: 8000});
+        && style.visibility === 'visible' && style.display !== 'none'
+        && Number(canvas.dataset.territoryRenderCount || 0) > previousRenderCount;
+    }, minRenderCount, {polling: 100, timeout: 8000});
   } catch (error) {
     const canvases = await page.evaluate(() => [...document.querySelectorAll('canvas')].map(canvas => {
       const rect = canvas.getBoundingClientRect();
@@ -59,7 +67,8 @@ const waitForGlobeCanvas = async stage => {
         display: style.display,
         visibility: style.visibility,
         hostVisibility: canvas.parentElement ? getComputedStyle(canvas.parentElement).visibility : null,
-        contextLost: gl ? gl.isContextLost() : null
+        contextLost: gl ? gl.isContextLost() : null,
+        renderCount: canvas.dataset.territoryRenderCount || null
       };
     })).catch(e => ({diagnosticError: String(e)}));
     throw new Error(`Globe canvas not ready at ${stage}: ${JSON.stringify(canvases)}`, {cause: error});
@@ -199,18 +208,20 @@ try {
     throw new Error(`Flat map did not paint the historical Russian polygon at its own focus: RGB ${JSON.stringify(centerRgb)}`);
   }
   await page.getByRole('button', {name: 'Рельеф', exact: true}).click();
+  const beforeFirstGlobeReturn = await globeRenderCount();
   await page.getByRole('button', {name: 'Показать глобус'}).click();
   if (await flatCanvas.count()) throw new Error('Planar canvas persisted after switching to globe');
-  await waitForGlobeCanvas('first 2D to 3D return');
+  await waitForGlobeCanvas('first 2D to 3D return', beforeFirstGlobeReturn);
 
   // Exercise the same visibility-only transition repeatedly: the WebGL
   // surface must remain attached, visible, and correctly sized each time.
   for (let cycle = 1; cycle <= 3; cycle++) {
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await flatCanvas.waitFor({state: 'visible', timeout: 10000});
+    const beforeGlobeReturn = await globeRenderCount();
     await page.getByRole('button', {name: 'Показать глобус'}).click();
     if (await flatCanvas.count()) throw new Error(`Planar canvas persisted after cycle ${cycle}`);
-    await waitForGlobeCanvas(`repeat 2D to 3D cycle ${cycle}`);
+    await waitForGlobeCanvas(`repeat 2D to 3D cycle ${cycle}`, beforeGlobeReturn);
   }
 
   const zoomIn = page.getByRole('button', { name: '+', exact: true });
