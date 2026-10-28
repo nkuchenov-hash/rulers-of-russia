@@ -29,6 +29,18 @@ try {
    'An override must not masquerade as an independently passing comparison');
  assert.equal(run(summary,{rangeMonthCount:12,comparedMonthCount:11,excludedMonthCount:1}).status,1,
    'Uncompared transition months must block full geographic certification');
+ // When a shard has multiple blockers, the CI log must identify the actual
+ // contour mismatch or source outage before reporting secondary year exclusions.
+ // All conditions still fail closed; only diagnostic precedence changes.
+ const mismatchAndTransition=run({...summary,comparisons:26,passingComparisons:0,failedComparisons:26},
+   {rangeMonthCount:960,comparedMonthCount:912,excludedMonthCount:48});
+ assert.equal(mismatchAndTransition.status,1);
+ assert.match(mismatchAndTransition.stderr,/26 contour failures/);
+ const outageAndTransition=run({...summary,usableReferenceLayers:0,comparisons:0,
+   passingComparisons:0,referenceFailures:8},
+   {rangeMonthCount:552,comparedMonthCount:492,excludedMonthCount:60});
+ assert.equal(outageAndTransition.status,1);
+ assert.match(outageAndTransition.stderr,/external-source outage/);
  assert.equal(run(summary,{rangeMonthCount:12,comparedMonthCount:11,excludedMonthCount:0}).status,1,
    'Inconsistent shard coverage counters must fail closed');
  assert.equal(run(summary,{rangeMonthCount:12,comparedMonthCount:13,excludedMonthCount:-1}).status,1,
