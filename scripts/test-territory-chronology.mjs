@@ -12,14 +12,33 @@ const periodAt = (year, month) => coverage.periods.find(period => {
   return key >= period.startMonth && key <= period.endMonth;
 });
 
-for (let year = 1917; year <= 1923; year++) {
-  for (let month = 1; month <= 12; month++) {
-    const expected = periodAt(year, month);
-    assert.ok(expected, `canonical coverage missing ${year}-${month}`);
-    assert.equal(territoryPeriodAt(year, month).polityId, expected.polityId,
-      `territory UI disagrees with History Core for ${year}-${month}`);
+for (const [first, last] of [[1720, 1722], [1917, 1923]]) {
+  for (let year = first; year <= last; year++) {
+    for (let month = 1; month <= 12; month++) {
+      const expected = periodAt(year, month);
+      assert.ok(expected, `canonical coverage missing ${year}-${month}`);
+      assert.equal(territoryPeriodAt(year, month).polityId, expected.polityId,
+        `territory UI disagrees with History Core for ${year}-${month}`);
+    }
   }
 }
+
+// Independent date assertion: 22 October 1721 Julian = 2 November Gregorian.
+// The timeline displays the polity at the END of the selected Gregorian month.
+for (let month = 1; month <= 10; month++) {
+  assert.equal(territoryPeriodAt(1721, month).polityId, 'russian-tsardom',
+    `1721-${month}: imperial title not yet accepted (Gregorian)`);
+  assert.equal(periodAt(1721, month)?.polityId, 'russian-tsardom',
+    `1721-${month}: canonical coverage prematurely labels Empire`);
+}
+for (const month of [11, 12]) {
+  assert.equal(territoryPeriodAt(1721, month).polityId, 'russian-empire');
+  assert.equal(periodAt(1721, month)?.polityId, 'russian-empire');
+}
+assert.equal(territoryPeriodAt(1721).polityId, 'russian-empire',
+  'legacy year-only callers use the year-end state');
+assert.equal(territoryPeriodAt(1720, 12).polityId, 'russian-tsardom');
+assert.equal(territoryPeriodAt(1722, 1).polityId, 'russian-empire');
 
 assert.equal(territoryPeriodAt(1922, 11).polityId, 'rsfsr');
 assert.equal(territoryPeriodAt(1922, 12).polityId, 'ussr');
@@ -30,4 +49,4 @@ assert.equal(territoryPeriodAt(1917, 1).label, 'Россия в 1917 году',
 assert.throws(() => territoryPeriodAt(1922, 0), RangeError);
 assert.throws(() => territoryPeriodAt(1922, 13), RangeError);
 
-console.log('Territory monthly polity chronology matches canonical History Core for 1917–1923.');
+console.log('Territory monthly polity chronology matches canonical History Core for 1720–1722 and 1917–1923, including Gregorian 1721 title transition.');
