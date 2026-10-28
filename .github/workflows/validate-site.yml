@@ -31,6 +31,9 @@ jobs:
       - name: Reject critical production dependency vulnerabilities
         run: npm audit --audit-level=critical --omit=dev
 
+      - name: Test historical geometry chronology caveats
+        run: node scripts/test-historical-geometry-caveats.mjs
+
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 
