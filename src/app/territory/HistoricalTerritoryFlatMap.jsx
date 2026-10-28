@@ -2,6 +2,7 @@
 
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
+import {isRussianWorldFeature} from './worldRussiaFeatureFilter.mjs';
 
 const TWO_PI=Math.PI*2;
 const PALETTE=['#879477','#b49b79','#808d9a','#9d8b72','#809995','#a18b89','#8d929e'];
@@ -98,8 +99,7 @@ export function HistoricalTerritoryFlatMap({
       const feature=worldFeatures[i];
       // These world polygons represent context at worldYear, not the Russian
       // state at the chosen month. The Russian fill is drawn separately.
-      const name=countryName(feature);
-      if(/russia|russian|soviet|ussr|kievan rus|muscovy|novgorod|vladimir/i.test(name))continue;
+      if(isRussianWorldFeature(feature))continue;
       ctx.beginPath();path(feature);
       ctx.fillStyle=colorFor(feature,i);
       ctx.globalAlpha=mode==='states'?.79:.32;
@@ -136,7 +136,7 @@ export function HistoricalTerritoryFlatMap({
     ctx.globalAlpha=1;
 
     if(camera.zoom>=1.5){
-      const ranked=worldFeatures.map(f=>({f,a:geoArea(f)}))
+      const ranked=worldFeatures.filter(f=>!isRussianWorldFeature(f)).map(f=>({f,a:geoArea(f)}))
         .filter(item=>Number.isFinite(item.a)&&item.a>0)
         .sort((a,b)=>b.a-a.a).slice(0,mobile?18:35);
       ctx.font='600 16px Georgia,serif';

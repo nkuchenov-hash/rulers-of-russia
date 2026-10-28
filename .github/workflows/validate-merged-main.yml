@@ -40,6 +40,9 @@ jobs:
       - name: Reject invalid territory deep-link dates
         run: node --experimental-strip-types scripts/test-territory-query-date.mjs
 
+      - name: Verify historical world Russian-state context filtering
+        run: node scripts/test-world-russia-filter.mjs
+
       - name: Materialize verified source-coordinate geometry
         run: npm run materialize:history-geometry
 
