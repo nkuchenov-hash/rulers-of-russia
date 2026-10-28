@@ -12,7 +12,9 @@ try {
  // Synthetic reports must carry the same coordinate-free distance ledger
  // that the real validator emits. This is NOT a real geographic pass.
  const metricRow = status => ({
-   status, runiversResourceId: 5455, historyGeometryFile: 'test-only.geojson',
+   status, runiversResourceId: 5455, runiversFromYear: 1920,
+   historyFirstMonth: '1920-01', runiversApproximate: false,
+   historyGeometryFile: 'test-only.geojson',
    referenceSamples: 100, currentSamples: 100,
    symmetricP95Meters: status === 'pass' ? 10000 : 16000,
    symmetricMaxMeters: status === 'pass' ? 30000 : 61000,
@@ -48,6 +50,16 @@ try {
    'every comparison must identify its source layer');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:NaN}]).status,1,
    'non-finite metric evidence must fail closed');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),toleranceMeters:1000000,maxToleranceMeters:4000000}]).status,1,
+   'inflated distance tolerances must not turn a comparison into a pass');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),maxToleranceMeters:1000000}]).status,1,
+   'maximum tolerance cannot be relaxed independently of p95');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:40000,symmetricMaxMeters:30000}]).status,1,
+   'p95 distance cannot exceed the maximum distance');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),historyFirstMonth:'invalid'}]).status,1,
+   'the source comparison date must be independently inspectable');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversApproximate:null}]).status,1,
+   'missing approximation class must not allow unverified tolerances');
  // The matrix provides its expected interval independently of the report.
  // A self-consistent report from another shard must not be accepted.
  const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1521-01',RUNIVERS_END_MONTH:'1521-12'});
