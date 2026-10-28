@@ -45,7 +45,13 @@ try {
     import fs from 'node:fs';
     const shard = JSON.parse(fs.readFileSync(process.env.RUNIVERS_MONTH_INDEX_FILE));
     fs.writeFileSync('child-input.json', JSON.stringify(shard));
-    if (!process.env.TEST_NO_REPORT) fs.writeFileSync('tmp/runivers-regression/report.json', JSON.stringify({summary: {comparisons: 1}}));
+    if (!process.env.TEST_NO_REPORT) {
+      const auditedRange = process.env.TEST_MISSING_AUDITED_RANGE ? undefined : {
+        startMonth: process.env.TEST_AUDITED_START || process.env.RUNIVERS_START_MONTH,
+        endMonth: process.env.TEST_AUDITED_END || process.env.RUNIVERS_END_MONTH,
+      };
+      fs.writeFileSync('tmp/runivers-regression/report.json', JSON.stringify({summary: {comparisons: 1, auditedRange}}));
+    }
     process.exitCode = Number(process.env.TEST_EXIT || 0);
   `);
   const months = [1991, 1992, 1993, 1994].flatMap(year => Array.from({length: 12}, (_, i) => ({
@@ -78,6 +84,25 @@ try {
     const report = JSON.parse(fs.readFileSync(reportPath));
     assert.equal(report.shard.excludedMonthCount, 12);
     assert.equal(report.shard.excludedYears[0].year, 1993);
+  }
+  // A successful validator process cannot substitute a report for another
+  // interval. In particular, the runner must never overwrite the child's
+  // auditedRange with its own requested dates before the acceptance gate.
+  for (const extra of [
+    {TEST_AUDITED_START: '1991-01'},
+    {TEST_AUDITED_END: '1994-12'},
+    {TEST_MISSING_AUDITED_RANGE: '1'},
+  ]) {
+    const mismatched = run(extra);
+    assert.equal(mismatched.status, 1, 'mismatched or absent child audit dates must fail closed');
+    assert.match(mismatched.stderr, /not requested shard/,
+      'wrong-period child audit must be diagnosed');
+    const report = JSON.parse(fs.readFileSync(reportPath));
+    assert.equal(report.shard.startMonth, '1992-01');
+    assert.equal(report.shard.endMonth, '1993-12');
+    assert.notDeepEqual(report.summary.auditedRange, {
+      startMonth: '1992-01', endMonth: '1993-12',
+    }, 'the runner must preserve the child's original audit dates');
   }
   // A full year with unchanged polygon coordinates can still contain a
   // political or evidentiary transition. Runivers cannot date that transition.
