@@ -255,6 +255,10 @@ while (cursor <= coverage.maxMonth) {
     months.push({
       month: cursor,
       polityId: period.polityId,
+      // The territory's geometry lineage can differ from the political title.
+      // E.g. Jan–Oct 1721 keeps the existing Empire-geometry track while the
+      // Gregorian month-end political title remains Russian Tsardom.
+      politicalPolityId: period.politicalPolityId ?? period.polityId,
       label: period.label,
       track: period.track,
       territorialModel: chosen.territorialModel,
@@ -278,6 +282,10 @@ while (cursor <= coverage.maxMonth) {
     months.push({
       month: cursor,
       polityId: period.polityId,
+      // The territory's geometry lineage can differ from the political title.
+      // E.g. Jan–Oct 1721 keeps the existing Empire-geometry track while the
+      // Gregorian month-end political title remains Russian Tsardom.
+      politicalPolityId: period.politicalPolityId ?? period.polityId,
       label: period.label,
       track: period.track,
       territorialModel: period.territorialModel,

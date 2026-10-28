@@ -54,7 +54,8 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
   },
   {
     start: 1547,
-    end: 1720,
+    end: 1721,
+    endMonth: 10,
     polityId: 'russian-tsardom',
     label: 'Русское царство',
     shortLabel: 'Русское царство',
@@ -63,6 +64,7 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
   },
   {
     start: 1721,
+    startMonth: 11,
     end: 1916,
     polityId: 'russian-empire',
     label: 'Российская империя',
@@ -112,8 +114,11 @@ export const TERRITORY_PERIODS: TerritoryPeriod[] = [
 
 export const POLITY_TRANSITION_YEARS = TERRITORY_PERIODS.map((period) => period.start);
 
-// History Core resolves the month-end state: January–November 1922 are RSFSR,
-// while the USSR begins in December after the 30 December founding act.
+// Monthly polity labels follow the Gregorian month-end state. Peter I accepted
+// the imperial title on 22 October 1721 Julian = 2 November Gregorian:
+// January–October 1721 are Tsardom, November onward Empire. This title
+// transition does not imply a territorial boundary change.
+// Likewise, January–November 1922 are RSFSR and December is USSR.
 // Keep the default month at December for legacy year-only callers.
 export function territoryPeriodAt(year: number, month = 12) {
   if (!Number.isInteger(month) || month < 1 || month > 12) {

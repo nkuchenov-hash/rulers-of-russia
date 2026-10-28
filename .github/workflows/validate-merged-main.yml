@@ -49,6 +49,9 @@ jobs:
       - name: Materialize complete historical territory timeline
         run: npm run materialize:history
 
+      - name: Verify month-by-month political title vs geometry lineage
+        run: node scripts/test-history-month-political-track.mjs
+
       - name: Audit true History Core completion
         run: node scripts/audit-history-completion.mjs
 

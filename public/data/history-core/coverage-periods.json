@@ -100,8 +100,27 @@
       "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry."
     },
     {
-      "id": "coverage-1721-1916-empire",
+      "id": "coverage-1721-01-10-tsardom-title-empire-territory",
       "startMonth": "1721-01",
+      "endMonth": "1721-10",
+      "polityId": "russian-empire",
+      "politicalPolityId": "russian-tsardom",
+      "label": "Русское царство (до принятия императорского титула)",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "fallbackGeometryFile": "data/territory/archive/russian-empire.geojson",
+      "status": "reconstruction-provisional",
+      "confidence": "medium",
+      "bootstrapGeometry": true,
+      "evidenceDocumentIds": [
+        "doc-nystad-1721-ebid",
+        "doc-bucharest-1812-ebid"
+      ],
+      "notes": "Political title and geometry are separate tracks. On 22 October 1721 Julian (2 November Gregorian) Peter I accepted the imperial title. January–October 1721 are Tsardom by Gregorian month-end, while the previously materialized russian-empire territorial track remains unchanged for all of 1721. This technical geometry-track identifier must NOT be interpreted as an imperial political title before November. No boundary is inferred from the title event."
+    },
+    {
+      "id": "coverage-1721-11-1916-empire",
+      "startMonth": "1721-11",
       "endMonth": "1916-12",
       "polityId": "russian-empire",
       "label": "Российская империя",
@@ -115,7 +134,7 @@
         "doc-nystad-1721-ebid",
         "doc-bucharest-1812-ebid"
       ],
-      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry."
+      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry. The Empire label begins in November 1721 (Gregorian month-end), following Peter I's acceptance of the imperial title on 22 October Julian / 2 November Gregorian. This is political chronology only; no border polygon is added, removed or promoted to verified status by this title change."
     },
     {
       "id": "coverage-1917-01-08-revolutionary-russia-predecessor",
