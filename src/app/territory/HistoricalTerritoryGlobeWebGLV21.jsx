@@ -1,6 +1,6 @@
 'use client';
 
-import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
+import {useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoPath} from 'd3-geo';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
@@ -152,15 +152,14 @@ diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));`)};baseMaterial.customProgram
   },[]);
 
   // The globe stays mounted while the planar view is active. ResizeObserver
-  // does not fire for visibility-only changes, so explicitly remeasure and
-  // repaint on the first visible frame after returning from 2D.
-  useEffect(()=>{
+  // does not fire for visibility-only changes. Restore the WebGL viewport and
+  // draw synchronously after React has committed the visible globe host, before
+  // paint. A deferred requestAnimationFrame can be throttled during projection
+  // transitions, leaving an attached canvas showing an old/blank frame.
+  useLayoutEffect(()=>{
     if(projection!=='globe')return;
-    const frame=requestAnimationFrame(()=>{
-      const runtime=sceneRef.current;
-      if(runtime?.renderer.domElement.isConnected)runtime.resize?.();
-    });
-    return()=>cancelAnimationFrame(frame);
+    const runtime=sceneRef.current;
+    if(runtime?.renderer.domElement.isConnected)runtime.resize?.();
   },[projection]);
 
   useEffect(()=>{const group=riverRef.current;if(!group||!rivers)return;group.traverse(o=>{o.geometry?.dispose?.();o.material?.dispose?.()});group.clear();const buckets=buildRiverBuckets(rivers);if(buckets[0].length){const major=makeWideLines(buckets[0],RIVER_COLORS[0],mobile?1.55:2.05,.91,'river',0);major.line.renderOrder=5;group.add(major.line)}if(buckets[1].length){const mid=makeThinLines(buckets[1],RIVER_COLORS[1],.8,1);mid.line.renderOrder=5;group.add(mid.line)}if(buckets[2].length){const minor=makeThinLines(buckets[2],RIVER_COLORS[2],.57,2);minor.line.renderOrder=5;group.add(minor.line)}const box=hostRef.current?.getBoundingClientRect();if(box)group.children.forEach(x=>x.material?.resolution?.set?.(box.width,box.height));renderRef.current()},[rivers,mobile]);
