@@ -10,9 +10,11 @@ const at = (year, month = 7, state = old) => historicalGeometryCaveat({year, mon
 assert.equal(at(1505), null, '1505 is the source snapshot, not a reused later state');
 assert.match(at(1506).desktop, /1506-07/);
 assert.doesNotMatch(at(1509).desktop, /Псков|Смоленск/);
-assert.match(at(1510).desktop, /Псков \(1510\)/);
+assert.doesNotMatch(at(1510).desktop, /Псков/, 'do not assume an effective month inside 1510');
+assert.match(at(1511).desktop, /Псков \(1510\)/);
 assert.doesNotMatch(at(1513).desktop, /Смоленск/);
-assert.match(at(1514).desktop, /Смоленск \(1514\)/);
+assert.doesNotMatch(at(1514).desktop, /Смоленск/, 'do not assume an effective month inside 1514');
+assert.match(at(1515).desktop, /Смоленск \(1514\)/);
 assert.match(at(1532, 12).mobile, /точность не подтверждена/);
 assert.equal(at(1533, 1), null, 'do not infer uninspected months');
 assert.equal(at(1514, 7, {...old, geometryFile: 'data/history-core/generated/territory/corrected-1514.geojson'}), null,
