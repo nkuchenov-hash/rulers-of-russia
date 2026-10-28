@@ -207,8 +207,11 @@ function updateAccuracyCaption(state) {
   }
 
   ensureCaptionStyle();
-  if (caveat) paragraph.setAttribute('data-history-geometry-gap', caveat.code);
-  else paragraph.removeAttribute('data-history-geometry-gap');
+  if (caveat && paragraph.getAttribute('data-history-geometry-gap') !== caveat.code) {
+    paragraph.setAttribute('data-history-geometry-gap', caveat.code);
+  } else if (!caveat && paragraph.hasAttribute('data-history-geometry-gap')) {
+    paragraph.removeAttribute('data-history-geometry-gap');
+  }
   const compact = mobileParts.join(' · ');
   if (paragraph.getAttribute(MOBILE_CAPTION_ATTR) !== compact) paragraph.setAttribute(MOBILE_CAPTION_ATTR, compact);
   if (paragraph.getAttribute(CAPTION_ATTR) !== text) paragraph.setAttribute(CAPTION_ATTR, text);
