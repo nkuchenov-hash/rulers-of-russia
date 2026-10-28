@@ -82,9 +82,9 @@
       "notes": "The period contains many incremental accessions, inheritances, conquests and treaty changes; the fallback keeps it visible until those are replayed from documents."
     },
     {
-      "id": "coverage-1547-1721-10-tsardom",
+      "id": "coverage-1547-1720-tsardom",
       "startMonth": "1547-01",
-      "endMonth": "1721-10",
+      "endMonth": "1720-12",
       "polityId": "russian-tsardom",
       "label": "Русское царство",
       "track": "russian-legal-border",
@@ -97,7 +97,26 @@
         "doc-sgdd-vol1-1813",
         "doc-stolbovo-1617-ebid"
       ],
-      "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry. The imperial title was accepted on 22 October 1721 Julian / 2 November 1721 Gregorian; month-end Gregorian polity coverage remains Tsardom through October 1721. This title transition alone does not change geometry."
+      "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry."
+    },
+    {
+      "id": "coverage-1721-01-10-tsardom-title-empire-territory",
+      "startMonth": "1721-01",
+      "endMonth": "1721-10",
+      "polityId": "russian-empire",
+      "politicalPolityId": "russian-tsardom",
+      "label": "Русское царство (до принятия императорского титула)",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "fallbackGeometryFile": "data/territory/archive/russian-empire.geojson",
+      "status": "reconstruction-provisional",
+      "confidence": "medium",
+      "bootstrapGeometry": true,
+      "evidenceDocumentIds": [
+        "doc-nystad-1721-ebid",
+        "doc-bucharest-1812-ebid"
+      ],
+      "notes": "Political title and geometry are separate tracks. On 22 October 1721 Julian (2 November Gregorian) Peter I accepted the imperial title. January–October 1721 are Tsardom by Gregorian month-end, while the previously materialized russian-empire territorial track remains unchanged for all of 1721. This technical geometry-track identifier must NOT be interpreted as an imperial political title before November. No boundary is inferred from the title event."
     },
     {
       "id": "coverage-1721-11-1916-empire",
