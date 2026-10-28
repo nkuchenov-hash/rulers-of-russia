@@ -260,16 +260,28 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     if (validCoordinate(line[line.length - 1])) candidateCount += 1;
   }
   if (!candidateCount) return [];
-  // Global stride sampling can miss an entire small, disconnected polity
-  // component when a much larger ring exhausts the sample budget first.
-  // Preserve one anchor per ring before distributing the remaining samples.
-  // If even those anchors exceed the cap, fail closed instead of silently
-  // certifying only a subset of the historical boundary.
-  if (!Number.isInteger(maxSamples) || maxSamples < 1 || lines.length > maxSamples) {
-    throw new Error(`Cannot sample all ${lines.length} boundary rings within ${maxSamples} samples`);
+  // A single anchor per disconnected ring is not enough: a displaced
+  // island could retain one matching vertex while its opposite shore is
+  // completely wrong. Preserve the first vertex AND its geodesically most
+  // distant vertex on every ring before applying the global sample budget.
+  // Fail closed if the cap cannot cover both ends of every component.
+  const anchors = lines.flatMap(line => {
+    if (!line.every(validCoordinate)) throw new Error('Boundary ring contains an invalid sampling coordinate');
+    const first = line[0];
+    let opposite = null, greatestDistance = 0;
+    for (let i = 1; i < line.length; i += 1) {
+      const distance = haversineMeters(first, line[i]);
+      if (distance > greatestDistance) {
+        greatestDistance = distance;
+        opposite = line[i];
+      }
+    }
+    if (!opposite || greatestDistance <= 0) throw new Error('Boundary ring has no distinct opposite sampling coordinate');
+    return [first, opposite];
+  });
+  if (!Number.isInteger(maxSamples) || maxSamples < 1 || anchors.length > maxSamples) {
+    throw new Error(`Cannot sample all ${lines.length} boundary rings with ${anchors.length} minimum anchors within ${maxSamples} samples`);
   }
-  const anchors = lines.map(line => line.find(validCoordinate));
-  if (anchors.some(point => !point)) throw new Error('Boundary ring has no valid sampling coordinate');
   const points = anchors.map(point => [point[0], point[1]]);
   const seen = new Set(points.map(point => point.join(',')));
   const budget = maxSamples - points.length;
