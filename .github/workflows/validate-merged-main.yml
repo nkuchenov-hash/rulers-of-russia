@@ -34,6 +34,9 @@ jobs:
       - name: Reject critical production dependency vulnerabilities
         run: npm audit --audit-level=critical --omit=dev
 
+      - name: Verify monthly territory polity chronology
+        run: node --experimental-strip-types scripts/test-territory-chronology.mjs
+
       - name: Materialize verified source-coordinate geometry
         run: npm run materialize:history-geometry
 
