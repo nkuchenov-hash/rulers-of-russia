@@ -705,6 +705,9 @@ async function main() {
   const comparisonEvidence = comparisons.map(row => ({
     status: row.status,
     runiversResourceId: row.runiversResourceId,
+    runiversFromYear: row.runiversFromYear,
+    historyFirstMonth: row.historyFirstMonth,
+    runiversApproximate: row.runiversApproximate,
     historyGeometryFile: row.historyGeometryFile,
     referenceSamples: row.referenceSamples,
     currentSamples: row.currentSamples,
