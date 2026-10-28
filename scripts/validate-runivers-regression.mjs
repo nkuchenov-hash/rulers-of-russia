@@ -248,7 +248,7 @@ function samplingLines(payload, outerOnly = true) {
   return lines;
 }
 
-function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true) {
+function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true, anchorsPerRing = 2) {
   const lines = samplingLines(payload, outerOnly);
   let candidateCount = 0;
   for (const line of lines) {
@@ -260,16 +260,32 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     if (validCoordinate(line[line.length - 1])) candidateCount += 1;
   }
   if (!candidateCount) return [];
-  // Global stride sampling can miss an entire small, disconnected polity
-  // component when a much larger ring exhausts the sample budget first.
-  // Preserve one anchor per ring before distributing the remaining samples.
-  // If even those anchors exceed the cap, fail closed instead of silently
-  // certifying only a subset of the historical boundary.
-  if (!Number.isInteger(maxSamples) || maxSamples < 1 || lines.length > maxSamples) {
-    throw new Error(`Cannot sample all ${lines.length} boundary rings within ${maxSamples} samples`);
+  // A single anchor per disconnected ring is not enough: a displaced
+  // island could retain one matching vertex while its opposite shore is
+  // completely wrong. Preserve the first vertex AND its geodesically most
+  // distant vertex on every ring before applying the global sample budget.
+  // Fail closed if the cap cannot cover both ends of every component.
+  const anchors = lines.flatMap(line => {
+    const first = line.find(validCoordinate);
+    if (!first) throw new Error('Boundary ring has no valid sampling coordinate');
+    // Preserve the previously pinned physical-coast sampling distribution;
+    // the stronger two-shore requirement applies to political borders only.
+    if (anchorsPerRing === 1) return [first];
+    if (!line.every(validCoordinate)) throw new Error('Boundary ring contains an invalid sampling coordinate');
+    let opposite = null, greatestDistance = 0;
+    for (let i = 1; i < line.length; i += 1) {
+      const distance = haversineMeters(first, line[i]);
+      if (distance > greatestDistance) {
+        greatestDistance = distance;
+        opposite = line[i];
+      }
+    }
+    if (!opposite || greatestDistance <= 0) throw new Error('Boundary ring has no distinct opposite sampling coordinate');
+    return [first, opposite];
+  });
+  if (!Number.isInteger(maxSamples) || maxSamples < 1 || anchors.length > maxSamples) {
+    throw new Error(`Cannot sample all ${lines.length} boundary rings with ${anchors.length} minimum anchors within ${maxSamples} samples`);
   }
-  const anchors = lines.map(line => line.find(validCoordinate));
-  if (anchors.some(point => !point)) throw new Error('Boundary ring has no valid sampling coordinate');
   const points = anchors.map(point => [point[0], point[1]]);
   const seen = new Set(points.map(point => point.join(',')));
   const budget = maxSamples - points.length;
@@ -349,7 +365,7 @@ function buildCoastIndex() {
   const lakeBytes = fs.readFileSync(path.join(publicRoot, 'data/territory/cultural/lakes_50m.geojson'));
   if (crypto.createHash('sha256').update(lakeBytes).digest('hex') !== 'd350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52') throw new Error('Physical lakes source hash mismatch');
   const shores = {type: 'FeatureCollection', features: [...payloadFeatures(payload), ...payloadFeatures(JSON.parse(lakeBytes))]};
-  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
+  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false, 1);
   if (coastPoints.length < 100) throw new Error(`Coastline reference produced too few samples: ${coastPoints.length}`);
   return {index: buildPointIndex(coastPoints), samples: coastPoints.length};
 }
