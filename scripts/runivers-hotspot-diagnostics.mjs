@@ -184,6 +184,9 @@ export function diagnoseFailedBoundarySamples({
       && sample.lonLat.every(Number.isFinite)
       && Math.abs(sample.lonLat[0]) <= 180 && Math.abs(sample.lonLat[1]) <= 90
       && Number.isFinite(sample.distanceMeters) && sample.distanceMeters >= 0)
+    // Never assume the caller has pre-sorted the samples. Keep the actual
+    // largest discrepancies even when an upstream metric changes ordering.
+    .sort((a, b) => b.distanceMeters - a.distanceMeters)
     .slice(0, 3)
     .map(sample => ({
       sampledBoundary,

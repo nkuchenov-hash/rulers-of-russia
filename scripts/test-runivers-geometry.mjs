@@ -63,6 +63,17 @@ const feature = (name, x) => ({type:'Feature',properties:{name},geometry:{type:'
 const source = {type:'FeatureCollection',referenceSourceFeatures:[feature('Московское княжество',30),feature('Тверское княжество',31)],features:[]};
 const scoped = referenceForPolity(source,'grand-moscow');
 assert.equal(scoped.scope.selectedFeatures,1);
+// Later eras use whole-layer references rather than Moscow name scoping.
+// They still need original Runivers feature IDs for actionable diagnostics.
+const wholeLayer = referenceForPolity(source, 'russian-empire');
+assert.equal(wholeLayer.payload, source, 'diagnostics must not alter the reference polygon');
+assert.equal(wholeLayer.scope.kind, 'whole-reference-layer');
+assert.equal(wholeLayer.sourceFeatures.selected.length, 2,
+  'whole-layer diagnostics must retain original source features');
+assert.equal(wholeLayer.sourceFeatures.excluded.length, 0);
+const fallbackLayer = referenceForPolity({type:'FeatureCollection',features:[feature('Россия',40)]}, 'rsfsr');
+assert.equal(fallbackLayer.sourceFeatures.selected.length, 1,
+  'whole-layer diagnostics must also work without referenceSourceFeatures metadata');
 assert.deepEqual(scoped.scope.excludedNames,['Тверское княжество']);
 assert.deepEqual(scoped.payload.features[0].geometry.coordinates, [source.referenceSourceFeatures[0].geometry.coordinates]);
 assert.throws(()=>referenceForPolity({features:[]},'grand-moscow'),/original named/);
@@ -486,4 +497,32 @@ assert.deepEqual(retainedValidSamples.map(row => row.lonLat),
   'invalid leading samples must not suppress three valid worst-distance records');
 assert.ok(retainedValidSamples.every(row => row.diagnosticOnly));
 
-console.log('Runivers live worst-sample attribution passed: both directions, overlap, cap, invalid points, no geometry export.');
+// Diagnostic callers may return samples in arbitrary order. The audit must
+// report the largest discrepancies, not merely the first three valid points.
+const unsortedSamples = diagnoseFailedBoundarySamples({
+  referenceSamples: [
+    {lonLat:[40.1,54],distanceMeters:100},
+    {lonLat:[40.2,54],distanceMeters:900},
+    {lonLat:[40.3,54],distanceMeters:200},
+    {lonLat:[40.4,54],distanceMeters:800},
+    {lonLat:[40.5,54],distanceMeters:700},
+  ],
+  currentSamples: [
+    {lonLat:[39.1,54],distanceMeters:1},
+    {lonLat:[39.2,54],distanceMeters:300},
+    {lonLat:[39.3,54],distanceMeters:100},
+    {lonLat:[39.4,54],distanceMeters:200},
+  ],
+  referencePayload: diagnosticScope.payload,
+  historyPayload: diagnosticHistory,
+});
+assert.deepEqual(unsortedSamples.map(row => row.distanceMeters),
+  [900,800,700,300,200,100],
+  'each direction must retain its actual three worst finite distances');
+assert.deepEqual(unsortedSamples.map(row => row.sampledBoundary),
+  ['runivers-reference','runivers-reference','runivers-reference',
+    'history-core','history-core','history-core']);
+assert.ok(!JSON.stringify(unsortedSamples).includes('"coordinates"'),
+  'all-era diagnostic attribution must not export reference geometry');
+
+console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
