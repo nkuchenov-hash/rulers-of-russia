@@ -10,12 +10,18 @@ if (!fs.existsSync(reportFile)) {
 
 const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
 const s = report.summary ?? {};
-const counters = ['usableReferenceLayers','comparisons','passingComparisons','overrides','failedComparisons','referenceFailures','missingStates','uncoveredMonths'];
+const counters = ['runiversLayersDiscovered','datedLayersAudited','usableReferenceLayers','comparisons','passingComparisons','overrides','failedComparisons','referenceFailures','missingStates','uncoveredMonths'];
 for (const name of counters) {
   if (!Number.isInteger(s[name]) || s[name] < 0) {
     console.error(`Runivers report has an invalid or missing ${name} counter.`);
     process.exit(1);
   }
+}
+// Every dated layer selected for this shard must be accounted for. A green
+// subset is not independent geographic verification of the full interval.
+if (s.datedLayersAudited === 0 || s.datedLayersAudited > s.runiversLayersDiscovered) {
+  console.error('Runivers report dated-layer coverage is invalid or exceeds discovered layers.');
+  process.exit(1);
 }
 if (s.passingComparisons + s.overrides + s.failedComparisons !== s.comparisons) {
   console.error('Runivers report comparison totals are inconsistent.');
@@ -80,6 +86,14 @@ if (referenceFailures > 0) {
 
 if (failed > 0 || missingStates > 0 || uncoveredMonths > 0) {
   console.error(`Runivers regression failed: ${failed} contour failures, ${missingStates} missing states, ${uncoveredMonths} uncovered months.`);
+  process.exit(1);
+}
+
+// Do not accept a passing subset when one or more discovered, dated,
+// overlapping reference layers never yielded a bilateral comparison.
+// Reference-failure and contour-failure diagnostics above take precedence.
+if (usable !== s.datedLayersAudited) {
+  console.error(`Runivers regression audited ${s.datedLayersAudited} dated reference layers but only ${usable} yielded comparable borders; incomplete layer coverage cannot pass.`);
   process.exit(1);
 }
 
