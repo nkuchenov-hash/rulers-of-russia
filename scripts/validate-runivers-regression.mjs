@@ -614,12 +614,14 @@ async function main() {
       const override = overrideFor(overrides, state, layer.id);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
-      // Attribute the five documented 1520-1599 clusters to original named
-      // and excluded source records. Point probes cannot certify a border;
-      // retain the existing symmetric distance gate and failure status.
-      const earlyPolityFailure = status === 'fail'
+      // Diagnose every failed comparison, not just the XVI-century clusters:
+      // otherwise later eras have distances but no original source identities
+      // at the worst mismatches. These probes are NOT geographic acceptance.
+      // Keep the existing symmetric distance gate and failure status.
+      const failedComparison = status === 'fail';
+      const earlyPolityFailure = failedComparison
         && (state.polityId === 'grand-moscow' || state.polityId === 'russian-tsardom');
-      const historicalPayload = earlyPolityFailure ? loadHistoryGeometry(state) : null;
+      const historicalPayload = failedComparison ? loadHistoryGeometry(state) : null;
       const hotspotDiagnostics = earlyPolityFailure ? diagnoseEarlyRussiaHotspots({
         year: comparisonYear,
         referencePayload: scoped.referencePayload,
@@ -627,9 +629,10 @@ async function main() {
         selectedSourceFeatures: scoped.sourceFeatures?.selected ?? [],
         excludedSourceFeatures: scoped.sourceFeatures?.excluded ?? [],
       }) : [];
-      // Use the worst points from THIS comparison as well as the fixed issue
-      // #326 hotspots: a past hotspot can be outside both present-day contours.
-      const boundarySampleAttribution = earlyPolityFailure ? diagnoseFailedBoundarySamples({
+      // Attribute both directions of the worst mismatch for ALL failed eras.
+      // The five fixed issue #326 hotspots remain specific to early Russia.
+      // Never include raw Runivers geometry in the audit report.
+      const boundarySampleAttribution = failedComparison ? diagnoseFailedBoundarySamples({
         referenceSamples: metric.worstReferenceSamples,
         currentSamples: metric.worstCurrentSamples,
         referencePayload: scoped.referencePayload,
