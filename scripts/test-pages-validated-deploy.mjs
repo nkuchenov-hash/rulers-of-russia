@@ -61,7 +61,7 @@ try {
   const b = commit('unvalidated B');
   const obsoletePin = run(pin, a);
   assert.notEqual(obsoletePin.status, 0, 'an old successful workflow must not publish newer unvalidated main');
-  assert.match(obsoletePin.stderr, /superseded/);
+  assert.match(obsoletePin.stdout + obsoletePin.stderr, /superseded/);
   assert.equal(run(pin, b).status, 0, 'newly validated main can be pinned');
   assert.equal(git('rev-parse', 'HEAD'), b);
   git('checkout', 'main');
@@ -69,7 +69,7 @@ try {
   commit('unvalidated C');
   const staleDeploy = run(guard, b);
   assert.notEqual(staleDeploy.status, 0, 'a main update during build must block the stale deployment');
-  assert.match(staleDeploy.stderr, /newer main must pass its own validation/);
+  assert.match(staleDeploy.stdout + staleDeploy.stderr, /newer main must pass its own validation/);
   console.log('Pages SHA safety passed: exact revision pin, superseded workflow rejection, and pre-deploy race guard.');
 } finally {
   fs.rmSync(root, {recursive: true, force: true});
