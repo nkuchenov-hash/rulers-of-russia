@@ -1,12 +1,27 @@
 // A History Core "geometry-verified" snapshot is not evidence that a reused
-// contour reflects all later territorial transitions. Keep this warning tied
-// to the actual 1505 geometry file so a future dated replacement clears it.
+// contour reflects all later territorial transitions. Keep these warnings tied
+// to the actual 1462/1505 geometry files so dated replacements clear them.
+const MOSCOW_1462_FILE = /(?:^|\/)base-grand-moscow-end-1462-1462-12-01\.geojson$/;
 const MOSCOW_1505_FILE = /(?:^|\/)base-grand-moscow-end-1505-1505-12-01\.geojson$/;
 
 export function historicalGeometryCaveat(date, monthState) {
   if (!date || monthState?.status !== 'geometry-verified') return null;
   if (!Number.isInteger(date.year) || !Number.isInteger(date.month) || date.month < 1 || date.month > 12) return null;
   const key = `${String(date.year).padStart(4, '0')}-${String(date.month).padStart(2, '0')}`;
+
+  // The explicitly dated 1462 Tornau state is carried through 1504-12.
+  // Novgorod's annexation in 1478 is not present in a 1462 Moscow contour.
+  // The world-background filter also suppresses obsolete independent
+  // Novgorod from 1478, so this gap must never be labelled verified.
+  // A year-only source cannot certify an effective month within 1478.
+  if (key >= '1463-01' && key <= '1504-12' && MOSCOW_1462_FILE.test(String(monthState.geometryFile ?? ''))) {
+    const missing = date.year > 1478 ? '; не отражено присоединение Новгорода (1478)' : '';
+    return {
+      code: 'muscovy-1462-reused',
+      desktop: `Контур 1462 г. повторно используется для ${key}${missing}; соответствие выбранному месяцу независимо не подтверждено`,
+      mobile: `Контур 1462 г. · ${date.year > 1478 ? 'не отражён Новгород (1478) · ' : ''}точность не подтверждена`,
+    };
+  }
   if (key < '1506-01' || key > '1532-12') return null;
   if (!MOSCOW_1505_FILE.test(String(monthState.geometryFile ?? ''))) return null;
 
