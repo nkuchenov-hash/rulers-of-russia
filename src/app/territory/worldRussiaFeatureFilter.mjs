@@ -5,8 +5,11 @@
 // NAME, and vice versa. PARTOF is deliberately excluded: a non-Russian polity
 // can have Russian suzerainty without being the Russian state polygon.
 const NAME_FIELDS = ['NAME_RU', 'name_ru', 'RU_NAME', 'NAME', 'name', 'ADMIN', 'entity', 'polity', 'ABBREVN', 'SUBJECTO'];
-const ENGLISH = /\b(?:russia|russian|soviet|ussr|rsfsr|union of soviet socialist republics|kievan rus|rus|muscovy|moscow|novgorod|vladimir)\b/i;
-const CYRILLIC = /(?:^|[^а-яё])(?:россия|российск[а-яё]*|русск[а-яё]*|русь|ссср|рсфср|советск[а-яё]*|московия|московск[а-яё]*|новгородск[а-яё]*|владимирск[а-яё]*)(?=$|[^а-яё])/i;
+// "Soviet" alone does not identify the USSR: the Hungarian, Bavarian and
+// Slovak Soviet republics were distinct polities. Do not erase their world
+// context simply because their form of government included the same word.
+const ENGLISH = /\b(?:russia|russian|ussr|rsfsr|union of soviet socialist republics|soviet union|soviet russia|kievan rus|kyivan rus|rus|muscovy|moscow|novgorod|vladimir)\b/i;
+const CYRILLIC = /(?:^|[^а-яё])(?:россия|российск[а-яё]*|русск[а-яё]*|русь|ссср|рсфср|советский союз|советская россия|союз советских социалистических республик|московия|московск[а-яё]*|новгородск[а-яё]*|владимирск[а-яё]*)(?=$|[^а-яё])/i;
 
 export function isRussianWorldFeature(feature) {
   const properties = feature?.properties;
