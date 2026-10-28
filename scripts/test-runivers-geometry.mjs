@@ -13,7 +13,12 @@ const disconnected = {type: 'FeatureCollection', features: [largeComponent, tiny
 const sparseSamples = samplePayload(disconnected, 1000, 5);
 assert.ok(sparseSamples.length <= 5, 'sample cap must still be respected');
 assert.ok(sparseSamples.some(([lon]) => lon < 31), 'mainland ring must be sampled');
-assert.ok(sparseSamples.some(([lon]) => lon >= 70), 'small disconnected ring must never be dropped');
+const tinySamples = sparseSamples.filter(([lon]) => lon >= 70);
+assert.ok(tinySamples.length >= 2, 'small disconnected ring must retain two separate border anchors');
+assert.ok(new Set(tinySamples.map(point => point.join(','))).size >= 2,
+  'a single matching vertex must not stand in for the opposite shore of an island');
+assert.throws(() => samplePayload(disconnected, 1000, 3), /Cannot sample all 2 boundary rings with 4 minimum anchors/,
+  'when the cap cannot cover both ends of every ring, the geographic audit must fail closed');
 assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 boundary rings/,
   'when even one sample per ring is impossible, the geographic audit must fail closed');
 console.log('Runivers component sampling tests passed: disconnected borders survive capped sampling.');
