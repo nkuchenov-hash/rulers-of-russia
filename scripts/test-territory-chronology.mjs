@@ -8,7 +8,7 @@ const coverage = JSON.parse(readFileSync(new URL(
   '../public/data/history-core/coverage-periods.json', import.meta.url,
 ), 'utf8'));
 const periodAt = (year, month) => coverage.periods.find(period => {
-  const key = `${year}-${String(month).padStart(2, '0')}`;
+  const key = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}`;
   return key >= period.startMonth && key <= period.endMonth;
 });
 
