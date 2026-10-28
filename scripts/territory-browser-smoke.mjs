@@ -248,6 +248,23 @@ try {
     await racePage.close();
   }
 
+  // Impossible deep links must never silently render the 862 or 2026 map.
+  for (const badQuery of ['?year=1', '?year=1721&month=13', '?year=1510&year=1514']) {
+    const badPage = await browser.newPage({viewport: {width: 390, height: 844}});
+    try {
+      const badUrl = new URL(url);
+      badUrl.search = badQuery;
+      const response = await badPage.goto(badUrl.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+      if (!response?.ok()) throw new Error('Invalid date route returned HTTP ' + response?.status());
+      await badPage.getByRole('alert').getByText('Некорректная дата карты').waitFor({timeout: 10000});
+      if (await badPage.locator('canvas').count()) {
+        throw new Error('Invalid date ' + badQuery + ' incorrectly mounted a historical map');
+      }
+    } finally {
+      await badPage.close();
+    }
+  }
+
   console.log('Territory browser smoke passed:', JSON.stringify(state));
 } catch (error) {
   const bodyText = await page.evaluate(() => document.body?.innerText?.slice(0, 1600) || '').catch(() => '');
