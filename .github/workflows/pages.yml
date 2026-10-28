@@ -5,7 +5,6 @@ on:
     workflows:
       - Validate merged main
     types: [completed]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,9 +18,8 @@ concurrency:
 jobs:
   build-and-deploy:
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == 'main')
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -57,13 +55,6 @@ jobs:
           done
           echo "Validated SHA $VALIDATED_SHA did not reach main within 10 minutes."
           exit 1
-
-      - name: Ensure manual deploy uses current main
-        if: github.event_name == 'workflow_dispatch'
-        shell: bash
-        run: |
-          git fetch origin main --prune
-          git checkout --detach origin/main
 
       - name: Resolve deployed revision
         id: revision
