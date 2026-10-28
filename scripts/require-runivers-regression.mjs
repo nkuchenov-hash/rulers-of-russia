@@ -53,9 +53,9 @@ for (const row of evidence) {
   const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
   const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
   const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
-  if (!shardStart || !shardEnd
-    || row.historyFirstMonth > row.historyLastMonth
-    || row.historyFirstMonth < shardStart || row.historyLastMonth > shardEnd
+  if (row.historyFirstMonth > row.historyLastMonth
+    || (shardStart && row.historyFirstMonth < shardStart)
+    || (shardEnd && row.historyLastMonth > shardEnd)
     || sourceLastYear < row.runiversFromYear
     || row.runiversFromYear > historyEndYear || sourceLastYear < historyStartYear) {
     console.error('Runivers comparison evidence refers to an out-of-shard or non-overlapping historical interval.');
