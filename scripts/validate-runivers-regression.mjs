@@ -698,7 +698,22 @@ async function main() {
     runiversIntervalSemantics: 'half-open chained ranges; terminal year inclusive',
   };
   fs.mkdirSync(reportDir, {recursive: true});
-  fs.writeFileSync(reportFile, JSON.stringify({schema_version: 2, generatedAt: new Date().toISOString(), summary, stateCoverage, failedComparisons, referenceFailures, uncoveredMonths}, null, 2));
+  // Retain numeric evidence for EVERY comparison, including passing ones.
+  // The previous report only serialized failures: a green summary could not
+  // be audited against actual symmetric border distances. Never serialize
+  // Runivers polygons or even sampled reference coordinates into this ledger.
+  const comparisonEvidence = comparisons.map(row => ({
+    status: row.status,
+    runiversResourceId: row.runiversResourceId,
+    historyGeometryFile: row.historyGeometryFile,
+    referenceSamples: row.referenceSamples,
+    currentSamples: row.currentSamples,
+    symmetricP95Meters: row.symmetricP95Meters,
+    symmetricMaxMeters: row.symmetricMaxMeters,
+    toleranceMeters: row.toleranceMeters,
+    maxToleranceMeters: row.maxToleranceMeters,
+  }));
+  fs.writeFileSync(reportFile, JSON.stringify({schema_version: 2, generatedAt: new Date().toISOString(), summary, comparisonEvidence, stateCoverage, failedComparisons, referenceFailures, uncoveredMonths}, null, 2));
   console.log('Runivers geometric regression summary:', JSON.stringify(summary));
   console.log(`Report: ${reportFile}`);
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
