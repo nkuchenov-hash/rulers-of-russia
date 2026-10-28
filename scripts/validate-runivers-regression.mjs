@@ -260,8 +260,27 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     if (validCoordinate(line[line.length - 1])) candidateCount += 1;
   }
   if (!candidateCount) return [];
-  const stride = Math.max(1, Math.ceil(candidateCount / maxSamples));
-  const points = [];
+  // Global stride sampling can miss an entire small, disconnected polity
+  // component when a much larger ring exhausts the sample budget first.
+  // Preserve one anchor per ring before distributing the remaining samples.
+  // If even those anchors exceed the cap, fail closed instead of silently
+  // certifying only a subset of the historical boundary.
+  if (!Number.isInteger(maxSamples) || maxSamples < 1 || lines.length > maxSamples) {
+    throw new Error(`Cannot sample all ${lines.length} boundary rings within ${maxSamples} samples`);
+  }
+  const anchors = lines.map(line => line.find(validCoordinate));
+  if (anchors.some(point => !point)) throw new Error('Boundary ring has no valid sampling coordinate');
+  const points = anchors.map(point => [point[0], point[1]]);
+  const seen = new Set(points.map(point => point.join(',')));
+  const budget = maxSamples - points.length;
+  const stride = budget > 0 ? Math.max(1, Math.ceil(candidateCount / budget)) : Infinity;
+  const append = point => {
+    const key = point.join(',');
+    if (!seen.has(key) && points.length < maxSamples) {
+      points.push(point);
+      seen.add(key);
+    }
+  };
   let candidateIndex = 0;
   for (const line of lines) {
     for (let i = 0; i + 1 < line.length; i += 1) {
@@ -271,14 +290,14 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
       const segmentStart = candidateIndex, segmentEnd = segmentStart + steps;
       let selected = segmentStart + ((stride - (segmentStart % stride)) % stride);
       while (selected < segmentEnd && points.length < maxSamples) {
-        points.push(interpolateLonLat(a, b, (selected - segmentStart) / steps));
+        append(interpolateLonLat(a, b, (selected - segmentStart) / steps));
         selected += stride;
       }
       candidateIndex = segmentEnd;
     }
     const last = line[line.length - 1];
     if (validCoordinate(last)) {
-      if (candidateIndex % stride === 0 && points.length < maxSamples) points.push([last[0], last[1]]);
+      if (candidateIndex % stride === 0 && points.length < maxSamples) append([last[0], last[1]]);
       candidateIndex += 1;
     }
   }
@@ -666,7 +685,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
+export {samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });

@@ -1,5 +1,22 @@
 import assert from 'node:assert/strict';
-import {buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+
+// A global stride must not skip a small disconnected island or enclave just
+// because the preceding continental ring has thousands of candidates.
+const largeComponent = {type: 'Feature', geometry: {type: 'Polygon', coordinates: [[
+  [0,0],[30,0],[30,1],[0,1],[0,0],
+]]}, properties: {}};
+const tinyComponent = {type: 'Feature', geometry: {type: 'Polygon', coordinates: [[
+  [70,0],[70.01,0],[70.01,.01],[70,.01],[70,0],
+]]}, properties: {}};
+const disconnected = {type: 'FeatureCollection', features: [largeComponent, tinyComponent]};
+const sparseSamples = samplePayload(disconnected, 1000, 5);
+assert.ok(sparseSamples.length <= 5, 'sample cap must still be respected');
+assert.ok(sparseSamples.some(([lon]) => lon < 31), 'mainland ring must be sampled');
+assert.ok(sparseSamples.some(([lon]) => lon >= 70), 'small disconnected ring must never be dropped');
+assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 boundary rings/,
+  'when even one sample per ring is impossible, the geographic audit must fail closed');
+console.log('Runivers component sampling tests passed: disconnected borders survive capped sampling.');
 
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
