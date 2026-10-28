@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {territoryPeriodAt} from '../src/app/territory/territoryChronology.ts';
+import {POLITY_TRANSITION_YEARS, TERRITORY_MIN_YEAR, TERRITORY_MAX_YEAR, territoryPeriodAt} from '../src/app/territory/territoryChronology.ts';
 
 // Compare the UI's period selection against the independent canonical
 // History Core coverage model, not against hard-coded expected UI labels.
@@ -11,6 +11,32 @@ const periodAt = (year, month) => coverage.periods.find(period => {
   const key = `${year}-${String(month).padStart(2, '0')}`;
   return key >= period.startMonth && key <= period.endMonth;
 });
+
+// Fail closed on unsupported dates rather than silently returning the 862 state.
+for (const year of [TERRITORY_MIN_YEAR - 1, TERRITORY_MAX_YEAR + 1, NaN, 1721.5]) {
+  assert.throws(() => territoryPeriodAt(year, 1), RangeError,
+    `Unsupported year ${year} must not resolve to a different historical state`);
+}
+assert.equal(new Set(POLITY_TRANSITION_YEARS).size, POLITY_TRANSITION_YEARS.length,
+  'Monthly transitions within one year must not duplicate year markers');
+assert.equal(POLITY_TRANSITION_YEARS.filter(year => year === 1721).length, 1);
+assert.equal(POLITY_TRANSITION_YEARS.filter(year => year === 1922).length, 1);
+
+// Compare EVERY month in the public range with the canonical political track.
+// This also catches accidental gaps in the UI chronology, rather than silently
+// rendering the earliest period when no period covers a valid selected date.
+let verifiedMonths = 0;
+for (let year = TERRITORY_MIN_YEAR; year <= TERRITORY_MAX_YEAR; year++) {
+  for (let month = 1; month <= 12; month++) {
+    const expected = periodAt(year, month);
+    assert.ok(expected, `canonical coverage missing ${year}-${month}`);
+    assert.equal(territoryPeriodAt(year, month).polityId,
+      expected.politicalPolityId ?? expected.polityId,
+      `territory UI political title disagrees with History Core for ${year}-${month}`);
+    verifiedMonths++;
+  }
+}
+assert.equal(verifiedMonths, 13980, 'UI chronology must cover the entire 862–2026 monthly range');
 
 for (const [first, last] of [[1720, 1722], [1917, 1923]]) {
   for (let year = first; year <= last; year++) {
@@ -54,4 +80,4 @@ assert.equal(territoryPeriodAt(1917, 1).label, 'Россия в 1917 году',
 assert.throws(() => territoryPeriodAt(1922, 0), RangeError);
 assert.throws(() => territoryPeriodAt(1922, 13), RangeError);
 
-console.log('Territory monthly polity chronology matches canonical History Core for 1720–1722 and 1917–1923, including Gregorian 1721 title transition.');
+console.log('Territory chronology covers all 13980 months without gaps, rejects unsupported dates, deduplicates transition years, and preserves 1721/1922 title transitions.');
