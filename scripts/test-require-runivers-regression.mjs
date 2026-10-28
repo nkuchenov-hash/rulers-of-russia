@@ -26,7 +26,7 @@ try {
    ...Array.from({length: s.passingComparisons ?? 0}, () => metricRow('pass')),
    ...Array.from({length: s.failedComparisons ?? 0}, () => metricRow('fail')),
    ...Array.from({length: s.overrides ?? 0}, () => metricRow('override')),
- ];
+ ].map((row, index) => ({...row, runiversResourceId: row.runiversResourceId + index}));
  const run=(s,shard=completeShard,expected={},comparisonEvidence=evidenceFor(s))=>{
    fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard,comparisonEvidence}));
    return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
