@@ -30,7 +30,7 @@ for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
     || !Number.isInteger(row.runiversResourceId) || row.runiversResourceId <= 0
     || !Number.isInteger(row.runiversFromYear) || row.runiversFromYear < 1
-    || typeof row.historyFirstMonth !== 'string' || !/^\\d{4}-(0[1-9]|1[0-2])$/.test(row.historyFirstMonth)
+    || typeof row.historyFirstMonth !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(row.historyFirstMonth)
     || typeof row.runiversApproximate !== 'boolean'
     || typeof row.historyGeometryFile !== 'string' || !row.historyGeometryFile
     || !Number.isInteger(row.referenceSamples) || row.referenceSamples <= 0
