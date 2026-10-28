@@ -23,20 +23,6 @@ const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ско
 const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
 const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: княжество)?$/i;
 
-// The pinned 1492 and 1500 world snapshots contain Pskov and Ryazan as
-// separately named polities. The 1500 snapshot is reused until 1529, even
-// after their annexations by Moscow (Pskov 1510; Ryazan 1521). Retain them
-// as independent background context BEFORE those years, and suppress stale
-// independent fills afterwards. This is a year-level BACKGROUND guard, not
-// evidence for the exact month of either boundary transition.
-// Sources: https://pskov.ru/region/istoriya/prisoedinenie-k-moskve
-// https://bigenc.ru/c/rossiia-istoriia-russkoe-gosudarstvo-obrazovanie-stanovlenie-formirovanie-territorii-i-ebc93b
-// https://nationalatlas.ru/tom1/20-22.html
-const PSKOV_ENGLISH = /^(?:(?:republic|principality|land) of )?pskov(?: (?:republic|principality|land))?$/i;
-const PSKOV_CYRILLIC = /^(?:псков|псковск[а-яё]*)(?: (?:республика|земля|княжество))?$/i;
-const RYAZAN_ENGLISH = /^(?:(?:grand )?(?:duchy|principality|land) of )?ryazan(?: (?:grand duchy|principality|land))?$/i;
-const RYAZAN_CYRILLIC = /^(?:рязань|рязанск[а-яё]*)(?: (?:княжество|земля))?$/i;
-
 // Use the selected historical year, not the older world-snapshot year.
 // This controls BACKGROUND rendering only; it never certifies or changes
 // History Core sovereign geometry. If the year is unavailable, fail safe
@@ -48,12 +34,6 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
     const name = properties[key];
     if (typeof name !== 'string') return false;
     if (ENGLISH.test(name) || CYRILLIC.test(name)) return true;
-    if (PSKOV_ENGLISH.test(name.trim()) || PSKOV_CYRILLIC.test(name.trim())) {
-      return Number.isInteger(selectedYear) && selectedYear >= 1510;
-    }
-    if (RYAZAN_ENGLISH.test(name.trim()) || RYAZAN_CYRILLIC.test(name.trim())) {
-      return Number.isInteger(selectedYear) && selectedYear >= 1521;
-    }
     if (SEVERSKY_ENGLISH.test(name.trim()) || SEVERSKY_CYRILLIC.test(name.trim())) {
       return Number.isInteger(selectedYear) && selectedYear >= 1503;
     }
