@@ -86,6 +86,31 @@ try {
     }
   }
 
+  // History Core assigns January–November 1922 to RSFSR and December 1922
+  // to the USSR. The displayed polity and both map projections must follow
+  // the selected month, not just the calendar year.
+  const preUnion = await loadHistoricalDate(1922, 11);
+  await page.waitForFunction(() => document.querySelector('main aside h1')?.textContent?.trim() === 'Российская СФСР',
+    null, {timeout: 12000});
+  await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+  await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1922-11',
+    null, {timeout: 15000});
+  await page.getByLabel('Месяц').selectOption('12');
+  await page.waitForFunction(() =>
+    document.querySelector('main aside h1')?.textContent?.trim() === 'Союз Советских Социалистических Республик'
+    && (document.body?.innerText || '').includes('History Core 1922-12')
+    && document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1922-12',
+  null, {timeout: 30000});
+  await page.getByRole('button', {name: 'Показать глобус'}).click();
+  await page.waitForFunction(() => document.querySelector('canvas[data-territory-globe="true"]')?.getBoundingClientRect().height > 0,
+    null, {timeout: 12000}).catch(() => {});
+
+  // January 1917 must not be mislabeled as the Russian Republic: the
+  // month-index deliberately treats the entire year as transitional.
+  const preRepublic = await loadHistoricalDate(1917, 1);
+  await page.waitForFunction(() => document.querySelector('main aside h1')?.textContent?.trim() === 'Россия в 1917 году',
+    null, {timeout: 12000});
+
   // Historical Basemaps has 1530 then 1600; 1573 must visibly identify 1530
   // as approximate temporal context rather than an exact 1573 world border.
   const changed1573 = await loadHistoricalDate(1573, 7);
