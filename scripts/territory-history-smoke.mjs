@@ -102,8 +102,10 @@ try {
     && document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1922-12',
   null, {timeout: 30000});
   await page.getByRole('button', {name: 'Показать глобус'}).click();
-  await page.waitForFunction(() => document.querySelector('canvas[data-territory-globe="true"]')?.getBoundingClientRect().height > 0,
-    null, {timeout: 12000}).catch(() => {});
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('main div[class*="globeHost"] canvas');
+    return canvas?.width > 300 && canvas?.height > 100 && canvas.getBoundingClientRect().height > 100;
+  }, null, {timeout: 12000});
 
   // January 1917 must not be mislabeled as the Russian Republic: the
   // month-index deliberately treats the entire year as transitional.
