@@ -20,8 +20,8 @@ const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ско
 // 1529. The 1503 Lithuanian–Muscovite peace formally recognized its transfer;
 // suppress that stale separate background polygon from 1503 onward.
 // This is a year-level visual guard, not a month-accurate sovereignty claim.
-const SEVERSKY_ENGLISH = /^novgorod[- ](?:seversky|seversk|siversky|siversk)$/i;
-const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*$/i;
+const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
+const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: княжество)?$/i;
 
 // Use the selected historical year, not the older world-snapshot year.
 // This controls BACKGROUND rendering only; it never certifies or changes
