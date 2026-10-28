@@ -486,4 +486,32 @@ assert.deepEqual(retainedValidSamples.map(row => row.lonLat),
   'invalid leading samples must not suppress three valid worst-distance records');
 assert.ok(retainedValidSamples.every(row => row.diagnosticOnly));
 
-console.log('Runivers live worst-sample attribution passed: both directions, overlap, cap, invalid points, no geometry export.');
+// Diagnostic callers may return samples in arbitrary order. The audit must
+// report the largest discrepancies, not merely the first three valid points.
+const unsortedSamples = diagnoseFailedBoundarySamples({
+  referenceSamples: [
+    {lonLat:[40.1,54],distanceMeters:100},
+    {lonLat:[40.2,54],distanceMeters:900},
+    {lonLat:[40.3,54],distanceMeters:200},
+    {lonLat:[40.4,54],distanceMeters:800},
+    {lonLat:[40.5,54],distanceMeters:700},
+  ],
+  currentSamples: [
+    {lonLat:[39.1,54],distanceMeters:1},
+    {lonLat:[39.2,54],distanceMeters:300},
+    {lonLat:[39.3,54],distanceMeters:100},
+    {lonLat:[39.4,54],distanceMeters:200},
+  ],
+  referencePayload: diagnosticScope.payload,
+  historyPayload: diagnosticHistory,
+});
+assert.deepEqual(unsortedSamples.map(row => row.distanceMeters),
+  [900,800,700,300,200,100],
+  'each direction must retain its actual three worst finite distances');
+assert.deepEqual(unsortedSamples.map(row => row.sampledBoundary),
+  ['runivers-reference','runivers-reference','runivers-reference',
+    'history-core','history-core','history-core']);
+assert.ok(!JSON.stringify(unsortedSamples).includes('"coordinates"'),
+  'all-era diagnostic attribution must not export reference geometry');
+
+console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
