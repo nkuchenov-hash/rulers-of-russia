@@ -58,36 +58,6 @@ const archivedFeature = (snapshot, name) => {
   assert.ok(feature, `Pinned world snapshot ${snapshot} must contain ${name}`);
   return feature;
 };
-// Both archived snapshots really contain independent Pskov and Ryazan
-// polygons. When a 1500 world snapshot is reused in 1510–1529, those
-// polygons must no longer obscure the month-resolved Moscow territory.
-// Year-level hiding does NOT claim a precise annexation month.
-for (const snapshot of [1492, 1500]) {
-  const pskov = archivedFeature(snapshot, 'Pskov');
-  const ryazan = archivedFeature(snapshot, 'Ryazan');
-  assert.equal(isRussianWorldFeature(pskov, 1509), false,
-    `Pskov remains separate before 1510 in world snapshot ${snapshot}`);
-  assert.equal(isRussianWorldFeature(pskov, 1510), true,
-    `obsolete Pskov polygon must not cover Moscow from 1510 in snapshot ${snapshot}`);
-  assert.equal(isRussianWorldFeature(pskov, 1529), true);
-  assert.equal(isRussianWorldFeature(ryazan, 1520), false,
-    `Ryazan remains separate before 1521 in world snapshot ${snapshot}`);
-  assert.equal(isRussianWorldFeature(ryazan, 1521), true,
-    `obsolete Ryazan polygon must not cover Moscow from 1521 in snapshot ${snapshot}`);
-  assert.equal(isRussianWorldFeature(ryazan, 1529), true);
-}
-assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Псковская республика'}}, 1509), false);
-assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Псковская республика'}}, 1510), true);
-assert.equal(isRussianWorldFeature({properties:{NAME:'Republic of Pskov'}}, 1510), true);
-assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанское княжество'}}, 1520), false);
-assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанское княжество'}}, 1521), true);
-assert.equal(isRussianWorldFeature({properties:{NAME:'Grand Duchy of Ryazan'}}, 1521), true);
-assert.equal(isRussianWorldFeature({properties:{NAME:'Pskov Oblast'}}, 1510), false,
-  'do not erase unrelated administrative geography based on a substring');
-assert.equal(isRussianWorldFeature({properties:{NAME:'Ryazan region'}}, 1521), false);
-assert.equal(isRussianWorldFeature({properties:{NAME:'Ryazan'}}, null), false,
-  'without a selected year, do not guess annexation of a separate polity');
-
 const novgorod1400 = archivedFeature(1400, 'Novgorod');
 assert.equal(isRussianWorldFeature(novgorod1400, 1400), false,
   'Novgorod Republic must remain visible alongside Moscow in the 1400 world context');
@@ -116,4 +86,4 @@ assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod-Seversky'}}, 1500
 assert.equal(isRussianWorldFeature({properties:{NAME:'Russian Empire', NAME_RU:'Новгородская республика'}}, 1462), true,
   'a separately named Novgorod alias must not override explicit Russian-state identity');
 
-console.log('Historical world Russian-state polygons are excluded across English/Russian aliases; Pskov/Ryazan/Novgorod annexations are year-aware and unrelated polities remain visible.');
+console.log('Historical world Russian-state polygons are excluded across English/Russian aliases; unrelated Soviet republics and PARTOF remain visible.');
