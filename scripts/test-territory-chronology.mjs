@@ -17,8 +17,9 @@ for (const [first, last] of [[1720, 1722], [1917, 1923]]) {
     for (let month = 1; month <= 12; month++) {
       const expected = periodAt(year, month);
       assert.ok(expected, `canonical coverage missing ${year}-${month}`);
-      assert.equal(territoryPeriodAt(year, month).polityId, expected.polityId,
-        `territory UI disagrees with History Core for ${year}-${month}`);
+      assert.equal(territoryPeriodAt(year, month).polityId,
+        expected.politicalPolityId ?? expected.polityId,
+        `territory UI political title disagrees with History Core for ${year}-${month}`);
     }
   }
 }
@@ -28,12 +29,16 @@ for (const [first, last] of [[1720, 1722], [1917, 1923]]) {
 for (let month = 1; month <= 10; month++) {
   assert.equal(territoryPeriodAt(1721, month).polityId, 'russian-tsardom',
     `1721-${month}: imperial title not yet accepted (Gregorian)`);
-  assert.equal(periodAt(1721, month)?.polityId, 'russian-tsardom',
-    `1721-${month}: canonical coverage prematurely labels Empire`);
+  assert.equal(periodAt(1721, month)?.politicalPolityId, 'russian-tsardom',
+    `1721-${month}: canonical political title prematurely labels Empire`);
+  assert.equal(periodAt(1721, month)?.polityId, 'russian-empire',
+    `1721-${month}: geometry lineage must remain unchanged by title correction`);
 }
 for (const month of [11, 12]) {
   assert.equal(territoryPeriodAt(1721, month).polityId, 'russian-empire');
   assert.equal(periodAt(1721, month)?.polityId, 'russian-empire');
+  assert.equal(periodAt(1721, month)?.politicalPolityId ?? periodAt(1721, month)?.polityId,
+    'russian-empire');
 }
 assert.equal(territoryPeriodAt(1721).polityId, 'russian-empire',
   'legacy year-only callers use the year-end state');
