@@ -13,6 +13,7 @@ import {TERRITORY_PLACES} from './territoryPlaces';
 import styles from './territory-webgl.module.css';
 import {HistoricalTerritoryFlatMap} from './HistoricalTerritoryFlatMap';
 import {fillProjectedFeature} from './globeTextureFill.mjs';
+import {isRussianWorldFeature} from './worldRussiaFeatureFilter.mjs';
 
 const TWO_PI=Math.PI*2;
 const MAX_FEATURE_AREA=2.2;
@@ -22,7 +23,6 @@ const COUNTRY_PALETTE=['#9a5f55','#7f8e5e','#6f7fa4','#b3874f','#568490','#8e6f4
 const RIVER_COLORS=[0x6f9eaa,0x82a8af,0x91adb1];
 const CAPITAL_DISTANCE=1.105;
 const CITY_DISTANCE=1.055;
-const RUSSIAN_WORLD_RE=/(^|\b)(russia|russian|soviet|ussr|union of soviet socialist republics|kievan rus|rus|muscovy|moscow|novgorod|vladimir)(\b|$)/i;
 
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const yearPart=v=>{const m=String(v??'').match(/-?\d{3,4}/);return m?Number(m[0]):null};
@@ -32,7 +32,6 @@ function normalizeCollection(c){return{...c,features:(c?.features??[]).map(norma
 function featureName(f){const p=f?.properties??{};return[p.NAME_RU,p.name_ru,p.RU_NAME,p.NAME,p.name,p.ADMIN,p.entity,p.polity,p.ABBREVN,p.SUBJECTO,p.PARTOF].find(x=>typeof x==='string'&&x.trim())?.trim()??''}
 function featureSetKey(features){return(features??[]).map(f=>`${featureName(f)}:${yearPart(f?.properties?.start_date)??''}:${yearPart(f?.properties?.end_date)??''}`).join('|')}
 function countryColor(f,i=0){const name=featureName(f);let h=23+i*17;for(let k=0;k<name.length;k++)h=((h<<5)-h+name.charCodeAt(k))|0;return COUNTRY_PALETTE[Math.abs(h)%COUNTRY_PALETTE.length]}
-function isRussianWorldFeature(f){return RUSSIAN_WORLD_RE.test(featureName(f))}
 function validAt(f,y){const s=yearPart(f?.properties?.start_date),e=yearPart(f?.properties?.end_date);return(s===null||y>=s)&&(e===null||y<=e)}
 function selectRussia(c,y){if(!c?.features?.length)return[];const exact=c.features.filter(f=>validAt(f,y));if(exact.length)return exact;const prev=c.features.map(feature=>({feature,start:yearPart(feature.properties?.start_date)})).filter(x=>x.start!==null&&x.start<=y).sort((a,b)=>b.start-a.start);return prev.length?prev.filter(x=>x.start===prev[0].start).map(x=>x.feature):[]}
 function latLonVector(lat,lon,r=1){const p=lat*Math.PI/180,l=lon*Math.PI/180;return new THREE.Vector3(Math.cos(p)*Math.cos(l),Math.sin(p),-Math.cos(p)*Math.sin(l)).multiplyScalar(r)}
