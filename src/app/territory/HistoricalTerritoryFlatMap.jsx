@@ -1,6 +1,6 @@
 'use client';
 
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
 import {isRussianWorldFeature} from './worldRussiaFeatureFilter.mjs';
 
@@ -26,6 +26,24 @@ export function HistoricalTerritoryFlatMap({
   const [size,setSize]=useState({width:1,height:1});
   const [terrain,setTerrain]=useState(null);
   const focusLon=focus[0],focusLat=focus[1];
+
+  // The historical background and its labels depend on the selected year,
+  // not on camera movement. Keep source feature indices for stable colors.
+  // Filtering, area ranking and geographic centroids must not run on every
+  // pointer move, wheel step or zoom-button redraw.
+  const worldFeatures=useMemo(()=>(world?.features??[])
+    .filter(feature=>feature?.geometry)
+    .map((feature,index)=>({feature,index}))
+    .filter(({feature})=>!isRussianWorldFeature(feature,year)),[world,year]);
+  const worldLabels=useMemo(()=>worldFeatures
+    .map(({feature})=>({feature,area:geoArea(feature)}))
+    .filter(({area})=>Number.isFinite(area)&&area>0)
+    .sort((a,b)=>b.area-a.area)
+    .slice(0,mobile?18:35)
+    .map(({feature})=>({name:countryName(feature),coordinates:geoCentroid(feature)}))
+    .filter(({name,coordinates})=>name&&name.length<=21
+      &&Number.isFinite(coordinates?.[0])&&Number.isFinite(coordinates?.[1])),
+  [worldFeatures,mobile]);
 
   useEffect(()=>{
     const node=hostRef.current;
@@ -56,8 +74,12 @@ export function HistoricalTerritoryFlatMap({
     if(!ctx)return;
     const {width,height}=size;
     const dpr=Math.min(window.devicePixelRatio||1,mobile?1.5:2);
-    canvas.width=Math.max(1,Math.round(width*dpr));
-    canvas.height=Math.max(1,Math.round(height*dpr));
+    const bitmapWidth=Math.max(1,Math.round(width*dpr));
+    const bitmapHeight=Math.max(1,Math.round(height*dpr));
+    // Assigning canvas.width/height reallocates and clears the bitmap even
+    // when the value is unchanged. Camera redraws must reuse the buffer.
+    if(canvas.width!==bitmapWidth)canvas.width=bitmapWidth;
+    if(canvas.height!==bitmapHeight)canvas.height=bitmapHeight;
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,width,height);
     ctx.fillStyle='#071821';
@@ -94,14 +116,10 @@ export function HistoricalTerritoryFlatMap({
     ctx.lineWidth=1;
     ctx.stroke();
 
-    const worldFeatures=(world?.features??[]).filter(f=>f?.geometry);
-    for(let i=0;i<worldFeatures.length;i++){
-      const feature=worldFeatures[i];
-      // These world polygons represent context at worldYear, not the Russian
-      // state at the chosen month. The Russian fill is drawn separately.
-      if(isRussianWorldFeature(feature,year))continue;
+    // These polygons are year-level context; Russian fill is separate.
+    for(const {feature,index} of worldFeatures){
       ctx.beginPath();path(feature);
-      ctx.fillStyle=colorFor(feature,i);
+      ctx.fillStyle=colorFor(feature,index);
       ctx.globalAlpha=mode==='states'?.79:.32;
       ctx.fill('evenodd');
       ctx.globalAlpha=worldYear===year?.68:.43;
@@ -136,16 +154,10 @@ export function HistoricalTerritoryFlatMap({
     ctx.globalAlpha=1;
 
     if(camera.zoom>=1.5){
-      const ranked=worldFeatures.filter(f=>!isRussianWorldFeature(f,year)).map(f=>({f,a:geoArea(f)}))
-        .filter(item=>Number.isFinite(item.a)&&item.a>0)
-        .sort((a,b)=>b.a-a.a).slice(0,mobile?18:35);
       ctx.font='600 16px Georgia,serif';
       ctx.textAlign='center';
       ctx.textBaseline='middle';
-      for(const item of ranked){
-        const name=countryName(item.f);
-        if(!name||name.length>21)continue;
-        const coordinates=geoCentroid(item.f);
+      for(const {name,coordinates} of worldLabels){
         const point=projection(coordinates);
         if(!point||point[0]<50||point[0]>width-50||point[1]<16||point[1]>height-16)continue;
         ctx.lineWidth=3;ctx.strokeStyle='rgba(4,14,18,.9)';
@@ -156,7 +168,7 @@ export function HistoricalTerritoryFlatMap({
     }
     // No geometry means no Russian territory is painted. The existing
     // History Core accuracy caption reports that state explicitly.
-  },[size,terrain,world,russiaFeatures,verifiedBoundaries,historyLoading,
+  },[size,terrain,worldFeatures,worldLabels,russiaFeatures,verifiedBoundaries,historyLoading,
     worldYear,year,focusLon,focusLat,mode,camera,mobile]);
 
   const onPointerDown=useCallback(e=>{

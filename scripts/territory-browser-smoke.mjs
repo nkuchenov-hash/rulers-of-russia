@@ -155,11 +155,32 @@ try {
       && canvas.dataset.historyMonth === '1992-02';
   }, null, {timeout: 15000});
   const zoomBefore = Number(await flatCanvas.getAttribute('data-camera-zoom'));
+  // Camera-only redraws must not write canvas.width/height: assigning even
+  // the same bitmap size clears and reallocates the entire 2D backing store.
+  // Observe the real canvas after initial layout has settled.
+  await flatCanvas.evaluate(canvas => {
+    window.__flatBitmapSizeWrites = 0;
+    window.__flatBitmapSizeObserver = new MutationObserver(mutations => {
+      window.__flatBitmapSizeWrites += mutations.length;
+    });
+    window.__flatBitmapSizeObserver.observe(canvas, {
+      attributes: true, attributeFilter: ['width', 'height']
+    });
+  });
   await page.getByRole('button', {name: '+', exact: true}).click();
   await page.waitForFunction(oldZoom => {
     const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
     return Number(canvas?.dataset.cameraZoom) > oldZoom;
   }, zoomBefore, {timeout: 8000});
+  // The zoom state update must also have had time to redraw.
+  await page.waitForTimeout(200);
+  const bitmapWrites = await page.evaluate(() => {
+    window.__flatBitmapSizeObserver?.disconnect();
+    return window.__flatBitmapSizeWrites;
+  });
+  if (bitmapWrites !== 0) {
+    throw new Error(`Flat map reallocated its canvas bitmap ${bitmapWrites} times on a zoom-only redraw`);
+  }
 
   // The flat view must use the same month-resolved Russian polygon as the globe.
   await monthSelect.selectOption('3');
