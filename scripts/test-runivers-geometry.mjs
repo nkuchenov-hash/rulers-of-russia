@@ -63,6 +63,17 @@ const feature = (name, x) => ({type:'Feature',properties:{name},geometry:{type:'
 const source = {type:'FeatureCollection',referenceSourceFeatures:[feature('Московское княжество',30),feature('Тверское княжество',31)],features:[]};
 const scoped = referenceForPolity(source,'grand-moscow');
 assert.equal(scoped.scope.selectedFeatures,1);
+// Later eras use whole-layer references rather than Moscow name scoping.
+// They still need original Runivers feature IDs for actionable diagnostics.
+const wholeLayer = referenceForPolity(source, 'russian-empire');
+assert.equal(wholeLayer.payload, source, 'diagnostics must not alter the reference polygon');
+assert.equal(wholeLayer.scope.kind, 'whole-reference-layer');
+assert.equal(wholeLayer.sourceFeatures.selected.length, 2,
+  'whole-layer diagnostics must retain original source features');
+assert.equal(wholeLayer.sourceFeatures.excluded.length, 0);
+const fallbackLayer = referenceForPolity({type:'FeatureCollection',features:[feature('Россия',40)]}, 'rsfsr');
+assert.equal(fallbackLayer.sourceFeatures.selected.length, 1,
+  'whole-layer diagnostics must also work without referenceSourceFeatures metadata');
 assert.deepEqual(scoped.scope.excludedNames,['Тверское княжество']);
 assert.deepEqual(scoped.payload.features[0].geometry.coordinates, [source.referenceSourceFeatures[0].geometry.coordinates]);
 assert.throws(()=>referenceForPolity({features:[]},'grand-moscow'),/original named/);
