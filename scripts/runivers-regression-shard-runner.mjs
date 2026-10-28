@@ -263,14 +263,23 @@ if (!preflight.healthy) {
       excludedMonthCount,
       excludedYears,
     };
+    // Keep the validator's independently reported audit range intact. The
+    // shard metadata describes the requested range, not proof that the child
+    // actually audited it. Overwriting auditedRange here would launder a
+    // truncated or wrong-period report into an apparently matching one.
+    const validatorRange = report.summary?.auditedRange;
+    const auditRangeMatches = validatorRange?.startMonth === startMonth
+      && validatorRange?.endMonth === endMonth;
+    if (!auditRangeMatches) {
+      console.error(`Runivers validator audited ${validatorRange?.startMonth ?? '<missing>'}..${validatorRange?.endMonth ?? '<missing>'}, not requested shard ${startMonth}..${endMonth}; refusing to certify.`);
+    }
     if (report.summary) {
-      report.summary.auditedRange = {startMonth, endMonth};
       report.summary.historyMonthsInShard = rangeMonths.length;
       report.summary.historyMonthsComparedAtRuniversYearGranularity = comparableMonths.length;
       report.summary.historyMonthsExcludedFromRuniversYearCrossCheck = excludedMonthCount;
       report.summary.runiversReferenceGranularity = 'year';
     }
     fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
-    process.exitCode = child.status ?? 1;
+    process.exitCode = auditRangeMatches ? (child.status ?? 1) : 1;
   }
 }
