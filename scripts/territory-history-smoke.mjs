@@ -86,6 +86,32 @@ try {
     }
   }
 
+  // Imperial title: 22 October 1721 Julian = 2 November Gregorian.
+  // The monthly timeline is Gregorian month-end; the title must not be
+  // backdated to January, nor should the change imply a new border polygon.
+  const beforeEmpire = await loadHistoricalDate(1721, 10);
+  await page.waitForFunction(() =>
+    document.querySelector('main aside h1')?.textContent?.trim() === 'Русское царство'
+    && document.querySelector('main aside')?.getAttribute('data-history-loaded-month') === '1721-10',
+  null, {timeout: 30000});
+  await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+  await page.waitForFunction(() =>
+    document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1721-10',
+  null, {timeout: 15000});
+  await page.getByLabel('Месяц').selectOption('11');
+  await page.waitForFunction(() =>
+    document.querySelector('main aside h1')?.textContent?.trim() === 'Российская империя'
+    && (document.body?.innerText || '').includes('History Core 1721-11')
+    && document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1721-11',
+  null, {timeout: 30000});
+  await page.getByRole('button', {name: 'Показать глобус'}).click();
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('main div[class*="globeHost"] canvas');
+    return canvas?.width > 300 && canvas?.height > 100
+      && canvas.getBoundingClientRect().height > 100
+      && document.querySelector('main aside')?.getAttribute('data-history-loaded-month') === '1721-11';
+  }, null, {timeout: 15000});
+
   // History Core assigns January–November 1922 to RSFSR and December 1922
   // to the USSR. The displayed polity and both map projections must follow
   // the selected month, not just the calendar year.
@@ -236,7 +262,7 @@ try {
     canvas: (() => { const c = document.querySelector('canvas'); return c ? [c.width,c.height] : null; })()
   }));
   if (!summary.canvas) throw new Error('Historical WebGL canvas missing');
-  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, changed1573, changed1581, blockedCanonicalGeometry, interceptedGeometryUrl, summary}));
+  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, beforeEmpire, changed1573, changed1581, blockedCanonicalGeometry, interceptedGeometryUrl, summary}));
 } finally {
   await browser.close();
 }
