@@ -6,6 +6,26 @@ const old = {
   geometryFile: 'data/history-core/generated/territory/base-grand-moscow-end-1505-1505-12-01.geojson',
 };
 const at = (year, month = 7, state = old) => historicalGeometryCaveat({year, month}, state);
+const older = {
+  status: 'geometry-verified',
+  geometryFile: 'data/history-core/generated/territory/base-grand-moscow-end-1462-1462-12-01.geojson',
+};
+const at1462 = (year, month = 7, state = older) => historicalGeometryCaveat({year, month}, state);
+
+assert.equal(at1462(1462, 12), null, 'the dated 1462 snapshot is not a reused state');
+assert.match(at1462(1463, 1).desktop, /1463-01/);
+assert.doesNotMatch(at1462(1477, 12).desktop, /Новгород/);
+assert.doesNotMatch(at1462(1478, 12).desktop, /Новгород/,
+  'year-only evidence does not certify an exact annexation month in 1478');
+assert.match(at1462(1479, 1).desktop, /присоединение Новгорода \(1478\)/);
+assert.match(at1462(1479, 1).mobile, /Новгород \(1478\)/);
+assert.match(at1462(1504, 12).mobile, /точность не подтверждена/);
+assert.equal(at1462(1505, 1), null, 'do not infer an uninspected 1505 month');
+assert.equal(at1462(1480, 1, {...older, geometryFile:'data/history-core/generated/territory/corrected-1480.geojson'}), null,
+  'a newly dated polygon must clear the 1462 reuse warning');
+assert.equal(at1462(1480, 1, {...older, status:'reconstruction-provisional'}), null,
+  'provisional geometry is not a geometry-verified reused snapshot');
+
 
 assert.equal(at(1505), null, '1505 is the source snapshot, not a reused later state');
 assert.match(at(1506).desktop, /1506-07/);
