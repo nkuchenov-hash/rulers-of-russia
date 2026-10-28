@@ -155,4 +155,7 @@ jobs:
 
       - name: Classify geometric regression result
         if: steps.baseline.outcome == 'success'
+        env:
+          RUNIVERS_START_MONTH: ${{ matrix.start }}
+          RUNIVERS_END_MONTH: ${{ matrix.end }}
         run: node scripts/require-runivers-regression.mjs
