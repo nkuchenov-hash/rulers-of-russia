@@ -19,9 +19,9 @@ const otherNames = [
   {NAME: 'Finland', PARTOF: 'Russian Empire'},
   {NAME_RU: 'Белоруссия', NAME: 'Belarus'},
   {NAME: 'Mongolia'}, {NAME: 'Kingdom of Poland'},
-  {NAME: 'Sovietsky district'}, // Russian words alone require state-name context? 
+  {NAME: 'Sovietsky district'},
 ];
-for (const properties of otherNames.slice(0, -1)) {
+for (const properties of otherNames) {
   assert.equal(isRussianWorldFeature({properties}), false, JSON.stringify(properties));
 }
 assert.equal(isRussianWorldFeature({properties: {NAME: 'Finland', PARTOF: 'Russian Empire'}}), false);
