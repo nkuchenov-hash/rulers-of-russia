@@ -248,7 +248,7 @@ function samplingLines(payload, outerOnly = true) {
   return lines;
 }
 
-function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true) {
+function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true, anchorsPerRing = 2) {
   const lines = samplingLines(payload, outerOnly);
   let candidateCount = 0;
   for (const line of lines) {
@@ -266,8 +266,12 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
   // distant vertex on every ring before applying the global sample budget.
   // Fail closed if the cap cannot cover both ends of every component.
   const anchors = lines.flatMap(line => {
+    const first = line.find(validCoordinate);
+    if (!first) throw new Error('Boundary ring has no valid sampling coordinate');
+    // Preserve the previously pinned physical-coast sampling distribution;
+    // the stronger two-shore requirement applies to political borders only.
+    if (anchorsPerRing === 1) return [first];
     if (!line.every(validCoordinate)) throw new Error('Boundary ring contains an invalid sampling coordinate');
-    const first = line[0];
     let opposite = null, greatestDistance = 0;
     for (let i = 1; i < line.length; i += 1) {
       const distance = haversineMeters(first, line[i]);
@@ -361,7 +365,7 @@ function buildCoastIndex() {
   const lakeBytes = fs.readFileSync(path.join(publicRoot, 'data/territory/cultural/lakes_50m.geojson'));
   if (crypto.createHash('sha256').update(lakeBytes).digest('hex') !== 'd350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52') throw new Error('Physical lakes source hash mismatch');
   const shores = {type: 'FeatureCollection', features: [...payloadFeatures(payload), ...payloadFeatures(JSON.parse(lakeBytes))]};
-  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false);
+  const coastPoints = samplePayload(shores, COAST_SAMPLE_STEP_M, MAX_COAST_SAMPLES, false, 1);
   if (coastPoints.length < 100) throw new Error(`Coastline reference produced too few samples: ${coastPoints.length}`);
   return {index: buildPointIndex(coastPoints), samples: coastPoints.length};
 }
