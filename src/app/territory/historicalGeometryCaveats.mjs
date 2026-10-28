@@ -11,8 +11,10 @@ export function historicalGeometryCaveat(date, monthState) {
   if (!MOSCOW_1505_FILE.test(String(monthState.geometryFile ?? ''))) return null;
 
   const missing = [];
-  if (date.year >= 1510) missing.push('Псков (1510)');
-  if (date.year >= 1514) missing.push('Смоленск (1514)');
+  // Event years are known, but exact effective months are not certified here.
+  // Only name an omitted event after its entire calendar year has passed.
+  if (date.year > 1510) missing.push('Псков (1510)');
+  if (date.year > 1514) missing.push('Смоленск (1514)');
   const changes = missing.length ? `; не отражены изменения: ${missing.join(', ')}` : '';
   return {
     code: 'muscovy-1505-reused',
