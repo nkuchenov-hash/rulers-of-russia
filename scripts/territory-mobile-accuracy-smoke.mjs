@@ -30,7 +30,10 @@ try {
           if (!canvas || !canvas.isConnected) return false;
           const rect = canvas.getBoundingClientRect();
           const style = getComputedStyle(canvas);
-          return canvas.width > 300 && canvas.height > 200
+          // A render counter can advance even after the WebGL context is lost.
+          const gl = canvas.getContext('webgl2');
+          return Boolean(gl && !gl.isContextLost())
+            && canvas.width > 300 && canvas.height > 200
             && rect.width >= viewportWidth * 0.75 && rect.height > 150
             && rect.right > 0 && rect.left < viewportWidth
             && style.display !== 'none' && style.visibility === 'visible'
@@ -44,6 +47,32 @@ try {
       const previousRenderCount = await globeRenderCount();
       await page.getByRole('button', {name: 'Показать глобус'}).click();
       await waitForRenderedGlobe(stage, previousRenderCount);
+    };
+    // A visible, correctly dated 2D canvas may still contain only a blank
+    // backing store. Sample actual painted pixels without storing screenshots
+    // or relying on one color that could change with the map theme.
+    const waitForPaintedFlatMap = async (month, stage) => {
+      try {
+        await page.waitForFunction(expectedMonth => {
+          const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
+          if (!canvas || canvas.dataset.historyMonth !== expectedMonth) return false;
+          const context = canvas.getContext('2d');
+          if (!context || canvas.width < 300 || canvas.height < 100) return false;
+          const colors = new Set();
+          for (let y = 1; y <= 9; y += 1) {
+            for (let x = 1; x <= 9; x += 1) {
+              const pixel = context.getImageData(
+                Math.floor(canvas.width * x / 10),
+                Math.floor(canvas.height * y / 10), 1, 1
+              ).data;
+              if (pixel[3] > 200) colors.add(`${pixel[0]},${pixel[1]},${pixel[2]}`);
+            }
+          }
+          return colors.size >= 3;
+        }, month, {polling: 200, timeout: 15000});
+      } catch (error) {
+        throw new Error(`mobile ${width}: flat map has no varied painted pixels at ${stage} (${month})`, {cause: error});
+      }
     };
     const target = new URL(url);
     target.searchParams.set('year', '1581');
@@ -98,6 +127,7 @@ try {
       const node=document.querySelector('canvas[data-territory-flat-map="true"]');
       return node?.width > 300 && node?.height > 100 && node?.dataset.historyMonth === '1581-07';
     }, null, {timeout: 15000});
+    await waitForPaintedFlatMap('1581-07', 'initial 2D switch');
     const mapBounds = await flat.boundingBox();
     assert(mapBounds && mapBounds.width >= width - 1,
       `mobile ${width}: flat map fails to fill the viewport: ${JSON.stringify(mapBounds)}`);
@@ -245,6 +275,7 @@ try {
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /независимая точность не подтверждена/,
       `mobile ${width}: independent-accuracy warning lost in 2D`);
+    await waitForPaintedFlatMap('2026-02', 'modern 2D switch');
 
     await returnToGlobe('2026-02');
     assert.equal(errors.length, 0, `mobile ${width}: page errors ${errors.join('; ')}`);
