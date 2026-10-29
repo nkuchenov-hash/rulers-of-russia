@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Approximation metadata raises the existing Runivers tolerance from the
 // year-specific limit to 100 km. A negative flag or a field name alone must
@@ -79,6 +79,12 @@ const extra = [...points, [60, 50]];
 const mismatch = comparePoliticalGeometry({points, allCount: 3}, {points: extra, allCount: 4}, {hasPolygon: true, types: ['Polygon']});
 assert.ok(mismatch.currentToReferenceMaxMeters > 1000000, 'extra distant boundaries must still fail');
 assert.deepEqual(mismatch.worstCurrentSamples[0].lonLat, [60, 50]);
+const publicMismatch = publicComparisonMetric(mismatch);
+assert.equal(publicMismatch.symmetricMaxMeters, mismatch.symmetricMaxMeters,
+  'redaction must preserve independent geographic distances');
+assert.ok(!Object.hasOwn(publicMismatch, 'worstReferenceSamples')
+  && !Object.hasOwn(publicMismatch, 'worstCurrentSamples'),
+  'failed comparison reports must not contain sampled Runivers or History Core border points');
 assert.equal(layerContainsYear({fromYear: 1992, toYear: 2004}, 2004, 2020), false);
 assert.equal(layerContainsYear({fromYear: 2014, toYear: 2020}, 2020, 2020), true);
 const unmatched = unmatchedReferenceLayers([
