@@ -42,11 +42,15 @@ export function historicalGeometryCaveat(date, monthState) {
   if (key >= '1510-01') missing.push('Псков (1510)');
   if (key >= '1514-08') missing.push('Смоленск (1514)');
   // The 1505 Moscow contour also predates the annexation of Ryazan in 1521.
-  // As with Pskov/Smolensk, year-only evidence is insufficient to assert an
-  // exact transition month, so report it only from the following calendar year.
-  // https://bigenc.ru/c/rossiia-istoriia-russkoe-gosudarstvo-obrazovanie-stanovlenie-formirovanie-territorii-i-ebc93b
-  // https://nationalatlas.ru/tom1/20-22.html
-  if (date.year > 1521) missing.push('Рязань (1521)');
+  // A published archival study documents the last prince's flight in July
+  // 1521 and an interrogation on 31 August (Julian); a Ryazan historical
+  // account documents Moscow's garrison holding the city in August 1521.
+  // These sources establish a change within 1521, but do not establish the
+  // exact legal effective month. Warn by the END of that year, not only 1522;
+  // deliberately do not claim that an earlier 1521 month is exact.
+  // https://www.vostlit.info/Texts/Dokumenty/Litva/XVI/1520-1540/Ivan_Ivanovic_Rjazaskij/text.htm
+  // https://www.rzn.info/articles/pochemu-ryazan-prisoedinili-k-moskve-500-let-nazad.html
+  if (key >= '1521-12') missing.push('Рязань (1521)');
   const changes = missing.length ? `; не отражены изменения: ${missing.join(', ')}` : '';
   return {
     code: 'muscovy-1505-reused',
