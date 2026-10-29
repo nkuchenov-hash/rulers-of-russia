@@ -28,6 +28,9 @@ if (!Array.isArray(evidence) || evidence.length !== s.comparisons) {
 const evidenceCounts = {pass: 0, fail: 0, override: 0};
 const seenEvidence = new Set();
 const comparedResourceIds = new Set();
+const evidenceCoveredMonths = new Set();
+const ordinalForMonth = month => Number(month.slice(0, 4)) * 12 + Number(month.slice(5)) - 1;
+
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
     || !Number.isInteger(row.runiversResourceId) || row.runiversResourceId <= 0
@@ -70,6 +73,15 @@ for (const row of evidence) {
   }
   seenEvidence.add(identity);
   comparedResourceIds.add(row.runiversResourceId);
+  // A source overlapping a long-lived History Core state in one year does not
+  // independently verify the other years of that state. Retain only the
+  // calendar-month intersection of the source and the state for coverage.
+  const evidenceStart = Math.max(ordinalForMonth(row.historyFirstMonth), row.runiversFromYear * 12);
+  const evidenceEnd = Math.min(ordinalForMonth(row.historyLastMonth), sourceLastYear * 12 + 11);
+  for (let month = evidenceStart; month <= evidenceEnd; month += 1) {
+    evidenceCoveredMonths.add(month);
+  }
+
 
   // Recompute the original validator tolerance policy from the dated
   // comparison, rather than trusting potentially inflated report numbers.
@@ -239,5 +251,22 @@ if (report.shard.excludedMonthCount > 0) {
   console.error(`Runivers shard excluded ${report.shard.excludedMonthCount}/${report.shard.rangeMonthCount} months in transition/ambiguous years; year-granular comparisons cannot certify complete dated geographic coverage.`);
   process.exit(1);
 }
+
+// The validator's uncoveredMonths counter is useful but cannot substitute
+// for evidence-based coverage: a comparison with a 1920 reference must not
+// certify a 1920–1921 state merely because the state spans both years.
+const missingEvidenceMonths = [];
+for (let month = startOrdinal; month <= endOrdinal; month += 1) {
+  if (!evidenceCoveredMonths.has(month)) {
+    const year = Math.floor(month / 12);
+    const monthOfYear = month % 12 + 1;
+    missingEvidenceMonths.push(`${String(year).padStart(4, '0')}-${String(monthOfYear).padStart(2, '0')}`);
+  }
+}
+if (missingEvidenceMonths.length) {
+  console.error(`Runivers comparison evidence does not cover ${missingEvidenceMonths.length}/${report.shard.rangeMonthCount} shard months (first: ${missingEvidenceMonths.slice(0, 3).join(', ')}).`);
+  process.exit(1);
+}
+
 
 console.log(`Runivers regression accepted: ${comparisons} comparisons, ${Number(s.passingComparisons ?? 0)} passes, ${Number(s.overrides ?? 0)} evidence-backed overrides.`);
