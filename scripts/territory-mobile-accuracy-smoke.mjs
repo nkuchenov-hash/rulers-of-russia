@@ -139,6 +139,28 @@ try {
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
 
+    // A source-backed internal History Core state must never be presented
+    // as independently geographically accepted, including on narrow phones
+    // and after switching projection.
+    const verifiedTarget = new URL(url);
+    verifiedTarget.searchParams.set('year', '2026');
+    verifiedTarget.searchParams.set('month', '2');
+    const verifiedResponse = await page.goto(verifiedTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+    assert(verifiedResponse?.ok(), `mobile ${width}: 2026 HTTP ${verifiedResponse?.status()}`);
+    await page.waitForFunction(() => {
+      const p = document.querySelector('main aside p[data-history-accuracy-caption]');
+      return (document.body?.innerText || '').includes('History Core 2026-02')
+        && (p?.getAttribute('data-history-mobile-caption') || '').includes('независимая точность не подтверждена')
+        && (p?.getAttribute('data-history-accuracy-caption') || '').includes('внутренний аудит');
+    }, null, {timeout: 45000});
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await page.waitForFunction(() =>
+      document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '2026-02',
+      null, {timeout: 15000});
+    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+      /независимая точность не подтверждена/,
+      `mobile ${width}: independent-accuracy warning lost in 2D`);
+
     assert.equal(errors.length, 0, `mobile ${width}: page errors ${errors.join('; ')}`);
     console.log(`Mobile territory ${width}px passed:`, JSON.stringify(metrics));
     await page.close();

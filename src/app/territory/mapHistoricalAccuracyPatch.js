@@ -179,7 +179,7 @@ function updateAccuracyCaption(state) {
   }
 
   if (caveat) {
-    text = text.replace('проверенная геометрия', 'геометрия с непроверенной актуальностью');
+    text = text.replace('геометрия прошла внутренний аудит; независимая точность не подтверждена', 'геометрия с непроверенной актуальностью; независимая точность не подтверждена');
     text += ` · ${caveat.desktop}`;
   }
 
@@ -198,7 +198,7 @@ function updateAccuracyCaption(state) {
       mobileParts.push('Документальная реконструкция границы');
     }
   } else if (monthState?.status === 'geometry-verified') {
-    mobileParts.push('Историческая геометрия проверена');
+    mobileParts.push('History Core: внутренний аудит · независимая точность не подтверждена');
   } else {
     mobileParts.push('Исторические границы пока не проверены');
   }

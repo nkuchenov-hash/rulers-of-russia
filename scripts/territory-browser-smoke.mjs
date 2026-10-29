@@ -78,7 +78,7 @@ const waitForGlobeCanvas = async (stage, minRenderCount = 0) => {
 const waitForHistoryStateStatus = async () => {
   await page.waitForFunction(() => {
     const text = document.body?.innerText || '';
-    return text.includes('проверенная геометрия') || text.includes('реконструкция · достоверность');
+    return text.includes('геометрия прошла внутренний аудит; независимая точность не подтверждена') || text.includes('реконструкция · достоверность');
   }, null, { timeout: 8000 });
 };
 
@@ -102,6 +102,14 @@ try {
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core'), null, { timeout: 8000 });
   await waitForHistoryStateStatus();
   await waitForCurrentVerifiedTracks();
+  // A History Core geometry-verified state has passed the internal source
+  // audit, not the independent Runivers geographic comparison. Both the
+  // desktop and mobile caption must disclose that distinction.
+  await page.waitForFunction(() => {
+    const p = document.querySelector('main aside p');
+    return p?.getAttribute('data-history-accuracy-caption')?.includes('независимая точность не подтверждена')
+      && p?.getAttribute('data-history-mobile-caption')?.includes('независимая точность не подтверждена');
+  }, null, {timeout: 8000});
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
 
