@@ -132,7 +132,7 @@ try {
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1490-01',
       null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
-      /Тверь \\(1485\\).*Вятка \\(1489\\)/, `mobile ${width}: 1490 warning lost in 2D`);
+      /Тверь \(1485\).*Вятка \(1489\)/, `mobile ${width}: 1490 warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
 
     // The 1505 Muscovy contour is still reused for 1514: do not call it
