@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Approximation metadata raises the existing Runivers tolerance from the
 // year-specific limit to 100 km. A negative flag or a field name alone must
@@ -79,6 +79,12 @@ const extra = [...points, [60, 50]];
 const mismatch = comparePoliticalGeometry({points, allCount: 3}, {points: extra, allCount: 4}, {hasPolygon: true, types: ['Polygon']});
 assert.ok(mismatch.currentToReferenceMaxMeters > 1000000, 'extra distant boundaries must still fail');
 assert.deepEqual(mismatch.worstCurrentSamples[0].lonLat, [60, 50]);
+const publicMismatch = publicComparisonMetric(mismatch);
+assert.equal(publicMismatch.symmetricMaxMeters, mismatch.symmetricMaxMeters,
+  'redaction must preserve independent geographic distances');
+assert.ok(!Object.hasOwn(publicMismatch, 'worstReferenceSamples')
+  && !Object.hasOwn(publicMismatch, 'worstCurrentSamples'),
+  'failed comparison reports must not contain sampled Runivers or History Core border points');
 assert.equal(layerContainsYear({fromYear: 1992, toYear: 2004}, 2004, 2020), false);
 assert.equal(layerContainsYear({fromYear: 2014, toYear: 2020}, 2020, 2020), true);
 const unmatched = unmatchedReferenceLayers([
@@ -586,6 +592,8 @@ assert.equal(worstAttribution[3].historyLocation, 'boundary');
 assert.ok(worstAttribution.every(row => row.diagnosticOnly));
 assert.ok(!JSON.stringify(worstAttribution).includes('"coordinates"'),
   'do not copy unlicensed reference polygons into diagnostic reports');
+assert.ok(worstAttribution.every(row => !Object.hasOwn(row, 'lonLat')),
+  'never publish source-derived worst-boundary sample coordinates');
 assert.deepEqual(diagnoseFailedBoundarySamples({
   referenceSamples: [{lonLat: [NaN, 54], distanceMeters: 1}],
 }), [], 'invalid sample coordinates cannot be attributed');
@@ -603,9 +611,11 @@ const retainedValidSamples = diagnoseFailedBoundarySamples({
   referencePayload: diagnosticScope.payload,
   historyPayload: diagnosticHistory,
 });
-assert.deepEqual(retainedValidSamples.map(row => row.lonLat),
-  [[40.25,54],[40.5,54],[40.75,54]],
+assert.deepEqual(retainedValidSamples.map(row => row.distanceMeters),
+  [700000,600000,500000],
   'invalid leading samples must not suppress three valid worst-distance records');
+assert.ok(retainedValidSamples.every(row => !Object.hasOwn(row, 'lonLat')),
+  'valid source samples must be attributed without publishing their coordinates');
 assert.ok(retainedValidSamples.every(row => row.diagnosticOnly));
 
 // Diagnostic callers may return samples in arbitrary order. The audit must
@@ -635,6 +645,8 @@ assert.deepEqual(unsortedSamples.map(row => row.sampledBoundary),
     'history-core','history-core','history-core']);
 assert.ok(!JSON.stringify(unsortedSamples).includes('"coordinates"'),
   'all-era diagnostic attribution must not export reference geometry');
+assert.ok(!JSON.stringify(unsortedSamples).includes('"lonLat"'),
+  'all-era diagnostic attribution must not export sampled source coordinates');
 
 // NextGIS source properties are not guaranteed to be scalar. An embedded
 // object could carry unlicensed geometry into a public failure report, and

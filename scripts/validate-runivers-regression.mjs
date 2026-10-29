@@ -460,6 +460,12 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
   };
 }
 
+export function publicComparisonMetric(metric) {
+  // Public reports retain numeric distances, never sampled boundary points.
+  const {worstReferenceSamples, worstCurrentSamples, ...safeMetric} = metric;
+  return safeMetric;
+}
+
 // A reference can have valid polygons but zero comparable inland border
 // samples on the History Core side (for example after coast masking). Do not
 // silently skip that layer: another successful layer could otherwise hide
@@ -674,6 +680,9 @@ async function main() {
         selectedSourceFeatures: scoped.sourceFeatures?.selected ?? [],
         excludedSourceFeatures: scoped.sourceFeatures?.excluded ?? [],
       }) : [];
+      // Worst-sample coordinates are needed in memory for attribution but
+      // cannot be copied to public Actions artifacts: the reference-side
+      // samples are derived from potentially licensed Runivers geometry.
       const row = {
         referenceScope: scoped.scope, status, runiversResourceId: layer.id, runiversName: layer.displayName,
         runiversFromYear: layer.fromYear, runiversToYear: layer.toYear,
@@ -682,7 +691,7 @@ async function main() {
         snapshotId: state.snapshotId, certificationId: state.certificationId,
         historyFirstMonth: state.firstMonth, historyLastMonth: state.lastMonth,
         historyVerificationClass: state.verificationClass, historyUncertaintyMeters: state.uncertaintyMeters,
-        toleranceMeters: tolerance, maxToleranceMeters: maxTolerance, ...metric, overrideId: override?.id ?? null,
+        toleranceMeters: tolerance, maxToleranceMeters: maxTolerance, ...publicComparisonMetric(metric), overrideId: override?.id ?? null,
         ...(hotspotDiagnostics.length ? {hotspotDiagnostics} : {}),
         ...(boundarySampleAttribution.length ? {boundarySampleAttribution} : {}),
       };
