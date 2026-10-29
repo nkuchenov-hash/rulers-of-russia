@@ -40,11 +40,34 @@ export function referenceForPolity(payload, polityId) {
     // Preserve its ORIGINAL source features for diagnostic attribution too:
     // otherwise non-Moscow failures show coordinates but no source IDs.
     // This stays in memory; only bounded feature identities enter reports.
-    const features = Array.isArray(payload.referenceSourceFeatures)
-      ? payload.referenceSourceFeatures
+    const hasOriginalFeatures = Array.isArray(payload.referenceSourceFeatures)
+      && payload.referenceSourceFeatures.length > 0;
+    const features = hasOriginalFeatures ? payload.referenceSourceFeatures
       : Array.isArray(payload.features) ? payload.features : [];
-    return {payload, scope: {kind: 'whole-reference-layer'},
-      sourceFeatures: {selected: features, excluded: []}};
+    // Whole-layer comparison is not a polity-identity check. Expose bounded
+    // source metadata for failed-comparison triage, especially when one
+    // Runivers layer contains several named entities. Never export polygons.
+    // A merged payload fallback is NOT original feature-level provenance.
+    const named = features.map(feature => String(feature?.properties?.name ?? '').trim()).filter(Boolean);
+    const names = [...new Set(named)].sort((a, b) => a.localeCompare(b, 'ru'));
+    const sourceRecordExamples = hasOriginalFeatures ? features.slice(0, 20).map(feature => ({
+      featureId: feature?.id ?? null,
+      cat: feature?.properties?.cat ?? null,
+      name: feature?.properties?.name ?? null,
+      lwdate: feature?.properties?.lwdate ?? null,
+      status: feature?.properties?.status ?? null,
+    })) : [];
+    return {payload, scope: {
+      kind: 'whole-reference-layer', diagnosticOnly: true,
+      sourceProvenance: hasOriginalFeatures ? 'original-source-features' : 'merged-payload-fallback',
+      sourceFeatureCount: features.length,
+      namedFeatureCount: named.length,
+      distinctNameCount: names.length,
+      sourceNameExamples: names.slice(0, 20),
+      sourceNamesTruncated: names.length > 20,
+      sourceRecordExamples,
+      sourceRecordsTruncated: hasOriginalFeatures && features.length > 20,
+    }, sourceFeatures: {selected: features, excluded: []}};
   }
   const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom' : 'USSR';
   const features = payload.referenceSourceFeatures;
