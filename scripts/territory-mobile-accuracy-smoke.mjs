@@ -138,22 +138,22 @@ try {
       /Смоленск \(1514\)/, `mobile ${width}: Smolensk warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
 
-    // The 1505 Moscow polygon also predates Ryazan's 1521 annexation.
-    // The year-end warning must survive both globe and flat-map rendering at 390/360px.
+    // The unchanged 1505 polygon misses Ryazan's documented Moscow control by autumn 1521.
+    // The conservative September month-end warning must survive 3D/2D at 390/360px.
     const ryazanTarget = new URL(url);
     ryazanTarget.searchParams.set('year', '1521');
-    ryazanTarget.searchParams.set('month', '12');
+    ryazanTarget.searchParams.set('month', '9');
     const ryazanResponse = await page.goto(ryazanTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
     assert(ryazanResponse?.ok(), `mobile ${width}: 1521 HTTP ${ryazanResponse?.status()}`);
     await page.waitForFunction(() => {
       const p = document.querySelector('main aside p[data-history-accuracy-caption]');
-      return (document.body?.innerText || '').includes('History Core 1521-12')
+      return (document.body?.innerText || '').includes('History Core 1521-09')
         && p?.getAttribute('data-history-geometry-gap') === 'muscovy-1505-reused'
         && (p?.getAttribute('data-history-mobile-caption') || '').includes('Рязань (1521)')
         && (p?.getAttribute('data-history-accuracy-caption') || '').includes('Рязань (1521)');
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
-    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1521-12', null, {timeout: 15000});
+    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1521-09', null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
