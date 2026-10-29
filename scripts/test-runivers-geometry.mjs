@@ -123,6 +123,15 @@ assert.equal(manyLayer.scope.sourceRecordExamples.length, 20);
 assert.equal(manyLayer.scope.sourceRecordsTruncated, true);
 assert.equal(manyLayer.scope.sourceNamesTruncated, true);
 assert.equal(manyLayer.scope.distinctNameCount, 25);
+const untrustedMetadata = feature('Н'.repeat(1000), 80);
+untrustedMetadata.id = {coordinates:[1,2]};
+untrustedMetadata.properties.cat = {geometry:[1,2]};
+const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-empire');
+assert.equal(sanitized.scope.sourceNameExamples[0].length, 160);
+assert.equal(sanitized.scope.sourceRecordExamples[0].name.length, 160);
+assert.equal(sanitized.scope.sourceRecordExamples[0].featureId, null);
+assert.equal(sanitized.scope.sourceRecordExamples[0].cat, null,
+  'source diagnostics must never serialize arbitrary nested source metadata');
 assert.deepEqual(scoped.scope.excludedNames,['Тверское княжество']);
 assert.deepEqual(scoped.payload.features[0].geometry.coordinates, [source.referenceSourceFeatures[0].geometry.coordinates]);
 assert.throws(()=>referenceForPolity({features:[]},'grand-moscow'),/original named/);
