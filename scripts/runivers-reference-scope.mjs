@@ -48,14 +48,17 @@ export function referenceForPolity(payload, polityId) {
     // source metadata for failed-comparison triage, especially when one
     // Runivers layer contains several named entities. Never export polygons.
     // A merged payload fallback is NOT original feature-level provenance.
-    const named = features.map(feature => String(feature?.properties?.name ?? '').trim()).filter(Boolean);
+    const sourceScalar = value => typeof value === 'string' ? value.slice(0, 160)
+      : typeof value === 'number' && Number.isFinite(value) ? value : null;
+    const named = features.map(feature => sourceScalar(feature?.properties?.name))
+      .filter(value => typeof value === 'string' && value.trim()).map(value => value.trim());
     const names = [...new Set(named)].sort((a, b) => a.localeCompare(b, 'ru'));
     const sourceRecordExamples = hasOriginalFeatures ? features.slice(0, 20).map(feature => ({
-      featureId: feature?.id ?? null,
-      cat: feature?.properties?.cat ?? null,
-      name: feature?.properties?.name ?? null,
-      lwdate: feature?.properties?.lwdate ?? null,
-      status: feature?.properties?.status ?? null,
+      featureId: sourceScalar(feature?.id),
+      cat: sourceScalar(feature?.properties?.cat),
+      name: sourceScalar(feature?.properties?.name),
+      lwdate: sourceScalar(feature?.properties?.lwdate),
+      status: sourceScalar(feature?.properties?.status),
     })) : [];
     return {payload, scope: {
       kind: 'whole-reference-layer', diagnosticOnly: true,
