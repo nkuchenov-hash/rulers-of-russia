@@ -21,6 +21,23 @@ assert.match(at1462(1478, 1).mobile, /Новгород \(1478\)/);
 assert.match(at1462(1478, 12).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).mobile, /Новгород \(1478\)/);
+
+assert.doesNotMatch(at1462(1474, 12).desktop, /ростовских земель/,
+  'a year-only 1474 acquisition must not be assigned an unsupported month');
+assert.match(at1462(1475, 1).desktop, /приобретение ростовских земель \(1474\)/,
+  'the unchanged 1462 geometry must warn after the documented 1474 Rostov purchase');
+assert.doesNotMatch(at1462(1485, 8).desktop, /Твери/,
+  'Tver was still independent before its September 1485 surrender');
+assert.match(at1462(1485, 9).desktop, /присоединение Твери \(1485\)/,
+  'September 1485 Tver surrender makes the 1462 contour stale');
+assert.match(at1462(1485, 9).mobile, /Тверь \(1485\)/);
+assert.doesNotMatch(at1462(1489, 12).desktop, /Вятки/,
+  'year-only Vyatka evidence must not be assigned an invented effective month');
+assert.match(at1462(1490, 1).desktop, /подчинение Вятки \(1489\)/,
+  'the 1462 contour must warn after the documented 1489 Vyatka subordination');
+assert.match(at1462(1490, 1).mobile, /Ростов \(1474\).*Новгород \(1478\).*Тверь \(1485\).*Вятка \(1489\)/,
+  'mobile accuracy caption must list all four known transitions in chronological order');
+
 assert.match(at1462(1504, 12).mobile, /точность не подтверждена/);
 assert.equal(at1462(1505, 1), null, 'do not infer an uninspected 1505 month');
 assert.equal(at1462(1480, 1, {...older, geometryFile:'data/history-core/generated/territory/corrected-1480.geojson'}), null,
