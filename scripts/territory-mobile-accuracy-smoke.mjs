@@ -139,21 +139,21 @@ try {
     await page.getByRole('button', {name: 'Показать глобус'}).click();
 
     // The 1505 Moscow polygon also predates Ryazan's 1521 annexation.
-    // This warning must survive both globe and flat-map rendering at 390/360px.
+    // The year-end warning must survive both globe and flat-map rendering at 390/360px.
     const ryazanTarget = new URL(url);
-    ryazanTarget.searchParams.set('year', '1522');
-    ryazanTarget.searchParams.set('month', '1');
+    ryazanTarget.searchParams.set('year', '1521');
+    ryazanTarget.searchParams.set('month', '12');
     const ryazanResponse = await page.goto(ryazanTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
-    assert(ryazanResponse?.ok(), `mobile ${width}: 1522 HTTP ${ryazanResponse?.status()}`);
+    assert(ryazanResponse?.ok(), `mobile ${width}: 1521 HTTP ${ryazanResponse?.status()}`);
     await page.waitForFunction(() => {
       const p = document.querySelector('main aside p[data-history-accuracy-caption]');
-      return (document.body?.innerText || '').includes('History Core 1522-01')
+      return (document.body?.innerText || '').includes('History Core 1521-12')
         && p?.getAttribute('data-history-geometry-gap') === 'muscovy-1505-reused'
         && (p?.getAttribute('data-history-mobile-caption') || '').includes('Рязань (1521)')
         && (p?.getAttribute('data-history-accuracy-caption') || '').includes('Рязань (1521)');
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
-    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1522-01', null, {timeout: 15000});
+    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1521-12', null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
