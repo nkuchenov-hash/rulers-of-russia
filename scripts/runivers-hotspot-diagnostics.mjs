@@ -119,23 +119,35 @@ export function geojsonLocation(point, payload) {
   return geometryLocation(point, payload);
 }
 
+// Only bounded scalar identities belong in public diagnostics. A source
+// property can itself be an object (including embedded geometry); never
+// serialize arbitrary nested metadata or unbounded strings into CI artifacts.
+const MAX_SOURCE_RECORDS = 20;
+const sourceScalar = value => typeof value === 'string' ? value.slice(0, 160)
+  : typeof value === 'number' && Number.isFinite(value) ? value : null;
+
 function sourceIdentity(feature) {
-  const properties = feature.properties ?? {};
+  const properties = feature?.properties ?? {};
   return {
-    featureId: feature.id ?? null,
-    cat: properties.cat ?? null,
-    name: properties.name ?? null,
-    lwdate: properties.lwdate ?? null,
-    status: properties.status ?? null,
+    featureId: sourceScalar(feature?.id),
+    cat: sourceScalar(properties.cat),
+    name: sourceScalar(properties.name),
+    lwdate: sourceScalar(properties.lwdate),
+    status: sourceScalar(properties.status),
   };
 }
 
 function sourceRecordsAtPoint(point, features) {
-  return (features ?? []).flatMap(feature => {
+  const records = [];
+  let matchedCount = 0;
+  for (const feature of Array.isArray(features) ? features : []) {
+    if (!feature || typeof feature !== 'object') continue;
     const location = geometryLocation(point, feature.geometry);
-    return location === 'inside' || location === 'boundary'
-      ? [{...sourceIdentity(feature), location}] : [];
-  });
+    if (location !== 'inside' && location !== 'boundary') continue;
+    matchedCount += 1;
+    if (records.length < MAX_SOURCE_RECORDS) records.push({...sourceIdentity(feature), location});
+  }
+  return {records, matchedCount, truncated: matchedCount > records.length};
 }
 
 export function diagnoseEarlyRussiaHotspots({
@@ -145,6 +157,8 @@ export function diagnoseEarlyRussiaHotspots({
   return EARLY_RUSSIA_HOTSPOTS.filter(hotspot => year >= hotspot.fromYear && year <= hotspot.toYear)
     .map(hotspot => {
       const [lon, lat] = hotspot.lonLat;
+      const selectedAtCenter = sourceRecordsAtPoint(hotspot.lonLat, selectedSourceFeatures);
+      const excludedAtCenter = sourceRecordsAtPoint(hotspot.lonLat, excludedSourceFeatures);
       return {
         clusterId: hotspot.id,
         sourceInterval: [hotspot.fromYear, hotspot.toYear],
@@ -159,8 +173,12 @@ export function diagnoseEarlyRussiaHotspots({
             historyLocation: geojsonLocation(point, historyPayload),
           };
         }),
-        selectedSourceRecordsAtCenter: sourceRecordsAtPoint(hotspot.lonLat, selectedSourceFeatures),
-        excludedSourceRecordsAtCenter: sourceRecordsAtPoint(hotspot.lonLat, excludedSourceFeatures),
+        selectedSourceRecordsAtCenter: selectedAtCenter.records,
+        excludedSourceRecordsAtCenter: excludedAtCenter.records,
+        selectedSourceRecordsAtCenterMatchedCount: selectedAtCenter.matchedCount,
+        excludedSourceRecordsAtCenterMatchedCount: excludedAtCenter.matchedCount,
+        selectedSourceRecordsAtCenterTruncated: selectedAtCenter.truncated,
+        excludedSourceRecordsAtCenterTruncated: excludedAtCenter.truncated,
         selectedSourceRecordCount: selectedSourceFeatures.length,
         excludedSourceRecordCount: excludedSourceFeatures.length,
       };
@@ -188,16 +206,24 @@ export function diagnoseFailedBoundarySamples({
     // largest discrepancies even when an upstream metric changes ordering.
     .sort((a, b) => b.distanceMeters - a.distanceMeters)
     .slice(0, 3)
-    .map(sample => ({
-      sampledBoundary,
-      lonLat: sample.lonLat,
-      distanceMeters: sample.distanceMeters,
-      scopedReferenceLocation: geojsonLocation(sample.lonLat, referencePayload),
-      historyLocation: geojsonLocation(sample.lonLat, historyPayload),
-      selectedSourceRecords: sourceRecordsAtPoint(sample.lonLat, selectedSourceFeatures),
-      excludedSourceRecords: sourceRecordsAtPoint(sample.lonLat, excludedSourceFeatures),
-      diagnosticOnly: true,
-    }));
+    .map(sample => {
+      const selected = sourceRecordsAtPoint(sample.lonLat, selectedSourceFeatures);
+      const excluded = sourceRecordsAtPoint(sample.lonLat, excludedSourceFeatures);
+      return {
+        sampledBoundary,
+        lonLat: sample.lonLat,
+        distanceMeters: sample.distanceMeters,
+        scopedReferenceLocation: geojsonLocation(sample.lonLat, referencePayload),
+        historyLocation: geojsonLocation(sample.lonLat, historyPayload),
+        selectedSourceRecords: selected.records,
+        excludedSourceRecords: excluded.records,
+        selectedSourceRecordsMatchedCount: selected.matchedCount,
+        excludedSourceRecordsMatchedCount: excluded.matchedCount,
+        selectedSourceRecordsTruncated: selected.truncated,
+        excludedSourceRecordsTruncated: excluded.truncated,
+        diagnosticOnly: true,
+      };
+    });
   return [
     ...annotate(referenceSamples, 'runivers-reference'),
     ...annotate(currentSamples, 'history-core'),

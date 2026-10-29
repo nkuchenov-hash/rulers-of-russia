@@ -583,4 +583,36 @@ assert.deepEqual(unsortedSamples.map(row => row.sampledBoundary),
 assert.ok(!JSON.stringify(unsortedSamples).includes('"coordinates"'),
   'all-era diagnostic attribution must not export reference geometry');
 
+// NextGIS source properties are not guaranteed to be scalar. An embedded
+// object could carry unlicensed geometry into a public failure report, and
+// hundreds of overlapping features could make the artifact unbounded.
+const hostileSourceRecords = Array.from({length: 25}, (_, i) => ({
+  ...feature('Россия', 40),
+  id: i === 0 ? {coordinates: [[1, 2]]} : i + 1,
+  properties: {
+    name: 'Р'.repeat(500),
+    cat: {coordinates: [[3, 4]]},
+    lwdate: '1521-01-01',
+    status: Number.POSITIVE_INFINITY,
+  },
+}));
+const boundedAttribution = diagnoseFailedBoundarySamples({
+  referenceSamples: [{lonLat: [40.5, 50.5], distanceMeters: 100000}],
+  selectedSourceFeatures: hostileSourceRecords,
+});
+assert.equal(boundedAttribution.length, 1);
+assert.equal(boundedAttribution[0].selectedSourceRecordsMatchedCount, 25);
+assert.equal(boundedAttribution[0].selectedSourceRecords.length, 20);
+assert.equal(boundedAttribution[0].selectedSourceRecordsTruncated, true);
+assert.equal(boundedAttribution[0].selectedSourceRecords[0].featureId, null);
+assert.equal(boundedAttribution[0].selectedSourceRecords[0].cat, null);
+assert.equal(boundedAttribution[0].selectedSourceRecords[0].status, null);
+assert.equal(boundedAttribution[0].selectedSourceRecords[0].name.length, 160);
+assert.equal(boundedAttribution[0].selectedSourceRecords[1].featureId, 2);
+assert.ok(!JSON.stringify(boundedAttribution).includes('"coordinates"'),
+  'nested source properties and source geometry must never enter CI reports');
+assert.equal(worstAttribution[0].selectedSourceRecordsMatchedCount, 1);
+assert.equal(worstAttribution[0].selectedSourceRecordsTruncated, false);
+console.log('Runivers attribution safety passed: scalar-only metadata, 160-character fields, 20-record cap with truthful truncation counts.');
+
 console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
