@@ -17,6 +17,10 @@ try {
    historyFirstMonth: '1920-01', historyLastMonth: '1920-12',
    runiversApproximate: false,
    historyGeometryFile: 'test-only.geojson',
+   // Synthetic scope metadata: this fixture is not an actual 1920 border pass.
+   historyPolityId: 'russian-republic', referenceScopeKind: 'named-polity',
+   referenceScopePolityId: 'russian-republic',
+   referenceScopeSelectedFeatures: 1, referenceScopeTotalFeatures: 2,
    referenceSamples: 100, currentSamples: 100,
    symmetricP95Meters: status === 'pass' ? 10000 : 16000,
    symmetricMaxMeters: status === 'pass' ? 30000 : 61000,
@@ -50,6 +54,20 @@ try {
    'a comparison without History Core border samples cannot pass');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversResourceId:null}]).status,1,
    'every comparison must identify its source layer');
+ // A successful numeric distance against a dissolved whole-layer polygon
+ // cannot certify the target sovereign polity without original named scope.
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceScopeKind:'whole-reference-layer'}]).status,1,
+   'whole-layer diagnostics must never become an independent geography pass');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceScopeKind:undefined}]).status,1,
+   'missing source scope must fail closed');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceScopePolityId:'ussr'}]).status,1,
+   'a different named polity cannot certify the target state');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),historyPolityId:undefined}]).status,1,
+   'missing target polity identity cannot be certified');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceScopeSelectedFeatures:0}]).status,1,
+   'zero original selected source features cannot establish a border');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceScopeTotalFeatures:0}]).status,1,
+   'source-scope selected count cannot exceed original feature count');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:NaN}]).status,1,
    'non-finite metric evidence must fail closed');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),toleranceMeters:1000000,maxToleranceMeters:4000000}]).status,1,
