@@ -100,15 +100,6 @@ if (evidenceCounts.pass !== s.passingComparisons
   process.exit(1);
 }
 
-// One Runivers resource may be compared to several History Core states, but
-// those comparisons still represent only ONE independent reference layer.
-// Never let repeated measurements against the same source substitute for
-// missing independently exported layers in a green shard.
-if (comparedResourceIds.size !== s.usableReferenceLayers) {
-  console.error(`Runivers report claims ${s.usableReferenceLayers} usable reference layers but comparison evidence identifies ${comparedResourceIds.size} distinct resource IDs.`);
-  process.exit(1);
-}
-
 // Every dated layer selected for this shard must be accounted for. A green
 // subset is not independent geographic verification of the full interval.
 if (s.datedLayersAudited === 0 || s.datedLayersAudited > s.runiversLayersDiscovered) {
@@ -185,6 +176,15 @@ if (referenceFailures > 0) {
 
 if (failed > 0 || missingStates > 0 || uncoveredMonths > 0) {
   console.error(`Runivers regression failed: ${failed} contour failures, ${missingStates} missing states, ${uncoveredMonths} uncovered months.`);
+  process.exit(1);
+}
+
+// One Runivers resource may be compared to several History Core states, but
+// those comparisons still represent only ONE independent reference layer.
+// Never let repeated measurements against the same source substitute for
+// missing independently exported layers in a green shard.
+if (comparedResourceIds.size !== s.usableReferenceLayers) {
+  console.error(`Runivers report claims ${s.usableReferenceLayers} usable reference layers but comparison evidence identifies ${comparedResourceIds.size} distinct resource IDs.`);
   process.exit(1);
 }
 
