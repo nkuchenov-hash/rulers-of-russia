@@ -14,6 +14,8 @@ on:
       - 'scripts/territory-history-smoke.mjs'
       - 'scripts/test-territory-chronology.mjs'
       - 'scripts/territory-mobile-accuracy-smoke.mjs'
+      - 'scripts/verify-live-territory-deploy.mjs'
+      - 'scripts/test-live-territory-deploy.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   pull_request:
@@ -27,6 +29,8 @@ on:
       - 'scripts/territory-history-smoke.mjs'
       - 'scripts/test-territory-chronology.mjs'
       - 'scripts/territory-mobile-accuracy-smoke.mjs'
+      - 'scripts/verify-live-territory-deploy.mjs'
+      - 'scripts/test-live-territory-deploy.mjs'
       - 'scripts/serve-territory-smoke.mjs'
       - '.github/workflows/validate-territory-browser.yml'
   workflow_run:
@@ -54,16 +58,23 @@ jobs:
         if: github.event_name != 'workflow_run'
         uses: actions/checkout@v4
 
-      - name: Checkout deployed main
+      - name: Checkout deployed Pages revision
         if: github.event_name == 'workflow_run'
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Confirm exact live Pages revision before Chromium
+        if: github.event_name == 'workflow_run'
+        env:
+          EXPECTED_DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+          EXPECTED_PAGES_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: node scripts/verify-live-territory-deploy.mjs
 
       - name: Install project dependencies
         run: npm install
