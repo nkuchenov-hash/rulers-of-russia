@@ -82,6 +82,17 @@ assert.deepEqual(mismatch.worstCurrentSamples[0].lonLat, [60, 50]);
 const publicMismatch = publicComparisonMetric(mismatch);
 assert.equal(publicMismatch.symmetricMaxMeters, mismatch.symmetricMaxMeters,
   'redaction must preserve independent geographic distances');
+assert.equal(publicMismatch.referenceToCurrentP95Meters, mismatch.referenceToCurrentP95Meters,
+  'public diagnostics must retain the actual reference-to-current error');
+assert.equal(publicMismatch.currentToReferenceMaxMeters, mismatch.currentToReferenceMaxMeters,
+  'public diagnostics must retain the actual current-to-reference error');
+const injectedMetric = publicComparisonMetric({
+  ...mismatch,
+  sourceBoundaryCoordinates: [[66.1, 55.2]],
+  futureNestedDiagnostics: {coordinates: [[66.1, 55.2]]},
+});
+assert.deepEqual(injectedMetric, publicMismatch,
+  'new in-memory fields must not automatically leak through public metric serialization');
 assert.ok(!Object.hasOwn(publicMismatch, 'worstReferenceSamples')
   && !Object.hasOwn(publicMismatch, 'worstCurrentSamples'),
   'failed comparison reports must not contain sampled Runivers or History Core border points');
@@ -477,6 +488,8 @@ assert.equal(hotspotDiagnostics[0].probes[1].historyLocation, 'outside',
   'a 0.25-degree east probe must expose the synthetic border discrepancy');
 assert.deepEqual(hotspotDiagnostics[0].selectedSourceRecordsAtCenter.map(row => row.featureId), [7701]);
 assert.deepEqual(hotspotDiagnostics[0].excludedSourceRecordsAtCenter.map(row => row.featureId), [7702]);
+assert.ok(!JSON.stringify(hotspotDiagnostics).includes('"lonLat"'),
+  'fixed source-derived hotspot coordinates must remain in memory, not public reports');
 assert.ok(!JSON.stringify(hotspotDiagnostics).includes('"coordinates"'),
   'the report must contain source identifiers and point probes, never original source geometry');
 assert.deepEqual(diagnoseEarlyRussiaHotspots({
