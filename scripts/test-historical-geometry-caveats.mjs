@@ -15,8 +15,10 @@ const at1462 = (year, month = 7, state = older) => historicalGeometryCaveat({yea
 assert.equal(at1462(1462, 12), null, 'the dated 1462 snapshot is not a reused state');
 assert.match(at1462(1463, 1).desktop, /1463-01/);
 assert.doesNotMatch(at1462(1477, 12).desktop, /Новгород/);
-assert.doesNotMatch(at1462(1478, 12).desktop, /Новгород/,
-  'year-only evidence does not certify an exact annexation month in 1478');
+assert.match(at1462(1478, 1).desktop, /присоединение Новгорода \(1478\)/,
+  'January 1478 surrender is documented; the unchanged 1462 contour must warn by month end');
+assert.match(at1462(1478, 1).mobile, /Новгород \(1478\)/);
+assert.match(at1462(1478, 12).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).mobile, /Новгород \(1478\)/);
 assert.match(at1462(1504, 12).mobile, /точность не подтверждена/);
@@ -30,10 +32,16 @@ assert.equal(at1462(1480, 1, {...older, status:'reconstruction-provisional'}), n
 assert.equal(at(1505), null, '1505 is the source snapshot, not a reused later state');
 assert.match(at(1506).desktop, /1506-07/);
 assert.doesNotMatch(at(1509).desktop, /Псков|Смоленск/);
-assert.doesNotMatch(at(1510).desktop, /Псков/, 'do not assume an effective month inside 1510');
+assert.match(at(1510, 1).desktop, /Псков \(1510\)/,
+  'Pskov veche ended in January 1510; warn at end of that month');
+assert.match(at(1510, 1).mobile, /Псков \(1510\)/);
 assert.match(at(1511).desktop, /Псков \(1510\)/);
 assert.doesNotMatch(at(1513).desktop, /Смоленск/);
-assert.doesNotMatch(at(1514).desktop, /Смоленск/, 'do not assume an effective month inside 1514');
+assert.doesNotMatch(at(1514, 7).desktop, /Смоленск/,
+  'Julian 30–31 July surrender corresponds to August Gregorian');
+assert.match(at(1514, 8).desktop, /Смоленск \(1514\)/,
+  'warn at August 1514 month end after the documented surrender');
+assert.match(at(1514, 8).mobile, /Смоленск \(1514\)/);
 assert.match(at(1515).desktop, /Смоленск \(1514\)/);
 assert.doesNotMatch(at(1520).desktop, /Рязань/,
   'Ryazan must not be listed before the documented 1521 annexation');
