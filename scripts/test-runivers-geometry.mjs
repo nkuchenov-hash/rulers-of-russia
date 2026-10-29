@@ -744,3 +744,34 @@ assert.equal(worstAttribution[0].selectedSourceRecordsTruncated, false);
 console.log('Runivers attribution safety passed: scalar-only metadata, 160-character fields, 20-record cap with truthful truncation counts.');
 
 console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
+
+
+// Third-party fetch/geometry exceptions can contain exact boundary coordinates,
+// and a discovery layer may acquire nested licensed metadata in the future.
+// Neither is safe to publish as a GitHub Actions JSON artifact.
+const {publicReferenceFailure} = await import('./runivers-public-reference-failures.mjs');
+const untrustedFailure = {
+  layer: {id: 5391, fromYear: 1553, toYear: 1557,
+    displayName: 'source boundary 37.12345,55.98765',
+    geometry: {coordinates: [[[37.12345, 55.98765]]]},
+    properties: {rawLicensedPayload: {coordinates: [[37.12345,55.98765]]}}},
+  polityId: 'russian-tsardom',
+  stage: 'reference-geometry',
+  error: 'TopologyException at 37.12345,55.98765',
+  futureSourceDiagnostics: {coordinates: [[37.12345,55.98765]]},
+};
+const publicFailure = publicReferenceFailure(untrustedFailure);
+assert.deepEqual(publicFailure, {
+  runiversResourceId: 5391, runiversFromYear: 1553, runiversToYear: 1557,
+  historyPolityId: 'russian-tsardom', stage: 'reference-geometry',
+});
+assert.ok(!JSON.stringify(publicFailure).includes('37.12345'),
+  'third-party source geometry and raw exception text must not enter public failures');
+assert.deepEqual(publicReferenceFailure({
+  layer: {id: {coordinates: [[37,55]]}, fromYear: '1553', toYear: Infinity},
+  polityId: {coordinates: [[37,55]]}, stage: 'unreviewed', error: '37,55',
+}), {
+  runiversResourceId: null, runiversFromYear: null, runiversToYear: null,
+  historyPolityId: null, stage: 'unclassified',
+}, 'unexpected nested metadata, stages, and invalid IDs must fail closed');
+console.log('Runivers reference-failure redaction passed: no source layers or exception coordinates in CI artifacts.');
