@@ -88,6 +88,27 @@ try {
  assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},[
    metricRow('pass'),metricRow('pass'),
  ]).status,1,'duplicate source/state evidence must not inflate successful comparisons');
+ // A single source may cover multiple distinct states; it still counts as
+ // only one independently usable Runivers reference, not two dated layers.
+ const twoStatesSameResource = [
+   metricRow('pass'),
+   {...metricRow('pass'),historyGeometryFile:'second-state.geojson'},
+ ];
+ assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},twoStatesSameResource).status,0,
+   'multiple state comparisons against one resource remain valid when counted as one source');
+ const falselyCountedSources = run({
+   ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
+   usableReferenceLayers:2,comparisons:2,passingComparisons:2,
+ },completeShard,{},twoStatesSameResource);
+ assert.equal(falselyCountedSources.status,1,
+   'two state comparisons against one source must not certify two independently usable reference layers');
+ assert.match(falselyCountedSources.stderr,/1 distinct resource IDs/);
+ assert.equal(run({
+   ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
+   usableReferenceLayers:2,comparisons:2,passingComparisons:2,
+ },completeShard,{},[metricRow('pass'),{...metricRow('pass'),runiversResourceId:5456}]).status,0,
+   'two genuinely distinct reference resources must still be accepted');
+
  // The matrix provides its expected interval independently of the report.
  // A self-consistent report from another shard must not be accepted.
  const wrongExpectedShard=run(summary,completeShard,{RUNIVERS_START_MONTH:'1921-01',RUNIVERS_END_MONTH:'1921-12'});
