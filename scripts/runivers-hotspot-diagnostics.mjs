@@ -190,6 +190,7 @@ export function diagnoseEarlyRussiaHotspots({
 // current scoped reference boundary (especially after source-scope changes).
 // Keep both directions: reference-to-History and History-to-reference can
 // identify entirely different missing or extra territorial components.
+// Do not serialize either direction's sample coordinates into CI artifacts.
 // This is diagnostic-only; no distance threshold or geometry is modified.
 export function diagnoseFailedBoundarySamples({
   referenceSamples = [], currentSamples = [], referencePayload, historyPayload,
@@ -209,9 +210,10 @@ export function diagnoseFailedBoundarySamples({
     .map(sample => {
       const selected = sourceRecordsAtPoint(sample.lonLat, selectedSourceFeatures);
       const excluded = sourceRecordsAtPoint(sample.lonLat, excludedSourceFeatures);
+      // Sample coordinates can reconstruct portions of a licensed Runivers
+      // boundary. Use them only in memory for attribution, never in public CI.
       return {
         sampledBoundary,
-        lonLat: sample.lonLat,
         distanceMeters: sample.distanceMeters,
         scopedReferenceLocation: geojsonLocation(sample.lonLat, referencePayload),
         historyLocation: geojsonLocation(sample.lonLat, historyPayload),
