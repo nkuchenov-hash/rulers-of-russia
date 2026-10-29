@@ -129,6 +129,10 @@ assert.equal(wholeLayer.scope.sourceFeatureCount, 2);
 assert.equal(wholeLayer.scope.distinctNameCount, 2);
 assert.deepEqual(wholeLayer.scope.sourceNameExamples, ['Московское княжество', 'Тверское княжество']);
 assert.equal(wholeLayer.scope.diagnosticOnly, true);
+assert.throws(() => prepareScopedReference(source, 'russian-republic', coast.index),
+  /no reviewed source-identity scope/,
+  'a diagnostic-only whole reference layer cannot certify a sovereign border');
+
 assert.equal(wholeLayer.scope.sourceRecordExamples.length, 2);
 assert.equal(wholeLayer.scope.sourceRecordExamples[0].name, 'Московское княжество');
 assert.equal(wholeLayer.scope.sourceRecordExamples[0].geometry, undefined,
@@ -206,6 +210,23 @@ assert.throws(()=>referenceForPolity({features:[feature('Россия',30)]},'ru
   'a dissolved layer cannot certify Empire source identity');
 assert.throws(()=>referenceForPolity({referenceSourceFeatures:[feature('Калмыцкое ханство',60)]},'russian-empire'),/no named Empire/,
   'unrelated source polities cannot stand in for Russia');
+
+// Modern Russia must be selected by explicit source identity; a neighboring
+// post-Soviet country in the same Runivers layer cannot be part of the RF.
+const federationSource = {type:'FeatureCollection',referenceSourceFeatures:[
+  feature('Россия',30), feature('Украина',40), feature('Российская Федерация',50),
+],features:[feature('unscoped modern layer',60)]};
+const federationScope = referenceForPolity(federationSource,'russian-federation');
+assert.equal(federationScope.scope.kind,'named-polity');
+assert.equal(federationScope.scope.selectedFeatures,2);
+assert.deepEqual(federationScope.scope.selectedNames,['Россия','Российская Федерация']);
+assert.deepEqual(federationScope.scope.excludedNames,['Украина']);
+assert.deepEqual(federationScope.payload.features[0].geometry.coordinates,[
+  federationSource.referenceSourceFeatures[0].geometry.coordinates,
+  federationSource.referenceSourceFeatures[2].geometry.coordinates,
+]);
+assert.throws(()=>referenceForPolity({features:[feature('Россия',30)]},'russian-federation'),/original named/);
+assert.throws(()=>referenceForPolity({referenceSourceFeatures:[feature('Украина',40)]},'russian-federation'),/no named Russian Federation/);
 
 const sourceRecord = feature('Россия',30);
 sourceRecord.id = 777;
