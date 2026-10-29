@@ -27,6 +27,7 @@ if (!Array.isArray(evidence) || evidence.length !== s.comparisons) {
 }
 const evidenceCounts = {pass: 0, fail: 0, override: 0};
 const seenEvidence = new Set();
+const comparedResourceIds = new Set();
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
     || !Number.isInteger(row.runiversResourceId) || row.runiversResourceId <= 0
@@ -68,6 +69,7 @@ for (const row of evidence) {
     process.exit(1);
   }
   seenEvidence.add(identity);
+  comparedResourceIds.add(row.runiversResourceId);
 
   // Recompute the original validator tolerance policy from the dated
   // comparison, rather than trusting potentially inflated report numbers.
@@ -174,6 +176,15 @@ if (referenceFailures > 0) {
 
 if (failed > 0 || missingStates > 0 || uncoveredMonths > 0) {
   console.error(`Runivers regression failed: ${failed} contour failures, ${missingStates} missing states, ${uncoveredMonths} uncovered months.`);
+  process.exit(1);
+}
+
+// One Runivers resource may be compared to several History Core states, but
+// those comparisons still represent only ONE independent reference layer.
+// Never let repeated measurements against the same source substitute for
+// missing independently exported layers in a green shard.
+if (comparedResourceIds.size !== s.usableReferenceLayers) {
+  console.error(`Runivers report claims ${s.usableReferenceLayers} usable reference layers but comparison evidence identifies ${comparedResourceIds.size} distinct resource IDs.`);
   process.exit(1);
 }
 
