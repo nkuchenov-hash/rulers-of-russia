@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers} from './validate-runivers-regression.mjs';
 
 // Approximation metadata raises the existing Runivers tolerance from the
 // year-specific limit to 100 km. A negative flag or a field name alone must
@@ -81,6 +81,20 @@ assert.ok(mismatch.currentToReferenceMaxMeters > 1000000, 'extra distant boundar
 assert.deepEqual(mismatch.worstCurrentSamples[0].lonLat, [60, 50]);
 assert.equal(layerContainsYear({fromYear: 1992, toYear: 2004}, 2004, 2020), false);
 assert.equal(layerContainsYear({fromYear: 2014, toYear: 2020}, 2020, 2020), true);
+const unmatched = unmatchedReferenceLayers([
+  {id: 1, fromYear: 1519, toYear: 1520}, // half-open: ended before 1520
+  {id: 2, fromYear: 1520, toYear: 1521}, // covers 1520
+  {id: 3, fromYear: 1521, toYear: 1522}, // begins after 1520
+  {id: 4, fromYear: 2020, toYear: 2020}, // terminal inclusive, but no 2020 state
+], [{firstMonth: '1520-01', lastMonth: '1520-12'}], 2020);
+assert.deepEqual(unmatched.map(row => row.runiversResourceId), [1, 3, 4],
+  'uncompared dated layers must be explicit failures, not silent successes');
+assert.ok(unmatched.every(row => row.reason.includes('no independent comparison attempted')));
+assert.deepEqual(unmatchedReferenceLayers(
+  [{id: 4, fromYear: 2020, toYear: 2020}],
+  [{firstMonth: '2020-01', lastMonth: '2020-12'}], 2020,
+), [], 'the final Runivers year must still be included when a verified state exists');
+
 console.log('Runivers geometry tests passed: physical coast, symmetric mismatch, diagnostic locations, half-open and terminal years.');
 
 const {referenceForPolity} = await import('./runivers-reference-scope.mjs');
