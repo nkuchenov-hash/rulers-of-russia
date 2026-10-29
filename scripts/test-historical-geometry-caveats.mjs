@@ -47,9 +47,9 @@ assert.doesNotMatch(at(1520).desktop, /Рязань/,
   'Ryazan must not be listed before the documented 1521 annexation');
 assert.doesNotMatch(at(1521, 1).desktop, /Рязань/,
   'January 1521 must not be assigned an unsupported annexation date');
-assert.match(at(1521, 12).desktop, /Рязань \\(1521\\)/,
+assert.match(at(1521, 12).desktop, /Рязань \(1521\)/,
   'year-end 1521 must disclose the missing Ryazan annexation, without claiming an exact earlier month');
-assert.match(at(1521, 12).mobile, /Рязань \\(1521\\)/,
+assert.match(at(1521, 12).mobile, /Рязань \(1521\)/,
   'year-end 1521 must disclose Ryazan on narrow screens');
 assert.match(at(1522, 1).desktop, /Рязань \(1521\)/,
   'the 1505 polygon cannot represent Ryazan annexation in 1522');
