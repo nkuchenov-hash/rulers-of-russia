@@ -154,6 +154,45 @@ const provenanceScope = referenceForPolity({referenceSourceFeatures:[sourceRecor
 assert.deepEqual(provenanceScope.scope.selectedSourceRecords,[
   {featureId:777,cat:767,name:'Россия',lwdate:'1557-01-01',status:6},
 ], 'each selected contour must retain its original dated source identity');
+
+const selectedOverflow = Array.from({length: 25}, (_, i) => {
+  const item = feature('Россия', 20 + i);
+  item.id = i;
+  item.properties.cat = i;
+  return item;
+});
+const excludedOverflow = Array.from({length: 25}, (_, i) => feature('Иная полития '+i, 60 + i));
+const boundedNamed = referenceForPolity({
+  referenceSourceFeatures: [...selectedOverflow, ...excludedOverflow],
+}, 'russian-tsardom');
+assert.equal(boundedNamed.scope.selectedFeatures, 25);
+assert.equal(boundedNamed.scope.selectedSourceRecords.length, 20);
+assert.equal(boundedNamed.scope.selectedSourceRecordsMatchedCount, 25);
+assert.equal(boundedNamed.scope.selectedSourceRecordsTruncated, true);
+assert.equal(boundedNamed.scope.selectedSourceCats.length, 20);
+assert.equal(boundedNamed.scope.selectedSourceCatsTruncated, true);
+assert.equal(boundedNamed.scope.excludedNames.length, 20);
+assert.equal(boundedNamed.scope.excludedNamesTruncated, true);
+assert.equal(boundedNamed.sourceFeatures.selected.length, 25,
+  'report caps must not remove reference polygons from in-memory comparison');
+const unsafeSelected = feature('Россия', 30);
+unsafeSelected.id = {coordinates:[37,55]};
+unsafeSelected.properties.cat = {geometry:{coordinates:[37,55]}};
+unsafeSelected.properties.lwdate = 'D'.repeat(400);
+unsafeSelected.properties.status = ['not a scalar'];
+const unsafeExcluded = feature('E'.repeat(400), 40);
+unsafeExcluded.properties.cat = {geometry:[1,2]};
+const safeNamed = referenceForPolity({
+  referenceSourceFeatures: [unsafeSelected, unsafeExcluded],
+}, 'russian-tsardom');
+assert.equal(safeNamed.scope.selectedSourceRecords[0].featureId, null);
+assert.equal(safeNamed.scope.selectedSourceRecords[0].cat, null);
+assert.equal(safeNamed.scope.selectedSourceRecords[0].status, null);
+assert.equal(safeNamed.scope.selectedSourceRecords[0].lwdate.length, 160);
+assert.equal(safeNamed.scope.excludedNames[0].length, 160);
+assert.ok(!JSON.stringify(safeNamed.scope).includes('coordinates'),
+  'nested source metadata and geometry must never enter the public named-polity report');
+
 assert.deepEqual(tsardomScope.payload.features[0].geometry.coordinates,
   [tsardomSource.referenceSourceFeatures[0].geometry.coordinates,
     tsardomSource.referenceSourceFeatures[3].geometry.coordinates]);
