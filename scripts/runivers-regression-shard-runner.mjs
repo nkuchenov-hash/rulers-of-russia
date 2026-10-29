@@ -29,10 +29,19 @@ fs.mkdirSync(shardDir, {recursive: true});
 
 const discovery = JSON.parse(fs.readFileSync(sourceDiscoveryFile, 'utf8'));
 const originalLayers = discovery.vectorLayers ?? [];
+// Runivers's chained from_Y_to_Z layers cover [Y, Z), except the final
+// year of the entire pinned baseline. A layer ending exactly at the shard's
+// first year is NOT evidence for that year. The former >= test admitted
+// irrelevant references (and could misreport them as outages) in shards such
+// as 1462 and 1946. Use the same interval semantics as the validator.
+const terminalYear = Number.isInteger(discovery.preferredMaxYear)
+  ? discovery.preferredMaxYear
+  : Math.max(...originalLayers.filter(layer => Number.isInteger(layer.toYear)).map(layer => layer.toYear));
 discovery.vectorLayers = originalLayers.filter((layer) => Number.isInteger(layer.fromYear)
   && Number.isInteger(layer.toYear)
-  && layer.toYear >= startYear
-  && layer.fromYear <= endYear);
+  && layer.fromYear <= endYear
+  && (layer.toYear > startYear
+    || (layer.toYear === terminalYear && layer.toYear === startYear)));
 if (!discovery.vectorLayers.length) throw new Error(`No Runivers layers overlap ${startMonth}..${endMonth}`);
 const shardDiscoveryFile = path.join(shardDir, 'runivers-baseline.json');
 fs.writeFileSync(shardDiscoveryFile, JSON.stringify(discovery, null, 2));
