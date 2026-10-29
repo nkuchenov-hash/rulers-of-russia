@@ -9,21 +9,32 @@ export function historicalGeometryCaveat(date, monthState) {
   if (!Number.isInteger(date.year) || !Number.isInteger(date.month) || date.month < 1 || date.month > 12) return null;
   const key = `${String(date.year).padStart(4, '0')}-${String(date.month).padStart(2, '0')}`;
 
-  // The explicitly dated 1462 Tornau state is carried through 1504-12.
-  // Novgorod's annexation in 1478 is not present in a 1462 Moscow contour.
-  // The world-background filter also suppresses obsolete independent
-  // Novgorod from 1478, so this gap must never be labelled verified.
-  // Novgorod Regional Scientific Library dates the surrender to 15 January
-  // 1478 (Julian; still January in the proleptic Gregorian calendar). Since
-  // the UI displays the state at month end, warn from 1478-01, not 1479-01.
+  // The 1462 Tornau Moscow contour is reused until 1504-12. These
+  // independently documented acquisitions occurred AFTER its source date.
+  // The National Atlas of Russia, vol. 1, documents the remaining Rostov
+  // share acquired in 1474, Tver in 1485, and Vyatka in 1489:
+  // https://nationalatlas.ru/tom1/19.html
+  // The atlas supplies YEARS, not effective months for Rostov and Vyatka;
+  // therefore their warnings begin the following January. No polygon or
+  // precise legal date is inferred from those year-only references.
+  // Tver surrendered on 12 September 1485 (Julian; still September
+  // proleptic Gregorian), per the Russian Historical Society's account:
+  // https://history.ru/read/articles/prisoiedinieniie-tvierskogho-vielikogho-kniazhiestva-k-moskvie-event
+  // Novgorod surrendered on 15 January 1478 (Julian; still January
+  // proleptic Gregorian), per the Novgorod Regional Scientific Library:
   // https://nounb.ru/virtualnye-vystavki/personazhi-novgorodskoj-istorii-na-pamyatnike-tysyacheletie-rossii-2/ivan-iii-1440-1505-velikij-knyaz-moskovskij
-  // This dates the missing transition, NOT the contour or its precise shape.
+  // All cutoffs describe stale source geometry, NOT validated borders.
   if (key >= '1463-01' && key <= '1504-12' && MOSCOW_1462_FILE.test(String(monthState.geometryFile ?? ''))) {
-    const missing = key >= '1478-01' ? '; не отражено присоединение Новгорода (1478)' : '';
+    const missing = [];
+    if (key >= '1475-01') missing.push({desktop: 'приобретение ростовских земель (1474)', mobile: 'Ростов (1474)'});
+    if (key >= '1478-01') missing.push({desktop: 'присоединение Новгорода (1478)', mobile: 'Новгород (1478)'});
+    if (key >= '1485-09') missing.push({desktop: 'присоединение Твери (1485)', mobile: 'Тверь (1485)'});
+    if (key >= '1490-01') missing.push({desktop: 'подчинение Вятки (1489)', mobile: 'Вятка (1489)'});
+    const changes = missing.length ? `; не отражены изменения: ${missing.map(item => item.desktop).join(', ')}` : '';
     return {
       code: 'muscovy-1462-reused',
-      desktop: `Контур 1462 г. повторно используется для ${key}${missing}; соответствие выбранному месяцу независимо не подтверждено`,
-      mobile: `Контур 1462 г. · ${key >= '1478-01' ? 'не отражён Новгород (1478) · ' : ''}точность не подтверждена`,
+      desktop: `Контур 1462 г. повторно используется для ${key}${changes}; соответствие выбранному месяцу независимо не подтверждено`,
+      mobile: `Контур 1462 г. · ${missing.length ? `не отражены ${missing.map(item => item.mobile).join(', ')} · ` : ''}точность не подтверждена`,
     };
   }
   if (key < '1506-01' || key > '1532-12') return null;
