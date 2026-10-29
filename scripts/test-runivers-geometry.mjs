@@ -294,6 +294,37 @@ assert.deepEqual(nestedPolityScope.scope.selectedSourceRecords.map(f => [f.featu
 assert.deepEqual(nestedPolityScope.payload.features[0].geometry.coordinates,
   [feature('nested-Russia',36).geometry.coordinates],
   'nested Russian polygon must survive named-polity scoping');
+// A source export may contain one complete Russian polygon and another
+// source-labeled Russian feature with only a point, line, or null geometry.
+// Comparing just the first polygon would falsely certify a partial border.
+const partialNamedSource = [
+  feature('Россия', 36),
+  {type:'Feature',properties:{name:'Русское царство'},
+    geometry:{type:'Point',coordinates:[38,55]}},
+];
+assert.throws(() => referenceForPolity({
+  referenceSourceFeatures: partialNamedSource,
+}, 'russian-tsardom'), /selected source features without polygon geometry/,
+  'one valid polygon cannot hide a second named polity feature without area');
+assert.throws(() => referenceForPolity({
+  referenceSourceFeatures: [feature('Россия',36),
+    {type:'Feature',properties:{name:'Россия'},geometry:null}],
+}, 'russian-tsardom'), /selected source features without polygon geometry/,
+  'a missing named source geometry must block independent border acceptance');
+assert.throws(() => referenceForPolity({
+  referenceSourceFeatures: [feature('Россия',36),
+    {type:'Feature',properties:{name:'Россия'},
+      geometry:{type:'GeometryCollection',geometries:[
+        {type:'LineString',coordinates:[[38,55],[39,55]]},
+        {type:'Point',coordinates:[38,55]},
+      ]}}],
+}, 'russian-tsardom'), /selected source features without polygon geometry/,
+  'non-area GeometryCollections must not disappear from a named border');
+assert.equal(referenceForPolity({
+  referenceSourceFeatures: [...partialNamedSource.slice(0,1),
+    {...partialNamedSource[1],properties:{name:'Тверское княжество'}}],
+}, 'russian-tsardom').scope.selectedFeatures, 1,
+  'unrelated non-area source features are excluded by reviewed polity identity');
 assert.throws(()=>referenceForPolity({referenceSourceFeatures:[{
   ...nestedRussian,geometry:{type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]}]},
 }]},'russian-tsardom'),/contains no polygon geometry/,
