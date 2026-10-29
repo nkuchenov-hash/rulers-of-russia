@@ -17,6 +17,34 @@ try {
     });
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
+    // A visible projection toggle does not prove that the mobile WebGL
+    // renderer produced a frame. The flat map can work while 3D is blank.
+    const globeCanvas = page.locator('canvas[data-territory-globe="true"]');
+    const globeRenderCount = async () => Number(
+      await globeCanvas.getAttribute('data-territory-render-count') || 0
+    );
+    const waitForRenderedGlobe = async (stage, previousRenderCount = 0) => {
+      try {
+        await page.waitForFunction(({previousRenderCount, viewportWidth}) => {
+          const canvas = document.querySelector('canvas[data-territory-globe="true"]');
+          if (!canvas || !canvas.isConnected) return false;
+          const rect = canvas.getBoundingClientRect();
+          const style = getComputedStyle(canvas);
+          return canvas.width > 300 && canvas.height > 200
+            && rect.width >= viewportWidth * 0.75 && rect.height > 150
+            && rect.right > 0 && rect.left < viewportWidth
+            && style.display !== 'none' && style.visibility === 'visible'
+            && Number(canvas.dataset.territoryRenderCount || 0) > previousRenderCount;
+        }, {previousRenderCount, viewportWidth: width}, {polling: 100, timeout: 15000});
+      } catch (error) {
+        throw new Error(`mobile ${width}: globe failed to render at ${stage} (previous render count ${previousRenderCount})`, {cause: error});
+      }
+    };
+    const returnToGlobe = async stage => {
+      const previousRenderCount = await globeRenderCount();
+      await page.getByRole('button', {name: 'Показать глобус'}).click();
+      await waitForRenderedGlobe(stage, previousRenderCount);
+    };
     const target = new URL(url);
     target.searchParams.set('year', '1581');
     target.searchParams.set('month', '7');
@@ -30,6 +58,8 @@ try {
         && caption.includes('Реконструкция')
         && caption.includes('220 км');
     }, null, {timeout: 45000});
+
+    await waitForRenderedGlobe('initial 1581-07');
 
     const metrics = await page.evaluate(() => {
       const p = document.querySelector('main aside p[data-history-accuracy-caption]');
@@ -78,7 +108,7 @@ try {
     await month.selectOption('8');
     await page.waitForFunction(() => (document.body?.innerText || '').includes('History Core 1581-08'), null, {timeout: 30000});
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1581-08', null, {timeout: 12000});
-    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    await returnToGlobe('1581-08');
     // The 1462 contour is reused across the 1478 annexation of Novgorod.
     // Both projections must disclose the missing transition on phones.
     const novgorodTarget = new URL(url);
@@ -97,7 +127,7 @@ try {
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1478-01', null, {timeout: 15000});
     assert.equal(await page.locator('main aside p').getAttribute('data-history-geometry-gap'),
       'muscovy-1462-reused', `mobile ${width}: 1478 warning lost in 2D`);
-    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    await returnToGlobe('1478-01');
 
     // A 1490 month still reuses the 1462 Moscow contour despite the
     // separately dated Rostov, Novgorod, Tver and Vyatka acquisitions.
@@ -133,7 +163,7 @@ try {
       null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Тверь \(1485\).*Вятка \(1489\)/, `mobile ${width}: 1490 warning lost in 2D`);
-    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    await returnToGlobe('1490-01');
 
     // The 1505 Muscovy contour is still reused for 1514: do not call it
     // geographically verified in either projection or on a phone.
@@ -172,7 +202,7 @@ try {
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1514-08', null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Смоленск \(1514\)/, `mobile ${width}: Smolensk warning lost in 2D`);
-    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    await returnToGlobe('1514-08');
 
     // The unchanged 1505 polygon misses Ryazan's documented Moscow control by autumn 1521.
     // The conservative September month-end warning must survive 3D/2D at 390/360px.
@@ -192,7 +222,7 @@ try {
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1521-09', null, {timeout: 15000});
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
-    await page.getByRole('button', {name: 'Показать глобус'}).click();
+    await returnToGlobe('1521-09');
 
     // A source-backed internal History Core state must never be presented
     // as independently geographically accepted, including on narrow phones
@@ -216,6 +246,7 @@ try {
       /независимая точность не подтверждена/,
       `mobile ${width}: independent-accuracy warning lost in 2D`);
 
+    await returnToGlobe('2026-02');
     assert.equal(errors.length, 0, `mobile ${width}: page errors ${errors.join('; ')}`);
     console.log(`Mobile territory ${width}px passed:`, JSON.stringify(metrics));
     await page.close();
