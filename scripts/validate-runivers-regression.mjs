@@ -215,7 +215,7 @@ function requireUsableReferenceGeometry(payload, resourceId) {
 // *key* such as "approximate": false is not evidence that a map is approximate.
 // Only affirmative flags or descriptive text can activate the existing policy.
 const approximationMarker = /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i;
-const explicitNonApproximation = /^(?:false|no|нет|0|none|n\\/a|not\\s+(?:approximate|uncertain|reconstructed|reconstruction))$/i;
+const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a|not\s+(?:approximate|uncertain|reconstructed|reconstruction))$/i;
 
 function hasApproximationEvidence(value, key = '') {
   if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
@@ -744,7 +744,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
+export {isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
