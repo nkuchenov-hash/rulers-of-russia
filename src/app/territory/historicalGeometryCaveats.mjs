@@ -13,23 +13,34 @@ export function historicalGeometryCaveat(date, monthState) {
   // Novgorod's annexation in 1478 is not present in a 1462 Moscow contour.
   // The world-background filter also suppresses obsolete independent
   // Novgorod from 1478, so this gap must never be labelled verified.
-  // A year-only source cannot certify an effective month within 1478.
+  // Novgorod Regional Scientific Library dates the surrender to 15 January
+  // 1478 (Julian; still January in the proleptic Gregorian calendar). Since
+  // the UI displays the state at month end, warn from 1478-01, not 1479-01.
+  // https://nounb.ru/virtualnye-vystavki/personazhi-novgorodskoj-istorii-na-pamyatnike-tysyacheletie-rossii-2/ivan-iii-1440-1505-velikij-knyaz-moskovskij
+  // This dates the missing transition, NOT the contour or its precise shape.
   if (key >= '1463-01' && key <= '1504-12' && MOSCOW_1462_FILE.test(String(monthState.geometryFile ?? ''))) {
-    const missing = date.year > 1478 ? '; не отражено присоединение Новгорода (1478)' : '';
+    const missing = key >= '1478-01' ? '; не отражено присоединение Новгорода (1478)' : '';
     return {
       code: 'muscovy-1462-reused',
       desktop: `Контур 1462 г. повторно используется для ${key}${missing}; соответствие выбранному месяцу независимо не подтверждено`,
-      mobile: `Контур 1462 г. · ${date.year > 1478 ? 'не отражён Новгород (1478) · ' : ''}точность не подтверждена`,
+      mobile: `Контур 1462 г. · ${key >= '1478-01' ? 'не отражён Новгород (1478) · ' : ''}точность не подтверждена`,
     };
   }
   if (key < '1506-01' || key > '1532-12') return null;
   if (!MOSCOW_1505_FILE.test(String(monthState.geometryFile ?? ''))) return null;
 
   const missing = [];
-  // Event years are known, but exact effective months are not certified here.
-  // Only name an omitted event after its entire calendar year has passed.
-  if (date.year > 1510) missing.push('Псков (1510)');
-  if (date.year > 1514) missing.push('Смоленск (1514)');
+  // Pskov's veche was abolished on 13 January 1510 (Julian; Gregorian
+  // January), per the Pskov regional government and Russian Historical Society.
+  // https://pskov.ru/region/istoriya/prisoedinenie-k-moskve
+  // https://historyrussia.org/sobytiya/13-yanvarya-1510-goda-v-pskove-byl-snyat-vechevoj-kolokol.html
+  // Smolensk surrendered 30–31 July 1514 (Julian = 9–10 August Gregorian);
+  // see A. N. Lobin, Vziatie Smolenska i bitva pod Orshei, 2015.
+  // https://djvu.online/file/zhlXoOVvyW3TJ
+  // These dates justify when the unchanged 1505 contour is stale, not a
+  // replacement boundary. UI dates represent the END of the selected month.
+  if (key >= '1510-01') missing.push('Псков (1510)');
+  if (key >= '1514-08') missing.push('Смоленск (1514)');
   // The 1505 Moscow contour also predates the annexation of Ryazan in 1521.
   // As with Pskov/Smolensk, year-only evidence is insufficient to assert an
   // exact transition month, so report it only from the following calendar year.
