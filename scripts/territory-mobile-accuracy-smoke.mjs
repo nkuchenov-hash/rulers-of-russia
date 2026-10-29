@@ -99,6 +99,42 @@ try {
       'muscovy-1462-reused', `mobile ${width}: 1478 warning lost in 2D`);
     await page.getByRole('button', {name: 'Показать глобус'}).click();
 
+    // A 1490 month still reuses the 1462 Moscow contour despite the
+    // separately dated Rostov, Novgorod, Tver and Vyatka acquisitions.
+    // Check the complete mobile disclosure and its layout in BOTH projections.
+    const annexationsTarget = new URL(url);
+    annexationsTarget.searchParams.set('year', '1490');
+    annexationsTarget.searchParams.set('month', '1');
+    const annexationsResponse = await page.goto(annexationsTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+    assert(annexationsResponse?.ok(), `mobile ${width}: 1490 HTTP ${annexationsResponse?.status()}`);
+    await page.waitForFunction(() => {
+      const p = document.querySelector('main aside p[data-history-accuracy-caption]');
+      const caption = p?.getAttribute('data-history-mobile-caption') || '';
+      return (document.body?.innerText || '').includes('History Core 1490-01')
+        && p?.getAttribute('data-history-geometry-gap') === 'muscovy-1462-reused'
+        && ['Ростов (1474)', 'Новгород (1478)', 'Тверь (1485)', 'Вятка (1489)']
+          .every(label => caption.includes(label));
+    }, null, {timeout: 45000});
+    const annexationLayout = await page.evaluate(() => {
+      const p = document.querySelector('main aside p[data-history-accuracy-caption]');
+      const zoom = document.querySelector('main div[class*="zoomTools"]');
+      return {
+        documentWidth: document.documentElement.scrollWidth,
+        statusRight: p?.getBoundingClientRect().right,
+        zoomLeft: zoom?.getBoundingClientRect().left,
+        textSize: parseFloat(getComputedStyle(p, '::after').fontSize),
+      };
+    });
+    assert(annexationLayout.documentWidth <= width + 1 && annexationLayout.statusRight < annexationLayout.zoomLeft
+      && annexationLayout.textSize >= 16,
+    `mobile ${width}: multi-transition caption layout regression: ${JSON.stringify(annexationLayout)}`);
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1490-01',
+      null, {timeout: 15000});
+    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+      /Тверь \\(1485\\).*Вятка \\(1489\\)/, `mobile ${width}: 1490 warning lost in 2D`);
+    await page.getByRole('button', {name: 'Показать глобус'}).click();
+
     // The 1505 Muscovy contour is still reused for 1514: do not call it
     // geographically verified in either projection or on a phone.
     const staleTarget = new URL(url);
