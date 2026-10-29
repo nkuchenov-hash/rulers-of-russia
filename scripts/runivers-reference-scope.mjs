@@ -110,8 +110,17 @@ export function referenceForPolity(payload, polityId) {
   // attribution. The public regression report receives only identifiers,
   // never the licensed reference geometry itself.
   const excluded = features.filter(f => !selected.includes(f));
-  const polygons = selected.flatMap(f => polygonsFromGeometry(f.geometry));
+  // A single usable polygon must not hide another selected source record with
+  // missing/point-only geometry. Silently omitting it would compare only a
+  // subset of the named state's territory and could produce a false pass.
+  // GeometryCollections may contain points as long as each selected feature
+  // also contributes at least one polygon.
+  const polygonGroups = selected.map(f => polygonsFromGeometry(f.geometry));
+  const polygons = polygonGroups.flat();
   if (!polygons.length) throw new Error(`Named ${label} reference contains no polygon geometry`);
+  if (polygonGroups.some(group => group.length === 0)) {
+    throw new Error(`Named ${label} reference has selected source features without polygon geometry; incomplete polity border`);
+  }
   return {
     payload: {type: 'FeatureCollection', features: [{type: 'Feature',
       properties: {sourceProperties: selected.map(f => f.properties)},
