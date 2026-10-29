@@ -21,6 +21,7 @@ on:
       - 'scripts/test-runivers-matrix.mjs'
       - 'scripts/test-runivers-geometry.mjs'
       - 'scripts/test-runivers-json-fallback.mjs'
+      - 'scripts/test-runivers-artifact-policy.mjs'
       - 'scripts/territory-history-smoke.mjs'
       - '.github/workflows/runivers-baseline-discovery.yml'
   schedule:
@@ -50,6 +51,7 @@ jobs:
       - run: node scripts/test-history-component-exclusions.mjs
       - run: node scripts/test-require-runivers-regression.mjs
       - run: node scripts/test-runivers-json-fallback.mjs
+      - run: node scripts/test-runivers-artifact-policy.mjs
 
   regression:
     needs: integrity
@@ -141,10 +143,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: runivers-geometric-regression-${{ matrix.id }}
+          # Public reports are diagnostic only. Do not upload the shard
+          # workspace, source cache, or full month index as a ZIP by accident.
           path: |
-            tmp/runivers-discovery
-            tmp/runivers-shards
             tmp/runivers-regression/report.json
+          retention-days: 7
           if-no-files-found: warn
 
       - name: Require baseline metadata
