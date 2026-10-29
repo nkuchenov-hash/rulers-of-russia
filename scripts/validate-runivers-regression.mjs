@@ -564,6 +564,20 @@ function referenceOverlapsState(layer, state, maxRuniversYear) {
   return false;
 }
 
+// Year-granular Runivers layers without an overlapping verified full-year
+// History Core state are NOT audited. Record their dated resource identities
+// instead of silently dropping them from the comparison loop. This is a
+// coverage failure, not an external source outage or a geographic pass.
+function unmatchedReferenceLayers(layers, states, maxRuniversYear) {
+  return layers.filter(layer => !states.some(state => referenceOverlapsState(layer, state, maxRuniversYear)))
+    .map(layer => ({
+      runiversResourceId: layer.id,
+      runiversFromYear: layer.fromYear,
+      runiversToYear: layer.toYear,
+      reason: 'No overlapping full-year geometry-verified History Core state; no independent comparison attempted',
+    }));
+}
+
 async function main() {
   if (!fs.existsSync(discoveryFile)) throw new Error(`Runivers discovery report missing: ${discoveryFile}`);
   if (!fs.existsSync(monthIndexFile)) throw new Error('History Core month index missing; run npm run materialize:history first');
@@ -584,6 +598,7 @@ async function main() {
   const maxRuniversYear = discovery.preferredMaxYear ?? Math.max(...layers.map(layer => layer.toYear));
 
   const relevantLayers = layers.filter(layer => states.some(state => referenceOverlapsState(layer, state, maxRuniversYear)));
+  const unmatchedLayers = unmatchedReferenceLayers(layers, states, maxRuniversYear);
   const coverage = new Map(states.map(state => [state.key, []]));
   const historySamplesCache = new Map();
   const comparisons = [], referenceFailures = [];
@@ -707,6 +722,7 @@ async function main() {
     auditedRange: {startMonth: START_MONTH, endMonth: END_MONTH}, runiversHost: discovery.host,
     runiversBoundaryRoot: discovery.boundaryRoot ?? null, runiversBaselineParent: discovery.currentBaselineParent ?? null,
     runiversLayersDiscovered: discovery.vectorLayers?.length ?? 0, datedLayersAudited: relevantLayers.length,
+    unmatchedReferenceLayers: unmatchedLayers.length,
     usableReferenceLayers: usableReferenceCount, historyStates: states.length, comparisons: comparisons.length,
     passingComparisons: comparisons.filter(row => row.status === 'pass').length,
     overrides: comparisons.filter(row => row.status === 'override').length, failedComparisons: failedComparisons.length,
@@ -738,13 +754,13 @@ async function main() {
     toleranceMeters: row.toleranceMeters,
     maxToleranceMeters: row.maxToleranceMeters,
   }));
-  fs.writeFileSync(reportFile, JSON.stringify({schema_version: 2, generatedAt: new Date().toISOString(), summary, comparisonEvidence, stateCoverage, failedComparisons, referenceFailures, uncoveredMonths}, null, 2));
+  fs.writeFileSync(reportFile, JSON.stringify({schema_version: 2, generatedAt: new Date().toISOString(), summary, comparisonEvidence, stateCoverage, failedComparisons, referenceFailures, unmatchedReferenceLayers: unmatchedLayers, uncoveredMonths}, null, 2));
   console.log('Runivers geometric regression summary:', JSON.stringify(summary));
   console.log(`Report: ${reportFile}`);
-  if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
+  if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
+export {isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
