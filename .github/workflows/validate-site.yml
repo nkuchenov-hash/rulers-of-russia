@@ -34,6 +34,9 @@ jobs:
       - name: Test Pages deployment SHA pinning
         run: node scripts/test-pages-validated-deploy.mjs
 
+      - name: Test live territory deployment identity and browser pinning
+        run: node scripts/test-live-territory-deploy.mjs
+
       - name: Test historical geometry chronology caveats
         run: node scripts/test-historical-geometry-caveats.mjs
 
