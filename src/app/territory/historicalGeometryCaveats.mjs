@@ -43,7 +43,7 @@ export function historicalGeometryCaveat(date, monthState) {
   if (key >= '1514-08') missing.push('Смоленск (1514)');
   // The 1505 Moscow contour also predates the change of control over
   // Ryazan in 1521. An archival study documents the last prince's July
-  // flight and the 31 August (Julian) investigation; contemporary-event
+  // flight and the 31 August (Julian) investigation; regional historical
   // accounts place a Moscow governor and loyal garrison in Ryazan in August.
   // By the END of September (including the Gregorian conversion of late
   // August Julian dates), the 1505 contour is demonstrably stale. The exact
