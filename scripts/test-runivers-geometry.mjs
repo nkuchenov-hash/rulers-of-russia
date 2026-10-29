@@ -93,12 +93,45 @@ assert.equal(scoped.scope.selectedFeatures,1);
 const wholeLayer = referenceForPolity(source, 'russian-empire');
 assert.equal(wholeLayer.payload, source, 'diagnostics must not alter the reference polygon');
 assert.equal(wholeLayer.scope.kind, 'whole-reference-layer');
+assert.equal(wholeLayer.scope.sourceProvenance, 'original-source-features');
+assert.equal(wholeLayer.scope.sourceFeatureCount, 2);
+assert.equal(wholeLayer.scope.distinctNameCount, 2);
+assert.deepEqual(wholeLayer.scope.sourceNameExamples, ['Московское княжество', 'Тверское княжество']);
+assert.equal(wholeLayer.scope.diagnosticOnly, true);
+assert.equal(wholeLayer.scope.sourceRecordExamples.length, 2);
+assert.equal(wholeLayer.scope.sourceRecordExamples[0].name, 'Московское княжество');
+assert.equal(wholeLayer.scope.sourceRecordExamples[0].geometry, undefined,
+  'public attribution must never embed licensed source polygons');
 assert.equal(wholeLayer.sourceFeatures.selected.length, 2,
   'whole-layer diagnostics must retain original source features');
 assert.equal(wholeLayer.sourceFeatures.excluded.length, 0);
 const fallbackLayer = referenceForPolity({type:'FeatureCollection',features:[feature('Россия',40)]}, 'rsfsr');
 assert.equal(fallbackLayer.sourceFeatures.selected.length, 1,
   'whole-layer diagnostics must also work without referenceSourceFeatures metadata');
+assert.equal(fallbackLayer.scope.sourceProvenance, 'merged-payload-fallback');
+assert.deepEqual(fallbackLayer.scope.sourceRecordExamples, [],
+  'a dissolved fallback polygon must not masquerade as original source records');
+const emptyOriginalLayer = referenceForPolity({
+  type:'FeatureCollection', referenceSourceFeatures: [], features:[feature('Россия',40)],
+}, 'russian-empire');
+assert.equal(emptyOriginalLayer.scope.sourceProvenance, 'merged-payload-fallback');
+assert.equal(emptyOriginalLayer.scope.sourceFeatureCount, 1,
+  'an empty original feature array must not hide the available fallback geometry');
+const manyFeatures = Array.from({length: 25}, (_, i) => feature('Полития '+i, 30 + i));
+const manyLayer = referenceForPolity({referenceSourceFeatures: manyFeatures, features:[]}, 'russian-empire');
+assert.equal(manyLayer.scope.sourceRecordExamples.length, 20);
+assert.equal(manyLayer.scope.sourceRecordsTruncated, true);
+assert.equal(manyLayer.scope.sourceNamesTruncated, true);
+assert.equal(manyLayer.scope.distinctNameCount, 25);
+const untrustedMetadata = feature('Н'.repeat(1000), 80);
+untrustedMetadata.id = {coordinates:[1,2]};
+untrustedMetadata.properties.cat = {geometry:[1,2]};
+const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-empire');
+assert.equal(sanitized.scope.sourceNameExamples[0].length, 160);
+assert.equal(sanitized.scope.sourceRecordExamples[0].name.length, 160);
+assert.equal(sanitized.scope.sourceRecordExamples[0].featureId, null);
+assert.equal(sanitized.scope.sourceRecordExamples[0].cat, null,
+  'source diagnostics must never serialize arbitrary nested source metadata');
 assert.deepEqual(scoped.scope.excludedNames,['Тверское княжество']);
 assert.deepEqual(scoped.payload.features[0].geometry.coordinates, [source.referenceSourceFeatures[0].geometry.coordinates]);
 assert.throws(()=>referenceForPolity({features:[]},'grand-moscow'),/original named/);
