@@ -119,9 +119,9 @@ const feature = (name, x) => ({type:'Feature',properties:{name},geometry:{type:'
 const source = {type:'FeatureCollection',referenceSourceFeatures:[feature('Московское княжество',30),feature('Тверское княжество',31)],features:[]};
 const scoped = referenceForPolity(source,'grand-moscow');
 assert.equal(scoped.scope.selectedFeatures,1);
-// Later eras use whole-layer references rather than Moscow name scoping.
-// They still need original Runivers feature IDs for actionable diagnostics.
-const wholeLayer = referenceForPolity(source, 'russian-empire');
+// Polities without a reviewed source-name scope still expose whole-layer
+// diagnostics; those cannot establish an independent Russian-state boundary.
+const wholeLayer = referenceForPolity(source, 'russian-republic');
 assert.equal(wholeLayer.payload, source, 'diagnostics must not alter the reference polygon');
 assert.equal(wholeLayer.scope.kind, 'whole-reference-layer');
 assert.equal(wholeLayer.scope.sourceProvenance, 'original-source-features');
@@ -144,12 +144,12 @@ assert.deepEqual(fallbackLayer.scope.sourceRecordExamples, [],
   'a dissolved fallback polygon must not masquerade as original source records');
 const emptyOriginalLayer = referenceForPolity({
   type:'FeatureCollection', referenceSourceFeatures: [], features:[feature('Россия',40)],
-}, 'russian-empire');
+}, 'russian-republic');
 assert.equal(emptyOriginalLayer.scope.sourceProvenance, 'merged-payload-fallback');
 assert.equal(emptyOriginalLayer.scope.sourceFeatureCount, 1,
   'an empty original feature array must not hide the available fallback geometry');
 const manyFeatures = Array.from({length: 25}, (_, i) => feature('Полития '+i, 30 + i));
-const manyLayer = referenceForPolity({referenceSourceFeatures: manyFeatures, features:[]}, 'russian-empire');
+const manyLayer = referenceForPolity({referenceSourceFeatures: manyFeatures, features:[]}, 'russian-republic');
 assert.equal(manyLayer.scope.sourceRecordExamples.length, 20);
 assert.equal(manyLayer.scope.sourceRecordsTruncated, true);
 assert.equal(manyLayer.scope.sourceNamesTruncated, true);
@@ -157,7 +157,7 @@ assert.equal(manyLayer.scope.distinctNameCount, 25);
 const untrustedMetadata = feature('Н'.repeat(1000), 80);
 untrustedMetadata.id = {coordinates:[1,2]};
 untrustedMetadata.properties.cat = {geometry:[1,2]};
-const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-empire');
+const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-republic');
 assert.equal(sanitized.scope.sourceNameExamples[0].length, 160);
 assert.equal(sanitized.scope.sourceRecordExamples[0].name.length, 160);
 assert.equal(sanitized.scope.sourceRecordExamples[0].featureId, null);
@@ -178,6 +178,35 @@ assert.equal(tsardomScope.scope.kind,'named-polity');
 assert.equal(tsardomScope.scope.selectedFeatures,2);
 assert.deepEqual(tsardomScope.scope.selectedNames,['Россия','Русское царство']);
 assert.deepEqual(tsardomScope.scope.excludedNames,['Казанское ханство','Ногайская Орда']);
+// A live 1750-1799 Runivers report (resource 5581) contains Russia and
+// Russian America alongside Kalmyk and Kazakh polities. The latter must not
+// contribute to an imperial border comparison merely because they share a
+// source layer. Preserve source identities without exporting their polygons.
+const empireSource = {type:'FeatureCollection',referenceSourceFeatures:[
+  feature('Россия',30), feature('Средний жуз',40),
+  feature('Младший жуз',50), feature('Калмыцкое ханство',60),
+  feature('Русская Америка',70), feature('Российская империя',80),
+],features:[feature('unscoped merged layer',90)]};
+const empireScope = referenceForPolity(empireSource,'russian-empire');
+assert.equal(empireScope.scope.kind,'named-polity');
+assert.equal(empireScope.scope.selectedFeatures,3);
+assert.equal(empireScope.scope.totalFeatures,6);
+assert.deepEqual(empireScope.scope.selectedNames,['Россия','Русская Америка','Российская империя']);
+assert.deepEqual(empireScope.scope.excludedNames,['Средний жуз','Младший жуз','Калмыцкое ханство']);
+assert.deepEqual(empireScope.payload.features[0].geometry.coordinates,[
+  empireSource.referenceSourceFeatures[0].geometry.coordinates,
+  empireSource.referenceSourceFeatures[4].geometry.coordinates,
+  empireSource.referenceSourceFeatures[5].geometry.coordinates,
+], 'unrelated Runivers political components must not alter the Empire border');
+assert.equal(empireScope.sourceFeatures.selected.length,3);
+assert.equal(empireScope.sourceFeatures.excluded.length,3);
+assert.ok(!JSON.stringify(empireScope.scope).includes('coordinates'),
+  'source polygon coordinates must remain in memory only');
+assert.throws(()=>referenceForPolity({features:[feature('Россия',30)]},'russian-empire'),/original named/,
+  'a dissolved layer cannot certify Empire source identity');
+assert.throws(()=>referenceForPolity({referenceSourceFeatures:[feature('Калмыцкое ханство',60)]},'russian-empire'),/no named Empire/,
+  'unrelated source polities cannot stand in for Russia');
+
 const sourceRecord = feature('Россия',30);
 sourceRecord.id = 777;
 sourceRecord.properties = {...sourceRecord.properties,cat:767,lwdate:'1557-01-01',status:6};
@@ -258,7 +287,7 @@ const sovietScope = referenceForPolity({referenceSourceFeatures:[soviet, inherit
 assert.equal(sovietScope.scope.selectedFeatures, 2);
 assert.deepEqual(sovietScope.scope.excludedNames, [occupation.properties.name, lease.properties.name]);
 assert.throws(() => referenceForPolity({referenceSourceFeatures:[occupation]}, 'ussr'), /no named USSR/);
-assert.equal(referenceForPolity(source,'russian-empire').payload,source);
+assert.equal(referenceForPolity(source,'russian-republic').payload,source);
 console.log('Runivers scope tests passed: independent polities remain separate, missing identity fails closed.');
 
 // A surrounding independent polity can hide the target's entire border when

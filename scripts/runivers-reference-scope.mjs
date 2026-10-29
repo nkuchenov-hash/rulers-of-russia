@@ -12,6 +12,12 @@ const moscowNames = new Set(['Московское княжество', 'Вел�
 // Russian-state features; unknown and independently named polities must never
 // be silently unioned into a sovereign border. Missing identity fails closed.
 const tsardomNames = new Set([...moscowNames, 'Русское царство', 'Российское царство', 'Царство Русское', 'Царство Московское']);
+// The 1750-1799 Runivers source layers contain independently named Kalmyk,
+// Kazakh and Caucasian polities alongside Russia. Comparing their union to
+// the Empire invents a sovereign outer border. Only source-labeled Russia
+// and Russian America (a distinct colonial-control label) are selected.
+// This does not certify their contours or settle colonial sovereignty.
+const empireNames = new Set(['Россия', 'Российская империя', 'Русская Америка']);
 // Identified unnamed Soviet additions in the original source records. Source
 // The selected status-6 records explicitly describe Soviet additions; the
 // inspected status-7 Polish transfers are cessions, not resulting territory.
@@ -53,6 +59,7 @@ function polygonsFromGeometry(geometry) {
 export function referenceForPolity(payload, polityId) {
   const names = polityId === 'grand-moscow' ? moscowNames
     : polityId === 'russian-tsardom' ? tsardomNames
+    : polityId === 'russian-empire' ? empireNames
     : polityId === 'ussr' ? new Set(['СССР', 'Россия', 'РСФСР']) : null;
   if (!names) {
     // For later historical polities the entire reference layer is selected.
@@ -83,7 +90,8 @@ export function referenceForPolity(payload, polityId) {
       sourceRecordsTruncated: hasOriginalFeatures && features.length > 20,
     }, sourceFeatures: {selected: features, excluded: []}};
   }
-  const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom' : 'USSR';
+  const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom'
+    : polityId === 'russian-empire' ? 'Empire' : 'USSR';
   const features = payload.referenceSourceFeatures;
   if (!Array.isArray(features) || !features.length) throw new Error(`${label} reference requires original named source features; refresh the reference cache`);
   const selected = features.filter(f => {
