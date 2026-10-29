@@ -47,8 +47,14 @@ assert.doesNotMatch(at(1520).desktop, /Рязань/,
   'Ryazan must not be listed before the documented 1521 annexation');
 assert.doesNotMatch(at(1521, 1).desktop, /Рязань/,
   'January 1521 must not be assigned an unsupported annexation date');
+assert.doesNotMatch(at(1521, 8).desktop, /Рязань/,
+  'August is not an asserted exact legal annexation month; the warning cutoff is conservative');
+assert.match(at(1521, 9).desktop, /Рязань \(1521\)/,
+  'by September month-end Moscow control is documented, though the exact legal month is unknown');
+assert.match(at(1521, 9).mobile, /Рязань \(1521\)/,
+  'the September warning must also be visible on narrow screens');
 assert.match(at(1521, 12).desktop, /Рязань \(1521\)/,
-  'year-end 1521 must disclose the missing Ryazan annexation, without claiming an exact earlier month');
+  'year-end 1521 must continue to disclose the missing Ryazan boundary');
 assert.match(at(1521, 12).mobile, /Рязань \(1521\)/,
   'year-end 1521 must disclose Ryazan on narrow screens');
 assert.match(at(1522, 1).desktop, /Рязань \(1521\)/,
