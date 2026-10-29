@@ -417,6 +417,10 @@ function politicalBorderSamples(payload, coastIndex) {
 // target state. A whole-layer coast mask is therefore not a valid early gate.
 function prepareScopedReference(payload, polityId, coastIndex) {
   const selected = referenceForPolity(payload, polityId);
+  // A whole-layer reference is research-only: it can include neighboring
+  // sovereign states and cannot certify the target country's border. Do not
+  // allow a coincidental geometric match to be counted as a pass.
+  if (selected.scope.diagnosticOnly) throw new Error(`Runivers polity ${polityId} has no reviewed source-identity scope; whole-layer diagnostics cannot certify geography`);
   const samples = politicalBorderSamples(selected.payload, coastIndex);
   if (samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
   return {samples, approximate: isReferenceApproximate(selected.payload), scope: selected.scope,
