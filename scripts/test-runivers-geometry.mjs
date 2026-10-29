@@ -1,5 +1,30 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth} from './validate-runivers-regression.mjs';
+
+// Approximation metadata raises the existing Runivers tolerance from the
+// year-specific limit to 100 km. A negative flag or a field name alone must
+// never silently make a historical contour easier to certify.
+const referenceWithMetadata = properties => ({type:'FeatureCollection',features:[
+  {type:'Feature',properties,geometry:{type:'Polygon',coordinates:[[[30,50],[31,50],[31,51],[30,51],[30,50]]]}},
+]});
+for (const properties of [
+  {approximate:false}, {reconstructed:false}, {uncertain:0},
+  {approximate:'false'}, {approximate:'no'}, {approximate:'0'},
+  {description:'not approximate'}, {metadata:{reconstruction:false}},
+  {name:'Russia',notes:'surveyed border'},
+]) {
+  assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),false,
+    'negative or unrelated Runivers metadata cannot activate 100 km tolerance: '+JSON.stringify(properties));
+}
+for (const properties of [
+  {approximate:true}, {reconstructed:1}, {approximate:'yes'},
+  {description:'Approximate historical border'},
+  {metadata:{uncertain:true}}, {notes:['modern map','условные границы']},
+]) {
+  assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),true,
+    'affirmative approximation evidence must retain the existing 100 km policy: '+JSON.stringify(properties));
+}
+console.log('Runivers approximation metadata tests passed: negative flags cannot inflate border tolerances.');
 
 // A global stride must not skip a small disconnected island or enclave just
 // because the preceding continental ring has thousands of candidates.
