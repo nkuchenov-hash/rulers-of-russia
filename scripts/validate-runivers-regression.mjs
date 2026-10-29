@@ -775,6 +775,14 @@ async function main() {
     historyLastMonth: row.historyLastMonth,
     runiversApproximate: row.runiversApproximate,
     historyGeometryFile: row.historyGeometryFile,
+    // Scalar provenance only: never serialize original source polygons.
+    // The independent acceptance gate must reject whole-layer diagnostics
+    // even when their numeric distances happen to be within tolerance.
+    historyPolityId: row.polityId,
+    referenceScopeKind: row.referenceScope?.kind ?? null,
+    referenceScopePolityId: row.referenceScope?.polityId ?? null,
+    referenceScopeSelectedFeatures: row.referenceScope?.selectedFeatures ?? null,
+    referenceScopeTotalFeatures: row.referenceScope?.totalFeatures ?? null,
     referenceSamples: row.referenceSamples,
     currentSamples: row.currentSamples,
     symmetricP95Meters: row.symmetricP95Meters,
