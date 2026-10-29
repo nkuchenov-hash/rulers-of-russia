@@ -45,6 +45,8 @@ try {
     import fs from 'node:fs';
     const shard = JSON.parse(fs.readFileSync(process.env.RUNIVERS_MONTH_INDEX_FILE));
     fs.writeFileSync('child-input.json', JSON.stringify(shard));
+    const sources = JSON.parse(fs.readFileSync(process.env.RUNIVERS_DISCOVERY_FILE));
+    fs.writeFileSync('child-discovery.json', JSON.stringify(sources.vectorLayers));
     if (!process.env.TEST_NO_REPORT) {
       const auditedRange = process.env.TEST_MISSING_AUDITED_RANGE ? undefined : {
         startMonth: process.env.TEST_AUDITED_START || process.env.RUNIVERS_START_MONTH,
@@ -175,6 +177,44 @@ try {
   assert.match(absentYear.stderr, /missing 12 months/);
   assert.equal(fs.existsSync(reportPath), false, 'an absent year must not reuse a passing report');
   fs.writeFileSync(canonicalPath, canonical);
+  // Chained Runivers intervals are half-open: a layer ending in the first
+  // shard year must not be counted as a reference for that year. Likewise,
+  // a layer starting after the shard cannot count as discovered coverage.
+  const originalDiscoveryForIntervals = fs.readFileSync(discoveryPath, 'utf8');
+  const intervalFixture = JSON.parse(originalDiscoveryForIntervals);
+  intervalFixture.vectorLayers.push(
+    {id: 9, fromYear: 1990, toYear: 1992},
+    {id: 10, fromYear: 1994, toYear: 1995},
+  );
+  fs.writeFileSync(discoveryPath, JSON.stringify(intervalFixture));
+  const halfOpen = run({});
+  assert.equal(halfOpen.status, 0, halfOpen.stderr);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(fixture, 'child-discovery.json')))
+    .map(layer => layer.id), [1, 2],
+  'a half-open source ending at the shard start and a later source must both be excluded');
+  fs.writeFileSync(discoveryPath, originalDiscoveryForIntervals);
+
+  // The final baseline year is the documented exception: its terminal
+  // endpoint is inclusive. Do not accidentally drop the 2020 reference.
+  const terminalMonths = Array.from({length: 12}, (_, i) => ({
+    month: `2020-${String(i + 1).padStart(2, '0')}`,
+    status: 'geometry-verified', geometryFile: 'terminal.geojson',
+  }));
+  fs.writeFileSync(canonicalPath, JSON.stringify({
+    complete: false, monthCount: 12, months: terminalMonths,
+  }));
+  fs.writeFileSync(discoveryPath, JSON.stringify({
+    host: 'https://example.invalid', preferredMaxYear: 2020,
+    vectorLayers: [{id: 3, fromYear: 2018, toYear: 2020}],
+  }));
+  const terminal = run({RUNIVERS_START_MONTH: '2020-01', RUNIVERS_END_MONTH: '2020-12'});
+  assert.equal(terminal.status, 0, terminal.stderr);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(fixture, 'child-discovery.json')))
+    .map(layer => layer.id), [3],
+  'the final pinned Runivers year must remain included');
+  fs.writeFileSync(canonicalPath, canonical);
+  fs.writeFileSync(discoveryPath, originalDiscoveryForIntervals);
+
   const firstDown = run({TEST_FIRST_RESOURCE_DOWN: '1'});
   assert.equal(firstDown.status, 0, firstDown.stderr);
   assert.match(firstDown.stdout, /responsive resource 2 via component-mvt/,
