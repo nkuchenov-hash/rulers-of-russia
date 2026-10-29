@@ -18,6 +18,10 @@ const tsardomNames = new Set([...moscowNames, 'Русское царство', '
 // and Russian America (a distinct colonial-control label) are selected.
 // This does not certify their contours or settle colonial sovereignty.
 const empireNames = new Set(['Россия', 'Российская империя', 'Русская Америка']);
+// Russian Federation comparisons must select the source-labeled country,
+// not a whole map layer that may contain other post-Soviet states. Source
+// identities are matched literally; missing original feature metadata fails.
+const federationNames = new Set(['Россия', 'Российская Федерация']);
 // Identified unnamed Soviet additions in the original source records. Source
 // The selected status-6 records explicitly describe Soviet additions; the
 // inspected status-7 Polish transfers are cessions, not resulting territory.
@@ -60,6 +64,7 @@ export function referenceForPolity(payload, polityId) {
   const names = polityId === 'grand-moscow' ? moscowNames
     : polityId === 'russian-tsardom' ? tsardomNames
     : polityId === 'russian-empire' ? empireNames
+    : polityId === 'russian-federation' ? federationNames
     : polityId === 'ussr' ? new Set(['СССР', 'Россия', 'РСФСР']) : null;
   if (!names) {
     // For later historical polities the entire reference layer is selected.
@@ -91,7 +96,8 @@ export function referenceForPolity(payload, polityId) {
     }, sourceFeatures: {selected: features, excluded: []}};
   }
   const label = polityId === 'grand-moscow' ? 'Moscow' : polityId === 'russian-tsardom' ? 'Tsardom'
-    : polityId === 'russian-empire' ? 'Empire' : 'USSR';
+    : polityId === 'russian-empire' ? 'Empire'
+    : polityId === 'russian-federation' ? 'Russian Federation' : 'USSR';
   const features = payload.referenceSourceFeatures;
   if (!Array.isArray(features) || !features.length) throw new Error(`${label} reference requires original named source features; refresh the reference cache`);
   const selected = features.filter(f => {
