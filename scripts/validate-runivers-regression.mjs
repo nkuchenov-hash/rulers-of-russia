@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
+import {publicReferenceFailure} from './runivers-public-reference-failures.mjs';
 import {diagnoseEarlyRussiaHotspots, diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -632,11 +633,15 @@ async function main() {
   for (let index = 0; index < relevantLayers.length; index += 1) {
     const layer = relevantLayers[index];
     let geojson, classification;
+    let referenceStage = 'reference-fetch';
     try {
       geojson = await fetchRuniversGeoJson(discovery.host, layer.id);
+      referenceStage = 'reference-geometry';
       classification = requireUsableReferenceGeometry(geojson, layer.id);
     } catch (error) {
-      referenceFailures.push({layer, error: error?.message ?? String(error)});
+      // External error strings and discovery-layer objects can contain raw
+      // coordinates or licensed metadata. Keep only fixed diagnostic codes.
+      referenceFailures.push(publicReferenceFailure({layer, stage: referenceStage}));
       continue;
     }
     const referenceSamplesByPolity = new Map();
@@ -649,7 +654,7 @@ async function main() {
           scoped = prepareScopedReference(geojson, state.polityId, coast.index);
           referenceSamplesByPolity.set(state.polityId, scoped);
         } catch (error) {
-          referenceFailures.push({layer, polityId: state.polityId, error: error.message});
+          referenceFailures.push(publicReferenceFailure({layer, polityId: state.polityId, stage: 'polity-scope'}));
           continue;
         }
       }
@@ -663,8 +668,7 @@ async function main() {
       try {
         metric = requireComparablePoliticalGeometry(scoped.samples, currentSamples, classification);
       } catch (error) {
-        referenceFailures.push({layer, polityId: state.polityId,
-          historyGeometryFile: state.geometryFile, error: error.message});
+        referenceFailures.push(publicReferenceFailure({layer, polityId: state.polityId, stage: 'border-comparison'}));
         continue;
       }
       hasUsableScopedReference = true;
