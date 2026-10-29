@@ -41,16 +41,19 @@ export function historicalGeometryCaveat(date, monthState) {
   // replacement boundary. UI dates represent the END of the selected month.
   if (key >= '1510-01') missing.push('Псков (1510)');
   if (key >= '1514-08') missing.push('Смоленск (1514)');
-  // The 1505 Moscow contour also predates the annexation of Ryazan in 1521.
-  // A published archival study documents the last prince's flight in July
-  // 1521 and an interrogation on 31 August (Julian); a Ryazan historical
-  // account documents Moscow's garrison holding the city in August 1521.
-  // These sources establish a change within 1521, but do not establish the
-  // exact legal effective month. Warn by the END of that year, not only 1522;
-  // deliberately do not claim that an earlier 1521 month is exact.
+  // The 1505 Moscow contour also predates the change of control over
+  // Ryazan in 1521. An archival study documents the last prince's July
+  // flight and the 31 August (Julian) investigation; contemporary-event
+  // accounts place a Moscow governor and loyal garrison in Ryazan in August.
+  // By the END of September (including the Gregorian conversion of late
+  // August Julian dates), the 1505 contour is demonstrably stale. The exact
+  // legal effective month and replacement boundary remain unestablished:
+  // this is a warning cutoff, NOT a claimed September annexation date.
   // https://www.vostlit.info/Texts/Dokumenty/Litva/XVI/1520-1540/Ivan_Ivanovic_Rjazaskij/text.htm
+  // https://www.docs.historyrussia.org/ru/nodes/344564-1521-avgusta-31-otryvok-rozysknogo-dela-o-begstve-iz-moskvy-ryazanskogo-knyazya-ioanna-ioannovicha
+  // https://62info.ru/history/node/332
   // https://www.rzn.info/articles/pochemu-ryazan-prisoedinili-k-moskve-500-let-nazad.html
-  if (key >= '1521-12') missing.push('Рязань (1521)');
+  if (key >= '1521-09') missing.push('Рязань (1521)');
   const changes = missing.length ? `; не отражены изменения: ${missing.join(', ')}` : '';
   return {
     code: 'muscovy-1505-reused',
