@@ -184,6 +184,22 @@ try {
  assert.match(invalidEnd.stderr,/date range is invalid/);
  assert.equal(run({...summary,auditedRange:undefined}).status,1,
    'Missing validator date metadata cannot certify a shard');
+ // A year-level reference only covers its declared years, even when the
+ // History Core polygon is reused across a longer two-year state. Previous
+ // checks trusted uncoveredMonths=0 and could accept this shortened evidence.
+ const twoYearSummary = {...summary,auditedRange:{startMonth:'1920-01',endMonth:'1921-12'}};
+ const twoYearShard = {startMonth:'1920-01',endMonth:'1921-12',
+   rangeMonthCount:24,comparedMonthCount:24,excludedMonthCount:0};
+ const twoYearEvidence = {...metricRow('pass'),historyLastMonth:'1921-12'};
+ const partialYearEvidence = run(twoYearSummary,twoYearShard,
+   {RUNIVERS_END_MONTH:'1921-12'},[twoYearEvidence]);
+ assert.equal(partialYearEvidence.status,1,
+   'a source covering only 1920 cannot certify a 1920–1921 History Core state');
+ assert.match(partialYearEvidence.stderr,/does not cover 12\/24 shard months/);
+ assert.equal(run(twoYearSummary,twoYearShard,
+   {RUNIVERS_END_MONTH:'1921-12'},[{...twoYearEvidence,runiversToYear:1922}]).status,0,
+   'the same state is accepted when its source really covers both full years');
+
  assert.equal(run(summary,{...completeShard,startMonth:'1921-01',endMonth:'1920-12'}).status,1,
    'Reversed shard dates cannot pass geographic acceptance');
  console.log('Runivers gate tests passed: complete dated-layer inventory, success, outage, partial coverage, contour failure, override-only comparisons, unverified transition months and malformed totals.');
