@@ -162,7 +162,8 @@ export function diagnoseEarlyRussiaHotspots({
       return {
         clusterId: hotspot.id,
         sourceInterval: [hotspot.fromYear, hotspot.toYear],
-        lonLat: hotspot.lonLat,
+        // Source-derived hotspot positions are used only for in-memory
+        // attribution. Publishing them would disclose precise locations.
         diagnosticOnly: true,
         probeOffsetUnits: 'longitude/latitude degrees (not metres)',
         probes: PROBES.map(({direction, deltaLonLatDegrees}) => {
