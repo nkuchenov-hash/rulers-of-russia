@@ -211,9 +211,28 @@ function requireUsableReferenceGeometry(payload, resourceId) {
   return classification;
 }
 
+// Approximation changes the geographic tolerance (up to 100 km). A metadata
+// *key* such as "approximate": false is not evidence that a map is approximate.
+// Only affirmative flags or descriptive text can activate the existing policy.
+const approximationMarker = /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i;
+const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a|not\s+(?:approximate|uncertain|reconstructed|reconstruction))$/i;
+
+function hasApproximationEvidence(value, key = '') {
+  if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
+  if (value && typeof value === 'object') {
+    return Object.entries(value).some(([name, item]) => hasApproximationEvidence(item, name));
+  }
+  if (typeof value === 'boolean') return approximationMarker.test(key) && value;
+  if (typeof value === 'number') return approximationMarker.test(key) && value === 1;
+  if (typeof value !== 'string') return false;
+  const label = value.trim();
+  if (explicitNonApproximation.test(label)) return false;
+  return approximationMarker.test(label)
+    || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
+}
+
 function isReferenceApproximate(payload) {
-  const text = payloadFeatures(payload).map(feature => JSON.stringify(feature?.properties ?? {})).join(' ').toLowerCase();
-  return /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i.test(text);
+  return payloadFeatures(payload).some(feature => hasApproximationEvidence(feature?.properties ?? {}));
 }
 
 function haversineMeters(a, b) {
@@ -725,7 +744,7 @@ async function main() {
   if (referenceFailures.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
+export {isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
