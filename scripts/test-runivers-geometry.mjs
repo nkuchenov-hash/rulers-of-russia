@@ -586,6 +586,8 @@ assert.equal(worstAttribution[3].historyLocation, 'boundary');
 assert.ok(worstAttribution.every(row => row.diagnosticOnly));
 assert.ok(!JSON.stringify(worstAttribution).includes('"coordinates"'),
   'do not copy unlicensed reference polygons into diagnostic reports');
+assert.ok(worstAttribution.every(row => !Object.hasOwn(row, 'lonLat')),
+  'never publish source-derived worst-boundary sample coordinates');
 assert.deepEqual(diagnoseFailedBoundarySamples({
   referenceSamples: [{lonLat: [NaN, 54], distanceMeters: 1}],
 }), [], 'invalid sample coordinates cannot be attributed');
@@ -603,9 +605,11 @@ const retainedValidSamples = diagnoseFailedBoundarySamples({
   referencePayload: diagnosticScope.payload,
   historyPayload: diagnosticHistory,
 });
-assert.deepEqual(retainedValidSamples.map(row => row.lonLat),
-  [[40.25,54],[40.5,54],[40.75,54]],
+assert.deepEqual(retainedValidSamples.map(row => row.distanceMeters),
+  [700000,600000,500000],
   'invalid leading samples must not suppress three valid worst-distance records');
+assert.ok(retainedValidSamples.every(row => !Object.hasOwn(row, 'lonLat')),
+  'valid source samples must be attributed without publishing their coordinates');
 assert.ok(retainedValidSamples.every(row => row.diagnosticOnly));
 
 // Diagnostic callers may return samples in arbitrary order. The audit must
@@ -635,6 +639,8 @@ assert.deepEqual(unsortedSamples.map(row => row.sampledBoundary),
     'history-core','history-core','history-core']);
 assert.ok(!JSON.stringify(unsortedSamples).includes('"coordinates"'),
   'all-era diagnostic attribution must not export reference geometry');
+assert.ok(!JSON.stringify(unsortedSamples).includes('"lonLat"'),
+  'all-era diagnostic attribution must not export sampled source coordinates');
 
 // NextGIS source properties are not guaranteed to be scalar. An embedded
 // object could carry unlicensed geometry into a public failure report, and
