@@ -460,9 +460,24 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
   };
 }
 
+// Explicitly allowlist public comparison metrics. A future in-memory metric
+// field must not silently become part of the public Actions artifact (as the
+// sampled coordinates did before PR #402). The diagnostic distances and sample
+// counts remain unchanged; only the serialization contract is restricted.
+const PUBLIC_METRIC_FIELDS = Object.freeze([
+  'usable', 'metric', 'coastlineExclusionMeters', 'sampleStepMeters',
+  'referenceBoundarySamplesBeforeCoastMask', 'currentBoundarySamplesBeforeCoastMask',
+  'referenceSamples', 'currentSamples', 'referenceGeometryTypes',
+  'referenceToCurrentP95Meters', 'referenceToCurrentMaxMeters',
+  'currentToReferenceP95Meters', 'currentToReferenceMaxMeters',
+  'symmetricP95Meters', 'symmetricMaxMeters',
+]);
+
 export function publicComparisonMetric(metric) {
-  // Public reports retain numeric distances, never sampled boundary points.
-  const {worstReferenceSamples, worstCurrentSamples, ...safeMetric} = metric;
+  const safeMetric = {};
+  for (const field of PUBLIC_METRIC_FIELDS) {
+    if (Object.hasOwn(metric, field)) safeMetric[field] = metric[field];
+  }
   return safeMetric;
 }
 
