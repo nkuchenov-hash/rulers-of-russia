@@ -41,6 +41,15 @@ for (const row of evidence) {
     || typeof row.historyLastMonth !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(row.historyLastMonth)
     || typeof row.runiversApproximate !== 'boolean'
     || typeof row.historyGeometryFile !== 'string' || !row.historyGeometryFile
+    // A whole-layer union can include neighboring sovereign states and may
+    // accidentally match the History Core contour. Numeric distances alone
+    // cannot establish that the reference was scoped to the same polity.
+    || typeof row.historyPolityId !== 'string' || !row.historyPolityId
+    || row.referenceScopeKind !== 'named-polity'
+    || row.referenceScopePolityId !== row.historyPolityId
+    || !Number.isInteger(row.referenceScopeSelectedFeatures) || row.referenceScopeSelectedFeatures < 1
+    || !Number.isInteger(row.referenceScopeTotalFeatures)
+    || row.referenceScopeTotalFeatures < row.referenceScopeSelectedFeatures
     || !Number.isInteger(row.referenceSamples) || row.referenceSamples <= 0
     || !Number.isInteger(row.currentSamples) || row.currentSamples <= 0
     || !['symmetricP95Meters', 'symmetricMaxMeters', 'toleranceMeters', 'maxToleranceMeters']
