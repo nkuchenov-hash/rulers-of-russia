@@ -18,7 +18,7 @@ assert.doesNotMatch(at1462(1477, 12).desktop, /Новгород/);
 assert.match(at1462(1478, 1).desktop, /присоединение Новгорода \(1478\)/,
   'January 1478 surrender is documented; the unchanged 1462 contour must warn by month end');
 assert.match(at1462(1478, 1).mobile, /Новгород \(1478\)/);
-assert.match(at1462(1478, 12).desktop, /Новгород \(1478\)/);
+assert.match(at1462(1478, 12).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).desktop, /присоединение Новгорода \(1478\)/);
 assert.match(at1462(1479, 1).mobile, /Новгород \(1478\)/);
 assert.match(at1462(1504, 12).mobile, /точность не подтверждена/);
