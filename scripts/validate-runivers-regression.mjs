@@ -233,7 +233,17 @@ function hasApproximationEvidence(value, key = '') {
 }
 
 function isReferenceApproximate(payload) {
-  return payloadFeatures(payload).some(feature => hasApproximationEvidence(feature?.properties ?? {}));
+  // A mixed source layer may contain an approximate island alongside an
+  // explicitly surveyed mainland. One approximate feature must not raise
+  // the tolerance for every other border in the dissolved state polygon.
+  // Scoping preserves original source properties in sourceProperties; require
+  // affirmative approximation evidence for EVERY selected source feature.
+  const sourceRecords = payloadFeatures(payload).flatMap(feature => {
+    const originals = feature?.properties?.sourceProperties;
+    return Array.isArray(originals) ? originals : [feature?.properties ?? {}];
+  });
+  return sourceRecords.length > 0
+    && sourceRecords.every(properties => hasApproximationEvidence(properties));
 }
 
 function haversineMeters(a, b) {
