@@ -77,6 +77,14 @@ const tver1400 = (() => {
   ), 'utf8'));
   const matches = archive.features.filter(f => Object.values(f.properties ?? {})
     .some(v => typeof v === 'string' && /tver|твер/i.test(v)));
+  for (const year of [1400, 1500]) {
+    const snapshot = JSON.parse(readFileSync(new URL(
+      `../public/data/territory/world-history/snapshots/${year}.geojson`, import.meta.url,
+    ), 'utf8'));
+    console.log('East-European archive names ' + year + ':',
+      snapshot.features.map(f => f.properties?.NAME).filter(v =>
+        typeof v === 'string' && /moscow|novgorod|ryazan|pskov|smolensk|rostov|vyatka|tver|vladimir|suzdal|lithuania|russia|perm|kazan|yaro/i.test(v)));
+  }
   assert.ok(matches.length, 'Pinned 1400 snapshot contains no identifiable Tver polity');
   console.log('Pinned 1400 Tver candidate properties:', matches.map(f => f.properties));
   return matches.find(f => isRussianWorldFeature(f, 1486));
