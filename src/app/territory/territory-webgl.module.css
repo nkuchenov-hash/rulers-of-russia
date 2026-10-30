@@ -7,7 +7,7 @@
 
 /* Keep full source/date caveats available on narrow screens without covering
    the globe, map controls, or timeline with a permanently expanded paragraph. */
-.worldContextCompact{display:none}
+.worldContextCompact{display:none;pointer-events:auto}
 @media(max-width:760px){
   .worldContextLong{display:none}
   .worldContextCompact{display:block}
