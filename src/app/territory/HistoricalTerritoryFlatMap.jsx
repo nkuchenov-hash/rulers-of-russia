@@ -220,21 +220,30 @@ export function HistoricalTerritoryFlatMap({
     // Never reuse a two-finger baseline after one finger is lifted.
     gestureRef.current=pinchSnapshot();
   },[pinchSnapshot]);
-  const onWheel=useCallback(e=>{
-    e.preventDefault();
-    if(e.deltaY===0)return;
-    const bounds=e.currentTarget.getBoundingClientRect();
-    const anchorX=e.clientX-bounds.left-bounds.width/2;
-    const anchorY=e.clientY-bounds.top-bounds.height/2;
-    const factor=e.deltaY>0?.85:1.15;
-    onCameraChange(prev=>zoomFlatCameraAt(prev,factor,anchorX,anchorY));
+  // React registers wheel listeners as passive in Chromium, so calling
+  // preventDefault from onWheel cannot stop the page from scrolling while
+  // the user zooms the map. Use an explicit non-passive native listener.
+  useEffect(()=>{
+    const node=hostRef.current;
+    if(!node)return;
+    const handleWheel=e=>{
+      e.preventDefault();
+      if(e.deltaY===0)return;
+      const bounds=node.getBoundingClientRect();
+      const anchorX=e.clientX-bounds.left-bounds.width/2;
+      const anchorY=e.clientY-bounds.top-bounds.height/2;
+      const factor=e.deltaY>0?.85:1.15;
+      onCameraChange(prev=>zoomFlatCameraAt(prev,factor,anchorX,anchorY));
+    };
+    node.addEventListener('wheel',handleWheel,{passive:false});
+    return ()=>node.removeEventListener('wheel',handleWheel);
   },[onCameraChange]);
 
   return <div ref={hostRef} className="territory-flat-host"
-      aria-label="Плоская историческая карта: перетаскивайте для перемещения, вращайте колесо для масштаба"
+      aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба"
       onPointerDown={onPointerDown} onPointerMove={onPointerMove}
       onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
-      onWheel={onWheel}>
+      >
     <canvas ref={canvasRef} data-territory-flat-map="true"
       data-history-month={historyLoading?'':historyState?.month??''}
       data-camera-zoom={camera.zoom.toFixed(3)}
