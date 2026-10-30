@@ -9,6 +9,8 @@ on:
       - 'package.json'
       - 'scripts/use-pinned-runivers-baseline.mjs'
       - 'scripts/runivers-fetch-cache.mjs'
+      - 'scripts/runivers-transport-order.mjs'
+      - 'scripts/test-runivers-transport-order.mjs'
       - 'scripts/runivers-reference-scope.mjs'
       - 'scripts/runivers-hotspot-diagnostics.mjs'
       - 'scripts/history-archive-component-exclusions.mjs'
@@ -46,6 +48,7 @@ jobs:
           node-version: 22
       - run: npm install
       - run: node scripts/test-runivers-shard-runner.mjs
+      - run: node scripts/test-runivers-transport-order.mjs
       - run: node scripts/test-runivers-matrix.mjs
       - run: node scripts/test-runivers-geometry.mjs
       - run: node scripts/test-history-component-exclusions.mjs
