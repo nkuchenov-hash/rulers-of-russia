@@ -142,6 +142,31 @@ try {
     assert.equal(fs.readFileSync(canonicalPath, 'utf8'), JSON.stringify(changed),
       'the comparison must not modify canonical history');
   }
+  // Historical regression: 22 October 1721 Julian = 2 November Gregorian.
+  // The Empire geometry lineage is already active throughout 1721, but the
+  // political title changes only in November. A year-only Runivers reference
+  // cannot certify either side of that within-year political transition.
+  const originalDiscoveryForTitle = fs.readFileSync(discoveryPath, 'utf8');
+  const titleMonths = [1721, 1722].flatMap(year => Array.from({length: 12}, (_, i) => ({
+    month: `${year}-${String(i + 1).padStart(2, '0')}`,
+    status: 'geometry-verified', geometryFile: 'empire-1721.geojson',
+    polityId: 'russian-empire',
+    politicalPolityId: year === 1721 && i < 10 ? 'russian-tsardom' : 'russian-empire',
+  })));
+  fs.writeFileSync(canonicalPath, JSON.stringify({months: titleMonths, monthCount: 24}));
+  fs.writeFileSync(discoveryPath, JSON.stringify({host: 'https://example.invalid', preferredMaxYear: 2020,
+    vectorLayers: [{id: 2, fromYear: 1721, toYear: 1723}]}));
+  const titleResult = run({RUNIVERS_START_MONTH: '1721-01', RUNIVERS_END_MONTH: '1722-12'});
+  assert.equal(titleResult.status, 0, titleResult.stderr);
+  const titleShard = JSON.parse(fs.readFileSync(path.join(fixture, 'child-input.json')));
+  assert.equal(titleShard.monthCount, 12, '1721 title transition must not be certified from a year-only source');
+  assert.equal(titleShard.minMonth, '1722-01');
+  assert.equal(titleShard.maxMonth, '1722-12');
+  const titleReport = JSON.parse(fs.readFileSync(reportPath));
+  assert.equal(titleReport.shard.excludedYears[0].year, 1721);
+  assert.equal(titleReport.shard.excludedYears[0].geometryCount, 1);
+  assert.equal(titleReport.shard.excludedYears[0].historicalStateCount, 2);
+  fs.writeFileSync(discoveryPath, originalDiscoveryForTitle);
   fs.writeFileSync(canonicalPath, canonical);
   assert.equal(run({TEST_EXIT: '1', TEST_NO_REPORT: '1'}).status, 1);
   assert.equal(fs.existsSync(reportPath), false, 'failed validator must not reuse a stale report');
