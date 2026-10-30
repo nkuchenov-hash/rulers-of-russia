@@ -46,6 +46,9 @@ jobs:
       - name: Reject invalid territory deep-link dates
         run: node --experimental-strip-types scripts/test-territory-query-date.mjs
 
+      - name: Verify cursor-anchored 2D map zoom
+        run: node scripts/test-flat-camera-zoom.mjs
+
       - name: Verify historical world Russian-state context filtering
         run: node scripts/test-world-russia-filter.mjs
 

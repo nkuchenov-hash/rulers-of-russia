@@ -199,6 +199,32 @@ try {
     throw new Error(`Flat map reallocated its canvas bitmap ${bitmapWrites} times on a zoom-only redraw`);
   }
 
+  // Wheel zoom must keep the geographical point under the actual mouse
+  // cursor fixed. Merely changing zoom around the canvas center makes users
+  // lose their location when inspecting small historical enclaves.
+  const wheelBefore = await flatCanvas.evaluate(canvas => {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    return {zoom:Number(canvas.dataset.cameraZoom), dx:Number(canvas.dataset.cameraDx),
+      dy:Number(canvas.dataset.cameraDy),
+      x:rect.left+rect.width*.23, y:rect.top+rect.height*.33,
+      anchorX:rect.width*(.23-.5), anchorY:rect.height*(.33-.5)};
+  });
+  await page.mouse.move(wheelBefore.x, wheelBefore.y);
+  await page.mouse.wheel(0, -100);
+  await page.waitForFunction(oldZoom =>
+    Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraZoom) > oldZoom,
+  wheelBefore.zoom, {timeout: 8000});
+  const wheelAfter = await flatCanvas.evaluate(canvas => ({
+    zoom:Number(canvas.dataset.cameraZoom), dx:Number(canvas.dataset.cameraDx),
+    dy:Number(canvas.dataset.cameraDy)
+  }));
+  const ratio = wheelAfter.zoom / wheelBefore.zoom;
+  const expectedDx = wheelBefore.dx + (1-ratio)*(wheelBefore.anchorX-wheelBefore.dx);
+  const expectedDy = wheelBefore.dy + (1-ratio)*(wheelBefore.anchorY-wheelBefore.dy);
+  if (Math.abs(wheelAfter.dx-expectedDx) > .3 || Math.abs(wheelAfter.dy-expectedDy) > .3) {
+    throw new Error(`Flat wheel zoom moved cursor anchor: ${JSON.stringify({wheelBefore,wheelAfter,expectedDx,expectedDy})}`);
+  }
+
   // The flat view must use the same month-resolved Russian polygon as the globe.
   await monthSelect.selectOption('3');
   await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1992-03', null, {timeout: 12000});
