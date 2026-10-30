@@ -243,6 +243,41 @@ try {
     throw new Error('Flat map wheel gestures were not canceled; the page may scroll during map navigation: '+JSON.stringify(wheelCancellation));
   }
 
+  // The flat map must remain operable for keyboard-only users. Key presses
+  // must move the camera (not the timeline or document), and zoom around the
+  // center with the same bounds as wheel and touch.
+  const flatHost = page.locator('.territory-flat-host');
+  if (await flatHost.getAttribute('tabindex') !== '0') {
+    throw new Error('Flat map host is not keyboard focusable');
+  }
+  await flatHost.focus();
+  const keyboardBefore = await flatCanvas.evaluate(canvas => ({
+    dx:Number(canvas.dataset.cameraDx),dy:Number(canvas.dataset.cameraDy),
+    zoom:Number(canvas.dataset.cameraZoom)
+  }));
+  await page.keyboard.press('ArrowRight');
+  await page.waitForFunction(previous =>
+    Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraDx) < previous-47,
+  keyboardBefore.dx,{timeout:8000});
+  await page.keyboard.press('ArrowLeft');
+  await page.waitForFunction(previous =>
+    Math.abs(Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraDx)-previous)<.3,
+  keyboardBefore.dx,{timeout:8000});
+  await page.keyboard.press('Shift+ArrowUp');
+  await page.waitForFunction(previous =>
+    Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraDy)>previous+119,
+  keyboardBefore.dy,{timeout:8000});
+  const keyboardZoomBefore = Number(await flatCanvas.getAttribute('data-camera-zoom'));
+  await page.keyboard.press('Equal');
+  await page.waitForFunction(previous =>
+    Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraZoom)>previous,
+  keyboardZoomBefore,{timeout:8000});
+  const keyboardZoomIn = Number(await flatCanvas.getAttribute('data-camera-zoom'));
+  await page.keyboard.press('Minus');
+  await page.waitForFunction(previous =>
+    Number(document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraZoom)<previous,
+  keyboardZoomIn,{timeout:8000});
+
   // The flat view must use the same month-resolved Russian polygon as the globe.
   await monthSelect.selectOption('3');
   await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1992-03', null, {timeout: 12000});
