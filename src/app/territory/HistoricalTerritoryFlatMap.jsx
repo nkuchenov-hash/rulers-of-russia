@@ -220,6 +220,38 @@ export function HistoricalTerritoryFlatMap({
     // Never reuse a two-finger baseline after one finger is lifted.
     gestureRef.current=pinchSnapshot();
   },[pinchSnapshot]);
+  // A canvas-only map otherwise cannot be navigated without a pointer.
+  // Only act while the map host itself has keyboard focus; never intercept
+  // the timeline, date selectors, or page-wide shortcuts.
+  const onKeyDown=useCallback(e=>{
+    const step=e.shiftKey?120:48;
+    switch(e.key){
+      case 'ArrowLeft':
+        onCameraChange(prev=>({...prev,dx:prev.dx+step}));
+        break;
+      case 'ArrowRight':
+        onCameraChange(prev=>({...prev,dx:prev.dx-step}));
+        break;
+      case 'ArrowUp':
+        onCameraChange(prev=>({...prev,dy:prev.dy+step}));
+        break;
+      case 'ArrowDown':
+        onCameraChange(prev=>({...prev,dy:prev.dy-step}));
+        break;
+      case '+':
+      case '=':
+        onCameraChange(prev=>zoomFlatCameraAt(prev,1.15,0,0));
+        break;
+      case '-':
+      case '_':
+        onCameraChange(prev=>zoomFlatCameraAt(prev,1/1.15,0,0));
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  },[onCameraChange]);
   // React registers wheel listeners as passive in Chromium, so calling
   // preventDefault from onWheel cannot stop the page from scrolling while
   // the user zooms the map. Use an explicit non-passive native listener.
@@ -240,7 +272,9 @@ export function HistoricalTerritoryFlatMap({
   },[onCameraChange]);
 
   return <div ref={hostRef} className="territory-flat-host"
-      aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба"
+      role="group" tabIndex={0}
+      aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба. С клавиатуры: стрелки для перемещения, Shift со стрелками для быстрого перемещения, плюс и минус для масштаба"
+      onKeyDown={onKeyDown}
       onPointerDown={onPointerDown} onPointerMove={onPointerMove}
       onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
       >
