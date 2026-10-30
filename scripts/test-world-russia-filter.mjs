@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {isRussianWorldFeature,worldBackgroundTransitionPhase} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
-import {worldHistoricalContextCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
+import {worldHistoricalContextCaveat,worldHistoricalContextCompactCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
 
 const russianNames = [
   {NAME: 'Russian Empire'}, {NAME: 'Soviet Union'}, {NAME: 'USSR'},
@@ -234,6 +234,29 @@ for (const [year, month] of [[1521,9],[1521,12],[1522,1],[1524,1],[1529,12]]) {
   assert.match(note, /точная дата присоединения не установлена/);
   assert.match(note, /датированная замена не подтверждена/);
 }
+// Mobile summaries must disclose the same dated entities while leaving the
+// full explanation accessible in an expandable, scrollable disclosure.
+const compactAt = (year, month, snapshotYear = 1500) =>
+  worldHistoricalContextCompactCaveat({year,month}, snapshotYear);
+assert.equal(compactAt(1500,4), null);
+assert.match(compactAt(1500,5), /Новгород-Северский/);
+assert.doesNotMatch(compactAt(1509,12), /Псков|Рязань/);
+assert.match(compactAt(1510,1), /Псков/);
+assert.doesNotMatch(compactAt(1521,8), /Рязань/);
+assert.match(compactAt(1521,9), /Рязань/);
+assert.match(compactAt(1529,12), /Новгород-Северский, Псков, Рязань/);
+assert.equal(compactAt(1530,1,1530), null);
+assert.match(compactAt(1485,8,1400), /Тверь и Псков/);
+assert.match(compactAt(1485,9,1400), /Псков/);
+assert.doesNotMatch(compactAt(1485,9,1400), /Тверь/);
+const globeUi = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
+const globeCss = readFileSync(new URL('../src/app/territory/territory-webgl.module.css', import.meta.url), 'utf8');
+assert.match(globeUi, /<details className=\{styles\.worldContextCompact\}>/);
+assert.match(globeUi, /<summary>\{compactWorldContextCaveat\}<\/summary>/);
+assert.match(globeUi, /<div>\{worldContextCaveat\}<\/div><\/details>/);
+assert.match(globeCss, /\.worldContextCompact\{display:none\}/);
+assert.match(globeCss, /@media\(max-width:760px\)\{/);
+assert.match(globeCss, /\.worldContextCompact\[open\]\{max-height:/);
 assert.equal(contextAt(1530,1,1530), null,
   'new 1530 snapshot must not inherit the stale 1500 warning');
 assert.equal(contextAt(1530, 1, 1530), null);
