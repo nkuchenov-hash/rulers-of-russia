@@ -406,7 +406,26 @@ const outer = feature('state', 40);
 const inner = {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[[40.2,50.2],[40.3,50.2],[40.3,50.3],[40.2,50.3],[40.2,50.2]]]}};
 const alone = politicalBorderSamples(outer, coast.index);
 const nested = politicalBorderSamples({type:'FeatureCollection',features:[outer,inner]},coast.index);
-assert.deepEqual(nested,alone,'Interior components cannot add an exterior sovereign border');
+assert.deepEqual(nested,alone,'Overlapping same-state components cannot add a spurious sovereign border');
+// An inland enclave is the opposite case: its hole is a real political
+// boundary, not an exterior-coast artifact. Filling that hole would falsely
+// accept a History Core state that annexed the enclave. The independent
+// physical-coast mask must still remove lakes and shorelines separately.
+const enclaveHole = [
+  [40.2,50.2],[40.2,50.8],[40.8,50.8],[40.8,50.2],[40.2,50.2],
+];
+const withEnclave = {type:'Feature',properties:{},geometry:{
+  type:'Polygon',coordinates:[outer.geometry.coordinates[0],enclaveHole],
+}};
+const enclaveSamples = politicalBorderSamples(withEnclave,coast.index);
+assert.ok(enclaveSamples.points.length > alone.points.length,
+  'an inland enclave ring must contribute political-border samples');
+assert.ok(enclaveSamples.points.some(([lon,lat]) => Math.abs(lon-40.2)<0.05 && lat>=50.2 && lat<=50.8),
+  'inland enclave boundary must survive the physical-coast mask');
+const enclaveMismatch = comparePoliticalGeometry(
+  enclaveSamples,alone,{hasPolygon:true,types:['Polygon']});
+assert.ok(enclaveMismatch.symmetricMaxMeters > 20000,
+  'a filled-in enclave must be detected as a geographic discrepancy');
 const unrelatedAnnotation = {type:'Feature',properties:{name:'label/road'},
   geometry:{type:'LineString',coordinates:[[80,50],[81,50]]}};
 const mixedWithAnnotation = politicalBorderSamples(

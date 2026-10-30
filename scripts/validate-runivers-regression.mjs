@@ -401,12 +401,17 @@ function buildCoastIndex() {
 }
 
 function politicalBorderSamples(payload, coastIndex) {
-  // This metric compares exterior polity boundaries. Fill the ignored holes
-  // before dissolving, so islands inside those holes cannot reappear as borders.
+  // Retain interior rings: an inland hole can be an independent enclave,
+  // whose sovereign boundary must be compared in both directions. The old
+  // exterior-only conversion silently filled such holes and could falsely
+  // certify a state that annexed an enclave. Physical lake/coast rings are
+  // still excluded by the independently pinned coastline distance mask.
+  // Dissolve complete polygons so an overlapping same-state component inside
+  // a hole is not counted as a separate political boundary.
   const polygons = [];
   const collect = geometry => {
-    if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
-    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
+    if (geometry?.type === 'Polygon') polygons.push(geometry.coordinates);
+    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates);
     else if (geometry?.type === 'GeometryCollection') (geometry.geometries ?? []).forEach(collect);
     // Point/line annotations are never a territorial exterior.
   };
@@ -418,7 +423,10 @@ function politicalBorderSamples(payload, coastIndex) {
   const features = polygons.length
     ? [{type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}}]
     : [];
-  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
+  // Include dissolved interior rings as well as exteriors. The physical
+  // coastline mask below excludes lake shores; surviving inland holes are
+  // possible sovereign enclave borders and must not disappear from the audit.
+  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES, false);
   const inland = all.filter(point => distanceToIndex(point, coastIndex) > COAST_EXCLUSION_M);
   return {allCount: all.length, allPoints: all, points: inland};
 }
