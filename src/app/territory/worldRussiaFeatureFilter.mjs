@@ -23,15 +23,6 @@ const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ско
 const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
 const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: княжество)?$/i;
 
-// The 1400 world snapshot is reused after Tver's documented September 1485
-// incorporation into Moscow. A year-only background cannot determine the
-// political state in each month of 1485, so retain that transition year.
-// From 1486, do not redraw an obsolete *independent* Tver polity over the
-// History Core state. Do not confuse Tver city/oblast with that polity.
-// Historical basis: https://bigenc.ru/c/tverskoe-kniazhestvo-02a7e2
-const TVER_ENGLISH = /^(?:the )?(?:(?:grand )?(?:principality|duchy|land) of )?tver(?: (?:grand )?(?:principality|duchy|land))?$/i;
-const TVER_CYRILLIC = /^(?:тверь|тверск(?:ая|ое|ий|ой)(?: (?:земля|(?:великое )?княжество))?|(?:великое )?княжество тверское)$/i;
-
 // The pinned 1500 Historical Basemaps world snapshot explicitly names
 // Pskov and Ryazan as separate polities and is reused until the 1530
 // snapshot. Pskov was annexed in January 1510, Ryazan in 1521. Do not
@@ -58,9 +49,6 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
     const name = properties[key];
     if (typeof name !== 'string') return false;
     if (ENGLISH.test(name) || CYRILLIC.test(name)) return true;
-    if (TVER_ENGLISH.test(name.trim()) || TVER_CYRILLIC.test(name.trim())) {
-      return Number.isInteger(selectedYear) && selectedYear >= 1486;
-    }
     if (PSKOV_ENGLISH.test(name.trim()) || PSKOV_CYRILLIC.test(name.trim())) {
       return Number.isInteger(selectedYear) && selectedYear >= 1510;
     }
