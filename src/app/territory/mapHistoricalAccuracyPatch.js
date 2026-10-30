@@ -78,7 +78,7 @@ function uncertaintyProfile(item) {
   };
 }
 
-function softenApproximateWorldBorder(object, state) {
+function softenApproximateWorldBorder(object) {
   if (object?.userData?.kind !== 'world-border') return;
   const selected = selectedDate();
   const snapshotYear = renderedWorldSnapshotYear(document.querySelector('main aside p')?.textContent ?? '');
@@ -251,7 +251,7 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
   THREE.Group.prototype.add = function accuracyGuardedAdd(...objects) {
     const halos = [];
     for (const object of objects) {
-      softenApproximateWorldBorder(object, state);
+      softenApproximateWorldBorder(object);
       const halo = certifiedUncertaintyHalo(object, state);
       if (halo) halos.push(halo);
     }
