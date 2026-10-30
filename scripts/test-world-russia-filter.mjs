@@ -195,7 +195,13 @@ for (const [year, month] of [[1485,9],[1486,1],[1491,12]]) {
 // events. Both need disclosure, without inventing a replacement polygon.
 assert.deepEqual(worldIndex.snapshots.filter(s => s.year >= 1500 && s.year <= 1530)
   .map(s => s.year), [1500, 1530]);
-for (const [year, month] of [[1500,1],[1500,12],[1501,1],[1523,12]]) {
+// Before the May 1500 allegiance change, the source's separate polity is
+// historically appropriate. A caveat must not anticipate a future event.
+for (const month of [1, 2, 3, 4]) {
+  assert.equal(contextAt(1500, month, 1500), null,
+    'January–April 1500 must not claim the May transfer has already happened');
+}
+for (const [year, month] of [[1500,5],[1500,12],[1501,1],[1523,12]]) {
   assert.match(contextAt(year, month, 1500),
     /под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г/);
 }
