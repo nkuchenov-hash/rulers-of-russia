@@ -534,6 +534,7 @@ assert.equal(byMonth.get('1992-03').firstMonth,'1992-03','a reused geometry must
 assert.equal(byMonth.get('1992-05'),undefined,'missing months must not be treated as covered');
 assert.throws(() => indexStateCoverageByMonth([recurring[0], recurring[0]]), /Overlapping Runivers history states/);
 for (const [field, value] of [
+  ['politicalPolityId', 'russian-tsardom'],
   ['track', 'different-track'],
   ['territorialModel', 'different-model'],
   ['uncertaintyGeometryFile', 'uncertainty.geojson'],

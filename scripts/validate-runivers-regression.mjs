@@ -550,6 +550,7 @@ function historyStates(monthIndex) {
     const sameState = state && previous && nextHistoryMonth(previous.month) === month.month
       && state.geometryFile === month.geometryFile
       && state.polityId === month.polityId
+      && state.politicalPolityId === (month.politicalPolityId ?? month.polityId ?? null)
       && state.snapshotId === (month.snapshotId ?? null)
       && state.certificationId === (month.certificationId ?? null)
       && state.verificationClass === (month.verificationClass ?? null)
@@ -564,6 +565,9 @@ function historyStates(monthIndex) {
       state = {
         key: `${month.geometryFile}@${month.month}`,
         geometryFile: month.geometryFile, polityId: month.polityId,
+        // Keep distinct monthly political identities even when a source
+        // contour is reused (e.g. Tsardom -> Empire in November 1721).
+        politicalPolityId: month.politicalPolityId ?? month.polityId ?? null,
         snapshotId: month.snapshotId ?? null,
         certificationId: month.certificationId ?? null,
         verificationClass: month.verificationClass ?? null,
