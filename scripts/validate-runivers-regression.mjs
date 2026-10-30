@@ -216,7 +216,13 @@ function requireUsableReferenceGeometry(payload, resourceId) {
 // *key* such as "approximate": false is not evidence that a map is approximate.
 // Only affirmative flags or descriptive text can activate the existing policy.
 const approximationMarker = /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i;
-const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a|not\s+(?:approximate|uncertain|reconstructed|reconstruction))$/i;
+const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a)$/i;
+// Free-text descriptions can explicitly NEGATE approximation without being
+// exactly "not approximate". Such source notes must never grant the more
+// permissive 100 km tolerance merely because they contain "approximate".
+// A mixed positive/negative note is ambiguous: fail closed at the strict
+// tolerance until its source meaning has been independently reviewed.
+const negatedApproximation = /(?:^|[\s,;:(])(?:not[-\s]+|non[-\s]*|no\s+)(?:approximate|approximation|uncertain|reconstructed|reconstruction)(?=$|[\s,.;:!?)])|(?:^|[\s,;:(])не\s+(?:приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*|реконструированн[а-яё]*)(?=$|[\s,.;:!?)])/i;
 
 function hasApproximationEvidence(value, key = '') {
   if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
@@ -227,7 +233,7 @@ function hasApproximationEvidence(value, key = '') {
   if (typeof value === 'number') return approximationMarker.test(key) && value === 1;
   if (typeof value !== 'string') return false;
   const label = value.trim();
-  if (explicitNonApproximation.test(label)) return false;
+  if (explicitNonApproximation.test(label) || negatedApproximation.test(label)) return false;
   return approximationMarker.test(label)
     || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
 }
