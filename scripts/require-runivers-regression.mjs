@@ -17,6 +17,15 @@ for (const name of counters) {
     process.exit(1);
   }
 }
+// A complete preflight outage is an explicit geographic blocker, even when
+// the report has no comparison ledger. Diagnose the source outage before the
+// generic missing-evidence check; a fabricated green ledger must not override
+// an outage flag in either the shard or the summary.
+if (s.externalOutage === true || report.shard?.externalOutage === true) {
+  console.error('Runivers verification is incomplete: preflight external-source outage; no independent geographic acceptance is possible.');
+  process.exit(1);
+}
+
 // A passing count alone is not geographic evidence. The validator must
 // publish numeric symmetric-border metrics for every attempted comparison,
 // without copying Runivers source polygons or sampled coordinates into CI.

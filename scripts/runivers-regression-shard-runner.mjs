@@ -203,7 +203,7 @@ const preflight = await runiversHealthy();
 if (!preflight.healthy) {
   fs.mkdirSync(reportDir, {recursive: true});
   const report = {
-    schema_version: 1,
+    schema_version: 2,
     generatedAt: new Date().toISOString(),
     summary: {
       auditedRange: {startMonth, endMonth},
@@ -222,6 +222,7 @@ if (!preflight.healthy) {
       preflightResourceIds: preflight.probedResourceIds,
       preflightProbeResults: preflight.preflightProbeResults,
     },
+    comparisonEvidence: [],
     stateCoverage: [],
     failedComparisons: [],
     referenceFailures: [{error: 'Runivers preflight found no HTTP-success transport across all five MVT/JSON endpoints for any dated resource; this is not a geometry comparison', probedResourceIds: preflight.probedResourceIds}],

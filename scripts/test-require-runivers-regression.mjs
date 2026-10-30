@@ -36,6 +36,22 @@ try {
    return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
  };
  assert.equal(run(summary).status,0);
+ // The real preflight outage report contains no comparisons. It must fail
+ // with an explicit source-availability reason rather than a misleading
+ // "missing comparison evidence" error.
+ const actualOutage = run({...summary,usableReferenceLayers:0,comparisons:0,
+   passingComparisons:0,referenceFailures:7,externalOutage:true},
+   {...completeShard,externalOutage:true},{},[]);
+ assert.equal(actualOutage.status,1);
+ assert.match(actualOutage.stderr,/preflight external-source outage/);
+ // Neither a fabricated green ledger nor a clean summary may override an
+ // outage marker written by the shard runner.
+ const forgedGreenOutage = run({...summary,externalOutage:true});
+ assert.equal(forgedGreenOutage.status,1);
+ assert.match(forgedGreenOutage.stderr,/preflight external-source outage/);
+ const shardFlaggedOutage = run(summary,{...completeShard,externalOutage:true});
+ assert.equal(shardFlaggedOutage.status,1);
+ assert.match(shardFlaggedOutage.stderr,/preflight external-source outage/);
  // A successful summary without independently inspectable numeric comparisons
  // must fail, even if every counter and date is internally consistent.
  assert.equal(run(summary,completeShard,{},undefined).status,0,
