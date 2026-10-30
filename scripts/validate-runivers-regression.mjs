@@ -423,7 +423,10 @@ function politicalBorderSamples(payload, coastIndex) {
   const features = polygons.length
     ? [{type: 'Feature', properties: {}, geometry: {type: 'MultiPolygon', coordinates: polygonClipping.union(...polygons)}}]
     : [];
-  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES);
+  // Include dissolved interior rings as well as exteriors. The physical
+  // coastline mask below excludes lake shores; surviving inland holes are
+  // possible sovereign enclave borders and must not disappear from the audit.
+  const all = samplePayload({type: 'FeatureCollection', features}, BORDER_SAMPLE_STEP_M, MAX_BORDER_SAMPLES, false);
   const inland = all.filter(point => distanceToIndex(point, coastIndex) > COAST_EXCLUSION_M);
   return {allCount: all.length, allPoints: all, points: inland};
 }
