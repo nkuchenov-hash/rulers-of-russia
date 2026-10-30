@@ -4,6 +4,7 @@ import {VectorTile} from '@mapbox/vector-tile';
 import Pbf from 'pbf';
 import polygonClipping from 'polygon-clipping';
 import {requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
+import {orderMvtTransports} from './runivers-transport-order.mjs';
 
 // Preload Runivers reference geometry with bounded concurrency. Runivers serves
 // its large historical polygons through NextGIS MVT in production; full-layer
@@ -179,10 +180,10 @@ function vectorTileUrls(host, id) {
   component.searchParams.set('x', String(x));
   component.searchParams.set('y', String(y));
   component.searchParams.set('simplification', '0');
-  return [
+  return orderMvtTransports([
     {kind: 'canonical-resource-mvt', url: canonical},
     {kind: 'component-feature-layer-mvt', url: component},
-  ];
+  ], process.env.RUNIVERS_PREFERRED_MVT_TRANSPORT);
 }
 
 async function fetchVectorTile(host, id) {
