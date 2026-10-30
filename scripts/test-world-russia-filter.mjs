@@ -43,6 +43,25 @@ for (const properties of otherNames) {
 }
 assert.equal(isRussianWorldFeature({properties: {NAME: 'Finland', PARTOF: 'Russian Empire'}}), false);
 assert.equal(isRussianWorldFeature({properties: {NAME: 'Belarus'}}), false);
+// State-name substring matches must not erase explicitly administrative
+// world context. These names are not Russian sovereign-state polygons.
+for (const name of [
+  'Moscow Oblast', 'Moscow City', 'City of Moscow', 'Vladimir Region',
+  'Vladimir Governorate', 'Russian District', 'Russia Province',
+  'Московская область', 'Московский район', 'город Москва',
+  'Владимирская область', 'Русский район', 'Российская губерния',
+]) {
+  assert.equal(isRussianWorldFeature({properties: {NAME: name}}, 1500), false,
+    'local administrative unit is not the Russian state: ' + name);
+  assert.equal(isRussianWorldFeature({properties: {NAME_RU: name}}, 2026), false,
+    'local administrative unit must remain in modern world context: ' + name);
+}
+// If another original alias explicitly names the sovereign state, retain it.
+assert.equal(isRussianWorldFeature({
+  properties: {NAME: 'Moscow Oblast', NAME_RU: 'Российская империя'},
+}, 1800), true);
+assert.equal(isRussianWorldFeature({properties: {NAME: 'Grand Duchy of Moscow'}}, 1300), true);
+assert.equal(isRussianWorldFeature({properties: {NAME_RU: 'Владимирское княжество'}}, 1200), true);
 assert.equal(isRussianWorldFeature(null), false);
 assert.equal(isRussianWorldFeature({properties: {NAME: 123}}), false);
 

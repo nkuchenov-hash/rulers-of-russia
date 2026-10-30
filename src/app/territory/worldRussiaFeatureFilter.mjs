@@ -5,6 +5,17 @@
 // NAME, and vice versa. PARTOF is deliberately excluded: a non-Russian polity
 // can have Russian suzerainty without being the Russian state polygon.
 const NAME_FIELDS = ['NAME_RU', 'name_ru', 'RU_NAME', 'NAME', 'name', 'ADMIN', 'entity', 'polity', 'ABBREVN', 'SUBJECTO'];
+// An alias containing "Moscow", "Vladimir" or "Russian" is not sufficient
+// evidence of sovereign-state identity when the same name explicitly denotes
+// an oblast, governorate, city or district. Both renderers use this filter:
+// erasing such world features would silently remove non-state geography.
+// This is a name-scope guard, not a historical polygon or date correction.
+const LOCAL_ENGLISH = /^(?:(?:city|municipality|district|region|oblast|province|governorate|county) of (?:moscow|vladimir|russia)|(?:moscow|vladimir|russian|russia) (?:city|municipality|district|region|oblast|province|governorate|county))$/i;
+const LOCAL_CYRILLIC = /^(?:(?:город|район|область|округ|губерния)\s+(?:москва|владимир|россия)|(?:московск[а-яё]*|владимирск[а-яё]*|русск[а-яё]*|российск[а-яё]*)\s+(?:город|район|область|округ|губерния))$/i;
+function isExplicitLocalUnit(name) {
+  const trimmed = name.trim();
+  return LOCAL_ENGLISH.test(trimmed) || LOCAL_CYRILLIC.test(trimmed);
+}
 // "Soviet" alone does not identify the USSR: the Hungarian, Bavarian and
 // Slovak Soviet republics were distinct polities. Do not erase their world
 // context simply because their form of government included the same word.
@@ -62,6 +73,7 @@ export function isRussianWorldFeature(feature, selectedYear = null, selectedMont
   return NAME_FIELDS.some(key => {
     const name = properties[key];
     if (typeof name !== 'string') return false;
+    if (isExplicitLocalUnit(name)) return false;
     if (ENGLISH.test(name) || CYRILLIC.test(name)) return true;
     if (PSKOV_ENGLISH.test(name.trim()) || PSKOV_CYRILLIC.test(name.trim())) {
       return Number.isInteger(selectedYear) && selectedYear >= 1510;
