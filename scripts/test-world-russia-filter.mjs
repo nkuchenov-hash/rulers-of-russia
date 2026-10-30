@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {isRussianWorldFeature} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
+import {isRussianWorldFeature,worldBackgroundTransitionPhase} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
 import {worldHistoricalContextCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
 
 const russianNames = [
@@ -71,6 +71,12 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
   'Novgorod-Seversky is distinct from Novgorod Republic; the May 1500 allegiance is within-year');
+// The 3 May 1500 (Julian) oath preceded the end of May in either calendar.
+// A year-only caller cannot resolve the transition and must stay cautious.
+assert.equal(isRussianWorldFeature(seversky1500, 1500, 4), false);
+assert.equal(isRussianWorldFeature(seversky1500, 1500, 5), true);
+assert.equal(isRussianWorldFeature(seversky1500, 1500, 12), true);
+assert.equal(isRussianWorldFeature(seversky1500, 1500, 0), false);
 assert.equal(isRussianWorldFeature(seversky1500, 1501), true,
   'the 1500 archive must not show the Moscow-dependent appanage as a separate sovereign in 1501');
 assert.equal(isRussianWorldFeature(seversky1500, 1502), true,
@@ -95,6 +101,12 @@ const ryazan1500 = archivedFeature(1500, 'Ryazan');
 assert.equal(isRussianWorldFeature(ryazan1500, 1520), false);
 assert.equal(isRussianWorldFeature(ryazan1500, 1521), false,
   'a year-only background cannot assume that all of 1521 followed the annexation');
+// The 1521 administrative change is documented by the end of September,
+// but the exact legal annexation month is not. Preserve Jan–Aug as context.
+assert.equal(isRussianWorldFeature(ryazan1500, 1521, 8), false);
+assert.equal(isRussianWorldFeature(ryazan1500, 1521, 9), true);
+assert.equal(isRussianWorldFeature(ryazan1500, 1521, 12), true);
+assert.equal(isRussianWorldFeature(ryazan1500, 1521, 13), false);
 assert.equal(isRussianWorldFeature(ryazan1500, 1522), true,
   'the stale 1500 Ryazan polygon must not be shown as independent in 1522–1529');
 assert.equal(isRussianWorldFeature(ryazan1500, 1529), true);
@@ -105,6 +117,24 @@ for (const name of ['Pskov Oblast', 'Ryazan Oblast', 'Pskov City', 'Ryazan Distr
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Псковская республика'}}, 1510), true);
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанское княжество'}}, 1522), true);
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанская область'}}, 1522), false);
+assert.equal(isRussianWorldFeature({properties:{NAME:'Ryazan Oblast'}}, 1521, 9), false);
+assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod-Seversky District'}}, 1500, 5), false);
+for (const [year, month, phase] of [
+  [1500,4,0],[1500,5,1],[1500,12,1],[1500,13,0],
+  [1521,8,0],[1521,9,1],[1521,12,1],[1510,9,0],[2026,10,0],
+]) assert.equal(worldBackgroundTransitionPhase(year, month), phase);
+
+// Both production projections must apply the same month-level identity rule.
+// The phase is a dependency so ordinary month scrubbing does not regenerate
+// large globe textures when the background identity has not changed.
+const flatSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryFlatMap.jsx', import.meta.url), 'utf8');
+const globeSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
+assert.match(flatSource, /isRussianWorldFeature\\(feature,year,month\\)/);
+assert.match(flatSource, /\\[world,year,backgroundPhase\\]/);
+assert.equal((globeSource.match(/isRussianWorldFeature\\(f,year,month\\)/g) ?? []).length, 3,
+  'globe fill, border and country-label layers must share month-level filtering');
+assert.match(globeSource, /buildStateTexture\\(world,russiaFeatures,mobile\\?2048:4096,year,month\\)/);
+assert.match(globeSource, /\\[mode,world,russiaKey,mobile,historyLoading,year,backgroundPhase\\]/);
 assert.equal(isRussianWorldFeature(archivedFeature(1300, 'Grand Duchy of Moscow'), 1300), true,
   'the current Moscow state must still be suppressed in the background');
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгородская республика'}}, 1462), false);
