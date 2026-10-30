@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import {historicalGeometryCaveat} from '../src/app/territory/historicalGeometryCaveats.mjs';
+import {renderedWorldSnapshotYear} from '../src/app/territory/worldSnapshotCaptionYear.mjs';
+import {readFileSync} from 'node:fs';
 
 const old = {
   status: 'geometry-verified',
@@ -88,4 +90,26 @@ assert.equal(at(1514, 7, {...old, status: 'reconstruction-provisional'}), null,
   'provisional geometry already has a different accuracy label');
 assert.equal(historicalGeometryCaveat({year: 1514, month: 0}, old), null);
 assert.equal(historicalGeometryCaveat(null, old), null);
-console.log('Historical geometry caveat regression passed');
+
+ 
+// A 1500 world fetch can begin while React still displays the 1400 snapshot.
+// The accuracy caption must attribute the currently rendered world layer,
+// not the in-flight request, and must not invent a year during loading.
+assert.equal(renderedWorldSnapshotYear('Исторический мировой срез 1400 года · History Core 1478-01'), 1400);
+assert.equal(renderedWorldSnapshotYear('Исторический мировой срез 1500 года · History Core 1514-08'), 1500);
+assert.equal(renderedWorldSnapshotYear('Исторический мировой срез 2020 года · History Core 2026-10'), 2020);
+for (const pending of [
+  'Исторический мировой срез — года · History Core 1514-08',
+  'Мировой контекст: приблизительный срез 1500 года',
+  'Исторический мировой срез 1500 года без даты',
+  '',
+  null,
+]) assert.equal(renderedWorldSnapshotYear(pending), null,
+  'uncommitted or malformed world years must not be used in accuracy captions');
+const accuracyPatch = readFileSync(new URL('../src/app/territory/mapHistoricalAccuracyPatch.js', import.meta.url), 'utf8');
+assert.match(accuracyPatch, /const displayedWorldYear = renderedWorldSnapshotYear\(text\)/);
+assert.match(accuracyPatch, /Мировой фон: приблизительно \$\{displayedWorldYear\}/);
+assert.doesNotMatch(accuracyPatch, /selected\.year !== state\.worldSnapshotYear/,
+  'mobile accuracy caption must not rely on the last requested fetch');
+
+console.log('Historical geometry caveat and committed world-snapshot caption regressions passed');
