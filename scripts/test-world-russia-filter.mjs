@@ -214,6 +214,28 @@ for (const [year, month] of [[1524,1],[1527,6],[1529,12]]) {
   assert.equal(isRussianWorldFeature(seversky1500, year, month), true,
     'obsolete separate sovereign fill must remain hidden while the 1500 snapshot is reused');
 }
+// The 1500 background's Pskov and Ryazan polygons become stale at different
+// documented cutoffs. Their removal must be disclosed, not mistaken for a
+// verified replacement. The Ryazan date is a conservative control cutoff,
+// NOT a claim about the exact month of legal annexation.
+for (const [year, month] of [[1500,5],[1509,12]]) {
+  assert.doesNotMatch(contextAt(year, month, 1500), /контуры Пскова|контуры Рязани/);
+}
+assert.match(contextAt(1510,1,1500), /контуры Пскова \(с января 1510 г\.\)/,
+  'the Pskov omission must be disclosed from the January 1510 month end');
+assert.doesNotMatch(contextAt(1510,1,1500), /Рязани/,
+  'the 1500 Ryazan background is still separate in 1510');
+assert.doesNotMatch(contextAt(1521,8,1500), /Рязани/,
+  'do not anticipate the conservative September 1521 control cutoff');
+for (const [year, month] of [[1521,9],[1521,12],[1522,1],[1524,1],[1529,12]]) {
+  const note = contextAt(year, month, 1500);
+  assert.match(note, /Пскова \(с января 1510 г\.\)/);
+  assert.match(note, /Рязани \(контроль Москвы подтверждён к концу сентября 1521 г/);
+  assert.match(note, /точная дата присоединения не установлена/);
+  assert.match(note, /датированная замена не подтверждена/);
+}
+assert.equal(contextAt(1530,1,1530), null,
+  'new 1530 snapshot must not inherit the stale 1500 warning');
 assert.equal(contextAt(1530, 1, 1530), null);
 assert.equal(contextAt(1492, 1, 1492), null);
 assert.equal(contextAt(1492, 1), null, 'a 1400 snapshot should not be claimed to cover 1492');
