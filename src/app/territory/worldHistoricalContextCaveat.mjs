@@ -13,6 +13,16 @@
 export function worldHistoricalContextCaveat(date, snapshotYear) {
   if (!Number.isInteger(date?.year) || !Number.isInteger(date?.month)
     || date.month < 1 || date.month > 12 || !Number.isInteger(snapshotYear)) return null;
+  // The pinned 1500 background continues to show Novgorod-Seversky as a
+  // separate polity. Its prince transferred allegiance to Moscow in May 1500,
+  // while the dependent appanage survived until 1523. A year-level world
+  // snapshot cannot show both political statuses correctly. The Russian
+  // sovereign overlay suppresses the obsolete independent fill from 1501,
+  // but this note preserves the distinction between suzerainty and abolition.
+  // https://bigenc.ru/c/novgorod-severskoe-kniazhestvo-e28685
+  if (snapshotYear === 1500 && date.year >= 1500 && date.year <= 1523) {
+    return 'Мировой фон 1500 г. не отражает переход Новгород-Северского княжества под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г.';
+  }
   if (snapshotYear !== 1400 || date.year < 1400 || date.year >= 1492) return null;
   const beforeTverAnnexation = date.year < 1485 || (date.year === 1485 && date.month < 9);
   return beforeTverAnnexation
