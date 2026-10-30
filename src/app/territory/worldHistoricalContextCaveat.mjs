@@ -60,3 +60,21 @@ export function worldHistoricalContextCaveat(date, snapshotYear) {
     ? 'Мировой фон 1400 г. неполон: Тверское княжество и Псковская земля не выделены'
     : 'Мировой фон 1400 г. неполон: Псковская земля не выделена';
 }
+
+
+// Phones show a short, expandable summary instead of a multi-line historical
+// paragraph covering the map. The full, dated explanation remains available
+// on demand; no uncertainty or source limitation is discarded.
+export function worldHistoricalContextCompactCaveat(date, snapshotYear) {
+  if (!worldHistoricalContextCaveat(date, snapshotYear)) return null;
+  if (snapshotYear === 1500) {
+    const polities = ['Новгород-Северский'];
+    if (date.year >= 1510) polities.push('Псков');
+    if (date.year > 1521 || (date.year === 1521 && date.month >= 9)) polities.push('Рязань');
+    return `Фон 1500 г. устарел: ${polities.join(', ')}. Подробнее`;
+  }
+  const beforeTverAnnexation = date.year < 1485 || (date.year === 1485 && date.month < 9);
+  return beforeTverAnnexation
+    ? 'Фон 1400 г. неполон: Тверь и Псков. Подробнее'
+    : 'Фон 1400 г. неполон: Псков. Подробнее';
+}
