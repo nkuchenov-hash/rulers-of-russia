@@ -224,6 +224,24 @@ try {
   if (Math.abs(wheelAfter.dx-expectedDx) > .3 || Math.abs(wheelAfter.dy-expectedDy) > .3) {
     throw new Error(`Flat wheel zoom moved cursor anchor: ${JSON.stringify({wheelBefore,wheelAfter,expectedDx,expectedDy})}`);
   }
+  // React's passive onWheel handler can change camera zoom yet still let the
+  // browser scroll the surrounding page. Require real DOM cancelation for
+  // both zoom-wheel and horizontal trackpad gestures over the 2D canvas.
+  const wheelCancellation = await flatCanvas.evaluate(canvas => {
+    const rect = canvas.getBoundingClientRect();
+    const dispatch = (deltaX, deltaY) => {
+      const event = new WheelEvent('wheel', {
+        bubbles:true, cancelable:true, deltaX, deltaY,
+        clientX:rect.left+rect.width*.23, clientY:rect.top+rect.height*.33
+      });
+      const allowed = canvas.dispatchEvent(event);
+      return {allowed, prevented:event.defaultPrevented};
+    };
+    return [dispatch(0,-60), dispatch(60,0)];
+  });
+  if (wheelCancellation.some(({allowed,prevented}) => allowed || !prevented)) {
+    throw new Error('Flat map wheel gestures were not canceled; the page may scroll during map navigation: '+JSON.stringify(wheelCancellation));
+  }
 
   // The flat view must use the same month-resolved Russian polygon as the globe.
   await monthSelect.selectOption('3');
