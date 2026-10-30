@@ -71,10 +71,14 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
   'Novgorod-Seversky is a distinct polity, not an alias for Novgorod Republic');
-assert.equal(isRussianWorldFeature(seversky1500, 1502), false,
-  'the 1500 year-level world feature remains context before the 1503 peace');
+assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
+  'the 1500 snapshot cannot resolve the May 1500 change of allegiance');
+assert.equal(isRussianWorldFeature(seversky1500, 1501), true,
+  'the 1500 archive must not show the Moscow-dependent appanage as a separate sovereign in 1501');
+assert.equal(isRussianWorldFeature(seversky1500, 1502), true,
+  'the 1503 peace confirmed a transfer already effective in 1500');
 assert.equal(isRussianWorldFeature(seversky1500, 1503), true,
-  'after the 1503 peace the reused 1500 world polygon must not depict a separate state');
+  'the appanage persisted, but was no longer a separate sovereign state');
 assert.equal(isRussianWorldFeature(seversky1500, 1520), true,
   'the stale 1500 snapshot must not redraw Novgorod-Seversky as independent in 1520');
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгород-Северское княжество'}}, 1520), true,
@@ -139,6 +143,18 @@ for (const [year, month] of [[1485,9],[1486,1],[1491,12]]) {
   assert.doesNotMatch(contextAt(year, month), /Тверское княжество/,
     'Tver was incorporated in September 1485, but Pskov remains missing');
 }
+// The 1500 source is reused through 1529, but the 1500 change of
+// allegiance and the 1523 abolition of the dependent appanage are different
+// events. Both need disclosure, without inventing a replacement polygon.
+assert.deepEqual(worldIndex.snapshots.filter(s => s.year >= 1500 && s.year <= 1530)
+  .map(s => s.year), [1500, 1530]);
+for (const [year, month] of [[1500,1],[1500,12],[1501,1],[1523,12]]) {
+  assert.match(contextAt(year, month, 1500),
+    /под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г/);
+}
+assert.equal(contextAt(1524, 1, 1500), null,
+  'the dependent Novgorod-Seversky appanage no longer existed after 1523');
+assert.equal(contextAt(1530, 1, 1530), null);
 assert.equal(contextAt(1492, 1, 1492), null);
 assert.equal(contextAt(1492, 1), null, 'a 1400 snapshot should not be claimed to cover 1492');
 assert.equal(contextAt(1400, 1, 1500), null);
