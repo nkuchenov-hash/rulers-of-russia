@@ -142,8 +142,8 @@ try {
     const cx = mapBounds.x + mapBounds.width / 2;
     const cy = mapBounds.y + mapBounds.height / 2;
     const points = separation => [
-      {x: cx - separation, y: cy},
-      {x: cx + separation, y: cy},
+      {x: cx - separation, y: cy, id: 1},
+      {x: cx + separation, y: cy, id: 2},
     ];
     const zoomValue = async () => Number(await flat.getAttribute('data-camera-zoom'));
     const zoomBeforePinch = await zoomValue();
