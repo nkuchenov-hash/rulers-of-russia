@@ -238,6 +238,9 @@ try {
   assert.equal(stats.cancelled, stats.requests, 'every preflight response body must be closed');
   const outageReport = JSON.parse(fs.readFileSync(reportPath));
   assert.equal(outageReport.summary.externalOutage, true);
+  assert.equal(outageReport.schema_version, 2, 'outage reports must use the same evidence schema as normal regression reports');
+  assert.deepEqual(outageReport.comparisonEvidence, [],
+    'a complete preflight outage must explicitly record zero independent geographic comparisons');
   assert.deepEqual(outageReport.summary.preflightProbeResults.map(row => row.resourceId), [1, 2],
     'every probed source must be identified, including later fallbacks');
   for (const row of outageReport.summary.preflightProbeResults) {
