@@ -67,6 +67,31 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1477), false,
   'Novgorod remained a distinct polity before the 1478 annexation');
 assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
   'after annexation an obsolete background Novgorod polygon must not overlay History Core');
+// Tver was annexed in September 1485 (Great Russian Encyclopedia).
+// The 1400 background snapshot is reused later in the 15th century.
+// Do not infer a month from the year-only world layer: 1485 remains
+// ambiguous, while the obsolete independent Tver overlay is hidden in 1486.
+const tver1400 = archivedFeature(1400, 'Tver');
+assert.equal(isRussianWorldFeature(tver1400, 1484), false,
+  'Tver remains independent before its 1485 incorporation');
+assert.equal(isRussianWorldFeature(tver1400, 1485), false,
+  'year-only context must not erase the pre-annexation part of 1485');
+assert.equal(isRussianWorldFeature(tver1400, 1486), true,
+  'the obsolete independent Tver polygon must be hidden after 1485');
+assert.equal(isRussianWorldFeature(tver1400, 1499), true);
+for (const name of ['Grand Principality of Tver', 'Principality of Tver', 'Tver Grand Duchy']) {
+  assert.equal(isRussianWorldFeature({properties:{NAME:name}}, 1486), true, name);
+}
+for (const name of ['Тверь', 'Тверское княжество', 'Великое княжество Тверское']) {
+  assert.equal(isRussianWorldFeature({properties:{NAME_RU:name}}, 1486), true, name);
+}
+for (const name of ['Tver Oblast', 'Tver City', 'Tver Governorate', 'Tver District', 'Тверская область']) {
+  assert.equal(isRussianWorldFeature({properties:{NAME:name}}, 1490), false,
+    'a city or administrative region must not be treated as the old polity: ' + name);
+}
+assert.equal(isRussianWorldFeature({properties:{NAME:'Tver'}}, null), false,
+  'unknown year must not assert that Tver was already annexed');
+
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
   'Novgorod-Seversky is a distinct polity, not an alias for Novgorod Republic');
