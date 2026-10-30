@@ -112,14 +112,18 @@ assert.equal(isRussianWorldFeature({properties:{NAME:'Russian Empire', NAME_RU:'
   'a separately named Novgorod alias must not override explicit Russian-state identity');
 
 // Source-completeness regression: the pinned 1400 world archive omits
-// independent Tver, although Tver existed until September 1485. Never
-// invent a polygon or pretend the 1400 world context is exhaustive.
+// separately named Tver AND Pskov, although both remained distinct political
+// entities in 1400. The same world snapshot is reused until 1492. The Tver
+// warning expires after its September 1485 surrender, but the Pskov warning
+// must remain until the next snapshot. Never invent missing source polygons.
 const snapshot1400 = JSON.parse(readFileSync(new URL(
   '../public/data/territory/world-history/snapshots/1400.geojson', import.meta.url,
 ), 'utf8'));
-assert.equal(snapshot1400.features.some(f => Object.values(f.properties ?? {})
-  .some(v => typeof v === 'string' && /tver|твер/i.test(v))), false,
-  'the caveat must be revised if a pinned Tver feature is added');
+for (const missing of [/tver|твер/i, /pskov|псков/i]) {
+  assert.equal(snapshot1400.features.some(f => Object.values(f.properties ?? {})
+    .some(v => typeof v === 'string' && missing.test(v))), false,
+  'the caveat must be revised if a pinned source feature is added: ' + missing);
+}
 const worldIndex = JSON.parse(readFileSync(new URL(
   '../public/data/territory/world-history/index.json', import.meta.url,
 ), 'utf8'));
@@ -127,12 +131,16 @@ assert.equal(worldIndex.snapshots.filter(s => s.year > 1400 && s.year < 1492).le
   'the caveat assumes that the 1400 world background is reused until 1492');
 const contextAt = (year, month, snapshotYear = 1400) =>
   worldHistoricalContextCaveat({year, month}, snapshotYear);
-assert.match(contextAt(1400, 1), /Тверское княжество не выделено/);
-assert.match(contextAt(1484, 12), /Тверское княжество не выделено/);
-assert.match(contextAt(1485, 8), /Тверское княжество не выделено/);
-assert.equal(contextAt(1485, 9), null, 'Tver surrendered in September 1485');
-assert.equal(contextAt(1486, 1), null);
+for (const [year, month] of [[1400,1],[1484,12],[1485,8]]) {
+  assert.match(contextAt(year, month), /Тверское княжество и Псковская земля не выделены/);
+}
+for (const [year, month] of [[1485,9],[1486,1],[1491,12]]) {
+  assert.match(contextAt(year, month), /Псковская земля не выделена/);
+  assert.doesNotMatch(contextAt(year, month), /Тверское княжество/,
+    'Tver was incorporated in September 1485, but Pskov remains missing');
+}
 assert.equal(contextAt(1492, 1, 1492), null);
+assert.equal(contextAt(1492, 1), null, 'a 1400 snapshot should not be claimed to cover 1492');
 assert.equal(contextAt(1400, 1, 1500), null);
 assert.equal(contextAt(1400, 0), null);
 assert.equal(worldHistoricalContextCaveat(null, 1400), null);
