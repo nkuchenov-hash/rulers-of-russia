@@ -401,12 +401,17 @@ function buildCoastIndex() {
 }
 
 function politicalBorderSamples(payload, coastIndex) {
-  // This metric compares exterior polity boundaries. Fill the ignored holes
-  // before dissolving, so islands inside those holes cannot reappear as borders.
+  // Retain interior rings: an inland hole can be an independent enclave,
+  // whose sovereign boundary must be compared in both directions. The old
+  // exterior-only conversion silently filled such holes and could falsely
+  // certify a state that annexed an enclave. Physical lake/coast rings are
+  // still excluded by the independently pinned coastline distance mask.
+  // Dissolve complete polygons so an overlapping same-state component inside
+  // a hole is not counted as a separate political boundary.
   const polygons = [];
   const collect = geometry => {
-    if (geometry?.type === 'Polygon') polygons.push([geometry.coordinates[0]]);
-    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(p => [p[0]]));
+    if (geometry?.type === 'Polygon') polygons.push(geometry.coordinates);
+    else if (geometry?.type === 'MultiPolygon') polygons.push(...geometry.coordinates);
     else if (geometry?.type === 'GeometryCollection') (geometry.geometries ?? []).forEach(collect);
     // Point/line annotations are never a territorial exterior.
   };
