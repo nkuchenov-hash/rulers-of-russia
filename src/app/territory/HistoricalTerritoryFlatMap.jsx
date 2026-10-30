@@ -3,10 +3,10 @@
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
 import {isRussianWorldFeature} from './worldRussiaFeatureFilter.mjs';
+import {zoomFlatCameraAt} from './flatCameraZoom.mjs';
 
 const TWO_PI=Math.PI*2;
 const PALETTE=['#879477','#b49b79','#808d9a','#9d8b72','#809995','#a18b89','#8d929e'];
-const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const countryName=f=>{const p=f?.properties??{};return[p.NAME_RU,p.name_ru,p.NAME,p.name,p.ADMIN,p.entity].find(x=>typeof x==='string'&&x.trim())??''};
 const colorFor=(f,i)=>{const name=countryName(f);let hash=i;for(let j=0;j<name.length;j++)hash=((hash<<5)-hash+name.charCodeAt(j))|0;return PALETTE[Math.abs(hash)%PALETTE.length]};
 const graticule=geoGraticule().step([30,30])();
@@ -211,11 +211,8 @@ export function HistoricalTerritoryFlatMap({
     const anchorX=before.x-bounds.left-bounds.width/2;
     const anchorY=before.y-bounds.top-bounds.height/2;
     onCameraChange(prev=>{
-      const zoom=clamp(prev.zoom*next.distance/before.distance,1,12);
-      const ratio=zoom/prev.zoom;
-      return {...prev,zoom,
-        dx:prev.dx+(next.x-before.x)+(1-ratio)*(anchorX-prev.dx),
-        dy:prev.dy+(next.y-before.y)+(1-ratio)*(anchorY-prev.dy)};
+      const zoomed=zoomFlatCameraAt(prev,next.distance/before.distance,anchorX,anchorY);
+      return {...zoomed,dx:zoomed.dx+(next.x-before.x),dy:zoomed.dy+(next.y-before.y)};
     });
   },[onCameraChange,pinchSnapshot]);
   const release=useCallback(e=>{
@@ -225,8 +222,12 @@ export function HistoricalTerritoryFlatMap({
   },[pinchSnapshot]);
   const onWheel=useCallback(e=>{
     e.preventDefault();
-    const next=e.deltaY>0?.85:1.15;
-    onCameraChange(prev=>({...prev,zoom:clamp(prev.zoom*next,1,12)}));
+    if(e.deltaY===0)return;
+    const bounds=e.currentTarget.getBoundingClientRect();
+    const anchorX=e.clientX-bounds.left-bounds.width/2;
+    const anchorY=e.clientY-bounds.top-bounds.height/2;
+    const factor=e.deltaY>0?.85:1.15;
+    onCameraChange(prev=>zoomFlatCameraAt(prev,factor,anchorX,anchorY));
   },[onCameraChange]);
 
   return <div ref={hostRef} className="territory-flat-host"
@@ -237,6 +238,7 @@ export function HistoricalTerritoryFlatMap({
     <canvas ref={canvasRef} data-territory-flat-map="true"
       data-history-month={historyLoading?'':historyState?.month??''}
       data-camera-zoom={camera.zoom.toFixed(3)}
+      data-camera-dx={camera.dx.toFixed(3)} data-camera-dy={camera.dy.toFixed(3)}
       role="img" aria-label={'Плоская карта исторических границ за '+month+'.'+year}/>
     <div className="territory-flat-watermark" aria-hidden="true">
       2D · Исторические границы · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}
