@@ -238,6 +238,22 @@ function hasApproximationEvidence(value, key = '') {
     || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
 }
 
+// Contradictory source fields are not a license to relax a border tolerance.
+// A positive flag in one field must not override an explicit negative flag
+// or a surveyed-boundary note elsewhere in the same original feature.
+function hasExplicitNonApproximation(value, key = '') {
+  if (Array.isArray(value)) return value.some(item => hasExplicitNonApproximation(item, key));
+  if (value && typeof value === 'object') {
+    return Object.entries(value).some(([name, item]) => hasExplicitNonApproximation(item, name));
+  }
+  if (typeof value === 'boolean') return approximationMarker.test(key) && !value;
+  if (typeof value === 'number') return approximationMarker.test(key) && value === 0;
+  if (typeof value !== 'string') return false;
+  const label = value.trim();
+  return negatedApproximation.test(label)
+    || (approximationMarker.test(key) && explicitNonApproximation.test(label));
+}
+
 function isReferenceApproximate(payload) {
   // A mixed source layer may contain an approximate island alongside an
   // explicitly surveyed mainland. One approximate feature must not raise
@@ -249,7 +265,8 @@ function isReferenceApproximate(payload) {
     return Array.isArray(originals) ? originals : [feature?.properties ?? {}];
   });
   return sourceRecords.length > 0
-    && sourceRecords.every(properties => hasApproximationEvidence(properties));
+    && sourceRecords.every(properties => hasApproximationEvidence(properties)
+      && !hasExplicitNonApproximation(properties));
 }
 
 function haversineMeters(a, b) {

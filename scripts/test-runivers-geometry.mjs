@@ -34,6 +34,24 @@ for (const properties of [
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),true,
     'affirmative approximation evidence must retain the existing 100 km policy: '+JSON.stringify(properties));
 }
+// An explicit negative source field must win over an affirmative flag in
+// another field of the SAME original feature. Previously .some() accepted
+// these contradictory records and silently raised the limit to 100 km.
+for (const properties of [
+  {approximate: true, notes: 'not approximate: surveyed boundary'},
+  {approximate: 'yes', uncertain: false},
+  {metadata: {approximate: true}, source: {reconstructed: 'no'}},
+  {approximate: true, description: 'не приблизительные границы'},
+  {notes: ['approximate borders', 'not approximate']},
+  {reconstructed: 1, metadata: {uncertain: 0}},
+]) {
+  assert.equal(isReferenceApproximate(referenceWithMetadata(properties)), false,
+    'conflicting approximation evidence must retain strict tolerance: ' + JSON.stringify(properties));
+}
+assert.equal(isReferenceApproximate(referenceWithMetadata({
+  approximate: true, description: 'no copyright restrictions mentioned',
+})), true, 'unrelated negative prose must not invalidate genuine approximation metadata');
+
 console.log('Runivers approximation metadata tests passed: negative flags cannot inflate border tolerances.');
 
 // A global stride must not skip a small disconnected island or enclave just
