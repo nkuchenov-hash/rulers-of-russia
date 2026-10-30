@@ -134,6 +134,35 @@ try {
     assert(await page.getByRole('button', {name: 'Показать глобус'}).isVisible(),
       `mobile ${width}: cannot switch back to globe`);
 
+    // Real Chromium multi-touch input, not synthetic DOM pointer events:
+    // verify both directions of 2D pinch zoom on 390px and 360px screens.
+    // The old flat map replaced the first finger with the second and never
+    // changed zoom, even though its single-finger drag and zoom buttons worked.
+    const touch = await page.context().newCDPSession(page);
+    const cx = mapBounds.x + mapBounds.width / 2;
+    const cy = mapBounds.y + mapBounds.height / 2;
+    const points = separation => [
+      {x: cx - separation, y: cy},
+      {x: cx + separation, y: cy},
+    ];
+    const zoomValue = async () => Number(await flat.getAttribute('data-camera-zoom'));
+    const zoomBeforePinch = await zoomValue();
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: points(35)});
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchMove', touchPoints: points(80)});
+    await page.waitForFunction(before => Number(
+      document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraZoom
+    ) > before * 1.3, zoomBeforePinch, {timeout: 8000});
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchEnd', touchPoints: []});
+    const zoomAfterOutwardPinch = await zoomValue();
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: points(80)});
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchMove', touchPoints: points(35)});
+    await page.waitForFunction(before => Number(
+      document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.cameraZoom
+    ) < before * .8, zoomAfterOutwardPinch, {timeout: 8000});
+    await touch.send('Input.dispatchTouchEvent', {type: 'touchEnd', touchPoints: []});
+    await touch.detach();
+    await waitForPaintedFlatMap('1581-07', 'after mobile two-finger pinch');
+
     const month = page.getByLabel('Месяц');
     await month.selectOption('8');
     await page.waitForFunction(() => (document.body?.innerText || '').includes('History Core 1581-08'), null, {timeout: 30000});
