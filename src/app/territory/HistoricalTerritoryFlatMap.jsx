@@ -22,7 +22,11 @@ export function HistoricalTerritoryFlatMap({
 }){
   const canvasRef=useRef(null);
   const hostRef=useRef(null);
-  const dragRef=useRef(null);
+  // Track active touch pointers separately. The previous single-pointer drag
+  // discarded the first finger when a second one landed, so mobile users
+  // could not pinch-zoom the 2D historical map.
+  const pointersRef=useRef(new Map());
+  const gestureRef=useRef(null);
   const [size,setSize]=useState({width:1,height:1});
   const [terrain,setTerrain]=useState(null);
   const focusLon=focus[0],focusLat=focus[1];
@@ -171,21 +175,54 @@ export function HistoricalTerritoryFlatMap({
   },[size,terrain,worldFeatures,worldLabels,russiaFeatures,verifiedBoundaries,historyLoading,
     worldYear,year,focusLon,focusLat,mode,camera,mobile]);
 
+  const pinchSnapshot=useCallback(()=>{
+    const points=[...pointersRef.current.values()];
+    if(points.length!==2)return null;
+    const [a,b]=points;
+    return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,
+      distance:Math.hypot(b.x-a.x,b.y-a.y)};
+  },[]);
   const onPointerDown=useCallback(e=>{
-    if(e.button!==0&&e.pointerType==='mouse')return;
-    dragRef.current={id:e.pointerId,x:e.clientX,y:e.clientY};
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    pointersRef.current.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    gestureRef.current=pinchSnapshot();
     e.currentTarget.setPointerCapture(e.pointerId);
-  },[]);
+  },[pinchSnapshot]);
   const onPointerMove=useCallback(e=>{
-    const drag=dragRef.current;
-    if(!drag||drag.id!==e.pointerId)return;
-    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
-    dragRef.current={...drag,x:e.clientX,y:e.clientY};
-    onCameraChange(prev=>({...prev,dx:prev.dx+dx,dy:prev.dy+dy}));
-  },[onCameraChange]);
+    const pointers=pointersRef.current;
+    const previous=pointers.get(e.pointerId);
+    if(!previous)return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===1){
+      gestureRef.current=null;
+      const dx=e.clientX-previous.x,dy=e.clientY-previous.y;
+      onCameraChange(prev=>({...prev,dx:prev.dx+dx,dy:prev.dy+dy}));
+      return;
+    }
+    const next=pinchSnapshot();
+    const before=gestureRef.current;
+    gestureRef.current=next;
+    if(!before||!next||before.distance<1||next.distance<1)return;
+    const bounds=hostRef.current?.getBoundingClientRect();
+    if(!bounds)return;
+    // Preserve the geographical point beneath the previous finger midpoint
+    // while also following midpoint translation. Clamp at the existing 1–12
+    // zoom limits; use the APPLIED ratio to avoid jumps at either limit.
+    const anchorX=before.x-bounds.left-bounds.width/2;
+    const anchorY=before.y-bounds.top-bounds.height/2;
+    onCameraChange(prev=>{
+      const zoom=clamp(prev.zoom*next.distance/before.distance,1,12);
+      const ratio=zoom/prev.zoom;
+      return {...prev,zoom,
+        dx:prev.dx+(next.x-before.x)+(1-ratio)*(anchorX-prev.dx),
+        dy:prev.dy+(next.y-before.y)+(1-ratio)*(anchorY-prev.dy)};
+    });
+  },[onCameraChange,pinchSnapshot]);
   const release=useCallback(e=>{
-    if(dragRef.current?.id===e.pointerId)dragRef.current=null;
-  },[]);
+    pointersRef.current.delete(e.pointerId);
+    // Never reuse a two-finger baseline after one finger is lifted.
+    gestureRef.current=pinchSnapshot();
+  },[pinchSnapshot]);
   const onWheel=useCallback(e=>{
     e.preventDefault();
     const next=e.deltaY>0?.85:1.15;
