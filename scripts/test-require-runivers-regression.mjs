@@ -234,6 +234,35 @@ try {
    {RUNIVERS_END_MONTH:'1921-12'},[{...twoYearEvidence,runiversToYear:1922}]).status,0,
    'the same state is accepted when its source really covers both full years');
 
+ // Each dated source must independently cover its own overlapping months.
+ // Two sources both spanning 1920-1921 cannot certify the period by checking
+ // only 1920 against the first and only 1921 against the second.
+ const twoResourceSummary = {...twoYearSummary,runiversLayersDiscovered:2,
+   datedLayersAudited:2,usableReferenceLayers:2,comparisons:2,passingComparisons:2};
+ const firstResourceOneYear = {...metricRow('pass'),runiversToYear:1922};
+ const secondResourceOneYear = {...metricRow('pass'),runiversResourceId:5456,
+   runiversToYear:1922,historyFirstMonth:'1921-01',historyLastMonth:'1921-12'};
+ const substitutedSource = run(twoResourceSummary,twoYearShard,
+   {RUNIVERS_END_MONTH:'1921-12'},[firstResourceOneYear,secondResourceOneYear]);
+ assert.equal(substitutedSource.status,1,
+   'a passing second source must not fill the first source\'s missing year');
+ assert.match(substitutedSource.stderr,/reference resource 5455 lacks 12 dated month/);
+ assert.equal(run(twoResourceSummary,twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+   {...firstResourceOneYear,historyLastMonth:'1921-12'},
+   {...secondResourceOneYear,historyFirstMonth:'1920-01'},
+ ]).status,0,'two sources may pass after each covers its own full dated overlap');
+
+ // One resource ID must not be represented with contradictory date bounds:
+ // that could make a short reference appear to cover extra years.
+ const inconsistentResource = run({...summary,comparisons:2,passingComparisons:2},
+   completeShard,{},[
+     {...metricRow('pass'),historyLastMonth:'1920-06'},
+     {...metricRow('pass'),runiversFromYear:1919,
+       historyFirstMonth:'1920-07',historyLastMonth:'1920-12'},
+   ]);
+ assert.equal(inconsistentResource.status,1);
+ assert.match(inconsistentResource.stderr,/inconsistent dated interval metadata/);
+
  assert.equal(run(summary,{...completeShard,startMonth:'1921-01',endMonth:'1920-12'}).status,1,
    'Reversed shard dates cannot pass geographic acceptance');
  console.log('Runivers gate tests passed: complete dated-layer inventory, success, outage, partial coverage, contour failure, override-only comparisons, unverified transition months and malformed totals.');

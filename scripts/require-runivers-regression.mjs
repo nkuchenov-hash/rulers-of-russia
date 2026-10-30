@@ -38,6 +38,11 @@ const evidenceCounts = {pass: 0, fail: 0, override: 0};
 const seenEvidence = new Set();
 const comparedResourceIds = new Set();
 const evidenceCoveredMonths = new Set();
+// A source layer must be checked throughout its own dated overlap with this
+// shard. Union coverage across different resources can hide missing
+// source/state comparisons, even when every calendar month has *some* pass.
+const resourceIntervals = new Map();
+const resourceCoveredMonths = new Map();
 const ordinalForMonth = month => Number(month.slice(0, 4)) * 12 + Number(month.slice(5)) - 1;
 
 for (const row of evidence) {
@@ -75,6 +80,15 @@ for (const row of evidence) {
   const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
   const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
   const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
+  const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear, row.runiversIntervalSemantics]);
+  const earlierInterval = resourceIntervals.get(row.runiversResourceId);
+  if (earlierInterval && earlierInterval.identity !== sourceInterval) {
+    console.error(`Runivers resource ${row.runiversResourceId} has inconsistent dated interval metadata across comparisons.`);
+    process.exit(1);
+  }
+  if (!earlierInterval) resourceIntervals.set(row.runiversResourceId, {
+    identity: sourceInterval, firstYear: row.runiversFromYear, lastYear: sourceLastYear,
+  });
   if (row.historyFirstMonth > row.historyLastMonth
     || (shardStart && row.historyFirstMonth < shardStart)
     || (shardEnd && row.historyLastMonth > shardEnd)
@@ -96,8 +110,11 @@ for (const row of evidence) {
   // calendar-month intersection of the source and the state for coverage.
   const evidenceStart = Math.max(ordinalForMonth(row.historyFirstMonth), row.runiversFromYear * 12);
   const evidenceEnd = Math.min(ordinalForMonth(row.historyLastMonth), sourceLastYear * 12 + 11);
+  const sourceMonths = resourceCoveredMonths.get(row.runiversResourceId) ?? new Set();
+  resourceCoveredMonths.set(row.runiversResourceId, sourceMonths);
   for (let month = evidenceStart; month <= evidenceEnd; month += 1) {
     evidenceCoveredMonths.add(month);
+    sourceMonths.add(month);
   }
 
 
@@ -286,5 +303,25 @@ if (missingEvidenceMonths.length) {
   process.exit(1);
 }
 
+// Distinct overlapping references must each be tested against every relevant
+// full-year History Core state. A pass from source B cannot fill an untested
+// year of source A. This check does not alter any geographic tolerance.
+for (const [resourceId, interval] of resourceIntervals) {
+  const first = Math.max(startOrdinal, interval.firstYear * 12);
+  const last = Math.min(endOrdinal, interval.lastYear * 12 + 11);
+  const covered = resourceCoveredMonths.get(resourceId);
+  let missing = 0, firstMissing = null;
+  for (let month = first; month <= last; month += 1) {
+    if (covered?.has(month)) continue;
+    missing += 1;
+    if (firstMissing === null) firstMissing = month;
+  }
+  if (missing > 0) {
+    const firstYear = Math.floor(firstMissing / 12);
+    const firstMonth = firstMissing % 12 + 1;
+    console.error(`Runivers reference resource ${resourceId} lacks ${missing} dated month(s) of its own shard overlap (first: ${String(firstYear).padStart(4, '0')}-${String(firstMonth).padStart(2, '0')}); other resources cannot substitute for missing comparisons.`);
+    process.exit(1);
+  }
+}
 
 console.log(`Runivers regression accepted: ${comparisons} comparisons, ${Number(s.passingComparisons ?? 0)} passes, ${Number(s.overrides ?? 0)} evidence-backed overrides.`);
