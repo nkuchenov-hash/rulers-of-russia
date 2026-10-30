@@ -47,6 +47,7 @@ try {
     fs.writeFileSync('child-input.json', JSON.stringify(shard));
     const sources = JSON.parse(fs.readFileSync(process.env.RUNIVERS_DISCOVERY_FILE));
     fs.writeFileSync('child-discovery.json', JSON.stringify(sources.vectorLayers));
+    fs.writeFileSync('child-preferred-mvt.txt', process.env.RUNIVERS_PREFERRED_MVT_TRANSPORT ?? '');
     if (!process.env.TEST_NO_REPORT) {
       const auditedRange = process.env.TEST_MISSING_AUDITED_RANGE ? undefined : {
         startMonth: process.env.TEST_AUDITED_START || process.env.RUNIVERS_START_MONTH,
@@ -76,6 +77,8 @@ try {
   for (const code of [0, 1]) {
     const result = run({TEST_EXIT: String(code)});
     assert.equal(result.status, code, result.stderr);
+    assert.equal(fs.readFileSync(path.join(fixture, 'child-preferred-mvt.txt'), 'utf8'), 'component-mvt',
+      'a successful component-MVT preflight must guide child request ordering');
     assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical, 'canonical index must be byte-identical after every shard');
     const input = JSON.parse(fs.readFileSync(path.join(fixture, 'child-input.json')));
     assert.equal(input.monthCount, 12);
@@ -254,6 +257,8 @@ try {
     assert.equal(fallback.status, 0, `${transport}: ${fallback.stderr}`);
     assert.match(fallback.stdout, /responsive resource 2/,
       `${transport}: later resource with a usable fallback must prevent a false outage`);
+    assert.equal(fs.readFileSync(path.join(fixture, 'child-preferred-mvt.txt'), 'utf8'), '',
+      `${transport}: JSON-only reachability must not bias MVT endpoint selection`);
     assert.equal(fs.readFileSync(canonicalPath, 'utf8'), canonical,
       `${transport}: fallback preflight must not modify canonical history`);
   }
