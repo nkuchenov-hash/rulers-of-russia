@@ -19,8 +19,8 @@ const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ско
 // principality (NOT Novgorod Republic). Its prince swore allegiance to Moscow
 // on 3 May 1500; the 1503 truce only confirmed that earlier transfer.
 // The principality survived as a dependent appanage until 1523. Suppress its
-// obsolete *separate sovereign* background fill from the first unambiguous
-// full year (1501), but keep the within-year transition 1500 visible.
+// obsolete *separate sovereign* background fill from May 1500 when a
+// Gregorian month is provided, or from 1501 for year-only callers.
 // This does not erase the appanage from history or certify History Core borders.
 // Source: https://bigenc.ru/c/novgorod-severskoe-kniazhestvo-e28685
 const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
@@ -30,8 +30,10 @@ const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: кн
 // Pskov and Ryazan as separate polities and is reused until the 1530
 // snapshot. Pskov was annexed in January 1510, Ryazan in 1521. Do not
 // paint those *stale background* polygons as independent after annexation.
-// For Ryazan, preserve the entire transition year (1521) as uncertain:
-// a year-only filter cannot establish which month the source depicts.
+// For Ryazan, the archive does not establish a legal annexation month.
+// Documentary controls establish Moscow's administration by the END of
+// September 1521 (Gregorian); earlier 1521 months remain uncertain.
+// Year-only callers conservatively retain the entire transition year.
 // These exact names must not hide modern oblasts or unrelated place labels.
 // Source names: https://jesusiniesta.es/es-ES/maps/historic-borders/1500
 // Dates: https://the-epoch-institute.org/state/pskov-republic
@@ -45,9 +47,18 @@ const RYAZAN_CYRILLIC = /^рязан(?:ь|ская|ское|ский|ской)?(
 // This controls BACKGROUND rendering only; it never certifies or changes
 // History Core sovereign geometry. If the year is unavailable, fail safe
 // against a duplicate Russian-state fill rather than guessing independence.
-export function isRussianWorldFeature(feature, selectedYear = null) {
+// Only May 1500 and September 1521 change the background identity within a
+// year. Consumers can use this phase in memo/effect dependencies so that
+// ordinary month scrubbing does not rebuild large world textures needlessly.
+export function worldBackgroundTransitionPhase(year, month) {
+  if (!Number.isInteger(month) || month < 1 || month > 12) return 0;
+  return year === 1500 ? Number(month >= 5) : year === 1521 ? Number(month >= 9) : 0;
+}
+
+export function isRussianWorldFeature(feature, selectedYear = null, selectedMonth = null) {
   const properties = feature?.properties;
   if (!properties || typeof properties !== 'object') return false;
+  const hasMonth = Number.isInteger(selectedMonth) && selectedMonth >= 1 && selectedMonth <= 12;
   return NAME_FIELDS.some(key => {
     const name = properties[key];
     if (typeof name !== 'string') return false;
@@ -56,12 +67,14 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
       return Number.isInteger(selectedYear) && selectedYear >= 1510;
     }
     if (RYAZAN_ENGLISH.test(name.trim()) || RYAZAN_CYRILLIC.test(name.trim())) {
-      // 1521 is a within-year transfer: retain the old world context until
-      // 1522 instead of pretending that January 1521 was post-annexation.
-      return Number.isInteger(selectedYear) && selectedYear >= 1522;
+      // A September 1521 cutoff denotes confirmed control by month end,
+      // not a fabricated legal annexation date. Year-only calls stay cautious.
+      return Number.isInteger(selectedYear) && (selectedYear >= 1522
+        || (selectedYear === 1521 && hasMonth && selectedMonth >= 9));
     }
     if (SEVERSKY_ENGLISH.test(name.trim()) || SEVERSKY_CYRILLIC.test(name.trim())) {
-      return Number.isInteger(selectedYear) && selectedYear >= 1501;
+      return Number.isInteger(selectedYear) && (selectedYear >= 1501
+        || (selectedYear === 1500 && hasMonth && selectedMonth >= 5));
     }
     if (NOVGOROD_ENGLISH.test(name.trim()) || NOVGOROD_CYRILLIC.test(name.trim())) {
       // 1136–1477: the Novgorod Republic is separate world context.
