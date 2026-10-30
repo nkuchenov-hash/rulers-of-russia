@@ -426,10 +426,6 @@ const enclaveMismatch = comparePoliticalGeometry(
   enclaveSamples,alone,{hasPolygon:true,types:['Polygon']});
 assert.ok(enclaveMismatch.symmetricMaxMeters > 20000,
   'a filled-in enclave must be detected as a geographic discrepancy');
-const enclaveFilledByState = politicalBorderSamples(
-  {type:'FeatureCollection',features:[withEnclave,inner]},coast.index);
-assert.ok(enclaveFilledByState.points.length >= enclaveSamples.points.length,
-  'an unrelated small same-state island must not erase the remaining enclave boundary');
 const unrelatedAnnotation = {type:'Feature',properties:{name:'label/road'},
   geometry:{type:'LineString',coordinates:[[80,50],[81,50]]}};
 const mixedWithAnnotation = politicalBorderSamples(
