@@ -247,6 +247,12 @@ if (!preflight.healthy) {
   process.exitCode = 1;
 } else {
   console.log(`Runivers preflight: responsive resource ${preflight.responsiveResourceId} via ${preflight.responsiveTransport} among ${preflight.probedResourceIds.length} probed, proceeding with the complete shard (HTTP reachability only).`);
+  // Prefer the transport that answered the shard's live preflight. In the
+  // observed Runivers outage, the canonical MVT endpoint repeatedly timed
+  // out while the component MVT endpoint served the same z=0 reference.
+  // Always retain both endpoints and all JSON fallbacks in the fetcher.
+  const preferredMvtTransport = ['resource-mvt', 'component-mvt'].includes(preflight.responsiveTransport)
+    ? preflight.responsiveTransport : '';
   const child = spawnSync(process.execPath, ['--import', path.join(root, 'scripts', 'runivers-fetch-cache.mjs'), validatorFile], {
     cwd: root,
     stdio: 'inherit',
@@ -254,6 +260,7 @@ if (!preflight.healthy) {
       ...process.env,
       RUNIVERS_DISCOVERY_FILE: shardDiscoveryFile,
       RUNIVERS_MONTH_INDEX_FILE: shardMonthIndexFile,
+      RUNIVERS_PREFERRED_MVT_TRANSPORT: preferredMvtTransport,
     },
   });
   if (child.error) throw child.error;
