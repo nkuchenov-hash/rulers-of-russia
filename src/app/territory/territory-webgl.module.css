@@ -3,3 +3,15 @@
 @media(max-width:430px){.brand strong{font-size:16px}.topActions button{padding:0 8px}.story h1{font-size:31px}.timelineHead{grid-template-columns:48px 1fr auto 48px}.timelineHead button{width:46px;height:46px}.timelineHead strong{font-size:20px}.timelineHead b{font-size:31px}}
 
 @media(max-width:360px){.brand strong{display:none}.story{max-width:calc(100vw - 110px)}.topActions button{padding:0 10px}}
+
+
+/* Keep full source/date caveats available on narrow screens without covering
+   the globe, map controls, or timeline with a permanently expanded paragraph. */
+.worldContextCompact{display:none;pointer-events:auto}
+@media(max-width:760px){
+  .worldContextLong{display:none}
+  .worldContextCompact{display:block}
+  .worldContextCompact summary{cursor:pointer;list-style:revert}
+  .worldContextCompact[open]{max-height:min(38vh,260px);overflow:auto;overscroll-behavior:contain}
+  .worldContextCompact>div{margin-top:8px}
+}

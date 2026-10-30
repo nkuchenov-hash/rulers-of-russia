@@ -241,6 +241,17 @@ try {
         && style.visibility === 'visible' && parseFloat(style.fontSize) >= 16;
     }, expected, {timeout: 45000});
     await visibleSourceWarning('Тверское княжество и Псковская земля не выделены');
+    // On phones the warning must be compact by default but expandable to the
+    // original complete explanation, without losing source/date caveats.
+    const worldDetails = page.locator('main aside [role="note"] details');
+    await worldDetails.locator('summary').waitFor({state: 'visible'});
+    assert.equal(await worldDetails.evaluate(el => el.open), false,
+      `mobile ${width}: world-source caveat should start collapsed`);
+    assert.match(await worldDetails.locator('summary').innerText(), /Тверь и Псков/);
+    await worldDetails.locator('summary').click();
+    assert.equal(await worldDetails.evaluate(el => el.open), true);
+    assert.match(await worldDetails.innerText(), /Тверское княжество и Псковская земля не выделены/);
+    await worldDetails.locator('summary').click();
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() =>
       document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1400-07',
@@ -360,6 +371,18 @@ try {
     assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
     await returnToGlobe('1521-09');
+    await visibleSourceWarning('точная дата присоединения не установлена');
+    const ryazanDetails = page.locator('main aside [role="note"] details');
+    assert.match(await ryazanDetails.locator('summary').innerText(),
+      /Новгород-Северский, Псков, Рязань/,
+      `mobile ${width}: Pskov and Ryazan missing from compact source caveat`);
+    assert.equal(await ryazanDetails.evaluate(el => el.open), false);
+    await ryazanDetails.locator('summary').click();
+    assert.match(await ryazanDetails.innerText(),
+      /контроль Москвы подтверждён к концу сентября 1521 г/);
+    assert.match(await ryazanDetails.innerText(),
+      /точная дата присоединения не установлена/);
+    await ryazanDetails.locator('summary').click();
 
     // A source-backed internal History Core state must never be presented
     // as independently geographically accepted, including on narrow phones
