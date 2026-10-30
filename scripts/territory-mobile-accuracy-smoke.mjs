@@ -278,6 +278,30 @@ try {
     await returnToGlobe('1490-01');
     await visibleSourceWarning('Псковская земля не выделена');
 
+    // In 1500 Novgorod-Seversky transferred allegiance to Moscow but its
+    // dependent appanage survived until 1523. The pinned 1500 world backdrop
+    // must disclose this distinction in both 2D and 3D, even on 360px.
+    sourceGapTarget.searchParams.set('year', '1501');
+    sourceGapTarget.searchParams.set('month', '7');
+    const severskyResponse = await page.goto(sourceGapTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+    assert(severskyResponse?.ok(), `mobile ${width}: 1501 HTTP ${severskyResponse?.status()}`);
+    await visibleSourceWarning('зависимый удел сохранялся до 1523 г.');
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await page.waitForFunction(() =>
+      document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1501-07',
+      null, {timeout: 15000});
+    await visibleSourceWarning('зависимый удел сохранялся до 1523 г.');
+    const severskyBounds = await page.evaluate(() => ({
+      right: document.querySelector('main aside [role="note"]')?.getBoundingClientRect().right,
+      zoomLeft: document.querySelector('main div[class*="zoomTools"]')?.getBoundingClientRect().left,
+      documentWidth: document.documentElement.scrollWidth,
+    }));
+    assert(severskyBounds.documentWidth <= width + 1
+      && severskyBounds.right < severskyBounds.zoomLeft,
+      `mobile ${width}: Novgorod-Seversky warning overlaps controls: ${JSON.stringify(severskyBounds)}`);
+    await returnToGlobe('1501-07');
+    await visibleSourceWarning('зависимый удел сохранялся до 1523 г.');
+
     // The 1505 Muscovy contour is still reused for 1514: do not call it
     // geographically verified in either projection or on a phone.
     const staleTarget = new URL(url);

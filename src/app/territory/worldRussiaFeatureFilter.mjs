@@ -15,11 +15,14 @@ const ENGLISH = /\b(?:russia|russian|ussr|rsfsr|union of soviet socialist republ
 const CYRILLIC = /(?:^|[^а-яё])(?:россия|российск[а-яё]*|русск[а-яё]*|русь|ссср|рсфср|советский союз|советская россия|союз советских социалистических республик|московия|московск[а-яё]*|владимирск[а-яё]*)(?=$|[^а-яё])/i;
 const NOVGOROD_ENGLISH = /^(?:the )?(?:(?:principality|republic|land) of )?novgorod(?: (?:republic|principality|land))?$/i;
 const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ской)?(?: (?:земля|республика|княжество))?$/i;
-// The 1500 snapshot also names Novgorod-Seversky. This is a different
-// polity from Novgorod Republic, but the same 1500 snapshot is reused through
-// 1529. The 1503 Lithuanian–Muscovite peace formally recognized its transfer;
-// suppress that stale separate background polygon from 1503 onward.
-// This is a year-level visual guard, not a month-accurate sovereignty claim.
+// The 1500 snapshot also names Novgorod-Seversky, a distinct appanage
+// principality (NOT Novgorod Republic). Its prince swore allegiance to Moscow
+// on 3 May 1500; the 1503 truce only confirmed that earlier transfer.
+// The principality survived as a dependent appanage until 1523. Suppress its
+// obsolete *separate sovereign* background fill from the first unambiguous
+// full year (1501), but keep the within-year transition 1500 visible.
+// This does not erase the appanage from history or certify History Core borders.
+// Source: https://bigenc.ru/c/novgorod-severskoe-kniazhestvo-e28685
 const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
 const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: княжество)?$/i;
 
@@ -58,7 +61,7 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
       return Number.isInteger(selectedYear) && selectedYear >= 1522;
     }
     if (SEVERSKY_ENGLISH.test(name.trim()) || SEVERSKY_CYRILLIC.test(name.trim())) {
-      return Number.isInteger(selectedYear) && selectedYear >= 1503;
+      return Number.isInteger(selectedYear) && selectedYear >= 1501;
     }
     if (NOVGOROD_ENGLISH.test(name.trim()) || NOVGOROD_CYRILLIC.test(name.trim())) {
       // 1136–1477: the Novgorod Republic is separate world context.
