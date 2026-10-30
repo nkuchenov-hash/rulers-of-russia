@@ -28,6 +28,6 @@ assert.equal(nearBoundary(40,50,regular),false);
 // must use the wrapped midpoint and periodic proximity index.
 const globe = fs.readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx',import.meta.url),'utf8');
 assert.match(globe,/import\s*\{[^}]*boundaryMidpointLongitude[^}]*\}\s*from '\.\/antimeridianBoundaryMath\.mjs'/);
-assert.match(globe,/midLon=boundaryMidpointLongitude\(a\[0\],b\[0\]\)/);
+assert.match(globe,/midLon=boundaryMidpointLongitude\(Number\(a\[0\]\),Number\(b\[0\]\)\)/);
 assert.match(globe,/nearBoundary\(midLon,midLat,excludeGrid\)/);
 console.log('Globe antimeridian boundary suppression tests passed.');
