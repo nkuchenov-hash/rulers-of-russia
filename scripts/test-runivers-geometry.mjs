@@ -119,6 +119,32 @@ const feature = (name, x) => ({type:'Feature',properties:{name},geometry:{type:'
 const source = {type:'FeatureCollection',referenceSourceFeatures:[feature('Московское княжество',30),feature('Тверское княжество',31)],features:[]};
 const scoped = referenceForPolity(source,'grand-moscow');
 assert.equal(scoped.scope.selectedFeatures,1);
+// Mixed-quality source polygons cannot globally acquire the more permissive
+// 100 km threshold from just one approximate component.
+const imperialFeature = (name, x, approximate) => ({
+  ...feature(name, x),
+  properties: {name, approximate},
+});
+const mixedQualityEmpire = referenceForPolity({
+  referenceSourceFeatures: [
+    imperialFeature('Россия', 30, false),
+    imperialFeature('Русская Америка', 80, true),
+  ],
+}, 'russian-empire');
+assert.equal(isReferenceApproximate(mixedQualityEmpire.payload), false,
+  'an approximate colonial feature must not relax the exact mainland tolerance');
+const fullyApproximateEmpire = referenceForPolity({
+  referenceSourceFeatures: [
+    imperialFeature('Россия', 30, true),
+    imperialFeature('Русская Америка', 80, true),
+  ],
+}, 'russian-empire');
+assert.equal(isReferenceApproximate(fullyApproximateEmpire.payload), true,
+  'all independently labeled source features explicitly approximate may use the existing policy');
+assert.equal(isReferenceApproximate(referenceWithMetadata({approximate:true})), true,
+  'single-source approximation policy must remain unchanged');
+assert.equal(isReferenceApproximate({type:'FeatureCollection',features:[]}), false,
+  'missing source features cannot justify an increased geographic tolerance');
 // Polities without a reviewed source-name scope still expose whole-layer
 // diagnostics; those cannot establish an independent Russian-state boundary.
 const wholeLayer = referenceForPolity(source, 'russian-republic');
