@@ -70,9 +70,7 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
   'after annexation an obsolete background Novgorod polygon must not overlay History Core');
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
-  'Novgorod-Seversky is a distinct polity, not an alias for Novgorod Republic');
-assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
-  'the 1500 snapshot cannot resolve the May 1500 change of allegiance');
+  'Novgorod-Seversky is distinct from Novgorod Republic; the May 1500 allegiance is within-year');
 assert.equal(isRussianWorldFeature(seversky1500, 1501), true,
   'the 1500 archive must not show the Moscow-dependent appanage as a separate sovereign in 1501');
 assert.equal(isRussianWorldFeature(seversky1500, 1502), true,
