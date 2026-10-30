@@ -368,17 +368,63 @@ try {
   }
 
   // Impossible deep links must never silently render the 862 or 2026 map.
+  // Keep the production smoke cache-buster from the base URL: replacing the
+  // entire search string discarded that diagnostic parameter.
   for (const badQuery of ['?year=1', '?year=1721&month=13', '?year=1510&year=1514']) {
     const badPage = await browser.newPage({viewport: {width: 390, height: 844}});
+    const badUrl = new URL(url);
+    badUrl.searchParams.delete('year');
+    badUrl.searchParams.delete('month');
+    for (const [key, value] of new URLSearchParams(badQuery)) {
+      badUrl.searchParams.append(key, value);
+    }
+    const failures = [];
+    const errors = [];
+    const responses = [];
+    badPage.on('requestfailed', request => {
+      const failure = request.failure();
+      failures.push({url: request.url(), error: typeof failure === 'string' ? failure : failure?.errorText || 'unknown'});
+    });
+    badPage.on('pageerror', error => errors.push(String(error?.stack || error)));
+    badPage.on('console', message => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    badPage.on('response', response => {
+      if (response.request().resourceType() === 'document' || response.status() >= 400) {
+        responses.push({url: response.url(), status: response.status()});
+      }
+    });
+    let response;
     try {
-      const badUrl = new URL(url);
-      badUrl.search = badQuery;
-      const response = await badPage.goto(badUrl.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+      response = await badPage.goto(badUrl.href, {waitUntil: 'domcontentloaded', timeout: 45000});
       if (!response?.ok()) throw new Error('Invalid date route returned HTTP ' + response?.status());
       await badPage.getByRole('alert').getByText('Некорректная дата карты').waitFor({timeout: 10000});
       if (await badPage.locator('canvas').count()) {
         throw new Error('Invalid date ' + badQuery + ' incorrectly mounted a historical map');
       }
+    } catch (error) {
+      const dom = await badPage.evaluate(() => ({
+        finalUrl: window.location.href,
+        readyState: document.readyState,
+        title: document.title,
+        alerts: [...document.querySelectorAll('[role="alert"]')].map(el => el.textContent?.trim().slice(0, 500)),
+        bodyText: document.body?.innerText?.slice(0, 1600) || '',
+        scripts: document.scripts.length,
+        canvases: document.querySelectorAll('canvas').length,
+      })).catch(e => ({inspectionError: String(e)}));
+      const headers = response?.headers() || {};
+      const diagnostics = {
+        badQuery, requestedUrl: badUrl.href, httpStatus: response?.status() ?? null,
+        cacheHeaders: {
+          cacheControl: headers['cache-control'] || null,
+          age: headers.age || null,
+          etag: headers.etag || null,
+          via: headers.via || null,
+        },
+        dom, responses: responses.slice(-20), failures: failures.slice(-20),
+        errors: errors.slice(-20),
+      };
+      throw new Error('Invalid territory deep link failed: ' + JSON.stringify(diagnostics), {cause: error});
     } finally {
       await badPage.close();
     }
