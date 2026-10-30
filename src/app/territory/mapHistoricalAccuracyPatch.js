@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {LineSegments2} from 'three/examples/jsm/lines/LineSegments2.js';
 import {historicalGeometryCaveat} from './historicalGeometryCaveats.mjs';
+import {renderedWorldSnapshotYear} from './worldSnapshotCaptionYear.mjs';
 
 // Accuracy guard for the production /territory globe.
 //
@@ -15,7 +16,6 @@ const PATCH_KEY = Symbol.for('rulers-of-russia.map-historical-accuracy.v1');
 const STATE_KEY = Symbol.for('rulers-of-russia.map-historical-accuracy.state.v1');
 const LEGACY_MANIFEST_RE = /\/data\/territory\/archive\/manifest\.json(?:\?|$)/;
 const MONTH_INDEX_RE = /\/data\/history-core\/generated\/month-index\.json(?:\?|$)/;
-const WORLD_SNAPSHOT_RE = /\/data\/territory\/world-history\/snapshots\/(\d+)\.geojson(?:\?|$)/;
 const MATERIAL_UNCERTAINTY_METERS = 25000;
 const CAPTION_ATTR = 'data-history-accuracy-caption';
 const MOBILE_CAPTION_ATTR = 'data-history-mobile-caption';
@@ -78,14 +78,16 @@ function uncertaintyProfile(item) {
   };
 }
 
-function softenApproximateWorldBorder(object, state) {
+function softenApproximateWorldBorder(object) {
   if (object?.userData?.kind !== 'world-border') return;
   const selected = selectedDate();
-  const snapshotYear = state.worldSnapshotYear;
-  if (!selected || !Number.isFinite(snapshotYear) || snapshotYear === selected.year) return;
+  const snapshotYear = renderedWorldSnapshotYear(document.querySelector('main aside p')?.textContent ?? '');
+  // Unknown or loading source years are not evidence of an exact-year world
+  // border. Soften conservatively instead of trusting a pending fetch.
+  if (selected && snapshotYear !== null && snapshotYear === selected.year) return;
   object.userData.temporalContextOnly = true;
   object.userData.snapshotYear = snapshotYear;
-  object.userData.selectedYear = selected.year;
+  object.userData.selectedYear = selected?.year ?? null;
   if (object.material) {
     object.material.opacity = Math.min(Number(object.material.opacity ?? 1), .48);
     object.material.linewidth = Math.min(Number(object.material.linewidth ?? 2), 1.35);
@@ -159,13 +161,17 @@ function updateAccuracyCaption(state) {
   if (!paragraph) return;
   const selected = selectedDate();
   let text = paragraph.textContent ?? '';
+  // The network-request year may already belong to a newer snapshot while
+  // React is still showing the previous one. Attribute accuracy to the
+  // world year committed in the visible story, never a pending fetch.
+  const displayedWorldYear = renderedWorldSnapshotYear(text);
 
   text = text.replace('аварийный архивный fallback', 'History Core: геометрия недоступна — граница России скрыта');
 
-  if (selected && Number.isFinite(state.worldSnapshotYear) && state.worldSnapshotYear !== selected.year) {
-    const offset = selected.year - state.worldSnapshotYear;
-    const exact = `Исторический мировой срез ${state.worldSnapshotYear} года`;
-    const replacement = `Мировой контекст: приблизительный срез ${state.worldSnapshotYear} года (${offset > 0 ? `${offset} лет до` : `${Math.abs(offset)} лет после`} выбранной даты)`;
+  if (selected && displayedWorldYear !== null && displayedWorldYear !== selected.year) {
+    const offset = selected.year - displayedWorldYear;
+    const exact = `Исторический мировой срез ${displayedWorldYear} года`;
+    const replacement = `Мировой контекст: приблизительный срез ${displayedWorldYear} года (${offset > 0 ? `${offset} лет до` : `${Math.abs(offset)} лет после`} выбранной даты)`;
     text = text.replace(exact, replacement);
   }
 
@@ -202,8 +208,8 @@ function updateAccuracyCaption(state) {
   } else {
     mobileParts.push('Исторические границы пока не проверены');
   }
-  if (selected && Number.isFinite(state.worldSnapshotYear) && selected.year !== state.worldSnapshotYear) {
-    mobileParts.push(`Мировой фон: приблизительно ${state.worldSnapshotYear} г.`);
+  if (selected && displayedWorldYear !== null && selected.year !== displayedWorldYear) {
+    mobileParts.push(`Мировой фон: приблизительно ${displayedWorldYear} г.`);
   }
 
   ensureCaptionStyle();
@@ -220,7 +226,7 @@ function updateAccuracyCaption(state) {
 
 if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
   Object.defineProperty(window, PATCH_KEY, {value: true, configurable: false});
-  const state = window[STATE_KEY] ?? {monthIndex: null, worldSnapshotYear: null};
+  const state = window[STATE_KEY] ?? {monthIndex: null};
   window[STATE_KEY] = state;
 
   const originalFetch = window.fetch.bind(window);
@@ -230,9 +236,6 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
     if (LEGACY_MANIFEST_RE.test(url)) {
       return jsonResponse({schema_version: 1, polities: [], disabledBy: 'mapHistoricalAccuracyPatch'});
     }
-
-    const worldMatch = url.match(WORLD_SNAPSHOT_RE);
-    if (worldMatch) state.worldSnapshotYear = Number(worldMatch[1]);
 
     const response = await originalFetch(input, init);
     if (MONTH_INDEX_RE.test(url) && response.ok) {
@@ -248,7 +251,7 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
   THREE.Group.prototype.add = function accuracyGuardedAdd(...objects) {
     const halos = [];
     for (const object of objects) {
-      softenApproximateWorldBorder(object, state);
+      softenApproximateWorldBorder(object);
       const halo = certifiedUncertaintyHalo(object, state);
       if (halo) halos.push(halo);
     }
