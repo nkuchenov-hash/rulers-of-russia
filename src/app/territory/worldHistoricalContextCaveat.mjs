@@ -32,9 +32,27 @@ export function worldHistoricalContextCaveat(date, snapshotYear) {
     // describe that future transition as an already missing boundary.
     // Both the 2D map and globe suppress the stale fill starting in May.
     if (date.year === 1500 && date.month < 5) return null;
-    return date.year <= 1523
+    // The same pinned snapshot separately labels Pskov and Ryazan. Their
+    // obsolete independent fills are hidden by worldRussiaFeatureFilter, but
+    // that does NOT replace them with independently dated geometry. Disclose
+    // this loss of background detail in both 2D and 3D accuracy captions.
+    // Pskov's incorporation is documented in January 1510. For Ryazan the
+    // September 1521 cutoff only establishes Moscow's control by month end;
+    // it does not assert an exact legal annexation date.
+    // https://pskov.ru/region/istoriya/prisoedinenie-k-moskve
+    // https://www.docs.historyrussia.org/ru/nodes/344564-1521-avgusta-31-otryvok-rozysknogo-dela-o-begstve-iz-moskvy-ryazanskogo-knyazya-ioanna-ioannovicha
+    const stalePolities = [];
+    if (date.year >= 1510) stalePolities.push('Пскова (с января 1510 г.)');
+    if (date.year > 1521 || (date.year === 1521 && date.month >= 9)) {
+      stalePolities.push('Рязани (контроль Москвы подтверждён к концу сентября 1521 г.; точная дата присоединения не установлена)');
+    }
+    const extra = stalePolities.length
+      ? ` Устаревшие самостоятельные контуры ${stalePolities.join(' и ')} в этом фоне скрыты; датированная замена не подтверждена.`
+      : '';
+    const seversky = date.year <= 1523
       ? 'Мировой фон 1500 г. не отражает переход Новгород-Северского княжества под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г.'
       : 'Мировой фон 1500 г. устарел: Новгород-Северский удел упразднён в 1523 г.; его отдельный контур в исходном снимке скрыт.';
+    return seversky + extra;
   }
   if (snapshotYear !== 1400 || date.year < 1400 || date.year >= 1492) return null;
   const beforeTverAnnexation = date.year < 1485 || (date.year === 1485 && date.month < 9);
