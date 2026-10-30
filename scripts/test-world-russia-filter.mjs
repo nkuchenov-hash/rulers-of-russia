@@ -78,6 +78,30 @@ assert.equal(isRussianWorldFeature(seversky1500, 1520), true,
   'the stale 1500 snapshot must not redraw Novgorod-Seversky as independent in 1520');
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгород-Северское княжество'}}, 1520), true,
   'Russian spelling of Novgorod-Seversky must follow the same 1503 guard');
+// The actual pinned 1500 background still contains these independent
+// entities. Its geometry is reused for later years; only the background
+// identities are suppressed after annexation, not the History Core polygons.
+const pskov1500 = archivedFeature(1500, 'Pskov');
+assert.equal(isRussianWorldFeature(pskov1500, 1500), false);
+assert.equal(isRussianWorldFeature(pskov1500, 1509), false,
+  'Pskov must remain a separate polity before January 1510');
+assert.equal(isRussianWorldFeature(pskov1500, 1510), true,
+  'the stale 1500 Pskov polygon must not be shown as independent after annexation');
+assert.equal(isRussianWorldFeature(pskov1500, 1529), true);
+const ryazan1500 = archivedFeature(1500, 'Ryazan');
+assert.equal(isRussianWorldFeature(ryazan1500, 1520), false);
+assert.equal(isRussianWorldFeature(ryazan1500, 1521), false,
+  'a year-only background cannot assume that all of 1521 followed the annexation');
+assert.equal(isRussianWorldFeature(ryazan1500, 1522), true,
+  'the stale 1500 Ryazan polygon must not be shown as independent in 1522–1529');
+assert.equal(isRussianWorldFeature(ryazan1500, 1529), true);
+for (const name of ['Pskov Oblast', 'Ryazan Oblast', 'Pskov City', 'Ryazan District']) {
+  assert.equal(isRussianWorldFeature({properties:{NAME:name}}, 1550), false,
+    'a region or city must not be mistaken for an independent state: ' + name);
+}
+assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Псковская республика'}}, 1510), true);
+assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанское княжество'}}, 1522), true);
+assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Рязанская область'}}, 1522), false);
 assert.equal(isRussianWorldFeature(archivedFeature(1300, 'Grand Duchy of Moscow'), 1300), true,
   'the current Moscow state must still be suppressed in the background');
 assert.equal(isRussianWorldFeature({properties:{NAME_RU:'Новгородская республика'}}, 1462), false);

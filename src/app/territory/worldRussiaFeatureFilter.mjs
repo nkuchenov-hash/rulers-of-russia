@@ -23,6 +23,21 @@ const NOVGOROD_CYRILLIC = /^новгород(?:ская|ское|ский|ско
 const SEVERSKY_ENGLISH = /^(?:(?:principality|duchy) of )?novgorod[- ](?:seversky|seversk|siversky|siversk)(?: principality)?$/i;
 const SEVERSKY_CYRILLIC = /^новгород[- ]северск[а-яё]*(?: княжество)?$/i;
 
+// The pinned 1500 Historical Basemaps world snapshot explicitly names
+// Pskov and Ryazan as separate polities and is reused until the 1530
+// snapshot. Pskov was annexed in January 1510, Ryazan in 1521. Do not
+// paint those *stale background* polygons as independent after annexation.
+// For Ryazan, preserve the entire transition year (1521) as uncertain:
+// a year-only filter cannot establish which month the source depicts.
+// These exact names must not hide modern oblasts or unrelated place labels.
+// Source names: https://jesusiniesta.es/es-ES/maps/historic-borders/1500
+// Dates: https://the-epoch-institute.org/state/pskov-republic
+//        https://www.rzn.info/articles/pochemu-ryazan-prisoedinili-k-moskve-500-let-nazad.html
+const PSKOV_ENGLISH = /^(?:the )?(?:(?:republic|principality|land) of )?pskov(?: (?:republic|principality|land))?$/i;
+const PSKOV_CYRILLIC = /^псков(?:ская|ское|ский|ской)?(?: (?:земля|республика|княжество))?$/i;
+const RYAZAN_ENGLISH = /^(?:the )?(?:(?:grand )?(?:principality|duchy|land) of )?ryazan(?: (?:grand )?(?:principality|duchy|land))?$/i;
+const RYAZAN_CYRILLIC = /^рязан(?:ь|ская|ское|ский|ской)?(?: (?:земля|княжество))?$/i;
+
 // Use the selected historical year, not the older world-snapshot year.
 // This controls BACKGROUND rendering only; it never certifies or changes
 // History Core sovereign geometry. If the year is unavailable, fail safe
@@ -34,6 +49,14 @@ export function isRussianWorldFeature(feature, selectedYear = null) {
     const name = properties[key];
     if (typeof name !== 'string') return false;
     if (ENGLISH.test(name) || CYRILLIC.test(name)) return true;
+    if (PSKOV_ENGLISH.test(name.trim()) || PSKOV_CYRILLIC.test(name.trim())) {
+      return Number.isInteger(selectedYear) && selectedYear >= 1510;
+    }
+    if (RYAZAN_ENGLISH.test(name.trim()) || RYAZAN_CYRILLIC.test(name.trim())) {
+      // 1521 is a within-year transfer: retain the old world context until
+      // 1522 instead of pretending that January 1521 was post-annexation.
+      return Number.isInteger(selectedYear) && selectedYear >= 1522;
+    }
     if (SEVERSKY_ENGLISH.test(name.trim()) || SEVERSKY_CYRILLIC.test(name.trim())) {
       return Number.isInteger(selectedYear) && selectedYear >= 1503;
     }
