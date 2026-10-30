@@ -11,7 +11,7 @@ const NAME_FIELDS = ['NAME_RU', 'name_ru', 'RU_NAME', 'NAME', 'name', 'ADMIN', '
 // erasing such world features would silently remove non-state geography.
 // This is a name-scope guard, not a historical polygon or date correction.
 const LOCAL_ENGLISH = /^(?:(?:city|municipality|district|region|oblast|province|governorate|county) of (?:moscow|vladimir|russia)|(?:moscow|vladimir|russian|russia) (?:city|municipality|district|region|oblast|province|governorate|county))$/i;
-const LOCAL_CYRILLIC = /^(?:(?:город|район|область|округ|губерния)\\s+(?:москва|владимир|россия)|(?:московск[а-яё]*|владимирск[а-яё]*|русск[а-яё]*|российск[а-яё]*)\\s+(?:город|район|область|округ|губерния))$/i;
+const LOCAL_CYRILLIC = /^(?:(?:город|район|область|округ|губерния)\s+(?:москва|владимир|россия)|(?:московск[а-яё]*|владимирск[а-яё]*|русск[а-яё]*|российск[а-яё]*)\s+(?:город|район|область|округ|губерния))$/i;
 function isExplicitLocalUnit(name) {
   const trimmed = name.trim();
   return LOCAL_ENGLISH.test(trimmed) || LOCAL_CYRILLIC.test(trimmed);
