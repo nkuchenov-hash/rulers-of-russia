@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {LineSegments2} from 'three/examples/jsm/lines/LineSegments2.js';
 import {historicalGeometryCaveat} from './historicalGeometryCaveats.mjs';
+import {renderedWorldSnapshotYear} from './worldSnapshotCaptionYear.mjs';
 
 // Accuracy guard for the production /territory globe.
 //
@@ -159,13 +160,17 @@ function updateAccuracyCaption(state) {
   if (!paragraph) return;
   const selected = selectedDate();
   let text = paragraph.textContent ?? '';
+  // The network-request year may already belong to a newer snapshot while
+  // React is still showing the previous one. Attribute accuracy to the
+  // world year committed in the visible story, never a pending fetch.
+  const displayedWorldYear = renderedWorldSnapshotYear(text);
 
   text = text.replace('аварийный архивный fallback', 'History Core: геометрия недоступна — граница России скрыта');
 
-  if (selected && Number.isFinite(state.worldSnapshotYear) && state.worldSnapshotYear !== selected.year) {
-    const offset = selected.year - state.worldSnapshotYear;
-    const exact = `Исторический мировой срез ${state.worldSnapshotYear} года`;
-    const replacement = `Мировой контекст: приблизительный срез ${state.worldSnapshotYear} года (${offset > 0 ? `${offset} лет до` : `${Math.abs(offset)} лет после`} выбранной даты)`;
+  if (selected && displayedWorldYear !== null && displayedWorldYear !== selected.year) {
+    const offset = selected.year - displayedWorldYear;
+    const exact = `Исторический мировой срез ${displayedWorldYear} года`;
+    const replacement = `Мировой контекст: приблизительный срез ${displayedWorldYear} года (${offset > 0 ? `${offset} лет до` : `${Math.abs(offset)} лет после`} выбранной даты)`;
     text = text.replace(exact, replacement);
   }
 
@@ -202,8 +207,8 @@ function updateAccuracyCaption(state) {
   } else {
     mobileParts.push('Исторические границы пока не проверены');
   }
-  if (selected && Number.isFinite(state.worldSnapshotYear) && selected.year !== state.worldSnapshotYear) {
-    mobileParts.push(`Мировой фон: приблизительно ${state.worldSnapshotYear} г.`);
+  if (selected && displayedWorldYear !== null && selected.year !== displayedWorldYear) {
+    mobileParts.push(`Мировой фон: приблизительно ${displayedWorldYear} г.`);
   }
 
   ensureCaptionStyle();
