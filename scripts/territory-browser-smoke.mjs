@@ -369,7 +369,7 @@ try {
 
   // Impossible deep links must never silently render the 862 or 2026 map.
   // Keep the production smoke cache-buster from the base URL: replacing the
-  // entire search string made these checks use a different Pages cache key.
+  // entire search string discarded that diagnostic parameter.
   for (const badQuery of ['?year=1', '?year=1721&month=13', '?year=1510&year=1514']) {
     const badPage = await browser.newPage({viewport: {width: 390, height: 844}});
     const badUrl = new URL(url);
@@ -382,7 +382,8 @@ try {
     const errors = [];
     const responses = [];
     badPage.on('requestfailed', request => {
-      failures.push({url: request.url(), error: request.failure()?.errorText || 'unknown'});
+      const failure = request.failure();
+      failures.push({url: request.url(), error: typeof failure === 'string' ? failure : failure?.errorText || 'unknown'});
     });
     badPage.on('pageerror', error => errors.push(String(error?.stack || error)));
     badPage.on('console', message => {
