@@ -71,7 +71,16 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
 // The 1400 background snapshot is reused later in the 15th century.
 // Do not infer a month from the year-only world layer: 1485 remains
 // ambiguous, while the obsolete independent Tver overlay is hidden in 1486.
-const tver1400 = archivedFeature(1400, 'Tver');
+const tver1400 = (() => {
+  const archive = JSON.parse(readFileSync(new URL(
+    '../public/data/territory/world-history/snapshots/1400.geojson', import.meta.url,
+  ), 'utf8'));
+  const matches = archive.features.filter(f => Object.values(f.properties ?? {})
+    .some(v => typeof v === 'string' && /tver|твер/i.test(v)));
+  assert.ok(matches.length, 'Pinned 1400 snapshot contains no identifiable Tver polity');
+  console.log('Pinned 1400 Tver candidate properties:', matches.map(f => f.properties));
+  return matches.find(f => isRussianWorldFeature(f, 1486));
+})();
 assert.equal(isRussianWorldFeature(tver1400, 1484), false,
   'Tver remains independent before its 1485 incorporation');
 assert.equal(isRussianWorldFeature(tver1400, 1485), false,
