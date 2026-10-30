@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {isRussianWorldFeature} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
+import {worldHistoricalContextCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
 
 const russianNames = [
   {NAME: 'Russian Empire'}, {NAME: 'Soviet Union'}, {NAME: 'USSR'},
@@ -67,48 +68,6 @@ assert.equal(isRussianWorldFeature(novgorod1400, 1477), false,
   'Novgorod remained a distinct polity before the 1478 annexation');
 assert.equal(isRussianWorldFeature(novgorod1400, 1478), true,
   'after annexation an obsolete background Novgorod polygon must not overlay History Core');
-// Tver was annexed in September 1485 (Great Russian Encyclopedia).
-// The 1400 background snapshot is reused later in the 15th century.
-// Do not infer a month from the year-only world layer: 1485 remains
-// ambiguous, while the obsolete independent Tver overlay is hidden in 1486.
-const tver1400 = (() => {
-  const archive = JSON.parse(readFileSync(new URL(
-    '../public/data/territory/world-history/snapshots/1400.geojson', import.meta.url,
-  ), 'utf8'));
-  const matches = archive.features.filter(f => Object.values(f.properties ?? {})
-    .some(v => typeof v === 'string' && /tver|твер/i.test(v)));
-  for (const year of [1400, 1500]) {
-    const snapshot = JSON.parse(readFileSync(new URL(
-      `../public/data/territory/world-history/snapshots/${year}.geojson`, import.meta.url,
-    ), 'utf8'));
-    console.log('East-European archive names ' + year + ':',
-      snapshot.features.map(f => f.properties?.NAME).filter(v =>
-        typeof v === 'string' && /moscow|novgorod|ryazan|pskov|smolensk|rostov|vyatka|tver|vladimir|suzdal|lithuania|russia|perm|kazan|yaro/i.test(v)));
-  }
-  assert.ok(matches.length, 'Pinned 1400 snapshot contains no identifiable Tver polity');
-  console.log('Pinned 1400 Tver candidate properties:', matches.map(f => f.properties));
-  return matches.find(f => isRussianWorldFeature(f, 1486));
-})();
-assert.equal(isRussianWorldFeature(tver1400, 1484), false,
-  'Tver remains independent before its 1485 incorporation');
-assert.equal(isRussianWorldFeature(tver1400, 1485), false,
-  'year-only context must not erase the pre-annexation part of 1485');
-assert.equal(isRussianWorldFeature(tver1400, 1486), true,
-  'the obsolete independent Tver polygon must be hidden after 1485');
-assert.equal(isRussianWorldFeature(tver1400, 1499), true);
-for (const name of ['Grand Principality of Tver', 'Principality of Tver', 'Tver Grand Duchy']) {
-  assert.equal(isRussianWorldFeature({properties:{NAME:name}}, 1486), true, name);
-}
-for (const name of ['Тверь', 'Тверское княжество', 'Великое княжество Тверское']) {
-  assert.equal(isRussianWorldFeature({properties:{NAME_RU:name}}, 1486), true, name);
-}
-for (const name of ['Tver Oblast', 'Tver City', 'Tver Governorate', 'Tver District', 'Тверская область']) {
-  assert.equal(isRussianWorldFeature({properties:{NAME:name}}, 1490), false,
-    'a city or administrative region must not be treated as the old polity: ' + name);
-}
-assert.equal(isRussianWorldFeature({properties:{NAME:'Tver'}}, null), false,
-  'unknown year must not assert that Tver was already annexed');
-
 const seversky1500 = archivedFeature(1500, 'Novgorod-Seversky');
 assert.equal(isRussianWorldFeature(seversky1500, 1500), false,
   'Novgorod-Seversky is a distinct polity, not an alias for Novgorod Republic');
@@ -151,5 +110,31 @@ assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod Republic'}}, 1462
 assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod-Seversky'}}, 1500), false);
 assert.equal(isRussianWorldFeature({properties:{NAME:'Russian Empire', NAME_RU:'Новгородская республика'}}, 1462), true,
   'a separately named Novgorod alias must not override explicit Russian-state identity');
+
+// Source-completeness regression: the pinned 1400 world archive omits
+// independent Tver, although Tver existed until September 1485. Never
+// invent a polygon or pretend the 1400 world context is exhaustive.
+const snapshot1400 = JSON.parse(readFileSync(new URL(
+  '../public/data/territory/world-history/snapshots/1400.geojson', import.meta.url,
+), 'utf8'));
+assert.equal(snapshot1400.features.some(f => Object.values(f.properties ?? {})
+  .some(v => typeof v === 'string' && /tver|твер/i.test(v))), false,
+  'the caveat must be revised if a pinned Tver feature is added');
+const worldIndex = JSON.parse(readFileSync(new URL(
+  '../public/data/territory/world-history/index.json', import.meta.url,
+), 'utf8'));
+assert.equal(worldIndex.snapshots.filter(s => s.year > 1400 && s.year < 1492).length, 0,
+  'the caveat assumes that the 1400 world background is reused until 1492');
+const contextAt = (year, month, snapshotYear = 1400) =>
+  worldHistoricalContextCaveat({year, month}, snapshotYear);
+assert.match(contextAt(1400, 1), /Тверское княжество не выделено/);
+assert.match(contextAt(1484, 12), /Тверское княжество не выделено/);
+assert.match(contextAt(1485, 8), /Тверское княжество не выделено/);
+assert.equal(contextAt(1485, 9), null, 'Tver surrendered in September 1485');
+assert.equal(contextAt(1486, 1), null);
+assert.equal(contextAt(1492, 1, 1492), null);
+assert.equal(contextAt(1400, 1, 1500), null);
+assert.equal(contextAt(1400, 0), null);
+assert.equal(worldHistoricalContextCaveat(null, 1400), null);
 
 console.log('Historical world Russian-state polygons are excluded across English/Russian aliases; unrelated Soviet republics and PARTOF remain visible.');
