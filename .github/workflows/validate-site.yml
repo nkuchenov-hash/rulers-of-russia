@@ -55,6 +55,9 @@ jobs:
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 
+      - name: Test globe antimeridian boundary proximity and suppression
+        run: node scripts/test-antimeridian-boundary-math.mjs
+
       - name: Prepare local historical world archive
         run: node scripts/sync-historical-world.mjs
 
