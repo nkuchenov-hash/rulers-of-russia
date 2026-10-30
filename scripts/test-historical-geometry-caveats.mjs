@@ -109,11 +109,11 @@ for (const pending of [
 const accuracyPatch = readFileSync(new URL('../src/app/territory/mapHistoricalAccuracyPatch.js', import.meta.url), 'utf8');
 assert.match(accuracyPatch, /const displayedWorldYear = renderedWorldSnapshotYear\(text\)/);
 assert.match(accuracyPatch, /Мировой фон: приблизительно \$\{displayedWorldYear\}/);
-assert.doesNotMatch(accuracyPatch, /state\\.worldSnapshotYear|WORLD_SNAPSHOT_RE/,
+assert.doesNotMatch(accuracyPatch, /state\.worldSnapshotYear|WORLD_SNAPSHOT_RE/,
   'neither captions nor 3D border styling may trust the last requested fetch');
-assert.match(accuracyPatch, /const snapshotYear = renderedWorldSnapshotYear\\(document\\.querySelector/,
+assert.match(accuracyPatch, /const snapshotYear = renderedWorldSnapshotYear\(document\.querySelector/,
   '3D world border softness must use the year actually rendered by React');
-assert.match(accuracyPatch, /if \\(selected && snapshotYear !== null && snapshotYear === selected\\.year\\) return;/,
+assert.match(accuracyPatch, /if \(selected && snapshotYear !== null && snapshotYear === selected\.year\) return;/,
   'an unknown world year must not be styled as an exact historical border');
 
 console.log('Historical geometry caveat and committed world-snapshot caption regressions passed');
