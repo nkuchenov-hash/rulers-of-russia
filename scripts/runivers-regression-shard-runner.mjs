@@ -86,7 +86,10 @@ for (const [year, rows] of [...monthsByYear.entries()].sort(([a], [b]) => a.loca
   // A polity, source snapshot, certification, or uncertainty change inside
   // the year cannot be dated by Runivers's year-granular reference.
   const states = new Set(verifiedRows.map((row) => JSON.stringify([
-    row.geometryFile, row.polityId ?? null, row.snapshotId ?? null,
+    row.geometryFile, row.polityId ?? null,
+    // A 1721-style title change can leave the geometry lineage unchanged.
+    // Runivers's year-only layer cannot resolve which political title applies.
+    row.politicalPolityId ?? row.polityId ?? null, row.snapshotId ?? null,
     row.certificationId ?? null, row.verificationClass ?? null,
     row.uncertaintyMeters ?? null, row.track ?? null,
     row.territorialModel ?? null, row.uncertaintyGeometryFile ?? null,
