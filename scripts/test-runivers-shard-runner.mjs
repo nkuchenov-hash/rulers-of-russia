@@ -110,6 +110,7 @@ try {
   // political or evidentiary transition. Runivers cannot date that transition.
   for (const [field, value] of [
     ['polityId', 'russian-empire'],
+    ['politicalPolityId', 'russian-tsardom'],
     ['snapshotId', 'different-snapshot'],
     ['certificationId', 'different-certificate'],
     ['verificationClass', 'reconstruction'],
