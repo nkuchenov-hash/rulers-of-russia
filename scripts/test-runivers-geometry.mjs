@@ -12,6 +12,16 @@ for (const properties of [
   {approximate:'false'}, {approximate:'no'}, {approximate:'0'},
   {description:'not approximate'}, {metadata:{reconstruction:false}},
   {name:'Russia',notes:'surveyed border'},
+  // A descriptive NEGATION with trailing explanation is not an affirmative
+  // source declaration. The former exact-match check silently raised the
+  // geographic tolerance to 100 km for these surveyed contours.
+  {description:'not approximate: surveyed boundary'},
+  {notes:'surveyed; not approximate according to archive'},
+  {description:'non-approximate surveyed map'},
+  {description:'no uncertain borders'},
+  {description:'не приблизительные границы, точная съёмка'},
+  {notes:'не условные границы'},
+  {description:'not approximate but reconstructed (conflicting source note)'},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),false,
     'negative or unrelated Runivers metadata cannot activate 100 km tolerance: '+JSON.stringify(properties));
