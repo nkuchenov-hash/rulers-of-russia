@@ -224,6 +224,44 @@ try {
       /Тверь \(1485\).*Вятка \(1489\)/, `mobile ${width}: 1490 warning lost in 2D`);
     await returnToGlobe('1490-01');
 
+    // The pinned 1400 world snapshot has no separately named independent
+    // Tver. This is a real source-coverage gap, not a missing History Core
+    // geometry file. Disclose it on both 2D and 3D at phone widths.
+    const tverGapTarget = new URL(url);
+    tverGapTarget.searchParams.set('year', '1400');
+    tverGapTarget.searchParams.set('month', '7');
+    const tverGapResponse = await page.goto(tverGapTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
+    assert(tverGapResponse?.ok(), `mobile ${width}: 1400 HTTP ${tverGapResponse?.status()}`);
+    const visibleTverSourceWarning = () => page.waitForFunction(() => {
+      const note = document.querySelector('main aside [role="note"]');
+      if (!note?.textContent?.includes('Тверское княжество не выделено')) return false;
+      const box = note.getBoundingClientRect();
+      const style = getComputedStyle(note);
+      return box.width > 0 && box.height > 0 && style.display !== 'none'
+        && style.visibility === 'visible' && parseFloat(style.fontSize) >= 16;
+    }, null, {timeout: 45000});
+    await visibleTverSourceWarning();
+    await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+    await page.waitForFunction(() =>
+      document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1400-07',
+      null, {timeout: 15000});
+    await visibleTverSourceWarning();
+    const sourceWarningBounds = await page.evaluate(() => {
+      const note = document.querySelector('main aside [role="note"]');
+      const zoom = document.querySelector('main div[class*="zoomTools"]');
+      return {
+        right: note?.getBoundingClientRect().right,
+        zoomLeft: zoom?.getBoundingClientRect().left,
+        documentWidth: document.documentElement.scrollWidth,
+      };
+    });
+    assert(sourceWarningBounds.documentWidth <= width + 1
+      && sourceWarningBounds.right < sourceWarningBounds.zoomLeft,
+      `mobile ${width}: source warning overlaps zoom or overflows: ${JSON.stringify(sourceWarningBounds)}`);
+    await returnToGlobe('1400-07');
+    await visibleTverSourceWarning();
+
+
     // The 1505 Muscovy contour is still reused for 1514: do not call it
     // geographically verified in either projection or on a phone.
     const staleTarget = new URL(url);

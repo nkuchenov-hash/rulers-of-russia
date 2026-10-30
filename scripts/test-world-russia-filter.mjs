@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {isRussianWorldFeature} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
+import {worldHistoricalContextCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
 
 const russianNames = [
   {NAME: 'Russian Empire'}, {NAME: 'Soviet Union'}, {NAME: 'USSR'},
@@ -109,5 +110,31 @@ assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod Republic'}}, 1462
 assert.equal(isRussianWorldFeature({properties:{NAME:'Novgorod-Seversky'}}, 1500), false);
 assert.equal(isRussianWorldFeature({properties:{NAME:'Russian Empire', NAME_RU:'Новгородская республика'}}, 1462), true,
   'a separately named Novgorod alias must not override explicit Russian-state identity');
+
+// Source-completeness regression: the pinned 1400 world archive omits
+// independent Tver, although Tver existed until September 1485. Never
+// invent a polygon or pretend the 1400 world context is exhaustive.
+const snapshot1400 = JSON.parse(readFileSync(new URL(
+  '../public/data/territory/world-history/snapshots/1400.geojson', import.meta.url,
+), 'utf8'));
+assert.equal(snapshot1400.features.some(f => Object.values(f.properties ?? {})
+  .some(v => typeof v === 'string' && /tver|твер/i.test(v))), false,
+  'the caveat must be revised if a pinned Tver feature is added');
+const worldIndex = JSON.parse(readFileSync(new URL(
+  '../public/data/territory/world-history/index.json', import.meta.url,
+), 'utf8'));
+assert.equal(worldIndex.snapshots.filter(s => s.year > 1400 && s.year < 1492).length, 0,
+  'the caveat assumes that the 1400 world background is reused until 1492');
+const contextAt = (year, month, snapshotYear = 1400) =>
+  worldHistoricalContextCaveat({year, month}, snapshotYear);
+assert.match(contextAt(1400, 1), /Тверское княжество не выделено/);
+assert.match(contextAt(1484, 12), /Тверское княжество не выделено/);
+assert.match(contextAt(1485, 8), /Тверское княжество не выделено/);
+assert.equal(contextAt(1485, 9), null, 'Tver surrendered in September 1485');
+assert.equal(contextAt(1486, 1), null);
+assert.equal(contextAt(1492, 1, 1492), null);
+assert.equal(contextAt(1400, 1, 1500), null);
+assert.equal(contextAt(1400, 0), null);
+assert.equal(worldHistoricalContextCaveat(null, 1400), null);
 
 console.log('Historical world Russian-state polygons are excluded across English/Russian aliases; unrelated Soviet republics and PARTOF remain visible.');
