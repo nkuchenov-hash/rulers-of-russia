@@ -88,6 +88,9 @@ jobs:
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 
+      - name: Test globe antimeridian boundary proximity and suppression
+        run: node scripts/test-antimeridian-boundary-math.mjs
+
       - name: Test globe texture async unmount safety
         run: node scripts/test-globe-texture-load-guard.mjs
 
