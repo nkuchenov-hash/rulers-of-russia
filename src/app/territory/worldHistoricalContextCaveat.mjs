@@ -27,6 +27,11 @@ export function worldHistoricalContextCaveat(date, snapshotYear) {
   // worldRussiaFeatureFilter; neither that filter nor this note supplies a
   // replacement dated polygon.
   if (snapshotYear === 1500 && date.year >= 1500 && date.year < 1530) {
+    // The 1500 snapshot's separate Novgorod-Seversky polity is not yet
+    // obsolete in January–April: allegiance changed in May 1500. Do not
+    // describe that future transition as an already missing boundary.
+    // Both the 2D map and globe suppress the stale fill starting in May.
+    if (date.year === 1500 && date.month < 5) return null;
     return date.year <= 1523
       ? 'Мировой фон 1500 г. не отражает переход Новгород-Северского княжества под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г.'
       : 'Мировой фон 1500 г. устарел: Новгород-Северский удел упразднён в 1523 г.; его отдельный контур в исходном снимке скрыт.';
