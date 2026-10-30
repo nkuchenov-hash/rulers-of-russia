@@ -254,7 +254,8 @@ const globeCss = readFileSync(new URL('../src/app/territory/territory-webgl.modu
 assert.match(globeUi, /<details className=\{styles\.worldContextCompact\}>/);
 assert.match(globeUi, /<summary>\{compactWorldContextCaveat\}<\/summary>/);
 assert.match(globeUi, /<div>\{worldContextCaveat\}<\/div><\/details>/);
-assert.match(globeCss, /\.worldContextCompact\{display:none\}/);
+assert.match(globeCss, /\.worldContextCompact\{display:none;pointer-events:auto\}/,
+  'the clickable disclosure must override pointer-events:none on the story overlay');
 assert.match(globeCss, /@media\(max-width:760px\)\{/);
 assert.match(globeCss, /\.worldContextCompact\[open\]\{max-height:/);
 assert.equal(contextAt(1530,1,1530), null,
