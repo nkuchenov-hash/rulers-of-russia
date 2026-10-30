@@ -180,8 +180,15 @@ for (const [year, month] of [[1500,1],[1500,12],[1501,1],[1523,12]]) {
   assert.match(contextAt(year, month, 1500),
     /под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г/);
 }
-assert.equal(contextAt(1524, 1, 1500), null,
-  'the dependent Novgorod-Seversky appanage no longer existed after 1523');
+// The appanage ended in 1523, but the selected 1500 background still
+// contains the stale separate polity until the next snapshot in 1530.
+// The warning must not silently disappear when the appanage disappears.
+for (const [year, month] of [[1524,1],[1527,6],[1529,12]]) {
+  assert.match(contextAt(year, month, 1500),
+    /Мировой фон 1500 г. устарел: Новгород-Северский удел упразднён в 1523 г/);
+  assert.equal(isRussianWorldFeature(seversky1500, year, month), true,
+    'obsolete separate sovereign fill must remain hidden while the 1500 snapshot is reused');
+}
 assert.equal(contextAt(1530, 1, 1530), null);
 assert.equal(contextAt(1492, 1, 1492), null);
 assert.equal(contextAt(1492, 1), null, 'a 1400 snapshot should not be claimed to cover 1492');

@@ -139,6 +139,28 @@ try {
   await page.waitForFunction(() => document.querySelector('main aside h1')?.textContent?.trim() === 'Россия в 1917 году',
     null, {timeout: 12000});
 
+  // The 1500 world snapshot is reused through 1529. The dependent
+  // Novgorod-Seversky appanage ended in 1523, but that does not make the
+  // old background accurate from 1524 onward. Check the visible disclosure
+  // on both renderers, not merely the pure filtering helper.
+  const changed1524 = await loadHistoricalDate(1524, 1);
+  await page.waitForFunction(() =>
+    document.querySelector('main aside [class*="worldContextWarning"]')?.textContent
+      ?.includes('Новгород-Северский удел упразднён в 1523 г.'),
+  null, {timeout: 15000});
+  await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
+  await page.waitForFunction(() =>
+    document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1524-01'
+    && document.querySelector('main aside [class*="worldContextWarning"]')?.textContent
+      ?.includes('Новгород-Северский удел упразднён в 1523 г.'),
+  null, {timeout: 15000});
+  await page.getByRole('button', {name: 'Показать глобус'}).click();
+  await page.waitForFunction(() =>
+    document.querySelector('main div[class*="globeHost"] canvas')?.getBoundingClientRect().height > 100
+    && document.querySelector('main aside [class*="worldContextWarning"]')?.textContent
+      ?.includes('Новгород-Северский удел упразднён в 1523 г.'),
+  null, {timeout: 15000});
+
   // Historical Basemaps has 1530 then 1600; 1573 must visibly identify 1530
   // as approximate temporal context rather than an exact 1573 world border.
   const changed1573 = await loadHistoricalDate(1573, 7);
@@ -262,7 +284,7 @@ try {
     canvas: (() => { const c = document.querySelector('canvas'); return c ? [c.width,c.height] : null; })()
   }));
   if (!summary.canvas) throw new Error('Historical WebGL canvas missing');
-  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, beforeEmpire, changed1573, changed1581, blockedCanonicalGeometry, interceptedGeometryUrl, summary}));
+  console.log('Territory historical accuracy browser acceptance passed:', JSON.stringify({changed1988, beforeEmpire, changed1524, changed1573, changed1581, blockedCanonicalGeometry, interceptedGeometryUrl, summary}));
 } finally {
   await browser.close();
 }

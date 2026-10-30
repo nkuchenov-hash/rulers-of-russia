@@ -20,8 +20,16 @@ export function worldHistoricalContextCaveat(date, snapshotYear) {
   // sovereign overlay suppresses the obsolete independent fill from 1501,
   // but this note preserves the distinction between suzerainty and abolition.
   // https://bigenc.ru/c/novgorod-severskoe-kniazhestvo-e28685
-  if (snapshotYear === 1500 && date.year >= 1500 && date.year <= 1523) {
-    return 'Мировой фон 1500 г. не отражает переход Новгород-Северского княжества под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г.';
+  // The 1500 world snapshot remains the selected background until 1529.
+  // Ending this disclosure in 1523 would imply that the 1524–1529 source
+  // suddenly became current, even though it still contains the obsolete
+  // Novgorod-Seversky polity. The separate sovereign fill is suppressed by
+  // worldRussiaFeatureFilter; neither that filter nor this note supplies a
+  // replacement dated polygon.
+  if (snapshotYear === 1500 && date.year >= 1500 && date.year < 1530) {
+    return date.year <= 1523
+      ? 'Мировой фон 1500 г. не отражает переход Новгород-Северского княжества под власть Москвы в 1500 г.; зависимый удел сохранялся до 1523 г.'
+      : 'Мировой фон 1500 г. устарел: Новгород-Северский удел упразднён в 1523 г.; его отдельный контур в исходном снимке скрыт.';
   }
   if (snapshotYear !== 1400 || date.year < 1400 || date.year >= 1492) return null;
   const beforeTverAnnexation = date.year < 1485 || (date.year === 1485 && date.month < 9);
