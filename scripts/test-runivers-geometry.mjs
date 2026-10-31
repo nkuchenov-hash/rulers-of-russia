@@ -734,6 +734,39 @@ for (const [label, payload] of Object.entries({malformedHole,mixedBrokenPolygon,
 }
 console.log('Runivers malformed-ring regression passed: invalid holes and mixed polygon parts cannot certify borders.');
 
+// A mixed Runivers export can have a valid national polygon plus malformed
+// auxiliary geometry. Silently ignoring the broken sibling makes a partial
+// transport look like a complete independent historical border.
+const validReferenceFeature = feature('Россия', 30);
+const malformedAuxiliaryGeometries = {
+  nullFeature: null,
+  emptyCollection: {type:'GeometryCollection',geometries:[]},
+  nullNestedMember: {type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]},null]},
+  unknownNestedMember: {type:'GeometryCollection',geometries:[{type:'UnrecognizedBorder',coordinates:[]}]},
+  projectedPoint: {type:'Point',coordinates:[4000000,7000000]},
+  brokenMultiPoint: {type:'MultiPoint',coordinates:[[37,55],[37,95]]},
+  collapsedAuxiliaryLine: {type:'LineString',coordinates:[[37,55],[37,55]]},
+  partiallyBrokenMultiLine: {type:'MultiLineString',coordinates:[
+    [[30,50],[31,50]],[[37,55],[37,55]],
+  ]},
+};
+for (const [label, geometry] of Object.entries(malformedAuxiliaryGeometries)) {
+  const payload = {type:'FeatureCollection',features:[
+    validReferenceFeature,{type:'Feature',properties:{},geometry},
+  ]};
+  assert.throws(() => requireUsableReferenceGeometry(payload,5393),
+    /malformed or unsupported geometry/,
+    label + ' must not be discarded behind a valid reference polygon');
+}
+assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[
+  validReferenceFeature,{type:'Feature',properties:{},geometry:{
+    type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]},
+      {type:'LineString',coordinates:[[30,50],[31,50]]}],
+  }},
+]},5394).hasPolygon,true, 'well-formed auxiliary geometries remain valid');
+console.log('Runivers mixed-export integrity passed: no malformed auxiliary or nested geometry can hide behind a valid polygon.');
+
+
 
 
 
