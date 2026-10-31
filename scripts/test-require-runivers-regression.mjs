@@ -274,9 +274,9 @@ try {
  // that could make a short reference appear to cover extra years.
  const inconsistentResource = run({...summary,comparisons:2,passingComparisons:2},
    completeShard,{},[
-     {...metricRow('pass'),historyLastMonth:'1920-06'},
+     {...metricRow('pass'),historyGeometryFile:'first-state.geojson'},
      {...metricRow('pass'),runiversFromYear:1919,
-       historyFirstMonth:'1920-07',historyLastMonth:'1920-12'},
+       historyGeometryFile:'second-state.geojson'},
    ]);
  assert.equal(inconsistentResource.status,1);
  assert.match(inconsistentResource.stderr,/inconsistent dated interval metadata/);
