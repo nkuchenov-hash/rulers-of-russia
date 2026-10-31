@@ -8,6 +8,14 @@ import {pathToFileURL} from 'node:url';
 const boundedString = value => typeof value === 'string' ? value.slice(0, 120) : null;
 const finiteNonnegative = value => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 const validResourceId = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
+// Runivers category IDs can arrive as numbers or decimal strings in source
+// metadata. Preserve their identity rather than silently reporting '?' for
+// string-encoded IDs; never accept arbitrary objects or unsafe integers.
+const validCategoryId = value => validResourceId(value) ?? (
+  typeof value === 'string' && /^\d+$/.test(value) && Number.isSafeInteger(Number(value))
+    ? Number(value) : null);
+const boundedFeatureId = value => typeof value === 'string' ? value.slice(0, 160)
+  : validResourceId(value) !== null ? String(value) : null;
 const safeMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(value) ? value : null;
 // Source identity at a sampled hotspot is not automatically the identity at
 // the report's global directional maximum. One metre covers JSON rounding,
@@ -17,8 +25,11 @@ const MAX_SAMPLE_ROUNDING_METERS = 1;
 function sourceKey(records) {
   if (!Array.isArray(records) || !records.length) return 'unknown';
   const labels = records.map(record => {
-    const cat = validResourceId(record?.cat);
+    const cat = validCategoryId(record?.cat);
     const name = boundedString(record?.name);
+    // Two polygons can share cat/name/date/status while having different
+    // original feature IDs. Do not merge their provenance in conflict triage.
+    const featureId = boundedFeatureId(record?.featureId);
     // Identically named source polities may describe different dated
     // territorial acts or political statuses. Grouping only by cat/name
     // silently merges their distinct historical evidence.
@@ -26,7 +37,8 @@ function sourceKey(records) {
     const status = typeof record?.status === 'number' && Number.isFinite(record.status)
       ? String(record.status) : boundedString(record?.status);
     const base = [cat === null ? '?' : cat, name ?? '?'].join(':');
-    return base + (date ? '@' + date : '') + (status !== null ? '#status=' + status : '');
+    return base + (featureId !== null ? '#feature=' + featureId : '')
+      + (date ? '@' + date : '') + (status !== null ? '#status=' + status : '');
   });
   // Do not truncate the INTERNAL grouping identity: distinct dated records
   // can share the first 500 characters and must never be merged.
@@ -61,17 +73,20 @@ export function summarizeRuniversSourceConflicts(report) {
       selectedSourceIdentityFingerprint: sourceFingerprint(selected),
       excludedSourceIdentityFingerprint: sourceFingerprint(excluded),
       comparisons: 0,
-      maxSymmetricErrorMeters: 0,
-      maxSymmetricP95Meters: 0,
+      // Missing metrics are unknown, not evidence of zero border error.
+      maxSymmetricErrorMeters: null,
+      maxSymmetricP95Meters: null,
       coincidentSelectedExcludedAtWorstSample: false,
       resourceIds: new Set(),
       historyStateStarts: new Set(),
     };
     current.comparisons += 1;
-    current.maxSymmetricErrorMeters = Math.max(current.maxSymmetricErrorMeters,
-      finiteNonnegative(failure?.symmetricMaxMeters) ?? 0);
-    current.maxSymmetricP95Meters = Math.max(current.maxSymmetricP95Meters,
-      finiteNonnegative(failure?.symmetricP95Meters) ?? 0);
+    const symmetricMax = finiteNonnegative(failure?.symmetricMaxMeters);
+    const symmetricP95 = finiteNonnegative(failure?.symmetricP95Meters);
+    if (symmetricMax !== null) current.maxSymmetricErrorMeters = Math.max(
+      current.maxSymmetricErrorMeters ?? 0, symmetricMax);
+    if (symmetricP95 !== null) current.maxSymmetricP95Meters = Math.max(
+      current.maxSymmetricP95Meters ?? 0, symmetricP95);
     current.coincidentSelectedExcludedAtWorstSample ||= Boolean(
       worst?.selectedSourceRecordsMatchedCount > 0 && worst?.excludedSourceRecordsMatchedCount > 0);
     const id = validResourceId(failure?.runiversResourceId);
@@ -85,7 +100,7 @@ export function summarizeRuniversSourceConflicts(report) {
     resourceIds: [...group.resourceIds].sort((a, b) => a - b),
     historyStateStarts: [...group.historyStateStarts].sort(),
   })).sort((a, b) => b.comparisons - a.comparisons
-    || b.maxSymmetricErrorMeters - a.maxSymmetricErrorMeters);
+    || (b.maxSymmetricErrorMeters ?? -1) - (a.maxSymmetricErrorMeters ?? -1));
   // The two directed border distances describe different failures: a border
   // present in Runivers but absent from History Core, and the reverse. The
   // original source identities at their worst samples may differ entirely.
