@@ -163,6 +163,28 @@ assert.deepEqual(unmatchedReferenceLayers(
   [{firstMonth: '2020-01', lastMonth: '2020-12'}], 2020,
 ), [], 'the final Runivers year must still be included when a verified state exists');
 
+// Runivers snapshots describe calendar years, not arbitrary verified months.
+// A partial-year state (or two different states splitting a transition year)
+// must be reported as UNCOMPARED rather than compared to a full-year layer.
+const datedLayer = [{id: 5397, fromYear: 1520, toYear: 1521}];
+const missingYear = states => unmatchedReferenceLayers(datedLayer, states, 2020).map(row => row.runiversResourceId);
+assert.deepEqual(missingYear([{firstMonth:'1520-03',lastMonth:'1520-11'}]), [5397],
+  'a March-November polygon is not evidence for all of 1520');
+assert.deepEqual(missingYear([
+  {firstMonth:'1520-01',lastMonth:'1520-06'},
+  {firstMonth:'1520-07',lastMonth:'1520-12'},
+]), [5397], 'two different half-year contours cannot certify one annual reference');
+assert.deepEqual(missingYear([{firstMonth:'1519-07',lastMonth:'1521-06'}]), [],
+  'a multi-year state still qualifies when it contains all twelve months of 1520');
+assert.deepEqual(missingYear([{firstMonth:'1519-07',lastMonth:'1520-11'}]), [5397],
+  'the layer year must be fully covered even if an earlier year was complete');
+assert.deepEqual(unmatchedReferenceLayers(
+  [{id: 9000, fromYear: 2020, toYear: 2020}],
+  [{firstMonth:'2020-02',lastMonth:'2020-12'}], 2020,
+).map(row => row.runiversResourceId), [9000],
+  'terminal-inclusive Runivers year still requires January-December verification');
+console.log('Runivers full-year coverage tests passed: partial and split-year states remain unverified.');
+
 console.log('Runivers geometry tests passed: physical coast, symmetric mismatch, diagnostic locations, half-open and terminal years.');
 
 const {referenceForPolity} = await import('./runivers-reference-scope.mjs');

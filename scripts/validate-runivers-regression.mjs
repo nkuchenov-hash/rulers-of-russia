@@ -639,9 +639,22 @@ function layerContainsYear(layer, year, maxRuniversYear) {
   return year >= layer.fromYear && (year < layer.toYear || (layer.toYear === maxRuniversYear && year === layer.toYear));
 }
 
+// Runivers intervals are year-granular. A geometry verified for only part of
+// a calendar year cannot certify the reference for that entire year. Require
+// January through December within the SAME uninterrupted History Core state;
+// two different states covering halves of a year do not constitute a match.
+function firstFullYearOfState(state) {
+  return monthToYear(state.firstMonth) + (state.firstMonth.slice(5, 7) === '01' ? 0 : 1);
+}
+
+function lastFullYearOfState(state) {
+  return monthToYear(state.lastMonth) - (state.lastMonth.slice(5, 7) === '12' ? 0 : 1);
+}
+
 function referenceOverlapsState(layer, state, maxRuniversYear) {
-  const firstYear = monthToYear(state.firstMonth), lastYear = monthToYear(state.lastMonth);
-  for (let year = firstYear; year <= lastYear; year += 1) if (layerContainsYear(layer, year, maxRuniversYear)) return true;
+  for (let year = firstFullYearOfState(state); year <= lastFullYearOfState(state); year += 1) {
+    if (layerContainsYear(layer, year, maxRuniversYear)) return true;
+  }
   return false;
 }
 
@@ -727,7 +740,7 @@ async function main() {
         continue;
       }
       hasUsableScopedReference = true;
-      const comparisonYear = Math.max(layer.fromYear, monthToYear(state.firstMonth));
+      const comparisonYear = Math.max(layer.fromYear, firstFullYearOfState(state));
       const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
       const override = overrideFor(overrides, state, layer.id);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
