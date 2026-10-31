@@ -38,6 +38,19 @@ const percentile = (values, p) => {
   return sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil(sorted.length * p) - 1))];
 };
 
+// Source evidence IDs are stable references, not last-writer-wins labels.
+// A duplicate ID could silently replace an A1/A2/A3 document with a weaker
+// record (or vice versa) and invalidate the provenance of a border override.
+function indexCanonicalDocuments(docs) {
+  const indexed = new Map();
+  for (const doc of docs) {
+    if (typeof doc?.id !== 'string' || !doc.id.trim()) throw new Error('Canonical document has no valid id');
+    if (indexed.has(doc.id)) throw new Error(`Duplicate canonical document id: ${doc.id}`);
+    indexed.set(doc.id, doc);
+  }
+  return indexed;
+}
+
 function canonicalDocuments() {
   const docs = [];
   const base = path.join(dataRoot, 'documents.json');
@@ -48,7 +61,7 @@ function canonicalDocuments() {
       docs.push(...(readJson(path.join(dir, name)).documents ?? []));
     }
   }
-  return new Map(docs.map(doc => [doc.id, doc]));
+  return indexCanonicalDocuments(docs);
 }
 
 function validateOverrides(registry, documents) {
@@ -56,10 +69,14 @@ function validateOverrides(registry, documents) {
   const seen = new Set();
   const strongTiers = new Set(['A1-archival-original', 'A2-official-document-publication', 'A3-contemporary-official-map']);
   for (const item of registry.overrides) {
-    if (!item.id || seen.has(item.id)) throw new Error(`Duplicate/missing Runivers override id: ${item.id}`);
+    if (typeof item?.id !== 'string' || !item.id.trim() || seen.has(item.id)) throw new Error(`Duplicate/missing Runivers override id: ${item?.id}`);
     seen.add(item.id);
-    if (!Number.isInteger(item.runiversResourceId)) throw new Error(`${item.id}: runiversResourceId must be an integer`);
-    if (!item.startMonth || !item.endMonth || item.startMonth > item.endMonth) throw new Error(`${item.id}: invalid month range`);
+    if (!Number.isSafeInteger(item.runiversResourceId) || item.runiversResourceId <= 0) throw new Error(`${item.id}: runiversResourceId must be a positive safe integer`);
+    // These ranges are compared lexicographically to full-year boundaries.
+    // Accepting arbitrary strings (e.g. 1600-99) could authorize a mismatch
+    // without a real calendar month ever being documented.
+    const validMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
+    if (!validMonth(item.startMonth) || !validMonth(item.endMonth) || item.startMonth > item.endMonth) throw new Error(`${item.id}: invalid month range`);
     if (!item.reason || item.reason.length < 20) throw new Error(`${item.id}: evidence-backed reason is required`);
     if (!Array.isArray(item.evidenceDocumentIds) || !item.evidenceDocumentIds.length) throw new Error(`${item.id}: evidenceDocumentIds required`);
     for (const id of item.evidenceDocumentIds) {
@@ -890,7 +907,7 @@ async function main() {
   if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
+export {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
