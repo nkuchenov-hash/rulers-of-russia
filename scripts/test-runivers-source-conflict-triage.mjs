@@ -90,7 +90,189 @@ const malicious = summarizeRuniversSourceConflicts({failedComparisons:[{
     excludedSourceRecords:[],
   }],
 }]});
-assert.equal(malicious.clusters[0].selectedSourceIdentities,'?:'+'R'.repeat(120));
+assert.match(malicious.clusters[0].selectedSourceIdentities,
+  new RegExp('^\\\\?:' + 'R'.repeat(120) + '#sha256=[0-9a-f]{16}
+assert.deepEqual(malicious.clusters[0].historyStateStarts,[]);
+assert.deepEqual(malicious.unmatchedReportedMaximumByDirection,
+  {'runivers-reference':1,'history-core':0}, 'missing directed metric cannot be claimed as an attributed maximum');
+assert.equal(malicious.directionalHotspots[0].maxReportedDirectionalMeters,null,
+  'missing directed metric must not be reported as zero or a pass');
+assert.ok(!JSON.stringify(malicious).includes('coordinates'),
+  'nested source metadata must never escape into public artifacts');
+// A source name attached to the worst *sampled* point is not proof that it
+// explains the larger comparison-level maximum (or a missing metric).
+const incompleteAttribution = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId:5401, historyFirstMonth:'1553-01',
+  referenceToCurrentMaxMeters:1111421, currentToReferenceMaxMeters:200,
+  boundarySampleAttribution:[
+    sample(400000, 'Российское царство', 'Зона русской колонизации'),
+    sample(200, 'Российское царство', 'Зона русской колонизации', 'history-core'),
+  ],
+}]});
+assert.deepEqual(incompleteAttribution.unmatchedReportedMaximumByDirection,
+  {'runivers-reference':1,'history-core':0});
+const unmatched = incompleteAttribution.directionalHotspots.find(row => row.sampledBoundary === 'runivers-reference');
+assert.equal(unmatched.maxAttributedSampleDistanceMeters,400000);
+assert.equal(unmatched.maxReportedDirectionalMeters,1111421);
+assert.equal(unmatched.reportedMaximumMatches,0);
+assert.equal(unmatched.reportedMaximumUnmatched,1);
+assert.equal(incompleteAttribution.directionalHotspots.find(row => row.sampledBoundary === 'history-core').reportedMaximumMatches,1);
+assert.equal(incompleteAttribution.auditedRange.startMonth,null);
+const invalidMonth = summarizeRuniversSourceConflicts({failedComparisons:[{
+  historyFirstMonth:'1520-13', boundarySampleAttribution:[],
+}]});
+assert.deepEqual(invalidMonth.clusters[0].historyStateStarts,[],
+  'invalid calendar month must never enter dated source triage');
+// The same Runivers category/name can refer to distinct dated political
+// acts. Combining them would erase the very transitions under investigation.
+const datedReport = summarizeRuniversSourceConflicts({failedComparisons:[
+  ...[
+    ['1553-01-01', 6],
+    ['1554-01-01', 6],
+    ['1554-01-01', 7],
+  ].map(([lwdate, status], i) => ({
+    runiversResourceId: 5399 + i,
+    historyFirstMonth: '1553-01',
+    symmetricMaxMeters: 1111421 - i,
+    referenceToCurrentMaxMeters: 1111421 - i,
+    boundarySampleAttribution: [{
+      ...sample(1111421 - i, 'Российское царство', 'Зона русской колонизации'),
+      selectedSourceRecords: [{cat:767, name:'Российское царство', lwdate, status}],
+      excludedSourceRecords: [{cat:522, name:'Зона русской колонизации'}],
+    }],
+  })),
+]});
+assert.equal(datedReport.clusters.length, 3,
+  'distinct dated source records must not be collapsed into one conflict');
+assert.equal(datedReport.directionalHotspots.length, 3,
+  'both aggregate and directed source triage must preserve dated identities');
+assert.deepEqual(datedReport.clusters.map(row => row.selectedSourceIdentities).sort(), [
+  '767:Российское царство@1553-01-01#status=6',
+  '767:Российское царство@1554-01-01#status=6',
+  '767:Российское царство@1554-01-01#status=7',
+]);
+assert.ok(!JSON.stringify(datedReport).includes('coordinates'),
+  'dated identity must remain scalar metadata without licensed geometry');
+// The previous 500-character grouping-key truncation merged distinct source
+// records whenever the first several identities were long and identical.
+// Keep the public display bounded without losing dated evidence internally.
+const longSharedRecords = Array.from({length: 7}, (_, i) => ({
+  cat: 100 + i, name: 'X'.repeat(100), lwdate: '1553-01-01', status: 6,
+}));
+const collisionReport = summarizeRuniversSourceConflicts({failedComparisons:
+  ['1554-01-01', '1555-01-01'].map((lastDate, i) => ({
+    runiversResourceId: 5400 + i, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 100 + i,
+    boundarySampleAttribution: [{
+      ...sample(100 + i, 'Russian state', 'colonization zone'),
+      selectedSourceRecords: longSharedRecords.map((record, j) =>
+        j === longSharedRecords.length - 1 ? {...record, lwdate: lastDate} : record),
+    }],
+  })),
+});
+assert.equal(collisionReport.clusters.length, 2,
+  'source identities differing after the public 500-character prefix must remain distinct');
+assert.equal(collisionReport.directionalHotspots.length, 2,
+  'directed geographic triage must also preserve distinct long source identities');
+assert.equal(collisionReport.clusters[0].selectedSourceIdentities.length, 500);
+assert.equal(collisionReport.clusters[0].selectedSourceIdentities,
+  collisionReport.clusters[1].selectedSourceIdentities,
+  'public display remains deliberately bounded and may share a prefix');
+assert.notEqual(collisionReport.clusters[0].selectedSourceIdentityFingerprint,
+  collisionReport.clusters[1].selectedSourceIdentityFingerprint,
+  'bounded display collisions must have distinguishable source fingerprints');
+assert.ok(!JSON.stringify(collisionReport).includes('coordinates'),
+  'fingerprints and bounded labels must not leak source geometry');
+
+
+ // Preserve distinct original source features even when their visible polity,
+ // category, effective date and status are identical. Numeric-string category
+ // IDs must retain their provenance rather than turning into unknown '?'.
+const distinctFeatures = summarizeRuniversSourceConflicts({failedComparisons:
+  ['relation-101', 'relation-102'].map((featureId, i) => ({
+    runiversResourceId: 5410 + i,
+    historyFirstMonth: '1560-01',
+    symmetricMaxMeters: 500000 + i,
+    referenceToCurrentMaxMeters: 500000 + i,
+    boundarySampleAttribution: [{
+      ...sample(500000 + i, 'Российское царство', 'Зона русской колонизации'),
+      selectedSourceRecords: [{featureId, cat: '767', name: 'Российское царство',
+        lwdate: '1556-01-01', status: 6}],
+      excludedSourceRecords: [],
+    }],
+  })),
+});
+assert.equal(distinctFeatures.clusters.length, 2,
+  'different original feature IDs must never be merged into one source conflict');
+assert.equal(distinctFeatures.directionalHotspots.length, 2,
+  'directed triage must preserve distinct original feature IDs');
+assert.deepEqual(distinctFeatures.clusters.map(row => row.selectedSourceIdentities).sort(), [
+  '767:Российское царство#feature=relation-101@1556-01-01#status=6',
+  '767:Российское царство#feature=relation-102@1556-01-01#status=6',
+]);
+assert.ok(!JSON.stringify(distinctFeatures).includes('coordinates'),
+  'original feature IDs must not cause geometry disclosure');
+
+// A failed comparison with absent distance measurements must remain unknown,
+// not appear as a zero-metre geographic success in the triage summary.
+const unknownDistance = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId: 5419, historyFirstMonth: '1590-01',
+  boundarySampleAttribution: [],
+}]});
+assert.equal(unknownDistance.clusters[0].maxSymmetricErrorMeters, null);
+assert.equal(unknownDistance.clusters[0].maxSymmetricP95Meters, null);
+const measuredZero = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId: 5420, symmetricMaxMeters: 0, symmetricP95Meters: 0,
+  boundarySampleAttribution: [],
+}]});
+assert.equal(measuredZero.clusters[0].maxSymmetricErrorMeters, 0,
+  'a real measured zero must remain distinguishable from missing evidence');
+assert.equal(measuredZero.clusters[0].maxSymmetricP95Meters, 0);
+
+// Long scalar metadata used to be truncated *before* building grouping keys.
+// Two original feature IDs or dated records with a common 120/160-character
+// prefix therefore collapsed, even after fixing the 500-character display cap.
+const longBase = {
+  cat: 767,
+  name: 'N'.repeat(120) + '-common',
+  featureId: 'F'.repeat(160) + '-common',
+  lwdate: 'D'.repeat(120) + '-common',
+  status: 'S'.repeat(120) + '-common',
+};
+const longScalarCases = ['name', 'featureId', 'lwdate', 'status'];
+const longScalarReport = summarizeRuniversSourceConflicts({failedComparisons:
+  longScalarCases.flatMap((field, caseIndex) => ['-SECRET_A', '-SECRET_B'].map((suffix, variant) => ({
+    runiversResourceId: 5500 + caseIndex * 2 + variant,
+    historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1000,
+    boundarySampleAttribution: [{
+      ...sample(1000, 'Russian state', 'colonization zone'),
+      selectedSourceRecords: [{...longBase, [field]: longBase[field] + suffix}],
+      excludedSourceRecords: [],
+    }],
+  }))),
+});
+assert.equal(longScalarReport.clusters.length, 8,
+  'distinct original long source scalars must not merge at their display truncation');
+assert.equal(longScalarReport.directionalHotspots.length, 8,
+  'directional triage must retain long feature/date/status/name distinctions');
+for (const field of longScalarCases) {
+  const pair = longScalarReport.clusters.filter(row => row.resourceIds.some(id =>
+    id >= 5500 + longScalarCases.indexOf(field) * 2 &&
+    id < 5502 + longScalarCases.indexOf(field) * 2));
+  assert.equal(pair.length, 2, field + ' identities must remain separate');
+  assert.notEqual(pair[0].selectedSourceIdentityFingerprint,
+    pair[1].selectedSourceIdentityFingerprint);
+  assert.ok(pair.every(row => row.selectedSourceIdentities.includes('#sha256=')));
+}
+assert.ok(!JSON.stringify(longScalarReport).includes('SECRET_'),
+  'unbounded source metadata must not be exposed in diagnostic artifacts');
+assert.ok(!JSON.stringify(longScalarReport).includes('coordinates'),
+  'long scalar fingerprints must not expose licensed geometry');
+
+console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
+),
+  'truncated malicious source names retain a distinguishing fingerprint');
 assert.deepEqual(malicious.clusters[0].historyStateStarts,[]);
 assert.deepEqual(malicious.unmatchedReportedMaximumByDirection,
   {'runivers-reference':1,'history-core':0}, 'missing directed metric cannot be claimed as an attributed maximum');
