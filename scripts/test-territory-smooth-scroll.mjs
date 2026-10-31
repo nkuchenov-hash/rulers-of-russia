@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createTimelineScrollGate} from '../src/app/territory/timelineScrollGate.mjs';
+import {createTimelineScrollGate,shouldHandleTimelineWheel} from '../src/app/territory/timelineScrollGate.mjs';
+
+// The timeline section wraps the month/era selectors and arrow buttons.
+// Their wheel events bubble to the section but must not scrub the year.
+for (const tag of ['select','button','input','textarea']) {
+  assert.equal(shouldHandleTimelineWheel({closest: selector => {
+    assert.ok(selector.includes(tag), 'interactive control must be excluded: '+tag);
+    return {tagName:tag};
+  }}), false);
+}
+assert.equal(shouldHandleTimelineWheel({closest:()=>({role:'combobox'})}),false);
+assert.equal(shouldHandleTimelineWheel({closest:()=>null}),true,'ruler wheel must still navigate years');
+assert.equal(shouldHandleTimelineWheel(null),true);
 
 const gate = createTimelineScrollGate(3);
 assert.equal(gate.shouldUpdateYear(0), true);
@@ -76,4 +88,6 @@ assert.match(source, /const now=performance\.now\(\);if\(now-timelineWheelRef\.c
   'Only accepted wheel events may cancel a smooth jump');
 assert.match(source, /const current=wasJumping\?year:clamp\(/,
   'Wheel interruption must step from the selected year, not an intermediate animated position');
-console.log('Timeline smooth-jump gate and production integration checks passed.');
+assert.ok(source.includes('if(!shouldHandleTimelineWheel(e.target))return;'),
+  'production wheel handler must ignore bubbled events from native timeline controls');
+console.log('Timeline smooth-jump gate, native control wheel isolation and production integration checks passed.');
