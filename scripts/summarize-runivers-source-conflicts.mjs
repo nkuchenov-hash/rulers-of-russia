@@ -18,7 +18,14 @@ function sourceKey(records) {
   const labels = records.map(record => {
     const cat = validResourceId(record?.cat);
     const name = boundedString(record?.name);
-    return [cat === null ? '?' : cat, name ?? '?'].join(':');
+    // Identically named source polities may describe different dated
+    // territorial acts or political statuses. Grouping only by cat/name
+    // silently merges their distinct historical evidence.
+    const date = boundedString(record?.lwdate);
+    const status = typeof record?.status === 'number' && Number.isFinite(record.status)
+      ? String(record.status) : boundedString(record?.status);
+    const base = [cat === null ? '?' : cat, name ?? '?'].join(':');
+    return base + (date ? '@' + date : '') + (status !== null ? '#status=' + status : '');
   });
   return [...new Set(labels)].sort().join(' | ').slice(0, 500);
 }

@@ -34,3 +34,7 @@ The summary groups actual worst reference-side boundary samples by bounded origi
 ## Directed maximum attribution guard (2026-10-31)
 
 The research-only summary now records `reportedMaximumMatches` and `reportedMaximumUnmatched` for each source-identity group, plus `unmatchedReportedMaximumByDirection` across the report. A sampled boundary identity is **not** asserted to explain the report's maximum directed distance unless its sample matches that reported maximum (allowing only 1 m for numeric serialization rounding). Missing samples remain separately counted in `unattributedByDirection`. This prevents assigning the largest geographic discrepancy to an unrelated source object when the detailed sample list is incomplete. It does not change the Runivers acceptance gate, geographic tolerances, source geometry, or the map.
+
+## Dated identity separation (2026-10-31)
+
+Source-conflict grouping now preserves the original feature's `lwdate` and `status` when available, in addition to its `cat` and `name`. Two source records named `Российское царство` with the same category but different effective dates or statuses must not be treated as one historical transition. Missing dates/statuses remain explicitly unknown rather than being invented. The summary contains only bounded scalar metadata, never Runivers polygon coordinates. This is a **triage correction**, not a new independent geographic pass or an assertion that the source's date represents a legally effective annexation.
