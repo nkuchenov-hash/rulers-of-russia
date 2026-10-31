@@ -352,8 +352,10 @@ const safeNamed = referenceForPolity({
 assert.equal(safeNamed.scope.selectedSourceRecords[0].featureId, null);
 assert.equal(safeNamed.scope.selectedSourceRecords[0].cat, null);
 assert.equal(safeNamed.scope.selectedSourceRecords[0].status, null);
-assert.equal(safeNamed.scope.selectedSourceRecords[0].lwdate.length, 160);
-assert.equal(safeNamed.scope.excludedNames[0].length, 160);
+assert.ok(safeNamed.scope.selectedSourceRecords[0].lwdate.length <= 160);
+assert.ok(safeNamed.scope.selectedSourceRecords[0].lwdate.includes('#sha256='));
+assert.ok(safeNamed.scope.excludedNames[0].length <= 160);
+assert.ok(safeNamed.scope.excludedNames[0].includes('#sha256='));
 assert.ok(!JSON.stringify(safeNamed.scope).includes('coordinates'),
   'nested source metadata and geometry must never enter the public named-polity report');
 
