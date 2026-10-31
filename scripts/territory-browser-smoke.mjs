@@ -163,6 +163,21 @@ try {
   await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, { timeout: 8000 });
   await waitForHistoryStateStatus();
 
+  // A native smooth jump may be interrupted by browser scroll anchoring
+  // without pointer/touch/wheel input. Simulate a settled scroll at 1900:
+  // scrollend must release the gate and render the year actually under the needle.
+  await eraSelect.selectOption('862');
+  await page.evaluate(() => {
+    const ruler = document.querySelector('[class*="rulerViewport"]');
+    if (!ruler) throw new Error('Timeline viewport missing for interrupted-scroll regression');
+    ruler.scrollTo({left: (1900 - 862) * 6, behavior: 'instant'});
+    ruler.dispatchEvent(new Event('scrollend', {bubbles: true}));
+  });
+  await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1900-02'), null, {timeout: 12000});
+  await waitForHistoryStateStatus();
+  await eraSelect.selectOption('1992');
+  await page.waitForFunction(() => document.body?.innerText?.includes('History Core 1992-02'), null, {timeout: 12000});
+
   const flatButton = page.getByRole('button', {name: 'Показать плоскую карту'});
   await flatButton.click();
   const flatCanvas = page.locator('canvas[data-territory-flat-map="true"]');
