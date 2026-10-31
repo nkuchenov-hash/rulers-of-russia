@@ -7,7 +7,11 @@ import {pathToFileURL} from 'node:url';
 const boundedString = value => typeof value === 'string' ? value.slice(0, 120) : null;
 const finiteNonnegative = value => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 const validResourceId = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
-const safeMonth = value => typeof value === 'string' && /^\d{4}-\d{2}$/.test(value) ? value : null;
+const safeMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(value) ? value : null;
+// Source identity at a sampled hotspot is not automatically the identity at
+// the report's global directional maximum. One metre covers JSON rounding,
+// NOT a relaxed geographic tolerance or a substitute for a boundary check.
+const MAX_SAMPLE_ROUNDING_METERS = 1;
 
 function sourceKey(records) {
   if (!Array.isArray(records) || !records.length) return 'unknown';
@@ -75,6 +79,7 @@ export function summarizeRuniversSourceConflicts(report) {
   ];
   const directionalGroups = new Map();
   const unattributedByDirection = Object.fromEntries(directions.map(([direction]) => [direction, 0]));
+  const unmatchedReportedMaximumByDirection = Object.fromEntries(directions.map(([direction]) => [direction, 0]));
   for (const failure of report.failedComparisons) {
     const samples = Array.isArray(failure?.boundarySampleAttribution)
       ? failure.boundarySampleAttribution : [];
@@ -96,6 +101,8 @@ export function summarizeRuniversSourceConflicts(report) {
         comparisons: 0,
         maxAttributedSampleDistanceMeters: 0,
         maxReportedDirectionalMeters: null,
+        reportedMaximumMatches: 0,
+        reportedMaximumUnmatched: 0,
         resourceIds: new Set(),
         historyStateStarts: new Set(),
       };
@@ -105,6 +112,13 @@ export function summarizeRuniversSourceConflicts(report) {
       const reported = finiteNonnegative(failure?.[metricField]);
       if (reported !== null) current.maxReportedDirectionalMeters = Math.max(
         current.maxReportedDirectionalMeters ?? 0, reported);
+      const maximumMatches = reported !== null
+        && Math.abs(worst.distanceMeters - reported) <= MAX_SAMPLE_ROUNDING_METERS;
+      if (maximumMatches) current.reportedMaximumMatches += 1;
+      else {
+        current.reportedMaximumUnmatched += 1;
+        unmatchedReportedMaximumByDirection[direction] += 1;
+      }
       const id = validResourceId(failure?.runiversResourceId);
       if (id !== null) current.resourceIds.add(id);
       const month = safeMonth(failure?.historyFirstMonth);
@@ -130,6 +144,7 @@ export function summarizeRuniversSourceConflicts(report) {
     failedComparisons: report.failedComparisons.length,
     unattributedComparisons: unattributed,
     unattributedByDirection,
+    unmatchedReportedMaximumByDirection,
     directionalHotspots,
     referenceFailureCount: Array.isArray(report.referenceFailures) ? report.referenceFailures.length : null,
     unmatchedReferenceResourceIds: Array.isArray(report.unmatchedReferenceLayers)

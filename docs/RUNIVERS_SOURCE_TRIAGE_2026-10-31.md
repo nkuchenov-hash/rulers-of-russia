@@ -30,3 +30,7 @@ N. V. Pertsev, *The 1499 Moscow campaign in Yugra in the context of domestic and
 `node scripts/summarize-runivers-source-conflicts.mjs tmp/runivers-regression/report.json > tmp/runivers-regression/source-triage.json`
 
 The summary groups actual worst reference-side boundary samples by bounded original source identities, preserving sample severity, reference IDs, missing attribution and unmatched resource IDs. It never emits boundary coordinates or raw polygons. It is **diagnostic only** and cannot turn a failed geographic comparison into a pass.
+
+## Directed maximum attribution guard (2026-10-31)
+
+The research-only summary now records `reportedMaximumMatches` and `reportedMaximumUnmatched` for each source-identity group, plus `unmatchedReportedMaximumByDirection` across the report. A sampled boundary identity is **not** asserted to explain the report's maximum directed distance unless its sample matches that reported maximum (allowing only 1 m for numeric serialization rounding). Missing samples remain separately counted in `unattributedByDirection`. This prevents assigning the largest geographic discrepancy to an unrelated source object when the detailed sample list is incomplete. It does not change the Runivers acceptance gate, geographic tolerances, source geometry, or the map.

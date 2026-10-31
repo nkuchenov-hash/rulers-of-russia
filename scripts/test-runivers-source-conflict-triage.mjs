@@ -56,16 +56,20 @@ assert.equal(result.clusters[1].excludedSourceIdentities,'unknown');
 // Both directed failures must be visible independently: a History Core
 // overhang cannot be misdiagnosed as a Runivers reference-side boundary.
 assert.deepEqual(result.unattributedByDirection, {'runivers-reference':1,'history-core':2});
+assert.deepEqual(result.unmatchedReportedMaximumByDirection, {'runivers-reference':0,'history-core':0});
 assert.equal(result.directionalHotspots.length,2);
 const referenceSide = result.directionalHotspots.find(row => row.sampledBoundary === 'runivers-reference');
 const historySide = result.directionalHotspots.find(row => row.sampledBoundary === 'history-core');
 assert.equal(referenceSide.comparisons,2);
 assert.equal(referenceSide.maxAttributedSampleDistanceMeters,983475);
 assert.equal(referenceSide.maxReportedDirectionalMeters,983475);
+assert.equal(referenceSide.reportedMaximumMatches,2);
+assert.equal(referenceSide.reportedMaximumUnmatched,0);
 assert.deepEqual(referenceSide.resourceIds,[5383,5385]);
 assert.equal(historySide.comparisons,1);
 assert.equal(historySide.maxAttributedSampleDistanceMeters,700000);
 assert.equal(historySide.maxReportedDirectionalMeters,700000);
+assert.equal(historySide.reportedMaximumMatches,1);
 assert.equal(historySide.selectedSourceIdentities,'51:Российское царство');
 assert.equal(historySide.excludedSourceIdentities,'488:Зона русской колонизации');
 assert.deepEqual(historySide.resourceIds,[5383]);
@@ -88,8 +92,34 @@ const malicious = summarizeRuniversSourceConflicts({failedComparisons:[{
 }]});
 assert.equal(malicious.clusters[0].selectedSourceIdentities,'?:'+'R'.repeat(120));
 assert.deepEqual(malicious.clusters[0].historyStateStarts,[]);
+assert.deepEqual(malicious.unmatchedReportedMaximumByDirection,
+  {'runivers-reference':1,'history-core':0}, 'missing directed metric cannot be claimed as an attributed maximum');
 assert.equal(malicious.directionalHotspots[0].maxReportedDirectionalMeters,null,
   'missing directed metric must not be reported as zero or a pass');
 assert.ok(!JSON.stringify(malicious).includes('coordinates'),
   'nested source metadata must never escape into public artifacts');
+// A source name attached to the worst *sampled* point is not proof that it
+// explains the larger comparison-level maximum (or a missing metric).
+const incompleteAttribution = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId:5401, historyFirstMonth:'1553-01',
+  referenceToCurrentMaxMeters:1111421, currentToReferenceMaxMeters:200,
+  boundarySampleAttribution:[
+    sample(400000, 'Российское царство', 'Зона русской колонизации'),
+    sample(200, 'Российское царство', 'Зона русской колонизации', 'history-core'),
+  ],
+}]});
+assert.deepEqual(incompleteAttribution.unmatchedReportedMaximumByDirection,
+  {'runivers-reference':1,'history-core':0});
+const unmatched = incompleteAttribution.directionalHotspots.find(row => row.sampledBoundary === 'runivers-reference');
+assert.equal(unmatched.maxAttributedSampleDistanceMeters,400000);
+assert.equal(unmatched.maxReportedDirectionalMeters,1111421);
+assert.equal(unmatched.reportedMaximumMatches,0);
+assert.equal(unmatched.reportedMaximumUnmatched,1);
+assert.equal(incompleteAttribution.directionalHotspots.find(row => row.sampledBoundary === 'history-core').reportedMaximumMatches,1);
+assert.equal(incompleteAttribution.auditedRange.startMonth,null);
+const invalidMonth = summarizeRuniversSourceConflicts({failedComparisons:[{
+  historyFirstMonth:'1520-13', boundarySampleAttribution:[],
+}]});
+assert.deepEqual(invalidMonth.clusters[0].historyStateStarts,[],
+  'invalid calendar month must never enter dated source triage');
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, no acceptance override.');
