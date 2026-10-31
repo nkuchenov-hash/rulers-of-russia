@@ -120,11 +120,15 @@ for (const row of evidence) {
 
   // Recompute the original validator tolerance policy from the dated
   // comparison, rather than trusting potentially inflated report numbers.
-  const comparisonYear = Math.max(row.runiversFromYear, historyStartYear);
+  // The validator uses the strictest (latest) year in the actual
+  // source/state overlap. Rechecking only the first year here would reject
+  // valid strict reports and could accept a forged looser threshold when an
+  // interval crosses 1700, 1850 or 1900.
+  const strictestComparisonYear = Math.min(sourceLastYear, historyEndYear);
   const expectedTolerance = row.runiversApproximate ? 100000
-    : comparisonYear < 1700 ? 50000
-      : comparisonYear < 1850 ? 35000
-        : comparisonYear < 1900 ? 25000 : 15000;
+    : strictestComparisonYear < 1700 ? 50000
+      : strictestComparisonYear < 1850 ? 35000
+        : strictestComparisonYear < 1900 ? 25000 : 15000;
   if (row.toleranceMeters !== expectedTolerance
     || row.maxToleranceMeters !== expectedTolerance * 4
     || row.symmetricP95Meters > row.symmetricMaxMeters) {
