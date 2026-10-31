@@ -228,4 +228,45 @@ assert.equal(measuredZero.clusters[0].maxSymmetricErrorMeters, 0,
   'a real measured zero must remain distinguishable from missing evidence');
 assert.equal(measuredZero.clusters[0].maxSymmetricP95Meters, 0);
 
+// Long scalar metadata used to be truncated *before* building grouping keys.
+// Two original feature IDs or dated records with a common 120/160-character
+// prefix therefore collapsed, even after fixing the 500-character display cap.
+const longBase = {
+  cat: 767,
+  name: 'N'.repeat(120) + '-common',
+  featureId: 'F'.repeat(160) + '-common',
+  lwdate: 'D'.repeat(120) + '-common',
+  status: 'S'.repeat(120) + '-common',
+};
+const longScalarCases = ['name', 'featureId', 'lwdate', 'status'];
+const longScalarReport = summarizeRuniversSourceConflicts({failedComparisons:
+  longScalarCases.flatMap((field, caseIndex) => ['-SECRET_A', '-SECRET_B'].map((suffix, variant) => ({
+    runiversResourceId: 5500 + caseIndex * 2 + variant,
+    historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1000,
+    boundarySampleAttribution: [{
+      ...sample(1000, 'Russian state', 'colonization zone'),
+      selectedSourceRecords: [{...longBase, [field]: longBase[field] + suffix}],
+      excludedSourceRecords: [],
+    }],
+  }))),
+});
+assert.equal(longScalarReport.clusters.length, 8,
+  'distinct original long source scalars must not merge at their display truncation');
+assert.equal(longScalarReport.directionalHotspots.length, 8,
+  'directional triage must retain long feature/date/status/name distinctions');
+for (const field of longScalarCases) {
+  const pair = longScalarReport.clusters.filter(row => row.resourceIds.some(id =>
+    id >= 5500 + longScalarCases.indexOf(field) * 2 &&
+    id < 5502 + longScalarCases.indexOf(field) * 2));
+  assert.equal(pair.length, 2, field + ' identities must remain separate');
+  assert.notEqual(pair[0].selectedSourceIdentityFingerprint,
+    pair[1].selectedSourceIdentityFingerprint);
+  assert.ok(pair.every(row => row.selectedSourceIdentities.includes('#sha256=')));
+}
+assert.ok(!JSON.stringify(longScalarReport).includes('SECRET_'),
+  'unbounded source metadata must not be exposed in diagnostic artifacts');
+assert.ok(!JSON.stringify(longScalarReport).includes('coordinates'),
+  'long scalar fingerprints must not expose licensed geometry');
+
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
