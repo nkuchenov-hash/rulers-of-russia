@@ -13,6 +13,8 @@ on:
       - 'scripts/test-runivers-transport-order.mjs'
       - 'scripts/runivers-reference-scope.mjs'
       - 'scripts/runivers-hotspot-diagnostics.mjs'
+      - 'scripts/summarize-runivers-source-conflicts.mjs'
+      - 'scripts/test-runivers-source-conflict-triage.mjs'
       - 'scripts/history-archive-component-exclusions.mjs'
       - 'scripts/test-history-component-exclusions.mjs'
       - 'scripts/runivers-regression-shard-runner.mjs'
@@ -51,6 +53,7 @@ jobs:
       - run: node scripts/test-runivers-transport-order.mjs
       - run: node scripts/test-runivers-matrix.mjs
       - run: node scripts/test-runivers-geometry.mjs
+      - run: node scripts/test-runivers-source-conflict-triage.mjs
       - run: node scripts/test-history-component-exclusions.mjs
       - run: node scripts/test-require-runivers-regression.mjs
       - run: node scripts/test-runivers-json-fallback.mjs
@@ -141,6 +144,13 @@ jobs:
           RUNIVERS_END_MONTH: ${{ matrix.end }}
         run: node scripts/runivers-regression-shard-runner.mjs
 
+      - name: Summarize original source identities at failed borders
+        if: steps.baseline.outcome == 'success'
+        run: |
+          if test -f tmp/runivers-regression/report.json; then
+            node scripts/summarize-runivers-source-conflicts.mjs tmp/runivers-regression/report.json > tmp/runivers-regression/source-triage.json
+          fi
+
       - name: Upload Runivers audit reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -150,6 +160,7 @@ jobs:
           # workspace, source cache, or full month index as a ZIP by accident.
           path: |
             tmp/runivers-regression/report.json
+            tmp/runivers-regression/source-triage.json
           retention-days: 7
           if-no-files-found: warn
 
