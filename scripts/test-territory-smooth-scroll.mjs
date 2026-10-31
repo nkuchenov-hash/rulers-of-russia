@@ -28,6 +28,13 @@ assert.equal(gate.shouldUpdateYear(NaN), false);
 assert.throws(() => gate.begin(NaN), RangeError);
 assert.throws(() => createTimelineScrollGate(-1), RangeError);
 
+// Browser scroll anchoring or an interrupted CSS smooth scroll may settle
+// short of the requested offset without a pointer/touch/wheel event.
+gate.begin(6000);
+assert.equal(gate.shouldUpdateYear(1800), false, 'Unfinished smooth jump must still suppress intermediate years');
+gate.cancel(); // onScrollEnd releases the gate and rechecks the settled offset.
+assert.equal(gate.shouldUpdateYear(1800), true, 'A settled, interrupted scroll must restore ordinary year scrubbing');
+
 // Guard the actual production wiring, not only the standalone helper.
 const source = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
 assert.match(source, /timelineScrollGateRef\.current\.begin\(left,behavior\)/,
@@ -36,6 +43,10 @@ assert.match(source, /timelineScrollGateRef\.current\.shouldUpdateYear\(el\.scro
   'Scroll handler must not overwrite the selected year mid-animation');
 assert.match(source, /onPointerDown=\{cancelTimelineJump\}/,
   'Dragging the ruler must restore manual year scrubbing');
+assert.match(source, /onScrollEnd=\{onTimelineScrollEnd\}/,
+  'Native scrollend must release an interrupted smooth jump');
+assert.match(source, /function onTimelineScrollEnd\(\)\{if\(!timelineScrollGateRef\.current\.isActive\(\)\)return;timelineScrollGateRef\.current\.cancel\(\);onTimelineScroll\(\)\}/,
+  'Scrollend must cancel the gate and resynchronize the visible year');
 assert.match(source, /onTouchStart=\{cancelTimelineJump\}/,
   'Touch input must restore manual year scrubbing');
 assert.match(source, /const now=performance\.now\(\);if\(now-timelineWheelRef\.current<62\)return;timelineWheelRef\.current=now;const wasJumping=timelineScrollGateRef\.current\.isActive\(\);timelineScrollGateRef\.current\.cancel\(\)/,
