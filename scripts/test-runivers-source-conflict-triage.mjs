@@ -152,4 +152,35 @@ assert.deepEqual(datedReport.clusters.map(row => row.selectedSourceIdentities).s
 ]);
 assert.ok(!JSON.stringify(datedReport).includes('coordinates'),
   'dated identity must remain scalar metadata without licensed geometry');
+// The previous 500-character grouping-key truncation merged distinct source
+// records whenever the first several identities were long and identical.
+// Keep the public display bounded without losing dated evidence internally.
+const longSharedRecords = Array.from({length: 7}, (_, i) => ({
+  cat: 100 + i, name: 'X'.repeat(100), lwdate: '1553-01-01', status: 6,
+}));
+const collisionReport = summarizeRuniversSourceConflicts({failedComparisons:
+  ['1554-01-01', '1555-01-01'].map((lastDate, i) => ({
+    runiversResourceId: 5400 + i, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 100 + i,
+    boundarySampleAttribution: [{
+      ...sample(100 + i, 'Russian state', 'colonization zone'),
+      selectedSourceRecords: longSharedRecords.map((record, j) =>
+        j === longSharedRecords.length - 1 ? {...record, lwdate: lastDate} : record),
+    }],
+  })),
+});
+assert.equal(collisionReport.clusters.length, 2,
+  'source identities differing after the public 500-character prefix must remain distinct');
+assert.equal(collisionReport.directionalHotspots.length, 2,
+  'directed geographic triage must also preserve distinct long source identities');
+assert.equal(collisionReport.clusters[0].selectedSourceIdentities.length, 500);
+assert.equal(collisionReport.clusters[0].selectedSourceIdentities,
+  collisionReport.clusters[1].selectedSourceIdentities,
+  'public display remains deliberately bounded and may share a prefix');
+assert.notEqual(collisionReport.clusters[0].selectedSourceIdentityFingerprint,
+  collisionReport.clusters[1].selectedSourceIdentityFingerprint,
+  'bounded display collisions must have distinguishable source fingerprints');
+assert.ok(!JSON.stringify(collisionReport).includes('coordinates'),
+  'fingerprints and bounded labels must not leak source geometry');
+
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');

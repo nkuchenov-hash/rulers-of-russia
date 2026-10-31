@@ -2,6 +2,7 @@
 // Does not change geometry, reference scope, tolerances, or acceptance gates.
 // Never copy raw feature geometry or boundary sample coordinates to artifacts.
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 
 const boundedString = value => typeof value === 'string' ? value.slice(0, 120) : null;
@@ -27,8 +28,16 @@ function sourceKey(records) {
     const base = [cat === null ? '?' : cat, name ?? '?'].join(':');
     return base + (date ? '@' + date : '') + (status !== null ? '#status=' + status : '');
   });
-  return [...new Set(labels)].sort().join(' | ').slice(0, 500);
+  // Do not truncate the INTERNAL grouping identity: distinct dated records
+  // can share the first 500 characters and must never be merged.
+  return [...new Set(labels)].sort().join(' | ');
 }
+
+// Public diagnostics stay bounded, while a digest distinguishes two full
+// source identities whose visible 500-character prefixes happen to match.
+// No coordinates, geometry, or original feature payloads enter this digest.
+const sourceFingerprint = identity => createHash('sha256').update(identity).digest('hex').slice(0, 16);
+const displaySourceIdentity = identity => identity.slice(0, 500);
 
 export function summarizeRuniversSourceConflicts(report) {
   if (!report || !Array.isArray(report.failedComparisons)) {
@@ -47,8 +56,10 @@ export function summarizeRuniversSourceConflicts(report) {
     const excluded = sourceKey(worst?.excludedSourceRecords);
     const key = JSON.stringify([selected, excluded]);
     const current = groups.get(key) ?? {
-      selectedSourceIdentities: selected,
-      excludedSourceIdentities: excluded,
+      selectedSourceIdentities: displaySourceIdentity(selected),
+      excludedSourceIdentities: displaySourceIdentity(excluded),
+      selectedSourceIdentityFingerprint: sourceFingerprint(selected),
+      excludedSourceIdentityFingerprint: sourceFingerprint(excluded),
       comparisons: 0,
       maxSymmetricErrorMeters: 0,
       maxSymmetricP95Meters: 0,
@@ -103,8 +114,10 @@ export function summarizeRuniversSourceConflicts(report) {
       const key = JSON.stringify([direction, selected, excluded]);
       const current = directionalGroups.get(key) ?? {
         sampledBoundary: direction,
-        selectedSourceIdentities: selected,
-        excludedSourceIdentities: excluded,
+        selectedSourceIdentities: displaySourceIdentity(selected),
+        excludedSourceIdentities: displaySourceIdentity(excluded),
+        selectedSourceIdentityFingerprint: sourceFingerprint(selected),
+        excludedSourceIdentityFingerprint: sourceFingerprint(excluded),
         comparisons: 0,
         maxAttributedSampleDistanceMeters: 0,
         maxReportedDirectionalMeters: null,
