@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+import {comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // A one-month documentary exception must never silently exempt a full
 // year (or several years) of failed independent boundary comparisons.
@@ -45,6 +45,45 @@ assert.equal(findOverride(terminalOverride, terminalState, terminalLayer, 2020),
 const halfOpenOverride = {runiversResourceId: 999, startMonth: '2019-01', endMonth: '2019-12'};
 assert.equal(findOverride(halfOpenOverride, terminalState, terminalLayer, 2021), halfOpenOverride,
   'nonterminal layer ending in 2020 covers 2019 only');
+// One Runivers layer and one unchanged History Core polygon can span a
+// tightening threshold. Using the FIRST overlapping year would silently
+// accept later years at the earlier, more permissive tolerance.
+for (const [startYear, endYear, expectedTolerance] of [
+  [1699, 1701, 35000], // 1700: 50 km -> 35 km
+  [1849, 1850, 25000], // 1850: 35 km -> 25 km
+  [1899, 1900, 15000], // 1900: 25 km -> 15 km
+]) {
+  const layer = {fromYear: startYear, toYear: endYear + 1};
+  const state = {firstMonth: startYear + '-01', lastMonth: endYear + '-12'};
+  const years = comparisonYearsForState(layer, state, 2020);
+  assert.deepEqual(years, {firstYear: startYear, lastYear: endYear});
+  assert.equal(toleranceMeters(years.lastYear, false), expectedTolerance,
+    'the last overlapping year must determine the strictest acceptance limit');
+  assert.ok(toleranceMeters(years.firstYear, false) > expectedTolerance,
+    'this regression must cross a real historical tolerance threshold');
+  assert.equal(toleranceMeters(years.lastYear, true), 100000,
+    'the existing affirmative approximation policy is unchanged');
+}
+assert.deepEqual(comparisonYearsForState(
+  {fromYear: 2019, toYear: 2020},
+  {firstMonth: '2019-01', lastMonth: '2020-12'}, 2020,
+), {firstYear: 2019, lastYear: 2020},
+'terminal-inclusive Runivers year must participate in the strictest-year selection');
+assert.deepEqual(comparisonYearsForState(
+  {fromYear: 2019, toYear: 2020},
+  {firstMonth: '2019-01', lastMonth: '2020-12'}, 2021,
+), {firstYear: 2019, lastYear: 2019},
+'nonterminal Runivers end years remain excluded');
+assert.equal(comparisonYearsForState(
+  {fromYear: 1699, toYear: 1701},
+  {firstMonth: '1700-02', lastMonth: '1700-12'}, 2020,
+), null, 'partial-year evidence must not create a comparable year');
+assert.equal(comparisonYearsForState(
+  {fromYear: 1699, toYear: 1700},
+  {firstMonth: '1700-01', lastMonth: '1700-12'}, 2020,
+), null, 'half-open source intervals cannot include their end year');
+console.log('Runivers multi-year tolerance tests passed: strictest complete overlap year governs acceptance.');
+
 console.log('Runivers documentary override scope tests passed: complete year intersections only.');
 
 // Approximation metadata raises the existing Runivers tolerance from the
