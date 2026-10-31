@@ -1,5 +1,48 @@
 import assert from 'node:assert/strict';
-import {comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+
+// Documentary exceptions must never be authorized by ambiguous evidence
+// identities or by a syntactically invalid date range. This is a provenance
+// check, not a new geographic comparison or a change in border tolerance.
+const strongEvidence = {id: 'archival-source', tier: 'A1-archival-original'};
+const evidenceIndex = indexCanonicalDocuments([strongEvidence]);
+assert.equal(evidenceIndex.get(strongEvidence.id), strongEvidence);
+for (const documents of [
+  [strongEvidence, {...strongEvidence, tier: 'B1-russian-academic-interpretation'}],
+  [{id: ''}], [{title: 'missing identifier'}],
+]) {
+  assert.throws(() => indexCanonicalDocuments(documents),
+    /Duplicate canonical document id|no valid id/,
+    'ambiguous or missing canonical evidence identity must fail closed');
+}
+const validRegistryItem = {
+  id: 'verified-exception', runiversResourceId: 123,
+  startMonth: '1599-01', endMonth: '1601-12',
+  reason: 'A documented independent archival border exception.',
+  evidenceDocumentIds: ['archival-source'],
+};
+const validateRegistry = item => validateOverrides({schema_version: 1, overrides: [item]}, evidenceIndex);
+assert.doesNotThrow(() => validateRegistry(validRegistryItem));
+for (const invalid of [
+  {startMonth: '1599-00'}, {startMonth: '1599-13'},
+  {startMonth: '1599-1'}, {startMonth: '1599-01-extra'},
+  {endMonth: '1601-00'}, {endMonth: '1601-99'},
+  {endMonth: '1601-12-extra'}, {endMonth: '1598-12'},
+  {startMonth: 159901}, {endMonth: null},
+]) {
+  assert.throws(() => validateRegistry({...validRegistryItem, ...invalid}), /invalid month range/,
+    'invalid override month must never authorize a geographic mismatch');
+}
+for (const invalidResource of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, '123']) {
+  assert.throws(() => validateRegistry({...validRegistryItem, runiversResourceId: invalidResource}),
+    /positive safe integer/, 'resource identity must be an unambiguous positive integer');
+}
+assert.throws(() => validateRegistry({...validRegistryItem, evidenceDocumentIds: ['unknown']}),
+  /unknown evidence document/);
+assert.throws(() => validateOverrides({schema_version: 1, overrides: [
+  validRegistryItem, {...validRegistryItem},
+]}, evidenceIndex), /Duplicate\/missing Runivers override id/);
+console.log('Runivers evidence integrity passed: duplicate IDs and invalid exception dates fail closed.');
 
 // A one-month documentary exception must never silently exempt a full
 // year (or several years) of failed independent boundary comparisons.
