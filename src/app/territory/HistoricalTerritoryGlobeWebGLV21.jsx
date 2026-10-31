@@ -164,6 +164,10 @@ diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));`)};baseMaterial.customProgram
     if(projection!=='globe')return;
     const runtime=sceneRef.current;
     if(!runtime?.renderer.domElement.isConnected)return;
+    const canvas=runtime.renderer.domElement;
+    canvas.dataset.territoryProjectionCommitCount=String(
+      Number(canvas.dataset.territoryProjectionCommitCount||0)+1
+    );
     runtime.resize?.();
     // A second draw after the visibility commit handles a delayed WebGL
     // viewport/layout update. Unlike RAF, a task is not tied to frame polling.
