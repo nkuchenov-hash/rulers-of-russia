@@ -183,4 +183,49 @@ assert.notEqual(collisionReport.clusters[0].selectedSourceIdentityFingerprint,
 assert.ok(!JSON.stringify(collisionReport).includes('coordinates'),
   'fingerprints and bounded labels must not leak source geometry');
 
+
+ // Preserve distinct original source features even when their visible polity,
+ // category, effective date and status are identical. Numeric-string category
+ // IDs must retain their provenance rather than turning into unknown '?'.
+const distinctFeatures = summarizeRuniversSourceConflicts({failedComparisons:
+  ['relation-101', 'relation-102'].map((featureId, i) => ({
+    runiversResourceId: 5410 + i,
+    historyFirstMonth: '1560-01',
+    symmetricMaxMeters: 500000 + i,
+    referenceToCurrentMaxMeters: 500000 + i,
+    boundarySampleAttribution: [{
+      ...sample(500000 + i, 'Российское царство', 'Зона русской колонизации'),
+      selectedSourceRecords: [{featureId, cat: '767', name: 'Российское царство',
+        lwdate: '1556-01-01', status: 6}],
+      excludedSourceRecords: [],
+    }],
+  })),
+});
+assert.equal(distinctFeatures.clusters.length, 2,
+  'different original feature IDs must never be merged into one source conflict');
+assert.equal(distinctFeatures.directionalHotspots.length, 2,
+  'directed triage must preserve distinct original feature IDs');
+assert.deepEqual(distinctFeatures.clusters.map(row => row.selectedSourceIdentities).sort(), [
+  '767:Российское царство#feature=relation-101@1556-01-01#status=6',
+  '767:Российское царство#feature=relation-102@1556-01-01#status=6',
+]);
+assert.ok(!JSON.stringify(distinctFeatures).includes('coordinates'),
+  'original feature IDs must not cause geometry disclosure');
+
+// A failed comparison with absent distance measurements must remain unknown,
+// not appear as a zero-metre geographic success in the triage summary.
+const unknownDistance = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId: 5419, historyFirstMonth: '1590-01',
+  boundarySampleAttribution: [],
+}]});
+assert.equal(unknownDistance.clusters[0].maxSymmetricErrorMeters, null);
+assert.equal(unknownDistance.clusters[0].maxSymmetricP95Meters, null);
+const measuredZero = summarizeRuniversSourceConflicts({failedComparisons:[{
+  runiversResourceId: 5420, symmetricMaxMeters: 0, symmetricP95Meters: 0,
+  boundarySampleAttribution: [],
+}]});
+assert.equal(measuredZero.clusters[0].maxSymmetricErrorMeters, 0,
+  'a real measured zero must remain distinguishable from missing evidence');
+assert.equal(measuredZero.clusters[0].maxSymmetricP95Meters, 0);
+
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
