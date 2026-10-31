@@ -7,7 +7,7 @@ import {pathToFileURL} from 'node:url';
 const boundedString = value => typeof value === 'string' ? value.slice(0, 120) : null;
 const finiteNonnegative = value => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 const validResourceId = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
-const safeMonth = value => typeof value === 'string' && /^\\d{4}-\\d{2}$/.test(value) ? value : null;
+const safeMonth = value => typeof value === 'string' && /^\d{4}-\d{2}$/.test(value) ? value : null;
 
 function sourceKey(records) {
   if (!Array.isArray(records) || !records.length) return 'unknown';
@@ -88,6 +88,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exitCode = 2;
   } else {
     const report = JSON.parse(readFileSync(process.argv[2], 'utf8'));
-    process.stdout.write(JSON.stringify(summarizeRuniversSourceConflicts(report), null, 2) + '\\n');
+    process.stdout.write(JSON.stringify(summarizeRuniversSourceConflicts(report), null, 2) + '\n');
   }
 }
