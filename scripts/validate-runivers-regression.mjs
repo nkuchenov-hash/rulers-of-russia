@@ -70,10 +70,18 @@ function validateOverrides(registry, documents) {
   }
 }
 
-function overrideFor(registry, state, resourceId) {
-  return registry.overrides.find(item => item.runiversResourceId === resourceId
-    && state.firstMonth <= item.endMonth
-    && state.lastMonth >= item.startMonth
+// A documentary exception is valid only for the ENTIRE calendar-year
+// intersection actually compared. A one-month override must never exempt a
+// multi-year mismatch merely because it overlaps the History Core state.
+function overrideFor(registry, state, layer, maxRuniversYear) {
+  const firstYear = Math.max(firstFullYearOfState(state), layer.fromYear);
+  const lastYear = Math.min(lastFullYearOfState(state),
+    layer.toYear === maxRuniversYear ? layer.toYear : layer.toYear - 1);
+  if (firstYear > lastYear) return null;
+  const firstMonth = `${String(firstYear).padStart(4, '0')}-01`;
+  const lastMonth = `${String(lastYear).padStart(4, '0')}-12`;
+  return registry.overrides.find(item => item.runiversResourceId === layer.id
+    && item.startMonth <= firstMonth && item.endMonth >= lastMonth
     && (!item.polityId || item.polityId === state.polityId)
     && (!item.snapshotId || item.snapshotId === state.snapshotId)
     && (!item.certificationId || item.certificationId === state.certificationId)) ?? null;
@@ -742,7 +750,7 @@ async function main() {
       hasUsableScopedReference = true;
       const comparisonYear = Math.max(layer.fromYear, firstFullYearOfState(state));
       const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
-      const override = overrideFor(overrides, state, layer.id);
+      const override = overrideFor(overrides, state, layer, maxRuniversYear);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
       // Diagnose every failed comparison, not just the XVI-century clusters:
@@ -868,7 +876,7 @@ async function main() {
   if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
+export {overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
