@@ -112,6 +112,25 @@ try {
       };
     });
 
+    // Check actual painted DOM geometry, not only the CSS string. The timeline
+    // card is inset from the browser edge on phones; the 1600 marker must
+    // retain its year-scale offset from the needle at any scroll position.
+    const rulerAlignment = await page.evaluate(() => {
+      const viewport = document.querySelector('[class*="rulerViewport"]');
+      const needle = document.querySelector('[class*="centerNeedle"]');
+      const tick = [...document.querySelectorAll('[class*="majorTick"]')]
+        .find(node => node.textContent?.trim() === '1600');
+      if (!viewport || !needle || !tick) return null;
+      const tickBox = tick.getBoundingClientRect();
+      const needleBox = needle.getBoundingClientRect();
+      return {
+        actual: tickBox.left + tickBox.width / 2 - needleBox.left - needleBox.width / 2,
+        expected: (1600 - 862) * 6 - viewport.scrollLeft,
+      };
+    });
+    assert(rulerAlignment && Math.abs(rulerAlignment.actual - rulerAlignment.expected) <= 1.5,
+      `mobile ${width}: ruler tick drifts from needle: ${JSON.stringify(rulerAlignment)}`);
+
     assert(metrics.statusVisible, `mobile ${width}: historical uncertainty hidden`);
     assert(metrics.textSize >= 16, `mobile ${width}: unreadable ${metrics.textSize}px status`);
     assert(metrics.docWidth <= width + 1, `mobile ${width}: horizontal page overflow to ${metrics.docWidth}px`);
