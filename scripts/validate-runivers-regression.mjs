@@ -175,7 +175,7 @@ function classifyGeometry(payload) {
   // GeometryCollection members must be inspected recursively: a valid nested
   // polygon is still a usable independent reference.
   const types = new Set();
-  let hasPolygon = false, hasLine = false, invalidPolygon = false;
+  let hasPolygon = false, hasLine = false, invalidPolygon = false, invalidGeometry = false;
   const wgs84Point = point => validCoordinate(point)
     && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
   const validLine = line => Array.isArray(line) && line.length >= 2
@@ -197,11 +197,18 @@ function classifyGeometry(payload) {
   // Reject the entire transport instead of silently dropping bad members.
   const validPolygon = polygon => Array.isArray(polygon) && polygon.length > 0 && polygon.every(validRing);
   const inspect = geometry => {
-    if (!geometry?.type) return;
+    if (!geometry || typeof geometry.type !== 'string') {
+      invalidGeometry = true;
+      return;
+    }
     types.add(geometry.type);
     const c = geometry.coordinates;
     if (geometry.type === 'GeometryCollection') {
-      for (const member of geometry.geometries ?? []) inspect(member);
+      if (!Array.isArray(geometry.geometries) || !geometry.geometries.length) {
+        invalidGeometry = true;
+      } else {
+        for (const member of geometry.geometries) inspect(member);
+      }
     } else if (geometry.type === 'Polygon') {
       if (validPolygon(c)) hasPolygon = true;
       else invalidPolygon = true;
@@ -210,12 +217,21 @@ function classifyGeometry(payload) {
       else invalidPolygon = true;
     } else if (geometry.type === 'LineString') {
       if (validLine(c)) hasLine = true;
+      else invalidGeometry = true;
     } else if (geometry.type === 'MultiLineString') {
-      if (Array.isArray(c) && c.some(validLine)) hasLine = true;
+      // A valid first segment must not hide a malformed second segment.
+      if (Array.isArray(c) && c.length > 0 && c.every(validLine)) hasLine = true;
+      else invalidGeometry = true;
+    } else if (geometry.type === 'Point') {
+      if (!wgs84Point(c)) invalidGeometry = true;
+    } else if (geometry.type === 'MultiPoint') {
+      if (!Array.isArray(c) || !c.length || !c.every(wgs84Point)) invalidGeometry = true;
+    } else {
+      invalidGeometry = true;
     }
   };
   for (const feature of payloadFeatures(payload)) inspect(feature?.geometry);
-  return {types: [...types], hasPolygon, hasLine, invalidPolygon, usable: hasPolygon || hasLine};
+  return {types: [...types], hasPolygon, hasLine, invalidPolygon, invalidGeometry, usable: hasPolygon || hasLine};
 }
 
 // A successful HTTP response is not proof of usable geographic reference.
@@ -228,6 +244,11 @@ function requireUsableReferenceGeometry(payload, resourceId) {
   }
   if (classification.invalidPolygon) {
     throw new Error(`Runivers resource ${resourceId} export contains malformed polygon rings; cannot certify a complete border`);
+  }
+  // A valid polygon alongside an invalid auxiliary feature or nested member
+  // is a partial export, not an independently certified complete border.
+  if (classification.invalidGeometry) {
+    throw new Error(`Runivers resource ${resourceId} export contains malformed or unsupported geometry; cannot certify a complete border`);
   }
   // A line-only map can match one edge of a state while omitting every other
   // sovereign border. It cannot certify a complete territorial polygon.
