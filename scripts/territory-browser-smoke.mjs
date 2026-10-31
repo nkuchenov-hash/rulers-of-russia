@@ -68,10 +68,11 @@ const waitForGlobeCanvas = async (stage, minRenderCount = 0) => {
         visibility: style.visibility,
         hostVisibility: canvas.parentElement ? getComputedStyle(canvas.parentElement).visibility : null,
         contextLost: gl ? gl.isContextLost() : null,
-        renderCount: canvas.dataset.territoryRenderCount || null
+        renderCount: canvas.dataset.territoryRenderCount || null,
+        projectionCommitCount: canvas.dataset.territoryProjectionCommitCount || null
       };
     })).catch(e => ({diagnosticError: String(e)}));
-    throw new Error(`Globe canvas not ready at ${stage}: ${JSON.stringify(canvases)}`, {cause: error});
+    throw new Error(`Globe canvas not ready at ${stage} (required render count > ${minRenderCount}): ${JSON.stringify(canvases)}`, {cause: error});
   }
 };
 
