@@ -46,6 +46,9 @@ jobs:
       - name: Reject invalid territory deep-link dates
         run: node --experimental-strip-types scripts/test-territory-query-date.mjs
 
+      - name: Reject intermediate historical loads during smooth timeline jumps
+        run: node scripts/test-territory-smooth-scroll.mjs
+
       - name: Verify cursor-anchored 2D map zoom
         run: node scripts/test-flat-camera-zoom.mjs
 
