@@ -286,7 +286,7 @@ assert.equal(layerContainsYear({fromYear: 2014, toYear: 2020}, 2020, 2020), true
 // the validator must not report the untested 1856 months as covered.
 const fullYearLedger = {runiversFromYear: 1856, runiversToYear: 1859,
   comparedFirstYear: 1857, comparedLastYear: 1858};
-assert.equal(layerContainsYear(fullYearLedger, 1856, 2020), true,
+assert.equal(layerContainsYear({fromYear: fullYearLedger.runiversFromYear, toYear: fullYearLedger.runiversToYear}, 1856, 2020), true,
   'the reference layer itself includes the untested transition year');
 assert.equal(comparisonCoversYear(fullYearLedger, 1856), false,
   'an untested partial-year state must remain uncovered');
