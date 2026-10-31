@@ -664,6 +664,7 @@ function lastFullYearOfState(state) {
 // must be the STRICTEST applicable year (the last, since limits decrease over
 // time). Never use the first overlap year to certify later, stricter eras.
 function comparisonYearsForState(layer, state, maxRuniversYear) {
+  if (!Number.isInteger(layer.fromYear) || !Number.isInteger(layer.toYear)) return null;
   const firstYear = Math.max(layer.fromYear, firstFullYearOfState(state));
   const lastYear = Math.min(lastFullYearOfState(state),
     layer.toYear === maxRuniversYear ? layer.toYear : layer.toYear - 1);
