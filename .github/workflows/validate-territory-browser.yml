@@ -88,6 +88,9 @@ jobs:
       - name: Reject intermediate historical loads during smooth timeline jumps
         run: node scripts/test-territory-smooth-scroll.mjs
 
+      - name: Verify visible 2D terrain tile wrapping and pan performance
+        run: node scripts/test-flat-terrain-tiles.mjs
+
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 

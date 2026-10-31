@@ -52,6 +52,9 @@ jobs:
       - name: Verify cursor-anchored 2D map zoom
         run: node scripts/test-flat-camera-zoom.mjs
 
+      - name: Verify visible 2D terrain tile wrapping and pan performance
+        run: node scripts/test-flat-terrain-tiles.mjs
+
       - name: Verify historical world Russian-state context filtering
         run: node scripts/test-world-russia-filter.mjs
 
