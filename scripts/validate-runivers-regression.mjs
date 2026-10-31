@@ -291,7 +291,12 @@ function interpolateLonLat(a, b, t) {
   return [lon, a[1] + (b[1] - a[1]) * t];
 }
 
-const validCoordinate = point => Array.isArray(point) && point.length >= 2 && Number.isFinite(point[0]) && Number.isFinite(point[1]);
+// The sampling metric assumes WGS84 degrees. Projected metres or an
+// impossible latitude can alias a real point in haversine arithmetic and
+// must never enter an independent geographic pass.
+const validCoordinate = point => Array.isArray(point) && point.length >= 2
+  && Number.isFinite(point[0]) && Number.isFinite(point[1])
+  && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
 
 function samplingLines(payload, outerOnly = true) {
   const lines = [];
@@ -303,6 +308,11 @@ function samplingLines(payload, outerOnly = true) {
 
 function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true, anchorsPerRing = 2) {
   const lines = samplingLines(payload, outerOnly);
+  // Never silently skip a malformed segment: it may be the only border of
+  // an enclave or island, and omitting it could produce a false comparison.
+  if (lines.some(line => !line.every(validCoordinate))) {
+    throw new Error('Boundary sampling contains invalid WGS84 coordinates');
+  }
   let candidateCount = 0;
   for (const line of lines) {
     for (let i = 0; i + 1 < line.length; i += 1) {
