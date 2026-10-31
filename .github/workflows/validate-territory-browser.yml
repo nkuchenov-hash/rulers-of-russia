@@ -85,6 +85,9 @@ jobs:
       - name: Verify monthly territory polity chronology
         run: node --experimental-strip-types scripts/test-territory-chronology.mjs
 
+      - name: Reject intermediate historical loads during smooth timeline jumps
+        run: node scripts/test-territory-smooth-scroll.mjs
+
       - name: Test globe texture antimeridian clipping and holes
         run: node scripts/test-globe-texture-fill.mjs
 
