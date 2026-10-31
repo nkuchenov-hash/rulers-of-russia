@@ -1,5 +1,51 @@
 import assert from 'node:assert/strict';
-import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, publicComparisonMetric} from './validate-runivers-regression.mjs';
+import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+
+// A one-month documentary exception must never silently exempt a full
+// year (or several years) of failed independent boundary comparisons.
+const overrideState = {
+  firstMonth: '1599-01', lastMonth: '1603-12', polityId: 'russian-tsardom',
+  snapshotId: 'verified-1600', certificationId: 'cert-1600',
+};
+const overrideLayer = {id: 123, fromYear: 1598, toYear: 1602};
+const overrideItem = {
+  runiversResourceId: 123, startMonth: '1599-01', endMonth: '1601-12',
+  polityId: 'russian-tsardom', snapshotId: 'verified-1600',
+  certificationId: 'cert-1600',
+};
+const findOverride = (item, state = overrideState, layer = overrideLayer, terminal = 2020) =>
+  overrideFor({overrides: [item]}, state, layer, terminal);
+assert.equal(findOverride(overrideItem), overrideItem,
+  'a documentary exception spanning every compared year can be applied');
+for (const item of [
+  {...overrideItem, startMonth: '1600-01'},
+  {...overrideItem, endMonth: '1600-12'},
+  {...overrideItem, startMonth: '1599-02'},
+  {...overrideItem, endMonth: '1601-11'},
+  {...overrideItem, runiversResourceId: 124},
+  {...overrideItem, polityId: 'ussr'},
+  {...overrideItem, snapshotId: 'another-snapshot'},
+  {...overrideItem, certificationId: 'another-certification'},
+]) {
+  assert.equal(findOverride(item), null,
+    'partial-year, partial-range or wrong-identity exception cannot mask a geographic failure');
+}
+assert.equal(findOverride(overrideItem, {...overrideState, firstMonth: '1602-02', lastMonth: '1603-12'}), null,
+  'no fully overlapping year means no eligible override');
+const terminalState = {
+  firstMonth: '2019-01', lastMonth: '2020-12', polityId: 'russian-federation',
+};
+const terminalLayer = {id: 999, fromYear: 2019, toYear: 2020};
+assert.equal(findOverride({
+  runiversResourceId: 999, startMonth: '2019-01', endMonth: '2019-12',
+}, terminalState, terminalLayer, 2020), null,
+'terminal Runivers year is inclusive and cannot be omitted from exception coverage');
+const terminalOverride = {runiversResourceId: 999, startMonth: '2019-01', endMonth: '2020-12'};
+assert.equal(findOverride(terminalOverride, terminalState, terminalLayer, 2020), terminalOverride);
+const halfOpenOverride = {runiversResourceId: 999, startMonth: '2019-01', endMonth: '2019-12'};
+assert.equal(findOverride(halfOpenOverride, terminalState, terminalLayer, 2021), halfOpenOverride,
+  'nonterminal layer ending in 2020 covers 2019 only');
+console.log('Runivers documentary override scope tests passed: complete year intersections only.');
 
 // Approximation metadata raises the existing Runivers tolerance from the
 // year-specific limit to 100 km. A negative flag or a field name alone must
