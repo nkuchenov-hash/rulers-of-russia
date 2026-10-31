@@ -163,7 +163,16 @@ diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));`)};baseMaterial.customProgram
   useLayoutEffect(()=>{
     if(projection!=='globe')return;
     const runtime=sceneRef.current;
-    if(runtime?.renderer.domElement.isConnected)runtime.resize?.();
+    if(!runtime?.renderer.domElement.isConnected)return;
+    runtime.resize?.();
+    // A second draw after the visibility commit handles a delayed WebGL
+    // viewport/layout update. Unlike RAF, a task is not tied to frame polling.
+    // Cleanup cancels it when switching back to the flat map or unmounting.
+    return scheduleMountedGlobeResize(
+      runtime,()=>sceneRef.current,
+      callback=>window.setTimeout(callback,0),
+      timer=>window.clearTimeout(timer)
+    );
   },[projection]);
 
   useEffect(()=>{const group=riverRef.current;if(!group||!rivers)return;group.traverse(o=>{o.geometry?.dispose?.();o.material?.dispose?.()});group.clear();const buckets=buildRiverBuckets(rivers);if(buckets[0].length){const major=makeWideLines(buckets[0],RIVER_COLORS[0],mobile?1.55:2.05,.91,'river',0);major.line.renderOrder=5;group.add(major.line)}if(buckets[1].length){const mid=makeThinLines(buckets[1],RIVER_COLORS[1],.8,1);mid.line.renderOrder=5;group.add(mid.line)}if(buckets[2].length){const minor=makeThinLines(buckets[2],RIVER_COLORS[2],.57,2);minor.line.renderOrder=5;group.add(minor.line)}const box=hostRef.current?.getBoundingClientRect();if(box)group.children.forEach(x=>x.material?.resolution?.set?.(box.width,box.height));renderRef.current()},[rivers,mobile]);
