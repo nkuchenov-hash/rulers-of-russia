@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Documentary exceptions must never be authorized by ambiguous evidence
 // identities or by a syntactically invalid date range. This is a provenance
@@ -281,6 +281,29 @@ assert.ok(!Object.hasOwn(publicMismatch, 'worstReferenceSamples')
   'failed comparison reports must not contain sampled Runivers or History Core border points');
 assert.equal(layerContainsYear({fromYear: 1992, toYear: 2004}, 2004, 2020), false);
 assert.equal(layerContainsYear({fromYear: 2014, toYear: 2020}, 2020, 2020), true);
+// A year-granular Runivers layer can cover 1856 while the verified History
+// Core contour starts only in March. Even if a comparison succeeds for 1857,
+// the validator must not report the untested 1856 months as covered.
+const fullYearLedger = {runiversFromYear: 1856, runiversToYear: 1859,
+  comparedFirstYear: 1857, comparedLastYear: 1858};
+assert.equal(layerContainsYear(fullYearLedger, 1856, 2020), true,
+  'the reference layer itself includes the untested transition year');
+assert.equal(comparisonCoversYear(fullYearLedger, 1856), false,
+  'an untested partial-year state must remain uncovered');
+assert.equal(comparisonCoversYear(fullYearLedger, 1857), true);
+assert.equal(comparisonCoversYear(fullYearLedger, 1858), true);
+assert.equal(comparisonCoversYear(fullYearLedger, 1859), false);
+assert.equal(comparisonCoversYear({comparedFirstYear: 2020, comparedLastYear: 2020}, 2020), true,
+  'a full terminal year remains eligible');
+for (const invalid of [
+  {comparedFirstYear: 1858, comparedLastYear: 1857},
+  {comparedFirstYear: 1857, comparedLastYear: undefined},
+  {comparedFirstYear: '1857', comparedLastYear: 1858},
+]) {
+  assert.equal(comparisonCoversYear(invalid, 1857), false,
+    'invalid or reversed compared-year ledgers cannot certify a month');
+}
+console.log('Runivers uncovered-month integrity passed: source-year overlap cannot replace full-year comparison evidence.');
 const unmatched = unmatchedReferenceLayers([
   {id: 1, fromYear: 1519, toYear: 1520}, // half-open: ended before 1520
   {id: 2, fromYear: 1520, toYear: 1521}, // covers 1520
