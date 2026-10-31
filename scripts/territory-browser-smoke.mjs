@@ -113,6 +113,23 @@ try {
   }, null, {timeout: 8000});
   const monthSelect = page.getByLabel('Месяц');
   if (await monthSelect.count() !== 1) throw new Error('History Core month selector missing');
+  // A wheel gesture over the month/era dropdown must not bubble into the
+  // surrounding timeline and silently change the selected historical year.
+  const yearBeforeSelectorWheel = await page.locator('[class*="timelineYear"]').innerText();
+  const selectorWheel = await page.evaluate(() => {
+    const selects = [...document.querySelectorAll('select[aria-label="Месяц"],select[aria-label="Быстрый переход к эпохе"]')];
+    if (selects.length !== 2) throw new Error('Expected month and era dropdowns for wheel regression');
+    return selects.map(select => {
+      const event = new WheelEvent('wheel', {bubbles:true,cancelable:true,deltaY:-120});
+      select.dispatchEvent(event);
+      return {label:select.getAttribute('aria-label'), canceled:event.defaultPrevented};
+    });
+  });
+  await page.waitForTimeout(120);
+  const yearAfterSelectorWheel = await page.locator('[class*="timelineYear"]').innerText();
+  if (yearAfterSelectorWheel !== yearBeforeSelectorWheel || selectorWheel.some(x=>x.canceled)) {
+    throw new Error('Wheel over a native timeline selector changed the year or canceled the dropdown gesture: '+JSON.stringify({yearBeforeSelectorWheel,yearAfterSelectorWheel,selectorWheel}));
+  }
 
   const state = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');

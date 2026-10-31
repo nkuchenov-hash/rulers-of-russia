@@ -16,7 +16,7 @@ import {fillProjectedFeature} from './globeTextureFill.mjs';
 import {boundaryGrid,boundaryMidpointLongitude,nearBoundary} from './antimeridianBoundaryMath.mjs';
 import {createGlobeTextureLoadGuard} from './globeTextureLoadGuard.mjs';
 import {observeMountedGlobeVisibility,scheduleMountedGlobeResize} from './globeDeferredResize.mjs';
-import {createTimelineScrollGate} from './timelineScrollGate.mjs';
+import {createTimelineScrollGate,shouldHandleTimelineWheel} from './timelineScrollGate.mjs';
 import {isRussianWorldFeature,worldBackgroundTransitionPhase} from './worldRussiaFeatureFilter.mjs';
 import {worldHistoricalContextCaveat,worldHistoricalContextCompactCaveat} from './worldHistoricalContextCaveat.mjs';
 
@@ -200,7 +200,7 @@ diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));`)};baseMaterial.customProgram
   const scrollToYear=useCallback((next,behavior='smooth')=>{const el=timelineRef.current;if(!el)return;const y=clamp(Math.round(next),TERRITORY_MIN_YEAR,TERRITORY_MAX_YEAR),left=(y-TERRITORY_MIN_YEAR)*YEAR_PX;timelineScrollGateRef.current.begin(left,behavior);el.scrollTo({left,behavior});setYear(y)},[]);
   useEffect(()=>{const frame=requestAnimationFrame(()=>scrollToYear(initialYear,'auto'));return()=>cancelAnimationFrame(frame)},[]);
   function onTimelineScroll(){if(scrollFrame.current)cancelAnimationFrame(scrollFrame.current);scrollFrame.current=requestAnimationFrame(()=>{scrollFrame.current=null;const el=timelineRef.current;if(el&&timelineScrollGateRef.current.shouldUpdateYear(el.scrollLeft)){const next=clamp(Math.round(TERRITORY_MIN_YEAR+el.scrollLeft/YEAR_PX),TERRITORY_MIN_YEAR,TERRITORY_MAX_YEAR);setYear(prev=>prev===next?prev:next)}})}
-  function onTimelineWheel(e){const el=timelineRef.current;if(!el)return;const raw=Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX;if(!raw)return;e.preventDefault();const now=performance.now();if(now-timelineWheelRef.current<62)return;timelineWheelRef.current=now;const wasJumping=timelineScrollGateRef.current.isActive();timelineScrollGateRef.current.cancel();const current=wasJumping?year:clamp(Math.round(TERRITORY_MIN_YEAR+el.scrollLeft/YEAR_PX),TERRITORY_MIN_YEAR,TERRITORY_MAX_YEAR);scrollToYear(current+(raw>0?1:-1),'auto')}
+  function onTimelineWheel(e){if(!shouldHandleTimelineWheel(e.target))return;const el=timelineRef.current;if(!el)return;const raw=Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX;if(!raw)return;e.preventDefault();const now=performance.now();if(now-timelineWheelRef.current<62)return;timelineWheelRef.current=now;const wasJumping=timelineScrollGateRef.current.isActive();timelineScrollGateRef.current.cancel();const current=wasJumping?year:clamp(Math.round(TERRITORY_MIN_YEAR+el.scrollLeft/YEAR_PX),TERRITORY_MIN_YEAR,TERRITORY_MAX_YEAR);scrollToYear(current+(raw>0?1:-1),'auto')}
   // Native scrollend also fires if a smooth jump is aborted before reaching its
   // requested offset (for example by browser scroll anchoring). Without this
   // release, later scrollbar movement can be ignored indefinitely.
