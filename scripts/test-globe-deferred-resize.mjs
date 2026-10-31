@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {scheduleMountedGlobeResize} from '../src/app/territory/globeDeferredResize.mjs';
+import {observeMountedGlobeVisibility,scheduleMountedGlobeResize} from '../src/app/territory/globeDeferredResize.mjs';
 
 let queued = new Map(), nextId = 0, canceled = [];
 const request = callback => {const id = ++nextId; queued.set(id, callback); return id;};
@@ -81,4 +81,51 @@ abandonRestore();
 currentRestored = null;
 abandonedTask();
 assert.equal(postCommitRenders,1,'a canceled post-commit task must not render a removed globe');
+// A ResizeObserver cannot detect visibility:hidden -> visible. A host style
+// mutation must redraw exactly on restoration, without touching stale scenes.
+let visibility = 'visible', lastObserver = null, visibilityRenders = 0;
+class FakeMutationObserver {
+  constructor(callback) { this.callback = callback; this.disconnected = false; lastObserver = this; }
+  observe(host, options) {
+    assert.equal(host, visibilityHost);
+    assert.deepEqual(options, {attributes: true, attributeFilter: ['style']});
+  }
+  disconnect() { this.disconnected = true; }
+}
+const visibilityHost = {};
+const visibleRuntime = {renderer:{domElement:{isConnected:true}},resize:()=>{visibilityRenders++;}};
+let activeRuntime = visibleRuntime;
+const stopObserving = observeMountedGlobeVisibility(
+  visibleRuntime,visibilityHost,()=>activeRuntime,FakeMutationObserver,()=>visibility
+);
+const observer = lastObserver;
+observer.callback();
+assert.equal(visibilityRenders,0,'initial visible host must not redraw');
+visibility = 'hidden'; observer.callback();
+visibility = 'visible'; observer.callback();
+assert.equal(visibilityRenders,1,'host restoration must redraw once');
+observer.callback();
+assert.equal(visibilityRenders,1,'duplicate visible mutations must not redraw');
+visibility = 'hidden'; observer.callback();
+activeRuntime = {renderer:{domElement:{isConnected:true}}};
+visibility = 'visible'; observer.callback();
+assert.equal(visibilityRenders,1,'replaced runtime must never redraw');
+visibility = 'hidden'; observer.callback();
+activeRuntime = visibleRuntime;
+visibleRuntime.renderer.domElement.isConnected = false;
+visibility = 'visible'; observer.callback();
+assert.equal(visibilityRenders,1,'detached WebGL canvas must never redraw');
+visibleRuntime.renderer.domElement.isConnected = true;
+visibility = 'hidden'; observer.callback();
+visibility = 'visible'; observer.callback();
+assert.equal(visibilityRenders,2,'mounted runtime must recover on the next restore');
+stopObserving();
+assert.equal(observer.disconnected,true,'cleanup must disconnect visibility observer');
+visibility = 'hidden'; observer.callback();
+visibility = 'visible'; observer.callback();
+assert.equal(visibilityRenders,2,'late callbacks after cleanup must be ignored');
+assert.match(source,/observeMountedGlobeVisibility\(runtime,host,\(\)=>sceneRef\.current,MutationObserver,/,
+  'production globe must observe the live host visibility');
+assert.match(source,/ro\.disconnect\(\);stopVisibilityObserver\(\);/,
+  'React cleanup must disconnect both resize and visibility observers');
 console.log('Globe redraw is synchronous on projection restore, with a guarded cancellable post-commit task.');
