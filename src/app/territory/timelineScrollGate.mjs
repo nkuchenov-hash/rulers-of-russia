@@ -9,6 +9,7 @@ export function createTimelineScrollGate(tolerancePx = 3) {
       target = behavior === 'smooth' ? left : null;
     },
     cancel() { target = null; },
+    isActive() { return target !== null; },
     shouldUpdateYear(left) {
       if (target === null) return true;
       if (!Number.isFinite(left)) return false;
