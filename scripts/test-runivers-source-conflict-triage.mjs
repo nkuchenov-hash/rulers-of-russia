@@ -122,4 +122,34 @@ const invalidMonth = summarizeRuniversSourceConflicts({failedComparisons:[{
 }]});
 assert.deepEqual(invalidMonth.clusters[0].historyStateStarts,[],
   'invalid calendar month must never enter dated source triage');
-console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, no acceptance override.');
+// The same Runivers category/name can refer to distinct dated political
+// acts. Combining them would erase the very transitions under investigation.
+const datedReport = summarizeRuniversSourceConflicts({failedComparisons:[
+  ...[
+    ['1553-01-01', 6],
+    ['1554-01-01', 6],
+    ['1554-01-01', 7],
+  ].map(([lwdate, status], i) => ({
+    runiversResourceId: 5399 + i,
+    historyFirstMonth: '1553-01',
+    symmetricMaxMeters: 1111421 - i,
+    referenceToCurrentMaxMeters: 1111421 - i,
+    boundarySampleAttribution: [{
+      ...sample(1111421 - i, 'Российское царство', 'Зона русской колонизации'),
+      selectedSourceRecords: [{cat:767, name:'Российское царство', lwdate, status}],
+      excludedSourceRecords: [{cat:522, name:'Зона русской колонизации'}],
+    }],
+  })),
+]});
+assert.equal(datedReport.clusters.length, 3,
+  'distinct dated source records must not be collapsed into one conflict');
+assert.equal(datedReport.directionalHotspots.length, 3,
+  'both aggregate and directed source triage must preserve dated identities');
+assert.deepEqual(datedReport.clusters.map(row => row.selectedSourceIdentities).sort(), [
+  '767:Российское царство@1553-01-01#status=6',
+  '767:Российское царство@1554-01-01#status=6',
+  '767:Российское царство@1554-01-01#status=7',
+]);
+assert.ok(!JSON.stringify(datedReport).includes('coordinates'),
+  'dated identity must remain scalar metadata without licensed geometry');
+console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
