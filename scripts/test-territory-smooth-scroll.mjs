@@ -35,8 +35,31 @@ assert.equal(gate.shouldUpdateYear(1800), false, 'Unfinished smooth jump must st
 gate.cancel(); // onScrollEnd releases the gate and rechecks the settled offset.
 assert.equal(gate.shouldUpdateYear(1800), true, 'A settled, interrupted scroll must restore ordinary year scrubbing');
 
+// The ruler viewport is narrower than the browser window because the timeline
+// card has horizontal margins. The first/last tick must align with the needle
+// at scrollLeft=0/max, on both desktop and 360/390px mobile viewports.
+const rulerSpan = (2026 - 862) * 6;
+for (const viewportWidth of [336, 366, 1408]) {
+  const rulerWidth = viewportWidth + rulerSpan;
+  assert.equal(rulerWidth - viewportWidth, rulerSpan, 'last year must be scroll-reachable');
+  for (const selectedYear of [862, 1547, 1721, 1922, 2026]) {
+    const scrollLeft = (selectedYear - 862) * 6;
+    const tickViewportX = rulerWidth / 2 - rulerSpan / 2 + scrollLeft - scrollLeft;
+    assert.equal(tickViewportX, viewportWidth / 2,
+      `needle must align with ${selectedYear} inside a ${viewportWidth}px timeline card`);
+  }
+}
+
 // Guard the actual production wiring, not only the standalone helper.
 const source = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
+assert.ok(source.includes('const TIMELINE_SPAN_PX=(TERRITORY_MAX_YEAR-TERRITORY_MIN_YEAR)*YEAR_PX;'),
+  'ruler geometry must derive from the same year scale as scrollToYear');
+assert.ok(source.includes('style={{width:`calc(100% + ${TIMELINE_SPAN_PX}px)`}}'),
+  'ruler width must use its own viewport, not 100vw');
+const centeredTickStyle = 'style={{left:`calc(50% - ${TIMELINE_SPAN_PX/2}px + ${(y-TERRITORY_MIN_YEAR)*YEAR_PX}px)`}}';
+assert.equal(source.split(centeredTickStyle).length - 1, 2,
+  'both year ticks and historical transition ticks must be centered within the timeline card');
+
 assert.match(source, /timelineScrollGateRef\.current\.begin\(left,behavior\)/,
   'Programmatic year jumps must arm the scroll gate before scrolling');
 assert.match(source, /timelineScrollGateRef\.current\.shouldUpdateYear\(el\.scrollLeft\)/,
