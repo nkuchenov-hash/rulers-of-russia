@@ -43,4 +43,42 @@ assert.match(source, /scheduleMountedGlobeResize\(r,\(\)=>sceneRef\.current,/,
   'production globe must use the guarded deferred resize');
 assert.match(source, /return cancelDeferredResize;/,
   'React effect must cancel a pending frame during cleanup');
-console.log('Deferred globe resize is canceled on cleanup and guarded against stale/disconnected WebGL runtimes.');
+
+// Projection restore must not depend exclusively on a throttled animation
+// frame: render once during the layout effect and once after the commit task.
+// The existing guarded scheduler prevents the second render after unmount.
+const projectionEffect = source.slice(
+  source.indexOf('  useLayoutEffect(()=>{'),
+  source.indexOf('  },[projection]);') + '  },[projection]);'.length
+);
+assert.match(projectionEffect, /runtime\.resize\?\.\(\)/,
+  'returning to the globe must draw synchronously during the layout effect');
+assert.match(projectionEffect, /return scheduleMountedGlobeResize\(/,
+  'returning to the globe must schedule a guarded post-commit redraw');
+assert.match(projectionEffect, /window\.setTimeout\(callback,0\)/,
+  'post-commit redraw must not depend on requestAnimationFrame');
+assert.match(projectionEffect, /window\.clearTimeout\(timer\)/,
+  'post-commit redraw must be canceled on projection change/unmount');
+
+const pendingTasks = new Map();
+let taskId = 0, postCommitRenders = 0;
+const scheduleTask = cb => {const id = ++taskId; pendingTasks.set(id,cb); return id;};
+const cancelTask = id => pendingTasks.delete(id);
+const restored = {renderer:{domElement:{isConnected:true}},resize:()=>{postCommitRenders++;}};
+let currentRestored = restored;
+const finishRestore = scheduleMountedGlobeResize(
+  restored,()=>currentRestored,scheduleTask,cancelTask
+);
+assert.equal(postCommitRenders,0,'second redraw must wait until after commit');
+pendingTasks.get(taskId)();
+assert.equal(postCommitRenders,1,'mounted globe must receive the post-commit redraw');
+finishRestore();
+const abandonRestore = scheduleMountedGlobeResize(
+  restored,()=>currentRestored,scheduleTask,cancelTask
+);
+const abandonedTask = pendingTasks.get(taskId);
+abandonRestore();
+currentRestored = null;
+abandonedTask();
+assert.equal(postCommitRenders,1,'a canceled post-commit task must not render a removed globe');
+console.log('Globe redraw is synchronous on projection restore, with a guarded cancellable post-commit task.');
