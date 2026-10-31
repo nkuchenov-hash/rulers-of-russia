@@ -5,7 +5,16 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 
-const boundedString = value => typeof value === 'string' ? value.slice(0, 120) : null;
+// Keep public source labels short without collapsing two *different* original
+// identifiers that share the displayed prefix. Only scalar source metadata is
+// hashed; geometry and sample positions are never included in this identity.
+const boundedIdentityString = (value, maxLength) => {
+  if (typeof value !== 'string') return null;
+  if (value.length <= maxLength) return value;
+  const digest = createHash('sha256').update(value).digest('hex').slice(0, 16);
+  return value.slice(0, maxLength) + '#sha256=' + digest;
+};
+const boundedString = value => boundedIdentityString(value, 120);
 const finiteNonnegative = value => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 const validResourceId = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
 // Runivers category IDs can arrive as numbers or decimal strings in source
@@ -14,7 +23,7 @@ const validResourceId = value => Number.isSafeInteger(value) && value >= 0 ? val
 const validCategoryId = value => validResourceId(value) ?? (
   typeof value === 'string' && /^\d+$/.test(value) && Number.isSafeInteger(Number(value))
     ? Number(value) : null);
-const boundedFeatureId = value => typeof value === 'string' ? value.slice(0, 160)
+const boundedFeatureId = value => typeof value === 'string' ? boundedIdentityString(value, 160)
   : validResourceId(value) !== null ? String(value) : null;
 const safeMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(value) ? value : null;
 // Source identity at a sampled hotspot is not automatically the identity at
