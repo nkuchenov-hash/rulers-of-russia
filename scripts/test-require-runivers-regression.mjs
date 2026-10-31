@@ -263,6 +263,48 @@ try {
  assert.equal(inconsistentResource.status,1);
  assert.match(inconsistentResource.stderr,/inconsistent dated interval metadata/);
 
+ // The validator applies the strictest year of the actual source/state
+ // overlap, not the first year of a multi-year source. The acceptance gate
+ // must agree at every historical tolerance transition, without allowing
+ // an older, looser limit to certify a later year.
+ for (const [firstYear, lastYear, strictLimit, oldLimit] of [
+   [1699, 1700, 35000, 50000],
+   [1849, 1850, 25000, 35000],
+   [1899, 1900, 15000, 25000],
+ ]) {
+   const startMonth = String(firstYear) + '-01';
+   const endMonth = String(lastYear) + '-12';
+   const rangeSummary = {...summary, auditedRange:{startMonth,endMonth}};
+   const rangeShard = {startMonth,endMonth,rangeMonthCount:24,
+     comparedMonthCount:24,excludedMonthCount:0};
+   const row = {...metricRow('pass'),runiversFromYear:firstYear,
+     runiversToYear:lastYear+1,historyFirstMonth:startMonth,
+     historyLastMonth:endMonth,toleranceMeters:strictLimit,
+     maxToleranceMeters:strictLimit*4};
+   const env = {RUNIVERS_START_MONTH:startMonth,RUNIVERS_END_MONTH:endMonth};
+   assert.equal(run(rangeSummary,rangeShard,env,[row]).status,0,
+     firstYear+'–'+lastYear+': the strict later-year tolerance must be accepted');
+   const inflated = run(rangeSummary,rangeShard,env,[{...row,
+     toleranceMeters:oldLimit,maxToleranceMeters:oldLimit*4}]);
+   assert.equal(inflated.status,1,
+     firstYear+'–'+lastYear+': the earlier, looser tolerance must be rejected');
+   assert.match(inflated.stderr,/changes the historical distance limits/);
+ }
+ // A long-lived source must not extend the tolerance beyond the actual
+ // History Core state; use the last year of the INTERSECTION, not the
+ // source's end year or the state's first year.
+ {
+   const rangeSummary = {...summary,auditedRange:{startMonth:'1699-01',endMonth:'1700-12'}};
+   const rangeShard = {startMonth:'1699-01',endMonth:'1700-12',
+     rangeMonthCount:24,comparedMonthCount:24,excludedMonthCount:0};
+   const row = {...metricRow('pass'),runiversFromYear:1690,
+     runiversToYear:1710,historyFirstMonth:'1699-01',
+     historyLastMonth:'1700-12',toleranceMeters:35000,maxToleranceMeters:140000};
+   assert.equal(run(rangeSummary,rangeShard,
+     {RUNIVERS_START_MONTH:'1699-01',RUNIVERS_END_MONTH:'1700-12'},[row]).status,0,
+     'the latest year of the actual overlap must govern the tolerance');
+ }
+
  assert.equal(run(summary,{...completeShard,startMonth:'1921-01',endMonth:'1920-12'}).status,1,
    'Reversed shard dates cannot pass geographic acceptance');
  console.log('Runivers gate tests passed: complete dated-layer inventory, success, outage, partial coverage, contour failure, override-only comparisons, unverified transition months and malformed totals.');
