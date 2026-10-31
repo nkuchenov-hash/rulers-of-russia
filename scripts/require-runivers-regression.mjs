@@ -43,7 +43,6 @@ const evidenceCoveredMonths = new Set();
 // source/state comparisons, even when every calendar month has *some* pass.
 const resourceIntervals = new Map();
 const resourceCoveredMonths = new Map();
-const ordinalForMonth = month => Number(month.slice(0, 4)) * 12 + Number(month.slice(5)) - 1;
 
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
