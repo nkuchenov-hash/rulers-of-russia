@@ -31,8 +31,26 @@ try {
    ...Array.from({length: s.failedComparisons ?? 0}, () => metricRow('fail')),
    ...Array.from({length: s.overrides ?? 0}, () => metricRow('override')),
  ].map((row, index) => ({...row, runiversResourceId: row.runiversResourceId + index}));
+ // The production validator emits comparedFirstYear/comparedLastYear.
+ // Derive them for synthetic fixtures unless a test explicitly supplies a
+ // forged value. No synthetic pass is evidence of real historical geography.
  const run=(s,shard=completeShard,expected={},comparisonEvidence=evidenceFor(s))=>{
-   fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard,comparisonEvidence}));
+   const ledger = comparisonEvidence?.map(row => {
+     const firstMonth = String(row.historyFirstMonth ?? '');
+     const lastMonth = String(row.historyLastMonth ?? '');
+     const sourceLastYear = Number(row.runiversToYear)
+       - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
+     return {
+       ...row,
+       comparedFirstYear: Object.hasOwn(row,'comparedFirstYear') ? row.comparedFirstYear
+         : Math.max(Number(firstMonth.slice(0,4)) + (firstMonth.slice(5,7) === '01' ? 0 : 1),
+           Number(row.runiversFromYear)),
+       comparedLastYear: Object.hasOwn(row,'comparedLastYear') ? row.comparedLastYear
+         : Math.min(Number(lastMonth.slice(0,4)) - (lastMonth.slice(5,7) === '12' ? 0 : 1),
+           sourceLastYear),
+     };
+   });
+   fs.writeFileSync(path.join(root,'tmp/runivers-regression/report.json'),JSON.stringify({summary:s,shard,comparisonEvidence:ledger}));
    return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
  };
  assert.equal(run(summary).status,0);
@@ -256,12 +274,51 @@ try {
  // that could make a short reference appear to cover extra years.
  const inconsistentResource = run({...summary,comparisons:2,passingComparisons:2},
    completeShard,{},[
-     {...metricRow('pass'),historyLastMonth:'1920-06'},
+     {...metricRow('pass'),historyGeometryFile:'first-state.geojson'},
      {...metricRow('pass'),runiversFromYear:1919,
-       historyFirstMonth:'1920-07',historyLastMonth:'1920-12'},
+       historyGeometryFile:'second-state.geojson'},
    ]);
  assert.equal(inconsistentResource.status,1);
  assert.match(inconsistentResource.stderr,/inconsistent dated interval metadata/);
+
+ // A year-granular source cannot certify two different states that each
+ // occupy only part of the same calendar year. The old gate added their
+ // partial months and could report a false complete-year geographic pass.
+ const stitchedPartialYears = run({...summary,comparisons:2,passingComparisons:2},
+   completeShard,{},[
+     {...metricRow('pass'),historyLastMonth:'1920-06'},
+     {...metricRow('pass'),historyFirstMonth:'1920-07',
+       historyGeometryFile:'second-half-only.geojson'},
+   ]);
+ assert.equal(stitchedPartialYears.status,1,
+   'two partial-year state comparisons cannot certify a full Runivers year');
+ assert.match(stitchedPartialYears.stderr,/complete-calendar-year/);
+ // Even a correctly dated full-year state must not accept invented or
+ // omitted compared-year bounds in the public evidence ledger.
+ for (const forged of [
+   {comparedFirstYear:1919}, {comparedLastYear:1921},
+   {comparedFirstYear:null}, {comparedLastYear:null},
+ ]) {
+   const result = run(summary,completeShard,{},[{...metricRow('pass'),...forged}]);
+   assert.equal(result.status,1,'invalid compared-year evidence must fail closed');
+   assert.match(result.stderr,/complete-calendar-year/);
+ }
+ // A partial final year must not select a stricter later-year tolerance.
+ // The complete year 1899 remains the only valid annual comparison.
+ {
+   const startMonth='1899-01', endMonth='1899-12';
+   const rangeSummary={...summary,auditedRange:{startMonth,endMonth}};
+   const rangeShard={startMonth,endMonth,rangeMonthCount:12,
+     comparedMonthCount:12,excludedMonthCount:0};
+   const row={...metricRow('pass'),runiversFromYear:1899,
+     runiversToYear:1901,historyFirstMonth:'1899-01',
+     historyLastMonth:'1900-06',toleranceMeters:25000,maxToleranceMeters:100000};
+   // The state extends past the shard and is intentionally rejected by the
+   // existing shard-boundary rule; a complete 1899-only state remains valid.
+   assert.equal(run(rangeSummary,rangeShard,
+     {RUNIVERS_START_MONTH:startMonth,RUNIVERS_END_MONTH:endMonth},
+     [{...row,historyLastMonth:'1899-12'}]).status,0);
+ }
 
  // The validator applies the strictest year of the actual source/state
  // overlap, not the first year of a multi-year source. The acceptance gate

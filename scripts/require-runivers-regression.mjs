@@ -43,7 +43,6 @@ const evidenceCoveredMonths = new Set();
 // source/state comparisons, even when every calendar month has *some* pass.
 const resourceIntervals = new Map();
 const resourceCoveredMonths = new Map();
-const ordinalForMonth = month => Number(month.slice(0, 4)) * 12 + Number(month.slice(5)) - 1;
 
 for (const row of evidence) {
   if (!row || !Object.hasOwn(evidenceCounts, row.status)
@@ -97,6 +96,21 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence refers to an out-of-shard or non-overlapping historical interval.');
     process.exit(1);
   }
+  // Runivers is year-granular: a state that begins in February or ends in
+  // November does NOT supply a complete-year border for those years.
+  // Validate the validator's explicit compared-year ledger independently.
+  // Otherwise two partial states can stitch twelve months into a false pass.
+  const firstFullHistoryYear = historyStartYear + (row.historyFirstMonth.slice(5) === '01' ? 0 : 1);
+  const lastFullHistoryYear = historyEndYear - (row.historyLastMonth.slice(5) === '12' ? 0 : 1);
+  const expectedFirstYear = Math.max(row.runiversFromYear, firstFullHistoryYear);
+  const expectedLastYear = Math.min(sourceLastYear, lastFullHistoryYear);
+  if (!Number.isInteger(row.comparedFirstYear) || !Number.isInteger(row.comparedLastYear)
+    || row.comparedFirstYear !== expectedFirstYear
+    || row.comparedLastYear !== expectedLastYear
+    || row.comparedFirstYear > row.comparedLastYear) {
+    console.error('Runivers comparison evidence lacks a valid complete-calendar-year source/state overlap.');
+    process.exit(1);
+  }
   const identity = JSON.stringify([row.runiversResourceId, row.runiversFromYear, row.runiversToYear,
     row.historyFirstMonth, row.historyLastMonth, row.historyGeometryFile]);
   if (seenEvidence.has(identity)) {
@@ -108,8 +122,8 @@ for (const row of evidence) {
   // A source overlapping a long-lived History Core state in one year does not
   // independently verify the other years of that state. Retain only the
   // calendar-month intersection of the source and the state for coverage.
-  const evidenceStart = Math.max(ordinalForMonth(row.historyFirstMonth), row.runiversFromYear * 12);
-  const evidenceEnd = Math.min(ordinalForMonth(row.historyLastMonth), sourceLastYear * 12 + 11);
+  const evidenceStart = row.comparedFirstYear * 12;
+  const evidenceEnd = row.comparedLastYear * 12 + 11;
   const sourceMonths = resourceCoveredMonths.get(row.runiversResourceId) ?? new Set();
   resourceCoveredMonths.set(row.runiversResourceId, sourceMonths);
   for (let month = evidenceStart; month <= evidenceEnd; month += 1) {
@@ -120,11 +134,10 @@ for (const row of evidence) {
 
   // Recompute the original validator tolerance policy from the dated
   // comparison, rather than trusting potentially inflated report numbers.
-  // The validator uses the strictest (latest) year in the actual
-  // source/state overlap. Rechecking only the first year here would reject
-  // valid strict reports and could accept a forged looser threshold when an
-  // interval crosses 1700, 1850 or 1900.
-  const strictestComparisonYear = Math.min(sourceLastYear, historyEndYear);
+  // The validator uses the strictest (latest) FULL year in the actual
+  // source/state overlap. The compared-year ledger is validated above.
+  // A partial final year must never change the tolerance or count as covered.
+  const strictestComparisonYear = row.comparedLastYear;
   const expectedTolerance = row.runiversApproximate ? 100000
     : strictestComparisonYear < 1700 ? 50000
       : strictestComparisonYear < 1850 ? 35000
