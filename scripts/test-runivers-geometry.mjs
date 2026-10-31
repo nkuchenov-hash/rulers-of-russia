@@ -871,13 +871,14 @@ assert.equal(boundedAttribution[0].selectedSourceRecordsTruncated, true);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].featureId, null);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].cat, null);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].status, null);
-assert.equal(boundedAttribution[0].selectedSourceRecords[0].name.length, 160);
+assert.ok(boundedAttribution[0].selectedSourceRecords[0].name.length <= 160);
+assert.ok(boundedAttribution[0].selectedSourceRecords[0].name.includes('#sha256='));
 assert.equal(boundedAttribution[0].selectedSourceRecords[1].featureId, 2);
 assert.ok(!JSON.stringify(boundedAttribution).includes('"coordinates"'),
   'nested source properties and source geometry must never enter CI reports');
 assert.equal(worstAttribution[0].selectedSourceRecordsMatchedCount, 1);
 assert.equal(worstAttribution[0].selectedSourceRecordsTruncated, false);
-console.log('Runivers attribution safety passed: scalar-only metadata, 160-character fields, 20-record cap with truthful truncation counts.');
+console.log('Runivers attribution safety passed: scalar-only metadata, bounded identity fingerprints, 20-record cap with truthful truncation counts.');
 
 console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
 
