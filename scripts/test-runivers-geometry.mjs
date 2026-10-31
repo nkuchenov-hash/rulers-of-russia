@@ -82,6 +82,10 @@ assert.equal(comparisonYearsForState(
   {fromYear: 1699, toYear: 1700},
   {firstMonth: '1700-01', lastMonth: '1700-12'}, 2020,
 ), null, 'half-open source intervals cannot include their end year');
+assert.equal(comparisonYearsForState(
+  {fromYear: '1699', toYear: 1701},
+  {firstMonth: '1699-01', lastMonth: '1700-12'}, 2020,
+), null, 'noninteger source years must still fail closed');
 console.log('Runivers multi-year tolerance tests passed: strictest complete overlap year governs acceptance.');
 
 console.log('Runivers documentary override scope tests passed: complete year intersections only.');
