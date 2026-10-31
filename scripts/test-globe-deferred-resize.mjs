@@ -128,4 +128,10 @@ assert.match(source,/observeMountedGlobeVisibility\(runtime,host,\(\)=>sceneRef\
   'production globe must observe the live host visibility');
 assert.match(source,/ro\.disconnect\(\);stopVisibilityObserver\(\);/,
   'React cleanup must disconnect both resize and visibility observers');
+// The expensive 4K state texture is not rebuilt while its WebGL host is hidden.
+// Returning in states mode must rebuild it because projection is a dependency.
+assert.match(source,/if\(!r\|\|projection!=='globe'\|\|mode!=='states'\)return/,
+  'flat mode must not generate a hidden globe state texture');
+assert.match(source,/\[mode,projection,world,russiaKey,mobile,historyLoading,year,backgroundPhase\]/,
+  'restoring the globe must re-evaluate state texture generation');
 console.log('Globe redraw is synchronous on projection restore, with a guarded cancellable post-commit task.');
