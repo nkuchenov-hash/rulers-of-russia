@@ -76,6 +76,29 @@ assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 b
   'when even one sample per ring is impossible, the geographic audit must fail closed');
 console.log('Runivers component sampling tests passed: disconnected borders survive capped sampling.');
 
+// Geographic comparison must fail closed on projected coordinates or invalid
+// latitudes, including a malformed island after an otherwise valid mainland.
+// Haversine periodicity would otherwise make impossible coordinates look real.
+const polygonPayload = ring => ({type: 'FeatureCollection', features: [
+  {type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [ring]}},
+]});
+const projectedRing = [[200,10],[201,10],[201,11],[200,11],[200,10]];
+const invalidLatitudeRing = [[30,91],[31,91],[31,92],[30,92],[30,91]];
+for (const ring of [projectedRing, invalidLatitudeRing]) {
+  assert.throws(() => samplePayload(polygonPayload(ring), 1000, 20),
+    /invalid WGS84 coordinates/, 'non-WGS84 border must never be sampled');
+  assert.throws(() => samplePayload({type:'FeatureCollection', features:[
+    largeComponent, ...polygonPayload(ring).features,
+  ]}, 1000, 20), /invalid WGS84 coordinates/,
+  'a valid mainland cannot hide an invalid disconnected component');
+}
+const datelineRing = [[179,10],[-179,10],[-179,11],[179,11],[179,10]];
+assert.ok(samplePayload(polygonPayload(datelineRing), 100000, 10).length >= 2,
+  'valid antimeridian geometry remains sampleable');
+console.log('Runivers WGS84 sampling tests passed: invalid coordinates fail closed.');
+
+
+
 const coast = buildCoastIndex();
 // This is a physical coastline, not the edges of individual political states.
 assert.ok(distanceToIndex([37.62, 55.75], coast.index) > 100000, 'Moscow must be inland');
