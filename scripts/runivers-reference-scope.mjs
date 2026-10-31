@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
 
 // Runivers's early layers contain multiple separately named polities. Moscow
@@ -33,8 +34,14 @@ const sovietAdditions = new Set(['369:1922-12-30','731:1922-12-30',
 // original Runivers features stay in memory for geometry and attribution;
 // only bounded, scalar examples may cross into the JSON report.
 const MAX_SCOPE_EXAMPLES = 20;
-const sourceScalar = value => typeof value === 'string' ? value.slice(0, 160)
-  : typeof value === 'number' && Number.isFinite(value) ? value : null;
+// Keep diagnostic strings bounded without collapsing two source names,
+// feature IDs or dates that share the first 160 characters. The original
+// geometry remains in memory and never enters the public report.
+const sourceScalar = value => {
+  if (typeof value === 'string') return value.length <= 160 ? value
+    : value.slice(0, 120) + '#sha256=' + createHash('sha256').update(value).digest('hex').slice(0, 16);
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+};
 function boundedDistinct(values) {
   const unique = [...new Set(values.map(sourceScalar).filter(value => value !== null))];
   return {examples: unique.slice(0, MAX_SCOPE_EXAMPLES), truncated: unique.length > MAX_SCOPE_EXAMPLES};
