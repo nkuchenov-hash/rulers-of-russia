@@ -685,6 +685,19 @@ function layerContainsYear(layer, year, maxRuniversYear) {
   return year >= layer.fromYear && (year < layer.toYear || (layer.toYear === maxRuniversYear && year === layer.toYear));
 }
 
+// The source layer may include a transition year for which the History Core
+// state is valid only from March or until November. Such a year is NOT part of
+// the actual comparison, even when the source layer itself covers it.
+// Report uncovered months from the compared full-year ledger, not the wider
+// reference layer interval.
+function comparisonCoversYear(row, year) {
+  return Number.isInteger(year)
+    && Number.isInteger(row?.comparedFirstYear)
+    && Number.isInteger(row?.comparedLastYear)
+    && row.comparedFirstYear <= row.comparedLastYear
+    && year >= row.comparedFirstYear && year <= row.comparedLastYear;
+}
+
 // Runivers intervals are year-granular. A geometry verified for only part of
 // a calendar year cannot certify the reference for that entire year. Require
 // January through December within the SAME uninterrupted History Core state;
@@ -872,8 +885,8 @@ async function main() {
       continue;
     }
     const year = monthToYear(month.month);
-    const overlappingRows = (coverage.get(coverageRow.key) ?? []).filter(row => layerContainsYear({fromYear: row.runiversFromYear, toYear: row.runiversToYear}, year, maxRuniversYear));
-    if (!overlappingRows.length) uncoveredMonths.push({month: month.month, reason: 'No dated Runivers layer covers this month year', geometryFile: month.geometryFile});
+    const overlappingRows = (coverage.get(coverageRow.key) ?? []).filter(row => comparisonCoversYear(row, year));
+    if (!overlappingRows.length) uncoveredMonths.push({month: month.month, reason: 'No complete-calendar-year Runivers comparison covers this month', geometryFile: month.geometryFile});
   }
 
   const summary = {
@@ -928,7 +941,7 @@ async function main() {
   if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
+export {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, comparisonCoversYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
