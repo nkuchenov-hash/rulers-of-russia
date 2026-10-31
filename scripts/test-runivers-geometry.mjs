@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Whole-layer source metadata must distinguish original feature identities
