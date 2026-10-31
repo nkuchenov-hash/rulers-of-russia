@@ -242,8 +242,11 @@ const untrustedMetadata = feature('Н'.repeat(1000), 80);
 untrustedMetadata.id = {coordinates:[1,2]};
 untrustedMetadata.properties.cat = {geometry:[1,2]};
 const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-republic');
-assert.equal(sanitized.scope.sourceNameExamples[0].length, 160);
-assert.equal(sanitized.scope.sourceRecordExamples[0].name.length, 160);
+assert.ok(sanitized.scope.sourceNameExamples[0].length <= 160);
+assert.ok(sanitized.scope.sourceNameExamples[0].includes('#sha256='),
+  'overlong source labels must retain a bounded identity fingerprint');
+assert.ok(sanitized.scope.sourceRecordExamples[0].name.length <= 160);
+assert.ok(sanitized.scope.sourceRecordExamples[0].name.includes('#sha256='));
 assert.equal(sanitized.scope.sourceRecordExamples[0].featureId, null);
 assert.equal(sanitized.scope.sourceRecordExamples[0].cat, null,
   'source diagnostics must never serialize arbitrary nested source metadata');
