@@ -4,11 +4,14 @@ import {createTimelineScrollGate} from '../src/app/territory/timelineScrollGate.
 
 const gate = createTimelineScrollGate(3);
 assert.equal(gate.shouldUpdateYear(0), true);
+assert.equal(gate.isActive(), false, 'No pending smooth jump initially');
 gate.begin(6000);
+assert.equal(gate.isActive(), true, 'Smooth jump pending');
 for (const left of [100, 500, 2500, 5996]) {
   assert.equal(gate.shouldUpdateYear(left), false, `Intermediate smooth scroll at ${left}px must not change year`);
 }
 assert.equal(gate.shouldUpdateYear(5998), true, 'Arrival releases the gate');
+assert.equal(gate.isActive(), false);
 assert.equal(gate.shouldUpdateYear(600), true, 'Normal manual scrolling resumes after arrival');
 gate.begin(7000);
 gate.begin(3000);
@@ -16,6 +19,7 @@ assert.equal(gate.shouldUpdateYear(7000), false, 'Superseded jump must not chang
 assert.equal(gate.shouldUpdateYear(3000), true);
 gate.begin(9000);
 gate.cancel();
+assert.equal(gate.isActive(), false, 'User interruption must clear the jump');
 assert.equal(gate.shouldUpdateYear(120), true, 'Pointer, touch or wheel input must cancel the jump');
 gate.begin(9000, 'auto');
 assert.equal(gate.shouldUpdateYear(300), true, 'Immediate jumps must not gate scroll events');
@@ -34,6 +38,8 @@ assert.match(source, /onPointerDown=\{cancelTimelineJump\}/,
   'Dragging the ruler must restore manual year scrubbing');
 assert.match(source, /onTouchStart=\{cancelTimelineJump\}/,
   'Touch input must restore manual year scrubbing');
-assert.match(source, /timelineScrollGateRef\.current\.cancel\(\);const now=performance\.now\(\)/,
-  'Wheel input must interrupt an active programmatic jump');
+assert.match(source, /const now=performance\.now\(\);if\(now-timelineWheelRef\.current<62\)return;timelineWheelRef\.current=now;const wasJumping=timelineScrollGateRef\.current\.isActive\(\);timelineScrollGateRef\.current\.cancel\(\)/,
+  'Only accepted wheel events may cancel a smooth jump');
+assert.match(source, /const current=wasJumping\?year:clamp\(/,
+  'Wheel interruption must step from the selected year, not an intermediate animated position');
 console.log('Timeline smooth-jump gate and production integration checks passed.');
