@@ -659,11 +659,20 @@ function lastFullYearOfState(state) {
   return monthToYear(state.lastMonth) - (state.lastMonth.slice(5, 7) === '12' ? 0 : 1);
 }
 
+// A single state/layer comparison can cover several calendar years. The
+// boundary metric is shared across those years, so its acceptance tolerance
+// must be the STRICTEST applicable year (the last, since limits decrease over
+// time). Never use the first overlap year to certify later, stricter eras.
+function comparisonYearsForState(layer, state, maxRuniversYear) {
+  if (!Number.isInteger(layer.fromYear) || !Number.isInteger(layer.toYear)) return null;
+  const firstYear = Math.max(layer.fromYear, firstFullYearOfState(state));
+  const lastYear = Math.min(lastFullYearOfState(state),
+    layer.toYear === maxRuniversYear ? layer.toYear : layer.toYear - 1);
+  return firstYear <= lastYear ? {firstYear, lastYear} : null;
+}
+
 function referenceOverlapsState(layer, state, maxRuniversYear) {
-  for (let year = firstFullYearOfState(state); year <= lastFullYearOfState(state); year += 1) {
-    if (layerContainsYear(layer, year, maxRuniversYear)) return true;
-  }
-  return false;
+  return comparisonYearsForState(layer, state, maxRuniversYear) !== null;
 }
 
 // Year-granular Runivers layers without an overlapping verified full-year
@@ -748,8 +757,10 @@ async function main() {
         continue;
       }
       hasUsableScopedReference = true;
-      const comparisonYear = Math.max(layer.fromYear, firstFullYearOfState(state));
-      const tolerance = toleranceMeters(comparisonYear, approximate), maxTolerance = tolerance * 4;
+      const comparisonYears = comparisonYearsForState(layer, state, maxRuniversYear);
+      // overlappingStates guarantees a complete-year intersection.
+      if (!comparisonYears) throw new Error('Runivers comparison lacks a full-year overlap');
+      const tolerance = toleranceMeters(comparisonYears.lastYear, approximate), maxTolerance = tolerance * 4;
       const override = overrideFor(overrides, state, layer, maxRuniversYear);
       const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
@@ -762,7 +773,7 @@ async function main() {
         && (state.polityId === 'grand-moscow' || state.polityId === 'russian-tsardom');
       const historicalPayload = failedComparison ? loadHistoryGeometry(state) : null;
       const hotspotDiagnostics = earlyPolityFailure ? diagnoseEarlyRussiaHotspots({
-        year: comparisonYear,
+        year: comparisonYears.firstYear,
         referencePayload: scoped.referencePayload,
         historyPayload: historicalPayload,
         selectedSourceFeatures: scoped.sourceFeatures?.selected ?? [],
@@ -786,6 +797,7 @@ async function main() {
         referenceScope: scoped.scope, status, runiversResourceId: layer.id, runiversName: layer.displayName,
         runiversFromYear: layer.fromYear, runiversToYear: layer.toYear,
         runiversIntervalSemantics: layer.toYear === maxRuniversYear ? 'terminal-inclusive' : 'half-open',
+        comparedFirstYear: comparisonYears.firstYear, comparedLastYear: comparisonYears.lastYear,
         runiversApproximate: approximate, historyGeometryFile: state.geometryFile, polityId: state.polityId,
         snapshotId: state.snapshotId, certificationId: state.certificationId,
         historyFirstMonth: state.firstMonth, historyLastMonth: state.lastMonth,
@@ -851,6 +863,8 @@ async function main() {
     runiversFromYear: row.runiversFromYear,
     runiversToYear: row.runiversToYear,
     runiversIntervalSemantics: row.runiversIntervalSemantics,
+    comparedFirstYear: row.comparedFirstYear,
+    comparedLastYear: row.comparedLastYear,
     historyFirstMonth: row.historyFirstMonth,
     historyLastMonth: row.historyLastMonth,
     runiversApproximate: row.runiversApproximate,
@@ -876,7 +890,7 @@ async function main() {
   if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
+export {comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
