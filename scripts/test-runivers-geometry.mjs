@@ -143,6 +143,32 @@ assert.deepEqual(unmatchedReferenceLayers(
 console.log('Runivers geometry tests passed: physical coast, symmetric mismatch, diagnostic locations, half-open and terminal years.');
 
 const {referenceForPolity} = await import('./runivers-reference-scope.mjs');
+// Whole-layer source metadata must distinguish original feature identities
+// even when their first 160 characters coincide. Prefix-only truncation
+// previously undercounted distinct names and hid dated-source conflicts.
+const originalNamePrefix = 'Moscow-source-'.repeat(13);
+const originalFeaturePrefix = 'source-feature-'.repeat(12);
+const longScope = referenceForPolity({
+  referenceSourceFeatures: ['-SECRET_A', '-SECRET_B'].map(suffix => ({
+    id: originalFeaturePrefix + suffix,
+    properties: {name: originalNamePrefix + suffix, cat: 51, lwdate: '1553-01-01'},
+    geometry: {type: 'Polygon', coordinates: [[[0,0],[1,0],[1,1],[0,1],[0,0]]]},
+  })),
+}, 'kievan-rus').scope;
+assert.equal(longScope.distinctNameCount, 2,
+  'long original names must not be merged by public metadata bounds');
+assert.notEqual(longScope.sourceRecordExamples[0].featureId,
+  longScope.sourceRecordExamples[1].featureId,
+  'distinct long feature IDs must retain unique bounded fingerprints');
+assert.notEqual(longScope.sourceRecordExamples[0].name,
+  longScope.sourceRecordExamples[1].name);
+const scopeSerialized = JSON.stringify(longScope);
+assert.ok(scopeSerialized.includes('#sha256='), 'long scalar identities must be fingerprinted');
+assert.ok(!scopeSerialized.includes('SECRET_A') && !scopeSerialized.includes('SECRET_B'),
+  'public scope diagnostics must not disclose overlong source values');
+assert.ok(!scopeSerialized.includes('coordinates'),
+  'public scope diagnostics must not contain source polygons');
+
 const feature = (name, x) => ({type:'Feature',properties:{name},geometry:{type:'Polygon',coordinates:[[[x,50],[x+1,50],[x+1,51],[x,51],[x,50]]]}});
 const source = {type:'FeatureCollection',referenceSourceFeatures:[feature('Московское княжество',30),feature('Тверское княжество',31)],features:[]};
 const scoped = referenceForPolity(source,'grand-moscow');
@@ -216,8 +242,11 @@ const untrustedMetadata = feature('Н'.repeat(1000), 80);
 untrustedMetadata.id = {coordinates:[1,2]};
 untrustedMetadata.properties.cat = {geometry:[1,2]};
 const sanitized = referenceForPolity({referenceSourceFeatures:[untrustedMetadata]}, 'russian-republic');
-assert.equal(sanitized.scope.sourceNameExamples[0].length, 160);
-assert.equal(sanitized.scope.sourceRecordExamples[0].name.length, 160);
+assert.ok(sanitized.scope.sourceNameExamples[0].length <= 160);
+assert.ok(sanitized.scope.sourceNameExamples[0].includes('#sha256='),
+  'overlong source labels must retain a bounded identity fingerprint');
+assert.ok(sanitized.scope.sourceRecordExamples[0].name.length <= 160);
+assert.ok(sanitized.scope.sourceRecordExamples[0].name.includes('#sha256='));
 assert.equal(sanitized.scope.sourceRecordExamples[0].featureId, null);
 assert.equal(sanitized.scope.sourceRecordExamples[0].cat, null,
   'source diagnostics must never serialize arbitrary nested source metadata');
@@ -323,8 +352,10 @@ const safeNamed = referenceForPolity({
 assert.equal(safeNamed.scope.selectedSourceRecords[0].featureId, null);
 assert.equal(safeNamed.scope.selectedSourceRecords[0].cat, null);
 assert.equal(safeNamed.scope.selectedSourceRecords[0].status, null);
-assert.equal(safeNamed.scope.selectedSourceRecords[0].lwdate.length, 160);
-assert.equal(safeNamed.scope.excludedNames[0].length, 160);
+assert.ok(safeNamed.scope.selectedSourceRecords[0].lwdate.length <= 160);
+assert.ok(safeNamed.scope.selectedSourceRecords[0].lwdate.includes('#sha256='));
+assert.ok(safeNamed.scope.excludedNames[0].length <= 160);
+assert.ok(safeNamed.scope.excludedNames[0].includes('#sha256='));
 assert.ok(!JSON.stringify(safeNamed.scope).includes('coordinates'),
   'nested source metadata and geometry must never enter the public named-polity report');
 
@@ -840,13 +871,14 @@ assert.equal(boundedAttribution[0].selectedSourceRecordsTruncated, true);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].featureId, null);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].cat, null);
 assert.equal(boundedAttribution[0].selectedSourceRecords[0].status, null);
-assert.equal(boundedAttribution[0].selectedSourceRecords[0].name.length, 160);
+assert.ok(boundedAttribution[0].selectedSourceRecords[0].name.length <= 160);
+assert.ok(boundedAttribution[0].selectedSourceRecords[0].name.includes('#sha256='));
 assert.equal(boundedAttribution[0].selectedSourceRecords[1].featureId, 2);
 assert.ok(!JSON.stringify(boundedAttribution).includes('"coordinates"'),
   'nested source properties and source geometry must never enter CI reports');
 assert.equal(worstAttribution[0].selectedSourceRecordsMatchedCount, 1);
 assert.equal(worstAttribution[0].selectedSourceRecordsTruncated, false);
-console.log('Runivers attribution safety passed: scalar-only metadata, 160-character fields, 20-record cap with truthful truncation counts.');
+console.log('Runivers attribution safety passed: scalar-only metadata, bounded identity fingerprints, 20-record cap with truthful truncation counts.');
 
 console.log('Runivers live worst-sample attribution passed: both directions, sorted severity, overlap, cap, invalid points, no geometry export.');
 

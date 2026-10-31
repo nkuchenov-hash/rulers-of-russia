@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 // Research-only attribution of the five documented early-Russia Runivers
 // discrepancy clusters (issue #326). Never use these probes to alter geometry,
 // certify a border, relax a tolerance, or promote Runivers data to production.
@@ -123,8 +124,14 @@ export function geojsonLocation(point, payload) {
 // property can itself be an object (including embedded geometry); never
 // serialize arbitrary nested metadata or unbounded strings into CI artifacts.
 const MAX_SOURCE_RECORDS = 20;
-const sourceScalar = value => typeof value === 'string' ? value.slice(0, 160)
-  : typeof value === 'number' && Number.isFinite(value) ? value : null;
+// Source records are already public diagnostic metadata. Preserve distinct
+// original identities beyond the display cap without leaking full source
+// strings: truncation alone collapsed different feature IDs and dated acts.
+const sourceScalar = value => {
+  if (typeof value === 'string') return value.length <= 160 ? value
+    : value.slice(0, 120) + '#sha256=' + createHash('sha256').update(value).digest('hex').slice(0, 16);
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+};
 
 function sourceIdentity(feature) {
   const properties = feature?.properties ?? {};

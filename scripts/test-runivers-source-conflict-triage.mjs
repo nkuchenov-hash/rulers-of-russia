@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {summarizeRuniversSourceConflicts} from './summarize-runivers-source-conflicts.mjs';
+import {diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
 
 const sample = (distanceMeters, selectedName, excludedName, sampledBoundary = 'runivers-reference') => ({
   sampledBoundary,
@@ -270,5 +271,40 @@ assert.ok(!JSON.stringify(longScalarReport).includes('SECRET_'),
   'unbounded source metadata must not be exposed in diagnostic artifacts');
 assert.ok(!JSON.stringify(longScalarReport).includes('coordinates'),
   'long scalar fingerprints must not expose licensed geometry');
+
+// End-to-end regression: source metadata was truncated to 160 characters
+// BEFORE reaching the summarizer. Its own hashing could not recover the lost
+// suffix, so two different original source features appeared identical.
+const sourceSquare = {type: 'Polygon', coordinates: [
+  [[0, 0], [2, 0], [2, 2], [0, 2], [0, 0]],
+]};
+const longOriginalId = 'relation-'.repeat(21);
+const longSourceFailures = ['-ACT_A', '-ACT_B'].map((suffix, index) => {
+  const feature = {type: 'Feature', id: longOriginalId + suffix,
+    properties: {cat: 51, name: 'Московское княжество', lwdate: '1553-01-01', status: 6},
+    geometry: sourceSquare};
+  return {
+    runiversResourceId: 5600 + index, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1000 + index,
+    boundarySampleAttribution: diagnoseFailedBoundarySamples({
+      referenceSamples: [{lonLat: [1, 1], distanceMeters: 1000 + index}],
+      currentSamples: [], referencePayload: feature, historyPayload: feature,
+      selectedSourceFeatures: [feature], excludedSourceFeatures: [],
+    }),
+  };
+});
+const upstreamIdentityReport = summarizeRuniversSourceConflicts({
+  failedComparisons: longSourceFailures,
+});
+assert.equal(upstreamIdentityReport.clusters.length, 2,
+  'long feature IDs must remain distinct after actual hotspot attribution');
+assert.equal(upstreamIdentityReport.directionalHotspots.length, 2,
+  'directional attribution must not collapse distinct upstream source IDs');
+const upstreamOutput = JSON.stringify(upstreamIdentityReport);
+assert.ok(upstreamOutput.includes('#sha256='), 'long upstream source IDs need bounded fingerprints');
+assert.ok(!upstreamOutput.includes('-ACT_A') && !upstreamOutput.includes('-ACT_B'),
+  'full long source identities must not be published');
+assert.ok(!upstreamOutput.includes('coordinates') && !upstreamOutput.includes('lonLat'),
+  'diagnostics must not serialize licensed source geometry or probe positions');
 
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
