@@ -4,6 +4,7 @@ import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
 import {isRussianWorldFeature,worldBackgroundTransitionPhase} from './worldRussiaFeatureFilter.mjs';
 import {zoomFlatCameraAt} from './flatCameraZoom.mjs';
+import {visibleTerrainCopies} from './flatTerrainTiles.mjs';
 
 const TWO_PI=Math.PI*2;
 const PALETTE=['#879477','#b49b79','#808d9a','#9d8b72','#809995','#a18b89','#8d929e'];
@@ -110,7 +111,7 @@ export function HistoricalTerritoryFlatMap({
       const x0=tx-scale*(Math.PI+focusLon*Math.PI/180);
       const y0=ty-scale*Math.PI/2;
       ctx.globalAlpha=.88;
-      for(let repeat=-2;repeat<=2;repeat++)
+      for(const repeat of visibleTerrainCopies(x0,fullWidth,width))
         ctx.drawImage(terrain,x0+repeat*fullWidth,y0,fullWidth,Math.PI*scale);
       ctx.globalAlpha=1;
     }
