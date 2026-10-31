@@ -64,6 +64,61 @@ export function summarizeRuniversSourceConflicts(report) {
     historyStateStarts: [...group.historyStateStarts].sort(),
   })).sort((a, b) => b.comparisons - a.comparisons
     || b.maxSymmetricErrorMeters - a.maxSymmetricErrorMeters);
+  // The two directed border distances describe different failures: a border
+  // present in Runivers but absent from History Core, and the reverse. The
+  // original source identities at their worst samples may differ entirely.
+  // Keep them separate rather than attributing both to the reference side.
+  // This is research metadata only: never emit sample positions or geometry.
+  const directions = [
+    ['runivers-reference', 'referenceToCurrentMaxMeters'],
+    ['history-core', 'currentToReferenceMaxMeters'],
+  ];
+  const directionalGroups = new Map();
+  const unattributedByDirection = Object.fromEntries(directions.map(([direction]) => [direction, 0]));
+  for (const failure of report.failedComparisons) {
+    const samples = Array.isArray(failure?.boundarySampleAttribution)
+      ? failure.boundarySampleAttribution : [];
+    for (const [direction, metricField] of directions) {
+      const worst = samples.filter(sample => sample?.sampledBoundary === direction
+        && finiteNonnegative(sample.distanceMeters) !== null)
+        .sort((a, b) => b.distanceMeters - a.distanceMeters)[0];
+      if (!worst) {
+        unattributedByDirection[direction] += 1;
+        continue;
+      }
+      const selected = sourceKey(worst.selectedSourceRecords);
+      const excluded = sourceKey(worst.excludedSourceRecords);
+      const key = JSON.stringify([direction, selected, excluded]);
+      const current = directionalGroups.get(key) ?? {
+        sampledBoundary: direction,
+        selectedSourceIdentities: selected,
+        excludedSourceIdentities: excluded,
+        comparisons: 0,
+        maxAttributedSampleDistanceMeters: 0,
+        maxReportedDirectionalMeters: null,
+        resourceIds: new Set(),
+        historyStateStarts: new Set(),
+      };
+      current.comparisons += 1;
+      current.maxAttributedSampleDistanceMeters = Math.max(
+        current.maxAttributedSampleDistanceMeters, worst.distanceMeters);
+      const reported = finiteNonnegative(failure?.[metricField]);
+      if (reported !== null) current.maxReportedDirectionalMeters = Math.max(
+        current.maxReportedDirectionalMeters ?? 0, reported);
+      const id = validResourceId(failure?.runiversResourceId);
+      if (id !== null) current.resourceIds.add(id);
+      const month = safeMonth(failure?.historyFirstMonth);
+      if (month) current.historyStateStarts.add(month);
+      directionalGroups.set(key, current);
+    }
+  }
+  const directionalHotspots = [...directionalGroups.values()].map(group => ({
+    ...group,
+    resourceIds: [...group.resourceIds].sort((a, b) => a - b),
+    historyStateStarts: [...group.historyStateStarts].sort(),
+  })).sort((a, b) => b.maxAttributedSampleDistanceMeters - a.maxAttributedSampleDistanceMeters
+    || b.comparisons - a.comparisons);
+
   return {
     schemaVersion: 1,
     diagnosticOnly: true,
@@ -74,6 +129,8 @@ export function summarizeRuniversSourceConflicts(report) {
     },
     failedComparisons: report.failedComparisons.length,
     unattributedComparisons: unattributed,
+    unattributedByDirection,
+    directionalHotspots,
     referenceFailureCount: Array.isArray(report.referenceFailures) ? report.referenceFailures.length : null,
     unmatchedReferenceResourceIds: Array.isArray(report.unmatchedReferenceLayers)
       ? [...new Set(report.unmatchedReferenceLayers.map(row => validResourceId(row?.runiversResourceId))
