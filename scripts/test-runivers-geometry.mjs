@@ -1,5 +1,32 @@
 import assert from 'node:assert/strict';
+import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, publicComparisonMetric} from './validate-runivers-regression.mjs';
+
+// Whole-layer source metadata must distinguish original feature identities
+// even when their first 160 characters coincide. Prefix-only truncation
+// previously undercounted distinct names and hid dated-source conflicts.
+const originalNamePrefix = 'Moscow-source-'.repeat(13);
+const originalFeaturePrefix = 'source-feature-'.repeat(12);
+const longScope = referenceForPolity({
+  referenceSourceFeatures: ['-SECRET_A', '-SECRET_B'].map(suffix => ({
+    id: originalFeaturePrefix + suffix,
+    properties: {name: originalNamePrefix + suffix, cat: 51, lwdate: '1553-01-01'},
+    geometry: {type: 'Polygon', coordinates: [[[0,0],[1,0],[1,1],[0,1],[0,0]]]},
+  })),
+}, 'kievan-rus').scope;
+assert.equal(longScope.distinctNameCount, 2,
+  'long original names must not be merged by public metadata bounds');
+assert.notEqual(longScope.sourceRecordExamples[0].featureId,
+  longScope.sourceRecordExamples[1].featureId,
+  'distinct long feature IDs must retain unique bounded fingerprints');
+assert.notEqual(longScope.sourceRecordExamples[0].name,
+  longScope.sourceRecordExamples[1].name);
+const scopeSerialized = JSON.stringify(longScope);
+assert.ok(scopeSerialized.includes('#sha256='), 'long scalar identities must be fingerprinted');
+assert.ok(!scopeSerialized.includes('SECRET_A') && !scopeSerialized.includes('SECRET_B'),
+  'public scope diagnostics must not disclose overlong source values');
+assert.ok(!scopeSerialized.includes('coordinates'),
+  'public scope diagnostics must not contain source polygons');
 
 // Approximation metadata raises the existing Runivers tolerance from the
 // year-specific limit to 100 km. A negative flag or a field name alone must
