@@ -22,6 +22,10 @@ try {
    referenceScopePolityId: 'russian-republic',
    referenceScopeSelectedFeatures: 1, referenceScopeTotalFeatures: 2,
    referenceSamples: 100, currentSamples: 100,
+   referenceToCurrentP95Meters: status === 'pass' ? 10000 : 16000,
+   referenceToCurrentMaxMeters: status === 'pass' ? 30000 : 61000,
+   currentToReferenceP95Meters: status === 'pass' ? 9000 : 15000,
+   currentToReferenceMaxMeters: status === 'pass' ? 25000 : 50000,
    symmetricP95Meters: status === 'pass' ? 10000 : 16000,
    symmetricMaxMeters: status === 'pass' ? 30000 : 61000,
    toleranceMeters: 15000, maxToleranceMeters: 60000,
@@ -86,6 +90,37 @@ try {
    'a comparison without actual source border samples cannot pass');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),currentSamples:0}]).status,1,
    'a comparison without History Core border samples cannot pass');
+ // The producer must publish both directed distance metrics. A symmetric
+ // aggregate alone cannot prove that both border directions were measured.
+ for (const key of [
+   'referenceToCurrentP95Meters', 'referenceToCurrentMaxMeters',
+   'currentToReferenceP95Meters', 'currentToReferenceMaxMeters',
+ ]) {
+   const missing = {...metricRow('pass')};
+   delete missing[key];
+   const result = run(summary,completeShard,{},[missing]);
+   assert.equal(result.status,1, key + ' must be present');
+   assert.match(result.stderr,/bilateral directed measurements/);
+ }
+ for (const forged of [
+   {referenceToCurrentP95Meters:16000},
+   {currentToReferenceMaxMeters:61000},
+   {currentToReferenceP95Meters:40000},
+   {referenceToCurrentMaxMeters:-1},
+   {currentToReferenceP95Meters:0.5},
+   {symmetricP95Meters:9000},
+   {symmetricMaxMeters:25000},
+ ]) {
+   const result = run(summary,completeShard,{},[{...metricRow('pass'),...forged}]);
+   assert.equal(result.status,1, 'contradictory directed and symmetric metrics must fail');
+   assert.match(result.stderr,/bilateral directed measurements/);
+ }
+ // Either direction may dominate; the symmetric score is the maximum of
+ // both, not necessarily the reference-to-current distance.
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),
+   referenceToCurrentP95Meters:9000, referenceToCurrentMaxMeters:25000,
+   currentToReferenceP95Meters:10000, currentToReferenceMaxMeters:30000,
+ }]).status,0, 'valid reverse-dominant bilateral metrics must still pass');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),runiversResourceId:null}]).status,1,
    'every comparison must identify its source layer');
  // A successful numeric distance against a dissolved whole-layer polygon

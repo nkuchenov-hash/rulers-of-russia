@@ -930,6 +930,13 @@ async function main() {
     referenceScopeTotalFeatures: row.referenceScope?.totalFeatures ?? null,
     referenceSamples: row.referenceSamples,
     currentSamples: row.currentSamples,
+    // Preserve both directed measurements so the independent acceptance
+    // gate can recompute the symmetric score rather than trusting one number.
+    // Distances are scalar metrics only; no source coordinates are serialized.
+    referenceToCurrentP95Meters: row.referenceToCurrentP95Meters,
+    referenceToCurrentMaxMeters: row.referenceToCurrentMaxMeters,
+    currentToReferenceP95Meters: row.currentToReferenceP95Meters,
+    currentToReferenceMaxMeters: row.currentToReferenceMaxMeters,
     symmetricP95Meters: row.symmetricP95Meters,
     symmetricMaxMeters: row.symmetricMaxMeters,
     toleranceMeters: row.toleranceMeters,

@@ -71,6 +71,22 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence contains an invalid or incomplete metric row.');
     process.exit(1);
   }
+  // Both directed measurements are necessary for a bilateral border audit.
+  // Recompute the symmetric maxima from the rounded directed values: a
+  // substituted or corrupted aggregate must never create a false green pass.
+  // The producing validator rounds each direction before serialization.
+  const directedFields = [
+    'referenceToCurrentP95Meters', 'referenceToCurrentMaxMeters',
+    'currentToReferenceP95Meters', 'currentToReferenceMaxMeters',
+  ];
+  if (!directedFields.every(key => Number.isSafeInteger(row[key]) && row[key] >= 0)
+    || row.referenceToCurrentP95Meters > row.referenceToCurrentMaxMeters
+    || row.currentToReferenceP95Meters > row.currentToReferenceMaxMeters
+    || row.symmetricP95Meters !== Math.max(row.referenceToCurrentP95Meters, row.currentToReferenceP95Meters)
+    || row.symmetricMaxMeters !== Math.max(row.referenceToCurrentMaxMeters, row.currentToReferenceMaxMeters)) {
+    console.error('Runivers symmetric distances disagree with bilateral directed measurements.');
+    process.exit(1);
+  }
   // A numeric border metric from another era must not certify this shard.
   // A source interval can start before the History Core state or vice versa,
   // but the two intervals must overlap under Runivers's half-open semantics.
