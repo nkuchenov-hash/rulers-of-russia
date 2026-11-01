@@ -72,7 +72,7 @@ function geometryLooksWgs84(payload) {
     if (!Array.isArray(value[0])) {
       if (value.length < 2 || !Number.isFinite(value[0]) || !Number.isFinite(value[1])) return false;
       checked += 1;
-      return Math.abs(value[0]) <= 180.000001 && Math.abs(value[1]) <= 90.000001;
+      return Math.abs(value[0]) <= 180 && Math.abs(value[1]) <= 90;
     }
     return value.every(inspectCoordinates);
   };
