@@ -23,6 +23,16 @@ const validRegistryItem = {
 };
 const validateRegistry = item => validateOverrides({schema_version: 1, overrides: [item]}, evidenceIndex);
 assert.doesNotThrow(() => validateRegistry(validRegistryItem));
+// A non-string reason has no trustworthy documentary meaning. Previously
+// truthy objects/numbers bypassed the length check (undefined < 20 is false).
+for (const reason of [{}, {text: 'A long explanation'}, 12345, ['A long explanation'],
+  '                    ', '  too short  ', null]) {
+  assert.throws(() => validateRegistry({...validRegistryItem, reason}),
+    /evidence-backed reason is required/,
+    'geographic exceptions require a substantive string explanation');
+}
+assert.doesNotThrow(() => validateRegistry({...validRegistryItem,
+  reason: '  Documented independent archival border exception.  '}));
 for (const invalid of [
   {startMonth: '1599-00'}, {startMonth: '1599-13'},
   {startMonth: '1599-1'}, {startMonth: '1599-01-extra'},
