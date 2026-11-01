@@ -269,6 +269,10 @@ const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a)$/i;
 // A mixed positive/negative note is ambiguous: fail closed at the strict
 // tolerance until its source meaning has been independently reviewed.
 const negatedApproximation = /(?:^|[\s,;:(])(?:not[-\s]+|non[-\s]*|no\s+)(?:approximate|approximation|uncertain|reconstructed|reconstruction)(?=$|[\s,.;:!?)])|(?:^|[\s,;:(])не\s+(?:приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*|реконструированн[а-яё]*)(?=$|[\s,.;:!?)])/i;
+// Source notes also use key=value / key: value notation. A description like
+// "approximate=false" previously matched the affirmative keyword and raised
+// the allowable error to 100 km, despite explicitly denying approximation.
+const negativeApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*)\s*[:=]\s*(?:false|no|нет|0)(?=$|[\s,;)}.!?])/i;
 
 function hasApproximationEvidence(value, key = '') {
   if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
@@ -279,7 +283,8 @@ function hasApproximationEvidence(value, key = '') {
   if (typeof value === 'number') return approximationMarker.test(key) && value === 1;
   if (typeof value !== 'string') return false;
   const label = value.trim();
-  if (explicitNonApproximation.test(label) || negatedApproximation.test(label)) return false;
+  if (explicitNonApproximation.test(label) || negatedApproximation.test(label)
+    || negativeApproximationAssignment.test(label)) return false;
   return approximationMarker.test(label)
     || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
 }
@@ -296,7 +301,7 @@ function hasExplicitNonApproximation(value, key = '') {
   if (typeof value === 'number') return approximationMarker.test(key) && value === 0;
   if (typeof value !== 'string') return false;
   const label = value.trim();
-  return negatedApproximation.test(label)
+  return negatedApproximation.test(label) || negativeApproximationAssignment.test(label)
     || (approximationMarker.test(key) && explicitNonApproximation.test(label));
 }
 
