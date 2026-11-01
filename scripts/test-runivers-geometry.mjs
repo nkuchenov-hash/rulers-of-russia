@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
 import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Documentary exceptions must never be authorized by ambiguous evidence
@@ -800,6 +801,40 @@ for (const [label, payload] of Object.entries({malformedHole,mixedBrokenPolygon,
     label + ' must not pass because another ring or feature is valid');
 }
 console.log('Runivers malformed-ring regression passed: invalid holes and mixed polygon parts cannot certify borders.');
+
+// All vertices of this hole are inside the concave exterior, but its top
+// edge passes outside the shell. Checking vertices alone accepts a false
+// independent boundary. Crossing/touching holes must fail closed as well.
+const concaveShell = [[0,0],[6,0],[6,6],[4,6],[4,2],[2,2],[2,6],[0,6],[0,0]];
+const interiorHole = [[.5,.5],[1.5,.5],[1.5,1.5],[.5,1.5],[.5,.5]];
+const escapingHole = [[1,1],[5,1],[5,5],[1,5],[1,1]];
+const squareShell = [[0,0],[10,0],[10,10],[0,10],[0,0]];
+const holeA = [[2,2],[5,2],[5,5],[2,5],[2,2]];
+const holeB = [[4,4],[7,4],[7,7],[4,7],[4,4]];
+const nestedHole = [[3,3],[4,3],[4,4],[3,4],[3,3]];
+assert.equal(hasValidPolygonTopology([concaveShell, interiorHole]), true);
+assert.equal(hasValidPolygonTopology([concaveShell, escapingHole]), false);
+assert.equal(hasValidPolygonTopology([squareShell, holeA, holeB]), false);
+assert.equal(hasValidPolygonTopology([squareShell, [[2,2],[8,2],[8,8],[2,8],[2,2]], nestedHole]), false);
+assert.equal(hasValidRingTopology(squareShell), true);
+assert.equal(hasValidRingTopology([[0,0],[3,3],[0,3],[3,0],[0,0]]), false);
+const antimeridianShell = [[179,10],[-179,10],[-179,12],[179,12],[179,10]];
+const antimeridianHole = [[179.4,10.4],[-179.4,10.4],[-179.4,11.4],[179.4,11.4],[179.4,10.4]];
+assert.equal(hasValidPolygonTopology([antimeridianShell, antimeridianHole]), true,
+  'legitimate holes crossing the antimeridian remain usable');
+assert.equal(hasValidRingTopology([[180,10],[-180,10],[-180,11],[180,11],[180,10]]), false);
+const polygonWithRings = rings => ({type:'FeatureCollection',features:[
+  {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:rings}},
+]});
+for (const rings of [[concaveShell, escapingHole], [squareShell, holeA, holeB],
+  [squareShell, [[2,2],[8,2],[8,8],[2,8],[2,2]], nestedHole]]) {
+  assert.throws(() => requireUsableReferenceGeometry(polygonWithRings(rings),5395),
+    /malformed polygon rings/, 'invalid hole topology cannot certify a Runivers reference');
+}
+assert.equal(requireUsableReferenceGeometry(polygonWithRings([concaveShell, interiorHole]),5395).hasPolygon,true);
+assert.equal(requireUsableReferenceGeometry(polygonWithRings([antimeridianShell, antimeridianHole]),5395).hasPolygon,true);
+console.log('Runivers edge-topology tests passed: escaping and overlapping holes fail closed.');
+
 
 // A mixed Runivers export can have a valid national polygon plus malformed
 // auxiliary geometry. Silently ignoring the broken sibling makes a partial
