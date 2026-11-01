@@ -272,7 +272,16 @@ export function HistoricalTerritoryFlatMap({
     if(!node)return;
     const handleWheel=e=>{
       const factor=flatWheelZoomFactor(e.deltaY,e.deltaMode,e.ctrlKey);
-      if(factor===1)return;
+      if(factor===1){
+        // Horizontal trackpad swipes should pan the map, not scroll the page.
+        // Preserve the native cancelation contract for both wheel axes.
+        if(Number.isFinite(e.deltaX)&&e.deltaX!==0){
+          e.preventDefault();
+          const unit=e.deltaMode===1?40:e.deltaMode===2?400:1;
+          onCameraChange(prev=>({...prev,dx:prev.dx-e.deltaX*unit}));
+        }
+        return;
+      }
       e.preventDefault();
       const bounds=node.getBoundingClientRect();
       const anchorX=e.clientX-bounds.left-bounds.width/2;
