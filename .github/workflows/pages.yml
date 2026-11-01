@@ -84,6 +84,9 @@ jobs:
       - name: Verify month-by-month political title vs geometry lineage
         run: node scripts/test-history-month-political-track.mjs
 
+      - name: Enforce strict History Core documentary completion before publication
+        run: node scripts/audit-history-completion.mjs --require-complete
+
       - name: Verify complete month coverage
         run: |
           node - <<'NODE'
