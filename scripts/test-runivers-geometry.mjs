@@ -985,7 +985,7 @@ assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:{inva
 assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:[null]}),
   'unavailable', 'null source features must fail closed');
 assert.equal(geojsonLocation([41.5,54], {type:'Point',coordinates:[41.5,54]}),
-  'outside', 'valid non-area source features still cannot establish territory');
+  'unavailable', 'a point-only export cannot establish territory OR its absence');
 
 const validAuxiliary = [
   {type:'Point',coordinates:[37,55]},
@@ -994,8 +994,8 @@ const validAuxiliary = [
   {type:'MultiLineString',coordinates:[[[37,55],[38,55]],[[39,55],[40,55]]]},
 ];
 for (const geometry of validAuxiliary) {
-  assert.equal(geojsonLocation([41.5,54], geometry), 'outside',
-    'valid non-area ' + geometry.type + ' remains outside the sovereign-area test');
+  assert.equal(geojsonLocation([41.5,54], geometry), 'unavailable',
+    'valid non-area ' + geometry.type + ' cannot establish a sovereign-area verdict');
   assert.equal(geojsonLocation([NaN,54], geometry), 'unavailable',
     'an invalid probe must not imply absence even with valid ' + geometry.type);
 }
