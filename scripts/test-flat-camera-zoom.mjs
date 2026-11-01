@@ -48,8 +48,12 @@ assert.equal(flatWheelZoomFactor(1, 3), 1, 'unknown deltaMode is inert');
 const flatMap = readFileSync(new URL('../src/app/territory/HistoricalTerritoryFlatMap.jsx', import.meta.url), 'utf8');
 assert.match(flatMap, /flatWheelZoomFactor\(e\.deltaY,e\.deltaMode,e\.ctrlKey\)/,
   'production 2D map must normalize the native wheel delta');
-assert.match(flatMap, /if\(factor===1\)return;\s*e\.preventDefault\(\)/,
-  'inert wheel events must not suppress page scrolling');
+assert.match(flatMap, /if\(factor===1\)\{/,
+  'zero vertical delta must be handled separately from zoom');
+assert.match(flatMap, /if\(Number\.isFinite\(e\.deltaX\)&&e\.deltaX!==0\)\{\s*e\.preventDefault\(\)/,
+  'horizontal trackpad swipes must be canceled to avoid scrolling the page');
+assert.match(flatMap, /dx:prev\.dx-e\.deltaX\*unit/,
+  'horizontal trackpad swipes must pan the map instead of being discarded');
 assert.doesNotMatch(flatMap, /const factor=e\.deltaY>0\?\.85:1\.15/,
   'fixed-per-event zoom must not return');
 console.log('2D wheel, trackpad and browser pinch zoom are continuous and bounded.');
