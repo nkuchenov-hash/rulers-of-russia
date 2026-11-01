@@ -269,6 +269,18 @@ assert.equal(same.symmetricMaxMeters, 0);
 const nearThresholdPoint = metres => [0, metres / 6371008.8 * 180 / Math.PI];
 const preciseReference = {points: [[0, 0]], allCount: 1};
 const preciseClass = {hasPolygon: true, types: ['Polygon']};
+// Two different boundary errors can display the same whole-metre distance.
+// The actual larger mismatch must remain first for source-identity triage.
+const nearerHotspot = nearThresholdPoint(1000.1);
+const fartherHotspot = nearThresholdPoint(1000.4);
+const hotspotOrder = comparePoliticalGeometry(
+  {points: [nearerHotspot, fartherHotspot], allCount: 2},
+  {points: [[0, 0]], allCount: 1}, preciseClass);
+assert.deepEqual(hotspotOrder.worstReferenceSamples.map(sample => sample.lonLat),
+  [fartherHotspot, nearerHotspot],
+  'hotspot ranking must use unrounded distances even when displayed metres tie');
+assert.deepEqual(hotspotOrder.worstReferenceSamples.map(sample => sample.distanceMeters),
+  [1000, 1000], 'diagnostic distance display stays rounded to whole metres');
 const nearFailure = comparePoliticalGeometry(preciseReference,
   {points: [nearThresholdPoint(15000.25)], allCount: 1}, preciseClass);
 assert.equal(nearFailure.symmetricP95Meters, 15000);
