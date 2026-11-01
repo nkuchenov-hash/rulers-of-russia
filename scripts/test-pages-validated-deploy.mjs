@@ -7,6 +7,28 @@ import {execFileSync, spawnSync} from 'node:child_process';
 // Exercise the actual shell bodies in pages.yml against a local Git remote.
 // No GitHub token, network access or historical geometry is needed.
 const workflow = fs.readFileSync(new URL('../.github/workflows/pages.yml', import.meta.url), 'utf8');
+
+// The monthly count is not the strict documentary completion audit. A build
+// can contain all 13,980 months while one of the other audit criteria fails.
+// Require the same fail-closed audit in merged-main CI and the Pages build.
+const mergedMainWorkflow = fs.readFileSync(
+  new URL('../.github/workflows/validate-merged-main.yml', import.meta.url), 'utf8');
+const strictAuditCommand = 'run: node scripts/audit-history-completion.mjs --require-complete';
+for (const [name, source] of [
+  ['merged-main validation', mergedMainWorkflow],
+  ['Pages publication', workflow],
+]) {
+  assert.ok(source.includes(strictAuditCommand),
+    name + ' must reject incomplete documentary coverage, not merely count months');
+  const materialize = source.indexOf('run: npm run materialize:history');
+  const strictAudit = source.indexOf(strictAuditCommand);
+  const build = source.indexOf('run: npm run build');
+  assert.ok(materialize >= 0 && materialize < strictAudit && strictAudit < build,
+    name + ' must enforce the strict audit after materialization and before build');
+}
+assert.doesNotMatch(mergedMainWorkflow,
+  /run: node scripts\/audit-history-completion\.mjs\s*$/m,
+  'merged-main must not silently run the non-enforcing audit');
 assert.doesNotMatch(workflow, /^  workflow_dispatch:\s*$/m,
   'manual Pages dispatch must not bypass successful main validation');
 assert.match(workflow, /github\.event\.workflow_run\.conclusion == 'success'/,
