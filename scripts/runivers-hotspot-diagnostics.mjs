@@ -101,13 +101,14 @@ function polygonLocation(point, rings) {
   // can be misreported as definitive "outside" rather than "unavailable".
   const holeLocations = rings.slice(1).map(hole => ringLocation(point, hole));
   if (exterior === 'unavailable' || holeLocations.includes('unavailable')) return 'unavailable';
-  // GeoJSON interior rings must lie within their exterior. A disjoint hole
-  // makes the source polygon invalid even when this probe is far from it.
-  // Check an actual hole vertex against the shell; never treat an invalid
-  // sovereign contour as evidence of inclusion or exclusion. This is a
-  // necessary containment check, not a full topology certification.
+  // A hole can begin inside the exterior and later leave or touch it.
+  // Checking only hole[0] falsely certified those malformed polygons.
+  // Check every distinct vertex regardless of the probe location. Edge
+  // crossings between vertices still need a separate topology audit.
   for (const hole of rings.slice(1)) {
-    if (ringLocation(hole[0], rings[0]) !== 'inside') return 'unavailable';
+    for (const vertex of hole.slice(0, -1)) {
+      if (ringLocation(vertex, rings[0]) !== 'inside') return 'unavailable';
+    }
   }
   if (exterior === 'outside') return 'outside';
   if (holeLocations.includes('boundary')) return 'boundary';
