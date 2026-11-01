@@ -13,6 +13,7 @@ on:
       - 'scripts/test-runivers-transport-order.mjs'
       - 'scripts/runivers-reference-scope.mjs'
       - 'scripts/runivers-hotspot-diagnostics.mjs'
+      - 'scripts/runivers-ring-topology.mjs'
       - 'scripts/summarize-runivers-source-conflicts.mjs'
       - 'scripts/test-runivers-source-conflict-triage.mjs'
       - 'scripts/history-archive-component-exclusions.mjs'

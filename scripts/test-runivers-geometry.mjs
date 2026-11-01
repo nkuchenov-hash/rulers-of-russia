@@ -916,6 +916,17 @@ const antimeridianShell = [[179,10],[-179,10],[-179,12],[179,12],[179,10]];
 const antimeridianHole = [[179.4,10.4],[-179.4,10.4],[-179.4,11.4],[179.4,11.4],[179.4,10.4]];
 assert.equal(hasValidPolygonTopology([antimeridianShell, antimeridianHole]), true,
   'legitimate holes crossing the antimeridian remain usable');
+// The exterior begins at Greenwich but extends east of the antimeridian.
+// Aligning a hole with shell[0] incorrectly leaves the eastern hole at -179
+// rather than +181. The western hole must remain on the original longitude
+// branch. Both are valid parts of the same WGS84 polygon.
+const wideDatelineShell = [[0,0],[100,0],[179,0],[-179,0],[-179,10],[100,10],[0,10],[0,0]];
+const wideEasternHole = [[-179.8,2],[-179.2,2],[-179.2,4],[-179.8,4],[-179.8,2]];
+const wideWesternHole = [[1,2],[2,2],[2,3],[1,3],[1,2]];
+assert.equal(hasValidPolygonTopology([wideDatelineShell, wideEasternHole, wideWesternHole]), true,
+  'wide antimeridian shell must accept both east and west interior holes');
+assert.equal(hasValidPolygonTopology([wideDatelineShell, wideEasternHole, [[-179.6,2.5],[-179.1,2.5],[-179.1,3.5],[-179.6,3.5],[-179.6,2.5]]]), false,
+  'wide shell must still reject overlapping holes after alignment');
 assert.equal(hasValidRingTopology([[180,10],[-180,10],[-180,11],[180,11],[180,10]]), false);
 const polygonWithRings = rings => ({type:'FeatureCollection',features:[
   {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:rings}},
