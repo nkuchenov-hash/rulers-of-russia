@@ -564,9 +564,16 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
   const currentIndex = buildPointIndex([...(current.allPoints ?? current.points)]);
   const refToCurrent = directedDistancesToIndex(reference.points, currentIndex);
   const currentToRef = referenceClass.hasPolygon ? directedDistancesToIndex(current.points, referenceIndex) : [];
+  // Rank hotspot samples using the original measurements. Rounding before
+  // sorting can select a smaller error when two distinct distances round to
+  // the same metre, hiding the actual worst source-identity attribution.
+  // Only the emitted diagnostic distances are rounded; the geographic
+  // acceptance gate already uses the exact bilateral distances.
   const worstSamples = (points, distances) => distances
-    .map((distance, index) => ({lonLat: points[index], distanceMeters: Math.round(distance)}))
-    .sort((a, b) => b.distanceMeters - a.distanceMeters).slice(0, 5);
+    .map((distance, index) => ({lonLat: points[index], exactDistanceMeters: distance}))
+    .sort((a, b) => b.exactDistanceMeters - a.exactDistanceMeters)
+    .slice(0, 5)
+    .map(({lonLat, exactDistanceMeters}) => ({lonLat, distanceMeters: Math.round(exactDistanceMeters)}));
   const refP95 = percentile(refToCurrent, .95), refMax = Math.max(...refToCurrent);
   const curP95 = currentToRef.length ? percentile(currentToRef, .95) : null;
   const curMax = currentToRef.length ? Math.max(...currentToRef) : null;
