@@ -93,6 +93,7 @@ export function HistoricalTerritoryFlatMap({
 
     // All camera actions affect the two-dimensional plane, not a second globe.
     const scale=Math.min(width/TWO_PI,height/Math.PI)*camera.zoom;
+    const fullWidth=TWO_PI*scale;
     // Center both longitude and latitude on the selected Russian period.
     // The equirectangular map itself remains north-up: pan the projected
     // y-origin instead of rotating the terrestrial latitude axis.
@@ -107,7 +108,6 @@ export function HistoricalTerritoryFlatMap({
     if(terrain?.complete&&terrain.naturalWidth&&mode==='relief'){
       // Equirectangular terrain is the same source as the globe. Repeat it
       // across the antimeridian, allowing seamless longitude panning.
-      const fullWidth=TWO_PI*scale;
       const x0=tx-scale*(Math.PI+focusLon*Math.PI/180);
       const y0=ty-scale*Math.PI/2;
       ctx.globalAlpha=.88;
@@ -116,8 +116,15 @@ export function HistoricalTerritoryFlatMap({
       ctx.globalAlpha=1;
     }
 
-    ctx.beginPath();
-    path(graticule);
+    // The projection clips vectors to one world even though the terrain repeats.
+    // Draw only the world copies intersecting the viewport, so after crossing
+    // the antimeridian (or panning several revolutions) state fills, verified
+    // boundaries, graticule and labels remain aligned with the relief.
+    for(const repeat of visibleTerrainCopies(tx-Math.PI*scale,fullWidth,width)){
+      ctx.save();
+      ctx.translate(repeat*fullWidth,0);
+      ctx.beginPath();
+      path(graticule);
     ctx.strokeStyle='rgba(191,207,199,.14)';
     ctx.lineWidth=1;
     ctx.stroke();
@@ -165,12 +172,15 @@ export function HistoricalTerritoryFlatMap({
       ctx.textBaseline='middle';
       for(const {name,coordinates} of worldLabels){
         const point=projection(coordinates);
-        if(!point||point[0]<50||point[0]>width-50||point[1]<16||point[1]>height-16)continue;
+        const screenX=point?.[0]+repeat*fullWidth;
+        if(!point||screenX<50||screenX>width-50||point[1]<16||point[1]>height-16)continue;
         ctx.lineWidth=3;ctx.strokeStyle='rgba(4,14,18,.9)';
         ctx.fillStyle='rgba(244,234,213,.92)';
         ctx.strokeText(name,point[0],point[1],150);
         ctx.fillText(name,point[0],point[1],150);
       }
+    }
+      ctx.restore();
     }
     // No geometry means no Russian territory is painted. The existing
     // History Core accuracy caption reports that state explicitly.
