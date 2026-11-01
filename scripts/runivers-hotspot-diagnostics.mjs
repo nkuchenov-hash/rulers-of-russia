@@ -130,12 +130,28 @@ export function geometryLocation(point, geometry) {
   return 'unavailable';
 }
 
+// A point or line annotation has no sovereign area. Its valid coordinates
+// cannot establish that a queried location is OUTSIDE a historical state.
+// Require at least one area member before emitting any inside/outside verdict;
+// geometryLocation still checks all siblings, so malformed annotations fail closed.
+function hasAreaMember(geometry) {
+  if (!geometry || typeof geometry !== 'object') return false;
+  if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') return true;
+  if (geometry.type === 'GeometryCollection') return Array.isArray(geometry.geometries)
+    && geometry.geometries.some(hasAreaMember);
+  return false;
+}
+
 export function geojsonLocation(point, payload) {
   if (!payload) return 'unavailable';
-  if (payload.type === 'FeatureCollection') return Array.isArray(payload.features)
-    ? combineLocations(payload.features.map(feature => geometryLocation(point, feature?.geometry))) : 'unavailable';
-  if (payload.type === 'Feature') return geometryLocation(point, payload.geometry);
-  return geometryLocation(point, payload);
+  if (payload.type === 'FeatureCollection') {
+    if (!Array.isArray(payload.features)
+      || !payload.features.some(feature => hasAreaMember(feature?.geometry))) return 'unavailable';
+    return combineLocations(payload.features.map(feature => geometryLocation(point, feature?.geometry)));
+  }
+  if (payload.type === 'Feature') return hasAreaMember(payload.geometry)
+    ? geometryLocation(point, payload.geometry) : 'unavailable';
+  return hasAreaMember(payload) ? geometryLocation(point, payload) : 'unavailable';
 }
 
 // Only bounded scalar identities belong in public diagnostics. A source

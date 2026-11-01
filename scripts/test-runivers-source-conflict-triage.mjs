@@ -1,6 +1,37 @@
 import assert from 'node:assert/strict';
 import {summarizeRuniversSourceConflicts} from './summarize-runivers-source-conflicts.mjs';
-import {diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
+import {diagnoseFailedBoundarySamples, geojsonLocation} from './runivers-hotspot-diagnostics.mjs';
+
+// Annotation-only exports do not describe a sovereign territory. Previously
+// a valid Point or LineString was reported as definitively "outside" at every
+// coordinate, even though no independent area boundary had been supplied.
+const diagnosticPoint = [1, 1];
+const square = {type:'Polygon',coordinates:[[
+  [0,0],[2,0],[2,2],[0,2],[0,0],
+]]};
+const annotation = {type:'Point',coordinates:[10,10]};
+const lineAnnotation = {type:'LineString',coordinates:[[10,10],[11,11]]};
+const feature = geometry => ({type:'Feature',properties:{},geometry});
+const collection = features => ({type:'FeatureCollection',features});
+for (const geometry of [annotation, lineAnnotation, {
+  type:'GeometryCollection',geometries:[annotation,lineAnnotation],
+}]) {
+  assert.equal(geojsonLocation(diagnosticPoint, geometry),'unavailable',
+    'a geometry without a polygon cannot prove the point is outside sovereign territory');
+  assert.equal(geojsonLocation(diagnosticPoint, feature(geometry)),'unavailable');
+  assert.equal(geojsonLocation(diagnosticPoint, collection([feature(geometry)])),'unavailable');
+}
+assert.equal(geojsonLocation(diagnosticPoint, collection([feature(square),feature(annotation)])), 'inside',
+  'a valid annotation alongside a genuine polygon must not suppress the area verdict');
+assert.equal(geojsonLocation([5,5], collection([feature(square),feature(lineAnnotation)])), 'outside',
+  'a genuine polygon can establish an outside result');
+assert.equal(geojsonLocation(diagnosticPoint, {
+  type:'GeometryCollection',geometries:[annotation,square],
+}), 'inside', 'nested area geometry must remain usable');
+assert.equal(geojsonLocation(diagnosticPoint, collection([
+  feature(square),feature({type:'Point',coordinates:[999,999]}),
+])), 'unavailable', 'malformed auxiliary geometry must invalidate the entire verdict');
+console.log('Runivers hotspot diagnostics reject annotation-only geographic absence claims.');
 
 const sample = (distanceMeters, selectedName, excludedName, sampledBoundary = 'runivers-reference') => ({
   sampledBoundary,
