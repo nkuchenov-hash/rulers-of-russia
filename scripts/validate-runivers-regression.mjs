@@ -136,9 +136,18 @@ async function fetchRuniversGeoJson(host, id) {
       let normalized = null;
       if (payload?.type === 'FeatureCollection' && Array.isArray(payload.features)) normalized = payload;
       if (Array.isArray(payload)) {
-        const list = payload.map(item => item?.type === 'Feature' ? item : item?.geom
-          ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
-          : null).filter(Boolean);
+        // A NextGIS array is a complete source inventory, not a collection
+        // of optional shapes. Dropping one missing-geometry record can erase
+        // part of the named polity and falsely certify a partial boundary.
+        // Match the prefetch/cache transport's fail-closed behavior.
+        const list = payload.map((item, index) => {
+          if (item?.type === 'Feature') return item;
+          if (item && typeof item === 'object' && item.geom) {
+            return {type: 'Feature', id: item.id ?? null, geometry: item.geom,
+              properties: item.fields ?? item.properties ?? {}};
+          }
+          throw new Error(`NextGIS JSON export contains missing or unsupported source record at index ${index}`);
+        });
         if (list.length) normalized = {type: 'FeatureCollection', features: list};
       }
       // A 200 response with an empty or point-only export must not prevent
