@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
+import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {publicReferenceFailure} from './runivers-public-reference-failures.mjs';
 import {diagnoseEarlyRussiaHotspots, diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
@@ -214,7 +215,11 @@ function classifyGeometry(payload) {
   // Every ring matters: an otherwise valid exterior with a malformed hole
   // can break polygon dissolution or create a false national boundary.
   // Reject the entire transport instead of silently dropping bad members.
-  const validPolygon = polygon => Array.isArray(polygon) && polygon.length > 0 && polygon.every(validRing);
+  // A hole can have every vertex inside a concave shell while an edge crosses
+  // outside; vertex-only checks cannot certify that topology. Also reject
+  // self-crossing rings and overlapping holes before polygon dissolution.
+  const validPolygon = polygon => Array.isArray(polygon) && polygon.length > 0
+    && polygon.every(validRing) && hasValidPolygonTopology(polygon);
   const inspect = geometry => {
     if (!geometry || typeof geometry.type !== 'string') {
       invalidGeometry = true;
