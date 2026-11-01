@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
 // Research-only attribution of the five documented early-Russia Runivers
 // discrepancy clusters (issue #326). Never use these probes to alter geometry,
 // certify a border, relax a tolerance, or promote Runivers data to production.
@@ -101,15 +102,12 @@ function polygonLocation(point, rings) {
   // can be misreported as definitive "outside" rather than "unavailable".
   const holeLocations = rings.slice(1).map(hole => ringLocation(point, hole));
   if (exterior === 'unavailable' || holeLocations.includes('unavailable')) return 'unavailable';
-  // A hole can begin inside the exterior and later leave or touch it.
-  // Checking only hole[0] falsely certified those malformed polygons.
-  // Check every distinct vertex regardless of the probe location. Edge
-  // crossings between vertices still need a separate topology audit.
-  for (const hole of rings.slice(1)) {
-    for (const vertex of hole.slice(0, -1)) {
-      if (ringLocation(vertex, rings[0]) !== 'inside') return 'unavailable';
-    }
-  }
+  // The transport validator rejects self-intersections, escaping holes,
+  // and overlapping/nested holes. Attribution must apply the same gate:
+  // otherwise a malformed source could still produce a definitive
+  // "inside"/"outside" label in a public diagnostic artifact. All rings
+  // were checked for WGS84 shape above before calling the topology helper.
+  if (!hasValidPolygonTopology(rings)) return 'unavailable';
   if (exterior === 'outside') return 'outside';
   if (holeLocations.includes('boundary')) return 'boundary';
   if (holeLocations.includes('inside')) return 'outside';
