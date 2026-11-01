@@ -63,8 +63,11 @@ for (const row of evidence) {
     || !Number.isInteger(row.referenceScopeSelectedFeatures) || row.referenceScopeSelectedFeatures < 1
     || !Number.isInteger(row.referenceScopeTotalFeatures)
     || row.referenceScopeTotalFeatures < row.referenceScopeSelectedFeatures
-    || !Number.isInteger(row.referenceSamples) || row.referenceSamples <= 0
-    || !Number.isInteger(row.currentSamples) || row.currentSamples <= 0
+    // Match the producing validator's 20-point minimum on BOTH sides.
+    // A forged or truncated metric with one coast-masked point must not
+    // certify a sovereign boundary merely because its distances are zero.
+    || !Number.isInteger(row.referenceSamples) || row.referenceSamples < 20
+    || !Number.isInteger(row.currentSamples) || row.currentSamples < 20
     || !['symmetricP95Meters', 'symmetricMaxMeters', 'toleranceMeters', 'maxToleranceMeters']
       .every(key => Number.isFinite(row[key]) && row[key] >= 0)
     || row.toleranceMeters === 0 || row.maxToleranceMeters === 0) {

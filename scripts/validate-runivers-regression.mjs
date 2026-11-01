@@ -26,6 +26,7 @@ const BORDER_SAMPLE_STEP_M = 5000;
 const COAST_SAMPLE_STEP_M = 20000;
 const COAST_EXCLUSION_M = 100000;
 const MAX_BORDER_SAMPLES = 20000;
+const MIN_BILATERAL_BORDER_SAMPLES = 20;
 const MAX_COAST_SAMPLES = 30000;
 const FETCH_TIMEOUT_MS = 30000;
 const FETCH_RETRIES = 3;
@@ -558,7 +559,7 @@ function prepareScopedReference(payload, polityId, coastIndex) {
   // allow a coincidental geometric match to be counted as a pass.
   if (selected.scope.diagnosticOnly) throw new Error(`Runivers polity ${polityId} has no reviewed source-identity scope; whole-layer diagnostics cannot certify geography`);
   const samples = politicalBorderSamples(selected.payload, coastIndex);
-  if (samples.points.length < 20) throw new Error('Too few scoped political-boundary samples');
+  if (samples.points.length < MIN_BILATERAL_BORDER_SAMPLES) throw new Error('Too few scoped political-boundary samples');
   return {samples, approximate: isReferenceApproximate(selected.payload), scope: selected.scope,
     // Research-only in-memory geometry; never serialized into the report.
     referencePayload: selected.payload, sourceFeatures: selected.sourceFeatures};
@@ -649,7 +650,11 @@ export function publicComparisonMetric(metric) {
 // incomplete independent geographic coverage in the aggregate audit.
 function requireComparablePoliticalGeometry(reference, current, referenceClass) {
   const metric = comparePoliticalGeometry(reference, current, referenceClass);
-  if (!metric.usable) {
+  // A single surviving coast-masked point cannot establish a country's
+  // boundary. Require meaningful samples in BOTH directions; otherwise a
+  // tiny remnant can accidentally match while most of the border is absent.
+  if (!metric.usable || metric.referenceSamples < MIN_BILATERAL_BORDER_SAMPLES
+    || metric.currentSamples < MIN_BILATERAL_BORDER_SAMPLES) {
     throw new Error(`No bilateral political-border comparison: ${metric.referenceSamples} Runivers inland samples and ${metric.currentSamples} History Core inland samples`);
   }
   return metric;

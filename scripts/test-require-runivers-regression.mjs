@@ -90,6 +90,12 @@ try {
    'a comparison without actual source border samples cannot pass');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),currentSamples:0}]).status,1,
    'a comparison without History Core border samples cannot pass');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceSamples:19}]).status,1,
+   'a sparse independent reference cannot certify a country border');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),currentSamples:19}]).status,1,
+   'a sparse coast-masked History Core boundary cannot certify a country border');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceSamples:20,currentSamples:20}]).status,0,
+   'twenty bilateral samples remain sufficient for a synthetic integrity fixture');
  // The producer must publish both directed distance metrics. A symmetric
  // aggregate alone cannot prove that both border directions were measured.
  for (const key of [

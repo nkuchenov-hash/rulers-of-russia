@@ -314,10 +314,21 @@ assert.throws(() => requireComparablePoliticalGeometry(
   {points: [[40, 50]], allCount: 1},
   {hasPolygon: true, types: ['Polygon']},
 ), /No bilateral political-border comparison: 0 Runivers inland samples and 1 History Core inland samples/);
-assert.equal(requireComparablePoliticalGeometry(
-  {points, allCount: 3}, {points, allCount: 3},
+const adequatePoints = Array.from({length: 20}, (_, i) => [40 + i / 10, 50]);
+assert.throws(() => requireComparablePoliticalGeometry(
+  {points: adequatePoints, allCount: 20}, {points: adequatePoints.slice(0, 19), allCount: 19},
   {hasPolygon: true, types: ['Polygon']},
-).symmetricMaxMeters, 0, 'complete bilateral sampling must still pass');
+), /No bilateral political-border comparison: 20 Runivers inland samples and 19 History Core inland samples/,
+'19 coast-masked History Core samples cannot certify a national border');
+assert.throws(() => requireComparablePoliticalGeometry(
+  {points: adequatePoints.slice(0, 19), allCount: 19}, {points: adequatePoints, allCount: 20},
+  {hasPolygon: true, types: ['Polygon']},
+), /No bilateral political-border comparison: 19 Runivers inland samples and 20 History Core inland samples/,
+'19 independent reference samples cannot certify a national border');
+assert.equal(requireComparablePoliticalGeometry(
+  {points: adequatePoints, allCount: 20}, {points: adequatePoints, allCount: 20},
+  {hasPolygon: true, types: ['Polygon']},
+).symmetricMaxMeters, 0, 'adequately sampled bilateral comparison must still pass');
 const extra = [...points, [60, 50]];
 const mismatch = comparePoliticalGeometry({points, allCount: 3}, {points: extra, allCount: 4}, {hasPolygon: true, types: ['Polygon']});
 assert.ok(mismatch.currentToReferenceMaxMeters > 1000000, 'extra distant boundaries must still fail');
