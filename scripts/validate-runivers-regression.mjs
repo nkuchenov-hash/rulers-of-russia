@@ -181,7 +181,7 @@ function classifyGeometry(payload) {
   const types = new Set();
   let hasPolygon = false, hasLine = false, invalidPolygon = false, invalidGeometry = false;
   const wgs84Point = point => validCoordinate(point)
-    && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
+    && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
   const validLine = line => Array.isArray(line) && line.length >= 2
     && line.every(wgs84Point)
     // +180 and -180 are the same meridian, not distinct endpoints.
@@ -371,7 +371,7 @@ function interpolateLonLat(a, b, t) {
 // must never enter an independent geographic pass.
 const validCoordinate = point => Array.isArray(point) && point.length >= 2
   && Number.isFinite(point[0]) && Number.isFinite(point[1])
-  && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
+  && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
 
 function samplingLines(payload, outerOnly = true) {
   const lines = [];

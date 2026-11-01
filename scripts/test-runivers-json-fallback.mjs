@@ -32,7 +32,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5, 6, 7, 8, 9].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -45,6 +45,10 @@ try {
     5: {type: 'FeatureCollection', features: [feature(geometry),
       feature({type: 'GeometryCollection', geometries: [
         {type: 'GeometryCollection', geometries: [badPoint]}]})]},
+    // A sub-microdegree overflow is still outside WGS84, even if a valid
+    // polygon elsewhere in the same source export looks plausible.
+    10: {type: 'FeatureCollection', features: [feature(geometry),
+      feature({type: 'Point', coordinates: [180.0000005, 55]})]},
   };
   const requestedRecovery = new Set();
   process.env.RUNIVERS_DISCOVERY_FILE = discovery;
@@ -165,6 +169,14 @@ try {
       referenceSourceFeatures: [{...feature(geometry), id: 899}],
     }));
   }
+  // A cached dissolved polygon cannot excuse a slightly out-of-range
+  // original auxiliary feature. Old +/-0.000001 slack wrongly reused it.
+  fs.writeFileSync(path.join(cacheDir, '10.geojson'), JSON.stringify({
+    type: 'FeatureCollection',
+    referenceCacheProvenance: {host: 'https://example.invalid', resourceId: 10},
+    features: [feature(geometry)],
+    referenceSourceFeatures: invalidExports[10].features,
+  }));
   await import('./runivers-fetch-cache.mjs');
   const response = await fetch('https://example.invalid/api/resource/1/geojson');
   assert.equal(response.status, 200, await response.clone().text());
@@ -232,7 +244,7 @@ try {
   const correctedPayload = await corrected.json();
   assert.deepEqual(correctedPayload.referenceSourceFeatures.map(f => f.id), [901],
     'stale foreign-resource source identities must not survive cache refresh');
-  for (const id of [3, 4, 5]) {
+  for (const id of [3, 4, 5, 10]) {
     const response = await fetch(`https://example.invalid/api/resource/${id}/geojson`);
     assert.equal(response.status, 200, await response.clone().text());
     assert.ok(requestedRecovery.has(id),
@@ -241,6 +253,8 @@ try {
     assert.equal(recovered.referenceSourceFeatures.length, 1);
     assert.deepEqual(recovered.referenceSourceFeatures[0].geometry, geometry);
   }
+  assert.ok(requestedRecovery.has(10),
+    'near-out-of-range cached and fetched source geometry must be rejected and recovered');
   console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;

@@ -7,8 +7,12 @@ const equal = (a, b) => Math.abs(a[0] - b[0]) <= EPS && Math.abs(a[1] - b[1]) <=
 const validPosition = p => Array.isArray(p) && p.length >= 2
   && Number.isFinite(p[0]) && Number.isFinite(p[1])
   && Math.abs(p[0]) <= 180 && Math.abs(p[1]) <= 90;
+// GeoJSON linear rings require identical first/last longitude and latitude.
+// A nearly closed ring (or a +/-180 alias) must not pass merely because
+// the unwrapped endpoints fall within the topology intersection epsilon.
 const validRingShape = ring => Array.isArray(ring) && ring.length >= 4
-  && ring.every(validPosition);
+  && ring.every(validPosition)
+  && ring[0][0] === ring.at(-1)[0] && ring[0][1] === ring.at(-1)[1];
 function hasArea(ring) {
   let twiceArea = 0;
   for (let i = 0; i < ring.length - 1; i++) {
