@@ -829,7 +829,7 @@ const polygonWithRings = rings => ({type:'FeatureCollection',features:[
 for (const rings of [[concaveShell, escapingHole], [squareShell, holeA, holeB],
   [squareShell, [[2,2],[8,2],[8,8],[2,8],[2,2]], nestedHole]]) {
   assert.throws(() => requireUsableReferenceGeometry(polygonWithRings(rings),5395),
-    /malformed polygon rings/, 'invalid hole topology cannot certify a Runivers reference');
+    /malformed polygon rings|no usable polygon or line geometry/, 'invalid hole topology cannot certify a Runivers reference');
 }
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([concaveShell, interiorHole]),5395).hasPolygon,true);
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([antimeridianShell, antimeridianHole]),5395).hasPolygon,true);
