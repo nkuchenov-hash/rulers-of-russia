@@ -327,6 +327,37 @@ try {
     && centerRgb[0] >= 95 && centerRgb[0] <= 160)) {
     throw new Error(`Flat map did not paint the historical Russian polygon at its own focus: RGB ${JSON.stringify(centerRgb)}`);
   }
+  // A complete horizontal revolution must restore the same historical
+  // territory at the center. Previously only the terrain texture wrapped:
+  // the vector state fills disappeared after one or more world-width pans.
+  const wrapBefore = await flatCanvas.evaluate(canvas => {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const width = Math.round(rect.width), height = Math.round(rect.height);
+    const zoom = Number(canvas.dataset.cameraZoom);
+    const worldWidth = Math.min(width, 2 * height) * zoom;
+    const ctx = canvas.getContext('2d');
+    const rgb = [...ctx.getImageData(Math.floor(canvas.width/2), Math.floor(canvas.height/2), 1, 1).data].slice(0,3);
+    return {x:rect.left+rect.width/2, y:rect.top+rect.height/2,
+      dx:Number(canvas.dataset.cameraDx), worldWidth, rgb};
+  });
+  const worldPan = 3 * wrapBefore.worldWidth;
+  await page.mouse.move(wrapBefore.x, wrapBefore.y);
+  await page.mouse.down();
+  await page.mouse.move(wrapBefore.x-worldPan, wrapBefore.y, {steps:6});
+  await page.mouse.up();
+  await page.waitForFunction(({dx,worldPan}) => {
+    const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
+    return Math.abs(Number(canvas?.dataset.cameraDx)-(dx-worldPan)) < 2;
+  }, {dx:wrapBefore.dx,worldPan}, {timeout:8000});
+  await page.waitForTimeout(200);
+  const wrapAfterRgb = await flatCanvas.evaluate(canvas => {
+    const ctx = canvas.getContext('2d');
+    return [...ctx.getImageData(Math.floor(canvas.width/2), Math.floor(canvas.height/2), 1, 1).data].slice(0,3);
+  });
+  if (wrapAfterRgb.some((channel,i) => Math.abs(channel-wrapBefore.rgb[i]) > 24)) {
+    throw new Error('2D historical territory disappeared after three world-width pans: '
+      +JSON.stringify({before:wrapBefore.rgb,after:wrapAfterRgb,worldPan}));
+  }
   await page.getByRole('button', {name: 'Рельеф', exact: true}).click();
   const beforeFirstGlobeReturn = await globeRenderCount();
   await page.getByRole('button', {name: 'Показать глобус'}).click();
