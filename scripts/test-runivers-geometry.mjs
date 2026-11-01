@@ -996,6 +996,8 @@ const validAuxiliary = [
 for (const geometry of validAuxiliary) {
   assert.equal(geojsonLocation([41.5,54], geometry), 'outside',
     'valid non-area ' + geometry.type + ' remains outside the sovereign-area test');
+  assert.equal(geojsonLocation([NaN,54], geometry), 'unavailable',
+    'an invalid probe must not imply absence even with valid ' + geometry.type);
 }
 const malformedAuxiliaryProbes = [
   {type:'Point',coordinates:[4000000,7000000]},

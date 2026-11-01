@@ -111,7 +111,7 @@ const validLine = line => Array.isArray(line) && line.length >= 2
   && line.some(point => point[0] !== line[0][0] || point[1] !== line[0][1]);
 
 export function geometryLocation(point, geometry) {
-  if (!geometry) return 'unavailable';
+  if (!validLonLat(point) || !geometry) return 'unavailable';
   if (geometry.type === 'Polygon') return polygonLocation(point, geometry.coordinates);
   if (geometry.type === 'MultiPolygon') return Array.isArray(geometry.coordinates)
     ? combineLocations(geometry.coordinates.map(rings => polygonLocation(point, rings))) : 'unavailable';
