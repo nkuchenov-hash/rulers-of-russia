@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
-import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
+import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, passesGeographicTolerance, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Documentary exceptions must never be authorized by ambiguous evidence
 // identities or by a syntactically invalid date range. This is a provenance
@@ -263,6 +263,32 @@ assert.ok(distanceToIndex([109.10588, 53.93523], coast.index) < 100000, 'Baikal 
 const points = [[40, 50], [41, 50], [42, 50]];
 const same = comparePoliticalGeometry({points, allCount: 3}, {points, allCount: 3}, {hasPolygon: true, types: ['Polygon']});
 assert.equal(same.symmetricMaxMeters, 0);
+// Distances are displayed rounded to whole metres, but certification must
+// never use the rounded numbers: a 15,000.25 m discrepancy is NOT within
+// the unchanged 15,000 m limit even when the report displays 15,000.
+const nearThresholdPoint = metres => [0, metres / 6371008.8 * 180 / Math.PI];
+const preciseReference = {points: [[0, 0]], allCount: 1};
+const preciseClass = {hasPolygon: true, types: ['Polygon']};
+const nearFailure = comparePoliticalGeometry(preciseReference,
+  {points: [nearThresholdPoint(15000.25)], allCount: 1}, preciseClass);
+assert.equal(nearFailure.symmetricP95Meters, 15000);
+assert.ok(nearFailure.exactSymmetricP95Meters > 15000);
+assert.equal(passesGeographicTolerance(nearFailure, 15000, 60000), false,
+  'a rounded-to-tolerance failure must not become an independent geographic pass');
+const nearSuccess = comparePoliticalGeometry(preciseReference,
+  {points: [nearThresholdPoint(14999.75)], allCount: 1}, preciseClass);
+assert.equal(nearSuccess.symmetricP95Meters, 15000);
+assert.equal(passesGeographicTolerance(nearSuccess, 15000, 60000), true,
+  'distances actually within the unchanged limit must remain eligible');
+assert.equal(passesGeographicTolerance({
+  usable: true, exactSymmetricP95Meters: 14999.9, exactSymmetricMaxMeters: 60000.25,
+}, 15000, 60000), false, 'unrounded maximum-distance threshold is also strict');
+assert.equal(passesGeographicTolerance({
+  usable: true, symmetricP95Meters: 0, symmetricMaxMeters: 0,
+}, 15000, 60000), false, 'missing exact measurements must fail closed');
+assert.equal(publicComparisonMetric(nearFailure).exactSymmetricP95Meters, undefined,
+  'internal precision fields must not leak into the public artifact');
+console.log('Runivers acceptance precision regression passed: no rounded-border false positives.');
 // A valid Runivers polygon does not imply a usable bilateral comparison.
 // In a multi-layer shard, silently skipping a coast-masked History Core state
 // could allow other layers to hide this missing geographic evidence.
