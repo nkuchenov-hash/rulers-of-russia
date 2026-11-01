@@ -154,6 +154,14 @@ for (const properties of [
   {description:'не приблизительные границы, точная съёмка'},
   {notes:'не условные границы'},
   {description:'not approximate but reconstructed (conflicting source note)'},
+  // Plain-text source exports sometimes encode booleans as assignments.
+  // A negative value must not be read as affirmative just because its key
+  // contains the word "approximate" or "reconstructed".
+  {description:'approximate=false'},
+  {notes:'approximation: no; surveyed boundary'},
+  {description:'reconstruction=0'},
+  {notes:'условные: нет'},
+  {metadata:{description:'uncertain = false'}},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),false,
     'negative or unrelated Runivers metadata cannot activate 100 km tolerance: '+JSON.stringify(properties));
@@ -162,6 +170,7 @@ for (const properties of [
   {approximate:true}, {reconstructed:1}, {approximate:'yes'},
   {description:'Approximate historical border'},
   {metadata:{uncertain:true}}, {notes:['modern map','условные границы']},
+  {description:'approximate=true'}, {notes:'reconstruction: yes'},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),true,
     'affirmative approximation evidence must retain the existing 100 km policy: '+JSON.stringify(properties));
@@ -176,6 +185,8 @@ for (const properties of [
   {approximate: true, description: 'не приблизительные границы'},
   {notes: ['approximate borders', 'not approximate']},
   {reconstructed: 1, metadata: {uncertain: 0}},
+  {approximate: true, description: 'approximate=false'},
+  {reconstructed: true, notes: 'reconstruction: no'},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)), false,
     'conflicting approximation evidence must retain strict tolerance: ' + JSON.stringify(properties));
