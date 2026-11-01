@@ -233,41 +233,58 @@ try {
       && aside.getAttribute('aria-busy') === 'false';
   }, null, {timeout: 30000});
 
-  // Prove fail-closed behavior by first observing and blocking an actual request
-  // for the canonical generated full-state geometry. Only after that request has
-  // been intercepted may the UI assertion pass; this prevents the transient
-  // pre-History-Core caption from producing a false positive.
+  // Prove fail-closed behavior by intercepting a canonical generated
+  // full-state geometry request. Use a FRESH isolated browser context:
+  // the earlier in-page 1581 -> 1992 transition already loaded this exact
+  // GeoJSON URL, so a second navigation in the same context can legitimately
+  // reuse a browser-cached response without issuing an interceptable request.
+  // That is not evidence that the map failed to load or failed closed.
   let blockedCanonicalGeometry = 0;
   let interceptedGeometryUrl = null;
   let resolveIntercept;
   const intercepted = new Promise(resolve => { resolveIntercept = resolve; });
   const generatedTerritoryPattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
-  await page.route(generatedTerritoryPattern, async route => {
-    blockedCanonicalGeometry += 1;
-    interceptedGeometryUrl = route.request().url();
-    resolveIntercept?.(interceptedGeometryUrl);
-    await route.fulfill({
-      status: 503,
-      contentType: 'application/json',
-      body: JSON.stringify({error: 'intentional-history-core-smoke-failure'})
-    });
+  const failClosedPage = await browser.newPage({viewport: {width: 1440, height: 900}, deviceScaleFactor: 1});
+  const failClosedRequests = [];
+  failClosedPage.on('request', request => {
+    if (request.url().includes('/data/history-core/')) failClosedRequests.push(request.url());
   });
-  const failClosedTarget = new URL(url);
-  failClosedTarget.searchParams.set('year', '1992');
-  failClosedTarget.searchParams.set('month', '7');
-  const failClosedResponse = await page.goto(failClosedTarget.href, {waitUntil: 'domcontentloaded', timeout: 45000});
-  if (!failClosedResponse?.ok()) throw new Error(`Fail-closed territory page HTTP failed: ${failClosedResponse?.status()}`);
-  await Promise.race([
-    intercepted,
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`Fail-closed smoke saw no canonical generated geometry request. Recent History Core requests: ${JSON.stringify(historyRequests.slice(-30))}`)), 30000)),
-  ]);
-  await page.waitForFunction(() => {
-    const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
-    return text.includes('History Core: геометрия недоступна — граница России скрыта');
-  }, null, {timeout: 30000});
-  await page.unroute(generatedTerritoryPattern);
-  if (!blockedCanonicalGeometry || !interceptedGeometryUrl) {
-    throw new Error('Fail-closed smoke did not intercept canonical generated territory geometry');
+  failClosedPage.on('pageerror', error => pageErrors.push(String(error?.stack || error)));
+  failClosedPage.on('crash', () => pageCrashes.push('Fail-closed Chromium page crashed'));
+  try {
+    await failClosedPage.route(generatedTerritoryPattern, async route => {
+      blockedCanonicalGeometry += 1;
+      interceptedGeometryUrl = route.request().url();
+      resolveIntercept?.(interceptedGeometryUrl);
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({error: 'intentional-history-core-smoke-failure'})
+      });
+    });
+    const failClosedTarget = new URL(url);
+    failClosedTarget.searchParams.set('year', '1992');
+    failClosedTarget.searchParams.set('month', '7');
+    const failClosedResponse = await failClosedPage.goto(failClosedTarget.href,
+      {waitUntil: 'domcontentloaded', timeout: 45000});
+    if (!failClosedResponse?.ok()) {
+      throw new Error(`Fail-closed territory page HTTP failed: ${failClosedResponse?.status()}`);
+    }
+    await Promise.race([
+      intercepted,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(
+        `Fail-closed smoke saw no canonical generated geometry request in a fresh context. Recent History Core requests: ${JSON.stringify(failClosedRequests.slice(-30))}`
+      )), 30000)),
+    ]);
+    await failClosedPage.waitForFunction(() => {
+      const text = document.querySelector('main aside p')?.getAttribute('data-history-accuracy-caption') ?? '';
+      return text.includes('History Core: геометрия недоступна — граница России скрыта');
+    }, null, {timeout: 30000});
+    if (!blockedCanonicalGeometry || !interceptedGeometryUrl) {
+      throw new Error('Fail-closed smoke did not intercept canonical generated territory geometry');
+    }
+  } finally {
+    await failClosedPage.close();
   }
 
   if (legacyArchiveRequests.length) {
