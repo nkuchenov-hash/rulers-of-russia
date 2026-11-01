@@ -85,8 +85,12 @@ assert.equal(geojsonLocation([0,15], datelinePolygon), 'outside',
 const shell = [[0,0],[4,0],[4,4],[0,4],[0,0]];
 const disjointHole = [[6,6],[7,6],[7,7],[6,7],[6,6]];
 const touchingHole = [[0,0],[1,0.5],[0.5,1],[0,0]];
+// Both begin strictly inside the exterior: checking only hole[0] incorrectly
+// certified them. Later vertices leave or touch the sovereign outer ring.
+const escapingHole = [[1,1],[5,1],[5,2],[1,2],[1,1]];
+const laterTouchingHole = [[1,1],[4,1],[2,2],[1,1]];
 const containedHole = [[1,1],[2,1],[2,2],[1,2],[1,1]];
-for (const hole of [disjointHole, touchingHole]) {
+for (const hole of [disjointHole, touchingHole, escapingHole, laterTouchingHole]) {
   const malformed = {type:'Polygon',coordinates:[shell,hole]};
   for (const probe of [[0.5,0.5],[8,8]]) {
     assert.equal(geojsonLocation(probe, malformed), 'unavailable',
