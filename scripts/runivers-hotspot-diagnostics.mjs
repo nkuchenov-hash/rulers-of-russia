@@ -106,9 +106,13 @@ function combineLocations(locations) {
 const validLonLat = point => Array.isArray(point) && point.length >= 2
   && point.slice(0, 2).every(Number.isFinite)
   && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
+// +180 and -180 are the same WGS84 meridian. A line containing only
+// equivalent endpoints has zero geographic length and must fail closed,
+// including when it accompanies an otherwise valid sovereign polygon.
 const validLine = line => Array.isArray(line) && line.length >= 2
   && line.every(validLonLat)
-  && line.some(point => point[0] !== line[0][0] || point[1] !== line[0][1]);
+  && line.some(point => point[1] !== line[0][1]
+    || (point[0] !== line[0][0] && Math.abs(point[0] - line[0][0]) !== 360));
 
 export function geometryLocation(point, geometry) {
   if (!validLonLat(point) || !geometry) return 'unavailable';
