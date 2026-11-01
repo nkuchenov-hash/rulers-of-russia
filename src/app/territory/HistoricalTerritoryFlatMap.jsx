@@ -3,7 +3,7 @@
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
 import {isRussianWorldFeature,worldBackgroundTransitionPhase} from './worldRussiaFeatureFilter.mjs';
-import {zoomFlatCameraAt} from './flatCameraZoom.mjs';
+import {zoomFlatCameraAt,flatWheelZoomFactor} from './flatCameraZoom.mjs';
 import {visibleTerrainCopies} from './flatTerrainTiles.mjs';
 
 const TWO_PI=Math.PI*2;
@@ -271,12 +271,21 @@ export function HistoricalTerritoryFlatMap({
     const node=hostRef.current;
     if(!node)return;
     const handleWheel=e=>{
+      const factor=flatWheelZoomFactor(e.deltaY,e.deltaMode,e.ctrlKey);
+      if(factor===1){
+        // Horizontal trackpad swipes should pan the map, not scroll the page.
+        // Preserve the native cancelation contract for both wheel axes.
+        if(Number.isFinite(e.deltaX)&&e.deltaX!==0){
+          e.preventDefault();
+          const unit=e.deltaMode===1?40:e.deltaMode===2?400:1;
+          onCameraChange(prev=>({...prev,dx:prev.dx-e.deltaX*unit}));
+        }
+        return;
+      }
       e.preventDefault();
-      if(e.deltaY===0)return;
       const bounds=node.getBoundingClientRect();
       const anchorX=e.clientX-bounds.left-bounds.width/2;
       const anchorY=e.clientY-bounds.top-bounds.height/2;
-      const factor=e.deltaY>0?.85:1.15;
       onCameraChange(prev=>zoomFlatCameraAt(prev,factor,anchorX,anchorY));
     };
     node.addEventListener('wheel',handleWheel,{passive:false});
