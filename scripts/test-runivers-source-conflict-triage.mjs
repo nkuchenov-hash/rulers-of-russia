@@ -52,6 +52,32 @@ assert.equal(geojsonLocation([5,5], collection([
   feature(square), feature({type:'LineString',coordinates:[[179,0],[-179,0]]}),
 ])), 'outside', 'valid crossing annotations must not hide a real polygon outside verdict');
 
+// A signed nonzero area alone does not make a polygon a valid sovereign
+// contour. Repeated non-adjacent vertices form a self-touching ring; a raw
+// closed ring winding 360 degrees is not closed after longitude unwrapping.
+const selfTouching = {type:'Polygon',coordinates:[[
+  [0,0],[4,0],[4,4],[0,4],[0,0],
+  [1,1],[2,1],[2,2],[1,2],[1,1],[0,0],
+]]};
+const fullWrap = {type:'Polygon',coordinates:[[
+  [0,0],[90,0],[180,10],[-90,10],[0,0],
+]]};
+for (const malformed of [selfTouching, fullWrap]) {
+  for (const point of [[1,1],[5,5]]) {
+    assert.equal(geojsonLocation(point, malformed), 'unavailable',
+      'non-simple or unwrapped-open polygon cannot establish inside or outside');
+    assert.equal(geojsonLocation(point, collection([feature(square),feature(malformed)])),
+      'unavailable', 'a valid polygon must not hide a malformed sibling');
+  }
+}
+const datelinePolygon = {type:'Polygon',coordinates:[[
+  [170,10],[-170,10],[-170,20],[170,20],[170,10],
+]]};
+assert.equal(geojsonLocation([179,15], datelinePolygon), 'inside',
+  'a real narrow antimeridian-crossing polygon remains usable');
+assert.equal(geojsonLocation([0,15], datelinePolygon), 'outside',
+  'the antimeridian fix must not create a world-spanning sovereign area');
+
 console.log('Runivers hotspot diagnostics reject annotation-only geographic absence claims.');
 
 const sample = (distanceMeters, selectedName, excludedName, sampledBoundary = 'runivers-reference') => ({
