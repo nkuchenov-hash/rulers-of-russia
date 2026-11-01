@@ -130,7 +130,13 @@ jobs:
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
+          # GitHub's ubuntu-latest image already provides Chromium's required
+          # shared libraries (verified in the previous successful browser run).
+          # --with-deps invokes apt update; an unavailable Ubuntu mirror can
+          # consume the entire 25-minute job budget before any browser test.
+          # Install the pinned browser only; browser launch will still fail
+          # closed if a runner image ever lacks a required shared library.
+          npx playwright install chromium
 
       - name: Build production-layout static site
         if: github.event_name != 'workflow_run'
