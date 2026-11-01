@@ -1,6 +1,23 @@
 // Diagnostic-only validation of independent WGS84 polygon rings. Never repairs or exports geometry.
 const EPS = 1e-10;
 const equal = (a, b) => Math.abs(a[0] - b[0]) <= EPS && Math.abs(a[1] - b[1]) <= EPS;
+// The topology helper is also called independently of the transport preflight.
+// Malformed or empty rings must return false rather than throw or certify an
+// empty polygon. Coordinates are WGS84 degrees; optional altitude is ignored.
+const validPosition = p => Array.isArray(p) && p.length >= 2
+  && Number.isFinite(p[0]) && Number.isFinite(p[1])
+  && Math.abs(p[0]) <= 180 && Math.abs(p[1]) <= 90;
+const validRingShape = ring => Array.isArray(ring) && ring.length >= 4
+  && ring.every(validPosition);
+function hasArea(ring) {
+  let twiceArea = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const a = ring[i], b = ring[i + 1];
+    twiceArea += a[0] * b[1] - b[0] * a[1];
+  }
+  // Match the independent hotspot diagnostic's degenerate-area guard.
+  return Number.isFinite(twiceArea) && Math.abs(twiceArea) > 1e-12;
+}
 
 function unwrap(ring) {
   const points = [];
@@ -84,14 +101,19 @@ function strictlyInside(point, ring) {
   return inside;
 }
 
-export function hasValidRingTopology(rawRing) {
-  const ring = unwrap(rawRing);
+function validUnwrappedRing(ring) {
   // A full wrap can masquerade as a closed polygon in [-180,180].
-  return equal(ring[0], ring.at(-1)) && !hasBacktrackingEdge(ring) && !crossingEdges(ring, ring, true);
+  return equal(ring[0], ring.at(-1)) && hasArea(ring)
+    && !hasBacktrackingEdge(ring) && !crossingEdges(ring, ring, true);
+}
+export function hasValidRingTopology(rawRing) {
+  return validRingShape(rawRing) && validUnwrappedRing(unwrap(rawRing));
 }
 export function hasValidPolygonTopology(rawPolygon) {
+  if (!Array.isArray(rawPolygon) || !rawPolygon.length
+    || !rawPolygon.every(validRingShape)) return false;
   const rings = rawPolygon.map(unwrap);
-  if (rings.some(ring => !equal(ring[0], ring.at(-1)) || hasBacktrackingEdge(ring) || crossingEdges(ring, ring, true))) return false;
+  if (rings.some(ring => !validUnwrappedRing(ring))) return false;
   const shell = rings[0];
   const holes = rings.slice(1).map(hole => {
     const shift = 360 * Math.round((shell[0][0] - hole[0][0]) / 360);
