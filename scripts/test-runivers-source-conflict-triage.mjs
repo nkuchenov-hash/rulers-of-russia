@@ -78,6 +78,38 @@ assert.equal(geojsonLocation([179,15], datelinePolygon), 'inside',
 assert.equal(geojsonLocation([0,15], datelinePolygon), 'outside',
   'the antimeridian fix must not create a world-spanning sovereign area');
 
+// A disjoint GeoJSON interior ring cannot carve a hole in a sovereign
+// exterior. Before this guard the diagnostic reported definitive inclusion
+// even though the polygon topology was invalid. This must also fail closed
+// when the queried point is outside both rings or another feature is valid.
+const shell = [[0,0],[4,0],[4,4],[0,4],[0,0]];
+const disjointHole = [[6,6],[7,6],[7,7],[6,7],[6,6]];
+const touchingHole = [[0,0],[1,0.5],[0.5,1],[0,0]];
+const containedHole = [[1,1],[2,1],[2,2],[1,2],[1,1]];
+for (const hole of [disjointHole, touchingHole]) {
+  const malformed = {type:'Polygon',coordinates:[shell,hole]};
+  for (const probe of [[0.5,0.5],[8,8]]) {
+    assert.equal(geojsonLocation(probe, malformed), 'unavailable',
+      'an interior ring outside or touching its exterior is not sovereign area evidence');
+    assert.equal(geojsonLocation(probe, collection([feature(square),feature(malformed)])),
+      'unavailable', 'a valid sibling cannot conceal a disjoint interior ring');
+  }
+}
+const validHoled = {type:'Polygon',coordinates:[shell,containedHole]};
+assert.equal(geojsonLocation([1.5,1.5], validHoled), 'outside',
+  'a properly enclosed hole still excludes its interior');
+assert.equal(geojsonLocation([0.5,0.5], validHoled), 'inside',
+  'a properly enclosed hole must not suppress valid sovereign area');
+assert.equal(geojsonLocation([8,8], validHoled), 'outside');
+const datelineHoled = {type:'Polygon',coordinates:[
+  [[170,10],[-170,10],[-170,20],[170,20],[170,10]],
+  [[175,12],[-175,12],[-175,18],[175,18],[175,12]],
+]};
+assert.equal(geojsonLocation([179,15], datelineHoled), 'outside',
+  'a valid antimeridian-crossing hole must remain excluded');
+assert.equal(geojsonLocation([172,15], datelineHoled), 'inside',
+  'valid antimeridian exterior area must remain available');
+
 console.log('Runivers hotspot diagnostics reject annotation-only geographic absence claims.');
 
 const sample = (distanceMeters, selectedName, excludedName, sampledBoundary = 'runivers-reference') => ({
