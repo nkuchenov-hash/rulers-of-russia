@@ -744,11 +744,30 @@ const projectedPolygon = {type:'FeatureCollection',features:[{type:'Feature',pro
     [4001000,7001000],[4000000,7001000],[4000000,7000000]]]}}]};
 const collinearPolygon = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
   geometry:{type:'Polygon',coordinates:[[[30,50],[31,50],[32,50],[30,50]]]}}]};
-for (const [label, payload] of Object.entries({emptyPolygon,collapsedLine,projectedPolygon,collinearPolygon})) {
+// These coordinates are WGS84-valid but all lie on the SAME meridian.
+// Raw longitude shoelace area is nonzero (360 degrees wide), even though
+// +180 and -180 represent identical geographic points.
+const zeroWidthDatelineRing = [[180,10],[-180,10],[-180,11],[180,11],[180,10]];
+const zeroWidthDatelinePolygon = polygonPayload(zeroWidthDatelineRing);
+const zeroWidthDatelineLine = {type:'FeatureCollection',features:[{type:'Feature',properties:{},
+  geometry:{type:'LineString',coordinates:[[180,10],[-180,10]]}}]};
+for (const [label, payload] of Object.entries({
+  emptyPolygon,collapsedLine,projectedPolygon,collinearPolygon,
+  zeroWidthDatelinePolygon,zeroWidthDatelineLine,
+})) {
   assert.throws(() => requireUsableReferenceGeometry(payload,5391), /no usable polygon or line geometry/,
     label + ' must not be accepted on type label alone');
 }
-console.log('Runivers coordinate validity tests passed: nested GeometryCollection, empty/collapsed, projected and collinear borders.');
+assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[
+  validReferenceFeatureForDatelineTest(),...zeroWidthDatelinePolygon.features,
+]},5391), /malformed polygon rings/,
+  'a valid mainland must not hide a zero-width antimeridian component');
+function validReferenceFeatureForDatelineTest() {
+  return polygonPayload([[30,50],[31,50],[31,51],[30,51],[30,50]]).features[0];
+}
+assert.equal(requireUsableReferenceGeometry(polygonPayload(datelineRing),5391).hasPolygon,true,
+  'a real two-degree-wide polygon crossing the antimeridian must remain usable');
+console.log('Runivers coordinate validity tests passed: projected, collinear and dateline-degenerate borders fail closed.');
 
 // One sound outer ring does not make malformed holes or a second broken
 // polygon safe to dissolve. These must fail closed before the distance metric.
