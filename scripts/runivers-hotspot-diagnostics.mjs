@@ -99,6 +99,17 @@ function combineLocations(locations) {
   return 'outside';
 }
 
+// Non-area annotations are evidence of absence of *area* only when their
+// coordinates are well-formed WGS84. A broken auxiliary Point/LineString must
+// not turn an otherwise valid source collection into a definitive inside or
+// outside result. Match the main Runivers transport integrity checks.
+const validLonLat = point => Array.isArray(point) && point.length >= 2
+  && point.slice(0, 2).every(Number.isFinite)
+  && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
+const validLine = line => Array.isArray(line) && line.length >= 2
+  && line.every(validLonLat)
+  && line.some(point => point[0] !== line[0][0] || point[1] !== line[0][1]);
+
 export function geometryLocation(point, geometry) {
   if (!geometry) return 'unavailable';
   if (geometry.type === 'Polygon') return polygonLocation(point, geometry.coordinates);
@@ -106,9 +117,16 @@ export function geometryLocation(point, geometry) {
     ? combineLocations(geometry.coordinates.map(rings => polygonLocation(point, rings))) : 'unavailable';
   if (geometry.type === 'GeometryCollection') return Array.isArray(geometry.geometries)
     ? combineLocations(geometry.geometries.map(item => geometryLocation(point, item))) : 'unavailable';
-  // Valid non-area geometry cannot establish sovereign area. An unknown type
-  // is malformed evidence, not evidence that the territory is absent.
-  if (['Point', 'MultiPoint', 'LineString', 'MultiLineString'].includes(geometry.type)) return 'outside';
+  // A valid non-area feature does not establish sovereign area. Malformed
+  // annotations and unsupported types must instead fail closed.
+  if (geometry.type === 'Point') return validLonLat(geometry.coordinates) ? 'outside' : 'unavailable';
+  if (geometry.type === 'MultiPoint') return Array.isArray(geometry.coordinates)
+    && geometry.coordinates.length > 0 && geometry.coordinates.every(validLonLat)
+    ? 'outside' : 'unavailable';
+  if (geometry.type === 'LineString') return validLine(geometry.coordinates) ? 'outside' : 'unavailable';
+  if (geometry.type === 'MultiLineString') return Array.isArray(geometry.coordinates)
+    && geometry.coordinates.length > 0 && geometry.coordinates.every(validLine)
+    ? 'outside' : 'unavailable';
   return 'unavailable';
 }
 
