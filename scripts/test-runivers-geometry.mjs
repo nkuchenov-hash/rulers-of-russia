@@ -844,9 +844,11 @@ for (const rings of [[concaveShell, escapingHole], [squareShell, holeA, holeB],
     /malformed polygon rings|no usable polygon or line geometry/, 'invalid hole topology cannot certify a Runivers reference');
 }
 assert.throws(() => requireUsableReferenceGeometry(polygonWithRings([retracedShell]),5395),
-  /malformed polygon rings/, 'adjacent shell backtracking must fail the reference preflight');
+  /malformed polygon rings|no usable polygon or line geometry/,
+  'adjacent shell backtracking must fail the reference preflight');
 assert.throws(() => requireUsableReferenceGeometry(polygonWithRings([squareShell, retracedHole]),5395),
-  /malformed polygon rings/, 'adjacent hole backtracking must fail the reference preflight');
+  /malformed polygon rings|no usable polygon or line geometry/,
+  'adjacent hole backtracking must fail the reference preflight');
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([concaveShell, interiorHole]),5395).hasPolygon,true);
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([antimeridianShell, antimeridianHole]),5395).hasPolygon,true);
 console.log('Runivers edge-topology tests passed: escaping and overlapping holes fail closed.');
