@@ -814,6 +814,10 @@ const invalidTopologyRings = [
   [[0,0],[1,0],[2,0],[0,0]], // closed, but zero sovereign area
   [[0,0],[181,0],[0,1],[0,0]], // out-of-range longitude
   [[0,0],[1,0],[0,91],[0,0]], // out-of-range latitude
+  [[0,0],[1,0],[0,90.0000005],[0,0]], // sub-microdegree overflow is still invalid WGS84
+  [[0,0],[180.0000005,0],[0,1],[0,0]], // no epsilon outside longitude limits
+  [[0,0],[2,0],[2,2],[0,2],[0,1e-11]], // almost closed is not a GeoJSON linear ring
+  [[-180,10],[-179,10],[-179,11],[-180,11],[180,10]], // dateline aliases cannot close a raw ring
   [[0,0],[1,0],[NaN,1],[0,0]], // non-finite coordinate
   [[0,0],[1,0],null,[0,0]],
 ];
@@ -909,6 +913,8 @@ const malformedAuxiliaryGeometries = {
   nullNestedMember: {type:'GeometryCollection',geometries:[{type:'Point',coordinates:[37,55]},null]},
   unknownNestedMember: {type:'GeometryCollection',geometries:[{type:'UnrecognizedBorder',coordinates:[]}]},
   projectedPoint: {type:'Point',coordinates:[4000000,7000000]},
+  justOutsideLongitude: {type:'Point',coordinates:[180.0000005,55]},
+  justOutsideLatitude: {type:'LineString',coordinates:[[37,55],[38,90.0000005]]},
   brokenMultiPoint: {type:'MultiPoint',coordinates:[[37,55],[37,95]]},
   collapsedAuxiliaryLine: {type:'LineString',coordinates:[[37,55],[37,55]]},
   partiallyBrokenMultiLine: {type:'MultiLineString',coordinates:[
@@ -929,6 +935,11 @@ assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[
       {type:'LineString',coordinates:[[30,50],[31,50]]}],
   }},
 ]},5394).hasPolygon,true, 'well-formed auxiliary geometries remain valid');
+assert.equal(requireUsableReferenceGeometry({type:'FeatureCollection',features:[
+  validReferenceFeature,{type:'Feature',properties:{},geometry:{
+    type:'Point',coordinates:[180,90],
+  }},
+]},5394).hasPolygon,true, 'exact WGS84 bounds remain valid for auxiliary metadata');
 console.log('Runivers mixed-export integrity passed: no malformed auxiliary or nested geometry can hide behind a valid polygon.');
 
 
