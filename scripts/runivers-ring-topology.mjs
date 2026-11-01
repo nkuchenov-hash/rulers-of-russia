@@ -129,8 +129,18 @@ export function hasValidPolygonTopology(rawPolygon) {
   const rings = rawPolygon.map(unwrap);
   if (rings.some(ring => !validUnwrappedRing(ring))) return false;
   const shell = rings[0];
+  // Align holes to the shell's unwrapped longitude *extent*, not its first
+  // vertex. A wide shell can begin near Greenwich and reach past +180:
+  // comparing a dateline hole to that first vertex leaves it at -179 even
+  // though the shell contains it near +181, rejecting a valid polygon.
+  let shellMinLon = Infinity, shellMaxLon = -Infinity;
+  for (const [lon] of shell) {
+    shellMinLon = Math.min(shellMinLon, lon);
+    shellMaxLon = Math.max(shellMaxLon, lon);
+  }
+  const shellCenterLon = (shellMinLon + shellMaxLon) / 2;
   const holes = rings.slice(1).map(hole => {
-    const shift = 360 * Math.round((shell[0][0] - hole[0][0]) / 360);
+    const shift = 360 * Math.round((shellCenterLon - hole[0][0]) / 360);
     return hole.map(([lon, lat]) => [lon + shift, lat]);
   });
   for (const hole of holes) {
