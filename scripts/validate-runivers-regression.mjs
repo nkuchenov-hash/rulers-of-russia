@@ -180,15 +180,31 @@ function classifyGeometry(payload) {
     && Math.abs(point[0]) <= 180.000001 && Math.abs(point[1]) <= 90.000001;
   const validLine = line => Array.isArray(line) && line.length >= 2
     && line.every(wgs84Point)
-    && line.some(point => point[0] !== line[0][0] || point[1] !== line[0][1]);
+    // +180 and -180 are the same meridian, not distinct endpoints.
+    && line.some(point => point[1] !== line[0][1]
+      || (point[0] !== line[0][0] && Math.abs(point[0] - line[0][0]) !== 360));
   const validRing = ring => {
     if (!validLine(ring) || ring.length < 4) return false;
     const first = ring[0], last = ring.at(-1);
     if (first[0] !== last[0] || first[1] !== last[1]) return false;
-    // A closed but collinear ring encloses no territory.
+    // Compute area on a continuous longitude axis. The raw shoelace
+    // formula treats +180/-180 as 360 degrees apart, so a zero-width
+    // antimeridian ring could otherwise certify a fictitious territory.
+    const unwrapped = [];
+    let previousLon = null;
+    for (const point of ring) {
+      let lon = point[0];
+      if (previousLon !== null) {
+        if (lon - previousLon > 180) lon -= 360;
+        if (lon - previousLon < -180) lon += 360;
+      }
+      unwrapped.push([lon, point[1]]);
+      previousLon = lon;
+    }
     let twiceArea = 0;
-    for (let i = 0; i < ring.length - 1; i += 1) {
-      twiceArea += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1];
+    for (let i = 0; i < unwrapped.length - 1; i += 1) {
+      twiceArea += unwrapped[i][0] * unwrapped[i + 1][1]
+        - unwrapped[i + 1][0] * unwrapped[i][1];
     }
     return Math.abs(twiceArea) > 1e-12;
   };
