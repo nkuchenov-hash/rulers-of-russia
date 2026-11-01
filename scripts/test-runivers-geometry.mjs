@@ -1006,6 +1006,36 @@ assert.equal(geojsonLocation([179,15], {type:'Polygon',coordinates:[
 assert.equal(geojsonLocation([0,15], {type:'Polygon',coordinates:[
   [[170,10],[-170,10],[-170,20],[170,20],[170,10]],
 ]}), 'outside');
+
+// The source-attribution ray caster used to trust malformed polygons even
+// after the independent reference transport validator rejected their topology.
+// This could label a worst-boundary sample as definitively inside/outside and
+// misdirect historical research. Diagnostic verdicts must fail closed too.
+const diagnosticPolygonRings = rings => ({type:'Polygon', coordinates:rings});
+const selfCrossingNonzeroArea = [[0,0],[4,0],[4,4],[0,4],[2,-1],[0,0]];
+for (const rings of [
+  [concaveShell, escapingHole], // every hole vertex is inside; its edge escapes
+  [squareShell, holeA, holeB], // two interior rings overlap
+  [squareShell, holeA, nestedHole], // nested interior rings
+  [selfCrossingNonzeroArea], // positive area does not rule out crossing edges
+]) {
+  for (const point of [[1,1],[20,20]]) {
+    assert.equal(geojsonLocation(point, diagnosticPolygonRings(rings)), 'unavailable',
+      'invalid reference topology cannot certify either inside or outside in attribution');
+  }
+}
+assert.equal(geojsonLocation([1,1], {type:'FeatureCollection',features:[
+  {type:'Feature',properties:{},geometry:diagnosticPolygonRings([squareShell])},
+  {type:'Feature',properties:{},geometry:diagnosticPolygonRings([selfCrossingNonzeroArea])},
+]}), 'unavailable', 'a valid source member cannot hide an invalid sibling');
+assert.equal(geojsonLocation([179.2,11],
+  diagnosticPolygonRings([antimeridianShell, antimeridianHole])), 'inside',
+  'legitimate antimeridian shell and hole remain diagnosable');
+assert.equal(geojsonLocation([179.8,11],
+  diagnosticPolygonRings([antimeridianShell, antimeridianHole])), 'outside',
+  'a legitimate antimeridian hole remains excluded from area');
+console.log('Runivers source-attribution topology parity passed: malformed rings fail closed; dateline preserved.');
+
 assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[
   {type:'Point',coordinates:[40,53]},donut,
 ]}), 'inside', 'nested geometry must retain polygon containment');
