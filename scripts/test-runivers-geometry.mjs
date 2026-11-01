@@ -762,6 +762,10 @@ assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',fea
   validReferenceFeatureForDatelineTest(),...zeroWidthDatelinePolygon.features,
 ]},5391), /malformed polygon rings/,
   'a valid mainland must not hide a zero-width antimeridian component');
+assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[
+  validReferenceFeatureForDatelineTest(),...zeroWidthDatelineLine.features,
+]},5391), /malformed or unsupported geometry/,
+  'a valid mainland must not hide a collapsed auxiliary line at the dateline');
 function validReferenceFeatureForDatelineTest() {
   return polygonPayload([[30,50],[31,50],[31,51],[30,51],[30,50]]).features[0];
 }
