@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {zoomFlatCameraAt} from '../src/app/territory/flatCameraZoom.mjs';
+import {zoomFlatCameraAt,flatWheelZoomFactor} from '../src/app/territory/flatCameraZoom.mjs';
+import {readFileSync} from 'node:fs';
 
 const almost = (actual, expected, message) =>
   assert.ok(Math.abs(actual - expected) < 1e-9, `${message}: ${actual} !== ${expected}`);
@@ -27,4 +28,30 @@ assert.deepEqual(zoomFlatCameraAt({zoom: 12, dx: 3, dy: 4}, 2, 200, 100),
 const translated = zoomFlatCameraAt({zoom: 2, dx: 10, dy: 20}, 1.5, 200, 100);
 almost(translated.dx + 3 * ((200 - 10) / 2) + 17, 217, 'pinch translation x');
 almost(translated.dy + 3 * ((100 - 20) / 2) - 8, 92, 'pinch translation y');
+
+
+// Pixel-based trackpads must not zoom 15% for a one-pixel wheel event.
+const tiny = flatWheelZoomFactor(-1, 0);
+assert.ok(tiny > 1 && tiny < 1.01, 'one-pixel trackpad scroll must zoom smoothly');
+const notch = flatWheelZoomFactor(-120, 0);
+assert.ok(notch > 1.15 && notch < 1.25, 'ordinary wheel notch must still zoom perceptibly');
+almost(notch * flatWheelZoomFactor(120, 0), 1, 'opposite wheel directions are symmetric');
+almost(flatWheelZoomFactor(-3, 1), notch, 'three wheel lines match 120 CSS pixels');
+assert.ok(flatWheelZoomFactor(-1, 2) <= Math.exp(0.4), 'page wheel event must be bounded');
+assert.ok(flatWheelZoomFactor(-1, 0, true) > tiny, 'ctrl+wheel pinch must respond to fine input');
+assert.ok(flatWheelZoomFactor(-1e8, 0) <= Math.exp(0.4), 'huge wheel delta must be capped');
+assert.ok(flatWheelZoomFactor(1e8, 0) >= Math.exp(-0.4), 'huge reverse delta must be capped');
+for (const value of [0, NaN, Infinity, -Infinity]) {
+  assert.equal(flatWheelZoomFactor(value, 0), 1, 'zero or invalid delta is inert');
+}
+assert.equal(flatWheelZoomFactor(1, 3), 1, 'unknown deltaMode is inert');
+const flatMap = readFileSync(new URL('../src/app/territory/HistoricalTerritoryFlatMap.jsx', import.meta.url), 'utf8');
+assert.match(flatMap, /flatWheelZoomFactor\(e\.deltaY,e\.deltaMode,e\.ctrlKey\)/,
+  'production 2D map must normalize the native wheel delta');
+assert.match(flatMap, /if\(factor===1\)return;\s*e\.preventDefault\(\)/,
+  'inert wheel events must not suppress page scrolling');
+assert.doesNotMatch(flatMap, /const factor=e\.deltaY>0\?\.85:1\.15/,
+  'fixed-per-event zoom must not return');
+console.log('2D wheel, trackpad and browser pinch zoom are continuous and bounded.');
+
 console.log('Flat map cursor-anchored zoom preserves location, pan and clamped limits.');
