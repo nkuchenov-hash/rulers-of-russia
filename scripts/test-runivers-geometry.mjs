@@ -1056,6 +1056,42 @@ try {
     assert.deepEqual(requested, ['/api/resource/5383/geojson','/api/resource/5383/feature/'],
       'HTTP 200 without a usable border must fall back to the WGS84 feature endpoint');
   }
+  // The direct validator's JSON path must enforce the same complete source
+  // inventory as the MVT/JSON prefetch cache. A valid Russian polygon plus a
+  // second source record with missing geometry is NOT a valid state boundary.
+  const validNextGisRecord = {id: 101, geom: validReference.features[0].geometry,
+    fields: {name: 'Россия'}};
+  const incompleteNextGisArray = [validNextGisRecord,
+    {id: 102, geom: null, fields: {name: 'Россия'}}];
+  {
+    const requested = [];
+    globalThis.fetch = async input => {
+      const pathname = new URL(input).pathname;
+      requested.push(pathname);
+      return Response.json(pathname.endsWith('/geojson') ? incompleteNextGisArray : validReference);
+    };
+    assert.deepEqual(await fetchRuniversGeoJson('https://runivers.invalid', 5383), validReference,
+      'incomplete NextGIS array must not hide a complete alternate export');
+    assert.deepEqual(requested, ['/api/resource/5383/geojson', '/api/resource/5383/feature/']);
+  }
+  {
+    const requested = [];
+    globalThis.fetch = async input => {
+      requested.push(new URL(input).pathname);
+      return Response.json(incompleteNextGisArray);
+    };
+    await assert.rejects(fetchRuniversGeoJson('https://runivers.invalid', 5383),
+      /missing or unsupported source record at index 1/,
+      'two incomplete exports must fail instead of accepting a partial state polygon');
+    assert.equal(requested.length, 2, 'both transports must be attempted after inventory failure');
+  }
+  {
+    const complete = [validNextGisRecord, {...validNextGisRecord, id: 103}];
+    globalThis.fetch = async () => Response.json(complete);
+    const result = await fetchRuniversGeoJson('https://runivers.invalid', 5383);
+    assert.equal(result.features.length, 2, 'valid source inventories retain every original record');
+    assert.deepEqual(result.features.map(feature => feature.id), [101, 103]);
+  }
   const requested = [];
   globalThis.fetch = async input => {
     requested.push(new URL(input).pathname);
