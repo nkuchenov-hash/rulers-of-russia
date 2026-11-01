@@ -987,6 +987,39 @@ assert.equal(geojsonLocation([41.5,54], {type:'FeatureCollection',features:[null
 assert.equal(geojsonLocation([41.5,54], {type:'Point',coordinates:[41.5,54]}),
   'outside', 'valid non-area source features still cannot establish territory');
 
+const validAuxiliary = [
+  {type:'Point',coordinates:[37,55]},
+  {type:'MultiPoint',coordinates:[[37,55],[38,55]]},
+  {type:'LineString',coordinates:[[37,55],[38,55]]},
+  {type:'MultiLineString',coordinates:[[[37,55],[38,55]],[[39,55],[40,55]]]},
+];
+for (const geometry of validAuxiliary) {
+  assert.equal(geojsonLocation([41.5,54], geometry), 'outside',
+    'valid non-area ' + geometry.type + ' remains outside the sovereign-area test');
+  assert.equal(geojsonLocation([NaN,54], geometry), 'unavailable',
+    'an invalid probe must not imply absence even with valid ' + geometry.type);
+}
+const malformedAuxiliaryProbes = [
+  {type:'Point',coordinates:[4000000,7000000]},
+  {type:'Point',coordinates:null},
+  {type:'MultiPoint',coordinates:[]},
+  {type:'MultiPoint',coordinates:[[37,55],[37,95]]},
+  {type:'LineString',coordinates:[[37,55],[37,55]]},
+  {type:'LineString',coordinates:[[37,55],[Infinity,55]]},
+  {type:'MultiLineString',coordinates:[]},
+  {type:'MultiLineString',coordinates:[[[37,55],[38,55]],[[39,55],[39,55]]]},
+];
+for (const geometry of malformedAuxiliaryProbes) {
+  assert.equal(geojsonLocation([41.5,54], geometry), 'unavailable',
+    'malformed ' + geometry.type + ' must not imply a definitive sovereign-area result');
+  assert.equal(geojsonLocation([41.5,54], {type:'GeometryCollection',geometries:[
+    diagnosticSelected.geometry, geometry,
+  ]}), 'unavailable',
+  'a valid polygon cannot hide malformed auxiliary ' + geometry.type);
+}
+console.log('Runivers hotspot diagnostics reject malformed auxiliary WGS84 points and lines without changing geographic acceptance.');
+
+
 
 
 console.log('Runivers hotspot attribution tests passed: five dated clusters, named/excluded source IDs, offset probes, holes, boundaries, antimeridian, no licensed geometry export.');
