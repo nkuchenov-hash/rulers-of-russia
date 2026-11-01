@@ -59,6 +59,20 @@ function crossingEdges(first, second, sameRing = false) {
   }
   return false;
 }
+// Adjacent edges normally share a vertex, but reversing along the same
+// segment creates a retraced boundary (a zero-width spike). The sweep skips
+// adjacent edges by design, so reject these separately, including at closure.
+function hasBacktrackingEdge(ring) {
+  const n = ring.length - 1;
+  for (let i = 0; i < n; i++) {
+    const prev = ring[(i + n - 1) % n], middle = ring[i], next = ring[i + 1];
+    if (Math.abs(orient(prev, middle, next)) > EPS) continue;
+    const inX = middle[0] - prev[0], inY = middle[1] - prev[1];
+    const outX = next[0] - middle[0], outY = next[1] - middle[1];
+    if (inX * outX + inY * outY < -EPS) return true;
+  }
+  return false;
+}
 function strictlyInside(point, ring) {
   let inside = false;
   for (let i = 0, j = ring.length - 2; i < ring.length - 1; j = i++) {
@@ -73,11 +87,11 @@ function strictlyInside(point, ring) {
 export function hasValidRingTopology(rawRing) {
   const ring = unwrap(rawRing);
   // A full wrap can masquerade as a closed polygon in [-180,180].
-  return equal(ring[0], ring.at(-1)) && !crossingEdges(ring, ring, true);
+  return equal(ring[0], ring.at(-1)) && !hasBacktrackingEdge(ring) && !crossingEdges(ring, ring, true);
 }
 export function hasValidPolygonTopology(rawPolygon) {
   const rings = rawPolygon.map(unwrap);
-  if (rings.some(ring => !equal(ring[0], ring.at(-1)) || crossingEdges(ring, ring, true))) return false;
+  if (rings.some(ring => !equal(ring[0], ring.at(-1)) || hasBacktrackingEdge(ring) || crossingEdges(ring, ring, true))) return false;
   const shell = rings[0];
   const holes = rings.slice(1).map(hole => {
     const shift = 360 * Math.round((shell[0][0] - hole[0][0]) / 360);
