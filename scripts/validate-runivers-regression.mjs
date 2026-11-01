@@ -77,7 +77,10 @@ function validateOverrides(registry, documents) {
     // without a real calendar month ever being documented.
     const validMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
     if (!validMonth(item.startMonth) || !validMonth(item.endMonth) || item.startMonth > item.endMonth) throw new Error(`${item.id}: invalid month range`);
-    if (!item.reason || item.reason.length < 20) throw new Error(`${item.id}: evidence-backed reason is required`);
+    // An object, number, array or whitespace-only note is not documentary
+    // justification. Undefined `.length` previously let non-string values
+    // bypass the minimum-reason requirement and authorize a geography override.
+    if (typeof item.reason !== 'string' || item.reason.trim().length < 20) throw new Error(`${item.id}: evidence-backed reason is required`);
     if (!Array.isArray(item.evidenceDocumentIds) || !item.evidenceDocumentIds.length) throw new Error(`${item.id}: evidenceDocumentIds required`);
     for (const id of item.evidenceDocumentIds) {
       const doc = documents.get(id);
