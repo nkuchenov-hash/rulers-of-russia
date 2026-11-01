@@ -101,10 +101,20 @@ function strictlyInside(point, ring) {
   return inside;
 }
 
+function hasZeroLengthEdge(ring) {
+  // Adjacent duplicate vertices are not a boundary segment. This also catches
+  // +180/-180 aliases after unwrapping, which can otherwise pass the sweep:
+  // adjacent edges are deliberately exempted from self-intersection checks.
+  for (let i = 0; i < ring.length - 1; i++) {
+    if (equal(ring[i], ring[i + 1])) return true;
+  }
+  return false;
+}
 function validUnwrappedRing(ring) {
   // A full wrap can masquerade as a closed polygon in [-180,180].
   return equal(ring[0], ring.at(-1)) && hasArea(ring)
-    && !hasBacktrackingEdge(ring) && !crossingEdges(ring, ring, true);
+    && !hasZeroLengthEdge(ring) && !hasBacktrackingEdge(ring)
+    && !crossingEdges(ring, ring, true);
 }
 export function hasValidRingTopology(rawRing) {
   return validRingShape(rawRing) && validUnwrappedRing(unwrap(rawRing));

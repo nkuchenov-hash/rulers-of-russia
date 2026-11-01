@@ -856,6 +856,20 @@ assert.equal(hasValidPolygonTopology([squareShell, retracedHole]), false,
   'backtracking along an adjacent hole edge is invalid');
 assert.equal(hasValidRingTopology(monotoneCollinearShell), true,
   'ordinary monotone collinear vertices remain valid');
+// A repeated consecutive vertex is a zero-length edge, not a real border.
+// The non-adjacent sweep skips this edge and the old topology helper accepted
+// it as valid despite a nonzero shoelace area. Longitude aliases at +/-180
+// must be tested AFTER unwrapping rather than as raw numeric equality.
+const duplicateShell = [[0,0],[6,0],[6,0],[6,6],[0,6],[0,0]];
+const duplicateHole = [[2,2],[4,2],[4,2],[4,4],[2,4],[2,2]];
+const datelineAliasDuplicate = [[179,10],[180,10],[-180,10],[-179,10],
+  [-179,12],[179,12],[179,10]];
+assert.equal(hasValidRingTopology(duplicateShell), false,
+  'duplicate consecutive shell vertex must invalidate a boundary');
+assert.equal(hasValidPolygonTopology([squareShell, duplicateHole]), false,
+  'duplicate consecutive hole vertex must invalidate the entire polygon');
+assert.equal(hasValidRingTopology(datelineAliasDuplicate), false,
+  '+180 and -180 describe the same point, not an extra boundary edge');
 const antimeridianShell = [[179,10],[-179,10],[-179,12],[179,12],[179,10]];
 const antimeridianHole = [[179.4,10.4],[-179.4,10.4],[-179.4,11.4],[179.4,11.4],[179.4,10.4]];
 assert.equal(hasValidPolygonTopology([antimeridianShell, antimeridianHole]), true,
@@ -875,6 +889,11 @@ assert.throws(() => requireUsableReferenceGeometry(polygonWithRings([retracedShe
 assert.throws(() => requireUsableReferenceGeometry(polygonWithRings([squareShell, retracedHole]),5395),
   /malformed polygon rings|no usable polygon or line geometry/,
   'adjacent hole backtracking must fail the reference preflight');
+for (const rings of [[duplicateShell], [squareShell, duplicateHole], [datelineAliasDuplicate]]) {
+  assert.throws(() => requireUsableReferenceGeometry(polygonWithRings(rings),5395),
+    /malformed polygon rings|no usable polygon or line geometry/,
+    'zero-length shell, hole and antimeridian-alias edges must fail reference preflight');
+}
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([concaveShell, interiorHole]),5395).hasPolygon,true);
 assert.equal(requireUsableReferenceGeometry(polygonWithRings([antimeridianShell, antimeridianHole]),5395).hasPolygon,true);
 console.log('Runivers edge-topology tests passed: escaping and overlapping holes fail closed.');
