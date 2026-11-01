@@ -584,11 +584,26 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
     referenceToCurrentMaxMeters: Math.round(refMax),
     currentToReferenceP95Meters: curP95 === null ? null : Math.round(curP95),
     currentToReferenceMaxMeters: curMax === null ? null : Math.round(curMax),
+    // The public report uses whole metres, but geographic acceptance must
+    // compare the original distances. Rounding first could certify a border
+    // 0.49 m beyond the published tolerance as a pass.
+    exactSymmetricP95Meters: Math.max(refP95, curP95 ?? 0),
+    exactSymmetricMaxMeters: Math.max(refMax, curMax ?? 0),
     symmetricP95Meters: Math.round(Math.max(refP95, curP95 ?? 0)),
     symmetricMaxMeters: Math.round(Math.max(refMax, curMax ?? 0)),
     worstReferenceSamples: worstSamples(reference.points, refToCurrent),
     worstCurrentSamples: worstSamples(current.points, currentToRef),
   };
+}
+
+// The gate consumes only unrounded, finite, bilateral distances. Public
+// report fields remain rounded for display and are never used for acceptance.
+function passesGeographicTolerance(metric, tolerance, maxTolerance) {
+  return metric?.usable === true
+    && Number.isFinite(metric.exactSymmetricP95Meters)
+    && Number.isFinite(metric.exactSymmetricMaxMeters)
+    && metric.exactSymmetricP95Meters <= tolerance
+    && metric.exactSymmetricMaxMeters <= maxTolerance;
 }
 
 // Explicitly allowlist public comparison metrics. A future in-memory metric
@@ -842,7 +857,7 @@ async function main() {
       if (!comparisonYears) throw new Error('Runivers comparison lacks a full-year overlap');
       const tolerance = toleranceMeters(comparisonYears.lastYear, approximate), maxTolerance = tolerance * 4;
       const override = overrideFor(overrides, state, layer, maxRuniversYear);
-      const passMetric = metric.symmetricP95Meters <= tolerance && metric.symmetricMaxMeters <= maxTolerance;
+      const passMetric = passesGeographicTolerance(metric, tolerance, maxTolerance);
       const status = passMetric ? 'pass' : override ? 'override' : 'fail';
       // Diagnose every failed comparison, not just the XVI-century clusters:
       // otherwise later eras have distances but no original source identities
@@ -977,7 +992,7 @@ async function main() {
   if (referenceFailures.length || unmatchedLayers.length || !usableReferenceCount || missingStates.length || uncoveredMonths.length || failedComparisons.length) process.exitCode = 1;
 }
 
-export {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, requireComparablePoliticalGeometry, layerContainsYear, comparisonCoversYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
+export {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, overrideFor, isReferenceApproximate, samplePayload, buildCoastIndex, buildPointIndex, politicalBorderSamples, prepareScopedReference, comparePoliticalGeometry, passesGeographicTolerance, requireComparablePoliticalGeometry, layerContainsYear, comparisonCoversYear, distanceToIndex, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   main().catch(error => { console.error(error); process.exitCode = 1; });
