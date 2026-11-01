@@ -236,11 +236,15 @@ async function fetchLayerFromVectorTile(host, id) {
     for (let index = 0; index < layer.length; index += 1) {
       const feature = layer.feature(index);
       const geojson = feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM);
+      // Preserve every original source feature, not just polygon-bearing
+      // ones. A named polity's point/line-only record may represent missing
+      // area geometry: dropping it would let a partial MVT reference pass
+      // polity scoping while the JSON transport correctly fails closed.
+      referenceSourceFeatures.push(geojson);
       const multi = geometryToMultiPolygon(geojson?.geometry);
       if (!multi.length) continue;
       polygonFeatures += 1;
       sourceProperties.push(geojson.properties ?? {});
-      referenceSourceFeatures.push(geojson);
       merged = merged.length ? polygonClipping.union(merged, multi) : multi;
     }
   }
@@ -259,7 +263,16 @@ async function fetchLayerFromVectorTile(host, id) {
       geometry: {type: 'MultiPolygon', coordinates: merged},
     }],
   };
-  if (!geometryLooksWgs84(payload)) throw new Error('MVT reconstruction is not valid EPSG:4326 geometry');
+  if (!geometryLooksWgs84(payload)
+    || !geometryLooksWgs84({features: referenceSourceFeatures})) {
+    throw new Error('MVT reconstruction or original source is not valid EPSG:4326 geometry');
+  }
+  // The cache validator already checks original source geometry on reuse.
+  // Apply that same integrity gate on first fetch, before a malformed
+  // auxiliary feature can enter the reference cache or source diagnostics.
+  requireUsableReferenceGeometry({
+    type: 'FeatureCollection', features: referenceSourceFeatures,
+  }, `${id} MVT original source features`);
   return {payload, transport};
 }
 
