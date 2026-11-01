@@ -52,6 +52,23 @@ function ringLocation(point, ring) {
     vertices.push([lon, coordinate[1]]);
     previousLon = lon;
   }
+  // A raw GeoJSON ring can close at the same longitude yet wind a full
+  // revolution after unwrapping. Its planar ray-cast contour is not closed;
+  // never turn that ambiguous world-spanning path into a sovereignty verdict.
+  if (vertices.at(-1)[0] !== vertices[0][0]
+    || vertices.at(-1)[1] !== vertices[0][1]) return 'unavailable';
+  // A non-adjacent repeated WGS84 vertex makes the ring self-touching, even
+  // when its signed area is nonzero. Canonicalize the antimeridian so +180
+  // and -180 cannot conceal a repeat. Consecutive duplicates are harmless.
+  const seenVertices = new Set();
+  let previousKey = null;
+  for (const [lon, lat] of vertices.slice(0, -1)) {
+    const normalizedLon = ((lon + 180) % 360 + 360) % 360 - 180;
+    const key = `${normalizedLon},${lat}`;
+    if (key !== previousKey && seenVertices.has(key)) return 'unavailable';
+    seenVertices.add(key);
+    previousKey = key;
+  }
   // A collapsed ring has no sovereign area. Use unwrapped longitudes so a
   // legitimate antimeridian crossing is not mistaken for a world-wide edge.
   let twiceArea = 0;
