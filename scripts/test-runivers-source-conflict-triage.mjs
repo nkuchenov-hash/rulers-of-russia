@@ -31,6 +31,27 @@ assert.equal(geojsonLocation(diagnosticPoint, {
 assert.equal(geojsonLocation(diagnosticPoint, collection([
   feature(square),feature({type:'Point',coordinates:[999,999]}),
 ])), 'unavailable', 'malformed auxiliary geometry must invalidate the entire verdict');
+// The antimeridian is one meridian, not a 360-degree-long line. A
+// zero-length auxiliary line cannot be treated as valid geographic evidence
+// when a polygon exists elsewhere in the same source export.
+for (const geometry of [
+  {type:'LineString',coordinates:[[180,0],[-180,0]]},
+  {type:'LineString',coordinates:[[180,0],[180,0],[-180,0]]},
+  {type:'MultiLineString',coordinates:[[[180,0],[-180,0]]]},
+  {type:'GeometryCollection',geometries:[
+    {type:'LineString',coordinates:[[180,0],[-180,0]]}, square,
+  ]},
+]) {
+  assert.equal(geojsonLocation(diagnosticPoint, collection([feature(square),feature(geometry)])),
+    'unavailable', 'collapsed antimeridian line must invalidate the area verdict');
+}
+assert.equal(geojsonLocation(diagnosticPoint, collection([
+  feature(square), feature({type:'LineString',coordinates:[[179,0],[-179,0]]}),
+])), 'inside', 'a real two-degree antimeridian crossing remains valid');
+assert.equal(geojsonLocation([5,5], collection([
+  feature(square), feature({type:'LineString',coordinates:[[179,0],[-179,0]]}),
+])), 'outside', 'valid crossing annotations must not hide a real polygon outside verdict');
+
 console.log('Runivers hotspot diagnostics reject annotation-only geographic absence claims.');
 
 const sample = (distanceMeters, selectedName, excludedName, sampledBoundary = 'runivers-reference') => ({
