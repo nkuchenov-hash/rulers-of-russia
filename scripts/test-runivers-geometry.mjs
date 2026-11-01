@@ -925,7 +925,7 @@ const wideEasternHole = [[-179.8,2],[-179.2,2],[-179.2,4],[-179.8,4],[-179.8,2]]
 const wideWesternHole = [[1,2],[2,2],[2,3],[1,3],[1,2]];
 assert.equal(hasValidPolygonTopology([wideDatelineShell, wideEasternHole, wideWesternHole]), true,
   'wide antimeridian shell must accept both east and west interior holes');
-assert.equal(hasValidPolygonTopology([wideDatelineShell, wideEasternHole, [[179,2],[179.5,2],[179.5,4],[179,4],[179,2]]]), false,
+assert.equal(hasValidPolygonTopology([wideDatelineShell, wideEasternHole, [[-179.6,2.5],[-179.1,2.5],[-179.1,3.5],[-179.6,3.5],[-179.6,2.5]]]), false,
   'wide shell must still reject overlapping holes after alignment');
 assert.equal(hasValidRingTopology([[180,10],[-180,10],[-180,11],[180,11],[180,10]]), false);
 const polygonWithRings = rings => ({type:'FeatureCollection',features:[
