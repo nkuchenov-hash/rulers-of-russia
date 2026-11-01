@@ -805,6 +805,32 @@ console.log('Runivers malformed-ring regression passed: invalid holes and mixed 
 // All vertices of this hole are inside the concave exterior, but its top
 // edge passes outside the shell. Checking vertices alone accepts a false
 // independent boundary. Crossing/touching holes must fail closed as well.
+// Direct callers of the shared topology helper must fail closed even when
+// transport-level WGS84 shape checks were not called first. Previously an
+// empty Polygon passed as valid and an empty Ring threw an exception.
+const validTriangle = [[0,0],[1,0],[0,1],[0,0]];
+const invalidTopologyRings = [
+  null, [], [[0,0]], [[0,0],[0,0],[0,0],[0,0]],
+  [[0,0],[1,0],[2,0],[0,0]], // closed, but zero sovereign area
+  [[0,0],[181,0],[0,1],[0,0]], // out-of-range longitude
+  [[0,0],[1,0],[0,91],[0,0]], // out-of-range latitude
+  [[0,0],[1,0],[NaN,1],[0,0]], // non-finite coordinate
+  [[0,0],[1,0],null,[0,0]],
+];
+for (const invalid of invalidTopologyRings) {
+  assert.equal(hasValidRingTopology(invalid), false,
+    'malformed or zero-area ring must fail closed without throwing');
+  assert.equal(hasValidPolygonTopology([invalid]), false,
+    'malformed or zero-area polygon must fail closed without throwing');
+}
+for (const invalid of [null, [], {}, [validTriangle, null], [validTriangle, []]]) {
+  assert.equal(hasValidPolygonTopology(invalid), false,
+    'empty or partially malformed polygon cannot be certified');
+}
+assert.equal(hasValidRingTopology(validTriangle), true);
+assert.equal(hasValidPolygonTopology([validTriangle]), true);
+console.log('Runivers topology shape guard passed: empty, malformed and zero-area polygons rejected.');
+
 const concaveShell = [[0,0],[6,0],[6,6],[4,6],[4,2],[2,2],[2,6],[0,6],[0,0]];
 const interiorHole = [[.5,.5],[1.5,.5],[1.5,1.5],[.5,1.5],[.5,.5]];
 const escapingHole = [[1,1],[5,1],[5,5],[1,5],[1,1]];
