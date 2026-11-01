@@ -243,7 +243,7 @@ try {
   let interceptedGeometryUrl = null;
   let resolveIntercept;
   const intercepted = new Promise(resolve => { resolveIntercept = resolve; });
-  const generatedTerritoryPattern = /\\/data\\/history-core\\/generated\\/territory\\/[^?]+\\.geojson(?:\\?|$)/;
+  const generatedTerritoryPattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
   const failClosedPage = await browser.newPage({viewport: {width: 1440, height: 900}, deviceScaleFactor: 1});
   const failClosedRequests = [];
   failClosedPage.on('request', request => {
