@@ -12,16 +12,27 @@ const geometry = {type: 'Polygon', coordinates: [[[30, 50], [31, 50], [31, 51], 
 const adjacent = {type: 'Polygon', coordinates: [[[31, 50], [32, 50], [32, 51], [31, 51], [31, 50]]]};
 // Minimal real MVT wire format: an empty layer or a rectangle encoded using
 // MoveTo, LineTo and ClosePath commands. No external tile service is needed.
-const makeTile = (withPolygon, degenerate = false) => {
+const makeTile = (withPolygon, degenerate = false, withNamedPoint = false) => {
   const pbf = new Pbf();
   pbf.writeMessage(3, (data, writer) => {
     writer.writeStringField(1, 'historical');
+    if (withNamedPoint) {
+      writer.writeStringField(3, 'name');
+      writer.writeMessage(4, (_, value) => value.writeStringField(1, 'Россия'), null);
+    }
     if (data) writer.writeMessage(2, (_, feature) => {
       feature.writeVarintField(1, 1);
+      if (withNamedPoint) feature.writePackedVarint(2, [0, 0]);
       feature.writeVarintField(3, 3); // POLYGON
       feature.writePackedVarint(4, degenerate
         ? [9, 4600, 3000, 26, 200, 0, 200, 0, 399, 0, 15] // closed, collinear: zero area
         : [9, 4600, 3000, 26, 200, 0, 0, 200, 199, 0, 15]);
+    }, null);
+    if (withNamedPoint) writer.writeMessage(2, (_, feature) => {
+      feature.writeVarintField(1, 2);
+      feature.writePackedVarint(2, [0, 0]); // Same named polity, but no area
+      feature.writeVarintField(3, 1); // POINT
+      feature.writePackedVarint(4, [9, 4700, 3000]);
     }, null);
     writer.writeVarintField(5, 4096);
     writer.writeVarintField(15, 2);
@@ -32,7 +43,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -68,6 +79,9 @@ try {
     if (url.pathname === '/api/component/feature_layer/mvt' && url.searchParams.get('resource') === '2') {
       requestedComponentMvt = true;
       return new Response(makeTile(true), {status: 200});
+    }
+    if (url.pathname === '/api/resource/11/0/0/0.mvt') {
+      return new Response(makeTile(true, false, true), {status: 200});
     }
     if (url.pathname === '/api/resource/6/0/0/0.mvt') {
       return new Response(makeTile(true, true), {status: 200}); // A polygon label with zero enclosed area
@@ -207,6 +221,22 @@ try {
   assert.equal(mvt.referenceSourceFeatures.length, 1);
   assert.equal(mvt.features[0].geometry.type, 'MultiPolygon');
   assert.ok(mvt.features[0].geometry.coordinates.length > 0);
+  // MVT and JSON must have identical source-completeness semantics. A
+  // named point-only record cannot disappear merely because another feature
+  // in the tile has a valid polygon for the same named state.
+  const mixedMvtResponse = await fetch('https://example.invalid/api/resource/11/geojson');
+  assert.equal(mixedMvtResponse.status, 200, await mixedMvtResponse.clone().text());
+  const mixedMvt = await mixedMvtResponse.json();
+  assert.equal(mixedMvt.features[0].geometry.type, 'MultiPolygon');
+  assert.equal(mixedMvt.referenceSourceFeatures.length, 2,
+    'MVT must preserve original point/line source records as well as polygons');
+  assert.deepEqual(mixedMvt.referenceSourceFeatures.map(f => f.geometry.type),
+    ['Polygon', 'Point']);
+  assert.deepEqual(mixedMvt.referenceSourceFeatures.map(f => f.properties.name),
+    ['Россия', 'Россия'], 'named non-area source identities must not be discarded');
+  assert.throws(() => referenceForPolity(mixedMvt, 'russian-tsardom'),
+    /selected source features without polygon geometry/,
+    'MVT must not certify a partial named-polity border after dropping a point-only source record');
   const degenerateResponse = await fetch('https://example.invalid/api/resource/6/geojson');
   assert.equal(degenerateResponse.status, 200, await degenerateResponse.clone().text());
   const degenerateMvt = await degenerateResponse.json();
@@ -255,7 +285,7 @@ try {
   }
   assert.ok(requestedRecovery.has(10),
     'near-out-of-range cached and fetched source geometry must be rejected and recovered');
-  console.log('Runivers fallbacks passed: empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: complete MVT source identities, empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);
