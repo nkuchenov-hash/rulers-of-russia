@@ -43,7 +43,7 @@ try {
   process.chdir(fixture);
   const discovery = path.join(fixture, 'baseline.json');
   fs.writeFileSync(discovery, JSON.stringify({host: 'https://example.invalid', vectorLayers:
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(id => ({id, fromYear: 1992, toYear: 2020}))}));
   // The first 5,001 WGS84 points are valid, but the next source feature
   // contains projected metres. A prefix-only coordinate check missed it.
   const longLine = {type: 'MultiLineString',
@@ -71,6 +71,7 @@ try {
   let requestedMalformedSourceRecovery = false;
   let requestedForeignHostRecovery = false;
   let requestedWrongResourceRecovery = false;
+  let requestedPartialJsonRecovery = false;
   globalThis.fetch = async input => {
     const url = new URL(input);
     if (url.pathname === '/api/resource/2/0/0/0.mvt') {
@@ -105,6 +106,21 @@ try {
     if (invalidExports[referenceId] && url.pathname.endsWith('/export')) {
       requestedRecovery.add(referenceId);
       return Response.json({type: 'FeatureCollection', features: [feature(geometry)]});
+    }
+    if (url.pathname === '/api/resource/12/feature/') {
+      // A valid polygon must not hide a second source record with missing
+      // geometry. The old array normalizer silently filtered that record.
+      return Response.json([
+        {id: 1201, geom: geometry, fields: {name: 'Россия', cat: 767}},
+        {id: 1202, fields: {name: 'Россия', cat: 767}},
+      ]);
+    }
+    if (url.pathname === '/api/resource/12/export') {
+      requestedPartialJsonRecovery = true;
+      return Response.json([
+        {id: 1201, geom: geometry, fields: {name: 'Россия', cat: 767}},
+        {id: 1202, geom: adjacent, fields: {name: 'Россия', cat: 767}},
+      ]);
     }
     if (url.pathname === '/api/resource/7/feature/') {
       requestedMalformedSourceRecovery = true;
@@ -263,6 +279,15 @@ try {
     assert.deepEqual(scopedMixed.payload.features[0].geometry.coordinates, [geometry.coordinates],
       'scoped border must match the Russian polygon, not the adjacent polity or annotations');
   }
+  const partialResponse = await fetch('https://example.invalid/api/resource/12/geojson');
+  assert.equal(partialResponse.status, 200, await partialResponse.clone().text());
+  assert.equal(requestedPartialJsonRecovery, true,
+    'an incomplete NextGIS feature array must trigger the alternate JSON export');
+  const recoveredComplete = await partialResponse.json();
+  assert.deepEqual(recoveredComplete.referenceSourceFeatures.map(f => f.id), [1201, 1202],
+    'a missing-geometry named record must not disappear from the source inventory');
+  assert.equal(referenceForPolity(recoveredComplete, 'russian-tsardom').scope.selectedFeatures, 2,
+    'only the complete alternate export may establish the named-state boundary');
   assert.equal(requestedMalformedSourceRecovery, true,
     'a valid cached merged border must not hide an invalid original source ring');
   assert.equal(requestedForeignHostRecovery, true,
@@ -285,7 +310,7 @@ try {
   }
   assert.ok(requestedRecovery.has(10),
     'near-out-of-range cached and fetched source geometry must be rejected and recovered');
-  console.log('Runivers fallbacks passed: complete MVT source identities, empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping and point-only JSON recovery.');
+  console.log('Runivers fallbacks passed: complete MVT source identities, empty and zero-area MVT alternatives, complete WGS84 coordinate scan, source-host/resource cache binding, stale malformed source-ring refresh, nested projected features, mixed-source scoping, partial-array recovery and point-only JSON recovery.');
 } finally {
   globalThis.fetch = originalFetch;
   process.chdir(cwd);

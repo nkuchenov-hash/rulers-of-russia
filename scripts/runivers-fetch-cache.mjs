@@ -94,9 +94,18 @@ function normalizePayload(parsed) {
   if (parsed?.type === 'FeatureCollection' && Array.isArray(parsed.features)) {
     payload = parsed;
   } else if (Array.isArray(parsed)) {
-    const features = parsed.map(item => item?.type === 'Feature' ? item : item?.geom
-      ? {type: 'Feature', id: item.id ?? null, geometry: item.geom, properties: item.fields ?? item.properties ?? {}}
-      : null).filter(Boolean);
+    // NextGIS arrays are source inventories, not a bag of optional shapes.
+    // Dropping a record with missing/unsupported geometry can silently omit
+    // part of a named historical polity and produce a false boundary pass.
+    // Reject the entire endpoint and try the next independent export instead.
+    const features = parsed.map((item, index) => {
+      if (item?.type === 'Feature') return item;
+      if (item && typeof item === 'object' && item.geom) {
+        return {type: 'Feature', id: item.id ?? null, geometry: item.geom,
+          properties: item.fields ?? item.properties ?? {}};
+      }
+      throw new Error(`NextGIS JSON export contains missing or unsupported source record at index ${index}`);
+    });
     if (features.length) payload = {type: 'FeatureCollection', features};
   }
   if (!payload) throw new Error('response has no usable feature geometry');
