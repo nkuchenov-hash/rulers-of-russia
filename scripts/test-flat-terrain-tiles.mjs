@@ -33,4 +33,33 @@ assert.match(flat, /import \{visibleTerrainCopies\} from '\.\/flatTerrainTiles\.
 assert.match(flat, /for\(const repeat of visibleTerrainCopies\(x0,fullWidth,width\)\)/);
 assert.doesNotMatch(flat, /for\(let repeat=-2;repeat<=2;repeat\+\+\)/,
   'the fixed five-copy terrain loop must not regress');
+// The vector projection is clipped to one world. Terrain-only repetition
+// leaves Russian borders and background states blank after a long pan.
+// Verify that the same visible-copy selection wraps every vector layer,
+// and that labels are culled using their repeated SCREEN coordinate.
+for (const [dx, width, height, zoom] of [
+  [0, 400, 400, 1], [-1600, 400, 400, 1],
+  [2000, 400, 400, 1], [-9000, 1400, 600, 2],
+  [4000, 1400, 600, 8],
+]) {
+  const scale = Math.min(width / (2 * Math.PI), height / Math.PI) * zoom;
+  const worldWidth = 2 * Math.PI * scale;
+  const tx = width / 2 + dx;
+  const vectorCopies = copies(tx - Math.PI * scale, worldWidth, width);
+  assert.ok(vectorCopies.length > 0 && vectorCopies.length <= Math.ceil(width / worldWidth) + 1);
+  assert.ok(vectorCopies.some(n => {
+    const left = tx - Math.PI * scale + n * worldWidth;
+    return left < width && left + worldWidth > 0;
+  }), 'wrapped state polygons must intersect the visible canvas');
+}
+assert.match(flat, /for\(const repeat of visibleTerrainCopies\(tx-Math\.PI\*scale,fullWidth,width\)\)\{/,
+  'world vectors must use the visible projected-world copies, not terrain texture origin');
+assert.match(flat, /ctx\.translate\(repeat\*fullWidth,0\)/,
+  'graticule, states, History Core, verified boundaries and labels must share the same wrap');
+assert.match(flat, /screenX=point\?\.\[0\]\+repeat\*fullWidth/,
+  'labels on repeated worlds must not be culled using their unwrapped coordinates');
+assert.match(flat, /ctx\.restore\(\);\s*\}/,
+  'canvas transforms must be restored after each wrapped vector copy');
+console.log('2D projected state vectors and labels repeat across multiple world pans.');
+
 console.log('2D terrain draws only visible wrapped copies, including extreme pan and zoom.');
