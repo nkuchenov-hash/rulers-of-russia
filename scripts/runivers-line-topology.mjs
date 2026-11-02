@@ -4,8 +4,17 @@ const validPoint = point => Array.isArray(point) && point.length >= 2
   && Number.isFinite(point[0]) && Number.isFinite(point[1])
   && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
 
+// A north-to-south pole edge is antipodal even when its raw longitude
+// difference is zero. Infinitely many great-circle arcs join the poles;
+// inferring one would fabricate a geographic border.
+export function hasAntipodalPoleEdge(line) {
+  return Array.isArray(line) && line.some((point, index) => index > 0
+    && Math.abs(point[1]) === 90 && point[1] === -line[index - 1][1]);
+}
+
 export function hasValidWgs84Line(line) {
-  if (!Array.isArray(line) || line.length < 2 || !line.every(validPoint)) return false;
+  if (!Array.isArray(line) || line.length < 2 || !line.every(validPoint)
+    || hasAntipodalPoleEdge(line)) return false;
   for (let i = 1; i < line.length; i++) {
     const a = line[i - 1], b = line[i];
     const lonSeparation = Math.abs(b[0] - a[0]);
