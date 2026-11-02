@@ -92,4 +92,56 @@ for (const [polygon, expected] of holeCases) {
 assert.equal(polygonHoleTopologyFailureReason([shell, hole(2, 2, 4, 4)]), null);
 assert.equal(hasValidPolygonTopology([shell, hole(2, 2, 4, 4)]), true);
 
-console.log('Runivers lossless reference normalization passed: exact duplicate edges only, strict topology preserved.');
+// A -> B -> A is an exact retraced zero-area spur, not a sovereign
+// extension. Only the two cancelling segments may be removed, and the
+// remaining shell/hole must still pass the unchanged strict validator.
+const retraced = [[30, 50], [31, 50], [31, 51], [31.2, 51.2],
+  [31, 51], [30, 51], [30, 50]];
+assert.equal(hasValidPolygonTopology([retraced]), false);
+const retracedResult = normalize(retraced);
+assert.equal(retracedResult.removedVertices, 2);
+assert.deepEqual(retracedResult.payload.features[0].geometry.coordinates[0], square);
+assert.equal(requireUsableReferenceGeometry(retracedResult.payload, 'synthetic-spur').hasPolygon, true);
+assert.deepEqual(retraced[3], [31.2, 51.2], 'source spur must not be mutated');
+
+const repeatedSpurs = [[30, 50], [31, 50], [31, 51], [31.2, 51.2],
+  [31, 51], [31.1, 51.1], [31, 51], [30, 51], [30, 50]];
+const repeatedResult = normalize(repeatedSpurs);
+assert.equal(repeatedResult.removedVertices, 4);
+assert.deepEqual(repeatedResult.payload.features[0].geometry.coordinates[0], square);
+
+const holedSpur = {type: 'Polygon', coordinates: [square, [
+  [30.2, 50.2], [30.8, 50.2], [30.8, 50.8], [30.9, 50.9],
+  [30.8, 50.8], [30.2, 50.8], [30.2, 50.2],
+]]};
+const normalizedHole = normalizeExactDuplicatePolygonFeatures(holedSpur);
+assert.equal(normalizedHole.removedVertices, 2);
+assert.equal(hasValidPolygonTopology(normalizedHole.payload.coordinates), true);
+assert.equal(requireUsableReferenceGeometry(normalizedHole.payload, 'synthetic-hole').hasPolygon, true);
+
+// A nearly retraced spur is not exact; it can enclose a real thin area.
+// Ambiguous half-world edges and altitude-bearing source vertices are also
+// never silently erased, even when a resulting square would look valid.
+for (const unsafe of [
+  [[30, 50], [31, 50], [31, 51], [31.2, 51.2],
+    [31, 51.0000001], [30, 51], [30, 50]],
+  [[30, 50], [31, 50], [31, 51], [-149, 51],
+    [31, 51], [30, 51], [30, 50]],
+  [[30, 50, 1], [31, 50, 1], [31, 51, 1], [31.2, 51.2, 1],
+    [31, 51, 1], [30, 51, 1], [30, 50, 1]],
+]) {
+  const untouched = normalize(unsafe);
+  assert.equal(untouched.removedVertices, 0,
+    'non-exact, ambiguous and 3D spurs must not be normalized');
+  assert.deepEqual(untouched.payload.features[0].geometry.coordinates[0], unsafe);
+}
+// Removing an exact spur must not excuse a separate invalid hole.
+const invalidWithSpur = normalizeExactDuplicatePolygonFeatures({
+  type: 'Polygon', coordinates: [retraced,
+    [[40, 60], [41, 60], [41, 61], [40, 61], [40, 60]]],
+});
+assert.equal(invalidWithSpur.removedVertices, 0);
+assert.throws(() => requireUsableReferenceGeometry(invalidWithSpur.payload, 'synthetic-invalid-hole'),
+  /malformed polygon rings/);
+
+console.log('Runivers lossless reference normalization passed: exact duplicate edges and exact retraced spurs only, strict topology preserved.');
