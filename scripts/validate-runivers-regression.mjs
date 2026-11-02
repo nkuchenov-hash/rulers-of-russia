@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
 import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidWgs84Line} from './runivers-line-topology.mjs';
 import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {publicReferenceFailure} from './runivers-public-reference-failures.mjs';
@@ -193,11 +194,9 @@ function classifyGeometry(payload) {
   let hasPolygon = false, hasLine = false, invalidPolygon = false, invalidGeometry = false;
   const wgs84Point = point => validCoordinate(point)
     && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
-  const validLine = line => Array.isArray(line) && line.length >= 2
-    && line.every(wgs84Point)
-    // +180 and -180 are the same meridian, not distinct endpoints.
-    && line.some(point => point[1] !== line[0][1]
-      || (point[0] !== line[0][0] && Math.abs(point[0] - line[0][0]) !== 360));
+  // Inspect every segment, not merely whether one vertex differs from the
+  // first. A valid polygon must not hide a collapsed/ambiguous auxiliary line.
+  const validLine = hasValidWgs84Line;
   const validRing = ring => {
     if (!validLine(ring) || ring.length < 4) return false;
     const first = ring[0], last = ring.at(-1);

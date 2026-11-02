@@ -835,6 +835,36 @@ assert.throws(() => requireUsableReferenceGeometry(boundaryLineOnly,5389), /line
 assert.equal(comparePoliticalGeometry({points:[[30,50]],allPoints:[[30,50]]},
   {points:[[30,50]],allPoints:[[30,50]]},{hasPolygon:false}).usable,false,
   'the comparison API must not allow a line-only reference to pass');
+// Every source segment matters. The old validator checked only whether SOME
+// point differed from the first, accepting collapsed or 180-degree segments
+// beside a valid polygon. This can contaminate bilateral border sampling.
+const lineSegmentCases = [
+  [[0,0],[0,0],[1,1]],                 // collapsed first segment
+  [[180,10],[-180,10],[179,11]],       // antimeridian alias
+  [[0,90],[20,90],[30,89]],           // distinct longitude, same north pole
+  [[0,0],[180,0]],                    // ambiguous half-world direction
+  [[-180,10],[0,10],[180,10]],        // two ambiguous half-world segments
+];
+for (const coordinates of lineSegmentCases) {
+  const payload = {type:'FeatureCollection',features:[
+    feature('Moscow',30), {type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates}},
+  ]};
+  assert.throws(() => requireUsableReferenceGeometry(payload,5398),
+    /malformed or unsupported geometry/,
+    'valid sovereign polygon must not conceal malformed line: '+JSON.stringify(coordinates));
+}
+for (const coordinates of [
+  [[179,10],[-179,10]], [[0,0],[1,1]],
+]) {
+  const payload = {type:'FeatureCollection',features:[
+    feature('Moscow',30), {type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates}},
+  ]};
+  assert.equal(requireUsableReferenceGeometry(payload,5398).hasPolygon,true,
+    'ordinary short lines and real dateline crossings remain valid');
+}
+
 console.log('Runivers empty/unsupported and line-only reference exports fail closed.');
 
 // A declared polygon/line with no actual geographic border must not suppress
