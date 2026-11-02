@@ -159,6 +159,11 @@ for (const properties of [
   // source declaration. The former exact-match check silently raised the
   // geographic tolerance to 100 km for these surveyed contours.
   {description:'not approximate: surveyed boundary'},
+  {description:'not an approximation'},
+  {description:'not a reconstruction of the border'},
+  {notes:'This is not an approximate boundary'},
+  {description:'not a reconstructed boundary'},
+  {description:'not an approximation, surveyed from records'},
   {notes:'surveyed; not approximate according to archive'},
   {description:'non-approximate surveyed map'},
   {description:'no uncertain borders'},
@@ -191,6 +196,8 @@ for (const properties of [
 // these contradictory records and silently raised the limit to 100 km.
 for (const properties of [
   {approximate: true, notes: 'not approximate: surveyed boundary'},
+  {approximate: true, notes: 'not an approximation'},
+  {reconstructed: true, description: 'not a reconstruction'},
   {approximate: 'yes', uncertain: false},
   {metadata: {approximate: true}, source: {reconstructed: 'no'}},
   {approximate: true, description: 'не приблизительные границы'},
