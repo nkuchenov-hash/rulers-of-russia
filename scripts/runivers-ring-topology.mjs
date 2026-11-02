@@ -157,13 +157,15 @@ export function hasValidRingTopology(rawRing) {
     && !hasAntipodalPoleEdge(rawRing)
     && validUnwrappedRing(unwrap(rawRing));
 }
-export function hasValidPolygonTopology(rawPolygon) {
+// Shared acceptance and scalar-only hole diagnostic. Classification never repairs
+// source coordinates or changes the strict polygon validity policy.
+export function polygonHoleTopologyFailureReason(rawPolygon) {
   if (!Array.isArray(rawPolygon) || !rawPolygon.length
     || !rawPolygon.every(validRingShape)
     || rawPolygon.some(hasAmbiguousHalfWorldEdge)
-    || rawPolygon.some(hasAntipodalPoleEdge)) return false;
+    || rawPolygon.some(hasAntipodalPoleEdge)) return 'invalid-ring';
   const rings = rawPolygon.map(unwrap);
-  if (rings.some(ring => !validUnwrappedRing(ring))) return false;
+  if (rings.some(ring => !validUnwrappedRing(ring))) return 'invalid-ring';
   const shell = rings[0];
   // Align holes to the shell's unwrapped longitude *extent*, not its first
   // vertex. A wide shell can begin near Greenwich and reach past +180:
@@ -180,16 +182,20 @@ export function hasValidPolygonTopology(rawPolygon) {
     return hole.map(([lon, lat]) => [lon + shift, lat]);
   });
   for (const hole of holes) {
-    if (hole.slice(0, -1).some(vertex => !strictlyInside(vertex, shell))) return false;
-    if (crossingEdges(shell, hole)) return false;
+    if (hole.slice(0, -1).some(vertex => !strictlyInside(vertex, shell))) return 'hole-outside-shell';
+    if (crossingEdges(shell, hole)) return 'hole-crosses-shell';
   }
   for (let i = 0; i < holes.length; i++) for (let j = i + 1; j < holes.length; j++) {
-    if (crossingEdges(holes[i], holes[j])
-      || strictlyInside(holes[i][0], holes[j]) || strictlyInside(holes[j][0], holes[i])) return false;
+    if (crossingEdges(holes[i], holes[j])) return 'holes-cross-or-touch';
+    if (strictlyInside(holes[i][0], holes[j]) || strictlyInside(holes[j][0], holes[i])) return 'holes-nested';
   }
-  return true;
+  return null;
 }
 
+
+export function hasValidPolygonTopology(rawPolygon) {
+  return polygonHoleTopologyFailureReason(rawPolygon) === null;
+}
 
 // Research-only scalar reason for an invalid ring. This intentionally uses
 // the SAME predicates and order as the acceptance topology gate; it does not
