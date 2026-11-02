@@ -70,6 +70,22 @@ for (const malformed of [selfTouching, fullWrap]) {
       'unavailable', 'a valid polygon must not hide a malformed sibling');
   }
 }
+// Research-only point attribution must reject the same malformed source
+// segments as the independent transport, even beside a valid area polygon.
+for (const coordinates of [
+  [[0,0],[0,0],[1,1]],
+  [[180,10],[-180,10],[179,11]],
+  [[0,90],[20,90],[30,89]],
+  [[0,0],[180,0]],
+]) {
+  assert.equal(geojsonLocation(diagnosticPoint, collection([
+    feature(square),feature({type:'LineString',coordinates}),
+  ])), 'unavailable', 'malformed auxiliary line must not yield a sovereignty verdict');
+}
+assert.equal(geojsonLocation(diagnosticPoint, collection([
+  feature(square),feature({type:'LineString',coordinates:[[179,10],[-179,10]]}),
+])), 'inside', 'valid short antimeridian line must remain usable');
+
 const datelinePolygon = {type:'Polygon',coordinates:[[
   [170,10],[-170,10],[-170,20],[170,20],[170,10],
 ]]};
