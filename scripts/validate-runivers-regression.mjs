@@ -313,6 +313,13 @@ const negatedApproximation = /(?:^|[\s,;:(])(?:not[-\s]+(?:an?\s+)?|non[-\s]*|no
 // the allowable error to 100 km, despite explicitly denying approximation.
 const negativeApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*)\s*[:=]\s*(?:false|no|нет|0)(?=$|[\s,;)}.!?])/i;
 
+// Source notes can negate approximation without using the exact word
+// "approximate": "not approximated", "without approximation" and the
+// Russian "без приблизительных ..." must not authorize the 100 km limit.
+// Unknown/pending key-value notes are also not affirmative evidence.
+const additionalNonApproximation = /(?:^|[\\s,;:(])(?:not\\s+approximated|never\\s+(?:approximate|approximated|reconstructed)|without\\s+(?:any\\s+)?(?:approximation|approximations|reconstruction|uncertainty))(?=$|[\\s,.;:!?)])|(?:^|[\\s,;:(])без\\s+(?:приблизительн[а-яё]*|условн[а-яё]*|реконструкци[а-яё]*)(?=$|[\\s,.;:!?)])/i;
+const unresolvedApproximationAssignment = /(?:^|[\\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*)\\s*[:=]\\s*(?:unknown|pending|undetermined|unspecified|n\\/a|null|\\?)(?=$|[\\s,;)}.!?])/i;
+
 function hasApproximationEvidence(value, key = '') {
   if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
   if (value && typeof value === 'object') {
@@ -323,6 +330,7 @@ function hasApproximationEvidence(value, key = '') {
   if (typeof value !== 'string') return false;
   const label = value.trim();
   if (explicitNonApproximation.test(label) || negatedApproximation.test(label)
+    || additionalNonApproximation.test(label) || unresolvedApproximationAssignment.test(label)
     || negativeApproximationAssignment.test(label)) return false;
   return approximationMarker.test(label)
     || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
@@ -340,7 +348,8 @@ function hasExplicitNonApproximation(value, key = '') {
   if (typeof value === 'number') return approximationMarker.test(key) && value === 0;
   if (typeof value !== 'string') return false;
   const label = value.trim();
-  return negatedApproximation.test(label) || negativeApproximationAssignment.test(label)
+  return negatedApproximation.test(label) || additionalNonApproximation.test(label)
+    || unresolvedApproximationAssignment.test(label) || negativeApproximationAssignment.test(label)
     || (approximationMarker.test(key) && explicitNonApproximation.test(label));
 }
 
