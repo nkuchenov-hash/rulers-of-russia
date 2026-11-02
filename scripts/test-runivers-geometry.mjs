@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidRingTopology, hasValidPolygonTopology, ringTopologyFailureReason} from './runivers-ring-topology.mjs';
 import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
 import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, passesGeographicTolerance, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
@@ -934,6 +934,9 @@ const diagnostic = summarizePolygonFailures(invalidDiagnostic);
 assert.deepEqual(diagnostic, {
   polygons:6,validPolygons:1,emptyPolygons:1,malformedRings:0,
   invalidWgs84Rings:1,unclosedRings:1,invalidRingTopology:1,invalidHoleTopology:1,
+  invalidRingReasons: {'ambiguous-half-world-edge':0, 'antipodal-pole-edge':0,
+    'unwrapped-open-ring':0, 'zero-area':1, 'zero-length-edge':0,
+    'repeated-pole':0, 'backtracking-edge':0, 'self-intersection':0},
 }, 'source failure triage must count independent invalid polygon categories');
 assert.ok(!JSON.stringify(diagnostic).includes('Never export this licensed label'),
   'diagnostic output must contain counts only, never source metadata');
@@ -942,6 +945,16 @@ assert.ok(!JSON.stringify(diagnostic).includes('30,50'),
 assert.throws(() => requireUsableReferenceGeometry(diagnosticPolygonPayload([]),5391),
   /malformed polygon rings.*"emptyPolygons":1/,
   'a polygon-only malformed export must not be mislabeled as missing geometry');
+assert.equal(ringTopologyFailureReason(diagnosticSquare), null);
+assert.equal(ringTopologyFailureReason([[0,0],[1,0],[2,0],[0,0]]), 'zero-area');
+assert.equal(ringTopologyFailureReason([[0,0],[6,0],[3,0],[6,6],[0,6],[0,0]]), 'backtracking-edge');
+assert.equal(ringTopologyFailureReason([[0,90],[0,-90],[30,-80],[30,80],[0,90]]), 'antipodal-pole-edge');
+assert.equal(ringTopologyFailureReason([[0,0],[180,10],[90,20],[0,0]]), 'ambiguous-half-world-edge');
+assert.equal(ringTopologyFailureReason([[0,0],[0,0],[2,0],[0,2],[0,0]]), 'zero-length-edge');
+assert.equal(ringTopologyFailureReason([[0,90],[30,80],[0,90],[-30,80],[0,90]]), 'repeated-pole');
+assert.equal(ringTopologyFailureReason(null), 'invalid-shape');
+assert.ok(Object.values(diagnostic.invalidRingReasons).every(Number.isSafeInteger),
+  'public diagnostic reasons must contain only integer counters');
 console.log('Runivers malformed polygon diagnostics passed: exact reason counts without source geometry.');
 
 
