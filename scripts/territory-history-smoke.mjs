@@ -186,20 +186,33 @@ try {
   // a 1992 timeline. Hold the 1992 geometry request so this loading window
   // can be inspected deterministically.
   const pending1992Pattern = /\/data\/history-core\/generated\/territory\/[^?]+\.geojson(?:\?|$)/;
-  let release1992Geometry = null;
+  // A transition may fetch several GeoJSON files concurrently. Keep every
+  // release callback: overwriting one can strand an earlier request forever.
+  const release1992Geometry = [];
+  const inFlight1992Routes = new Set();
+  let holding1992Geometry = true;
   let resolve1992Intercept = null;
-  let resolve1992RequestCompletion = null;
-  const request1992Completed = new Promise(resolve => { resolve1992RequestCompletion = resolve; });
   const saw1992Intercept = new Promise(resolve => { resolve1992Intercept = resolve; });
-  await page.route(pending1992Pattern, async route => {
-    if (route.request().url().includes('/generated/territory/')) {
-      await new Promise(resolve => {
-        release1992Geometry = resolve;
-        resolve1992Intercept?.();
-      });
+  const failed1992Requests = [];
+  const onFailed1992Request = request => {
+    if (pending1992Pattern.test(request.url())) {
+      failed1992Requests.push({url: request.url(), failure: request.failure()?.errorText ?? null});
     }
-    try { await route.continue(); }
-    finally { resolve1992RequestCompletion?.(); }
+  };
+  page.on('requestfailed', onFailed1992Request);
+  await page.route(pending1992Pattern, async route => {
+    const task = (async () => {
+      if (holding1992Geometry && route.request().url().includes('/generated/territory/')) {
+        await new Promise(resolve => {
+          release1992Geometry.push(resolve);
+          resolve1992Intercept?.();
+        });
+      }
+      await route.continue();
+    })();
+    inFlight1992Routes.add(task);
+    try { await task; }
+    finally { inFlight1992Routes.delete(task); }
   });
   try {
     await page.evaluate(() => {
@@ -221,17 +234,30 @@ try {
     }, null, {timeout: 15000});
     console.log('In-page 1581 -> 1992 transition hides stale Russian geometry until the new file loads.');
   } finally {
-    if (release1992Geometry) {
-      release1992Geometry();
-      await request1992Completed;
-    }
+    holding1992Geometry = false;
+    for (const release of release1992Geometry) release();
+    // Playwright may automatically handle a suspended route on unroute().
+    // Finish every route.continue() first; otherwise the resumed callback
+    // throws "Route is already handled!" and aborts the browser smoke.
+    await Promise.allSettled([...inFlight1992Routes]);
     await page.unroute(pending1992Pattern);
   }
-  await page.waitForFunction(() => {
-    const aside = document.querySelector('main aside');
-    return aside?.getAttribute('data-history-loaded-month') === '1992-07'
-      && aside.getAttribute('aria-busy') === 'false';
-  }, null, {timeout: 30000});
+  try {
+    await page.waitForFunction(() => {
+      const aside = document.querySelector('main aside');
+      return aside?.getAttribute('data-history-loaded-month') === '1992-07'
+        && aside.getAttribute('aria-busy') === 'false';
+    }, null, {timeout: 30000});
+  } catch (error) {
+    const state = await page.evaluate(() => {
+      const aside = document.querySelector('main aside');
+      return {month: aside?.getAttribute('data-history-loaded-month'),
+        busy: aside?.getAttribute('aria-busy'), text: aside?.textContent?.slice(0, 500)};
+    });
+    throw new Error(`1992 geometry did not finish after releasing ${release1992Geometry.length} intercepted requests: ${JSON.stringify(state)}; failed requests: ${JSON.stringify(failed1992Requests)}; page errors: ${JSON.stringify(pageErrors.slice(-5))}`, {cause: error});
+  } finally {
+    page.off('requestfailed', onFailed1992Request);
+  }
 
   // Prove fail-closed behavior by intercepting a canonical generated
   // full-state geometry request. Use a FRESH isolated browser context:
