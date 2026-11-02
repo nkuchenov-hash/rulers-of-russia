@@ -189,3 +189,22 @@ export function hasValidPolygonTopology(rawPolygon) {
   }
   return true;
 }
+
+
+// Research-only scalar reason for an invalid ring. This intentionally uses
+// the SAME predicates and order as the acceptance topology gate; it does not
+// repair, simplify, emit or license any third-party coordinates. A single
+// primary reason per ring makes 1520-1599 transport failures actionable.
+export function ringTopologyFailureReason(rawRing) {
+  if (!validRingShape(rawRing)) return 'invalid-shape';
+  if (hasAmbiguousHalfWorldEdge(rawRing)) return 'ambiguous-half-world-edge';
+  if (hasAntipodalPoleEdge(rawRing)) return 'antipodal-pole-edge';
+  const ring = unwrap(rawRing);
+  if (!equal(ring[0], ring.at(-1))) return 'unwrapped-open-ring';
+  if (!hasArea(ring)) return 'zero-area';
+  if (hasZeroLengthEdge(ring)) return 'zero-length-edge';
+  if (hasRepeatedPoleVertex(ring)) return 'repeated-pole';
+  if (hasBacktrackingEdge(ring)) return 'backtracking-edge';
+  if (crossingEdges(ring, ring, true)) return 'self-intersection';
+  return null;
+}
