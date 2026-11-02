@@ -5,6 +5,7 @@ import Pbf from 'pbf';
 import polygonClipping from 'polygon-clipping';
 import {requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
 import {orderMvtTransports} from './runivers-transport-order.mjs';
+import {normalizeExactDuplicatePolygonFeatures} from './runivers-lossless-geometry.mjs';
 
 // Preload Runivers reference geometry with bounded concurrency. Runivers serves
 // its large historical polygons through NextGIS MVT in production; full-layer
@@ -109,6 +110,9 @@ function normalizePayload(parsed) {
     if (features.length) payload = {type: 'FeatureCollection', features};
   }
   if (!payload) throw new Error('response has no usable feature geometry');
+  // Exact consecutive duplicates have no geographic length; only normalize
+  // when the resulting entire polygon passes the unchanged strict topology gate.
+  payload = normalizeExactDuplicatePolygonFeatures(payload).payload;
   if (!geometryLooksWgs84(payload)) throw new Error('geometry is not EPSG:4326 lon/lat');
   // HTTP 200 with only points, collapsed lines or degenerate polygons is not
   // a border. Continue to the next WGS84 endpoint instead of caching it.
@@ -210,7 +214,8 @@ async function fetchVectorTile(host, id) {
           for (let index = 0; index < layer.length; index += 1) {
             const feature = layer.feature(index);
             if (feature.type !== 3) continue;
-            const geojson = feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM);
+            const geojson = normalizeExactDuplicatePolygonFeatures(
+              feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM)).payload;
             if (!geometryToMultiPolygon(geojson?.geometry).length) continue;
             // A polygon type and non-empty coordinates do not prove a border.
             // A z=0 tile may contain a collapsed/collinear polygon while the
@@ -244,7 +249,8 @@ async function fetchLayerFromVectorTile(host, id) {
     const layer = tile.layers[layerName];
     for (let index = 0; index < layer.length; index += 1) {
       const feature = layer.feature(index);
-      const geojson = feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM);
+      const geojson = normalizeExactDuplicatePolygonFeatures(
+              feature.toGeoJSON(0, 0, VECTOR_TILE_ZOOM)).payload;
       // Preserve every original source feature, not just polygon-bearing
       // ones. A named polity's point/line-only record may represent missing
       // area geometry: dropping it would let a partial MVT reference pass

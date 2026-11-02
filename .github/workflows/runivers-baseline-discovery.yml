@@ -16,6 +16,8 @@ on:
       - 'scripts/runivers-ring-topology.mjs'
       - 'scripts/runivers-line-topology.mjs'
       - 'scripts/runivers-polygon-failure-diagnostics.mjs'
+      - 'scripts/runivers-lossless-geometry.mjs'
+      - 'scripts/test-runivers-lossless-geometry.mjs'
       - 'scripts/test-runivers-polar-antipodes.mjs'
       - 'scripts/summarize-runivers-source-conflicts.mjs'
       - 'scripts/test-runivers-source-conflict-triage.mjs'
@@ -58,6 +60,7 @@ jobs:
       - run: node scripts/test-runivers-matrix.mjs
       - run: node scripts/test-runivers-geometry.mjs
       - run: node scripts/test-runivers-polar-antipodes.mjs
+      - run: node scripts/test-runivers-lossless-geometry.mjs
       - run: node scripts/test-runivers-source-conflict-triage.mjs
       - run: node scripts/test-history-component-exclusions.mjs
       - run: node scripts/test-require-runivers-regression.mjs
