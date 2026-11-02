@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {hasValidWgs84Line, hasAntipodalPoleEdge} from './runivers-line-topology.mjs';
+import {hasValidWgs84Line, hasAntipodalPoleEdge, hasRepeatedPoleVisit} from './runivers-line-topology.mjs';
 import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
 
 // Both poles are antipodal regardless of longitude. A meridian-like edge
@@ -17,6 +17,24 @@ assert.equal(hasValidRingTopology(antipodalRing), false);
 assert.equal(hasValidPolygonTopology([antipodalRing]), false);
 assert.equal(hasValidPolygonTopology([[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]], antipodalRing]), false,
   'an invalid hole must not be silently accepted');
+
+// Non-adjacent visits to the same geographic pole are the same physical
+// point even when the longitudes differ. The previous segment-only check
+// accepted these self-touching auxiliary lines as independent evidence.
+for (const line of [
+  [[0, 90], [20, 80], [60, 90]],
+  [[10, -90], [40, -80], [-50, -90]],
+  [[0, 90], [30, 80], [60, -90], [90, -80], [120, 90]],
+]) {
+  assert.equal(hasAntipodalPoleEdge(line), false);
+  assert.equal(hasRepeatedPoleVisit(line), true);
+  assert.equal(hasValidWgs84Line(line), false);
+}
+assert.equal(hasRepeatedPoleVisit([[0, 90], [30, 80], [60, -90]]), false);
+assert.equal(hasValidWgs84Line([[0, 90], [30, 80], [60, -90]]), true);
+assert.equal(hasRepeatedPoleVisit([[0, 0], [30, 80], [60, 0]]), false);
+assert.equal(hasValidWgs84Line([[0, 0], [30, 80], [60, 0]]), true);
+assert.equal(hasRepeatedPoleVisit(null), false);
 
 // Preserve legitimate single-pole rings and short antimeridian crossings.
 const singlePoleRing = [[0, 90], [30, 80], [-30, 80], [0, 90]];
