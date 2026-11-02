@@ -182,8 +182,13 @@ export function polygonHoleTopologyFailureReason(rawPolygon) {
     return hole.map(([lon, lat]) => [lon + shift, lat]);
   });
   for (const hole of holes) {
-    if (hole.slice(0, -1).some(vertex => !strictlyInside(vertex, shell))) return 'hole-outside-shell';
+    // A hole straddling the shell has both outside vertices and crossing
+    // edges. Classify the actual boundary intersection first; otherwise
+    // almost every escaping hole is mislabeled as merely outside, hiding
+    // the MVT/JSON transport failure that needs investigation. This changes
+    // diagnostics only: both cases remain invalid under the same strict gate.
     if (crossingEdges(shell, hole)) return 'hole-crosses-shell';
+    if (hole.slice(0, -1).some(vertex => !strictlyInside(vertex, shell))) return 'hole-outside-shell';
   }
   for (let i = 0; i < holes.length; i++) for (let j = i + 1; j < holes.length; j++) {
     if (crossingEdges(holes[i], holes[j])) return 'holes-cross-or-touch';
