@@ -92,10 +92,9 @@ for (const [polygon, expected] of holeCases) {
 assert.equal(polygonHoleTopologyFailureReason([shell, hole(2, 2, 4, 4)]), null);
 assert.equal(hasValidPolygonTopology([shell, hole(2, 2, 4, 4)]), true);
 
-
- // A -> B -> A is an exact retraced zero-area spur, not a sovereign
- // extension. Only the two cancelling segments may be removed, and the
- // remaining shell/hole must still pass the unchanged strict validator.
+// A -> B -> A is an exact retraced zero-area spur, not a sovereign
+// extension. Only the two cancelling segments may be removed, and the
+// remaining shell/hole must still pass the unchanged strict validator.
 const retraced = [[30, 50], [31, 50], [31, 51], [31.2, 51.2],
   [31, 51], [30, 51], [30, 50]];
 assert.equal(hasValidPolygonTopology([retraced]), false);
