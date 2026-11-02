@@ -886,19 +886,19 @@ assert.equal(requireUsableReferenceGeometry(polygonPayload(datelineRing),5391).h
   'a real two-degree-wide polygon crossing the antimeridian must remain usable');
 console.log('Runivers coordinate validity tests passed: projected, collinear and dateline-degenerate borders fail closed.');
 
-const diagnosticPolygon = rings => ({type:'FeatureCollection',features:[{
+const diagnosticPolygonPayload = rings => ({type:'FeatureCollection',features:[{
   type:'Feature',properties:{name:'Never export this licensed label'},
   geometry:{type:'Polygon',coordinates:rings},
 }]});
 const diagnosticSquare = [[30,50],[31,50],[31,51],[30,51],[30,50]];
 const outsideHole = [[32,52],[33,52],[33,53],[32,53],[32,52]];
 const invalidDiagnostic = {type:'FeatureCollection',features:[
-  ...diagnosticPolygon([diagnosticSquare]).features,
-  ...diagnosticPolygon([]).features,
-  ...diagnosticPolygon([[[200,50],[201,50],[201,51],[200,51],[200,50]]]).features,
-  ...diagnosticPolygon([[[30,50],[31,50],[31,51],[30,51]]]).features,
-  ...diagnosticPolygon([[[30,50],[31,51],[30,51],[31,50],[30,50]]]).features,
-  ...diagnosticPolygon([diagnosticSquare,outsideHole]).features,
+  ...diagnosticPolygonPayload([diagnosticSquare]).features,
+  ...diagnosticPolygonPayload([]).features,
+  ...diagnosticPolygonPayload([[[200,50],[201,50],[201,51],[200,51],[200,50]]]).features,
+  ...diagnosticPolygonPayload([[[30,50],[31,50],[31,51],[30,51]]]).features,
+  ...diagnosticPolygonPayload([[[30,50],[31,51],[30,51],[31,50],[30,50]]]).features,
+  ...diagnosticPolygonPayload([diagnosticSquare,outsideHole]).features,
 ]};
 const diagnostic = summarizePolygonFailures(invalidDiagnostic);
 assert.deepEqual(diagnostic, {
@@ -909,7 +909,7 @@ assert.ok(!JSON.stringify(diagnostic).includes('Never export this licensed label
   'diagnostic output must contain counts only, never source metadata');
 assert.ok(!JSON.stringify(diagnostic).includes('30,50'),
   'diagnostic output must never serialize source coordinates');
-assert.throws(() => requireUsableReferenceGeometry(diagnosticPolygon([]),5391),
+assert.throws(() => requireUsableReferenceGeometry(diagnosticPolygonPayload([]),5391),
   /malformed polygon rings.*"emptyPolygons":1/,
   'a polygon-only malformed export must not be mislabeled as missing geometry');
 console.log('Runivers malformed polygon diagnostics passed: exact reason counts without source geometry.');
