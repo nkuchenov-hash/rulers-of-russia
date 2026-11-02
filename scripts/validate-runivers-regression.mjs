@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import polygonClipping from 'polygon-clipping';
 import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {publicReferenceFailure} from './runivers-public-reference-failures.mjs';
 import {diagnoseEarlyRussiaHotspots, diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
@@ -273,19 +274,20 @@ function classifyGeometry(payload) {
 // failures, rather than silently removing them from the readiness denominator.
 function requireUsableReferenceGeometry(payload, resourceId) {
   const classification = classifyGeometry(payload);
-  if (!classification.usable) {
-    throw new Error(`Runivers resource ${resourceId} export has no usable polygon or line geometry (types: ${classification.types.join(', ') || 'none'})`);
-  }
+  // Check malformed geometry BEFORE the 'no usable polygon' case. When
+  // every polygon is invalid, hasPolygon is false, but the failure is not
+  // an empty source. The old ordering mislabelled 23 malformed XVI-century
+  // Runivers exports as 'no usable polygon', obscuring source recovery.
   if (classification.invalidPolygon) {
-    throw new Error(`Runivers resource ${resourceId} export contains malformed polygon rings; cannot certify a complete border`);
+    const reasons = summarizePolygonFailures(payload);
+    throw new Error(`Runivers resource ${resourceId} export contains malformed polygon rings; cannot certify a complete border (scalar-only reasons: ${JSON.stringify(reasons)})`);
   }
-  // A valid polygon alongside an invalid auxiliary feature or nested member
-  // is a partial export, not an independently certified complete border.
   if (classification.invalidGeometry) {
     throw new Error(`Runivers resource ${resourceId} export contains malformed or unsupported geometry; cannot certify a complete border`);
   }
-  // A line-only map can match one edge of a state while omitting every other
-  // sovereign border. It cannot certify a complete territorial polygon.
+  if (!classification.usable) {
+    throw new Error(`Runivers resource ${resourceId} export has no usable polygon or line geometry (types: ${classification.types.join(', ') || 'none'})`);
+  }
   if (!classification.hasPolygon) {
     throw new Error(`Runivers resource ${resourceId} export has no usable polygon geometry (line-only reference; types: ${classification.types.join(', ')})`);
   }
