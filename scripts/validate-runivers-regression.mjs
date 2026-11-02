@@ -76,6 +76,23 @@ function validateOverrides(registry, documents) {
   for (const item of registry.overrides) {
     if (typeof item?.id !== 'string' || !item.id.trim() || seen.has(item.id)) throw new Error(`Duplicate/missing Runivers override id: ${item?.id}`);
     seen.add(item.id);
+    // A misspelled or empty identity selector silently becomes a wildcard in
+    // overrideFor(). A documentary exception must not broaden its polity,
+    // snapshot or certification scope because of malformed registry metadata.
+    const allowedFields = new Set([
+      'id', 'runiversResourceId', 'startMonth', 'endMonth', 'reason',
+      'evidenceDocumentIds', 'polityId', 'snapshotId', 'certificationId',
+    ]);
+    for (const field of Object.keys(item)) {
+      if (!allowedFields.has(field)) throw new Error(`${item.id}: unknown override field ${field}`);
+    }
+    for (const field of ['polityId', 'snapshotId', 'certificationId']) {
+      if (Object.hasOwn(item, field)
+        && (typeof item[field] !== 'string' || !item[field].trim()
+          || item[field] !== item[field].trim())) {
+        throw new Error(`${item.id}: invalid ${field} identity selector`);
+      }
+    }
     if (!Number.isSafeInteger(item.runiversResourceId) || item.runiversResourceId <= 0) throw new Error(`${item.id}: runiversResourceId must be a positive safe integer`);
     // These ranges are compared lexicographically to full-year boundaries.
     // Accepting arbitrary strings (e.g. 1600-99) could authorize a mismatch
