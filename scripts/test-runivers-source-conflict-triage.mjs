@@ -437,4 +437,52 @@ assert.ok(!upstreamOutput.includes('-ACT_A') && !upstreamOutput.includes('-ACT_B
 assert.ok(!upstreamOutput.includes('coordinates') && !upstreamOutput.includes('lonLat'),
   'diagnostics must not serialize licensed source geometry or probe positions');
 
+// Original source labels may contain the same delimiters used by the
+// human-readable triage display. Do not merge distinct political evidence
+// merely because their *display strings* happen to coincide.
+const delimiterCollisions = summarizeRuniversSourceConflicts({failedComparisons: [
+  {runiversResourceId: 5701, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1000,
+    boundarySampleAttribution: [{
+      ...sample(1000, 'unused', 'unused'),
+      selectedSourceRecords: [{cat: 1, name: 'Moscow | 2:Ryazan'}],
+      excludedSourceRecords: [],
+    }]},
+  {runiversResourceId: 5702, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1001,
+    boundarySampleAttribution: [{
+      ...sample(1001, 'unused', 'unused'),
+      selectedSourceRecords: [{cat: 1, name: 'Moscow'}, {cat: 2, name: 'Ryazan'}],
+      excludedSourceRecords: [],
+    }]},
+  {runiversResourceId: 5703, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1002,
+    boundarySampleAttribution: [{
+      ...sample(1002, 'unused', 'unused'),
+      selectedSourceRecords: [{cat: 1, name: 'Moscow#feature=12'}],
+      excludedSourceRecords: [],
+    }]},
+  {runiversResourceId: 5704, historyFirstMonth: '1553-01',
+    referenceToCurrentMaxMeters: 1003,
+    boundarySampleAttribution: [{
+      ...sample(1003, 'unused', 'unused'),
+      selectedSourceRecords: [{cat: 1, name: 'Moscow', featureId: '12'}],
+      excludedSourceRecords: [],
+    }]},
+]});
+assert.equal(delimiterCollisions.clusters.length, 4,
+  'literal source delimiters cannot collapse separate source records');
+assert.equal(delimiterCollisions.directionalHotspots.length, 4,
+  'directed boundary attribution must preserve separate source records');
+for (const [first, second] of [[5701, 5702], [5703, 5704]]) {
+  const left = delimiterCollisions.clusters.find(row => row.resourceIds.includes(first));
+  const right = delimiterCollisions.clusters.find(row => row.resourceIds.includes(second));
+  assert.equal(left.selectedSourceIdentities, right.selectedSourceIdentities,
+    'the bounded human-readable label may legitimately be ambiguous');
+  assert.notEqual(left.selectedSourceIdentityFingerprint, right.selectedSourceIdentityFingerprint,
+    'canonical source identity must distinguish the otherwise identical displays');
+}
+assert.ok(!JSON.stringify(delimiterCollisions).includes('coordinates'),
+  'canonical identity grouping must not expose source geometry');
+
 console.log('Runivers source-conflict triage tests passed: two-sided attribution, severity grouping, missing evidence, redaction, dated-source separation, no acceptance override.');
