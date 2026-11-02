@@ -73,6 +73,10 @@ const concaveShell = [[0, 0], [10, 0], [10, 10], [7, 10], [7, 3],
   [3, 3], [3, 10], [0, 10], [0, 0]];
 const holeCases = [
   [[shell, hole(20, 20, 21, 21)], 'hole-outside-shell'],
+  // A partially escaping hole crosses the actual shell edge. The previous
+  // vertex-first diagnostic incorrectly counted it as "outside shell".
+  [[shell, hole(9, 4, 12, 6)], 'hole-crosses-shell'],
+  [[shell, hole(10, 4, 12, 6)], 'hole-crosses-shell'],
   [[concaveShell, hole(1, 5, 9, 6)], 'hole-crosses-shell'],
   [[shell, hole(2, 2, 7, 7), hole(3, 3, 4, 4)], 'holes-nested'],
   [[shell, hole(2, 2, 6, 6), hole(5, 5, 8, 8)], 'holes-cross-or-touch'],
