@@ -51,6 +51,21 @@ function stripExactRetracedSpikes(ring) {
       removed += 2;
     }
   }
+  // A closed ring can start at the TIP of a zero-area spur. For example,
+  // X -> A -> B -> C -> D -> A -> X has the cancelling A-X-A segment
+  // split across the closing seam, so the linear stack above cannot see it.
+  // Remove only the two exact X endpoints, preserving every other segment.
+  // Never rotate or alter already valid rings, near-matches, 3D positions,
+  // or ambiguous geographic edges. The caller revalidates the whole polygon.
+  const n = cleaned.length;
+  const same2D = (a, b) => Array.isArray(a) && Array.isArray(b)
+    && a.length === 2 && b.length === 2
+    && a[0] === b[0] && a[1] === b[1];
+  if (n >= 6 && same2D(cleaned[0], cleaned[n - 1])
+    && same2D(cleaned[1], cleaned[n - 2])
+    && hasValidWgs84Line([cleaned[0], cleaned[1]])) {
+    return {ring: cleaned.slice(1, -1), removed: removed + 2};
+  }
   return {ring: cleaned, removed};
 }
 

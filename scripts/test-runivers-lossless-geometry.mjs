@@ -110,6 +110,50 @@ const repeatedResult = normalize(repeatedSpurs);
 assert.equal(repeatedResult.removedVertices, 4);
 assert.deepEqual(repeatedResult.payload.features[0].geometry.coordinates[0], square);
 
+// A ring's first vertex is an arbitrary serialization seam. When it is
+// the spur TIP, the cancelling A-X-A lies across the closing edge, outside
+// the linear A-B-A scan. This is the same zero-area defect, not a new border.
+const seamSpur = [[31.2, 51.2], [31, 51], [30, 51], [30, 50],
+  [31, 50], [31, 51], [31.2, 51.2]];
+assert.equal(hasValidPolygonTopology([seamSpur]), false);
+const seamResult = normalize(seamSpur);
+assert.equal(seamResult.removedVertices, 2);
+assert.deepEqual(seamResult.payload.features[0].geometry.coordinates[0],
+  [[31, 51], [30, 51], [30, 50], [31, 50], [31, 51]]);
+assert.equal(requireUsableReferenceGeometry(seamResult.payload, 'synthetic-seam-spur').hasPolygon, true);
+assert.deepEqual(seamSpur[0], [31.2, 51.2], 'the source seam vertex must not be mutated');
+
+// A valid hole may contain the same seam defect; strict shell/hole topology
+// must still be checked after the lossless transformation.
+const seamHole = [[30.9, 50.9], [30.8, 50.8], [30.2, 50.8],
+  [30.2, 50.2], [30.8, 50.2], [30.8, 50.8], [30.9, 50.9]];
+const normalizedSeamHole = normalizeExactDuplicatePolygonFeatures({
+  type: 'Polygon', coordinates: [square, seamHole],
+});
+assert.equal(normalizedSeamHole.removedVertices, 2);
+assert.equal(hasValidPolygonTopology(normalizedSeamHole.payload.coordinates), true);
+assert.equal(requireUsableReferenceGeometry(normalizedSeamHole.payload, 'synthetic-seam-hole').hasPolygon, true);
+
+// A near-retrace may enclose real area. 3D and ambiguous half-world edges
+// cannot be silently discarded, even when the remaining shell looks valid.
+for (const unsafe of [
+  [[31.2, 51.2], [31, 51], [30, 51], [30, 50],
+    [31, 50], [31, 51.0000001], [31.2, 51.2]],
+  seamSpur.map(([lon, lat]) => [lon, lat, 1]),
+  [[-149, 51], [31, 51], [30, 51], [30, 50],
+    [31, 50], [31, 51], [-149, 51]],
+]) {
+  const unchanged = normalize(unsafe);
+  assert.equal(unchanged.removedVertices, 0, 'unsafe seam spur must remain unmodified');
+  assert.deepEqual(unchanged.payload.features[0].geometry.coordinates[0], unsafe);
+}
+const invalidSeamHole = normalizeExactDuplicatePolygonFeatures({
+  type: 'Polygon', coordinates: [seamSpur,
+    [[40, 60], [41, 60], [41, 61], [40, 61], [40, 60]]],
+});
+assert.equal(invalidSeamHole.removedVertices, 0,
+  'seam normalization cannot excuse an unrelated invalid hole');
+
 const holedSpur = {type: 'Polygon', coordinates: [square, [
   [30.2, 50.2], [30.8, 50.2], [30.8, 50.8], [30.9, 50.9],
   [30.8, 50.8], [30.2, 50.8], [30.2, 50.2],
