@@ -951,7 +951,7 @@ assert.equal(ringTopologyFailureReason([[0,0],[6,0],[3,0],[6,6],[0,6],[0,0]]), '
 assert.equal(ringTopologyFailureReason([[0,90],[0,-90],[30,-80],[30,80],[0,90]]), 'antipodal-pole-edge');
 assert.equal(ringTopologyFailureReason([[0,0],[180,10],[90,20],[0,0]]), 'ambiguous-half-world-edge');
 assert.equal(ringTopologyFailureReason([[0,0],[0,0],[2,0],[0,2],[0,0]]), 'zero-length-edge');
-assert.equal(ringTopologyFailureReason([[0,90],[30,80],[0,90],[-30,80],[0,90]]), 'repeated-pole');
+assert.equal(ringTopologyFailureReason([[0,90],[30,80],[40,70],[0,90],[-10,80],[-15,70],[0,90]]), 'repeated-pole');
 assert.equal(ringTopologyFailureReason(null), 'invalid-shape');
 assert.ok(Object.values(diagnostic.invalidRingReasons).every(Number.isSafeInteger),
   'public diagnostic reasons must contain only integer counters');
