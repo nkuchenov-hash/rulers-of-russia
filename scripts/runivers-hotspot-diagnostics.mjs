@@ -1,5 +1,6 @@
 import {createHash} from 'node:crypto';
 import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidWgs84Line} from './runivers-line-topology.mjs';
 // Research-only attribution of the five documented early-Russia Runivers
 // discrepancy clusters (issue #326). Never use these probes to alter geometry,
 // certify a border, relax a tolerance, or promote Runivers data to production.
@@ -130,13 +131,9 @@ function combineLocations(locations) {
 const validLonLat = point => Array.isArray(point) && point.length >= 2
   && point.slice(0, 2).every(Number.isFinite)
   && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90;
-// +180 and -180 are the same WGS84 meridian. A line containing only
-// equivalent endpoints has zero geographic length and must fail closed,
-// including when it accompanies an otherwise valid sovereign polygon.
-const validLine = line => Array.isArray(line) && line.length >= 2
-  && line.every(validLonLat)
-  && line.some(point => point[1] !== line[0][1]
-    || (point[0] !== line[0][0] && Math.abs(point[0] - line[0][0]) !== 360));
+// Match transport integrity exactly: one good segment cannot hide an
+// ambiguous or zero-length sibling in the same source annotation.
+const validLine = hasValidWgs84Line;
 
 export function geometryLocation(point, geometry) {
   if (!validLonLat(point) || !geometry) return 'unavailable';
