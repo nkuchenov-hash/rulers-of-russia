@@ -25,6 +25,21 @@ const validRegistryItem = {
 };
 const validateRegistry = item => validateOverrides({schema_version: 1, overrides: [item]}, evidenceIndex);
 assert.doesNotThrow(() => validateRegistry(validRegistryItem));
+// Optional scope identities are exact matches. Empty, whitespace or mistyped
+// selectors previously fell back to a wildcard and could authorize a failed
+// border comparison for an unintended polity, snapshot or certification.
+for (const field of ['polityId', 'snapshotId', 'certificationId']) {
+  for (const value of ['', ' ', 'wrong-id ', null, 123, [], {}]) {
+    assert.throws(() => validateRegistry({...validRegistryItem, [field]: value}),
+      new RegExp('invalid ' + field + ' identity selector'),
+      'malformed optional identity must not broaden an override');
+  }
+  assert.doesNotThrow(() => validateRegistry({...validRegistryItem, [field]: 'verified-id'}));
+}
+for (const misspelled of ['polityID', 'snapshotID', 'certificationID', 'runiversResourceID']) {
+  assert.throws(() => validateRegistry({...validRegistryItem, [misspelled]: 'verified-id'}),
+    /unknown override field/, 'unknown override metadata must not be ignored');
+}
 // A non-string reason has no trustworthy documentary meaning. Previously
 // truthy objects/numbers bypassed the length check (undefined < 20 is false).
 for (const reason of [{}, {text: 'A long explanation'}, 12345, ['A long explanation'],
