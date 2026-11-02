@@ -27,13 +27,12 @@ function stripExactAdjacentDuplicates(ring) {
   return {ring: cleaned, removed};
 }
 
-
- // A source polygon may trace A -> B -> A as an exact out-and-back
- // zero-area spur. Both directed edges cancel: removing B and the returning
- // A changes no enclosed area and leaves all other edges untouched.
- // This is temporary reference-transport normalization only. Do not infer
- // a near-match, remove an ambiguous 180-degree/polar edge, or modify 3D
- // coordinates. The entire resulting polygon must still pass strict topology.
+// A source polygon may trace A -> B -> A as an exact out-and-back
+// zero-area spur. Both directed edges cancel: removing B and the returning
+// A changes no enclosed area and leaves all other edges untouched.
+// This is temporary reference-transport normalization only. Do not infer
+// a near-match, remove an ambiguous 180-degree/polar edge, or modify 3D
+// coordinates. The entire resulting polygon must still pass strict topology.
 function stripExactRetracedSpikes(ring) {
   if (!Array.isArray(ring)) return {ring, removed: 0};
   const cleaned = [];
