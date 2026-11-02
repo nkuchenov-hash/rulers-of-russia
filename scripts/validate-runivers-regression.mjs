@@ -292,6 +292,12 @@ function requireUsableReferenceGeometry(payload, resourceId) {
 // *key* such as "approximate": false is not evidence that a map is approximate.
 // Only affirmative flags or descriptive text can activate the existing policy.
 const approximationMarker = /(приблиз|условн|неточн|approx|uncertain|reconstruct)/i;
+// Only explicit approximation flags and border-quality narrative fields can
+// relax the independent geographic tolerance. A source name, URL, publisher
+// or arbitrary catalog tag containing "approximate" is NOT a statement that
+// the actual boundary was reconstructed.
+const approximationFlagKey = /^(?:is[_-]?)?(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*)$/i;
+const approximationNarrativeKey = /^(?:description|notes?|comments?|remarks?|accuracy|precision|quality|boundary(?:Description|Notes?|Accuracy|Quality))$/i;
 const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a)$/i;
 // Free-text descriptions can explicitly NEGATE approximation without being
 // exactly "not approximate". Such source notes must never grant the more
@@ -312,19 +318,22 @@ const additionalNonApproximation = /(?:^|[\s,;:(])(?:not\s+approximated|never\s+
 const unresolvedApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*)\s*[:=]\s*(?:unknown|pending|undetermined|unspecified|n\/a|null|\?)(?=$|[\s,;)}.!?])/i;
 
 function hasApproximationEvidence(value, key = '') {
-  if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
+  // Preserve the parent field name for arrays of notes. Without it, an
+  // arbitrary string array in a source catalog can masquerade as a border
+  // quality declaration and raise the allowed mismatch to 100 km.
+  if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item, key));
   if (value && typeof value === 'object') {
     return Object.entries(value).some(([name, item]) => hasApproximationEvidence(item, name));
   }
-  if (typeof value === 'boolean') return approximationMarker.test(key) && value;
-  if (typeof value === 'number') return approximationMarker.test(key) && value === 1;
+  if (typeof value === 'boolean') return approximationFlagKey.test(key) && value;
+  if (typeof value === 'number') return approximationFlagKey.test(key) && value === 1;
   if (typeof value !== 'string') return false;
   const label = value.trim();
   if (explicitNonApproximation.test(label) || negatedApproximation.test(label)
     || additionalNonApproximation.test(label) || unresolvedApproximationAssignment.test(label)
     || negativeApproximationAssignment.test(label)) return false;
-  return approximationMarker.test(label)
-    || (approximationMarker.test(key) && /^(?:true|yes|да|1)$/i.test(label));
+  return (approximationNarrativeKey.test(key) && approximationMarker.test(label))
+    || (approximationFlagKey.test(key) && /^(?:true|yes|да|1)$/i.test(label));
 }
 
 // Contradictory source fields are not a license to relax a border tolerance.
