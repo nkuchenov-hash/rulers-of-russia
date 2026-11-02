@@ -31,27 +31,30 @@ const safeMonth = value => typeof value === 'string' && /^\d{4}-(0[1-9]|1[0-2])$
 // NOT a relaxed geographic tolerance or a substitute for a boundary check.
 const MAX_SAMPLE_ROUNDING_METERS = 1;
 
-function sourceKey(records) {
-  if (!Array.isArray(records) || !records.length) return 'unknown';
-  const labels = records.map(record => {
+function sourceIdentity(records) {
+  if (!Array.isArray(records) || !records.length) {
+    return {display: 'unknown', key: JSON.stringify([])};
+  }
+  const identities = records.map(record => {
     const cat = validCategoryId(record?.cat);
     const name = boundedString(record?.name);
-    // Two polygons can share cat/name/date/status while having different
-    // original feature IDs. Do not merge their provenance in conflict triage.
     const featureId = boundedFeatureId(record?.featureId);
-    // Identically named source polities may describe different dated
-    // territorial acts or political statuses. Grouping only by cat/name
-    // silently merges their distinct historical evidence.
     const date = boundedString(record?.lwdate);
     const status = typeof record?.status === 'number' && Number.isFinite(record.status)
       ? String(record.status) : boundedString(record?.status);
     const base = [cat === null ? '?' : cat, name ?? '?'].join(':');
-    return base + (featureId !== null ? '#feature=' + featureId : '')
+    const label = base + (featureId !== null ? '#feature=' + featureId : '')
       + (date ? '@' + date : '') + (status !== null ? '#status=' + status : '');
+    // Human-readable delimiters may occur literally inside source names and
+    // IDs. They cannot serve as a grouping key: one original feature named
+    // "Moscow | 2:Ryazan" is not two different sovereign source records.
+    return {label, key: JSON.stringify([cat, name, featureId, date, status])};
   });
-  // Do not truncate the INTERNAL grouping identity: distinct dated records
-  // can share the first 500 characters and must never be merged.
-  return [...new Set(labels)].sort().join(' | ');
+  const distinct = new Map(identities.map(({key, label}) => [key, label]));
+  return {
+    display: [...new Set(distinct.values())].sort().join(' | '),
+    key: JSON.stringify([...distinct.keys()].sort()),
+  };
 }
 
 // Public diagnostics stay bounded, while a digest distinguishes two full
@@ -73,14 +76,14 @@ export function summarizeRuniversSourceConflicts(report) {
       && finiteNonnegative(sample.distanceMeters) !== null)
       .sort((a, b) => b.distanceMeters - a.distanceMeters)[0];
     if (!worst) unattributed += 1;
-    const selected = sourceKey(worst?.selectedSourceRecords);
-    const excluded = sourceKey(worst?.excludedSourceRecords);
-    const key = JSON.stringify([selected, excluded]);
+    const selected = sourceIdentity(worst?.selectedSourceRecords);
+    const excluded = sourceIdentity(worst?.excludedSourceRecords);
+    const key = JSON.stringify([selected.key, excluded.key]);
     const current = groups.get(key) ?? {
-      selectedSourceIdentities: displaySourceIdentity(selected),
-      excludedSourceIdentities: displaySourceIdentity(excluded),
-      selectedSourceIdentityFingerprint: sourceFingerprint(selected),
-      excludedSourceIdentityFingerprint: sourceFingerprint(excluded),
+      selectedSourceIdentities: displaySourceIdentity(selected.display),
+      excludedSourceIdentities: displaySourceIdentity(excluded.display),
+      selectedSourceIdentityFingerprint: sourceFingerprint(selected.key),
+      excludedSourceIdentityFingerprint: sourceFingerprint(excluded.key),
       comparisons: 0,
       // Missing metrics are unknown, not evidence of zero border error.
       maxSymmetricErrorMeters: null,
@@ -133,15 +136,15 @@ export function summarizeRuniversSourceConflicts(report) {
         unattributedByDirection[direction] += 1;
         continue;
       }
-      const selected = sourceKey(worst.selectedSourceRecords);
-      const excluded = sourceKey(worst.excludedSourceRecords);
-      const key = JSON.stringify([direction, selected, excluded]);
+      const selected = sourceIdentity(worst.selectedSourceRecords);
+      const excluded = sourceIdentity(worst.excludedSourceRecords);
+      const key = JSON.stringify([direction, selected.key, excluded.key]);
       const current = directionalGroups.get(key) ?? {
         sampledBoundary: direction,
-        selectedSourceIdentities: displaySourceIdentity(selected),
-        excludedSourceIdentities: displaySourceIdentity(excluded),
-        selectedSourceIdentityFingerprint: sourceFingerprint(selected),
-        excludedSourceIdentityFingerprint: sourceFingerprint(excluded),
+        selectedSourceIdentities: displaySourceIdentity(selected.display),
+        excludedSourceIdentities: displaySourceIdentity(excluded.display),
+        selectedSourceIdentityFingerprint: sourceFingerprint(selected.key),
+        excludedSourceIdentityFingerprint: sourceFingerprint(excluded.key),
         comparisons: 0,
         maxAttributedSampleDistanceMeters: 0,
         maxReportedDirectionalMeters: null,
