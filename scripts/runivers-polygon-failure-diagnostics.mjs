@@ -1,4 +1,4 @@
-import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidRingTopology, hasValidPolygonTopology, ringTopologyFailureReason} from './runivers-ring-topology.mjs';
 
 // Diagnostic only: report aggregate reasons a third-party polygon cannot be
 // used as independent evidence. Never return coordinates, feature metadata,
@@ -8,6 +8,10 @@ export function summarizePolygonFailures(payload) {
     polygons: 0, validPolygons: 0, emptyPolygons: 0,
     malformedRings: 0, invalidWgs84Rings: 0, unclosedRings: 0,
     invalidRingTopology: 0, invalidHoleTopology: 0,
+    // Counts are primary reasons for rings already rejected by the unchanged gate.
+    invalidRingReasons: {'ambiguous-half-world-edge': 0, 'antipodal-pole-edge': 0,
+      'unwrapped-open-ring': 0, 'zero-area': 0, 'zero-length-edge': 0,
+      'repeated-pole': 0, 'backtracking-edge': 0, 'self-intersection': 0},
   };
   const validPosition = point => Array.isArray(point) && point.length >= 2
     && Number.isFinite(point[0]) && Number.isFinite(point[1])
@@ -32,6 +36,8 @@ export function summarizePolygonFailures(payload) {
         allRingsValid = false;
       } else if (!hasValidRingTopology(ring)) {
         counts.invalidRingTopology++;
+        const reason = ringTopologyFailureReason(ring);
+        if (Object.hasOwn(counts.invalidRingReasons, reason)) counts.invalidRingReasons[reason]++;
         allRingsValid = false;
       }
     }
