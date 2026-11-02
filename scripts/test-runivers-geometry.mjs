@@ -298,8 +298,12 @@ assert.equal(passesGeographicTolerance({
 assert.equal(passesGeographicTolerance({
   usable: true, symmetricP95Meters: 0, symmetricMaxMeters: 0,
 }, 15000, 60000), false, 'missing exact measurements must fail closed');
-assert.equal(publicComparisonMetric(nearFailure).exactSymmetricP95Meters, undefined,
-  'internal precision fields must not leak into the public artifact');
+assert.equal(publicComparisonMetric(nearFailure).exactSymmetricP95Meters,
+  nearFailure.exactSymmetricP95Meters,
+  'coordinate-free exact distances must reach the independent acceptance gate');
+assert.equal(publicComparisonMetric(nearFailure).exactSymmetricMaxMeters,
+  nearFailure.exactSymmetricMaxMeters,
+  'exact maximum-distance evidence must also survive public redaction');
 console.log('Runivers acceptance precision regression passed: no rounded-border false positives.');
 // A valid Runivers polygon does not imply a usable bilateral comparison.
 // In a multi-layer shard, silently skipping a coast-masked History Core state
