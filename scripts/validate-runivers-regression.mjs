@@ -317,8 +317,8 @@ const negativeApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximat
 // "approximate": "not approximated", "without approximation" and the
 // Russian "без приблизительных ..." must not authorize the 100 km limit.
 // Unknown/pending key-value notes are also not affirmative evidence.
-const additionalNonApproximation = /(?:^|[\\s,;:(])(?:not\\s+approximated|never\\s+(?:approximate|approximated|reconstructed)|without\\s+(?:any\\s+)?(?:approximation|approximations|reconstruction|uncertainty))(?=$|[\\s,.;:!?)])|(?:^|[\\s,;:(])без\\s+(?:приблизительн[а-яё]*|условн[а-яё]*|реконструкци[а-яё]*)(?=$|[\\s,.;:!?)])/i;
-const unresolvedApproximationAssignment = /(?:^|[\\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*)\\s*[:=]\\s*(?:unknown|pending|undetermined|unspecified|n\\/a|null|\\?)(?=$|[\\s,;)}.!?])/i;
+const additionalNonApproximation = /(?:^|[\s,;:(])(?:not\s+approximated|never\s+(?:approximate|approximated|reconstructed)|without\s+(?:any\s+)?(?:approximation|approximations|reconstruction|uncertainty))(?=$|[\s,.;:!?)])|(?:^|[\s,;:(])без\s+(?:приблизительн[а-яё]*|условн[а-яё]*|реконструкци[а-яё]*)(?=$|[\s,.;:!?)])/i;
+const unresolvedApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*)\s*[:=]\s*(?:unknown|pending|undetermined|unspecified|n\/a|null|\?)(?=$|[\s,;)}.!?])/i;
 
 function hasApproximationEvidence(value, key = '') {
   if (Array.isArray(value)) return value.some(item => hasApproximationEvidence(item));
