@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {hasValidRingTopology, hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
 import {indexCanonicalDocuments, validateOverrides, comparisonYearsForState, toleranceMeters, samplePayload, buildCoastIndex, buildPointIndex, distanceToIndex, comparePoliticalGeometry, passesGeographicTolerance, requireComparablePoliticalGeometry, politicalBorderSamples, prepareScopedReference, isReferenceApproximate, layerContainsYear, comparisonCoversYear, requireUsableReferenceGeometry, fetchRuniversGeoJson, historyStates, indexStateCoverageByMonth, unmatchedReferenceLayers, overrideFor, publicComparisonMetric} from './validate-runivers-regression.mjs';
 
 // Documentary exceptions must never be authorized by ambiguous evidence
@@ -864,7 +865,10 @@ for (const [label, payload] of Object.entries({
   emptyPolygon,collapsedLine,projectedPolygon,collinearPolygon,
   zeroWidthDatelinePolygon,zeroWidthDatelineLine,
 })) {
-  assert.throws(() => requireUsableReferenceGeometry(payload,5391), /no usable polygon or line geometry/,
+  assert.throws(() => requireUsableReferenceGeometry(payload,5391),
+    label === 'collapsedLine' || label === 'zeroWidthDatelineLine'
+      ? /malformed or unsupported geometry/
+      : /malformed polygon rings.*scalar-only reasons/,
     label + ' must not be accepted on type label alone');
 }
 assert.throws(() => requireUsableReferenceGeometry({type:'FeatureCollection',features:[
@@ -881,6 +885,35 @@ function validReferenceFeatureForDatelineTest() {
 assert.equal(requireUsableReferenceGeometry(polygonPayload(datelineRing),5391).hasPolygon,true,
   'a real two-degree-wide polygon crossing the antimeridian must remain usable');
 console.log('Runivers coordinate validity tests passed: projected, collinear and dateline-degenerate borders fail closed.');
+
+const diagnosticPolygon = rings => ({type:'FeatureCollection',features:[{
+  type:'Feature',properties:{name:'Never export this licensed label'},
+  geometry:{type:'Polygon',coordinates:rings},
+}]});
+const diagnosticSquare = [[30,50],[31,50],[31,51],[30,51],[30,50]];
+const outsideHole = [[32,52],[33,52],[33,53],[32,53],[32,52]];
+const invalidDiagnostic = {type:'FeatureCollection',features:[
+  ...diagnosticPolygon([diagnosticSquare]).features,
+  ...diagnosticPolygon([]).features,
+  ...diagnosticPolygon([[[200,50],[201,50],[201,51],[200,51],[200,50]]]).features,
+  ...diagnosticPolygon([[[30,50],[31,50],[31,51],[30,51]]]).features,
+  ...diagnosticPolygon([[[30,50],[31,51],[30,51],[31,50],[30,50]]]).features,
+  ...diagnosticPolygon([diagnosticSquare,outsideHole]).features,
+]};
+const diagnostic = summarizePolygonFailures(invalidDiagnostic);
+assert.deepEqual(diagnostic, {
+  polygons:6,validPolygons:1,emptyPolygons:1,malformedRings:0,
+  invalidWgs84Rings:1,unclosedRings:1,invalidRingTopology:1,invalidHoleTopology:1,
+}, 'source failure triage must count independent invalid polygon categories');
+assert.ok(!JSON.stringify(diagnostic).includes('Never export this licensed label'),
+  'diagnostic output must contain counts only, never source metadata');
+assert.ok(!JSON.stringify(diagnostic).includes('30,50'),
+  'diagnostic output must never serialize source coordinates');
+assert.throws(() => requireUsableReferenceGeometry(diagnosticPolygon([]),5391),
+  /malformed polygon rings.*"emptyPolygons":1/,
+  'a polygon-only malformed export must not be mislabeled as missing geometry');
+console.log('Runivers malformed polygon diagnostics passed: exact reason counts without source geometry.');
+
 
 // One sound outer ring does not make malformed holes or a second broken
 // polygon safe to dissolve. These must fail closed before the distance metric.
