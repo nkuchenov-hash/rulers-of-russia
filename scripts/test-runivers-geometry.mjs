@@ -981,6 +981,21 @@ const validSinglePoleTriangle = [[0,90],[30,89],[0,89],[0,90]];
 assert.equal(hasValidRingTopology(validSinglePoleTriangle), true,
   'a ring visiting the pole once remains valid');
 console.log('Runivers polar topology regression passed: collapsed polar edges and repeated pole visits rejected.');
+// An edge connecting longitudes exactly 180 degrees apart has two equally
+// short unwrap directions. Treat it as ambiguous instead of silently choosing
+// an east/west half-world border in the independent reference.
+const ambiguousHalfWorldShell = [[0,0],[180,0],[180,10],[0,10],[0,0]];
+const ambiguousHalfWorldReverse = [[180,0],[0,0],[0,10],[180,10],[180,0]];
+for (const ring of [ambiguousHalfWorldShell, ambiguousHalfWorldReverse]) {
+  assert.equal(hasValidRingTopology(ring), false,
+    'exactly 180-degree longitude edges cannot establish an unambiguous border');
+  assert.equal(hasValidPolygonTopology([ring]), false,
+    'a half-world edge must fail the full polygon topology gate');
+}
+assert.equal(hasValidRingTopology([[179,0],[-179,0],[-179,10],[179,10],[179,0]]), true,
+  'ordinary two-degree antimeridian crossings must remain valid');
+console.log('Runivers half-world edge regression passed: ambiguous 180-degree edges rejected.');
+
 const antimeridianShell = [[179,10],[-179,10],[-179,12],[179,12],[179,10]];
 const antimeridianHole = [[179.4,10.4],[-179.4,10.4],[-179.4,11.4],[179.4,11.4],[179.4,10.4]];
 assert.equal(hasValidPolygonTopology([antimeridianShell, antimeridianHole]), true,

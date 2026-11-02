@@ -133,6 +133,16 @@ function hasRepeatedPoleVertex(ring) {
   }
   return false;
 }
+// At exactly 180 degrees of longitude separation, both eastward and
+// westward unwrappings are equally short. Choosing one arbitrarily can turn
+// a half-world edge into a seemingly valid sovereign border. Reject this
+// ambiguity before unwrapping; normal short dateline crossings still pass.
+function hasAmbiguousHalfWorldEdge(ring) {
+  for (let i = 0; i < ring.length - 1; i++) {
+    if (Math.abs(ring[i + 1][0] - ring[i][0]) === 180) return true;
+  }
+  return false;
+}
 function validUnwrappedRing(ring) {
   // A full wrap can masquerade as a closed polygon in [-180,180].
   return equal(ring[0], ring.at(-1)) && hasArea(ring)
@@ -141,11 +151,13 @@ function validUnwrappedRing(ring) {
     && !crossingEdges(ring, ring, true);
 }
 export function hasValidRingTopology(rawRing) {
-  return validRingShape(rawRing) && validUnwrappedRing(unwrap(rawRing));
+  return validRingShape(rawRing) && !hasAmbiguousHalfWorldEdge(rawRing)
+    && validUnwrappedRing(unwrap(rawRing));
 }
 export function hasValidPolygonTopology(rawPolygon) {
   if (!Array.isArray(rawPolygon) || !rawPolygon.length
-    || !rawPolygon.every(validRingShape)) return false;
+    || !rawPolygon.every(validRingShape)
+    || rawPolygon.some(hasAmbiguousHalfWorldEdge)) return false;
   const rings = rawPolygon.map(unwrap);
   if (rings.some(ring => !validUnwrappedRing(ring))) return false;
   const shell = rings[0];
