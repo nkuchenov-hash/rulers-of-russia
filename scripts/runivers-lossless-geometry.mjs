@@ -1,4 +1,5 @@
 import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidWgs84Line} from './runivers-line-topology.mjs';
 
 // Exact consecutive duplicate coordinates trace a zero-length edge. Removing
 // only those edges leaves every nonzero boundary segment unchanged. This is
@@ -26,9 +27,41 @@ function stripExactAdjacentDuplicates(ring) {
   return {ring: cleaned, removed};
 }
 
+
+ // A source polygon may trace A -> B -> A as an exact out-and-back
+ // zero-area spur. Both directed edges cancel: removing B and the returning
+ // A changes no enclosed area and leaves all other edges untouched.
+ // This is temporary reference-transport normalization only. Do not infer
+ // a near-match, remove an ambiguous 180-degree/polar edge, or modify 3D
+ // coordinates. The entire resulting polygon must still pass strict topology.
+function stripExactRetracedSpikes(ring) {
+  if (!Array.isArray(ring)) return {ring, removed: 0};
+  const cleaned = [];
+  let removed = 0;
+  for (const point of ring) {
+    cleaned.push(point);
+    while (cleaned.length >= 3) {
+      const a = cleaned[cleaned.length - 3];
+      const b = cleaned[cleaned.length - 2];
+      const c = cleaned[cleaned.length - 1];
+      if (![a, b, c].every(p => Array.isArray(p) && p.length === 2)
+        || a[0] !== c[0] || a[1] !== c[1]
+        || !hasValidWgs84Line([a, b])) break;
+      cleaned.pop(); // returning A
+      cleaned.pop(); // spur tip B
+      removed += 2;
+    }
+  }
+  return {ring: cleaned, removed};
+}
+
 function normalizePolygon(polygon) {
   if (!Array.isArray(polygon)) return {polygon, removed: 0};
-  const candidates = polygon.map(stripExactAdjacentDuplicates);
+  const candidates = polygon.map(ring => {
+    const duplicates = stripExactAdjacentDuplicates(ring);
+    const spikes = stripExactRetracedSpikes(duplicates.ring);
+    return {ring: spikes.ring, removed: duplicates.removed + spikes.removed};
+  });
   const removed = candidates.reduce((total, item) => total + item.removed, 0);
   if (!removed) return {polygon, removed: 0};
   const cleaned = candidates.map(item => item.ring);
