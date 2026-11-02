@@ -931,7 +931,7 @@ assert.equal(hasValidRingTopology(datelineAliasDuplicate), false,
 // the same pole are a single physical point. A collapsed polar edge or a
 // non-adjacent return to the pole must not certify a sovereign polygon.
 const collapsedNorthPoleEdge = [[0,89],[30,89],[30,90],[0,90],[0,89]];
-const repeatedNorthPoleVisit = [[0,90],[30,89],[60,90],[0,89],[0,90]];
+const repeatedNorthPoleVisit = [[0,90],[30,89],[60,90],[60,88],[0,88],[0,90]];
 const collapsedSouthPoleEdge = [[0,-89],[30,-89],[30,-90],[0,-90],[0,-89]];
 for (const ring of [collapsedNorthPoleEdge, repeatedNorthPoleVisit, collapsedSouthPoleEdge]) {
   assert.equal(hasValidRingTopology(ring), false,
