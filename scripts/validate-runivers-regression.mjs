@@ -634,6 +634,9 @@ const PUBLIC_METRIC_FIELDS = Object.freeze([
   'referenceToCurrentP95Meters', 'referenceToCurrentMaxMeters',
   'currentToReferenceP95Meters', 'currentToReferenceMaxMeters',
   'symmetricP95Meters', 'symmetricMaxMeters',
+  // Scalar distances, not coordinates: preserve sub-metre precision for the
+  // independent report gate, while retaining rounded display metrics.
+  'exactSymmetricP95Meters', 'exactSymmetricMaxMeters',
 ]);
 
 export function publicComparisonMetric(metric) {
@@ -1004,6 +1007,8 @@ async function main() {
     currentToReferenceMaxMeters: row.currentToReferenceMaxMeters,
     symmetricP95Meters: row.symmetricP95Meters,
     symmetricMaxMeters: row.symmetricMaxMeters,
+    exactSymmetricP95Meters: row.exactSymmetricP95Meters,
+    exactSymmetricMaxMeters: row.exactSymmetricMaxMeters,
     toleranceMeters: row.toleranceMeters,
     maxToleranceMeters: row.maxToleranceMeters,
   }));

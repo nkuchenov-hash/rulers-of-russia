@@ -28,6 +28,8 @@ try {
    currentToReferenceMaxMeters: status === 'pass' ? 25000 : 50000,
    symmetricP95Meters: status === 'pass' ? 10000 : 16000,
    symmetricMaxMeters: status === 'pass' ? 30000 : 61000,
+   exactSymmetricP95Meters: status === 'pass' ? 10000 : 16000,
+   exactSymmetricMaxMeters: status === 'pass' ? 30000 : 61000,
    toleranceMeters: 15000, maxToleranceMeters: 60000,
  });
  const evidenceFor = s => [
@@ -86,6 +88,23 @@ try {
    'a pass outside the unchanged maximum tolerance must be rejected');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),symmetricP95Meters:16000}]).status,1,
    'a pass outside the unchanged p95 tolerance must be rejected');
+ // A 0.25 m violation must not become a geographic pass just because
+ // both display metrics round to the published tolerance.
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),
+   referenceToCurrentP95Meters:15000,symmetricP95Meters:15000,
+   exactSymmetricP95Meters:15000.25}]).status,1,
+   'sub-metre p95 exceedance must fail the independent acceptance gate');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),
+   referenceToCurrentMaxMeters:60000,symmetricMaxMeters:60000,
+   exactSymmetricMaxMeters:60000.25}]).status,1,
+   'sub-metre maximum exceedance must fail the independent acceptance gate');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),
+   referenceToCurrentP95Meters:15000,symmetricP95Meters:15000,
+   exactSymmetricP95Meters:14999.75}]).status,0,
+   'genuinely below-limit distances may round up to the tolerance');
+ assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),
+   exactSymmetricP95Meters:undefined}]).status,1,
+   'missing exact evidence cannot certify geography');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),referenceSamples:0}]).status,1,
    'a comparison without actual source border samples cannot pass');
  assert.equal(run(summary,completeShard,{},[{...metricRow('pass'),currentSamples:0}]).status,1,

@@ -167,8 +167,21 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence changes the historical distance limits or violates p95/max ordering.');
     process.exit(1);
   }
-  const withinLimits = row.symmetricP95Meters <= row.toleranceMeters
-    && row.symmetricMaxMeters <= row.maxToleranceMeters;
+  // The producer decides pass/fail using unrounded distances. The public
+  // evidence previously omitted those values, so an independent gate could
+  // accept 15,000.25 m as a rounded 15,000 m pass. Distances are safe scalar
+  // evidence; never include source vertices or sampled coordinates.
+  if (!Number.isFinite(row.exactSymmetricP95Meters)
+    || !Number.isFinite(row.exactSymmetricMaxMeters)
+    || row.exactSymmetricP95Meters < 0
+    || row.exactSymmetricMaxMeters < row.exactSymmetricP95Meters
+    || Math.round(row.exactSymmetricP95Meters) !== row.symmetricP95Meters
+    || Math.round(row.exactSymmetricMaxMeters) !== row.symmetricMaxMeters) {
+    console.error('Runivers exact symmetric distances are missing or disagree with rounded diagnostics.');
+    process.exit(1);
+  }
+  const withinLimits = row.exactSymmetricP95Meters <= row.toleranceMeters
+    && row.exactSymmetricMaxMeters <= row.maxToleranceMeters;
   if ((row.status === 'pass' && !withinLimits)
     || (row.status !== 'pass' && withinLimits)) {
     console.error('Runivers comparison status disagrees with the unchanged symmetric distance tolerances.');
