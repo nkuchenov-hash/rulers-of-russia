@@ -1,4 +1,6 @@
 // Diagnostic-only validation of independent WGS84 polygon rings. Never repairs or exports geometry.
+import {hasAntipodalPoleEdge} from './runivers-line-topology.mjs';
+
 const EPS = 1e-10;
 const equal = (a, b) => Math.abs(a[0] - b[0]) <= EPS && Math.abs(a[1] - b[1]) <= EPS;
 // The topology helper is also called independently of the transport preflight.
@@ -152,12 +154,14 @@ function validUnwrappedRing(ring) {
 }
 export function hasValidRingTopology(rawRing) {
   return validRingShape(rawRing) && !hasAmbiguousHalfWorldEdge(rawRing)
+    && !hasAntipodalPoleEdge(rawRing)
     && validUnwrappedRing(unwrap(rawRing));
 }
 export function hasValidPolygonTopology(rawPolygon) {
   if (!Array.isArray(rawPolygon) || !rawPolygon.length
     || !rawPolygon.every(validRingShape)
-    || rawPolygon.some(hasAmbiguousHalfWorldEdge)) return false;
+    || rawPolygon.some(hasAmbiguousHalfWorldEdge)
+    || rawPolygon.some(hasAntipodalPoleEdge)) return false;
   const rings = rawPolygon.map(unwrap);
   if (rings.some(ring => !validUnwrappedRing(ring))) return false;
   const shell = rings[0];
