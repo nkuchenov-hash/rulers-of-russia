@@ -392,6 +392,16 @@ function samplingLines(payload, outerOnly = true) {
 }
 
 function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = MAX_BORDER_SAMPLES, outerOnly = true, anchorsPerRing = 2) {
+  // Invalid spacing must not collapse a full boundary into just its anchors.
+  // In particular, zero/NaN/Infinity or an overflowing segment count could
+  // otherwise skip interpolation while still producing enough points to pass
+  // the bilateral minimum-sample gate.
+  if (!Number.isFinite(stepMeters) || stepMeters <= 0) {
+    throw new Error('Boundary sampling requires a finite positive step in metres');
+  }
+  if (!Number.isSafeInteger(maxSamples) || maxSamples < 1 || ![1, 2].includes(anchorsPerRing)) {
+    throw new Error('Boundary sampling requires a positive safe sample cap and 1 or 2 anchors per ring');
+  }
   const lines = samplingLines(payload, outerOnly);
   // Never silently skip a malformed segment: it may be the only border of
   // an enclave or island, and omitting it could produce a false comparison.
@@ -403,9 +413,18 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     for (let i = 0; i + 1 < line.length; i += 1) {
       const a = line[i], b = line[i + 1];
       if (!validCoordinate(a) || !validCoordinate(b)) continue;
-      candidateCount += Math.max(1, Math.ceil(haversineMeters(a, b) / stepMeters));
+      const steps = Math.max(1, Math.ceil(haversineMeters(a, b) / stepMeters));
+      if (!Number.isSafeInteger(steps) || !Number.isSafeInteger(candidateCount + steps)) {
+        throw new Error('Boundary sampling step produces an unsafe candidate count');
+      }
+      candidateCount += steps;
     }
-    if (validCoordinate(line[line.length - 1])) candidateCount += 1;
+    if (validCoordinate(line[line.length - 1])) {
+      candidateCount += 1;
+      if (!Number.isSafeInteger(candidateCount)) {
+        throw new Error('Boundary sampling step produces an unsafe candidate count');
+      }
+    }
   }
   if (!candidateCount) return [];
   // A single anchor per disconnected ring is not enough: a displaced
