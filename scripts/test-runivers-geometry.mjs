@@ -242,28 +242,28 @@ const tinyComponent = {type: 'Feature', geometry: {type: 'Polygon', coordinates:
   [70,0],[70.01,0],[70.01,.01],[70,.01],[70,0],
 ]]}, properties: {}};
 const disconnected = {type: 'FeatureCollection', features: [largeComponent, tinyComponent]};
-const sparseSamples = samplePayload(disconnected, 1000, 7);
-assert.ok(sparseSamples.length <= 7, 'sample cap must still be respected');
+const sparseSamples = samplePayload(disconnected, 1000, 9);
+assert.ok(sparseSamples.length <= 9, 'sample cap must still be respected');
 assert.ok(sparseSamples.some(([lon]) => lon < 31), 'mainland ring must be sampled');
 const tinySamples = sparseSamples.filter(([lon]) => lon >= 70);
-assert.ok(tinySamples.length >= 3, 'small disconnected ring must retain three border samples');
+assert.ok(tinySamples.length >= 4, 'small disconnected ring must retain four border samples');
 assert.equal(new Set(tinySamples.map(point => point.join(','))).size, tinySamples.length,
   'an island must have distinct political-border samples');
 assert.ok(tinySamples.some(([lon, lat]) =>
   (lon > 70 && lon < 70.01) || (lat > 0 && lat < .01)),
 'one island sample must lie in the interior of an actual edge, not only at vertices');
 assert.throws(() => samplePayload(disconnected, 1000, 5),
-  /Cannot sample all 2 boundary rings with 6 minimum anchors/,
+  /Cannot sample all 2 boundary rings with 8 minimum anchors/,
   'a cap permitting only two anchors per ring must fail closed');
 assert.throws(() => samplePayload(disconnected, 1000, 3),
-  /Cannot sample all 2 boundary rings with 6 minimum anchors/,
+  /Cannot sample all 2 boundary rings with 8 minimum anchors/,
   'when the cap cannot cover all ring samples, the geographic audit must fail closed');
 assert.throws(() => samplePayload(disconnected, 1000, 1),
   /Cannot sample all 2 boundary rings/,
   'when even one sample per ring is impossible, the geographic audit must fail closed');
-assert.throws(() => samplePayload(disconnected, 1000, 6),
+assert.throws(() => samplePayload(disconnected, 1000, 8),
   /no budget beyond per-ring interior samples/,
-  'the three mandatory points per ring cannot replace broader boundary sampling');
+  'the four mandatory points per ring cannot replace broader boundary sampling');
 assert.ok(samplePayload(disconnected, 1000, 4, true, 1).length >= 2,
   'single-anchor physical-coast sampling retains its separate existing policy');
 
@@ -275,11 +275,19 @@ const islands = {type: 'FeatureCollection', features: Array.from({length: 11}, (
     [60 + i, 10.01], [60 + i, 10],
   ]]},
 }))};
-const archipelagoSamples = samplePayload(islands, 1000, 34);
-assert.ok(archipelagoSamples.length >= 33 && archipelagoSamples.length <= 34);
+assert.throws(() => samplePayload(islands, 1000, 34),
+  /Cannot sample all 11 boundary rings with 44 minimum anchors/,
+  'a global cap that would leave islands with only three samples must fail closed');
+const archipelagoSamples = samplePayload(islands, 1000, 45);
+assert.ok(archipelagoSamples.length >= 44 && archipelagoSamples.length <= 45);
 for (let i = 0; i < 11; i += 1) {
   const ringSamples = archipelagoSamples.filter(([lon]) => lon >= 60 + i && lon <= 60.01 + i);
-  assert.ok(ringSamples.length >= 3, `island ${i} must have an interior sample even with a 34-point cap`);
+  assert.ok(ringSamples.length >= 4, `island ${i} must have four distinct samples even with a 45-point cap`);
+  const edgeInterior = ringSamples.filter(([lon, lat]) =>
+    ((lon > 60 + i && lon < 60.01 + i) && (lat === 10 || lat === 10.01))
+    || ((lat > 10 && lat < 10.01) && (lon === 60 + i || lon === 60.01 + i)));
+  assert.ok(edgeInterior.length >= 2,
+    `island ${i} must have samples inside two distinct edges, not merely vertices`);
 }
 // A zero/invalid step used to leave only per-ring anchors, potentially
 // meeting the 20-point acceptance minimum without sampling the intervening
