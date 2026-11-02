@@ -4,6 +4,7 @@ import polygonClipping from 'polygon-clipping';
 import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
 import {hasValidWgs84Line} from './runivers-line-topology.mjs';
 import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
+import {normalizeExactDuplicatePolygonFeatures} from './runivers-lossless-geometry.mjs';
 import {referenceForPolity} from './runivers-reference-scope.mjs';
 import {publicReferenceFailure} from './runivers-public-reference-failures.mjs';
 import {diagnoseEarlyRussiaHotspots, diagnoseFailedBoundarySamples} from './runivers-hotspot-diagnostics.mjs';
@@ -157,6 +158,9 @@ async function fetchRuniversGeoJson(host, id) {
       // trying the alternate WGS84 endpoint. Both failures remain visible if
       // neither endpoint supplies a usable independent border.
       if (!normalized) throw new Error('no valid GeoJSON feature collection');
+      // The direct JSON transport follows the same lossless normalization
+      // policy as prefetch. This does not bypass strict polygon validation.
+      normalized = normalizeExactDuplicatePolygonFeatures(normalized).payload;
       requireUsableReferenceGeometry(normalized, id);
       return normalized;
     } catch (error) {
