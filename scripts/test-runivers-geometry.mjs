@@ -251,6 +251,12 @@ assert.throws(() => samplePayload(disconnected, 1000, 3), /Cannot sample all 2 b
   'when the cap cannot cover both ends of every ring, the geographic audit must fail closed');
 assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 boundary rings/,
   'when even one sample per ring is impossible, the geographic audit must fail closed');
+assert.throws(() => samplePayload(disconnected, 1000, 4),
+  /no budget for intermediate boundary points/,
+  'exactly two anchors per ring must not masquerade as a sampled political border');
+assert.ok(samplePayload(disconnected, 1000, 4, true, 1).length >= 2,
+  'single-anchor physical-coast sampling retains its separate existing policy');
+
 // A zero/invalid step used to leave only per-ring anchors, potentially
 // meeting the 20-point acceptance minimum without sampling the intervening
 // political border. Reject it instead of certifying a sparse false match.
