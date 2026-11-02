@@ -289,6 +289,39 @@ for (let i = 0; i < 11; i += 1) {
   assert.ok(edgeInterior.length >= 2,
     `island ${i} must have samples inside two distinct edges, not merely vertices`);
 }
+// Two legitimate rings can meet at the antimeridian or a pole. The same
+// geographic point must not count twice merely because its longitude is
+// serialized as +180/-180 or as different pole longitudes. This tests the
+// sampling gate only, using synthetic polygons without third-party geometry.
+const datelineNeighbors = {type: 'FeatureCollection', features: [
+  {type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [[
+    [179, 10], [180, 10], [180, 11], [179, 11], [179, 10],
+  ]]}},
+  {type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [[
+    [-180, 10], [-179, 10], [-179, 11], [-180, 11], [-180, 10],
+  ]]}},
+]};
+const datelineSamples = samplePayload(datelineNeighbors, 1e9, 9);
+assert.equal(datelineSamples.length, 7,
+  'shared +/-180 meridian midpoint must count as one geographic sample, not two');
+assert.equal(datelineSamples.filter(([lon, lat]) =>
+  Math.abs(lon) === 180 && lat === 10.5).length, 1,
+'shared antimeridian midpoint must be deduplicated without changing coordinates');
+assert.throws(() => samplePayload(datelineNeighbors, 1e9, 8),
+  /no budget beyond per-ring interior samples/,
+  'coordinate aliases cannot relax the minimum global sampling budget');
+const poleNeighbors = {type: 'FeatureCollection', features: [
+  {type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [[
+    [0, 90], [0, 89], [1, 89], [0, 90],
+  ]]}},
+  {type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [[
+    [90, 90], [90, 89], [91, 89], [90, 90],
+  ]]}},
+]};
+const poleSamples = samplePayload(poleNeighbors, 1e9, 9);
+assert.equal(poleSamples.filter(([, lat]) => lat === 90).length, 1,
+  'distinct longitude labels at the North Pole must count as one sample');
+
 // A zero/invalid step used to leave only per-ring anchors, potentially
 // meeting the 20-point acceptance minimum without sampling the intervening
 // political border. Reject it instead of certifying a sparse false match.
