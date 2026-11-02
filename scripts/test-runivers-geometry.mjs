@@ -233,6 +233,8 @@ console.log('Runivers approximation metadata tests passed: negative flags cannot
 
 // A global stride must not skip a small disconnected island or enclave just
 // because the preceding continental ring has thousands of candidates.
+// Two matching vertices alone can hide a displaced border between them:
+// reserve a genuine segment-interior sample on EACH political ring.
 const largeComponent = {type: 'Feature', geometry: {type: 'Polygon', coordinates: [[
   [0,0],[30,0],[30,1],[0,1],[0,0],
 ]]}, properties: {}};
@@ -240,23 +242,45 @@ const tinyComponent = {type: 'Feature', geometry: {type: 'Polygon', coordinates:
   [70,0],[70.01,0],[70.01,.01],[70,.01],[70,0],
 ]]}, properties: {}};
 const disconnected = {type: 'FeatureCollection', features: [largeComponent, tinyComponent]};
-const sparseSamples = samplePayload(disconnected, 1000, 5);
-assert.ok(sparseSamples.length <= 5, 'sample cap must still be respected');
+const sparseSamples = samplePayload(disconnected, 1000, 7);
+assert.ok(sparseSamples.length <= 7, 'sample cap must still be respected');
 assert.ok(sparseSamples.some(([lon]) => lon < 31), 'mainland ring must be sampled');
 const tinySamples = sparseSamples.filter(([lon]) => lon >= 70);
-assert.ok(tinySamples.length >= 2, 'small disconnected ring must retain two separate border anchors');
-assert.ok(new Set(tinySamples.map(point => point.join(','))).size >= 2,
-  'a single matching vertex must not stand in for the opposite shore of an island');
-assert.throws(() => samplePayload(disconnected, 1000, 3), /Cannot sample all 2 boundary rings with 4 minimum anchors/,
-  'when the cap cannot cover both ends of every ring, the geographic audit must fail closed');
-assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 boundary rings/,
+assert.ok(tinySamples.length >= 3, 'small disconnected ring must retain three border samples');
+assert.equal(new Set(tinySamples.map(point => point.join(','))).size, tinySamples.length,
+  'an island must have distinct political-border samples');
+assert.ok(tinySamples.some(([lon, lat]) =>
+  (lon > 70 && lon < 70.01) || (lat > 0 && lat < .01)),
+'one island sample must lie in the interior of an actual edge, not only at vertices');
+assert.throws(() => samplePayload(disconnected, 1000, 5),
+  /Cannot sample all 2 boundary rings with 6 minimum anchors/,
+  'a cap permitting only two anchors per ring must fail closed');
+assert.throws(() => samplePayload(disconnected, 1000, 3),
+  /Cannot sample all 2 boundary rings with 6 minimum anchors/,
+  'when the cap cannot cover all ring samples, the geographic audit must fail closed');
+assert.throws(() => samplePayload(disconnected, 1000, 1),
+  /Cannot sample all 2 boundary rings/,
   'when even one sample per ring is impossible, the geographic audit must fail closed');
-assert.throws(() => samplePayload(disconnected, 1000, 4),
-  /no budget for intermediate boundary points/,
-  'exactly two anchors per ring must not masquerade as a sampled political border');
+assert.throws(() => samplePayload(disconnected, 1000, 6),
+  /no budget beyond per-ring interior samples/,
+  'the three mandatory points per ring cannot replace broader boundary sampling');
 assert.ok(samplePayload(disconnected, 1000, 4, true, 1).length >= 2,
   'single-anchor physical-coast sampling retains its separate existing policy');
 
+// A global count of 20+ must not hide undersampling of any small component.
+// This synthetic archipelago uses no historical or licensed source geometry.
+const islands = {type: 'FeatureCollection', features: Array.from({length: 11}, (_, i) => ({
+  type: 'Feature', properties: {}, geometry: {type: 'Polygon', coordinates: [[
+    [60 + i, 10], [60.01 + i, 10], [60.01 + i, 10.01],
+    [60 + i, 10.01], [60 + i, 10],
+  ]]},
+}))};
+const archipelagoSamples = samplePayload(islands, 1000, 34);
+assert.ok(archipelagoSamples.length >= 33 && archipelagoSamples.length <= 34);
+for (let i = 0; i < 11; i += 1) {
+  const ringSamples = archipelagoSamples.filter(([lon]) => lon >= 60 + i && lon <= 60.01 + i);
+  assert.ok(ringSamples.length >= 3, `island ${i} must have an interior sample even with a 34-point cap`);
+}
 // A zero/invalid step used to leave only per-ring anchors, potentially
 // meeting the 20-point acceptance minimum without sampling the intervening
 // political border. Reject it instead of certifying a sparse false match.
