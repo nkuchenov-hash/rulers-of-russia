@@ -12,9 +12,30 @@ export function hasAntipodalPoleEdge(line) {
     && Math.abs(point[1]) === 90 && point[1] === -line[index - 1][1]);
 }
 
+// Distinct longitude labels at a pole refer to one physical location.
+// Even when separated by otherwise valid segments, revisiting either pole
+// makes a LineString self-touch on the sphere. Such a path cannot certify an
+// unambiguous independent border. A single visit to each pole is permitted;
+// the direct antipodal edge is rejected separately.
+export function hasRepeatedPoleVisit(line) {
+  if (!Array.isArray(line)) return false;
+  let north = false, south = false;
+  for (const point of line) {
+    if (!validPoint(point)) return false;
+    if (point[1] === 90) {
+      if (north) return true;
+      north = true;
+    } else if (point[1] === -90) {
+      if (south) return true;
+      south = true;
+    }
+  }
+  return false;
+}
+
 export function hasValidWgs84Line(line) {
   if (!Array.isArray(line) || line.length < 2 || !line.every(validPoint)
-    || hasAntipodalPoleEdge(line)) return false;
+    || hasAntipodalPoleEdge(line) || hasRepeatedPoleVisit(line)) return false;
   for (let i = 1; i < line.length; i++) {
     const a = line[i - 1], b = line[i];
     const lonSeparation = Math.abs(b[0] - a[0]);
