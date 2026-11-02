@@ -1,4 +1,4 @@
-import {hasValidRingTopology, hasValidPolygonTopology, ringTopologyFailureReason} from './runivers-ring-topology.mjs';
+import {hasValidRingTopology, hasValidPolygonTopology, ringTopologyFailureReason, polygonHoleTopologyFailureReason} from './runivers-ring-topology.mjs';
 
 // Diagnostic only: report aggregate reasons a third-party polygon cannot be
 // used as independent evidence. Never return coordinates, feature metadata,
@@ -8,6 +8,8 @@ export function summarizePolygonFailures(payload) {
     polygons: 0, validPolygons: 0, emptyPolygons: 0,
     malformedRings: 0, invalidWgs84Rings: 0, unclosedRings: 0,
     invalidRingTopology: 0, invalidHoleTopology: 0,
+    invalidHoleReasons: {'hole-outside-shell': 0, 'hole-crosses-shell': 0,
+      'holes-cross-or-touch': 0, 'holes-nested': 0},
     // Counts are primary reasons for rings already rejected by the unchanged gate.
     invalidRingReasons: {'ambiguous-half-world-edge': 0, 'antipodal-pole-edge': 0,
       'unwrapped-open-ring': 0, 'zero-area': 0, 'zero-length-edge': 0,
@@ -43,7 +45,11 @@ export function summarizePolygonFailures(payload) {
     }
     if (allRingsValid) {
       if (hasValidPolygonTopology(polygon)) counts.validPolygons++;
-      else counts.invalidHoleTopology++;
+      else {
+        counts.invalidHoleTopology++;
+        const reason = polygonHoleTopologyFailureReason(polygon);
+        if (Object.hasOwn(counts.invalidHoleReasons, reason)) counts.invalidHoleReasons[reason]++;
+      }
     }
   };
   const inspectGeometry = geometry => {

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
-import {hasValidPolygonTopology} from './runivers-ring-topology.mjs';
+import {hasValidPolygonTopology, polygonHoleTopologyFailureReason} from './runivers-ring-topology.mjs';
 import {requireUsableReferenceGeometry} from './validate-runivers-regression.mjs';
 import {normalizeExactDuplicatePolygonFeatures} from './runivers-lossless-geometry.mjs';
+import {summarizePolygonFailures} from './runivers-polygon-failure-diagnostics.mjs';
 
 const square = [[30, 50], [31, 50], [31, 51], [30, 51], [30, 50]];
 const feature = ring => ({type: 'Feature', properties: {name: 'Россия'},
@@ -62,5 +63,29 @@ assert.equal(failedHole.removedVertices, 0,
   'an invalid hole must not be excused by an exact duplicate in the shell');
 assert.throws(() => requireUsableReferenceGeometry(failedHole.payload, 'test'),
   /malformed polygon rings/);
+
+
+// Hole-topology failures must remain fatal but reveal the specific scalar
+// cause. These synthetic rings contain no licensed source geometry.
+const shell = [[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]];
+const hole = (a, b, c, d) => [[a, b], [c, b], [c, d], [a, d], [a, b]];
+const concaveShell = [[0, 0], [10, 0], [10, 10], [7, 10], [7, 3],
+  [3, 3], [3, 10], [0, 10], [0, 0]];
+const holeCases = [
+  [[shell, hole(20, 20, 21, 21)], 'hole-outside-shell'],
+  [[concaveShell, hole(1, 5, 9, 6)], 'hole-crosses-shell'],
+  [[shell, hole(2, 2, 7, 7), hole(3, 3, 4, 4)], 'holes-nested'],
+  [[shell, hole(2, 2, 6, 6), hole(5, 5, 8, 8)], 'holes-cross-or-touch'],
+];
+for (const [polygon, expected] of holeCases) {
+  assert.equal(hasValidPolygonTopology(polygon), false);
+  assert.equal(polygonHoleTopologyFailureReason(polygon), expected);
+  const summary = summarizePolygonFailures({type: 'Polygon', coordinates: polygon});
+  assert.equal(summary.invalidHoleTopology, 1);
+  assert.equal(summary.invalidHoleReasons[expected], 1);
+  assert.equal(summary.validPolygons, 0);
+}
+assert.equal(polygonHoleTopologyFailureReason([shell, hole(2, 2, 4, 4)]), null);
+assert.equal(hasValidPolygonTopology([shell, hole(2, 2, 4, 4)]), true);
 
 console.log('Runivers lossless reference normalization passed: exact duplicate edges only, strict topology preserved.');
