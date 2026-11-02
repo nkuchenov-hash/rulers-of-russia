@@ -415,11 +415,12 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     }
   }
   if (!candidateCount) return [];
-  // A single anchor per disconnected ring is not enough: a displaced
-  // island could retain one matching vertex while its opposite shore is
-  // completely wrong. Preserve the first vertex AND its geodesically most
-  // distant vertex on every ring before applying the global sample budget.
-  // Fail closed if the cap cannot cover both ends of every component.
+  // A ring can retain two correct vertices while the rest of its border
+  // is displaced. Reserve a third, non-vertex midpoint on its longest
+  // segment BEFORE applying the global stride: otherwise a small island can
+  // receive only its two endpoints even when the whole audit has 20+ samples.
+  // The physical-coast mode deliberately retains its one-anchor policy.
+  // Fail closed if the cap cannot cover all mandatory ring samples.
   const anchors = lines.flatMap(line => {
     const first = line.find(validCoordinate);
     if (!first) throw new Error('Boundary ring has no valid sampling coordinate');
@@ -436,18 +437,28 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
       }
     }
     if (!opposite || greatestDistance <= 0) throw new Error('Boundary ring has no distinct opposite sampling coordinate');
-    return [first, opposite];
+    let longestSegment = -1, interior = null;
+    for (let i = 0; i + 1 < line.length; i += 1) {
+      const length = haversineMeters(line[i], line[i + 1]);
+      if (length > longestSegment) {
+        longestSegment = length;
+        interior = interpolateLonLat(line[i], line[i + 1], 0.5);
+      }
+    }
+    if (!(longestSegment > 0) || !interior
+      || [first, opposite].some(point => point[0] === interior[0] && point[1] === interior[1])) {
+      throw new Error('Boundary ring has no distinct interior segment sample');
+    }
+    return [first, opposite, interior];
   });
   if (!Number.isInteger(maxSamples) || maxSamples < 1 || anchors.length > maxSamples) {
     throw new Error(`Cannot sample all ${lines.length} boundary rings with ${anchors.length} minimum anchors within ${maxSamples} samples`);
   }
-  // If the cap is exhausted by the two compulsory endpoints of each ring,
-  // the audit would silently compare anchors only, even when their count
-  // exceeds MIN_BILATERAL_BORDER_SAMPLES. The Infinity stride below would
-  // skip every intervening segment. Never certify a political boundary
-  // without any intermediate samples; retain the separate coast policy.
+  // Three mandatory points per political ring are a minimum, not a substitute
+  // for sampling the remaining segments. Require at least some global budget
+  // beyond those points; the physical-coast policy is unchanged.
   if (anchorsPerRing === 2 && anchors.length === maxSamples) {
-    throw new Error('Political border sampling cap leaves no budget for intermediate boundary points');
+    throw new Error('Political border sampling cap leaves no budget beyond per-ring interior samples');
   }
   const points = anchors.map(point => [point[0], point[1]]);
   const seen = new Set(points.map(point => point.join(',')));
