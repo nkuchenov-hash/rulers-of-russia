@@ -441,6 +441,14 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
   if (!Number.isInteger(maxSamples) || maxSamples < 1 || anchors.length > maxSamples) {
     throw new Error(`Cannot sample all ${lines.length} boundary rings with ${anchors.length} minimum anchors within ${maxSamples} samples`);
   }
+  // If the cap is exhausted by the two compulsory endpoints of each ring,
+  // the audit would silently compare anchors only, even when their count
+  // exceeds MIN_BILATERAL_BORDER_SAMPLES. The Infinity stride below would
+  // skip every intervening segment. Never certify a political boundary
+  // without any intermediate samples; retain the separate coast policy.
+  if (anchorsPerRing === 2 && anchors.length === maxSamples) {
+    throw new Error('Political border sampling cap leaves no budget for intermediate boundary points');
+  }
   const points = anchors.map(point => [point[0], point[1]]);
   const seen = new Set(points.map(point => point.join(',')));
   const budget = maxSamples - points.length;
