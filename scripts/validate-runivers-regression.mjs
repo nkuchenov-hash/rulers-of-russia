@@ -302,8 +302,8 @@ const explicitNonApproximation = /^(?:false|no|нет|0|none|n\/a)$/i;
 // permissive 100 km tolerance merely because they contain "approximate".
 // A mixed positive/negative note is ambiguous: fail closed at the strict
 // tolerance until its source meaning has been independently reviewed.
-const negatedApproximation = /(?:^|[\s,;:(])(?:not[-\s]+|non[-\s]*|no\s+)(?:approximate|approximation|uncertain|reconstructed|reconstruction)(?=$|[\s,.;:!?)])|(?:^|[\s,;:(])не\s+(?:приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*|реконструированн[а-яё]*)(?=$|[\s,.;:!?)])/i;
-// Source notes also use key=value / key: value notation. A description like
+const negatedApproximation = /(?:^|[\s,;:(])(?:not[-\s]+(?:an?\s+)?|non[-\s]*|no\s+)(?:approximate|approximation|uncertain|reconstructed|reconstruction)(?=$|[\s,.;:!?)])|(?:^|[\s,;:(])не\s+(?:приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*|реконструированн[а-яё]*)(?=$|[\s,.;:!?)])/i;
+// English negations can include an article ("not an approximation", "not a\n// reconstruction"). These deny uncertainty rather than authorizing the 100 km\n// approximation tolerance; retain the stricter dated border threshold.\n// Source notes also use key=value / key: value notation. A description like
 // "approximate=false" previously matched the affirmative keyword and raised
 // the allowable error to 100 km, despite explicitly denying approximation.
 const negativeApproximationAssignment = /(?:^|[\s,;({])(?:approximate|approximation|uncertain|reconstructed|reconstruction|приблизительн[а-яё]*|условн[а-яё]*|неточн[а-яё]*)\s*[:=]\s*(?:false|no|нет|0)(?=$|[\s,;)}.!?])/i;
