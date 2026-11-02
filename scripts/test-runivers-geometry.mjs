@@ -209,6 +209,27 @@ for (const properties of [
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),false,
     'negative or unrelated Runivers metadata cannot activate 100 km tolerance: '+JSON.stringify(properties));
 }
+// A catalog title, publisher, URL or unrelated string is not evidence that
+// the polygon is approximate. These used to grant a 100 km allowance merely
+// because the word "approximate"/"reconstruction" appeared anywhere in
+// source properties, even when the actual border had no such declaration.
+for (const properties of [
+  {name: 'Approximate Atlas of Russia'},
+  {title: 'Reconstructed historical series'},
+  {sourceUrl: 'https://example.org/approximate-boundaries'},
+  {source: {url: 'https://example.org/reconstruction'}},
+  {metadata: {publisher: 'Approximate Maps Press'}},
+  {tags: ['atlas', 'uncertain catalog entry']},
+  {notes: ['surveyed boundary'], publisher: 'Reconstruction Archive'},
+  {approximateLicense: true},
+  {approximationVendor: 1},
+]) {
+  assert.equal(isReferenceApproximate(referenceWithMetadata(properties)), false,
+    'unrelated source metadata cannot raise geographic tolerance: ' + JSON.stringify(properties));
+}
+assert.equal(isReferenceApproximate(referenceWithMetadata({
+  notes: ['surveyed map', 'approximate historical border'],
+})), true, 'an explicitly approximate border note in an array remains affirmative');
 for (const properties of [
   {approximate:true}, {reconstructed:1}, {approximate:'yes'},
   {description:'Approximate historical border'},
