@@ -282,7 +282,12 @@ const archipelagoSamples = samplePayload(islands, 1000, 45);
 assert.ok(archipelagoSamples.length >= 44 && archipelagoSamples.length <= 45);
 for (let i = 0; i < 11; i += 1) {
   const ringSamples = archipelagoSamples.filter(([lon]) => lon >= 60 + i && lon <= 60.01 + i);
-  assert.ok(ringSamples.length >= 4, `island ${i} must have two distinct interior edge samples even with a 45-point cap`);
+  assert.ok(ringSamples.length >= 4, `island ${i} must have four distinct samples even with a 45-point cap`);
+  const edgeInterior = ringSamples.filter(([lon, lat]) =>
+    ((lon > 60 + i && lon < 60.01 + i) && (lat === 10 || lat === 10.01))
+    || ((lat > 10 && lat < 10.01) && (lon === 60 + i || lon === 60.01 + i)));
+  assert.ok(edgeInterior.length >= 2,
+    `island ${i} must have samples inside two distinct edges, not merely vertices`);
 }
 // A zero/invalid step used to leave only per-ring anchors, potentially
 // meeting the 20-point acceptance minimum without sampling the intervening
