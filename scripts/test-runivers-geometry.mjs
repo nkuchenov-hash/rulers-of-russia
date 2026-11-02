@@ -228,6 +228,25 @@ assert.throws(() => samplePayload(disconnected, 1000, 3), /Cannot sample all 2 b
   'when the cap cannot cover both ends of every ring, the geographic audit must fail closed');
 assert.throws(() => samplePayload(disconnected, 1000, 1), /Cannot sample all 2 boundary rings/,
   'when even one sample per ring is impossible, the geographic audit must fail closed');
+// A zero/invalid step used to leave only per-ring anchors, potentially
+// meeting the 20-point acceptance minimum without sampling the intervening
+// political border. Reject it instead of certifying a sparse false match.
+for (const invalidStep of [0, -1, NaN, Infinity, -Infinity, '5000', null]) {
+  assert.throws(() => samplePayload(disconnected, invalidStep, 30),
+    /finite positive step/, 'invalid sampling distance must fail closed');
+}
+assert.throws(() => samplePayload(disconnected, 1e-20, 30),
+  /unsafe candidate count/, 'sub-microscopic step must not overflow the interpolation budget');
+for (const invalidCap of [0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+  assert.throws(() => samplePayload(disconnected, 1000, invalidCap),
+    /positive safe sample cap/, 'invalid sample budget must fail closed');
+}
+for (const invalidAnchors of [0, 3, -1, NaN, '2']) {
+  assert.throws(() => samplePayload(disconnected, 1000, 30, true, invalidAnchors),
+    /1 or 2 anchors/, 'invalid ring anchor policy must fail closed');
+}
+assert.ok(samplePayload(disconnected, 1000, 30, true, 1).length >= 2,
+  'the documented single-anchor physical-coast mode must remain supported');
 console.log('Runivers component sampling tests passed: disconnected borders survive capped sampling.');
 
 // Geographic comparison must fail closed on projected coordinates or invalid
