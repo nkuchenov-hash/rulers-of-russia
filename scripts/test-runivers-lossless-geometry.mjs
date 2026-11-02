@@ -65,13 +65,15 @@ assert.throws(() => requireUsableReferenceGeometry(failedHole.payload, 'test'),
   /malformed polygon rings/);
 
 
-
 // Hole-topology failures must remain fatal but reveal the specific scalar
 // cause. These synthetic rings contain no licensed source geometry.
 const shell = [[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]];
 const hole = (a, b, c, d) => [[a, b], [c, b], [c, d], [a, d], [a, b]];
+const concaveShell = [[0, 0], [10, 0], [10, 10], [7, 10], [7, 3],
+  [3, 3], [3, 10], [0, 10], [0, 0]];
 const holeCases = [
   [[shell, hole(20, 20, 21, 21)], 'hole-outside-shell'],
+  [[concaveShell, hole(1, 5, 9, 6)], 'hole-crosses-shell'],
   [[shell, hole(2, 2, 7, 7), hole(3, 3, 4, 4)], 'holes-nested'],
   [[shell, hole(2, 2, 6, 6), hole(5, 5, 8, 8)], 'holes-cross-or-touch'],
 ];
