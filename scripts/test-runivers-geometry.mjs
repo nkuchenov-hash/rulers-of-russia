@@ -281,22 +281,41 @@ assert.deepEqual(hotspotOrder.worstReferenceSamples.map(sample => sample.lonLat)
   'hotspot ranking must use unrounded distances even when displayed metres tie');
 assert.deepEqual(hotspotOrder.worstReferenceSamples.map(sample => sample.distanceMeters),
   [1000, 1000], 'diagnostic distance display stays rounded to whole metres');
-const nearFailure = comparePoliticalGeometry(preciseReference,
-  {points: [nearThresholdPoint(15000.25)], allCount: 1}, preciseClass);
+// Use 20 distinct bilateral samples, not a fabricated sample-count field,
+// to isolate the exact-distance threshold from the independent sufficiency
+// requirement. Small latitude offsets keep each corresponding pair nearest.
+const preciseReference20 = {points: Array.from({length: 20}, (_, i) => [0, i * 0.00001]), allCount: 20};
+const shiftedBoundary = metres => ({points: Array.from({length: 20}, (_, i) =>
+  [metres / 6371008.8 * 180 / Math.PI, i * 0.00001]), allCount: 20});
+const nearFailure = comparePoliticalGeometry(preciseReference20,
+  shiftedBoundary(15000.25), preciseClass);
 assert.equal(nearFailure.symmetricP95Meters, 15000);
 assert.ok(nearFailure.exactSymmetricP95Meters > 15000);
 assert.equal(passesGeographicTolerance(nearFailure, 15000, 60000), false,
   'a rounded-to-tolerance failure must not become an independent geographic pass');
-const nearSuccess = comparePoliticalGeometry(preciseReference,
-  {points: [nearThresholdPoint(14999.75)], allCount: 1}, preciseClass);
+const nearSuccess = comparePoliticalGeometry(preciseReference20,
+  shiftedBoundary(14999.75), preciseClass);
 assert.equal(nearSuccess.symmetricP95Meters, 15000);
 assert.equal(passesGeographicTolerance(nearSuccess, 15000, 60000), true,
-  'distances actually within the unchanged limit must remain eligible');
+  '20 samples on both sides and exact distances within the limit remain eligible');
+const singleSample = comparePoliticalGeometry(preciseReference,
+  {points: [nearThresholdPoint(14999.75)], allCount: 1}, preciseClass);
+assert.equal(passesGeographicTolerance(singleSample, 15000, 60000), false,
+  'the final pass gate must not accept a one-point match even if called directly');
+for (const insufficient of [
+  {...nearSuccess, referenceSamples: 19},
+  {...nearSuccess, currentSamples: 19},
+  {...nearSuccess, referenceSamples: 19.5},
+  {...nearSuccess, currentSamples: null},
+]) {
+  assert.equal(passesGeographicTolerance(insufficient, 15000, 60000), false,
+    'both bilateral sample counts must be safe integers of at least 20');
+}
 assert.equal(passesGeographicTolerance({
-  usable: true, exactSymmetricP95Meters: 14999.9, exactSymmetricMaxMeters: 60000.25,
+  ...nearSuccess, exactSymmetricMaxMeters: 60000.25,
 }, 15000, 60000), false, 'unrounded maximum-distance threshold is also strict');
 assert.equal(passesGeographicTolerance({
-  usable: true, symmetricP95Meters: 0, symmetricMaxMeters: 0,
+  ...nearSuccess, exactSymmetricP95Meters: undefined,
 }, 15000, 60000), false, 'missing exact measurements must fail closed');
 assert.equal(publicComparisonMetric(nearFailure).exactSymmetricP95Meters,
   nearFailure.exactSymmetricP95Meters,
