@@ -179,6 +179,17 @@ for (const properties of [
   {description:'reconstruction=0'},
   {notes:'условные: нет'},
   {metadata:{description:'uncertain = false'}},
+  // These source notes deny or leave uncertainty unresolved. Keyword-only
+  // matching used to treat them as affirmative and allow 100 km instead of
+  // the historical period's stricter boundary tolerance.
+  {description:'not approximated from the survey'},
+  {notes:'without approximation; surveyed border'},
+  {description:'never approximate'},
+  {notes:'без приблизительных оценок'},
+  {description:'approximate: unknown'},
+  {description:'uncertain=pending'},
+  {notes:'reconstruction: n/a'},
+  {description:'approximate: ?'},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)),false,
     'negative or unrelated Runivers metadata cannot activate 100 km tolerance: '+JSON.stringify(properties));
@@ -206,6 +217,10 @@ for (const properties of [
   {reconstructed: 1, metadata: {uncertain: 0}},
   {approximate: true, description: 'approximate=false'},
   {reconstructed: true, notes: 'reconstruction: no'},
+  {approximate: true, notes: 'without approximation'},
+  {reconstructed: true, description: 'not approximated'},
+  {approximate: true, notes: 'approximate: unknown'},
+  {uncertain: true, description: 'без приблизительных оценок'},
 ]) {
   assert.equal(isReferenceApproximate(referenceWithMetadata(properties)), false,
     'conflicting approximation evidence must retain strict tolerance: ' + JSON.stringify(properties));
