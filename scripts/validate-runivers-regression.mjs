@@ -616,7 +616,16 @@ function comparePoliticalGeometry(reference, current, referenceClass) {
 // The gate consumes only unrounded, finite, bilateral distances. Public
 // report fields remain rounded for display and are never used for acceptance.
 function passesGeographicTolerance(metric, tolerance, maxTolerance) {
+  // Enforce bilateral sample sufficiency at the final acceptance gate as
+  // well as in requireComparablePoliticalGeometry. A direct caller or future
+  // report consumer must not certify a one-point match merely because its
+  // exact distances are within tolerance. Counts come from the sampled
+  // boundary arrays, not from a rounded diagnostic field.
   return metric?.usable === true
+    && Number.isSafeInteger(metric.referenceSamples)
+    && Number.isSafeInteger(metric.currentSamples)
+    && metric.referenceSamples >= MIN_BILATERAL_BORDER_SAMPLES
+    && metric.currentSamples >= MIN_BILATERAL_BORDER_SAMPLES
     && Number.isFinite(metric.exactSymmetricP95Meters)
     && Number.isFinite(metric.exactSymmetricMaxMeters)
     && metric.exactSymmetricP95Meters <= tolerance
