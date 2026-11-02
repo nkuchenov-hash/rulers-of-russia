@@ -934,6 +934,8 @@ const diagnostic = summarizePolygonFailures(invalidDiagnostic);
 assert.deepEqual(diagnostic, {
   polygons:6,validPolygons:1,emptyPolygons:1,malformedRings:0,
   invalidWgs84Rings:1,unclosedRings:1,invalidRingTopology:1,invalidHoleTopology:1,
+  invalidHoleReasons: {'hole-outside-shell':1, 'hole-crosses-shell':0,
+    'holes-cross-or-touch':0, 'holes-nested':0},
   invalidRingReasons: {'ambiguous-half-world-edge':0, 'antipodal-pole-edge':0,
     'unwrapped-open-ring':0, 'zero-area':1, 'zero-length-edge':0,
     'repeated-pole':0, 'backtracking-edge':0, 'self-intersection':0},
