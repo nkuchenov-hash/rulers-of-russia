@@ -390,6 +390,14 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
   if (!Number.isSafeInteger(maxSamples) || maxSamples < 1 || ![1, 2].includes(anchorsPerRing)) {
     throw new Error('Boundary sampling requires a positive safe sample cap and 1 or 2 anchors per ring');
   }
+  // WGS84 has coordinate aliases: +180 and -180 are the same meridian,
+  // and every longitude at a pole is the same physical location. Counting
+  // these as distinct samples can falsely satisfy the bilateral minimum or
+  // a per-ring four-point guarantee. Keep original coordinates for distance
+  // calculations; canonicalize only their identity for deduplication.
+  const sampleIdentity = ([lon, lat]) => lat === 90 || lat === -90
+    ? `pole:${lat}`
+    : `${lon === 180 ? -180 : lon},${lat}`;
   const lines = samplingLines(payload, outerOnly);
   // Never silently skip a malformed segment: it may be the only border of
   // an enclave or island, and omitting it could produce a false comparison.
@@ -455,7 +463,7 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
     }
     const mandatory = [first, opposite, interior, secondInterior];
     if (!(secondLongestSegment > 0) || mandatory.some(point => !point)
-      || new Set(mandatory.map(point => point.join(','))).size !== mandatory.length) {
+      || new Set(mandatory.map(sampleIdentity)).size !== mandatory.length) {
       throw new Error('Boundary ring has no four distinct political-border samples');
     }
     return mandatory;
@@ -469,12 +477,18 @@ function samplePayload(payload, stepMeters = BORDER_SAMPLE_STEP_M, maxSamples = 
   if (anchorsPerRing === 2 && anchors.length === maxSamples) {
     throw new Error('Political border sampling cap leaves no budget beyond per-ring interior samples');
   }
-  const points = anchors.map(point => [point[0], point[1]]);
-  const seen = new Set(points.map(point => point.join(',')));
+  const points = [];
+  const seen = new Set();
+  for (const point of anchors) {
+    const key = sampleIdentity(point);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    points.push([point[0], point[1]]);
+  }
   const budget = maxSamples - points.length;
   const stride = budget > 0 ? Math.max(1, Math.ceil(candidateCount / budget)) : Infinity;
   const append = point => {
-    const key = point.join(',');
+    const key = sampleIdentity(point);
     if (!seen.has(key) && points.length < maxSamples) {
       points.push(point);
       seen.add(key);
