@@ -114,10 +114,30 @@ function hasZeroLengthEdge(ring) {
   }
   return false;
 }
+// All longitudes at either geographic pole represent the SAME physical
+// position. A ring that visits one pole twice (including via distinct
+// longitudes) retraces a zero-length edge or self-touches on the sphere,
+// although planar lon/lat tests may report a nonzero area and no crossing.
+// Ignore the mandatory closing vertex: one visit to a pole is valid.
+function hasRepeatedPoleVertex(ring) {
+  let north = false, south = false;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const lat = ring[i][1];
+    if (lat === 90) {
+      if (north) return true;
+      north = true;
+    } else if (lat === -90) {
+      if (south) return true;
+      south = true;
+    }
+  }
+  return false;
+}
 function validUnwrappedRing(ring) {
   // A full wrap can masquerade as a closed polygon in [-180,180].
   return equal(ring[0], ring.at(-1)) && hasArea(ring)
-    && !hasZeroLengthEdge(ring) && !hasBacktrackingEdge(ring)
+    && !hasZeroLengthEdge(ring) && !hasRepeatedPoleVertex(ring)
+    && !hasBacktrackingEdge(ring)
     && !crossingEdges(ring, ring, true);
 }
 export function hasValidRingTopology(rawRing) {

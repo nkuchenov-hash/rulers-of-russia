@@ -927,6 +927,22 @@ assert.equal(hasValidPolygonTopology([squareShell, duplicateHole]), false,
   'duplicate consecutive hole vertex must invalidate the entire polygon');
 assert.equal(hasValidRingTopology(datelineAliasDuplicate), false,
   '+180 and -180 describe the same point, not an extra boundary edge');
+// Longitude is undefined at +/-90 latitude: different longitude values at
+// the same pole are a single physical point. A collapsed polar edge or a
+// non-adjacent return to the pole must not certify a sovereign polygon.
+const collapsedNorthPoleEdge = [[0,89],[30,89],[30,90],[0,90],[0,89]];
+const repeatedNorthPoleVisit = [[0,90],[30,89],[60,90],[60,88],[0,88],[0,90]];
+const collapsedSouthPoleEdge = [[0,-89],[30,-89],[30,-90],[0,-90],[0,-89]];
+for (const ring of [collapsedNorthPoleEdge, repeatedNorthPoleVisit, collapsedSouthPoleEdge]) {
+  assert.equal(hasValidRingTopology(ring), false,
+    'multiple longitude aliases at the same pole must invalidate a spherical ring');
+  assert.equal(hasValidPolygonTopology([ring]), false,
+    'a degenerate polar boundary cannot certify an independent polygon');
+}
+const validSinglePoleTriangle = [[0,90],[30,89],[0,89],[0,90]];
+assert.equal(hasValidRingTopology(validSinglePoleTriangle), true,
+  'a ring visiting the pole once remains valid');
+console.log('Runivers polar topology regression passed: collapsed polar edges and repeated pole visits rejected.');
 const antimeridianShell = [[179,10],[-179,10],[-179,12],[179,12],[179,10]];
 const antimeridianHole = [[179.4,10.4],[-179.4,10.4],[-179.4,11.4],[179.4,11.4],[179.4,10.4]];
 assert.equal(hasValidPolygonTopology([antimeridianShell, antimeridianHole]), true,
