@@ -189,6 +189,7 @@ try {
   // A transition may fetch several GeoJSON files concurrently. Keep every
   // release callback: overwriting one can strand an earlier request forever.
   const release1992Geometry = [];
+  const inFlight1992Routes = new Set();
   let holding1992Geometry = true;
   let resolve1992Intercept = null;
   const saw1992Intercept = new Promise(resolve => { resolve1992Intercept = resolve; });
@@ -200,13 +201,18 @@ try {
   };
   page.on('requestfailed', onFailed1992Request);
   await page.route(pending1992Pattern, async route => {
-    if (holding1992Geometry && route.request().url().includes('/generated/territory/')) {
-      await new Promise(resolve => {
-        release1992Geometry.push(resolve);
-        resolve1992Intercept?.();
-      });
-    }
-    await route.continue();
+    const task = (async () => {
+      if (holding1992Geometry && route.request().url().includes('/generated/territory/')) {
+        await new Promise(resolve => {
+          release1992Geometry.push(resolve);
+          resolve1992Intercept?.();
+        });
+      }
+      await route.continue();
+    })();
+    inFlight1992Routes.add(task);
+    try { await task; }
+    finally { inFlight1992Routes.delete(task); }
   });
   try {
     await page.evaluate(() => {
@@ -230,6 +236,10 @@ try {
   } finally {
     holding1992Geometry = false;
     for (const release of release1992Geometry) release();
+    // Playwright may automatically handle a suspended route on unroute().
+    // Finish every route.continue() first; otherwise the resumed callback
+    // throws "Route is already handled!" and aborts the browser smoke.
+    await Promise.allSettled([...inFlight1992Routes]);
     await page.unroute(pending1992Pattern);
   }
   try {
