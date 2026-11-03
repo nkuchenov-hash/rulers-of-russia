@@ -122,7 +122,7 @@ jobs:
           test -f out/territory/atlas-lab/index.html
           test -f out/data/history-core/generated/territory/index.json
           test -f out/data/history-core/generated/month-index.json
-          node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('out/data/history-core/generated/month-index.json','utf8'));if(x.monthCount!==13980)process.exit(1);"
+          node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('out/data/history-core/generated/month-index.json','utf8'));if(x.complete!==true||x.monthCount!==13980)process.exit(1);"
           cat out/deploy.json
 
       - name: Upload Pages artifact
