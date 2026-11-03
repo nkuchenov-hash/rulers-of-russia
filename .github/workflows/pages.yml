@@ -123,6 +123,7 @@ jobs:
           test -f out/data/history-core/generated/territory/index.json
           test -f out/data/history-core/generated/month-index.json
           node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('out/data/history-core/generated/month-index.json','utf8'));if(x.complete!==true||x.monthCount!==13980)process.exit(1);"
+          node -e "JSON.parse(require('fs').readFileSync('out/data/history-core/generated/territory/index.json', 'utf8'));"
           cat out/deploy.json
 
       - name: Upload Pages artifact
@@ -161,7 +162,8 @@ jobs:
                curl -fsSL "$BASE/territory/atlas-lab/" -o /tmp/atlas-lab.html && \
                curl -fsSL "$BASE/data/history-core/generated/territory/index.json" -o /tmp/history-territory.json && \
                curl -fsSL "$BASE/data/history-core/generated/month-index.json" -o /tmp/month-index.json && \
-               curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json; then
+               curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json && \
+               node -e "JSON.parse(require('fs').readFileSync('/tmp/history-territory.json', 'utf8'))" >/dev/null; then
               LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
               MONTH_COUNT="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/month-index.json','utf8'));process.stdout.write(x.complete===true && x.monthCount===13980 ? '13980' : 'INVALID')")"
               if [ "$LIVE_SHA" = "$EXPECTED_SHA" ] && [ "$MONTH_COUNT" = "13980" ]; then
