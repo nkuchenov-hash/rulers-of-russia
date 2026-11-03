@@ -12,10 +12,20 @@ const certifiedById = new Map((certifications.spatialChangeCertifications ?? [])
 
 const blockers = [];
 const certified = [];
+const seenChangeIds = new Map();
 for (const changeFile of model.changeFiles ?? []) {
   const filePath = path.join(dataRoot, changeFile);
   const payload = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   for (const change of payload.territoryChanges ?? []) {
+    // A repeated ID can silently apply one certification to unrelated geometry.
+    if (typeof change.id !== 'string' || !change.id.trim()) {
+      throw new Error(`Missing territory change ID in ${changeFile}`);
+    }
+    const previousFile = seenChangeIds.get(change.id);
+    if (previousFile) {
+      throw new Error(`Duplicate territory change ID ${change.id}: ${previousFile} and ${changeFile}`);
+    }
+    seenChangeIds.set(change.id, changeFile);
     const isGeometryMutation = change.geometryAction !== 'metadata-only';
     const geometryVerified = change.reviewStatus === 'geometry-verified';
     if (!isGeometryMutation || geometryVerified) continue;
