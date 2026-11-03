@@ -38,3 +38,9 @@ The research-only summary now records `reportedMaximumMatches` and `reportedMaxi
 ## Dated identity separation (2026-10-31)
 
 Source-conflict grouping now preserves the original feature's `lwdate` and `status` when available, in addition to its `cat` and `name`. Two source records named `Российское царство` with the same category but different effective dates or statuses must not be treated as one historical transition. Missing dates/statuses remain explicitly unknown rather than being invented. The summary contains only bounded scalar metadata, never Runivers polygon coordinates. This is a **triage correction**, not a new independent geographic pass or an assertion that the source's date represents a legally effective annexation.
+
+## Transport-local invalid polygon locations (2026-11-03)
+
+[Run 41546068774, 1520–1599 job](https://github.com/nkuchenov-hash/rulers-of-russia/actions/runs/41546068774) confirms that resource **5383** returned an MVT with **11 polygons, 10 valid and one invalid hole crossing the shell**. Resource **5385** showed the same aggregate failure; other layers also returned invalid holes or rings. These are source-export topology failures, **not** newly passing border comparisons. In the same run, the 1946–1991 shard again recorded a complete preflight outage across seven resources.
+
+The research-only failure summary now includes at most eight `firstInvalidPolygons` entries: zero-based feature/polygon indexes, nested GeometryCollection indexes, first failing ring index (if any), and a fixed reason code. Indexes are local to each transport response and **must not be used as persistent historical feature identities**. No third-party coordinates, polygons, feature properties or names are recorded. Every malformed source polygon remains a hard rejection; this diagnostic does not repair or license geometry.

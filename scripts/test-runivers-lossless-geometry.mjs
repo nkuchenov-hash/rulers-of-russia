@@ -89,6 +89,44 @@ for (const [polygon, expected] of holeCases) {
   assert.equal(summary.invalidHoleReasons[expected], 1);
   assert.equal(summary.validPolygons, 0);
 }
+// Locate malformed source polygons without serializing any third-party geometry.
+// Indexes are zero-based within the individual transport, not stable source IDs.
+const indexedFailures = summarizePolygonFailures({type: 'FeatureCollection', features: [
+  feature(square),
+  {type: 'Feature', geometry: {type: 'GeometryCollection', geometries: [
+    {type: 'Point', coordinates: [1, 1]},
+    {type: 'MultiPolygon', coordinates: [
+      [shell, hole(2, 2, 4, 4)],
+      [shell, hole(9, 4, 12, 6)],
+    ]},
+  ]}},
+]});
+assert.equal(indexedFailures.polygons, 3);
+assert.equal(indexedFailures.invalidHoleTopology, 1);
+assert.deepEqual(indexedFailures.firstInvalidPolygons, [{
+  featureIndex: 1, polygonIndex: 1, collectionPath: [1],
+  ringIndex: null, reason: 'hole-crosses-shell',
+}]);
+const indexedRingFailure = summarizePolygonFailures({type: 'Polygon', coordinates: [withDuplicate]});
+assert.deepEqual(indexedRingFailure.firstInvalidPolygons, [{
+  featureIndex: 0, polygonIndex: 0, collectionPath: [],
+  ringIndex: 0, reason: 'zero-length-edge',
+}]);
+const manyInvalid = summarizePolygonFailures({type: 'FeatureCollection', features:
+  Array.from({length: 12}, () => ({type: 'Feature', geometry: {
+    type: 'Polygon', coordinates: [shell, hole(9, 4, 12, 6)],
+  }})),
+});
+assert.equal(manyInvalid.invalidHoleTopology, 12);
+assert.equal(manyInvalid.firstInvalidPolygons.length, 8,
+  'public diagnostics must cap indexed locations, even for large source exports');
+assert.equal(manyInvalid.firstInvalidPolygons[7].featureIndex, 7);
+for (const location of manyInvalid.firstInvalidPolygons) {
+  assert.deepEqual(Object.keys(location),
+    ['featureIndex', 'polygonIndex', 'collectionPath', 'ringIndex', 'reason'],
+    'no coordinates, names, source properties or geometry may leak into diagnostics');
+}
+
 assert.equal(polygonHoleTopologyFailureReason([shell, hole(2, 2, 4, 4)]), null);
 assert.equal(hasValidPolygonTopology([shell, hole(2, 2, 4, 4)]), true);
 
