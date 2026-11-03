@@ -1061,9 +1061,16 @@ assert.deepEqual(diagnostic, {
   invalidRingReasons: {'ambiguous-half-world-edge':0, 'antipodal-pole-edge':0,
     'unwrapped-open-ring':0, 'zero-area':1, 'zero-length-edge':0,
     'repeated-pole':0, 'backtracking-edge':0, 'self-intersection':0},
-}, 'source failure triage must count independent invalid polygon categories');
+  firstInvalidPolygons: [
+    {featureIndex:1,polygonIndex:0,collectionPath:[],ringIndex:null,reason:'empty-polygon'},
+    {featureIndex:2,polygonIndex:0,collectionPath:[],ringIndex:0,reason:'invalid-wgs84-ring'},
+    {featureIndex:3,polygonIndex:0,collectionPath:[],ringIndex:0,reason:'unclosed-ring'},
+    {featureIndex:4,polygonIndex:0,collectionPath:[],ringIndex:0,reason:'zero-area'},
+    {featureIndex:5,polygonIndex:0,collectionPath:[],ringIndex:null,reason:'hole-outside-shell'},
+  ],
+}, 'source failure triage must count invalid polygons and bounded transport-local indexes');
 assert.ok(!JSON.stringify(diagnostic).includes('Never export this licensed label'),
-  'diagnostic output must contain counts only, never source metadata');
+  'diagnostic output must contain scalar counts/indexes only, never source metadata');
 assert.ok(!JSON.stringify(diagnostic).includes('30,50'),
   'diagnostic output must never serialize source coordinates');
 assert.throws(() => requireUsableReferenceGeometry(diagnosticPolygonPayload([]),5391),
