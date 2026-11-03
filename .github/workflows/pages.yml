@@ -163,7 +163,7 @@ jobs:
                curl -fsSL "$BASE/data/history-core/generated/month-index.json" -o /tmp/month-index.json && \
                curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json; then
               LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
-              MONTH_COUNT="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/month-index.json','utf8'));process.stdout.write(String(x.monthCount||0))")"
+              MONTH_COUNT="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/month-index.json','utf8'));process.stdout.write(x.complete===true && x.monthCount===13980 ? '13980' : 'INVALID')")"
               if [ "$LIVE_SHA" = "$EXPECTED_SHA" ] && [ "$MONTH_COUNT" = "13980" ]; then
                 echo "Live territory, 13980-month History Core and Atlas Lab confirmed for $LIVE_SHA"
                 exit 0
