@@ -67,7 +67,9 @@ try {
   rejects('blank evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: ['  ']}], /Missing spatial reconstruction evidenceDocumentIds/);
 
   // A valid relative filename may still escape the data root via a symlink.
-  // Preserve the synthetic change fixture after the negative test.
+  // Restore valid model and certification fixtures so containment is the first failure.
+  write('territory-model.json', model);
+  write('completion-certifications.json', {spatialChangeCertifications: []});
   write('changes.json', {territoryChanges: [baseChange]});
   const outsideFile = path.join(tmp, 'outside-changes.json');
   fs.writeFileSync(outsideFile, JSON.stringify({territoryChanges: [baseChange]}));
