@@ -8,7 +8,17 @@ const certificationFile = path.join(dataRoot, 'completion-certifications.json');
 const certifications = fs.existsSync(certificationFile)
   ? JSON.parse(fs.readFileSync(certificationFile, 'utf8'))
   : {spatialChangeCertifications: []};
-const certifiedById = new Map((certifications.spatialChangeCertifications ?? []).map(item => [item.changeId, item]));
+const certifiedById = new Map();
+for (const certification of certifications.spatialChangeCertifications ?? []) {
+  const id = certification.changeId;
+  if (typeof id !== 'string' || !id.trim()) {
+    throw new Error('Missing spatial reconstruction certification changeId');
+  }
+  if (certifiedById.has(id)) {
+    throw new Error(`Duplicate spatial reconstruction certification changeId: ${id}`);
+  }
+  certifiedById.set(id, certification);
+}
 
 const blockers = [];
 const certified = [];
