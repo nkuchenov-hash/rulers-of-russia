@@ -71,6 +71,15 @@ for (const changeFile of model.changeFiles ?? []) {
   }
 }
 
+// A stale or misspelled certificate must not silently disappear from the audit.
+// Every certification must refer to a present, unresolved geometry mutation.
+const accountedCertifiedIds = new Set(certified.map(row => row.id));
+for (const id of certifiedById.keys()) {
+  if (!accountedCertifiedIds.has(id)) {
+    throw new Error(`Spatial reconstruction certificate does not match an unresolved geometry change: ${id}`);
+  }
+}
+
 blockers.sort((a, b) => String(a.effectiveDate ?? '').localeCompare(String(b.effectiveDate ?? '')) || String(a.id).localeCompare(String(b.id)));
 certified.sort((a, b) => String(a.effectiveDate ?? '').localeCompare(String(b.effectiveDate ?? '')) || String(a.id).localeCompare(String(b.id)));
 const byOperation = Object.fromEntries([...new Set(blockers.map(x => x.operation ?? 'missing'))].sort().map(op => [op, blockers.filter(x => (x.operation ?? 'missing') === op).length]));
