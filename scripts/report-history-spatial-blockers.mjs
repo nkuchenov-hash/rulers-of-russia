@@ -58,7 +58,13 @@ const certified = [];
 const seenChangeIds = new Map();
 for (const changeFile of model.changeFiles ?? []) {
   const filePath = path.join(dataRoot, changeFile);
-  const payload = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  // Lexical path checks do not catch symlinks pointing outside the data root.
+  const resolvedRoot = fs.realpathSync(dataRoot);
+  const resolvedFile = fs.realpathSync(filePath);
+  if (!resolvedFile.startsWith(resolvedRoot + path.sep)) {
+    throw new Error(`Territory changeFile resolves outside history-core data root: ${changeFile}`);
+  }
+  const payload = JSON.parse(fs.readFileSync(resolvedFile, 'utf8'));
   if (!Array.isArray(payload.territoryChanges)) {
     throw new Error(`Invalid territoryChanges array in ${changeFile}`);
   }
