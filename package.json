@@ -8,7 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "prepare:history-model": "node scripts/apply-history-model-extensions.mjs",
-    "validate:history": "npm run prepare:history-model && node scripts/validate-history-core.mjs && node scripts/validate-history-completion-certifications.mjs",
+    "validate:history": "npm run prepare:history-model && node scripts/validate-history-core.mjs && node scripts/validate-history-completion-certifications.mjs && npm run test:history-spatial-blockers",
     "validate:history-geometry": "npm run prepare:history-model && node scripts/check-history-geometry-recipes.mjs && node scripts/check-history-raster-geometry-recipes.mjs && node scripts/check-history-archive-geometry-recipes.mjs && node scripts/test-raster-georeference.mjs",
     "report:history-spatial-blockers": "npm run prepare:history-model && node scripts/report-history-spatial-blockers.mjs",
     "materialize:history-geometry": "npm run prepare:history-model && node scripts/build-history-geometry.mjs && node scripts/build-history-raster-geometry.mjs && node scripts/build-history-archive-geometry.mjs",
