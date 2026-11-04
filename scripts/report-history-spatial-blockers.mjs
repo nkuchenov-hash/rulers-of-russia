@@ -14,6 +14,20 @@ if (!Array.isArray(model.changeFiles) || model.changeFiles.length === 0 ||
     model.changeFiles.some(file => typeof file !== 'string' || !file.trim())) {
   throw new Error('Invalid territory model changeFiles: expected non-empty file paths');
 }
+// Only unique JSON files inside the history-core data root may supply changes.
+// Duplicate paths can duplicate records; parent traversal can read unrelated files.
+const seenChangeFiles = new Set();
+for (const changeFile of model.changeFiles) {
+  if (path.posix.isAbsolute(changeFile) || path.win32.isAbsolute(changeFile) ||
+      changeFile.includes('\\') || changeFile.split('/').some(part => part === '..' || part === '.' || !part) ||
+      path.posix.extname(changeFile) !== '.json') {
+    throw new Error(`Invalid territory model changeFile path: ${changeFile}`);
+  }
+  if (seenChangeFiles.has(changeFile)) {
+    throw new Error(`Duplicate territory model changeFile path: ${changeFile}`);
+  }
+  seenChangeFiles.add(changeFile);
+}
 if (!Array.isArray(certifications.spatialChangeCertifications)) {
   throw new Error('Invalid spatialChangeCertifications: expected an array');
 }
