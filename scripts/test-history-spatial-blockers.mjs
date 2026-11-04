@@ -42,6 +42,24 @@ try {
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 1);
 
+  // Non-spatial and already verified changes must not be counted as blockers.
+  result = run(model, [
+    {...baseChange, geometryAction: 'metadata-only'},
+    {...baseChange, id: 'change-2', reviewStatus: 'geometry-verified'},
+  ], []);
+  assert.equal(result.status, 0, result.stderr);
+  report = JSON.parse(fs.readFileSync(path.join(data, 'generated', 'spatial-blockers.json')));
+  assert.equal(report.totalSpatialBlockers, 0);
+  assert.equal(report.certifiedReconstructionChanges, 0);
+
+  rejects('missing certificate array', model, [baseChange], undefined, /Invalid spatialChangeCertifications/);
+  rejects('empty change ID', model, [{...baseChange, id: ''}], [], /Missing territory change ID/);
+  rejects('empty certificate ID', model, [baseChange], [{...certificate, changeId: ''}], /Missing spatial reconstruction certification changeId/);
+  rejects('certificate on verified change', model, [{...baseChange, reviewStatus: 'geometry-verified'}], [certificate], /does not match an unresolved geometry change/);
+  rejects('certificate on metadata-only change', model, [{...baseChange, geometryAction: 'metadata-only'}], [certificate], /does not match an unresolved geometry change/);
+  rejects('non-finite uncertainty', model, [baseChange], [{...certificate, uncertaintyMeters: 'Infinity'}], /Invalid spatial reconstruction uncertaintyMeters/);
+  rejects('blank evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: ['  ']}], /Missing spatial reconstruction evidenceDocumentIds/);
+
   rejects('missing change files', {}, [baseChange], [], /Invalid territory model changeFiles/);
   rejects('missing territory changes', model, undefined, [], /Invalid territoryChanges array/);
   rejects('duplicate change IDs', model, [baseChange, {...baseChange}], [], /Duplicate territory change ID/);
