@@ -41,6 +41,7 @@ try {
   report = JSON.parse(fs.readFileSync(path.join(data, 'generated', 'spatial-blockers.json')));
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 1);
+  assert.match(report.definition, /does not independently verify documentary evidence, historical boundary accuracy/);
 
   // Non-spatial and already verified changes must not be counted as blockers.
   result = run(model, [
