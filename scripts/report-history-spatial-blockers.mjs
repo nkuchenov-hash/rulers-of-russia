@@ -8,6 +8,14 @@ const certificationFile = path.join(dataRoot, 'completion-certifications.json');
 const certifications = fs.existsSync(certificationFile)
   ? JSON.parse(fs.readFileSync(certificationFile, 'utf8'))
   : {spatialChangeCertifications: []};
+// Malformed or absent input arrays must not yield a misleading zero-blocker report.
+if (!Array.isArray(model.changeFiles) || model.changeFiles.length === 0 ||
+    model.changeFiles.some(file => typeof file !== 'string' || !file.trim())) {
+  throw new Error('Invalid territory model changeFiles: expected non-empty file paths');
+}
+if (!Array.isArray(certifications.spatialChangeCertifications)) {
+  throw new Error('Invalid spatialChangeCertifications: expected an array');
+}
 const certifiedById = new Map();
 for (const certification of certifications.spatialChangeCertifications ?? []) {
   const id = certification.changeId;
@@ -36,7 +44,10 @@ const seenChangeIds = new Map();
 for (const changeFile of model.changeFiles ?? []) {
   const filePath = path.join(dataRoot, changeFile);
   const payload = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  for (const change of payload.territoryChanges ?? []) {
+  if (!Array.isArray(payload.territoryChanges)) {
+    throw new Error(`Invalid territoryChanges array in ${changeFile}`);
+  }
+  for (const change of payload.territoryChanges) {
     // A repeated ID can silently apply one certification to unrelated geometry.
     if (typeof change.id !== 'string' || !change.id.trim()) {
       throw new Error(`Missing territory change ID in ${changeFile}`);
