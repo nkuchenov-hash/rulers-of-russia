@@ -5,9 +5,10 @@ const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
 const model = JSON.parse(fs.readFileSync(path.join(dataRoot, 'territory-model.json'), 'utf8'));
 const certificationFile = path.join(dataRoot, 'completion-certifications.json');
-const certifications = fs.existsSync(certificationFile)
-  ? JSON.parse(fs.readFileSync(certificationFile, 'utf8'))
-  : {spatialChangeCertifications: []};
+if (!fs.existsSync(certificationFile)) {
+  throw new Error('Missing completion-certifications.json: cannot audit spatial reconstruction certificates');
+}
+const certifications = JSON.parse(fs.readFileSync(certificationFile, 'utf8'));
 // Malformed or absent input arrays must not yield a misleading zero-blocker report.
 if (!Array.isArray(model.changeFiles) || model.changeFiles.length === 0 ||
     model.changeFiles.some(file => typeof file !== 'string' || !file.trim())) {
