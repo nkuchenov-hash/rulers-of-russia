@@ -66,6 +66,20 @@ try {
   rejects('non-finite uncertainty', model, [baseChange], [{...certificate, uncertaintyMeters: 'Infinity'}], /Invalid spatial reconstruction uncertaintyMeters/);
   rejects('blank evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: ['  ']}], /Missing spatial reconstruction evidenceDocumentIds/);
 
+  // A valid relative filename may still escape the data root via a symlink.
+  // Restore valid model and certification fixtures so containment is the first failure.
+  write('territory-model.json', model);
+  write('completion-certifications.json', {spatialChangeCertifications: []});
+  write('changes.json', {territoryChanges: [baseChange]});
+  const outsideFile = path.join(tmp, 'outside-changes.json');
+  fs.writeFileSync(outsideFile, JSON.stringify({territoryChanges: [baseChange]}));
+  fs.rmSync(path.join(data, 'changes.json'));
+  fs.symlinkSync(outsideFile, path.join(data, 'changes.json'));
+  const symlinkResult = spawnSync(process.execPath, [script], {cwd: tmp, encoding: 'utf8'});
+  assert.notEqual(symlinkResult.status, 0, 'escaping symlink unexpectedly passed');
+  assert.match(symlinkResult.stderr, /resolves outside history-core data root/);
+  fs.rmSync(path.join(data, 'changes.json'));
+
   rejects('duplicate change file path', {changeFiles: ['changes.json', 'changes.json']}, [baseChange], [], /Duplicate territory model changeFile path/);
   rejects('parent traversal path', {changeFiles: ['../changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('absolute change file path', {changeFiles: ['/tmp/changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
