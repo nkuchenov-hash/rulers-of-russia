@@ -52,6 +52,12 @@ try {
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 0);
 
+  // A missing manifest must not be interpreted as an empty certificate list.
+  fs.rmSync(path.join(data, 'completion-certifications.json'));
+  const missingManifest = spawnSync(process.execPath, [script], {cwd: tmp, encoding: 'utf8'});
+  assert.notEqual(missingManifest.status, 0, 'missing manifest unexpectedly passed');
+  assert.match(missingManifest.stderr, /Missing completion-certifications.json/);
+
   rejects('missing certificate array', model, [baseChange], undefined, /Invalid spatialChangeCertifications/);
   rejects('empty change ID', model, [{...baseChange, id: ''}], [], /Missing territory change ID/);
   rejects('empty certificate ID', model, [baseChange], [{...certificate, changeId: ''}], /Missing spatial reconstruction certification changeId/);
