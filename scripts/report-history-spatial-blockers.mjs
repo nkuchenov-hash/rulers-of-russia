@@ -17,6 +17,16 @@ for (const certification of certifications.spatialChangeCertifications ?? []) {
   if (certifiedById.has(id)) {
     throw new Error(`Duplicate spatial reconstruction certification changeId: ${id}`);
   }
+  // A certificate must never hide an unresolved geometry change without
+  // a finite uncertainty envelope and at least one documentary reference.
+  if (!Number.isFinite(certification.uncertaintyMeters) || certification.uncertaintyMeters <= 0) {
+    throw new Error(`Invalid spatial reconstruction uncertaintyMeters for ${id}`);
+  }
+  if (!Array.isArray(certification.evidenceDocumentIds) ||
+      certification.evidenceDocumentIds.length === 0 ||
+      certification.evidenceDocumentIds.some(doc => typeof doc !== 'string' || !doc.trim())) {
+    throw new Error(`Missing spatial reconstruction evidenceDocumentIds for ${id}`);
+  }
   certifiedById.set(id, certification);
 }
 
