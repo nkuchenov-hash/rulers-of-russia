@@ -66,6 +66,10 @@ try {
   rejects('non-finite uncertainty', model, [baseChange], [{...certificate, uncertaintyMeters: 'Infinity'}], /Invalid spatial reconstruction uncertaintyMeters/);
   rejects('blank evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: ['  ']}], /Missing spatial reconstruction evidenceDocumentIds/);
 
+  rejects('duplicate change file path', {changeFiles: ['changes.json', 'changes.json']}, [baseChange], [], /Duplicate territory model changeFile path/);
+  rejects('parent traversal path', {changeFiles: ['../changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
+  rejects('absolute change file path', {changeFiles: ['/tmp/changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
+  rejects('windows traversal path', {changeFiles: ['..\\\\changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('missing change files', {}, [baseChange], [], /Invalid territory model changeFiles/);
   rejects('missing territory changes', model, undefined, [], /Invalid territoryChanges array/);
   rejects('duplicate change IDs', model, [baseChange, {...baseChange}], [], /Duplicate territory change ID/);
