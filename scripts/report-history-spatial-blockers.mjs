@@ -120,7 +120,7 @@ const byTrack = Object.fromEntries([...new Set(blockers.map(x => x.track ?? 'mis
 const report = {
   schema_version: 2,
   generatedAt: new Date().toISOString(),
-  definition: 'Unresolved spatial blockers exclude geometry-verified changes, metadata-only changes, and changes covered by explicit document-corroborated reconstruction certifications with finite uncertainty.',
+  definition: 'Unresolved spatial blockers exclude geometry-verified changes, metadata-only changes, and changes with declared reconstruction certifications. Certificate evidenceDocumentIds and uncertaintyMeters are checked for presence and validity of shape only; this report does not independently verify documentary evidence, historical boundary accuracy, or the stated uncertainty.',
   totalSpatialBlockers: blockers.length,
   certifiedReconstructionChanges: certified.length,
   byOperation,
