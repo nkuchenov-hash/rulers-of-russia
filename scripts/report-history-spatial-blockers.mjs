@@ -61,6 +61,8 @@ const blockers = [];
 const certified = [];
 const seenChangeIds = new Map();
 let totalTerritoryChanges = 0;
+let metadataOnlyChanges = 0;
+let geometryVerifiedChanges = 0;
 for (const changeFile of model.changeFiles ?? []) {
   const filePath = path.join(dataRoot, changeFile);
   // Lexical path checks do not catch symlinks pointing outside the data root.
@@ -86,7 +88,14 @@ for (const changeFile of model.changeFiles ?? []) {
     seenChangeIds.set(change.id, changeFile);
     const isGeometryMutation = change.geometryAction !== 'metadata-only';
     const geometryVerified = change.reviewStatus === 'geometry-verified';
-    if (!isGeometryMutation || geometryVerified) continue;
+    if (!isGeometryMutation) {
+      metadataOnlyChanges++;
+      continue;
+    }
+    if (geometryVerified) {
+      geometryVerifiedChanges++;
+      continue;
+    }
     const cert = certifiedById.get(change.id);
     const row = {
       id: change.id,
@@ -132,6 +141,9 @@ const report = {
   schema_version: 2,
   generatedAt: new Date().toISOString(),
   definition: 'Unresolved spatial blockers exclude geometry-verified changes, metadata-only changes, and changes with declared reconstruction certifications. Certificate evidenceDocumentIds and uncertaintyMeters are checked for presence and validity of shape only; this report does not independently verify documentary evidence, historical boundary accuracy, or the stated uncertainty.',
+  totalTerritoryChanges,
+  metadataOnlyChanges,
+  geometryVerifiedChanges,
   totalSpatialBlockers: blockers.length,
   certifiedReconstructionChanges: certified.length,
   byOperation,
@@ -139,6 +151,10 @@ const report = {
   blockers,
   certified,
 };
+
+if (metadataOnlyChanges + geometryVerifiedChanges + blockers.length + certified.length !== totalTerritoryChanges) {
+  throw new Error('Spatial audit accounting mismatch: territory changes not fully classified');
+}
 
 const outDir = path.join(dataRoot, 'generated');
 fs.mkdirSync(outDir, {recursive: true});
