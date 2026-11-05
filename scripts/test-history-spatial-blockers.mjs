@@ -94,6 +94,8 @@ try {
   rejects('windows traversal path', {changeFiles: ['..\\\\changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('missing change files', {}, [baseChange], [], /Invalid territory model changeFiles/);
   rejects('missing territory changes', model, undefined, [], /Invalid territoryChanges array/);
+  rejects('all change files empty', model, [], [], /No territory changes found across model changeFiles/);
+  assert.equal(fs.existsSync(reportPath), false, 'empty input left a successful audit report');
   rejects('duplicate change IDs', model, [baseChange, {...baseChange}], [], /Duplicate territory change ID/);
   rejects('duplicate certificate IDs', model, [baseChange], [certificate, certificate], /Duplicate spatial reconstruction certification changeId/);
   rejects('orphan certificate', model, [baseChange], [{...certificate, changeId: 'missing'}], /does not match an unresolved geometry change/);
