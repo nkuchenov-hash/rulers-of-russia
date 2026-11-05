@@ -53,6 +53,13 @@ try {
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 0);
 
+  // A failed audit must invalidate the previous successful zero-blocker report.
+  // Otherwise downstream consumers may incorrectly accept stale results.
+  const reportPath = path.join(data, 'generated', 'spatial-blockers.json');
+  assert.equal(fs.existsSync(reportPath), true, 'successful report missing');
+  rejects('invalid model invalidates old report', {}, [baseChange], [], /Invalid territory model changeFiles/);
+  assert.equal(fs.existsSync(reportPath), false, 'stale successful report survived failed audit');
+
   // A missing manifest must not be interpreted as an empty certificate list.
   fs.rmSync(path.join(data, 'completion-certifications.json'));
   const missingManifest = spawnSync(process.execPath, [script], {cwd: tmp, encoding: 'utf8'});
