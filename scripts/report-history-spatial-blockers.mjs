@@ -3,6 +3,10 @@ import path from 'node:path';
 
 const root = process.cwd();
 const dataRoot = path.join(root, 'public', 'data', 'history-core');
+// Never leave a previous successful audit report available after a failed run.
+// Consumers must not mistake stale zero-blocker output for current validation.
+const reportPath = path.join(dataRoot, 'generated', 'spatial-blockers.json');
+fs.rmSync(reportPath, {force: true});
 const model = JSON.parse(fs.readFileSync(path.join(dataRoot, 'territory-model.json'), 'utf8'));
 const certificationFile = path.join(dataRoot, 'completion-certifications.json');
 if (!fs.existsSync(certificationFile)) {
@@ -131,7 +135,7 @@ const report = {
 
 const outDir = path.join(dataRoot, 'generated');
 fs.mkdirSync(outDir, {recursive: true});
-fs.writeFileSync(path.join(outDir, 'spatial-blockers.json'), JSON.stringify(report, null, 2) + '\n');
+fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
 
 console.log(`History spatial blockers: ${blockers.length}; certified reconstruction changes: ${certified.length}`);
 for (const blocker of blockers) console.log(`${blocker.effectiveDate ?? 'unknown'}\t${blocker.operation ?? 'missing'}\t${blocker.track ?? 'missing'}\t${blocker.id}\t${blocker.geometryMethod ?? 'missing'}`);
