@@ -190,7 +190,8 @@ jobs:
                  cmp -s out/territory/atlas-lab/index.html /tmp/atlas-lab.html && \
                  cmp -s out/data/history-core/generated/territory/index.json /tmp/history-territory.json && \
                  cmp -s out/data/history-core/generated/month-index.json /tmp/month-index.json && \
-                 cmp -s out/data/history-core/generated/spatial-blockers.json /tmp/spatial-blockers.json; then
+                 cmp -s out/data/history-core/generated/spatial-blockers.json /tmp/spatial-blockers.json && \
+                 cmp -s out/deploy.json /tmp/deploy.json; then
                 echo "Live territory, 13980-month History Core and Atlas Lab confirmed for $LIVE_SHA"
                 exit 0
               fi
