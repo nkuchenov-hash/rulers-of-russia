@@ -130,7 +130,12 @@ jobs:
           const report = JSON.parse(fs.readFileSync(file, 'utf8'));
           if (report.schema_version !== 2 || !Array.isArray(report.blockers) || !Array.isArray(report.certified) ||
               !Number.isSafeInteger(report.totalSpatialBlockers) || report.totalSpatialBlockers !== report.blockers.length ||
-              !Number.isSafeInteger(report.certifiedReconstructionChanges) || report.certifiedReconstructionChanges !== report.certified.length) {
+              !Number.isSafeInteger(report.certifiedReconstructionChanges) || report.certifiedReconstructionChanges !== report.certified.length ||
+              !Number.isSafeInteger(report.totalTerritoryChanges) || report.totalTerritoryChanges <= 0 ||
+              !Number.isSafeInteger(report.metadataOnlyChanges) || report.metadataOnlyChanges < 0 ||
+              !Number.isSafeInteger(report.geometryVerifiedChanges) || report.geometryVerifiedChanges < 0 ||
+              report.totalTerritoryChanges !== report.metadataOnlyChanges + report.geometryVerifiedChanges +
+                report.totalSpatialBlockers + report.certifiedReconstructionChanges) {
             throw new Error('Invalid or inconsistent History Core spatial blocker report');
           }
           console.log(`Spatial blockers: ${report.totalSpatialBlockers}; certified reconstructions: ${report.certifiedReconstructionChanges}`);
