@@ -34,6 +34,9 @@ try {
   assert.equal(result.status, 0, result.stderr);
   let report = JSON.parse(fs.readFileSync(path.join(data, 'generated', 'spatial-blockers.json')));
   assert.equal(report.totalSpatialBlockers, 1);
+  assert.equal(report.totalTerritoryChanges, 1);
+  assert.equal(report.metadataOnlyChanges, 0);
+  assert.equal(report.geometryVerifiedChanges, 0);
   assert.equal(report.certifiedReconstructionChanges, 0);
 
   result = run(model, [baseChange], [certificate]);
@@ -41,6 +44,7 @@ try {
   report = JSON.parse(fs.readFileSync(path.join(data, 'generated', 'spatial-blockers.json')));
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 1);
+  assert.equal(report.totalTerritoryChanges, 1);
   assert.match(report.definition, /does not independently verify documentary evidence, historical boundary accuracy/);
 
   // Non-spatial and already verified changes must not be counted as blockers.
@@ -52,6 +56,10 @@ try {
   report = JSON.parse(fs.readFileSync(path.join(data, 'generated', 'spatial-blockers.json')));
   assert.equal(report.totalSpatialBlockers, 0);
   assert.equal(report.certifiedReconstructionChanges, 0);
+  assert.equal(report.totalTerritoryChanges, 2);
+  assert.equal(report.metadataOnlyChanges, 1);
+  assert.equal(report.geometryVerifiedChanges, 1);
+  assert.equal(report.totalTerritoryChanges, report.metadataOnlyChanges + report.geometryVerifiedChanges + report.totalSpatialBlockers + report.certifiedReconstructionChanges);
 
   // A failed audit must invalidate the previous successful zero-blocker report.
   // Otherwise downstream consumers may incorrectly accept stale results.
