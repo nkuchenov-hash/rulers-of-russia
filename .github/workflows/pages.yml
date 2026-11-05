@@ -179,6 +179,7 @@ jobs:
                curl -fsSL "$BASE/territory/atlas-lab/" -o /tmp/atlas-lab.html && \
                curl -fsSL "$BASE/data/history-core/generated/territory/index.json" -o /tmp/history-territory.json && \
                curl -fsSL "$BASE/data/history-core/generated/month-index.json" -o /tmp/month-index.json && \
+               curl -fsSL "$BASE/data/history-core/generated/spatial-blockers.json" -o /tmp/spatial-blockers.json && \
                curl -fsSL "$BASE/deploy.json" -o /tmp/deploy.json && \
                node -e "JSON.parse(require('fs').readFileSync('/tmp/history-territory.json', 'utf8'))" >/dev/null; then
               LIVE_SHA="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/deploy.json','utf8'));process.stdout.write(x.sha||'')")"
@@ -188,7 +189,8 @@ jobs:
                  cmp -s out/territory/index.html /tmp/territory.html && \
                  cmp -s out/territory/atlas-lab/index.html /tmp/atlas-lab.html && \
                  cmp -s out/data/history-core/generated/territory/index.json /tmp/history-territory.json && \
-                 cmp -s out/data/history-core/generated/month-index.json /tmp/month-index.json; then
+                 cmp -s out/data/history-core/generated/month-index.json /tmp/month-index.json && \
+                 cmp -s out/data/history-core/generated/spatial-blockers.json /tmp/spatial-blockers.json; then
                 echo "Live territory, 13980-month History Core and Atlas Lab confirmed for $LIVE_SHA"
                 exit 0
               fi
