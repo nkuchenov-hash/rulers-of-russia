@@ -60,6 +60,7 @@ for (const certification of certifications.spatialChangeCertifications ?? []) {
 const blockers = [];
 const certified = [];
 const seenChangeIds = new Map();
+let totalTerritoryChanges = 0;
 for (const changeFile of model.changeFiles ?? []) {
   const filePath = path.join(dataRoot, changeFile);
   // Lexical path checks do not catch symlinks pointing outside the data root.
@@ -72,6 +73,7 @@ for (const changeFile of model.changeFiles ?? []) {
   if (!Array.isArray(payload.territoryChanges)) {
     throw new Error(`Invalid territoryChanges array in ${changeFile}`);
   }
+  totalTerritoryChanges += payload.territoryChanges.length;
   for (const change of payload.territoryChanges) {
     // A repeated ID can silently apply one certification to unrelated geometry.
     if (typeof change.id !== 'string' || !change.id.trim()) {
@@ -105,6 +107,11 @@ for (const changeFile of model.changeFiles ?? []) {
     }
     blockers.push(row);
   }
+}
+
+// An entirely empty set of change records must not masquerade as a clean audit.
+if (totalTerritoryChanges === 0) {
+  throw new Error('No territory changes found across model changeFiles: cannot certify a zero-blocker audit');
 }
 
 // A stale or misspelled certificate must not silently disappear from the audit.
