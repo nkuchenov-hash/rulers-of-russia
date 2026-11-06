@@ -96,6 +96,15 @@ try {
   assert.match(symlinkResult.stderr, /resolves outside history-core data root/);
   fs.rmSync(path.join(data, 'changes.json'));
 
+  // Two distinct manifest entries may alias the same on-disk file.
+  // This must fail before duplicate change IDs are used as a fallback guard.
+  write('changes.json', {territoryChanges: [baseChange]});
+  fs.symlinkSync(path.join(data, 'changes.json'), path.join(data, 'alias-changes.json'));
+  rejects('symlink alias of change file', {changeFiles: ['changes.json', 'alias-changes.json']},
+    [baseChange], [], /Duplicate resolved territory changeFile/);
+  assert.equal(fs.existsSync(reportPath), false, 'symlink alias left stale audit report');
+  fs.rmSync(path.join(data, 'alias-changes.json'));
+
   rejects('duplicate change file path', {changeFiles: ['changes.json', 'changes.json']}, [baseChange], [], /Duplicate territory model changeFile path/);
   rejects('parent traversal path', {changeFiles: ['../changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('absolute change file path', {changeFiles: ['/tmp/changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
