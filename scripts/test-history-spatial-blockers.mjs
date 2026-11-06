@@ -104,6 +104,19 @@ try {
   rejects('missing territory changes', model, undefined, [], /Invalid territoryChanges array/);
   rejects('all change files empty', model, [], [], /No territory changes found across model changeFiles/);
   assert.equal(fs.existsSync(reportPath), false, 'empty input left a successful audit report');
+  // Duplicate IDs across separate change files must not reuse one certificate.
+  // The audit must classify every file together, not reset its ID set per file.
+  write('second-changes.json', {territoryChanges: [{...baseChange, id: 'change-2'}]});
+  result = run({changeFiles: ['changes.json', 'second-changes.json']}, [baseChange], []);
+  assert.equal(result.status, 0, result.stderr);
+  report = JSON.parse(fs.readFileSync(reportPath));
+  assert.equal(report.totalTerritoryChanges, 2);
+  assert.equal(report.totalSpatialBlockers, 2);
+  write('second-changes.json', {territoryChanges: [{...baseChange}]});
+  rejects('duplicate IDs across change files', {changeFiles: ['changes.json', 'second-changes.json']},
+    [baseChange], [certificate], /Duplicate territory change ID/);
+  assert.equal(fs.existsSync(reportPath), false, 'cross-file duplicate left stale audit report');
+
   rejects('duplicate change IDs', model, [baseChange, {...baseChange}], [], /Duplicate territory change ID/);
   rejects('duplicate certificate IDs', model, [baseChange], [certificate, certificate], /Duplicate spatial reconstruction certification changeId/);
   rejects('orphan certificate', model, [baseChange], [{...certificate, changeId: 'missing'}], /does not match an unresolved geometry change/);
