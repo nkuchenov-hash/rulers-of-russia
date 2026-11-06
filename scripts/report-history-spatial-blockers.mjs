@@ -61,6 +61,7 @@ const blockers = [];
 const certified = [];
 const seenChangeIds = new Map();
 const seenResolvedChangeFiles = new Map();
+const seenFileIdentities = new Map();
 let totalTerritoryChanges = 0;
 let metadataOnlyChanges = 0;
 let geometryVerifiedChanges = 0;
@@ -79,6 +80,15 @@ for (const changeFile of model.changeFiles ?? []) {
     throw new Error(`Duplicate resolved territory changeFile: ${previousAlias} and ${changeFile}`);
   }
   seenResolvedChangeFiles.set(resolvedFile, changeFile);
+  // Hard links have different realpaths but refer to the same physical file.
+  // Without this check the manifest could count one source twice.
+  const stat = fs.statSync(resolvedFile);
+  const identity = `${stat.dev}:${stat.ino}`;
+  const previousHardlink = seenFileIdentities.get(identity);
+  if (previousHardlink) {
+    throw new Error(`Duplicate physical territory changeFile: ${previousHardlink} and ${changeFile}`);
+  }
+  seenFileIdentities.set(identity, changeFile);
   const payload = JSON.parse(fs.readFileSync(resolvedFile, 'utf8'));
   if (!Array.isArray(payload.territoryChanges)) {
     throw new Error(`Invalid territoryChanges array in ${changeFile}`);
