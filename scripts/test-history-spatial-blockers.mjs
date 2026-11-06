@@ -91,6 +91,9 @@ try {
   rejects('certificate on metadata-only change', model, [{...baseChange, geometryAction: 'metadata-only'}], [certificate], /does not match an unresolved geometry change/);
   rejects('non-finite uncertainty', model, [baseChange], [{...certificate, uncertaintyMeters: 'Infinity'}], /Invalid spatial reconstruction uncertaintyMeters/);
   rejects('blank evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: ['  ']}], /Missing spatial reconstruction evidenceDocumentIds/);
+  rejects('padded evidence ID', model, [baseChange], [{...certificate, evidenceDocumentIds: [' document-1 ']}], /Missing spatial reconstruction evidenceDocumentIds/);
+  rejects('duplicate evidence IDs', model, [baseChange], [{...certificate, evidenceDocumentIds: ['document-1', 'document-1']}], /Missing spatial reconstruction evidenceDocumentIds/);
+  assert.equal(fs.existsSync(reportPath), false, 'invalid evidence IDs left stale successful report');
 
   // A valid relative filename may still escape the data root via a symlink.
   // Restore valid model and certification fixtures so containment is the first failure.
