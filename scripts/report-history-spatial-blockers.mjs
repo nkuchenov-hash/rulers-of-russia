@@ -29,7 +29,7 @@ if (!Array.isArray(model.changeFiles) || model.changeFiles.length === 0 ||
 const seenChangeFiles = new Set();
 for (const changeFile of model.changeFiles) {
   if (path.posix.isAbsolute(changeFile) || path.win32.isAbsolute(changeFile) ||
-      changeFile.includes('\\') || changeFile.split('/').some(part => part === '..' || part === '.' || !part) ||
+      changeFile !== changeFile.trim() || changeFile.includes('\\') || changeFile.split('/').some(part => part === '..' || part === '.' || !part) ||
       path.posix.extname(changeFile) !== '.json') {
     throw new Error(`Invalid territory model changeFile path: ${changeFile}`);
   }
