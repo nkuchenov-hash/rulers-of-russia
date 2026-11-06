@@ -118,6 +118,17 @@ jobs:
       - name: Verify territory routes, history materialization and deploy marker
         run: |
           test -f out/deploy.json
+          DEPLOY_SHA_EXPECTED="$(git rev-parse HEAD)" GITHUB_RUN_EXPECTED="${GITHUB_RUN_ID}" node - <<'NODE'
+          const fs = require('node:fs');
+          const marker = JSON.parse(fs.readFileSync('out/deploy.json', 'utf8'));
+          if (marker.sha !== process.env.DEPLOY_SHA_EXPECTED ||
+              String(marker.run_id) !== process.env.GITHUB_RUN_EXPECTED ||
+              typeof marker.built_at !== 'string' ||
+              !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(marker.built_at) ||
+              !Number.isFinite(Date.parse(marker.built_at))) {
+            throw new Error('Pages artifact deploy marker does not match this build');
+          }
+          NODE
           test -f out/territory/index.html
           test -f out/territory/atlas-lab/index.html
           test -f out/data/history-core/generated/territory/index.json
