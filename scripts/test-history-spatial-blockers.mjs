@@ -105,6 +105,14 @@ try {
   assert.equal(fs.existsSync(reportPath), false, 'symlink alias left stale audit report');
   fs.rmSync(path.join(data, 'alias-changes.json'));
 
+  // Hard links bypass realpath-based alias detection while sharing one inode.
+  write('changes.json', {territoryChanges: [baseChange]});
+  fs.linkSync(path.join(data, 'changes.json'), path.join(data, 'hardlink-changes.json'));
+  rejects('hardlink alias of change file', {changeFiles: ['changes.json', 'hardlink-changes.json']},
+    [baseChange], [], /Duplicate physical territory changeFile/);
+  assert.equal(fs.existsSync(reportPath), false, 'hardlink alias left stale audit report');
+  fs.rmSync(path.join(data, 'hardlink-changes.json'));
+
   rejects('duplicate change file path', {changeFiles: ['changes.json', 'changes.json']}, [baseChange], [], /Duplicate territory model changeFile path/);
   rejects('parent traversal path', {changeFiles: ['../changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('absolute change file path', {changeFiles: ['/tmp/changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
