@@ -44,6 +44,9 @@ for (const certification of certifications.spatialChangeCertifications ?? []) {
   if (typeof id !== 'string' || !id.trim()) {
     throw new Error('Missing spatial reconstruction certification changeId');
   }
+  if (id !== id.trim()) {
+    throw new Error(`Non-canonical spatial reconstruction certification changeId: ${JSON.stringify(id)}`);
+  }
   if (certifiedById.has(id)) {
     throw new Error(`Duplicate spatial reconstruction certification changeId: ${id}`);
   }
@@ -104,6 +107,9 @@ for (const changeFile of model.changeFiles ?? []) {
     // A repeated ID can silently apply one certification to unrelated geometry.
     if (typeof change.id !== 'string' || !change.id.trim()) {
       throw new Error(`Missing territory change ID in ${changeFile}`);
+    }
+    if (change.id !== change.id.trim()) {
+      throw new Error(`Non-canonical territory change ID in ${changeFile}: ${JSON.stringify(change.id)}`);
     }
     const previousFile = seenChangeIds.get(change.id);
     if (previousFile) {
