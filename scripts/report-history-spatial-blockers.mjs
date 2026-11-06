@@ -57,7 +57,8 @@ for (const certification of certifications.spatialChangeCertifications ?? []) {
   }
   if (!Array.isArray(certification.evidenceDocumentIds) ||
       certification.evidenceDocumentIds.length === 0 ||
-      certification.evidenceDocumentIds.some(doc => typeof doc !== 'string' || !doc.trim())) {
+      certification.evidenceDocumentIds.some(doc => typeof doc !== 'string' || !doc.trim() || doc !== doc.trim()) ||
+      new Set(certification.evidenceDocumentIds).size !== certification.evidenceDocumentIds.length) {
     throw new Error(`Missing spatial reconstruction evidenceDocumentIds for ${id}`);
   }
   certifiedById.set(id, certification);
