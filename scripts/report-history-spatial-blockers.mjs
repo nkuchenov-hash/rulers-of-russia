@@ -14,6 +14,12 @@ if (!fs.existsSync(certificationFile)) {
 }
 const certifications = JSON.parse(fs.readFileSync(certificationFile, 'utf8'));
 // Malformed or absent input arrays must not yield a misleading zero-blocker report.
+if (!model || typeof model !== 'object' || Array.isArray(model)) {
+  throw new Error('Invalid territory model: expected an object');
+}
+if (!certifications || typeof certifications !== 'object' || Array.isArray(certifications)) {
+  throw new Error('Invalid completion certifications: expected an object');
+}
 if (!Array.isArray(model.changeFiles) || model.changeFiles.length === 0 ||
     model.changeFiles.some(file => typeof file !== 'string' || !file.trim())) {
   throw new Error('Invalid territory model changeFiles: expected non-empty file paths');
@@ -97,7 +103,7 @@ for (const changeFile of model.changeFiles ?? []) {
   }
   seenFileIdentities.set(identity, changeFile);
   const payload = JSON.parse(fs.readFileSync(resolvedFile, 'utf8'));
-  if (!Array.isArray(payload.territoryChanges)) {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload) || !Array.isArray(payload.territoryChanges)) {
     throw new Error(`Invalid territoryChanges array in ${changeFile}`);
   }
   totalTerritoryChanges += payload.territoryChanges.length;
