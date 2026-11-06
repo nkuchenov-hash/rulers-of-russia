@@ -74,6 +74,11 @@ try {
   assert.notEqual(missingManifest.status, 0, 'missing manifest unexpectedly passed');
   assert.match(missingManifest.stderr, /Missing completion-certifications.json/);
 
+  rejects('null model', null, [baseChange], [], /Invalid territory model: expected an object/);
+  rejects('array model', [], [baseChange], [], /Invalid territory model: expected an object/);
+  rejects('null certification manifest', model, [baseChange], null, /Invalid completion certifications: expected an object/);
+  rejects('array certification manifest', model, [baseChange], [], /Invalid completion certifications: expected an object/);
+  rejects('null change payload', model, null, [], /Invalid territoryChanges array/);
   rejects('missing certificate array', model, [baseChange], undefined, /Invalid spatialChangeCertifications/);
   rejects('empty change ID', model, [{...baseChange, id: ''}], [], /Missing territory change ID/);
   rejects('null change record', model, [null], [], /Invalid territory change record/);
