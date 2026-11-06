@@ -60,6 +60,7 @@ for (const certification of certifications.spatialChangeCertifications ?? []) {
 const blockers = [];
 const certified = [];
 const seenChangeIds = new Map();
+const seenResolvedChangeFiles = new Map();
 let totalTerritoryChanges = 0;
 let metadataOnlyChanges = 0;
 let geometryVerifiedChanges = 0;
@@ -71,6 +72,13 @@ for (const changeFile of model.changeFiles ?? []) {
   if (!resolvedFile.startsWith(resolvedRoot + path.sep)) {
     throw new Error(`Territory changeFile resolves outside history-core data root: ${changeFile}`);
   }
+  // Distinct manifest paths can resolve to the same file via symlinks.
+  // Reject aliases rather than counting the same historical changes twice.
+  const previousAlias = seenResolvedChangeFiles.get(resolvedFile);
+  if (previousAlias) {
+    throw new Error(`Duplicate resolved territory changeFile: ${previousAlias} and ${changeFile}`);
+  }
+  seenResolvedChangeFiles.set(resolvedFile, changeFile);
   const payload = JSON.parse(fs.readFileSync(resolvedFile, 'utf8'));
   if (!Array.isArray(payload.territoryChanges)) {
     throw new Error(`Invalid territoryChanges array in ${changeFile}`);
