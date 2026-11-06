@@ -76,9 +76,18 @@ try {
 
   rejects('null model', null, [baseChange], [], /Invalid territory model: expected an object/);
   rejects('array model', [], [baseChange], [], /Invalid territory model: expected an object/);
-  rejects('null certification manifest', model, [baseChange], null, /Invalid completion certifications: expected an object/);
-  rejects('array certification manifest', model, [baseChange], [], /Invalid completion certifications: expected an object/);
-  rejects('null change payload', model, null, [], /Invalid territoryChanges array/);
+  for (const malformedRoot of [null, []]) {
+    run(model, [baseChange], []);
+    write('completion-certifications.json', malformedRoot);
+    const invalidManifest = spawnSync(process.execPath, [script], {cwd: tmp, encoding: 'utf8'});
+    assert.notEqual(invalidManifest.status, 0, 'malformed certification root unexpectedly passed');
+    assert.match(invalidManifest.stderr, /Invalid completion certifications: expected an object/);
+  }
+  run(model, [baseChange], []);
+  write('changes.json', null);
+  const invalidChangePayload = spawnSync(process.execPath, [script], {cwd: tmp, encoding: 'utf8'});
+  assert.notEqual(invalidChangePayload.status, 0, 'null change-file root unexpectedly passed');
+  assert.match(invalidChangePayload.stderr, /Invalid territoryChanges array/);
   rejects('missing certificate array', model, [baseChange], undefined, /Invalid spatialChangeCertifications/);
   rejects('empty change ID', model, [{...baseChange, id: ''}], [], /Missing territory change ID/);
   rejects('null change record', model, [null], [], /Invalid territory change record/);
