@@ -125,7 +125,8 @@ jobs:
               String(marker.run_id) !== process.env.GITHUB_RUN_EXPECTED ||
               typeof marker.built_at !== 'string' ||
               !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(marker.built_at) ||
-              !Number.isFinite(Date.parse(marker.built_at))) {
+              (!Number.isFinite(Date.parse(marker.built_at)) ||
+               new Date(marker.built_at).toISOString().replace('.000Z', 'Z') !== marker.built_at)) {
             throw new Error('Pages artifact deploy marker does not match this build');
           }
           NODE
