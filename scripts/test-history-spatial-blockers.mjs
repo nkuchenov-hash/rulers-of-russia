@@ -140,6 +140,8 @@ try {
   assert.equal(fs.existsSync(reportPath), false, 'hardlink alias left stale audit report');
   fs.rmSync(path.join(data, 'hardlink-changes.json'));
 
+  rejects('padded change file path', {changeFiles: [' changes.json ']}, [baseChange], [], /Invalid territory model changeFile path/);
+  rejects('trailing-space change file path', {changeFiles: ['changes.json ']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('duplicate change file path', {changeFiles: ['changes.json', 'changes.json']}, [baseChange], [], /Duplicate territory model changeFile path/);
   rejects('parent traversal path', {changeFiles: ['../changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
   rejects('absolute change file path', {changeFiles: ['/tmp/changes.json']}, [baseChange], [], /Invalid territory model changeFile path/);
