@@ -12,6 +12,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: node scripts/analyze-ussr-1946-1952-poland.mjs
+      - name: Assert diagnostic report cannot authorize geometry promotion
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync('ussr-1946-1952-poland-component.json', 'utf8'));
+          assert.equal(report.schema_version, 4);
+          assert.equal(report.diagnosticOnly, true);
+          assert.equal(report.independentGeographyValidated, false);
+          assert.equal(report.geometryPromotionAllowed, false);
+          assert.deepEqual(report.rows.map(row => row.index), [12, 13, 14, 15, 16]);
+          for (const row of report.rows) {
+            assert.equal(row.geometryPromotionAllowed, false);
+            assert.ok(row.remaining > 0);
+            assert.equal(row.remaining + row.warsawParts.length, row.polygonCount);
+            assert.equal(row.unsafeRemoval, row.warsawParts.length === 0 ||
+              row.warsawParts.some(part => part.expectedInsideControls.length > 0) ||
+              row.newFailures.length > 0);
+            if (row.controlGridPass) {
+              assert.equal(row.unsafeRemoval, false);
+              assert.equal(row.failed.length, 0);
+            }
+            for (const id of row.fixedControls) {
+              assert.ok(row.originalFailed.some(item => item.id === id));
+              assert.ok(!row.failed.some(item => item.id === id));
+            }
+          }
+          NODE
       - uses: actions/upload-artifact@v4
         with:
           name: ussr-1946-1952-poland-component
