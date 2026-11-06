@@ -37,6 +37,9 @@ if (!Array.isArray(certifications.spatialChangeCertifications)) {
 }
 const certifiedById = new Map();
 for (const certification of certifications.spatialChangeCertifications ?? []) {
+  if (!certification || typeof certification !== 'object' || Array.isArray(certification)) {
+    throw new Error('Invalid spatial reconstruction certification record: expected an object');
+  }
   const id = certification.changeId;
   if (typeof id !== 'string' || !id.trim()) {
     throw new Error('Missing spatial reconstruction certification changeId');
@@ -95,6 +98,9 @@ for (const changeFile of model.changeFiles ?? []) {
   }
   totalTerritoryChanges += payload.territoryChanges.length;
   for (const change of payload.territoryChanges) {
+    if (!change || typeof change !== 'object' || Array.isArray(change)) {
+      throw new Error(`Invalid territory change record in ${changeFile}: expected an object`);
+    }
     // A repeated ID can silently apply one certification to unrelated geometry.
     if (typeof change.id !== 'string' || !change.id.trim()) {
       throw new Error(`Missing territory change ID in ${changeFile}`);

@@ -76,6 +76,9 @@ try {
 
   rejects('missing certificate array', model, [baseChange], undefined, /Invalid spatialChangeCertifications/);
   rejects('empty change ID', model, [{...baseChange, id: ''}], [], /Missing territory change ID/);
+  rejects('null change record', model, [null], [], /Invalid territory change record/);
+  rejects('array change record', model, [[]], [], /Invalid territory change record/);
+  rejects('null certification record', model, [baseChange], [null], /Invalid spatial reconstruction certification record/);
   rejects('empty certificate ID', model, [baseChange], [{...certificate, changeId: ''}], /Missing spatial reconstruction certification changeId/);
   rejects('certificate on verified change', model, [{...baseChange, reviewStatus: 'geometry-verified'}], [certificate], /does not match an unresolved geometry change/);
   rejects('certificate on metadata-only change', model, [{...baseChange, geometryAction: 'metadata-only'}], [certificate], /does not match an unresolved geometry change/);
