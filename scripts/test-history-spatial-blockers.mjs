@@ -84,6 +84,8 @@ try {
   rejects('array certification record', model, [baseChange], [[]], /Invalid spatial reconstruction certification record/);
   rejects('numeric certification record', model, [baseChange], [42], /Invalid spatial reconstruction certification record/);
   assert.equal(fs.existsSync(reportPath), false, 'malformed records left stale successful report');
+  rejects('padded change ID', model, [{...baseChange, id: ' change-1 '}], [], /Non-canonical territory change ID/);
+  rejects('padded certificate ID', model, [baseChange], [{...certificate, changeId: ' change-1 '}], /Non-canonical spatial reconstruction certification changeId/);
   rejects('empty certificate ID', model, [baseChange], [{...certificate, changeId: ''}], /Missing spatial reconstruction certification changeId/);
   rejects('certificate on verified change', model, [{...baseChange, reviewStatus: 'geometry-verified'}], [certificate], /does not match an unresolved geometry change/);
   rejects('certificate on metadata-only change', model, [{...baseChange, geometryAction: 'metadata-only'}], [certificate], /does not match an unresolved geometry change/);
