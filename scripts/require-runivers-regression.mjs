@@ -98,7 +98,11 @@ for (const row of evidence) {
   const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
   const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
   const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
-  const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear, row.runiversIntervalSemantics]);
+  // Approximation is a property of the Runivers reference layer, not of the
+  // individual History Core state. A contradictory flag for the same resource
+  // could otherwise switch its distance tolerance between comparisons.
+  const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear,
+    row.runiversIntervalSemantics, row.runiversApproximate]);
   const earlierInterval = resourceIntervals.get(row.runiversResourceId);
   if (earlierInterval && earlierInterval.identity !== sourceInterval) {
     console.error(`Runivers resource ${row.runiversResourceId} has inconsistent dated interval metadata across comparisons.`);
