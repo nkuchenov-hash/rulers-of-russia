@@ -311,6 +311,19 @@ try {
  const twoYearSummary = {...summary,auditedRange:{startMonth:'1920-01',endMonth:'1921-12'}};
  const twoYearShard = {startMonth:'1920-01',endMonth:'1921-12',
    rangeMonthCount:24,comparedMonthCount:24,excludedMonthCount:0};
+ // One dated reference resource must retain the same approximation class
+ // across different full-year History Core states. Otherwise the second
+ // state can silently receive a looser 100 km limit than the first.
+ const inconsistentApproximation = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+   twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+     {...metricRow('pass'),runiversToYear:1922},
+     {...metricRow('pass'),runiversToYear:1922,
+       historyFirstMonth:'1921-01',historyLastMonth:'1921-12',
+       runiversApproximate:true,toleranceMeters:100000,maxToleranceMeters:400000},
+   ]);
+ assert.equal(inconsistentApproximation.status,1,
+   'the same dated reference cannot change its approximation class between states');
+ assert.match(inconsistentApproximation.stderr,/inconsistent dated interval metadata/);
  const twoYearEvidence = {...metricRow('pass'),historyLastMonth:'1921-12'};
  const partialYearEvidence = run(twoYearSummary,twoYearShard,
    {RUNIVERS_END_MONTH:'1921-12'},[twoYearEvidence]);
