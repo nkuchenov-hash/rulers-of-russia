@@ -311,6 +311,17 @@ try {
  const twoYearSummary = {...summary,auditedRange:{startMonth:'1920-01',endMonth:'1921-12'}};
  const twoYearShard = {startMonth:'1920-01',endMonth:'1921-12',
    rangeMonthCount:24,comparedMonthCount:24,excludedMonthCount:0};
+ // Distinct complete-year states may legitimately use one dated source.
+ // Reject duplicate state intervals, not all repeated resource IDs.
+ const distinctStatesOneResource = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+   twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+     {...metricRow('pass'),runiversToYear:1922},
+     {...metricRow('pass'),runiversToYear:1922,
+       historyFirstMonth:'1921-01',historyLastMonth:'1921-12',
+       historyGeometryFile:'genuinely-distinct-state.geojson'},
+   ]);
+ assert.equal(distinctStatesOneResource.status,0,
+   'two genuinely distinct annual states can share one source without inflating source count');
  // One dated reference resource must retain the same approximation class
  // across different full-year History Core states. Otherwise the second
  // state can silently receive a looser 100 km limit than the first.
