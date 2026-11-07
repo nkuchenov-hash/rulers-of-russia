@@ -324,6 +324,23 @@ try {
  assert.equal(inconsistentApproximation.status,1,
    'the same dated reference cannot change its approximation class between states');
  assert.match(inconsistentApproximation.stderr,/inconsistent dated interval metadata/);
+ // One source ID cannot silently change its named-polity selection or
+ // original feature inventory between different History Core states.
+ // Such a report would compare different reference geometries as one source.
+ for (const scopeChange of [
+   {historyPolityId:'ussr',referenceScopePolityId:'ussr'},
+   {referenceScopeSelectedFeatures:2,referenceScopeTotalFeatures:2},
+ ]) {
+   const inconsistentScope = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+     twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+       {...metricRow('pass'),runiversToYear:1922},
+       {...metricRow('pass'),runiversToYear:1922,
+         historyFirstMonth:'1921-01',historyLastMonth:'1921-12',...scopeChange},
+     ]);
+   assert.equal(inconsistentScope.status,1,
+     'one Runivers resource must retain its original named-polity scope');
+   assert.match(inconsistentScope.stderr,/inconsistent dated interval metadata/);
+ }
  const twoYearEvidence = {...metricRow('pass'),historyLastMonth:'1921-12'};
  const partialYearEvidence = run(twoYearSummary,twoYearShard,
    {RUNIVERS_END_MONTH:'1921-12'},[twoYearEvidence]);
