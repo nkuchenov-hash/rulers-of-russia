@@ -130,8 +130,11 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence lacks a valid complete-calendar-year source/state overlap.');
     process.exit(1);
   }
+  // A resource/state comparison is unique regardless of the geometry filename.
+  // Otherwise a report could count the same dated state twice by renaming its
+  // file, inflating the number of supposedly independent border comparisons.
   const identity = JSON.stringify([row.runiversResourceId, row.runiversFromYear, row.runiversToYear,
-    row.historyFirstMonth, row.historyLastMonth, row.historyGeometryFile]);
+    row.historyFirstMonth, row.historyLastMonth]);
   if (seenEvidence.has(identity)) {
     console.error('Runivers comparison evidence repeats a source/state pair instead of independent comparisons.');
     process.exit(1);
