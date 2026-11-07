@@ -68,7 +68,7 @@ try {
    completeShard,{},[repeatedState,renamedState]);
  assert.equal(duplicateStateReport.status,1,
    'a duplicate source/state pair with a different filename must fail');
- assert.match(duplicateStateReport.stderr,/repeats a source\\/state pair/);
+ assert.match(duplicateStateReport.stderr,/repeats a source\/state pair/);
  // The real preflight outage report contains no comparisons. It must fail
  // with an explicit source-availability reason rather than a misleading
  // "missing comparison evidence" error.
