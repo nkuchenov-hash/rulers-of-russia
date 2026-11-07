@@ -215,8 +215,8 @@ try {
    metricRow('pass'),
    {...metricRow('pass'),historyGeometryFile:'second-state.geojson'},
  ];
- assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},twoStatesSameResource).status,0,
-   'multiple state comparisons against one resource remain valid when counted as one source');
+ assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},twoStatesSameResource).status,1,
+   'renaming a file cannot create a second historical state for the same dated interval');
  const falselyCountedSources = run({
    ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
    usableReferenceLayers:2,comparisons:2,passingComparisons:2,
