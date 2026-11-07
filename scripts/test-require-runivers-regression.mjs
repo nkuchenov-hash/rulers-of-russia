@@ -318,6 +318,7 @@ try {
      {...metricRow('pass'),runiversToYear:1922},
      {...metricRow('pass'),runiversToYear:1922,
        historyFirstMonth:'1921-01',historyLastMonth:'1921-12',
+       comparedFirstYear:1921,comparedLastYear:1921,
        historyGeometryFile:'genuinely-distinct-state.geojson'},
    ]);
  assert.equal(distinctStatesOneResource.status,0,
