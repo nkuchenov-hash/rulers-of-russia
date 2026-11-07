@@ -60,6 +60,15 @@ try {
    return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
  };
  assert.equal(run(summary).status,0);
+ // Renaming a geometry file must not turn one dated source/state comparison
+ // into two independent geographic observations. This is synthetic only.
+ const repeatedState = metricRow('pass');
+ const renamedState = {...repeatedState, historyGeometryFile:'renamed-test-only.geojson'};
+ const duplicateStateReport = run({...summary,comparisons:2,passingComparisons:2},
+   completeShard,{},[repeatedState,renamedState]);
+ assert.equal(duplicateStateReport.status,1,
+   'a duplicate source/state pair with a different filename must fail');
+ assert.match(duplicateStateReport.stderr,/repeats a source\\/state pair/);
  // The real preflight outage report contains no comparisons. It must fail
  // with an explicit source-availability reason rather than a misleading
  // "missing comparison evidence" error.
