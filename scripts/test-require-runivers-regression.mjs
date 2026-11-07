@@ -223,7 +223,7 @@ try {
  },completeShard,{},twoStatesSameResource);
  assert.equal(falselyCountedSources.status,1,
    'two state comparisons against one source must not certify two independently usable reference layers');
- assert.match(falselyCountedSources.stderr,/1 distinct resource IDs/);
+ assert.match(falselyCountedSources.stderr,/repeats a source\/state pair/);
  assert.equal(run({
    ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
    usableReferenceLayers:2,comparisons:2,passingComparisons:2,
