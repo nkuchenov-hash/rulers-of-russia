@@ -98,11 +98,14 @@ for (const row of evidence) {
   const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
   const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
   const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
-  // Approximation is a property of the Runivers reference layer, not of the
-  // individual History Core state. A contradictory flag for the same resource
-  // could otherwise switch its distance tolerance between comparisons.
+  // Approximation and named-polity selection are properties of the Runivers
+  // reference resource, not of an individual History Core state. Reusing one
+  // resource ID with a different polity or selected-feature inventory could
+  // falsely count incomparable contours as independent geographic evidence.
   const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear,
-    row.runiversIntervalSemantics, row.runiversApproximate]);
+    row.runiversIntervalSemantics, row.runiversApproximate,
+    row.historyPolityId, row.referenceScopeKind, row.referenceScopePolityId,
+    row.referenceScopeSelectedFeatures, row.referenceScopeTotalFeatures]);
   const earlierInterval = resourceIntervals.get(row.runiversResourceId);
   if (earlierInterval && earlierInterval.identity !== sourceInterval) {
     console.error(`Runivers resource ${row.runiversResourceId} has inconsistent dated interval metadata across comparisons.`);
