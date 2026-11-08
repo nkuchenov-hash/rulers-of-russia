@@ -129,3 +129,13 @@ test('two disjoint holes remain valid',()=>{
  assert.equal(contains(g,3,3),false);
  assert.equal(contains(g,11,11),false);
 });
+
+// Failure diagnostics must identify the exact source polygon and hole, not
+// silently convert invalid historical geometry into a successful city control.
+test('topology failure identifies polygon and hole indices',()=>{
+ const g={type:'MultiPolygon',coordinates:[
+  [square(-20,-20,-10,-10)],
+  [square(0,0,10,10),[[5,5],[12,5],[5,6],[5,5]]]
+ ]};
+ assert.throws(()=>contains(g,1,1),/Polygon 1 hole 1: Invalid topology: polygon hole crosses or touches outer ring/);
+});
