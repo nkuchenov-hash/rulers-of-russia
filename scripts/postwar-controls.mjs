@@ -58,7 +58,20 @@ export function contains(geometry,lon,lat) {
  if(!geometry||!['Polygon','MultiPolygon'].includes(geometry.type)) throw Error('Expected Polygon/MultiPolygon');
  if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lon)>180||Math.abs(lat)>90) throw Error('Invalid query coordinate');
  const polygons=geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates;
- return polygons.some(poly=>inRing(lon,lat,poly[0])&&!poly.slice(1).some(hole=>inRing(lon,lat,hole)));
+ // Evaluate every ring, even after a match: malformed later geometry must fail closed.
+ // Short-circuiting some() previously hid invalid holes and subsequent polygons.
+ let contained=false;
+ for(const poly of polygons) {
+  if(!Array.isArray(poly)||poly.length===0) throw Error('Invalid polygon coordinates');
+  const outerContains=inRing(lon,lat,poly[0]);
+  let inHole=false;
+  for(const hole of poly.slice(1)) {
+   const holeContains=inRing(lon,lat,hole);
+   if(holeContains) inHole=true;
+  }
+  if(outerContains&&!inHole) contained=true;
+ }
+ return contained;
 }
 export function audit(document,selector='USSR') {
  const features=document.type==='FeatureCollection'?document.features:[document];
