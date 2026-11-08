@@ -100,3 +100,8 @@ test('empty or malformed multipolygon collections fail closed',()=>{
   assert.throws(()=>contains({type:'MultiPolygon',coordinates},37.6173,55.7558),/Empty or invalid polygon collection/);
  }
 });
+
+test('hole outside parent polygon must fail closed',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,10,10),square(20,20,22,22)]};
+ assert.throws(()=>contains(g,5,5),/hole outside outer ring/);
+});
