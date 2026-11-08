@@ -93,3 +93,10 @@ test('malformed later hole must not be hidden by earlier matching hole',()=>{
  const g={type:'Polygon',coordinates:[outer,firstHole,malformed]};
  assert.throws(()=>contains(g,3,3),/Degenerate zero-area/);
 });
+
+// Empty geometry must not silently appear to be a valid historical absence.
+test('empty or malformed multipolygon collections fail closed',()=>{
+ for(const coordinates of [[],null,{},'invalid']) {
+  assert.throws(()=>contains({type:'MultiPolygon',coordinates},37.6173,55.7558),/Empty or invalid polygon collection/);
+ }
+});
