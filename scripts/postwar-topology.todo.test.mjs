@@ -28,7 +28,7 @@ test('crossing-hole diagnostic identifies the exact edge pair and longitude shif
  const geometry={type:'Polygon',coordinates:[outer,crossingHole]};
  assert.throws(()=>contains(geometry,2,2),error=>{
   assert.match(error.message,/Polygon 0 hole 1:/);
-  assert.match(error.message,/outer edge \\d+, inner edge \\d+, longitude shift -?\\d+/);
+  assert.match(error.message,/outer edge \d+, inner edge \d+, longitude shift -?\d+/);
   return true;
  });
 });
