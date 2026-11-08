@@ -18,6 +18,13 @@ test('Warsaw included is detected as failed historical control',()=>{
  const result=audit({type:'FeatureCollection',features:[feature]});
  assert.ok(result.failed.some(p=>p.name==='Warsaw'&&p.actual===true));
 });
+test('select only canonical NAME, never incidental metadata aliases',()=>{
+ const g={type:'Polygon',coordinates:[square(35,50,40,60)]};
+ const f={type:'Feature',properties:{NAME:'USSR'},geometry:g};
+ const unrelated={type:'Feature',properties:{NAME:'OTHER',NOTE:'USSR'},geometry:g};
+ const result=audit({type:'FeatureCollection',features:[f,unrelated]});
+ assert.equal(result.selectedFeatures,1);
+});
 test('ambiguous polity selector rejected',()=>{
  const f={type:'Feature',properties:{NAME:'USSR'},geometry:{type:'Polygon',coordinates:[square(0,0,1,1)]}};
  assert.throws(()=>audit({type:'FeatureCollection',features:[f,f]}),/exactly one/);
