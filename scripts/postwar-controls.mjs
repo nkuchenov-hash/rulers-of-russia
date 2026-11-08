@@ -56,7 +56,7 @@ export function contains(geometry,lon,lat) {
 }
 export function audit(document,selector='USSR') {
  const features=document.type==='FeatureCollection'?document.features:[document];
- const selected=features.filter(f=>f.type==='Feature'&&Object.values(f.properties??{}).some(v=>String(v).toUpperCase()===selector.toUpperCase()));
+ const selected=features.filter(f=>f.type==='Feature'&&String(f.properties?.NAME??'').trim().toUpperCase()===selector.trim().toUpperCase());
  if(selected.length!==1) throw Error(`Expected exactly one ${selector} feature, got ${selected.length}`);
  const results=controls.map(p=>({...p,actual:contains(selected[0].geometry,p.lon,p.lat)}));
  return {selectedFeatures:selected.length,controls:results,passed:results.filter(p=>p.actual===p.inside).length,failed:results.filter(p=>p.actual!==p.inside)};
