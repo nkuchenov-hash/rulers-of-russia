@@ -27,6 +27,10 @@ function unwrapRing(ring) {
  }
  if(ring[0][0]!==ring.at(-1)[0]||ring[0][1]!==ring.at(-1)[1]) throw Error('Unclosed polygon ring');
  if(Math.abs(out.at(-1)[0]-out[0][0])>1e-8) throw Error('Ring winds around globe; planar diagnostic unsupported');
+ // Reject zero-area rings: ray casting can otherwise classify points on a line as inside.
+ let twiceArea=0;
+ for(let i=1;i<out.length;i++) twiceArea+=out[i-1][0]*out[i][1]-out[i][0]*out[i-1][1];
+ if(twiceArea===0) throw Error('Degenerate zero-area polygon ring');
  return out;
 }
 function onSegment(x,y,a,b) {
