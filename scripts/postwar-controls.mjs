@@ -76,6 +76,15 @@ export function contains(geometry,lon,lat) {
    const holeContains=inRing(lon,lat,hole);
    if(holeContains) inHole=true;
   }
+  // GeoJSON holes must be mutually disjoint: overlapping or nested holes
+  // make even/odd point containment ambiguous. Check all pairs, not only
+  // the hole that happens to contain the query point.
+  for(let i=1;i<poly.length;i++) for(let j=i+1;j<poly.length;j++) {
+   const a=poly[i],b=poly[j];
+   assertDisjointRingBoundaries(unwrapRing(a),unwrapRing(b));
+   if(inRing(a[0][0],a[0][1],b)||inRing(b[0][0],b[0][1],a))
+    throw Error('Invalid topology: overlapping or nested polygon holes');
+  }
   if(outerContains&&!inHole) contained=true;
  }
  return contained;
