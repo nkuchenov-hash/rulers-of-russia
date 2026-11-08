@@ -61,3 +61,12 @@ test('repository 1945 snapshot satisfies 1946–1950 USSR city controls (interna
  assert.equal(result.controls.length,8);
  assert.deepEqual(result.failed.map(p=>p.name),[],JSON.stringify(result.failed));
 });
+
+test('densely sampled boundary does not exceed JavaScript argument limit',()=>{
+ const ring=[];
+ for(let i=0;i<=140000;i++) ring.push([i/14000,0]);
+ ring.push([10,10],[0,10],[0,0]);
+ const g={type:'Polygon',coordinates:[ring]};
+ assert.equal(contains(g,5,5),true);
+ assert.equal(contains(g,15,5),false);
+});
