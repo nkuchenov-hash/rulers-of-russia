@@ -64,15 +64,16 @@ export function contains(geometry,lon,lat) {
  // Evaluate every ring, even after a match: malformed later geometry must fail closed.
  // Short-circuiting some() previously hid invalid holes and subsequent polygons.
  let contained=false;
- for(const poly of polygons) {
+ for(const [polygonIndex,poly] of polygons.entries()) {
   if(!Array.isArray(poly)||poly.length===0) throw Error('Invalid polygon coordinates');
   const outerContains=inRing(lon,lat,poly[0]);
   let inHole=false;
-  for(const hole of poly.slice(1)) {
+  for(const [holeOffset,hole] of poly.slice(1).entries()) {
    // A hole entirely outside its parent is invalid GeoJSON polygon topology.
    // This vertex check is a necessary condition, not a complete ring-crossing audit.
    if(!inRing(hole[0]?.[0],hole[0]?.[1],poly[0])) throw Error('Invalid topology: polygon hole outside outer ring');
-   assertDisjointRingBoundaries(unwrapRing(poly[0]),unwrapRing(hole));
+   try { assertDisjointRingBoundaries(unwrapRing(poly[0]),unwrapRing(hole)); }
+   catch(error) { throw new Error(`Polygon ${polygonIndex} hole ${holeOffset+1}: ${error.message}`,{cause:error}); }
    const holeContains=inRing(lon,lat,hole);
    if(holeContains) inHole=true;
   }
