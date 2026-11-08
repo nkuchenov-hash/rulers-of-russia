@@ -21,3 +21,14 @@ test('reject crossing edges, but accept valid dense rings',()=>{
  const square={type:'Polygon',coordinates:[[[0,0],[5,0],[5,5],[0,5],[0,0]]]};
  assert.equal(contains(square,2,2),true);
 });
+
+test('crossing-hole diagnostic identifies the exact edge pair and longitude shift',()=>{
+ const outer=[[0,0],[8,0],[8,8],[0,8],[0,0]];
+ const crossingHole=[[6,6],[10,6],[10,10],[6,10],[6,6]];
+ const geometry={type:'Polygon',coordinates:[outer,crossingHole]};
+ assert.throws(()=>contains(geometry,2,2),error=>{
+  assert.match(error.message,/Polygon 0 hole 1:/);
+  assert.match(error.message,/outer edge \\d+, inner edge \\d+, longitude shift -?\\d+/);
+  return true;
+ });
+});
