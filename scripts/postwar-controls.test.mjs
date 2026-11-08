@@ -70,3 +70,12 @@ test('densely sampled boundary does not exceed JavaScript argument limit',()=>{
  assert.equal(contains(g,5,5),true);
  assert.equal(contains(g,15,5),false);
 });
+
+test('zero-area collinear outer ring fails closed',()=>{
+ const g={type:'Polygon',coordinates:[[[0,0],[1,1],[2,2],[0,0]]]};
+ assert.throws(()=>contains(g,1,1),/Degenerate zero-area/);
+});
+test('zero-area inner hole fails closed instead of silently accepting it',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,10,10),[[2,2],[3,3],[4,4],[2,2]]]};
+ assert.throws(()=>contains(g,3,3),/Degenerate zero-area/);
+});
