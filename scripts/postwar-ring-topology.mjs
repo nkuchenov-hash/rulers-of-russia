@@ -43,3 +43,36 @@ export function assertSimpleRing(points){
   }
  }
 }
+
+function ringSegments(points){
+ const segments=[];
+ for(let i=0;i<points.length-1;i++){
+  const a=points[i],b=points[i+1];
+  segments.push({i,points:[a,b],minX:Math.min(a[0],b[0]),maxX:Math.max(a[0],b[0]),minY:Math.min(a[1],b[1]),maxY:Math.max(a[1],b[1])});
+ }
+ return segments;
+}
+// Detect intersections between distinct rings with a BVH; touching boundaries
+// are rejected too. The caller supplies already unwrapped coordinates.
+export function assertDisjointRingBoundaries(outer,hole){
+ const outerSegments=ringSegments(outer);
+ const tree=build(outerSegments.slice());
+ let outerMin=Infinity,outerMax=-Infinity,holeMin=Infinity,holeMax=-Infinity;
+ for(const [x] of outer){outerMin=Math.min(outerMin,x);outerMax=Math.max(outerMax,x)}
+ for(const [x] of hole){holeMin=Math.min(holeMin,x);holeMax=Math.max(holeMax,x)}
+ const outerMid=(outerMin+outerMax)/2,holeMid=(holeMin+holeMax)/2;
+ const shift=360*Math.round((outerMid-holeMid)/360);
+ for(const offset of [shift-360,shift,shift+360]){
+  const translated=hole.map(([x,y])=>[x+offset,y]);
+  for(const s of ringSegments(translated)){
+   const stack=[tree];
+   while(stack.length){
+    const node=stack.pop();if(!overlaps(s,node))continue;
+    if(node.items){
+     for(const t of node.items)if(overlaps(s,t)&&intersects(s,t))
+      throw Error('Invalid topology: polygon hole crosses or touches outer ring');
+    }else stack.push(node.left,node.right);
+   }
+  }
+ }
+}
