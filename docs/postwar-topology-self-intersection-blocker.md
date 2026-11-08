@@ -12,7 +12,7 @@ const geometry = {type:'Polygon',coordinates:[ring]};
 console.log(contains(geometry,1,1)); // currently returns a boolean; should reject invalid topology
 ```
 
-The first and third non-adjacent segments intersect at (2,2). The shoelace sum is **-12** (signed area -6 square coordinate units), hence the existing zero-area check cannot catch it. This is a synthetic geometry counterexample, not a historical boundary reference.
+The first and third non-adjacent segments intersect at (2,2). The shoelace sum is **+12** (signed area +6 square coordinate units), hence the existing zero-area check cannot catch it. This is a synthetic geometry counterexample, not a historical boundary reference.
 
 ## Acceptance criteria
 - Reject any crossing or non-adjacent touching edges, including collinear overlap, without incorrectly rejecting a legitimate adjacent shared endpoint.
