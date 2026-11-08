@@ -69,6 +69,9 @@ export function contains(geometry,lon,lat) {
   const outerContains=inRing(lon,lat,poly[0]);
   let inHole=false;
   for(const hole of poly.slice(1)) {
+   // A hole entirely outside its parent is invalid GeoJSON polygon topology.
+   // This vertex check is a necessary condition, not a complete ring-crossing audit.
+   if(!inRing(hole[0]?.[0],hole[0]?.[1],poly[0])) throw Error('Invalid topology: polygon hole outside outer ring');
    const holeContains=inRing(lon,lat,hole);
    if(holeContains) inHole=true;
   }
