@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/postwar-controls.mjs'
       - 'scripts/postwar-controls.test.mjs'
+      - 'scripts/postwar-topology.todo.test.mjs'
+      - 'scripts/postwar-ring-topology.mjs'
       - 'public/data/territory/world-history/snapshots/1945.geojson'
       - '.github/workflows/postwar-controls.yml'
   workflow_dispatch:
@@ -22,7 +24,7 @@ jobs:
         with:
           node-version: '22'
       - name: Execute synthetic and actual 1945 snapshot controls
-        run: node --test scripts/postwar-controls.test.mjs
+        run: node --test scripts/postwar-controls.test.mjs scripts/postwar-topology.todo.test.mjs
       - name: Print detailed control outcomes
         if: always()
         run: node scripts/postwar-controls.mjs public/data/territory/world-history/snapshots/1945.geojson USSR
