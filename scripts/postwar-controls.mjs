@@ -35,7 +35,9 @@ function onSegment(x,y,a,b) {
 }
 function inRing(lon,lat,rawRing) {
  const ring=unwrapRing(rawRing);
- const xs=ring.map(p=>p[0]),mid=(Math.min(...xs)+Math.max(...xs))/2;
+ let minLon=Infinity,maxLon=-Infinity;
+ for(const [x] of ring) {if(x<minLon) minLon=x;if(x>maxLon) maxLon=x;}
+ const mid=(minLon+maxLon)/2;
  const center=lon+360*Math.round((mid-lon)/360);
  for(const x of [center-360,center,center+360]) {
   let inside=false;
