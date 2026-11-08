@@ -87,6 +87,17 @@ export function contains(geometry,lon,lat) {
   }
   if(outerContains&&!inHole) contained=true;
  }
+ // Separate MultiPolygon members must not intersect or contain one another's
+ // filled interiors. An island wholly inside another member's hole is valid.
+ // Validate boundaries first, then test one outer vertex of each member.
+ for(let i=0;i<polygons.length;i++) for(let j=i+1;j<polygons.length;j++) {
+  const a=polygons[i],b=polygons[j];
+  for(const ringA of a) for(const ringB of b)
+   assertDisjointRingBoundaries(unwrapRing(ringA),unwrapRing(ringB));
+  const filled=(poly,point)=>inRing(point[0],point[1],poly[0])&&!poly.slice(1).some(h=>inRing(point[0],point[1],h));
+  if(filled(a,b[0][0])||filled(b,a[0][0]))
+   throw Error('Invalid topology: overlapping MultiPolygon interiors');
+ }
  return contained;
 }
 export function audit(document,selector='USSR') {
