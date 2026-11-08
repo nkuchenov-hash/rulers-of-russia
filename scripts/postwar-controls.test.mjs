@@ -114,3 +114,18 @@ test('hole touching outer boundary fails closed',()=>{
  const g={type:'Polygon',coordinates:[square(0,0,10,10),[[5,5],[10,5],[5,6],[5,5]]]};
  assert.throws(()=>contains(g,1,1),/hole crosses or touches outer ring/);
 });
+
+test('overlapping polygon holes fail closed even when query is outside both',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,20,20),square(2,2,8,8),square(6,6,12,12)]};
+ assert.throws(()=>contains(g,1,1),/hole crosses or touches outer ring/);
+});
+test('nested polygon holes fail closed rather than silently subtracting twice',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,20,20),square(2,2,12,12),square(4,4,6,6)]};
+ assert.throws(()=>contains(g,1,1),/overlapping or nested polygon holes/);
+});
+test('two disjoint holes remain valid',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,20,20),square(2,2,4,4),square(10,10,12,12)]};
+ assert.equal(contains(g,1,1),true);
+ assert.equal(contains(g,3,3),false);
+ assert.equal(contains(g,11,11),false);
+});
