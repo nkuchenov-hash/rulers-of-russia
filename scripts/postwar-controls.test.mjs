@@ -105,3 +105,12 @@ test('hole outside parent polygon must fail closed',()=>{
  const g={type:'Polygon',coordinates:[square(0,0,10,10),square(20,20,22,22)]};
  assert.throws(()=>contains(g,5,5),/hole outside outer ring/);
 });
+
+test('hole beginning inside outer but crossing outer boundary fails closed',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,10,10),[[5,5],[12,5],[5,6],[5,5]]]};
+ assert.throws(()=>contains(g,1,1),/hole crosses or touches outer ring/);
+});
+test('hole touching outer boundary fails closed',()=>{
+ const g={type:'Polygon',coordinates:[square(0,0,10,10),[[5,5],[10,5],[5,6],[5,5]]]};
+ assert.throws(()=>contains(g,1,1),/hole crosses or touches outer ring/);
+});
