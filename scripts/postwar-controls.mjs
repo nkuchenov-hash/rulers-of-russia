@@ -58,6 +58,7 @@ export function contains(geometry,lon,lat) {
  if(!geometry||!['Polygon','MultiPolygon'].includes(geometry.type)) throw Error('Expected Polygon/MultiPolygon');
  if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lon)>180||Math.abs(lat)>90) throw Error('Invalid query coordinate');
  const polygons=geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates;
+ if(!Array.isArray(polygons)||polygons.length===0) throw Error('Empty or invalid polygon collection');
  // Evaluate every ring, even after a match: malformed later geometry must fail closed.
  // Short-circuiting some() previously hid invalid holes and subsequent polygons.
  let contained=false;
