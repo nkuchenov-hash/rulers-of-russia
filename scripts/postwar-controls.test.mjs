@@ -43,3 +43,14 @@ test('invalid and ambiguous rings fail closed',()=>{
  assert.throws(()=>contains({type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1]]]},0.5,0.5),/Unclosed/);
  assert.throws(()=>contains({type:'Polygon',coordinates:[[[0,0],[181,0],[1,1],[0,0]]]},0.5,0.5),/Invalid/);
 });
+
+test('repository 1945 snapshot satisfies 1946–1950 USSR city controls (internal diagnostic only)', async()=>{
+ const {readFile} = await import('node:fs/promises');
+ const {fileURLToPath} = await import('node:url');
+ const snapshot=fileURLToPath(new URL('../public/data/territory/world-history/snapshots/1945.geojson',import.meta.url));
+ const source=JSON.parse(await readFile(snapshot,'utf8'));
+ const result=audit(source,'USSR');
+ assert.equal(result.selectedFeatures,1);
+ assert.equal(result.controls.length,8);
+ assert.deepEqual(result.failed.map(p=>p.name),[],JSON.stringify(result.failed));
+});
