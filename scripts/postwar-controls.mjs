@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Diagnostic only: point containment does not establish historical border accuracy.
 import fs from 'node:fs';
-import {assertSimpleRing} from './postwar-ring-topology.mjs';
+import {assertSimpleRing,assertDisjointRingBoundaries} from './postwar-ring-topology.mjs';
 export const controls = Object.freeze([
 {name:'Moscow',lon:37.6173,lat:55.7558,inside:true},
 {name:'Kyiv',lon:30.5234,lat:50.4501,inside:true},
@@ -72,6 +72,7 @@ export function contains(geometry,lon,lat) {
    // A hole entirely outside its parent is invalid GeoJSON polygon topology.
    // This vertex check is a necessary condition, not a complete ring-crossing audit.
    if(!inRing(hole[0]?.[0],hole[0]?.[1],poly[0])) throw Error('Invalid topology: polygon hole outside outer ring');
+   assertDisjointRingBoundaries(unwrapRing(poly[0]),unwrapRing(hole));
    const holeContains=inRing(lon,lat,hole);
    if(holeContains) inHole=true;
   }
