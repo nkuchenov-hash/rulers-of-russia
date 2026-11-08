@@ -1,0 +1,28 @@
+name: Postwar USSR geometry controls (diagnostic)
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/postwar-controls.mjs'
+      - 'scripts/postwar-controls.test.mjs'
+      - 'public/data/territory/world-history/snapshots/1945.geojson'
+      - '.github/workflows/postwar-controls.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Execute synthetic and actual 1945 snapshot controls
+        run: node --test scripts/postwar-controls.test.mjs
+      - name: Print detailed control outcomes
+        if: always()
+        run: node scripts/postwar-controls.mjs public/data/territory/world-history/snapshots/1945.geojson USSR
