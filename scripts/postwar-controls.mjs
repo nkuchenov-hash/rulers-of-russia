@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Diagnostic only: point containment does not establish historical border accuracy.
 import fs from 'node:fs';
+import {assertSimpleRing} from './postwar-ring-topology.mjs';
 export const controls = Object.freeze([
 {name:'Moscow',lon:37.6173,lat:55.7558,inside:true},
 {name:'Kyiv',lon:30.5234,lat:50.4501,inside:true},
@@ -31,6 +32,7 @@ function unwrapRing(ring) {
  let twiceArea=0;
  for(let i=1;i<out.length;i++) twiceArea+=out[i-1][0]*out[i][1]-out[i][0]*out[i-1][1];
  if(twiceArea===0) throw Error('Degenerate zero-area polygon ring');
+ assertSimpleRing(out);
  return out;
 }
 function onSegment(x,y,a,b) {
