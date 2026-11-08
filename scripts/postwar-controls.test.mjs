@@ -79,3 +79,17 @@ test('zero-area inner hole fails closed instead of silently accepting it',()=>{
  const g={type:'Polygon',coordinates:[square(0,0,10,10),[[2,2],[3,3],[4,4],[2,2]]]};
  assert.throws(()=>contains(g,3,3),/Degenerate zero-area/);
 });
+
+test('malformed later multipolygon part must not be hidden by first matching part',()=>{
+ const valid=square(0,0,10,10);
+ const malformed=[[20,20],[21,21],[22,22],[20,20]];
+ const g={type:'MultiPolygon',coordinates:[[valid],[malformed]]};
+ assert.throws(()=>contains(g,5,5),/Degenerate zero-area/);
+});
+test('malformed later hole must not be hidden by earlier matching hole',()=>{
+ const outer=square(0,0,10,10);
+ const firstHole=square(2,2,4,4);
+ const malformed=[[6,6],[7,7],[8,8],[6,6]];
+ const g={type:'Polygon',coordinates:[outer,firstHole,malformed]};
+ assert.throws(()=>contains(g,3,3),/Degenerate zero-area/);
+});
