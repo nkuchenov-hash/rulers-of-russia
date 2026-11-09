@@ -14,7 +14,7 @@ export function inspectSeam(doc,name='USSR'){
    const [lon,lat]=ring[i];
    if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lon)>180||Math.abs(lat)>90)throw Error('Invalid coordinate');
    if(Math.abs(Math.abs(lon)-180)<1e-9)seamVertices.push({index:i,longitude:lon,latitude:lat});
-   if(i&&Math.abs(Math.abs(ring[i-1][0])-180)<1e-9&&Math.abs(Math.abs(lon)-180)<1e-9&&Math.abs(ring[i-1][0]-lon)<1e-9)
+   if(i&&Math.abs(Math.abs(ring[i-1][0])-180)<1e-9&&Math.abs(Math.abs(lon)-180)<1e-9&&Math.abs(ring[i-1][1]-lat)>1e-9)
     seamEdges.push({index:i-1,from:ring[i-1],to:ring[i]});
   }
   if(ring[0][0]!==ring.at(-1)[0]||ring[0][1]!==ring.at(-1)[1])throw Error('Unclosed ring');
