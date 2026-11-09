@@ -45,3 +45,25 @@ test('nearby but distinct seam locations are not collapsed',()=>{
  const result=inspectSeam(fixture([outer,hole]));
  assert.equal(result.uniqueContactCount,2);
 });
+
+test('reports positive-length seam overlap even with zero coincident vertices',()=>{
+ const outer=[[179,59],[180,60],[180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[-180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{type:'MultiPolygon',coordinates:[[outer],[other]]}}]};
+ const result=inspectSeam(doc);
+ assert.equal(result.contacts.length,0,'vertex-only contacts cannot see nested seam edges');
+ assert.deepEqual(result.seamEdgeOverlaps,[{a:[0,0,1],b:[1,0,1],latitudeInterval:[62,68]}]);
+});
+test('endpoint-only seam contacts do not count as positive-length overlap',()=>{
+ const outer=[[179,59],[180,60],[180,65],[179,66],[179,59]];
+ const hole=[[179.5,64],[180,65],[180,68],[179.5,69],[179.5,64]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.equal(result.seamEdgeOverlaps.length,0);
+ assert.ok(result.contacts.length>0);
+});
+test('disjoint seam intervals remain distinct',()=>{
+ const outer=[[179,59],[180,60],[180,61],[179,62],[179,59]];
+ const hole=[[179.5,63],[180,64],[180,65],[179.5,66],[179.5,63]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.deepEqual(result.seamEdgeOverlaps,[]);
+});
