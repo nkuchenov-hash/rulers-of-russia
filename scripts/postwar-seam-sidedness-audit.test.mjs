@@ -9,17 +9,23 @@ test('opposite-side seam contact is not interior overlap',()=>{
  const result=auditSeamSidedness(feature([west,east]));
  assert.equal(result.samples.length,1);
  assert.equal(result.summary['opposite-side-contact'],1);
+ assert.equal(result.samples[0].probes.length,3);
+ assert.deepEqual(result.samples[0].probes.map(p=>p.latitude),[66,67,68]);
+ assert.ok(result.samples[0].probes.every(p=>p.classification==='opposite-side-contact'));
  assert.deepEqual(result.samples[0].sides.map(({west,east})=>[west,east]),[[true,false],[false,true]]);
 });
 test('same-side duplicate is classified as overlap',()=>{
  const duplicate=[west[0].map(([x,y])=>[x-360,y])];
  const result=auditSeamSidedness(feature([west,duplicate]));
  assert.equal(result.summary['same-side-overlap'],1);
+ assert.ok(result.samples[0].probes.every(p=>p.classification==='same-side-overlap'));
 });
 test('real 1945 USSR seam produces classifications for all seven edge pairs',()=>{
  const path=new URL('../public/data/territory/world-history/snapshots/1945.geojson',import.meta.url);
  const result=auditSeamSidedness(JSON.parse(readFileSync(path,'utf8')));
  assert.equal(result.samples.length,7);
+ assert.equal(result.samples.flatMap(s=>s.probes).length,21);
+ assert.ok(result.samples.every(s=>s.probes.every(p=>p.classification==='opposite-side-contact')));
  assert.equal(Object.values(result.summary).reduce((a,b)=>a+b,0),7);
  assert.ok(result.samples.every(s=>s.sides.length===2));
  assert.deepEqual(result.summary,{'opposite-side-contact':7,'same-side-overlap':0,'inconclusive':0});
