@@ -21,3 +21,12 @@ test('invalid coordinates and ambiguous selection fail closed',()=>{
  const f=fixture([[[0,0],[1,0],[1,1],[0,0]]]);f.features.push(f.features[0]);
  assert.throws(()=>inspectSeam(f),/exactly one/);
 });
+
+test('signed antimeridian aliases count as one physical contact',()=>{
+ const outer=[[179,60],[180,65],[-180,65],[-179,60],[179,60]];
+ const hole=[[179.5,64],[180,65],[-180,65],[179.5,64]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.equal(result.contacts.length,4,'retain all source vertex pairings');
+ assert.equal(result.uniqueContactCount,1,'+180 and -180 identify one physical point');
+ assert.equal(result.uniqueContacts[0].latitude,65);
+});
