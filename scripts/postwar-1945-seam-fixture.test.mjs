@@ -11,6 +11,12 @@ test('1945 USSR seam contacts remain explicitly unresolved and indexed',()=>{
  assert.equal(evidence.polygonCount,24);
  assert.equal(evidence.seamRingCount,2);
  assert.equal(evidence.contacts.length,5);
+ assert.equal(evidence.seamEdgeOverlaps.length,7,'real 1945 seam has seven positive-length source-edge overlaps');
+ assert.deepEqual(evidence.seamEdgeOverlaps.map(x=>[x.a[2],x.b[2]]),[
+  [1029,3],[1030,1],[1030,2],[1031,1],[1032,0],[1033,83],[1034,82]
+ ]);
+ assert.ok(evidence.seamEdgeOverlaps.every(x=>x.a[0]===1&&x.b[0]===2));
+
  // Vertex 0 and closing vertex 84 of component 2 represent one physical point.
  assert.equal(evidence.uniqueContactCount,4);
  assert.deepEqual(evidence.uniqueContacts.map(c=>c.latitude),[
