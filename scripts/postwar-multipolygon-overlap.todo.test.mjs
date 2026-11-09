@@ -51,3 +51,16 @@ test('MultiPolygon members touching at a boundary are rejected',()=>{
  ]};
  assert.throws(()=>contains(geometry,12,5),/topology/i);
 });
+
+test('cross-component boundary diagnostic never mislabels an outer ring as a hole',()=>{
+ const geometry={type:'MultiPolygon',coordinates:[
+  [square(0,0,10,10)],
+  [square(10,2,15,8)]
+ ]};
+ assert.throws(()=>contains(geometry,12,5),error=>{
+  assert.match(error.message,/MultiPolygon component boundaries cross or touch/);
+  assert.doesNotMatch(error.message,/polygon hole crosses/);
+  assert.match(error.message,/outer edge \d+, inner edge \d+, longitude shift/);
+  return true;
+ });
+});
