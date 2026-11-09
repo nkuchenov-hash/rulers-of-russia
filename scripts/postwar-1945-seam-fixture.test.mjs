@@ -11,6 +11,11 @@ test('1945 USSR seam contacts remain explicitly unresolved and indexed',()=>{
  assert.equal(evidence.polygonCount,24);
  assert.equal(evidence.seamRingCount,2);
  assert.equal(evidence.contacts.length,5);
+ // Vertex 0 and closing vertex 84 of component 2 represent one physical point.
+ assert.equal(evidence.uniqueContactCount,4);
+ assert.deepEqual(evidence.uniqueContacts.map(c=>c.latitude),[
+  65.31103094668751,65.96313055606251,66.96313055606251,67.96313055606251
+ ]);
  assert.deepEqual(evidence.contacts.map(({a,b,latitude})=>({a,b,latitude})),[
   {a:[1,0,1030],b:[2,0,3],latitude:65.31103094668751},
   {a:[1,0,1032],b:[2,0,1],latitude:65.96313055606251},
