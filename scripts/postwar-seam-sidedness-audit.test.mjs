@@ -22,4 +22,8 @@ test('real 1945 USSR seam produces classifications for all seven edge pairs',()=
  assert.equal(result.samples.length,7);
  assert.equal(Object.values(result.summary).reduce((a,b)=>a+b,0),7);
  assert.ok(result.samples.every(s=>s.sides.length===2));
+ assert.deepEqual(result.summary,{'opposite-side-contact':7,'same-side-overlap':0,'inconclusive':0});
+ assert.ok(result.samples.every(s=>s.sides.some(x=>x.west&&!x.east)&&s.sides.some(x=>!x.west&&x.east)));
+ assert.equal(result.samples[0].latitudeInterval[0],65.25922735782032);
+ assert.equal(result.samples.at(-1).latitudeInterval[1],68.91692694278126);
 });
