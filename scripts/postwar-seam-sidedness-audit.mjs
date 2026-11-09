@@ -24,7 +24,10 @@ export function auditSeamSidedness(doc,name='USSR',delta=0.0001){
  const evidence=inspectSeam(doc,name);
  const features=doc.type==='FeatureCollection'?doc.features:[doc];
  const selected=features.filter(f=>f.type==='Feature'&&String(f.properties?.NAME??'').trim().toUpperCase()===name.toUpperCase());
- const g=selected[0].geometry,polygons=g.type==='Polygon'?[g.coordinates]:g.coordinates;
+ if(selected.length!==1)throw Error(`Expected exactly one ${name} feature; found ${selected.length}`);
+ const g=selected[0].geometry;
+ if(!g||!['Polygon','MultiPolygon'].includes(g.type))throw Error(`Unsupported ${name} geometry type: ${g?.type??'null'}`);
+ const polygons=g.type==='Polygon'?[g.coordinates]:g.coordinates;
  const samples=evidence.seamEdgeOverlaps.map(({a,b,latitudeInterval})=>{
   // Five interior probes include near-endpoint coverage, but remain finite samples.
   // These remain sparse samples; no global-topology conclusion is implied.
