@@ -15,7 +15,8 @@ test('opposite-side seam contact is not interior overlap',()=>{
  assert.deepEqual(result.samples[0].sides.map(({west,east})=>[west,east]),[[true,false],[false,true]]);
 });
 test('same-side duplicate is classified as overlap',()=>{
- const duplicate=[west[0].map(([x,y])=>[x-360,y])];
+ // Duplicate a valid GeoJSON ring on the same side; longitude -190 is invalid.
+ const duplicate=west.map(ring=>ring.map(([x,y])=>[x,y]));
  const result=auditSeamSidedness(feature([west,duplicate]));
  assert.equal(result.summary['same-side-overlap'],1);
  assert.ok(result.samples[0].probes.every(p=>p.classification==='same-side-overlap'));
