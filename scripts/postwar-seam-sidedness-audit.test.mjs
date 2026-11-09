@@ -9,8 +9,8 @@ test('opposite-side seam contact is not interior overlap',()=>{
  const result=auditSeamSidedness(feature([west,east]));
  assert.equal(result.samples.length,1);
  assert.equal(result.summary['opposite-side-contact'],1);
- assert.equal(result.samples[0].probes.length,3);
- assert.deepEqual(result.samples[0].probes.map(p=>p.latitude),[66,67,68]);
+ assert.equal(result.samples[0].probes.length,5);
+ assert.deepEqual(result.samples[0].probes.map(p=>p.latitude),[65.2,66,67,68,68.8]);
  assert.ok(result.samples[0].probes.every(p=>p.classification==='opposite-side-contact'));
  assert.deepEqual(result.samples[0].sides.map(({west,east})=>[west,east]),[[true,false],[false,true]]);
 });
@@ -25,7 +25,7 @@ test('real 1945 USSR seam produces classifications for all seven edge pairs',()=
  const path=new URL('../public/data/territory/world-history/snapshots/1945.geojson',import.meta.url);
  const result=auditSeamSidedness(JSON.parse(readFileSync(path,'utf8')));
  assert.equal(result.samples.length,7);
- assert.equal(result.samples.flatMap(s=>s.probes).length,21);
+ assert.equal(result.samples.flatMap(s=>s.probes).length,35);
  assert.ok(result.samples.every(s=>s.probes.every(p=>p.classification==='opposite-side-contact')));
  assert.equal(Object.values(result.summary).reduce((a,b)=>a+b,0),7);
  assert.ok(result.samples.every(s=>s.sides.length===2));
@@ -45,10 +45,19 @@ test('real 1945 seam classifications are stable across three probe offsets',()=>
  for(const [i,result] of results.entries()){
   assert.equal(result.delta,offsets[i]);
   assert.equal(result.samples.length,7);
-  assert.equal(result.samples.flatMap(s=>s.probes).length,21);
+  assert.equal(result.samples.flatMap(s=>s.probes).length,35);
   assert.deepEqual(result.summary,{'opposite-side-contact':7,'same-side-overlap':0,'inconclusive':0});
  }
  const signatures=results.map(result=>result.samples.map(s=>s.probes.map(p=>p.classification).join(',')));
  assert.deepEqual(signatures[0],signatures[1]);
  assert.deepEqual(signatures[1],signatures[2]);
+});
+
+test('near-endpoint seam overlap is detected rather than hidden by midpoint-only sampling',()=>{
+ const west=[[[170,65],[180,65],[180,69],[170,69],[170,65]]];
+ const east=[[[-180,65],[-170,65],[-170,69],[-180,69],[-180,65]]];
+ const result=auditSeamSidedness(feature([west,east]));
+ assert.equal(result.samples[0].probes[0].latitude,65.2);
+ assert.equal(result.samples[0].probes.at(-1).latitude,68.8);
+ assert.ok(result.samples[0].probes.every(p=>p.classification==='opposite-side-contact'));
 });
