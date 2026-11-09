@@ -94,7 +94,7 @@ export function contains(geometry,lon,lat) {
  for(let i=0;i<polygons.length;i++) for(let j=i+1;j<polygons.length;j++) {
   const a=polygons[i],b=polygons[j];
   for(const ringA of a) for(const ringB of b)
-   assertDisjointRingBoundaries(unwrapRing(ringA),unwrapRing(ringB));
+   assertDisjointRingBoundaries(unwrapRing(ringA),unwrapRing(ringB),'component');
   const filled=(poly,point)=>inRing(point[0],point[1],poly[0])&&!poly.slice(1).some(h=>inRing(point[0],point[1],h));
   if(filled(a,b[0][0])||filled(b,a[0][0]))
    throw Error('Invalid topology: overlapping MultiPolygon interiors');
