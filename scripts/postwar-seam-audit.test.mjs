@@ -67,3 +67,20 @@ test('disjoint seam intervals remain distinct',()=>{
  const result=inspectSeam(fixture([outer,hole]));
  assert.deepEqual(result.seamEdgeOverlaps,[]);
 });
+
+test('union of subdivided seam edges measures coverage once',()=>{
+ const outer=[[179,59],[180,60],[180,65],[180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[-180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{type:'MultiPolygon',coordinates:[[outer],[other]]}}]};
+ const result=inspectSeam(doc);
+ assert.equal(result.seamEdgeOverlaps.length,2,'two edge pairs cover one shared interval');
+ assert.deepEqual(result.mergedSeamOverlapIntervals,[[62,68]]);
+ assert.equal(result.seamOverlapLatitudeDegrees,6,'do not sum overlapping edge-pair coverage twice');
+});
+test('non-overlapping seam edge pairs preserve separate merged intervals',()=>{
+ const outer=[[179,59],[180,60],[180,63],[179,64],[179,59]];
+ const hole=[[179.5,60],[180,61],[180,62],[179.5,63],[179.5,60]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.deepEqual(result.mergedSeamOverlapIntervals,[[61,62]]);
+ assert.equal(result.seamOverlapLatitudeDegrees,1);
+});
