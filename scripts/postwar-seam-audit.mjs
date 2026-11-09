@@ -27,12 +27,18 @@ export function inspectSeam(doc,name='USSR'){
  // A closed ring repeats its first vertex at the last index. Preserve raw
  // index-level contacts for forensics, but count each physical seam location once.
  const uniqueContacts=[];
- const seen=new Set();
+ const byRingPair=new Map();
  for(const contact of contacts){
-  // +180 and -180 are the same meridian on the globe. Deduplicate by
-  // component pair and physical latitude, while retaining raw vertex evidence.
-  const key=[contact.a[0],contact.a[1],contact.b[0],contact.b[1],contact.latitude].join('|');
-  if(!seen.has(key)){seen.add(key);uniqueContacts.push(contact);}
+  // +180 and -180 are the same meridian. The raw contact predicate uses
+  // a 1e-9 latitude tolerance, so exact-string latitude keys would count
+  // near-identical vertices twice. Keep raw index-level evidence unchanged.
+  const pair=[contact.a[0],contact.a[1],contact.b[0],contact.b[1]].join('|');
+  const latitudes=byRingPair.get(pair)??[];
+  if(!latitudes.some(latitude=>Math.abs(latitude-contact.latitude)<1e-9)){
+   latitudes.push(contact.latitude);
+   byRingPair.set(pair,latitudes);
+   uniqueContacts.push(contact);
+  }
  }
  return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
