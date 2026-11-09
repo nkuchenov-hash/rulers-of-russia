@@ -75,3 +75,15 @@ test('unsupported geometry fails closed with an explicit error',()=>{
  doc.features[0].geometry={type:'Point',coordinates:[180,67]};
  assert.throws(()=>auditSeamSidedness(doc),/Unsupported USSR geometry type: Point/);
 });
+
+test('malformed diagnostic rings fail closed instead of yielding a sidedness classification',()=>{
+ const badCases=[
+  [[[170,65],[180,65],[180,69]]],
+  [[[170,65],[180,65],[180,69],[170,69],[170,66]]],
+  [[[170,65],[181,65],[180,69],[170,65]]],
+  [[[170,65],[180,65],[180,Infinity],[170,65]]],
+ ];
+ for(const bad of badCases){
+  assert.throws(()=>auditSeamSidedness(feature([bad,east])),/Invalid diagnostic ring|Unclosed diagnostic ring/);
+ }
+});
