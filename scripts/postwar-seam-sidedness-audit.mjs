@@ -26,10 +26,17 @@ export function auditSeamSidedness(doc,name='USSR',delta=0.0001){
  const selected=features.filter(f=>f.type==='Feature'&&String(f.properties?.NAME??'').trim().toUpperCase()===name.toUpperCase());
  const g=selected[0].geometry,polygons=g.type==='Polygon'?[g.coordinates]:g.coordinates;
  const samples=evidence.seamEdgeOverlaps.map(({a,b,latitudeInterval})=>{
-  const latitude=(latitudeInterval[0]+latitudeInterval[1])/2;
-  const sides=[a[0],b[0]].map(component=>({component,west:filled(polygons[component],180-delta,latitude),east:filled(polygons[component],-180+delta,latitude)}));
-  const west=sides.filter(s=>s.west).length,east=sides.filter(s=>s.east).length;
-  return {edges:[a,b],latitudeInterval,latitude,sides,classification:west>1||east>1?'same-side-overlap':west===1&&east===1?'opposite-side-contact':'inconclusive'};
+  // Three interior probes catch latitude-dependent sidedness that a midpoint alone misses.
+  // These remain sparse samples; no global-topology conclusion is implied.
+  const probes=[0.25,0.5,0.75].map(fraction=>{
+   const latitude=latitudeInterval[0]+(latitudeInterval[1]-latitudeInterval[0])*fraction;
+   const sides=[a[0],b[0]].map(component=>({component,west:filled(polygons[component],180-delta,latitude),east:filled(polygons[component],-180+delta,latitude)}));
+   const west=sides.filter(s=>s.west).length,east=sides.filter(s=>s.east).length;
+   return {latitude,sides,classification:west>1||east>1?'same-side-overlap':west===1&&east===1?'opposite-side-contact':'inconclusive'};
+  });
+  const middle=probes[1];
+  const classification=probes.some(p=>p.classification==='same-side-overlap')?'same-side-overlap':probes.every(p=>p.classification==='opposite-side-contact')?'opposite-side-contact':'inconclusive';
+  return {edges:[a,b],latitudeInterval,latitude:middle.latitude,sides:middle.sides,probes,classification};
  });
  return {name,delta,samples,summary:Object.fromEntries(['opposite-side-contact','same-side-overlap','inconclusive'].map(k=>[k,samples.filter(s=>s.classification===k).length])),limitations:'Sparse local planar samples, not proof of global topology or historical accuracy.'};
 }
