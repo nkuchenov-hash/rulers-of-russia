@@ -154,5 +154,5 @@ test('two MultiPolygon shells sharing an antimeridian seam fail strict diagnosti
  const west=[[179,0],[180,0],[180,10],[179,10],[179,0]];
  const east=[[-180,0],[-179,0],[-179,10],[-180,10],[-180,0]];
  const g={type:'MultiPolygon',coordinates:[[west],[east]]};
- assert.throws(()=>contains(g,179.5,5),/hole crosses or touches outer ring/);
+ assert.throws(()=>contains(g,179.5,5),/MultiPolygon component boundaries cross or touch/);
 });
