@@ -8,6 +8,8 @@ on:
       - 'scripts/postwar-topology.todo.test.mjs'
       - 'scripts/postwar-multipolygon-overlap.todo.test.mjs'
       - 'scripts/postwar-ring-topology.mjs'
+      - 'scripts/postwar-seam-audit.mjs'
+      - 'scripts/postwar-seam-audit.test.mjs'
       - 'public/data/territory/world-history/snapshots/1945.geojson'
       - '.github/workflows/postwar-controls.yml'
   workflow_dispatch:
@@ -26,6 +28,12 @@ jobs:
           node-version: '22'
       - name: Execute synthetic and actual 1945 snapshot controls
         run: node --test scripts/postwar-controls.test.mjs scripts/postwar-topology.todo.test.mjs scripts/postwar-multipolygon-overlap.todo.test.mjs
+      - name: Test seam evidence extraction
+        if: always()
+        run: node --test scripts/postwar-seam-audit.test.mjs
+      - name: Print seam contacts in actual 1945 geometry
+        if: always()
+        run: node scripts/postwar-seam-audit.mjs public/data/territory/world-history/snapshots/1945.geojson USSR > /tmp/ussr-seam-evidence.json && node -e "const d=require('/tmp/ussr-seam-evidence.json'); console.log(JSON.stringify({polygonCount:d.polygonCount,seamRingCount:d.seamRingCount,contacts:d.contacts.slice(0,50),contactCount:d.contacts.length},null,2))"
       - name: Print detailed control outcomes
         if: always()
         run: node scripts/postwar-controls.mjs public/data/territory/world-history/snapshots/1945.geojson USSR
