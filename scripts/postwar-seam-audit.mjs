@@ -24,7 +24,19 @@ export function inspectSeam(doc,name='USSR'){
  for(let i=0;i<rings.length;i++)for(let j=i+1;j<rings.length;j++)
   for(const a of rings[i].seamVertices)for(const b of rings[j].seamVertices)
    if(Math.abs(a.latitude-b.latitude)<1e-9)contacts.push({a:[rings[i].polygonIndex,rings[i].ringIndex,a.index],b:[rings[j].polygonIndex,rings[j].ringIndex,b.index],latitude:a.latitude});
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ // A closed ring repeats its first vertex at the last index. Preserve raw
+ // index-level contacts for forensics, but count each physical seam location once.
+ const uniqueContacts=[];
+ const seen=new Set();
+ for(const contact of contacts){
+  const a=rings.find(r=>r.polygonIndex===contact.a[0]&&r.ringIndex===contact.a[1]);
+  const b=rings.find(r=>r.polygonIndex===contact.b[0]&&r.ringIndex===contact.b[1]);
+  const av=a.seamVertices.find(v=>v.index===contact.a[2]);
+  const bv=b.seamVertices.find(v=>v.index===contact.b[2]);
+  const key=[contact.a[0],contact.a[1],contact.b[0],contact.b[1],av.longitude,bv.longitude,contact.latitude].join('|');
+  if(!seen.has(key)){seen.add(key);uniqueContacts.push(contact);}
+ }
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
