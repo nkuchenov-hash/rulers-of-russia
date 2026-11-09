@@ -61,3 +61,17 @@ test('near-endpoint seam overlap is detected rather than hidden by midpoint-only
  assert.equal(result.samples[0].probes.at(-1).latitude,68.8);
  assert.ok(result.samples[0].probes.every(p=>p.classification==='opposite-side-contact'));
 });
+
+test('missing named feature fails closed rather than dereferencing undefined',()=>{
+ assert.throws(()=>auditSeamSidedness({type:'FeatureCollection',features:[]}),/exactly one USSR feature; found 0/);
+});
+test('duplicate named features fail closed rather than silently using the first',()=>{
+ const doc=feature([west,east]);
+ doc.features.push(structuredClone(doc.features[0]));
+ assert.throws(()=>auditSeamSidedness(doc),/exactly one USSR feature; found 2/);
+});
+test('unsupported geometry fails closed with an explicit error',()=>{
+ const doc=feature([west,east]);
+ doc.features[0].geometry={type:'Point',coordinates:[180,67]};
+ assert.throws(()=>auditSeamSidedness(doc),/Unsupported USSR geometry type: Point/);
+});
