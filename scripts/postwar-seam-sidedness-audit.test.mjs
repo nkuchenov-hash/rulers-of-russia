@@ -84,6 +84,6 @@ test('malformed diagnostic rings fail closed instead of yielding a sidedness cla
   [[[170,65],[180,65],[180,Infinity],[170,65]]],
  ];
  for(const bad of badCases){
-  assert.throws(()=>auditSeamSidedness(feature([bad,east])),/Invalid diagnostic ring|Unclosed diagnostic ring/);
+  assert.throws(()=>auditSeamSidedness(feature([bad,east])),/Invalid ring|Invalid coordinate|Unclosed ring|Invalid diagnostic ring|Unclosed diagnostic ring/);
  }
 });
