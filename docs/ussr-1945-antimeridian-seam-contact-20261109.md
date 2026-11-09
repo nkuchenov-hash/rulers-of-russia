@@ -45,3 +45,9 @@ Overlapping latitude intervals on the ±180° meridian, in source-edge index ord
 The union of these consecutive intervals spans **65.25922735782032°–68.91692694278126° N**, or **3.65769958496094° latitude**. This is a geometric seam-span measurement, not an independent historical-border comparison and not evidence that the two components overlap in filled area. The validator's message says “hole” because `assertDisjointRingBoundaries` is reused for *pairs of distinct MultiPolygon members*; the source rings in this finding are both outer rings. A future diagnostic should distinguish the calling context to avoid misreporting an outer-ring seam as a polygon hole.
 
 Do not suppress this check or merge the draft based on the seam span alone. Establish periodic-surface topology and whether these two components represent an intended seam split; then verify dated geography against a licensed independent reference.
+
+## Signed seam-edge alias regression (2026-11-09)
+
+The read-only seam auditor previously recognized a seam edge only if its endpoints had the *same numeric longitude*. This misses edges whose endpoints are `[+180, latA]` and `[-180, latB]`: these represent the same physical meridian on the periodic surface, even though the numeric longitudes differ by 360°. Commit `c88329f` accepts this signed alias for nonzero latitude spans; commit `5d7f2bc` adds synthetic regressions for a six-degree shared span and for an alias edge with zero latitude span.
+
+This is a **diagnostic completeness fix**, not a modification of the USSR snapshot or evidence that the seam clipping is historically correct. The seven previously measured 1945 edge-pairs and their 3.65769958496094° union must be rechecked on the updated code; their count must not be assumed unchanged. No independently licensed dated boundary comparison has been completed.
