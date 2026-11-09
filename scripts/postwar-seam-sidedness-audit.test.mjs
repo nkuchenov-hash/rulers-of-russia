@@ -34,3 +34,21 @@ test('real 1945 USSR seam produces classifications for all seven edge pairs',()=
  assert.equal(result.samples[0].latitudeInterval[0],65.25922735782032);
  assert.equal(result.samples.at(-1).latitudeInterval[1],68.91692694278126);
 });
+
+test('real 1945 seam classifications are stable across three probe offsets',()=>{
+ // Probe sensitivity is a diagnostic robustness check, NOT an independent reference.
+ // A single offset can conceal a narrow overlap or numerical boundary artifact.
+ const path=new URL('../public/data/territory/world-history/snapshots/1945.geojson',import.meta.url);
+ const snapshot=JSON.parse(readFileSync(path,'utf8'));
+ const offsets=[0.00001,0.0001,0.001];
+ const results=offsets.map(delta=>auditSeamSidedness(snapshot,'USSR',delta));
+ for(const [i,result] of results.entries()){
+  assert.equal(result.delta,offsets[i]);
+  assert.equal(result.samples.length,7);
+  assert.equal(result.samples.flatMap(s=>s.probes).length,21);
+  assert.deepEqual(result.summary,{'opposite-side-contact':7,'same-side-overlap':0,'inconclusive':0});
+ }
+ const signatures=results.map(result=>result.samples.map(s=>s.probes.map(p=>p.classification).join(',')));
+ assert.deepEqual(signatures[0],signatures[1]);
+ assert.deepEqual(signatures[1],signatures[2]);
+});
