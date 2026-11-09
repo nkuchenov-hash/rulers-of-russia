@@ -25,3 +25,23 @@ Before changing the validator or geometry:
 5. Compare dated borders with a rights-cleared independent reference; currently **zero** such quantitative comparisons for this case. The 26/26 failures for 1520–1599 remain unresolved.
 
 This report is a topology diagnosis, **not** proof of geographic accuracy or permission to redistribute historical contours.
+
+## Follow-up: continuous seam-edge overlap (2026-11-09, run 42585279692)
+
+The vertex-only report understated the observed geometric relationship. The read-only edge-overlap diagnostic added in commits `760de772`, `81527358`, and `fb66e45f` found **seven pairs of overlapping source edges** between outer rings of MultiPolygon components **1 and 2**. All three new synthetic seam-overlap tests passed in GitHub Actions run [42585279692](https://github.com/nkuchenov-hash/rulers-of-russia/actions/runs/42585279692) (10/10 seam tests). The overall diagnostic remains red because the real snapshot is rejected (31/32 topology tests).
+
+Overlapping latitude intervals on the ±180° meridian, in source-edge index order:
+
+| Component 1 edge | Component 2 edge | Overlap latitude range (°N) |
+|---:|---:|---|
+| 1029 | 3 | 65.25922735782032–65.31103094668751 |
+| 1030 | 1 | 65.38161810489063–65.3816333636797 |
+| 1030 | 2 | 65.31103094668751–65.38161810489063 |
+| 1031 | 1 | 65.3816333636797–65.96313055606251 |
+| 1032 | 0 | 65.96313055606251–66.96313055606251 |
+| 1033 | 83 | 66.96313055606251–67.96313055606251 |
+| 1034 | 82 | 67.96313055606251–68.91692694278126 |
+
+The union of these consecutive intervals spans **65.25922735782032°–68.91692694278126° N**, or **3.65769958496094° latitude**. This is a geometric seam-span measurement, not an independent historical-border comparison and not evidence that the two components overlap in filled area. The validator's message says “hole” because `assertDisjointRingBoundaries` is reused for *pairs of distinct MultiPolygon members*; the source rings in this finding are both outer rings. A future diagnostic should distinguish the calling context to avoid misreporting an outer-ring seam as a polygon hole.
+
+Do not suppress this check or merge the draft based on the seam span alone. Establish periodic-surface topology and whether these two components represent an intended seam split; then verify dated geography against a licensed independent reference.
