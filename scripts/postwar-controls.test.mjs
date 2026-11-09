@@ -139,3 +139,20 @@ test('topology failure identifies polygon and hole indices',()=>{
  ]};
  assert.throws(()=>contains(g,1,1),/Polygon 1 hole 1: Invalid topology: polygon hole crosses or touches outer ring/);
 });
+
+ 
+// Longitude +180 and -180 represent the same meridian. A diagnostic
+// must not treat a genuine ring contact as disjoint merely because
+// GeoJSON uses opposite signed aliases on either side of the seam.
+test('hole touching outer shell at opposite signed antimeridian aliases fails closed',()=>{
+ const shell=[[179,0],[180,0],[180,10],[179,10],[179,0]];
+ const hole=[[-180,5],[179.5,4],[179.5,6],[-180,5]];
+ const g={type:'Polygon',coordinates:[shell,hole]};
+ assert.throws(()=>contains(g,179.25,2),/hole crosses or touches outer ring/);
+});
+test('two MultiPolygon shells sharing an antimeridian seam fail strict diagnostic',()=>{
+ const west=[[179,0],[180,0],[180,10],[179,10],[179,0]];
+ const east=[[-180,0],[-179,0],[-179,10],[-180,10],[-180,0]];
+ const g={type:'MultiPolygon',coordinates:[[west],[east]]};
+ assert.throws(()=>contains(g,179.5,5),/hole crosses or touches outer ring/);
+});
