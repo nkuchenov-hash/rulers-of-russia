@@ -20,6 +20,22 @@ export function inspectSeam(doc,name='USSR'){
   if(ring[0][0]!==ring.at(-1)[0]||ring[0][1]!==ring.at(-1)[1])throw Error('Unclosed ring');
   if(seamVertices.length)rings.push({polygonIndex,ringIndex,kind:ringIndex?'hole':'outer',vertices:ring.length-1,seamVertices,seamEdges});
  }
+ // A vertex-only audit misses collinear seam segments with overlapping latitude
+ // intervals but no matching endpoints (e.g. [60,70] versus [62,68]).
+ // Preserve every source edge and report positive-length overlaps separately.
+ const seamEdgeOverlaps=[];
+ for(let i=0;i<rings.length;i++)for(let j=i+1;j<rings.length;j++){
+  for(const a of rings[i].seamEdges)for(const b of rings[j].seamEdges){
+   const aLow=Math.min(a.from[1],a.to[1]),aHigh=Math.max(a.from[1],a.to[1]);
+   const bLow=Math.min(b.from[1],b.to[1]),bHigh=Math.max(b.from[1],b.to[1]);
+   const low=Math.max(aLow,bLow),high=Math.min(aHigh,bHigh);
+   if(high-low>1e-9)seamEdgeOverlaps.push({
+    a:[rings[i].polygonIndex,rings[i].ringIndex,a.index],
+    b:[rings[j].polygonIndex,rings[j].ringIndex,b.index],
+    latitudeInterval:[low,high]
+   });
+  }
+ }
  const contacts=[];
  for(let i=0;i<rings.length;i++)for(let j=i+1;j<rings.length;j++)
   for(const a of rings[i].seamVertices)for(const b of rings[j].seamVertices)
@@ -40,7 +56,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,seamEdgeOverlaps,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
