@@ -34,7 +34,7 @@ jobs:
         run: node --test scripts/postwar-seam-audit.test.mjs scripts/postwar-1945-seam-fixture.test.mjs
       - name: Print seam contacts in actual 1945 geometry
         if: always()
-        run: node scripts/postwar-seam-audit.mjs public/data/territory/world-history/snapshots/1945.geojson USSR > /tmp/ussr-seam-evidence.json && node -e "const d=require('/tmp/ussr-seam-evidence.json'); console.log(JSON.stringify({polygonCount:d.polygonCount,seamRingCount:d.seamRingCount,contacts:d.contacts.slice(0,50),contactCount:d.contacts.length},null,2))"
+        run: node scripts/postwar-seam-audit.mjs public/data/territory/world-history/snapshots/1945.geojson USSR > /tmp/ussr-seam-evidence.json && node -e "const d=require('/tmp/ussr-seam-evidence.json'); console.log(JSON.stringify({polygonCount:d.polygonCount,seamRingCount:d.seamRingCount,contacts:d.contacts.slice(0,50),contactCount:d.contacts.length,seamEdgeOverlapCount:d.seamEdgeOverlaps.length,seamEdgeOverlaps:d.seamEdgeOverlaps.slice(0,50)},null,2))"
       - name: Print detailed control outcomes
         if: always()
         run: node scripts/postwar-controls.mjs public/data/territory/world-history/snapshots/1945.geojson USSR
