@@ -36,6 +36,17 @@ export function inspectSeam(doc,name='USSR'){
    });
   }
  }
+ // Pairwise edge overlaps can subdivide the same physical seam interval.
+ // Merge their latitude ranges before reporting total coverage; summing raw
+ // edge-pair lengths can double-count when source edges overlap each other.
+ const sortedIntervals=seamEdgeOverlaps.map(x=>x.latitudeInterval).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const mergedSeamOverlapIntervals=[];
+ for(const [low,high] of sortedIntervals){
+  const last=mergedSeamOverlapIntervals.at(-1);
+  if(last&&low<=last[1]+1e-9)last[1]=Math.max(last[1],high);
+  else mergedSeamOverlapIntervals.push([low,high]);
+ }
+ const seamOverlapLatitudeDegrees=mergedSeamOverlapIntervals.reduce((sum,[low,high])=>sum+high-low,0);
  const contacts=[];
  for(let i=0;i<rings.length;i++)for(let j=i+1;j<rings.length;j++)
   for(const a of rings[i].seamVertices)for(const b of rings[j].seamVertices)
@@ -56,7 +67,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,seamEdgeOverlaps,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,seamEdgeOverlaps,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
