@@ -2,9 +2,15 @@
 import fs from 'node:fs';
 import {inspectSeam} from './postwar-seam-audit.mjs';
 function unwrap(ring){
+ if(!Array.isArray(ring)||ring.length<4)throw Error('Invalid diagnostic ring: at least four positions required');
  const out=[];
- for(const [lon,lat] of ring){let x=lon;if(out.length)x+=360*Math.round((out.at(-1)[0]-x)/360);out.push([x,lat]);}
- if(Math.abs(out[0][0]-out.at(-1)[0])>1e-8)throw Error('Unsupported winding ring');
+ for(const point of ring){
+  if(!Array.isArray(point)||point.length<2||!Number.isFinite(point[0])||!Number.isFinite(point[1])||Math.abs(point[0])>180||Math.abs(point[1])>90)throw Error('Invalid diagnostic ring coordinate');
+  const [lon,lat]=point;let x=lon;
+  if(out.length)x+=360*Math.round((out.at(-1)[0]-x)/360);
+  out.push([x,lat]);
+ }
+ if(Math.abs(out[0][0]-out.at(-1)[0])>1e-8||Math.abs(out[0][1]-out.at(-1)[1])>1e-8)throw Error('Unclosed diagnostic ring');
  return out;
 }
 function inside(ring,x,y){
