@@ -30,3 +30,18 @@ test('signed antimeridian aliases count as one physical contact',()=>{
  assert.equal(result.uniqueContactCount,1,'+180 and -180 identify one physical point');
  assert.equal(result.uniqueContacts[0].latitude,65);
 });
+
+test('near-equal seam latitudes use the same tolerance for contacts and deduplication',()=>{
+ const outer=[[179,60],[180,65],[179,66],[179,60]];
+ const hole=[[179.5,64],[180,65+5e-10],[180,65+7e-10],[179.5,64]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.equal(result.contacts.length,2,'retain both distinct source vertex indices');
+ assert.equal(result.uniqueContactCount,1,'sub-nanodegree latitude jitter is one seam location');
+});
+
+test('nearby but distinct seam locations are not collapsed',()=>{
+ const outer=[[179,60],[180,65],[180,65+2e-9],[179,66],[179,60]];
+ const hole=[[179.5,64],[180,65],[180,65+2e-9],[179.5,64]];
+ const result=inspectSeam(fixture([outer,hole]));
+ assert.equal(result.uniqueContactCount,2);
+});
