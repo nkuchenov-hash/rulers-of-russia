@@ -10,6 +10,7 @@ on:
       - 'scripts/postwar-ring-topology.mjs'
       - 'scripts/postwar-seam-audit.mjs'
       - 'scripts/postwar-seam-audit.test.mjs'
+      - 'scripts/postwar-1945-seam-fixture.test.mjs'
       - 'public/data/territory/world-history/snapshots/1945.geojson'
       - '.github/workflows/postwar-controls.yml'
   workflow_dispatch:
@@ -30,7 +31,7 @@ jobs:
         run: node --test scripts/postwar-controls.test.mjs scripts/postwar-topology.todo.test.mjs scripts/postwar-multipolygon-overlap.todo.test.mjs
       - name: Test seam evidence extraction
         if: always()
-        run: node --test scripts/postwar-seam-audit.test.mjs
+        run: node --test scripts/postwar-seam-audit.test.mjs scripts/postwar-1945-seam-fixture.test.mjs
       - name: Print seam contacts in actual 1945 geometry
         if: always()
         run: node scripts/postwar-seam-audit.mjs public/data/territory/world-history/snapshots/1945.geojson USSR > /tmp/ussr-seam-evidence.json && node -e "const d=require('/tmp/ussr-seam-evidence.json'); console.log(JSON.stringify({polygonCount:d.polygonCount,seamRingCount:d.seamRingCount,contacts:d.contacts.slice(0,50),contactCount:d.contacts.length},null,2))"
