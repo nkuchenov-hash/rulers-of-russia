@@ -14,6 +14,7 @@ on:
       - 'scripts/postwar-seam-sidedness-audit.mjs'
       - 'scripts/postwar-seam-sidedness-audit.test.mjs'
       - 'scripts/postwar-1945-seam-fixture.test.mjs'
+      - 'scripts/postwar-1945-seam-coverage.test.mjs'
       - 'public/data/territory/world-history/snapshots/1945.geojson'
       - '.github/workflows/postwar-controls.yml'
   workflow_dispatch:
@@ -34,7 +35,7 @@ jobs:
         run: node --test scripts/postwar-controls.test.mjs scripts/postwar-topology.todo.test.mjs scripts/postwar-multipolygon-overlap.todo.test.mjs
       - name: Test seam evidence extraction
         if: always()
-        run: node --test scripts/postwar-seam-audit.test.mjs scripts/postwar-1945-seam-fixture.test.mjs scripts/postwar-periodic-seam-sidedness.test.mjs scripts/postwar-seam-sidedness-audit.test.mjs
+        run: node --test scripts/postwar-seam-audit.test.mjs scripts/postwar-1945-seam-fixture.test.mjs scripts/postwar-1945-seam-coverage.test.mjs scripts/postwar-periodic-seam-sidedness.test.mjs scripts/postwar-seam-sidedness-audit.test.mjs
       - name: Print local sidedness of real 1945 seam
         if: always()
         run: node scripts/postwar-seam-sidedness-audit.mjs public/data/territory/world-history/snapshots/1945.geojson USSR
