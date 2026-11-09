@@ -84,3 +84,17 @@ test('non-overlapping seam edge pairs preserve separate merged intervals',()=>{
  assert.deepEqual(result.mergedSeamOverlapIntervals,[[61,62]]);
  assert.equal(result.seamOverlapLatitudeDegrees,1);
 });
+
+test('opposite signed longitude aliases form a physical seam edge',()=>{
+ const outer=[[179,59],[180,60],[-180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{type:'MultiPolygon',coordinates:[[outer],[other]]}}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.seamEdgeOverlaps,[{a:[0,0,1],b:[1,0,1],latitudeInterval:[62,68]}]);
+ assert.equal(result.seamOverlapLatitudeDegrees,6);
+});
+test('opposite signed seam aliases at identical latitude are not a positive-length seam edge',()=>{
+ const outer=[[179,59],[180,60],[-180,60],[179,61],[179,59]];
+ const result=inspectSeam(fixture([outer]));
+ assert.equal(result.rings[0].seamEdges.length,0);
+});
