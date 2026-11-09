@@ -54,7 +54,8 @@ function ringSegments(points){
 }
 // Detect intersections between distinct rings with a BVH; touching boundaries
 // are rejected too. The caller supplies already unwrapped coordinates.
-export function assertDisjointRingBoundaries(outer,hole){
+export function assertDisjointRingBoundaries(outer,hole,context='hole'){
+ if(!['hole','component'].includes(context))throw Error('Invalid ring comparison context');
  const outerSegments=ringSegments(outer);
  const tree=build(outerSegments.slice());
  let outerMin=Infinity,outerMax=-Infinity,holeMin=Infinity,holeMax=-Infinity;
@@ -70,7 +71,7 @@ export function assertDisjointRingBoundaries(outer,hole){
     const node=stack.pop();if(!overlaps(s,node))continue;
     if(node.items){
      for(const t of node.items)if(overlaps(s,t)&&intersects(s,t))
-      throw Error(`Invalid topology: polygon hole crosses or touches outer ring (outer edge ${t.i}, inner edge ${s.i}, longitude shift ${offset}; outer coordinates ${JSON.stringify(t.points)}, inner coordinates ${JSON.stringify(s.points)})`);
+      throw Error(`Invalid topology: ${context==='component'?'MultiPolygon component boundaries cross or touch':'polygon hole crosses or touches outer ring'} (outer edge ${t.i}, inner edge ${s.i}, longitude shift ${offset}; outer coordinates ${JSON.stringify(t.points)}, inner coordinates ${JSON.stringify(s.points)})`);
     }else stack.push(node.left,node.right);
    }
   }
