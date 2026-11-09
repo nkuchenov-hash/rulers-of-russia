@@ -22,3 +22,13 @@ The 2026-11-08 GitHub Actions run 42453940009 passed 9/9 tests and all eight cit
 6. Keep historical errors and reference outages visible as blockers. No source available means **not verified**, not passed.
 
 Current independent quantitative comparisons for this candidate: **0**. Existing 1520–1599 historical regression failures: **26/26** (previously reported, not retested here).
+
+## Source recheck (2026-11-10): version and population-selection hazards
+
+Official publisher page: https://icr.ethz.ch/data/cshapes/ confirms CShapes 2.0 covers 1886–2019 and retains **CC BY-NC-SA 4.0**. Its separate beta page https://icr.ethz.ch/data/cshapes/beta.html advertises **CShapes 2.1** covering 1886–2023. These are distinct versions: do not silently mix them or assume the beta is the downloaded 2.0 archive. No reference geometry has been imported here.
+
+The CShapes R documentation (https://www.stat.ethz.ch/CRAN/web/packages/cshapes/refman/cshapes.html) specifies `cshp(date, useGW, dependencies)`: `useGW=true` chooses Gleditsch–Ward state membership, `false` Correlates of War; `dependencies=false` excludes dependent units. These switches may change the geometry/feature population. Any USSR comparison must record the chosen state-system definition, dependencies setting, and precise snapshot date alongside source version and hash. A passing comparison with an unspecified switch is not independently reproducible.
+
+A separate CShapes-powered OGC API description at https://github.com/ldproxy/demo/blob/main/doc/cshapes.md explicitly documents dated filtering (e.g. `datetime=1980-01-01`) and the same noncommercial share-alike license. It is a secondary service, not an authoritative substitute for publisher bytes or permission to redistribute contours.
+
+**Status:** official source and license text rechecked, but 0 geometry files fetched, 0 licensed independent boundary comparisons executed, and no new historical correctness claim. The existing 26/26 failures for 1520–1599 remain unresolved. Before a comparison, select an explicit version (2.0 vs beta 2.1), dated USSR records, GW/COW definition, dependencies policy, and usage rights; record each as comparison metadata.
