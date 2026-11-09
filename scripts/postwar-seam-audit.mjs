@@ -29,11 +29,9 @@ export function inspectSeam(doc,name='USSR'){
  const uniqueContacts=[];
  const seen=new Set();
  for(const contact of contacts){
-  const a=rings.find(r=>r.polygonIndex===contact.a[0]&&r.ringIndex===contact.a[1]);
-  const b=rings.find(r=>r.polygonIndex===contact.b[0]&&r.ringIndex===contact.b[1]);
-  const av=a.seamVertices.find(v=>v.index===contact.a[2]);
-  const bv=b.seamVertices.find(v=>v.index===contact.b[2]);
-  // +180 and -180 are the same meridian on the globe. Deduplicate by\n  // component pair and physical latitude, while retaining raw vertex evidence.\n  const key=[contact.a[0],contact.a[1],contact.b[0],contact.b[1],contact.latitude].join('|');
+  // +180 and -180 are the same meridian on the globe. Deduplicate by
+  // component pair and physical latitude, while retaining raw vertex evidence.
+  const key=[contact.a[0],contact.a[1],contact.b[0],contact.b[1],contact.latitude].join('|');
   if(!seen.has(key)){seen.add(key);uniqueContacts.push(contact);}
  }
  return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
