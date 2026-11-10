@@ -158,3 +158,10 @@ test('near but not equal half-world edges are not rejected as ambiguous',()=>{
  const ring=[[0,10],[179.999,11],[179.998,12],[0,10]];
  assert.deepEqual(inspectSeam(fixture([ring])).implicitSeamCrossings,[]);
 });
+
+test('opposite signed representations of the same seam cannot be interpolated as a 360-degree edge',()=>{
+ for(const ring of [
+  [[180,60],[-180,61],[-179,62],[180,60]],
+  [[-180,60],[180,61],[179,62],[-180,60]]
+ ])assert.throws(()=>inspectSeam(fixture([ring])),/Ambiguous 360-degree seam edge/);
+});
