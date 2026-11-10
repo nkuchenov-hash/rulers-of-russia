@@ -19,6 +19,9 @@ export function inspectSeam(doc,name='USSR'){
    if(i){
     const [prevLon,prevLat]=ring[i-1];
     const delta=lon-prevLon;
+    // Exactly 180 degrees admits two equally short arcs. A seam audit must
+    // not silently choose a hemisphere or report a false negative.
+    if(Math.abs(delta)===180)throw Error('Ambiguous 180-degree longitude edge');
     if(Math.abs(delta)>180){
      const unwrappedLon=lon+(delta>0?-360:360);
      const seamLongitude=prevLon>0?180:-180;
