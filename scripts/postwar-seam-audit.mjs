@@ -7,12 +7,25 @@ export function inspectSeam(doc,name='USSR'){
  const g=selected[0].geometry;
  if(!g||!['Polygon','MultiPolygon'].includes(g.type))throw Error('Expected polygon geometry');
  const polygons=g.type==='Polygon'?[g.coordinates]:g.coordinates, rings=[];
+ const implicitSeamCrossings=[];
  for(const [polygonIndex,poly] of polygons.entries())for(const [ringIndex,ring] of poly.entries()){
   if(!Array.isArray(ring)||ring.length<4)throw Error('Invalid ring');
   const seamVertices=[],seamEdges=[];
   for(let i=0;i<ring.length;i++){
    const [lon,lat]=ring[i];
    if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lon)>180||Math.abs(lat)>90)throw Error('Invalid coordinate');
+   // Short dateline-crossing edges can have no explicit +/-180 vertex.
+   // Interpolated latitude is diagnostic in coordinate space, not geodesic.
+   if(i){
+    const [prevLon,prevLat]=ring[i-1];
+    const delta=lon-prevLon;
+    if(Math.abs(delta)>180){
+     const unwrappedLon=lon+(delta>0?-360:360);
+     const seamLongitude=prevLon>0?180:-180;
+     const t=(seamLongitude-prevLon)/(unwrappedLon-prevLon);
+     if(t>0&&t<1)implicitSeamCrossings.push({polygonIndex,ringIndex,edgeIndex:i-1,latitude:prevLat+t*(lat-prevLat),from:ring[i-1],to:ring[i]});
+    }
+   }
    if(Math.abs(Math.abs(lon)-180)<1e-9)seamVertices.push({index:i,longitude:lon,latitude:lat});
    if(i&&Math.abs(Math.abs(ring[i-1][0])-180)<1e-9&&Math.abs(Math.abs(lon)-180)<1e-9&&Math.abs(ring[i-1][1]-lat)>1e-9)
     seamEdges.push({index:i-1,from:ring[i-1],to:ring[i]});
@@ -67,7 +80,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,seamEdgeOverlaps,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
