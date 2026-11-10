@@ -6,7 +6,7 @@ import {inspectSeam} from './postwar-seam-audit.mjs';
 // Regression fingerprint for the repository's 1945 USSR snapshot, NOT an
 // independent historical boundary comparison or proof of valid topology.
 const snapshot=new URL('../public/data/territory/world-history/snapshots/1945.geojson',import.meta.url);
-test('1945 USSR seam overlap has reproducible union coverage and gaps',()=>{
+test('1945 USSR seam overlap has reproducible continuous union coverage',()=>{
  const result=inspectSeam(JSON.parse(fs.readFileSync(snapshot,'utf8')),'USSR');
  assert.equal(result.polygonCount,24);
  assert.equal(result.seamRingCount,2);
@@ -22,7 +22,7 @@ test('1945 USSR seam overlap has reproducible union coverage and gaps',()=>{
   assert.ok(!samePair||Math.abs(a.latitude-b.latitude)>=1e-9,'duplicate physical contact');
  }
  const intervals=result.mergedSeamOverlapIntervals;
- assert.equal(intervals.length,3,'small discontinuities in seam coverage must not be silently filled');
+ assert.equal(intervals.length,1,'the seven source-edge overlaps form one continuous interval; unexpected gaps or components must fail');
  assert.ok(Math.abs(intervals[0][0]-65.25922735782032)<1e-9);
  assert.ok(Math.abs(intervals.at(-1)[1]-68.91692694278126)<1e-9);
  const sum=intervals.reduce((n,[a,b])=>n+b-a,0);
