@@ -109,3 +109,16 @@ test('two separated physical overlap bands are not merged across a latitude gap'
  assert.deepEqual(result.mergedSeamOverlapIntervals,[[61,63],[71,73]]);
  assert.equal(result.seamOverlapLatitudeDegrees,4);
 });
+
+test('short dateline edges without seam vertices are reported',()=>{
+ const ring=[[179,60],[-179,62],[-178,64],[178,64],[179,60]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.seamRingCount,0);
+ assert.equal(result.implicitSeamCrossings.length,2);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.edgeIndex),[0,2]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.latitude),[61,64]);
+});
+test('ordinary edges have no implicit dateline crossings',()=>{
+ const result=inspectSeam(fixture([[[10,60],[11,60],[11,61],[10,60]]]));
+ assert.deepEqual(result.implicitSeamCrossings,[]);
+});
