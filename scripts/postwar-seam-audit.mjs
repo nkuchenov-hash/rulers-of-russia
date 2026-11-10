@@ -58,6 +58,10 @@ export function inspectSeam(doc,name='USSR'){
  // Attribute overlaps to component pairs rather than treating the global union
  // as a single source of conflict. This is forensic provenance, not a verdict
  // about which historical component owns the shared boundary.
+ // Distinguish overlap within one polygon (outer/hole rings) from overlap
+ // between separate MultiPolygon components. Neither alone proves invalidity.
+ const intraComponentSeamEdgeOverlaps=seamEdgeOverlaps.filter(x=>x.a[0]===x.b[0]);
+ const interComponentSeamEdgeOverlaps=seamEdgeOverlaps.filter(x=>x.a[0]!==x.b[0]);
  const overlapByComponentPair=[];
  const pairBuckets=new Map();
  for(const overlap of seamEdgeOverlaps){
@@ -110,7 +114,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,overlapByComponentPair,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,intraComponentSeamEdgeOverlaps,interComponentSeamEdgeOverlaps,overlapByComponentPair,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
