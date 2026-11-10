@@ -125,3 +125,24 @@ test('ordinary edges have no implicit dateline crossings',()=>{
  const result=inspectSeam(fixture([[[10,60],[11,60],[11,61],[10,60]]]));
  assert.deepEqual(result.implicitSeamCrossings,[]);
 });
+
+test('unequal antimeridian crossing fractions preserve source edge and latitude',()=>{
+ const ring=[[179,10],[-178,18],[-177,20],[179,10]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.implicitSeamCrossings.length,2);
+ const [east,west]=result.implicitSeamCrossings;
+ assert.equal(east.edgeIndex,0);
+ assert.equal(east.seamLongitude,180);
+ assert.ok(Math.abs(east.fraction-0.25)<1e-12);
+ assert.ok(Math.abs(east.latitude-12)<1e-12);
+ assert.equal(west.edgeIndex,2,'closing ring edge must be inspected');
+ assert.equal(west.seamLongitude,-180);
+ assert.ok(Math.abs(west.fraction-0.75)<1e-12);
+ assert.ok(Math.abs(west.latitude-12.5)<1e-12);
+});
+test('explicit seam endpoint is not reported as an interior implicit crossing',()=>{
+ const ring=[[180,10],[-179,12],[-178,14],[180,10]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.implicitSeamCrossings.length,0);
+ assert.equal(result.seamRingCount,1);
+});
