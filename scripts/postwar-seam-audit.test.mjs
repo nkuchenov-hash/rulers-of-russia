@@ -202,3 +202,16 @@ test('subdivided source edges do not inflate component-pair overlap coverage',()
   {polygonIndices:[0,1],sourceEdgePairs:2,mergedIntervals:[[62,68]],overlapLatitudeDegrees:6}
  ]);
 });
+
+test('distinguishes same-component outer/hole overlap from cross-component overlap',()=>{
+ const rect=(lo,hi)=>[[179,lo-1],[180,lo],[180,hi],[179,hi+1],[179,lo-1]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[rect(60,70),rect(62,68)],[rect(64,66)]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.equal(result.intraComponentSeamEdgeOverlaps.length,1);
+ assert.equal(result.interComponentSeamEdgeOverlaps.length,2);
+ assert.deepEqual(result.intraComponentSeamEdgeOverlaps[0].latitudeInterval,[62,68]);
+ assert.deepEqual(result.interComponentSeamEdgeOverlaps.map(x=>x.latitudeInterval),[[64,66],[64,66]]);
+ assert.deepEqual(result.overlapByComponentPair.map(x=>x.polygonIndices),[[0,0],[0,1]]);
+});
