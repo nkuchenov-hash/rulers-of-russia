@@ -117,6 +117,9 @@ test('short dateline edges without seam vertices are reported',()=>{
  assert.equal(result.implicitSeamCrossings.length,2);
  assert.deepEqual(result.implicitSeamCrossings.map(c=>c.edgeIndex),[0,2]);
  assert.deepEqual(result.implicitSeamCrossings.map(c=>c.latitude),[61,64]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.seamLongitude),[180,-180]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.direction),['eastward','westward']);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.fraction),[0.5,0.5]);
 });
 test('ordinary edges have no implicit dateline crossings',()=>{
  const result=inspectSeam(fixture([[[10,60],[11,60],[11,61],[10,60]]]));
