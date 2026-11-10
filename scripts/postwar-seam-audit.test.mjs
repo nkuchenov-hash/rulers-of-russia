@@ -159,9 +159,22 @@ test('near but not equal half-world edges are not rejected as ambiguous',()=>{
  assert.deepEqual(inspectSeam(fixture([ring])).implicitSeamCrossings,[]);
 });
 
-test('opposite signed representations of the same seam cannot be interpolated as a 360-degree edge',()=>{
+test('signed seam aliases are seam-aligned edges, not implicit crossings',()=>{
  for(const ring of [
   [[180,60],[-180,61],[-179,62],[180,60]],
   [[-180,60],[180,61],[179,62],[-180,60]]
- ])assert.throws(()=>inspectSeam(fixture([ring])),/Ambiguous 360-degree seam edge/);
+ ]){
+  const result=inspectSeam(fixture([ring]));
+  assert.deepEqual(result.implicitSeamCrossings,[]);
+  assert.equal(result.rings[0].seamEdges.length,1);
+  assert.equal(result.rings[0].seamEdges[0].index,0);
+ }
+});
+test('signed seam-alias edges participate in overlap measurement',()=>{
+ const outer=[[179,59],[180,60],[-180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{type:'MultiPolygon',coordinates:[[outer],[other]]}}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.implicitSeamCrossings,[]);
+ assert.equal(result.seamOverlapLatitudeDegrees,6);
 });
