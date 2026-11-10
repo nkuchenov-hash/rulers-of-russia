@@ -178,3 +178,27 @@ test('signed seam-alias edges participate in overlap measurement',()=>{
  assert.deepEqual(result.implicitSeamCrossings,[]);
  assert.equal(result.seamOverlapLatitudeDegrees,6);
 });
+
+test('component-pair provenance keeps independent seam overlap bands separate',()=>{
+ const rect=(lo,hi)=>[[179,lo-1],[180,lo],[180,hi],[179,hi+1],[179,lo-1]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[rect(60,64)],[rect(61,63)],[rect(70,74)],[rect(71,73)]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.overlapByComponentPair,[
+  {polygonIndices:[0,1],sourceEdgePairs:1,mergedIntervals:[[61,63]],overlapLatitudeDegrees:2},
+  {polygonIndices:[2,3],sourceEdgePairs:1,mergedIntervals:[[71,73]],overlapLatitudeDegrees:2}
+ ]);
+ assert.equal(result.seamOverlapLatitudeDegrees,4);
+});
+test('subdivided source edges do not inflate component-pair overlap coverage',()=>{
+ const outer=[[179,59],[180,60],[180,65],[180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[-180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[outer],[other]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.overlapByComponentPair,[
+  {polygonIndices:[0,1],sourceEdgePairs:2,mergedIntervals:[[62,68]],overlapLatitudeDegrees:6}
+ ]);
+});
