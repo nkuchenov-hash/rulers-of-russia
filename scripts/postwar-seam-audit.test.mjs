@@ -146,3 +146,15 @@ test('explicit seam endpoint is not reported as an interior implicit crossing',(
  assert.equal(result.implicitSeamCrossings.length,0);
  assert.equal(result.seamRingCount,1);
 });
+
+test('exact half-world longitude edges are ambiguous in both directions',()=>{
+ for(const ring of [
+  [[0,10],[180,11],[179,12],[0,10]],
+  [[180,10],[0,11],[1,12],[180,10]],
+  [[-90,10],[90,11],[89,12],[-90,10]]
+ ])assert.throws(()=>inspectSeam(fixture([ring])),/Ambiguous 180-degree longitude edge/);
+});
+test('near but not equal half-world edges are not rejected as ambiguous',()=>{
+ const ring=[[0,10],[179.999,11],[179.998,12],[0,10]];
+ assert.deepEqual(inspectSeam(fixture([ring])).implicitSeamCrossings,[]);
+});
