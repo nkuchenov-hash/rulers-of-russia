@@ -127,7 +127,7 @@ test('ordinary edges have no implicit dateline crossings',()=>{
 });
 
 test('unequal antimeridian crossing fractions preserve source edge and latitude',()=>{
- const ring=[[179,10],[-178,18],[-177,20],[179,10]];
+ const ring=[[179,10],[-177,18],[-177,20],[179,10]];
  const result=inspectSeam(fixture([ring]));
  assert.equal(result.implicitSeamCrossings.length,2);
  const [east,west]=result.implicitSeamCrossings;
