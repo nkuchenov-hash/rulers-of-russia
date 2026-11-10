@@ -22,10 +22,10 @@ export function inspectSeam(doc,name='USSR'){
     // Exactly 180 degrees admits two equally short arcs. A seam audit must
     // not silently choose a hemisphere or report a false negative.
     if(Math.abs(delta)===180)throw Error('Ambiguous 180-degree longitude edge');
-    // +180 and -180 denote the same meridian. A 360-degree jump has
-    // zero unwrapped length and cannot be interpolated as a crossing.
-    if(Math.abs(delta)===360)throw Error('Ambiguous 360-degree seam edge');
-    if(Math.abs(delta)>180){
+    // +180 and -180 are aliases of the same meridian. Their 360-degree
+    // coordinate jump is a legitimate seam-aligned edge, not an interior
+    // crossing. Preserve it for seam-edge overlap analysis below.
+    if(Math.abs(delta)>180&&Math.abs(delta)<360){
      const unwrappedLon=lon+(delta>0?-360:360);
      const seamLongitude=prevLon>0?180:-180;
      const t=(seamLongitude-prevLon)/(unwrappedLon-prevLon);
