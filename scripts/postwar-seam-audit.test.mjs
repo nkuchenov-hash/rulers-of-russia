@@ -98,3 +98,14 @@ test('opposite signed seam aliases at identical latitude are not a positive-leng
  const result=inspectSeam(fixture([outer]));
  assert.equal(result.rings[0].seamEdges.length,0);
 });
+
+test('two separated physical overlap bands are not merged across a latitude gap',()=>{
+ const rect=(lo,hi)=>[[179,lo-1],[180,lo],[180,hi],[179,hi+1],[179,lo-1]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[rect(60,64)],[rect(61,63)],[rect(70,74)],[rect(71,73)]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.equal(result.seamEdgeOverlaps.length,2);
+ assert.deepEqual(result.mergedSeamOverlapIntervals,[[61,63],[71,73]]);
+ assert.equal(result.seamOverlapLatitudeDegrees,4);
+});
