@@ -14,6 +14,11 @@ test('1945 USSR: preserve quantitative antimeridian conflict evidence', () => {
   assert.equal(result.polygonCount, 24);
   assert.equal(result.seamRingCount, 2);
   assert.equal(result.seamEdgeOverlaps.length, 7);
+  assert.deepEqual(result.overlapByComponentPair, [{
+    polygonIndices: [1, 2], sourceEdgePairs: 7,
+    mergedIntervals: [[65.25922735782032, 68.91692694278126]],
+    overlapLatitudeDegrees: 3.6576995849609375
+  }]);
   assert.equal(result.contacts.length, 5);
   assert.equal(result.uniqueContactCount, 4);
   assert.equal(result.mergedSeamOverlapIntervals.length, 1);
