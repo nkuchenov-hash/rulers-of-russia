@@ -109,3 +109,109 @@ test('two separated physical overlap bands are not merged across a latitude gap'
  assert.deepEqual(result.mergedSeamOverlapIntervals,[[61,63],[71,73]]);
  assert.equal(result.seamOverlapLatitudeDegrees,4);
 });
+
+test('short dateline edges without seam vertices are reported',()=>{
+ const ring=[[179,60],[-179,62],[-178,64],[178,64],[179,60]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.seamRingCount,0);
+ assert.equal(result.implicitSeamCrossings.length,2);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.edgeIndex),[0,2]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.latitude),[61,64]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.seamLongitude),[180,-180]);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.direction),['eastward','westward']);
+ assert.deepEqual(result.implicitSeamCrossings.map(c=>c.fraction),[0.5,0.5]);
+});
+test('ordinary edges have no implicit dateline crossings',()=>{
+ const result=inspectSeam(fixture([[[10,60],[11,60],[11,61],[10,60]]]));
+ assert.deepEqual(result.implicitSeamCrossings,[]);
+});
+
+test('unequal antimeridian crossing fractions preserve source edge and latitude',()=>{
+ const ring=[[179,10],[-177,18],[-177,20],[179,10]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.implicitSeamCrossings.length,2);
+ const [east,west]=result.implicitSeamCrossings;
+ assert.equal(east.edgeIndex,0);
+ assert.equal(east.seamLongitude,180);
+ assert.ok(Math.abs(east.fraction-0.25)<1e-12);
+ assert.ok(Math.abs(east.latitude-12)<1e-12);
+ assert.equal(west.edgeIndex,2,'closing ring edge must be inspected');
+ assert.equal(west.seamLongitude,-180);
+ assert.ok(Math.abs(west.fraction-0.75)<1e-12);
+ assert.ok(Math.abs(west.latitude-12.5)<1e-12);
+});
+test('explicit seam endpoint is not reported as an interior implicit crossing',()=>{
+ const ring=[[180,10],[-179,12],[-178,14],[180,10]];
+ const result=inspectSeam(fixture([ring]));
+ assert.equal(result.implicitSeamCrossings.length,0);
+ assert.equal(result.seamRingCount,1);
+});
+
+test('exact half-world longitude edges are ambiguous in both directions',()=>{
+ for(const ring of [
+  [[0,10],[180,11],[179,12],[0,10]],
+  [[180,10],[0,11],[1,12],[180,10]],
+  [[-90,10],[90,11],[89,12],[-90,10]]
+ ])assert.throws(()=>inspectSeam(fixture([ring])),/Ambiguous 180-degree longitude edge/);
+});
+test('near but not equal half-world edges are not rejected as ambiguous',()=>{
+ const ring=[[0,10],[179.999,11],[179.998,12],[0,10]];
+ assert.deepEqual(inspectSeam(fixture([ring])).implicitSeamCrossings,[]);
+});
+
+test('signed seam aliases are seam-aligned edges, not implicit crossings',()=>{
+ for(const ring of [
+  [[180,60],[-180,61],[-179,62],[180,60]],
+  [[-180,60],[180,61],[179,62],[-180,60]]
+ ]){
+  const result=inspectSeam(fixture([ring]));
+  assert.deepEqual(result.implicitSeamCrossings,[]);
+  assert.equal(result.rings[0].seamEdges.length,1);
+  assert.equal(result.rings[0].seamEdges[0].index,0);
+ }
+});
+test('signed seam-alias edges participate in overlap measurement',()=>{
+ const outer=[[179,59],[180,60],[-180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{type:'MultiPolygon',coordinates:[[outer],[other]]}}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.implicitSeamCrossings,[]);
+ assert.equal(result.seamOverlapLatitudeDegrees,6);
+});
+
+test('component-pair provenance keeps independent seam overlap bands separate',()=>{
+ const rect=(lo,hi)=>[[179,lo-1],[180,lo],[180,hi],[179,hi+1],[179,lo-1]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[rect(60,64)],[rect(61,63)],[rect(70,74)],[rect(71,73)]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.overlapByComponentPair,[
+  {polygonIndices:[0,1],sourceEdgePairs:1,mergedIntervals:[[61,63]],overlapLatitudeDegrees:2},
+  {polygonIndices:[2,3],sourceEdgePairs:1,mergedIntervals:[[71,73]],overlapLatitudeDegrees:2}
+ ]);
+ assert.equal(result.seamOverlapLatitudeDegrees,4);
+});
+test('subdivided source edges do not inflate component-pair overlap coverage',()=>{
+ const outer=[[179,59],[180,60],[180,65],[180,70],[179,71],[179,59]];
+ const other=[[179,61],[-180,62],[-180,68],[179,69],[179,61]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[outer],[other]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.deepEqual(result.overlapByComponentPair,[
+  {polygonIndices:[0,1],sourceEdgePairs:2,mergedIntervals:[[62,68]],overlapLatitudeDegrees:6}
+ ]);
+});
+
+test('distinguishes same-component outer/hole overlap from cross-component overlap',()=>{
+ const rect=(lo,hi)=>[[179,lo-1],[180,lo],[180,hi],[179,hi+1],[179,lo-1]];
+ const doc={type:'FeatureCollection',features:[{type:'Feature',properties:{NAME:'USSR'},geometry:{
+  type:'MultiPolygon',coordinates:[[rect(60,70),rect(62,68)],[rect(64,66)]]
+ }}]};
+ const result=inspectSeam(doc);
+ assert.equal(result.intraComponentSeamEdgeOverlaps.length,1);
+ assert.equal(result.interComponentSeamEdgeOverlaps.length,2);
+ assert.deepEqual(result.intraComponentSeamEdgeOverlaps[0].latitudeInterval,[62,68]);
+ assert.deepEqual(result.interComponentSeamEdgeOverlaps.map(x=>x.latitudeInterval),[[64,66],[64,66]]);
+ assert.deepEqual(result.overlapByComponentPair.map(x=>x.polygonIndices),[[0,0],[0,1]]);
+});

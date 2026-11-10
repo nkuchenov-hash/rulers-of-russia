@@ -7,12 +7,31 @@ export function inspectSeam(doc,name='USSR'){
  const g=selected[0].geometry;
  if(!g||!['Polygon','MultiPolygon'].includes(g.type))throw Error('Expected polygon geometry');
  const polygons=g.type==='Polygon'?[g.coordinates]:g.coordinates, rings=[];
+ const implicitSeamCrossings=[];
  for(const [polygonIndex,poly] of polygons.entries())for(const [ringIndex,ring] of poly.entries()){
   if(!Array.isArray(ring)||ring.length<4)throw Error('Invalid ring');
   const seamVertices=[],seamEdges=[];
   for(let i=0;i<ring.length;i++){
    const [lon,lat]=ring[i];
    if(!Number.isFinite(lon)||!Number.isFinite(lat)||Math.abs(lon)>180||Math.abs(lat)>90)throw Error('Invalid coordinate');
+   // Short dateline-crossing edges can have no explicit +/-180 vertex.
+   // Interpolated latitude is diagnostic in coordinate space, not geodesic.
+   if(i){
+    const [prevLon,prevLat]=ring[i-1];
+    const delta=lon-prevLon;
+    // Exactly 180 degrees admits two equally short arcs. A seam audit must
+    // not silently choose a hemisphere or report a false negative.
+    if(Math.abs(delta)===180)throw Error('Ambiguous 180-degree longitude edge');
+    // +180 and -180 are aliases of the same meridian. Their 360-degree
+    // coordinate jump is a legitimate seam-aligned edge, not an interior
+    // crossing. Preserve it for seam-edge overlap analysis below.
+    if(Math.abs(delta)>180&&Math.abs(delta)<360){
+     const unwrappedLon=lon+(delta>0?-360:360);
+     const seamLongitude=prevLon>0?180:-180;
+     const t=(seamLongitude-prevLon)/(unwrappedLon-prevLon);
+     if(t>0&&t<1)implicitSeamCrossings.push({polygonIndex,ringIndex,edgeIndex:i-1,seamLongitude,latitude:prevLat+t*(lat-prevLat),fraction:t,direction:seamLongitude===180?'eastward':'westward',from:ring[i-1],to:ring[i]});
+    }
+   }
    if(Math.abs(Math.abs(lon)-180)<1e-9)seamVertices.push({index:i,longitude:lon,latitude:lat});
    if(i&&Math.abs(Math.abs(ring[i-1][0])-180)<1e-9&&Math.abs(Math.abs(lon)-180)<1e-9&&Math.abs(ring[i-1][1]-lat)>1e-9)
     seamEdges.push({index:i-1,from:ring[i-1],to:ring[i]});
@@ -35,6 +54,34 @@ export function inspectSeam(doc,name='USSR'){
     latitudeInterval:[low,high]
    });
   }
+ }
+ // Attribute overlaps to component pairs rather than treating the global union
+ // as a single source of conflict. This is forensic provenance, not a verdict
+ // about which historical component owns the shared boundary.
+ // Distinguish overlap within one polygon (outer/hole rings) from overlap
+ // between separate MultiPolygon components. Neither alone proves invalidity.
+ const intraComponentSeamEdgeOverlaps=seamEdgeOverlaps.filter(x=>x.a[0]===x.b[0]);
+ const interComponentSeamEdgeOverlaps=seamEdgeOverlaps.filter(x=>x.a[0]!==x.b[0]);
+ const overlapByComponentPair=[];
+ const pairBuckets=new Map();
+ for(const overlap of seamEdgeOverlaps){
+  const key=[overlap.a[0],overlap.b[0]].join(':');
+  if(!pairBuckets.has(key))pairBuckets.set(key,[]);
+  pairBuckets.get(key).push(overlap.latitudeInterval);
+ }
+ for(const [key,intervals] of pairBuckets){
+  const merged=[];
+  for(const [low,high] of [...intervals].sort((a,b)=>a[0]-b[0]||a[1]-b[1])){
+   const last=merged.at(-1);
+   if(last&&low<=last[1]+1e-9)last[1]=Math.max(last[1],high);
+   else merged.push([low,high]);
+  }
+  overlapByComponentPair.push({
+   polygonIndices:key.split(':').map(Number),
+   sourceEdgePairs:intervals.length,
+   mergedIntervals:merged,
+   overlapLatitudeDegrees:merged.reduce((sum,[low,high])=>sum+high-low,0)
+  });
  }
  // Pairwise edge overlaps can subdivide the same physical seam interval.
  // Merge their latitude ranges before reporting total coverage; summing raw
@@ -67,7 +114,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,rings,contacts,seamEdgeOverlaps,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,intraComponentSeamEdgeOverlaps,interComponentSeamEdgeOverlaps,overlapByComponentPair,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
