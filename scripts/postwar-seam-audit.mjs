@@ -55,6 +55,30 @@ export function inspectSeam(doc,name='USSR'){
    });
   }
  }
+ // Attribute overlaps to component pairs rather than treating the global union
+ // as a single source of conflict. This is forensic provenance, not a verdict
+ // about which historical component owns the shared boundary.
+ const overlapByComponentPair=[];
+ const pairBuckets=new Map();
+ for(const overlap of seamEdgeOverlaps){
+  const key=[overlap.a[0],overlap.b[0]].join(':');
+  if(!pairBuckets.has(key))pairBuckets.set(key,[]);
+  pairBuckets.get(key).push(overlap.latitudeInterval);
+ }
+ for(const [key,intervals] of pairBuckets){
+  const merged=[];
+  for(const [low,high] of [...intervals].sort((a,b)=>a[0]-b[0]||a[1]-b[1])){
+   const last=merged.at(-1);
+   if(last&&low<=last[1]+1e-9)last[1]=Math.max(last[1],high);
+   else merged.push([low,high]);
+  }
+  overlapByComponentPair.push({
+   polygonIndices:key.split(':').map(Number),
+   sourceEdgePairs:intervals.length,
+   mergedIntervals:merged,
+   overlapLatitudeDegrees:merged.reduce((sum,[low,high])=>sum+high-low,0)
+  });
+ }
  // Pairwise edge overlaps can subdivide the same physical seam interval.
  // Merge their latitude ranges before reporting total coverage; summing raw
  // edge-pair lengths can double-count when source edges overlap each other.
@@ -86,7 +110,7 @@ export function inspectSeam(doc,name='USSR'){
    uniqueContacts.push(contact);
   }
  }
- return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
+ return {name,polygonCount:polygons.length,seamRingCount:rings.length,implicitSeamCrossings,rings,contacts,seamEdgeOverlaps,overlapByComponentPair,mergedSeamOverlapIntervals,seamOverlapLatitudeDegrees,uniqueContacts,uniqueContactCount:uniqueContacts.length,limitations:'Coincident seam vertices are diagnostic candidates, not proof of invalid topology or historical accuracy.'};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
  try{if(!process.argv[2])throw Error('Usage: node scripts/postwar-seam-audit.mjs <snapshot.geojson> [NAME]');
