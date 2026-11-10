@@ -53,8 +53,14 @@ const projectionEffect = source.slice(
 );
 assert.match(projectionEffect, /runtime\.resize\?\.\(\)/,
   'returning to the globe must draw synchronously during the layout effect');
-assert.match(projectionEffect, /return scheduleMountedGlobeResize\(/,
-  'returning to the globe must schedule a guarded post-commit redraw');
+assert.match(projectionEffect, /const cancelNextTask = scheduleMountedGlobeResize\\(/,
+  'returning to the globe must schedule the immediate guarded post-commit redraw');
+assert.match(projectionEffect, /const cancelSettledLayout = scheduleMountedGlobeResize\\(/,
+  'returning to the globe must schedule a second guarded redraw after layout settles');
+assert.match(projectionEffect, /window\\.setTimeout\\(callback,160\\)/,
+  'settled-layout redraw must wait for the layout transition');
+assert.match(projectionEffect, /cancelNextTask\\(\\);[\\s\\S]*cancelSettledLayout\\(\\)/,
+  'cleanup must cancel both scheduled redraws');
 assert.match(projectionEffect, /window\.setTimeout\(callback,0\)/,
   'post-commit redraw must not depend on requestAnimationFrame');
 assert.match(projectionEffect, /window\.clearTimeout\(timer\)/,
