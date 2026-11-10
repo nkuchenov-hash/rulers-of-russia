@@ -304,6 +304,12 @@ export function HistoricalTerritoryFlatMap({
       data-camera-zoom={camera.zoom.toFixed(3)}
       data-camera-dx={camera.dx.toFixed(3)} data-camera-dy={camera.dy.toFixed(3)}
       role="img" aria-label={'Плоская карта исторических границ за '+month+'.'+year}/>
+    {!historyLoading && !(russiaFeatures?.length > 0) && (
+      <div className="territory-flat-missing-history" role="status">
+        Исторический контур территории России для {String(month).padStart(2, '0')}.{year} отсутствует.
+        Фоновая карта не является заменой исторической границы.
+      </div>
+    )}
     <div className="territory-flat-watermark" aria-hidden="true">
       2D · Исторические границы · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}
     </div>
