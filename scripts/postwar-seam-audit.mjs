@@ -23,7 +23,7 @@ export function inspectSeam(doc,name='USSR'){
      const unwrappedLon=lon+(delta>0?-360:360);
      const seamLongitude=prevLon>0?180:-180;
      const t=(seamLongitude-prevLon)/(unwrappedLon-prevLon);
-     if(t>0&&t<1)implicitSeamCrossings.push({polygonIndex,ringIndex,edgeIndex:i-1,latitude:prevLat+t*(lat-prevLat),from:ring[i-1],to:ring[i]});
+     if(t>0&&t<1)implicitSeamCrossings.push({polygonIndex,ringIndex,edgeIndex:i-1,seamLongitude,latitude:prevLat+t*(lat-prevLat),fraction:t,direction:seamLongitude===180?'eastward':'westward',from:ring[i-1],to:ring[i]});
     }
    }
    if(Math.abs(Math.abs(lon)-180)<1e-9)seamVertices.push({index:i,longitude:lon,latitude:lat});
