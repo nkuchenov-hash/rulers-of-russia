@@ -39,7 +39,7 @@ export function HistoricalTerritoryFlatMap({
     :!hasHistoricalContour?'Нет контура History Core'
     :historyState?.status==='geometry-verified'
       ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
-      :'Предварительная реконструкция History Core · точность не подтверждена';
+      :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
@@ -158,9 +158,15 @@ export function HistoricalTerritoryFlatMap({
         ctx.globalAlpha=mode==='states'?.94:.70;
         ctx.fill('evenodd');
         ctx.globalAlpha=1;
-        ctx.strokeStyle='#efcf75';
+        // A continuous gold line suggests a surveyed boundary. Most early
+        // History Core surfaces are provisional political reconstructions:
+        // render their perimeter as a dashed line, not a verified border.
+        const internallyVerified=historyState?.status==='geometry-verified';
+        ctx.strokeStyle=internallyVerified?'#efcf75':'#e8bc72';
         ctx.lineWidth=mobile?2.2:2.7;
+        ctx.setLineDash(internallyVerified?[]:[7,5]);
         ctx.stroke();
+        ctx.setLineDash([]);
       }
       for(const item of verifiedBoundaries??[]){
         const geometry=item?.data;
