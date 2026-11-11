@@ -31,6 +31,8 @@ export function HistoricalTerritoryFlatMap({
   const [size,setSize]=useState({width:1,height:1});
   const [terrain,setTerrain]=useState(null);
   const focusLon=focus[0],focusLat=focus[1];
+  const hasHistoricalContour=!historyLoading&&(russiaFeatures?.length??0)>0;
+  const contourStatus=historyLoading?'Загрузка границ':hasHistoricalContour?'Контур History Core · точность требует проверки':'Нет контура History Core';
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
@@ -303,15 +305,15 @@ export function HistoricalTerritoryFlatMap({
       data-history-month={historyLoading?'':historyState?.month??''}
       data-camera-zoom={camera.zoom.toFixed(3)}
       data-camera-dx={camera.dx.toFixed(3)} data-camera-dy={camera.dy.toFixed(3)}
-      role="img" aria-label={'Плоская карта исторических границ за '+month+'.'+year}/>
-    {!historyLoading && !(russiaFeatures?.length > 0) && (
+      role="img" aria-label={'Плоская историческая карта за '+month+'.'+year+'. '+contourStatus}/>
+    {!historyLoading && !hasHistoricalContour && (
       <div className="territory-flat-missing-history" role="status">
         Исторический контур территории России для {String(month).padStart(2, '0')}.{year} отсутствует.
         Фоновая карта не является заменой исторической границы.
       </div>
     )}
     <div className="territory-flat-watermark" aria-hidden="true">
-      2D · Исторические границы · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}
+      2D · {contourStatus} · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}
     </div>
   </div>;
 }
