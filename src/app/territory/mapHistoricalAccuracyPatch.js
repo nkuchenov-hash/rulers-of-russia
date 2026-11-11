@@ -267,6 +267,17 @@ if (typeof window !== 'undefined' && !window[PATCH_KEY]) {
     return this;
   };
 
+  // Changing a native month selector does not necessarily mutate the DOM.
+  // Recompute after React commits the new timeline date so the mobile
+  // provenance warning cannot remain attached to the previous month.
+  const syncAfterDateInput = (event) => {
+    if (!(event.target instanceof Element)) return;
+    if (!event.target.matches('select[aria-label="Месяц"]')) return;
+    queueMicrotask(() => updateAccuracyCaption(state));
+    window.setTimeout(() => updateAccuracyCaption(state), 0);
+  };
+  document.addEventListener('change', syncAfterDateInput, true);
+
   const observer = new MutationObserver(() => updateAccuracyCaption(state));
   const startObserver = () => {
     if (!document.body) return;
