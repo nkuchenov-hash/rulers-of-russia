@@ -175,14 +175,25 @@ diffuseColor.rgb=min(diffuseColor.rgb,vec3(0.54));`)};baseMaterial.customProgram
       Number(canvas.dataset.territoryProjectionCommitCount||0)+1
     );
     runtime.resize?.();
-    // A second draw after the visibility commit handles a delayed WebGL
-    // viewport/layout update. Unlike RAF, a task is not tied to frame polling.
-    // Cleanup cancels it when switching back to the flat map or unmounting.
-    return scheduleMountedGlobeResize(
+    // Visibility and the WebGL backing store can settle in separate tasks,
+    // especially after a costly 2D canvas render. Draw immediately, then
+    // once in the next task and once after layout has had time to settle.
+    // Both retries are scoped to this renderer and canceled on projection
+    // change/unmount, so a stale timer cannot revive a hidden/disposed globe.
+    const cancelNextTask = scheduleMountedGlobeResize(
       runtime,()=>sceneRef.current,
       callback=>window.setTimeout(callback,0),
       timer=>window.clearTimeout(timer)
     );
+    const cancelSettledLayout = scheduleMountedGlobeResize(
+      runtime,()=>sceneRef.current,
+      callback=>window.setTimeout(callback,160),
+      timer=>window.clearTimeout(timer)
+    );
+    return () => {
+      cancelNextTask();
+      cancelSettledLayout();
+    };
   },[projection]);
 
   useEffect(()=>{const group=riverRef.current;if(!group||!rivers)return;group.traverse(o=>{o.geometry?.dispose?.();o.material?.dispose?.()});group.clear();const buckets=buildRiverBuckets(rivers);if(buckets[0].length){const major=makeWideLines(buckets[0],RIVER_COLORS[0],mobile?1.55:2.05,.91,'river',0);major.line.renderOrder=5;group.add(major.line)}if(buckets[1].length){const mid=makeThinLines(buckets[1],RIVER_COLORS[1],.8,1);mid.line.renderOrder=5;group.add(mid.line)}if(buckets[2].length){const minor=makeThinLines(buckets[2],RIVER_COLORS[2],.57,2);minor.line.renderOrder=5;group.add(minor.line)}const box=hostRef.current?.getBoundingClientRect();if(box)group.children.forEach(x=>x.material?.resolution?.set?.(box.width,box.height));renderRef.current()},[rivers,mobile]);
