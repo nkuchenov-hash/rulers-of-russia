@@ -32,7 +32,14 @@ export function HistoricalTerritoryFlatMap({
   const [terrain,setTerrain]=useState(null);
   const focusLon=focus[0],focusLat=focus[1];
   const hasHistoricalContour=!historyLoading&&(russiaFeatures?.length??0)>0;
-  const contourStatus=historyLoading?'Загрузка границ':hasHistoricalContour?'Контур History Core · точность требует проверки':'Нет контура History Core';
+  // History Core distinguishes a provisional reconstruction from a geometry
+  // that passed its INTERNAL audit. Neither status certifies independent
+  // historical accuracy; do not present both as the same quality level.
+  const contourStatus=historyLoading?'Загрузка границ'
+    :!hasHistoricalContour?'Нет контура History Core'
+    :historyState?.status==='geometry-verified'
+      ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
+      :'Предварительная реконструкция History Core · точность не подтверждена';
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
