@@ -198,6 +198,9 @@ export function HistoricalTerritoryFlatMap({
   },[]);
   const onPointerDown=useCallback(e=>{
     if(e.pointerType==='mouse'&&e.button!==0)return;
+    // Keep keyboard panning available immediately after interacting with the map.
+    // preventScroll avoids moving the surrounding timeline/page on focus.
+    e.currentTarget.focus({preventScroll:true});
     pointersRef.current.set(e.pointerId,{x:e.clientX,y:e.clientY});
     gestureRef.current=pinchSnapshot();
     e.currentTarget.setPointerCapture(e.pointerId);
