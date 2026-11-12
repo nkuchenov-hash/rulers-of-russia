@@ -12,6 +12,7 @@ on:
       - 'package.json'
       - 'scripts/territory-browser-smoke.mjs'
       - 'scripts/territory-history-smoke.mjs'
+      - 'scripts/territory-rusmap-smoke.mjs'
       - 'scripts/test-territory-chronology.mjs'
       - 'scripts/territory-mobile-accuracy-smoke.mjs'
       - 'scripts/verify-live-territory-deploy.mjs'
@@ -165,6 +166,10 @@ jobs:
         env:
           TERRITORY_SMOKE_URL: ${{ github.event_name == 'workflow_run' && format('https://nkuchenov-hash.github.io/rulers-of-russia/territory/?history_smoke={0}', github.run_id) || '' }}
         run: node scripts/territory-history-smoke.mjs
+
+      - name: Verify 1556 sourced globe on desktop and 390px/360px mobile
+        if: github.event_name != 'workflow_run'
+        run: node scripts/territory-rusmap-smoke.mjs
 
       - name: Verify 390px and 360px mobile uncertainty and controls
         env:
