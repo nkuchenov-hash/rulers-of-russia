@@ -21,6 +21,7 @@ try {
       url.searchParams.set('month','12');
       const response = await page.goto(url.href,{waitUntil:'domcontentloaded',timeout:45000});
       if(!response?.ok())throw new Error('Globe HTTP error: '+response?.status());
+      try {
       await page.waitForFunction(()=>{
         const aside=document.querySelector('main aside');
         const host=document.querySelector('main div[class*="globeHost"] canvas');
@@ -31,7 +32,22 @@ try {
           && (aside.textContent?.includes('не проверено независимо') || aside.textContent?.includes('независимая точность не подтверждена'))
           && host?.width>200 && host?.height>100
           && host.getBoundingClientRect().height>100;
-      },null,{timeout:30000});
+      },null,{timeout:20000});
+      } catch(error) {
+        const debug=await page.evaluate(()=>{
+          const aside=document.querySelector('main aside');
+          const host=document.querySelector('main div[class*="globeHost"] canvas');
+          return {
+            path:location.href,
+            loadedMonth:aside?.getAttribute('data-history-loaded-month'),
+            busy:aside?.getAttribute('aria-busy'),
+            text:aside?.textContent?.slice(0,1600),
+            sourceLinkCount:document.querySelectorAll('main aside a[href="https://rusmap.org/data/"]').length,
+            globeCanvas:host?{w:host.width,h:host.height,rect:host.getBoundingClientRect().toJSON()}:null,
+          };
+        });
+        throw new Error(`1556 source viewport ${width}px failure: ${JSON.stringify({debug,errors,geographyRequests})}`,{cause:error});
+      }
       const sourceLink=page.locator('main aside a[href="https://rusmap.org/data/"]');
       const source=await sourceLink.count();
       if(source!==1 || !await sourceLink.isVisible())
