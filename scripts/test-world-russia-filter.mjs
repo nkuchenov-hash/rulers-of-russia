@@ -149,7 +149,8 @@ for (const [year, month, phase] of [
 const flatSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryFlatMap.jsx', import.meta.url), 'utf8');
 const globeSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
 assert.match(flatSource, /isRussianWorldFeature\(feature,year,month\)/);
-assert.match(flatSource, /\[world,year,backgroundPhase\]/);
+assert.match(flatSource, /\[world,year,month,backgroundPhase\]/,
+  'the flat world background must recompute when the selected historical month changes');
 assert.equal((globeSource.match(/isRussianWorldFeature\(f,year,month\)/g) ?? []).length, 3,
   'globe fill, border and country-label layers must share month-level filtering');
 assert.match(globeSource, /buildStateTexture\(world,russiaFeatures,mobile\?2048:4096,year,month\)/);
