@@ -112,7 +112,53 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       }
     }).catch(()=>{});
   return()=>c.abort();
-},[worldSnapshotFile,worldSnapshotYear]);useEffect(()=>{const base=process.env.NEXT_PUBLIC_BASE_PATH??'',c=new AbortController(),state=monthStateAt(monthIndex,year,month);const failClosed=()=>{if(!c.signal.aborted){setRussia(null);setHistoryState(null);setLoadedMonthKey(activeKey)}};if(state?.geometryFile){const file=String(state.geometryFile).replace(/^\/+/,''),key=`history:${file}`,cached=rc.current.get(key);if(cached){setRussia(cached);setHistoryState(state);setLoadedMonthKey(activeKey);return()=>c.abort()}setLoadedMonthKey(null);fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'}).then(r=>{if(!r.ok)throw new Error(`History Core geometry HTTP ${r.status}`);return r.json()}).then(normalizeCollection).then(d=>{if(!d?.features?.length)throw new Error('History Core polygon collection is empty');rc.current.set(key,d);if(!c.signal.aborted){setRussia(d);setHistoryState(state);setLoadedMonthKey(activeKey)}}).catch(()=>failClosed())}else failClosed();return()=>c.abort()},[monthIndex,polityId,year,month]);useEffect(()=>{const entries=activeVerifiedBoundaryEntries(boundaryIndex,year,month,polityId);if(!entries.length){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey);return}const base=process.env.NEXT_PUBLIC_BASE_PATH??'',c=new AbortController();Promise.all(entries.map(async entry=>{const file=String(entry.geometryFile).replace(/^\/+/,''),key=`boundary:${file}`;let data=bc.current.get(key);if(!data){const r=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});if(!r.ok)throw new Error(`Verified boundary HTTP ${r.status}`);data=await r.json();bc.current.set(key,data)}return{entry,data}})).then(items=>{if(!c.signal.aborted){setVerifiedBoundaries(items);setLoadedBoundaryKey(activeKey)}}).catch(()=>{if(!c.signal.aborted){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey)}});return()=>c.abort()},[boundaryIndex,polityId,year,month]);return{index,monthIndex,historyState:loadedMonthKey===activeKey?historyState:null,historyLoading:loadedMonthKey!==activeKey,world:loadedWorldFile===snapshotAt(index,year)?.file?world:null,worldYear:loadedWorldFile===snapshotAt(index,year)?.file?worldYear:null,russia:loadedMonthKey===activeKey?russia:null,rivers,verifiedBoundaries:loadedBoundaryKey===activeKey?verifiedBoundaries:[]}}
+},[worldSnapshotFile,worldSnapshotYear]);useEffect(()=>{
+  const base=process.env.NEXT_PUBLIC_BASE_PATH??'',c=new AbortController();
+  const canonical=monthStateAt(monthIndex,year,month);
+  // Keep the canonical History Core status/source untouched in the materialized
+  // index. The public globe can show an attributed provisional alternative,
+  // but its actual *displayed* status must never masquerade as verified.
+  const displayed=canonical?.displayGeometryFile?{
+    ...canonical,
+    underlyingHistoryCoreStatus:canonical.status,
+    underlyingHistoryCoreGeometryFile:canonical.geometryFile,
+    geometryFile:canonical.displayGeometryFile,
+    status:canonical.displayStatus,
+    confidence:canonical.displayConfidence,
+    sourceAttribution:canonical.displaySourceAttribution,
+    sourceUrl:canonical.displaySourceUrl,
+    sourceLicense:canonical.displaySourceLicense,
+    sourceCertainty:canonical.displaySourceCertainty,
+    isAlternativeReconstruction:true,
+  }:canonical;
+  const failClosed=()=>{if(!c.signal.aborted){setRussia(null);setHistoryState(null);setLoadedMonthKey(activeKey)}};
+  if(!displayed?.geometryFile){failClosed();return()=>c.abort()}
+  setLoadedMonthKey(null);
+  const load=async(state)=>{
+    const file=String(state.geometryFile).replace(/^\/+/,''),key=`history:${file}`;
+    let collection=rc.current.get(key);
+    if(!collection){
+      const response=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});
+      if(!response.ok)throw new Error(`Historical polygon HTTP ${response.status}`);
+      collection=normalizeCollection(await response.json());
+      if(!collection?.features?.length)throw new Error('Historical polygon collection is empty');
+      rc.current.set(key,collection);
+    }
+    if(!c.signal.aborted){
+      setRussia(collection);
+      setHistoryState(state);
+      setLoadedMonthKey(activeKey);
+    }
+  };
+  load(displayed).catch(()=>{
+    // User must never see an empty globe solely because an optional alternative
+    // reconstruction is missing. Fall back to the retained canonical state.
+    if(canonical?.geometryFile&&canonical.geometryFile!==displayed.geometryFile){
+      load({...canonical,displayAlternativeUnavailable:true}).catch(failClosed);
+    }else failClosed();
+  });
+  return()=>c.abort();
+},[monthIndex,polityId,year,month]);useEffect(()=>{const entries=activeVerifiedBoundaryEntries(boundaryIndex,year,month,polityId);if(!entries.length){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey);return}const base=process.env.NEXT_PUBLIC_BASE_PATH??'',c=new AbortController();Promise.all(entries.map(async entry=>{const file=String(entry.geometryFile).replace(/^\/+/,''),key=`boundary:${file}`;let data=bc.current.get(key);if(!data){const r=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});if(!r.ok)throw new Error(`Verified boundary HTTP ${r.status}`);data=await r.json();bc.current.set(key,data)}return{entry,data}})).then(items=>{if(!c.signal.aborted){setVerifiedBoundaries(items);setLoadedBoundaryKey(activeKey)}}).catch(()=>{if(!c.signal.aborted){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey)}});return()=>c.abort()},[boundaryIndex,polityId,year,month]);return{index,monthIndex,historyState:loadedMonthKey===activeKey?historyState:null,historyLoading:loadedMonthKey!==activeKey,world:loadedWorldFile===snapshotAt(index,year)?.file?world:null,worldYear:loadedWorldFile===snapshotAt(index,year)?.file?worldYear:null,russia:loadedMonthKey===activeKey?russia:null,rivers,verifiedBoundaries:loadedBoundaryKey===activeKey?verifiedBoundaries:[]}}
 
 export function HistoricalTerritoryGlobeWebGLV21({initialYear=TERRITORY_MAX_YEAR,initialMonth=null}){
   const hostRef=useRef(null),sceneRef=useRef(null),timelineRef=useRef(null),renderRef=useRef(()=>{}),stateTextureRef=useRef(null),borderRef=useRef(null),riverRef=useRef(null),countryLabelsRef=useRef(null),cityLabelsRef=useRef(null),scrollFrame=useRef(null),timelineWheelRef=useRef(0),zoomIntentRef=useRef(false);
