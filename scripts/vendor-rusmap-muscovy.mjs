@@ -73,7 +73,10 @@ export function normalizeMuscovy(source, upstreamSha256) {
       geometry: feature.geometry,
       properties: {
         ...feature.properties,
-        start_date: from,
+        // Year-only evidence does not authorize an invented January change.
+        // Select a year-only version at the December month-end; the exact
+        // historical effective date remains unknown and is preserved in 'from'.
+        start_date: /^\d{4}$/.test(from) ? `${from}-12` : from,
         end_date: to,
         history_core_status: 'reconstruction-provisional',
         history_core_source: 'rusmap.org',
@@ -95,7 +98,7 @@ export function normalizeMuscovy(source, upstreamSha256) {
       license: 'ODbL-1.0',
       license_url: 'https://opendatacommons.org/licenses/odbl/1-0/',
       upstream_sha256: upstreamSha256,
-      adaptation: 'Preserved geometries and source feature properties; added History Core display dates and provisional labels',
+      adaptation: 'Preserved geometries and source properties; year-only from dates conservatively selected at year-end for monthly display (never asserted as historical dates); provisional History Core labels',
       version_count: source.features.length,
       start_years: years,
     },
