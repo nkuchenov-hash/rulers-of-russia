@@ -276,6 +276,22 @@ while (cursor <= coverage.maxMonth) {
   const chosen = latestStarted && (!latestStarted.__validThroughMonth || cursor <= latestStarted.__validThroughMonth)
     ? latestStarted
     : null;
+  // Display choice and canonical verification are separate. This explicitly
+  // source-backed provisional outline can be shown on the map without
+  // relabeling/replacing an audited History Core historical snapshot.
+  const display = period.displaySelection === 'source-reconstruction'
+    ? materializeProvisional(period, cursor)
+    : null;
+  const displayFields = display ? {
+    displayGeometryFile: display.geometryFile,
+    displayStatus: 'reconstruction-provisional',
+    displayConfidence: display.confidence,
+    displaySourceAttribution: period.sourceAttribution ?? null,
+    displaySourceUrl: period.sourceUrl ?? null,
+    displaySourceLicense: period.sourceLicense ?? null,
+    displaySourceCertainty: display.sourceCertainty,
+    displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
+  } : {};
 
   if (chosen) {
     months.push({
@@ -301,6 +317,7 @@ while (cursor <= coverage.maxMonth) {
       declaredCoverageAnchorMonth: chosen.__declaredFromMonth,
       validThroughMonth: chosen.validThroughMonth ?? null,
       derivedFromChangeIds: chosen.derivedFromChangeIds ?? [],
+      ...displayFields,
     });
     coverageCounts.set('geometry-verified', (coverageCounts.get('geometry-verified') ?? 0) + 1);
   } else {
@@ -331,6 +348,7 @@ while (cursor <= coverage.maxMonth) {
       effectiveDate: period.startMonth,
       coveragePeriodId: period.id,
       notes: period.notes ?? null,
+      ...displayFields,
     });
     coverageCounts.set(period.status, (coverageCounts.get(period.status) ?? 0) + 1);
   }
@@ -349,6 +367,9 @@ if (coverage.minMonth === '0862-01' && coverage.maxMonth === '2026-12' && months
 }
 for (const item of months) {
   if (!fs.existsSync(path.join(publicRoot, item.geometryFile))) throw new Error(`Month ${item.month} points to missing geometry ${item.geometryFile}`);
+  if (item.displayGeometryFile && !fs.existsSync(path.join(publicRoot, item.displayGeometryFile))) {
+    throw new Error(`Month ${item.month} points to missing display reconstruction ${item.displayGeometryFile}`);
+  }
 }
 
 fs.mkdirSync(outputDir, {recursive: true});
