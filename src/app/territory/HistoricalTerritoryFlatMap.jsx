@@ -319,6 +319,7 @@ export function HistoricalTerritoryFlatMap({
   },[onCameraChange]);
 
   return <div ref={hostRef} className="territory-flat-host"
+      style={{touchAction:"none"}}
       role="group" tabIndex={0}
       aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба. С клавиатуры: стрелки для перемещения, Shift со стрелками для быстрого перемещения, плюс и минус для масштаба"
       onKeyDown={onKeyDown}
