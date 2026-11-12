@@ -72,31 +72,38 @@ assert.equal(sourcedPeriods.length, 2);
 const seenSourceVersions = new Set();
 let sourcedMonths = 0;
 for (const item of months.months) {
-  if (item.status === 'geometry-verified') continue;
   const inSourcedPeriod = sourcedPeriods.some(p =>
     p.startMonth <= item.month && p.endMonth >= item.month
   );
-  if (!inSourcedPeriod) continue;
+  if (!inSourcedPeriod) {
+    assert.ok(!item.displayGeometryFile, 'Display override leaked outside its time period');
+    continue;
+  }
   sourcedMonths++;
-  assert.equal(item.status, 'reconstruction-provisional');
-  assert.equal(item.sourceLicense, 'ODbL-1.0');
-  assert.equal(item.sourceUrl, 'https://rusmap.org/data/');
-  assert.equal(item.sourceAttribution, 'Историческая карта России, rusmap.org');
-  assert.ok(!item.forwardProxy);
-  const output = readJson('public/' + item.geometryFile);
+  assert.ok(item.displayGeometryFile, 'Missing visible display geometry for ' + item.month);
+  assert.equal(item.displayStatus, 'reconstruction-provisional');
+  assert.equal(item.displaySourceLicense, 'ODbL-1.0');
+  assert.equal(item.displaySourceUrl, 'https://rusmap.org/data/');
+  assert.equal(item.displaySourceAttribution, 'Историческая карта России, rusmap.org');
+  const output = readJson('public/' + item.displayGeometryFile);
   assert.equal(output.features.length, 1, 'Successive whole-state contours must not be unioned');
   const f = output.features[0];
   seenSourceVersions.add(f.properties.from);
   assert.equal(output.metadata.sourceCertainty, f.properties.certainty);
-  assert.equal(item.sourceCertainty, f.properties.certainty);
-  assert.equal(item.confidence, f.properties.certainty === 'schematic' ? 'low' :
+  assert.equal(item.displaySourceCertainty, f.properties.certainty);
+  assert.equal(item.displayConfidence, f.properties.certainty === 'schematic' ? 'low' :
     sourcedPeriods.find(p => p.startMonth <= item.month && p.endMonth >= item.month).confidence);
   assert.equal(output.metadata.sourceLicense, 'ODbL-1.0');
   assert.equal(f.properties.history_core_status, 'reconstruction-provisional');
+  if (item.status === 'geometry-verified') {
+    assert.notEqual(item.geometryFile, item.displayGeometryFile,
+      'Display choice must never replace the audited History Core polygon');
+    assert.ok(item.snapshotId, 'Verified history lineage must remain recorded');
+  }
 }
-assert.ok(sourcedMonths > 100, `Imported contours insufficient: ${sourcedMonths} provisional months and ${seenSourceVersions.size} distinct source versions [${[...seenSourceVersions].join(', ')}]`);
-assert.ok(seenSourceVersions.size >= 5, 'The globe would show only one source version');
+assert.ok(sourcedMonths > 2000, `Imported contours insufficient: ${sourcedMonths} displayed months, ${seenSourceVersions.size} versions [${[...seenSourceVersions].join(', ')}]`);
+assert.equal(seenSourceVersions.size, 17, 'All 17 dated versions should reach the user');
 
 console.log('Muscovy ODbL source: 17 versions, Kazan/Astrakhan spatial controls,',
-  sourcedMonths, 'materialized provisional months,',
+  sourcedMonths, 'visible provisional-reconstruction months,',
   seenSourceVersions.size, 'distinct visible source versions.');
