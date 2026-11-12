@@ -65,9 +65,9 @@
       "notes": "Primary monthly surface is reconstructed political/de-facto control with frontier and tributary uncertainty, not a surveyed modern-style legal border. Where a treaty or demarcation provides an actual line, it must be represented separately as a dated boundary fragment."
     },
     {
-      "id": "coverage-1263-1546-moscow",
+      "id": "coverage-1263-1485-11-moscow",
       "startMonth": "1263-01",
-      "endMonth": "1546-12",
+      "endMonth": "1485-11",
       "polityId": "grand-moscow",
       "label": "Великое княжество Московское",
       "track": "russian-legal-border",
@@ -79,7 +79,29 @@
       "evidenceDocumentIds": [
         "doc-sgdd-vol1-1813"
       ],
-      "notes": "The period contains many incremental accessions, inheritances, conquests and treaty changes; the fallback keeps it visible until those are replayed from documents."
+      "notes": "The period contains many incremental accessions, inheritances, conquests and treaty changes; the fallback keeps it visible until those are replayed from documents. 1485 January–November uses the existing fallback because the new source records only the year, not a precise acquisition month."
+    },
+    {
+      "id": "coverage-1485-12-1546-moscow-rusmap",
+      "startMonth": "1485-12",
+      "endMonth": "1546-12",
+      "polityId": "grand-moscow",
+      "label": "Великое княжество Московское",
+      "track": "russian-legal-border",
+      "territorialModel": "mixed",
+      "fallbackGeometryFile": "data/territory/rusmap/state-muscovy.geojson",
+      "status": "reconstruction-provisional",
+      "confidence": "low",
+      "bootstrapGeometry": true,
+      "evidenceDocumentIds": [
+        "doc-sgdd-vol1-1813"
+      ],
+      "notes": "Dated Muscovy display reconstruction from rusmap.org (ODbL 1.0), primarily OpenHistoricalMap relations and cited retrospective maps. Not independently verified; documentary/approximate source labels are not canonical acceptance. Year-only changes display conservatively from December; original from/to dates are retained. Do not override geometry-verified History Core months. For the interactive globe, this source is the explicitly chosen provisional display candidate, while the canonically verified History Core polygon remains unchanged in the month index and may differ. The source does not acquire geometry-verified status by display preference.",
+      "fallbackSelectionMode": "latest-started",
+      "sourceAttribution": "Историческая карта России, rusmap.org",
+      "sourceUrl": "https://rusmap.org/data/",
+      "sourceLicense": "ODbL-1.0",
+      "displaySelection": "source-reconstruction"
     },
     {
       "id": "coverage-1547-1720-tsardom",
@@ -89,7 +111,7 @@
       "label": "Русское царство",
       "track": "russian-legal-border",
       "territorialModel": "mixed",
-      "fallbackGeometryFile": "data/territory/archive/russian-tsardom.geojson",
+      "fallbackGeometryFile": "data/territory/rusmap/state-muscovy.geojson",
       "status": "reconstruction-provisional",
       "confidence": "medium",
       "bootstrapGeometry": true,
@@ -97,7 +119,12 @@
         "doc-sgdd-vol1-1813",
         "doc-stolbovo-1617-ebid"
       ],
-      "notes": "Document density rises sharply in this period. The fallback is not itself primary-source geometry."
+      "notes": "17 dated Muscovy/Tsardom source versions (1485–1720) from rusmap.org, ODbL 1.0, mostly OpenHistoricalMap relations. Provisional reconstruction with per-feature source certainty retained; not independently History Core verified. Year-only source dates are conservatively displayed from December, never invented as exact change dates. For the interactive globe, this source is the explicitly chosen provisional display candidate, while the canonically verified History Core polygon remains unchanged in the month index and may differ. The source does not acquire geometry-verified status by display preference.",
+      "fallbackSelectionMode": "latest-started",
+      "sourceAttribution": "Историческая карта России, rusmap.org",
+      "sourceUrl": "https://rusmap.org/data/",
+      "sourceLicense": "ODbL-1.0",
+      "displaySelection": "source-reconstruction"
     },
     {
       "id": "coverage-1721-01-10-tsardom-title-empire-territory",

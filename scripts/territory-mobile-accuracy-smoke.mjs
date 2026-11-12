@@ -203,7 +203,7 @@ try {
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1478-01', null, {timeout: 15000});
-    assert.equal(await page.locator('main aside p').getAttribute('data-history-geometry-gap'),
+    assert.equal(await page.locator('main aside p').first().getAttribute('data-history-geometry-gap'),
       'muscovy-1462-reused', `mobile ${width}: 1478 warning lost in 2D`);
     await returnToGlobe('1478-01');
 
@@ -239,7 +239,7 @@ try {
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1490-01',
       null, {timeout: 15000});
-    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+    assert.match(await page.locator('main aside p').first().getAttribute('data-history-mobile-caption') || '',
       /Тверь \(1485\).*Вятка \(1489\)/, `mobile ${width}: 1490 warning lost in 2D`);
     await returnToGlobe('1490-01');
 
@@ -349,7 +349,7 @@ try {
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1514-07', null, {timeout: 15000});
-    assert.equal(await page.locator('main aside p').getAttribute('data-history-geometry-gap'),
+    assert.equal(await page.locator('main aside p').first().getAttribute('data-history-geometry-gap'),
       'muscovy-1505-reused', `mobile ${width}: stale border warning lost in 2D`);
 
     // Smolensk fell in July 1514 Julian / August 1514 Gregorian. The
@@ -367,7 +367,7 @@ try {
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1514-08', null, {timeout: 15000});
-    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+    assert.match(await page.locator('main aside p').first().getAttribute('data-history-mobile-caption') || '',
       /Смоленск \(1514\)/, `mobile ${width}: Smolensk warning lost in 2D`);
     await returnToGlobe('1514-08');
 
@@ -387,7 +387,7 @@ try {
     }, null, {timeout: 45000});
     await page.getByRole('button', {name: 'Показать плоскую карту'}).click();
     await page.waitForFunction(() => document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '1521-09', null, {timeout: 15000});
-    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+    assert.match(await page.locator('main aside p').first().getAttribute('data-history-mobile-caption') || '',
       /Рязань \(1521\)/, `mobile ${width}: Ryazan warning lost in 2D`);
     await returnToGlobe('1521-09');
     await visibleSourceWarning('точная дата присоединения не установлена');
@@ -421,7 +421,7 @@ try {
     await page.waitForFunction(() =>
       document.querySelector('canvas[data-territory-flat-map="true"]')?.dataset.historyMonth === '2026-02',
       null, {timeout: 15000});
-    assert.match(await page.locator('main aside p').getAttribute('data-history-mobile-caption') || '',
+    assert.match(await page.locator('main aside p').first().getAttribute('data-history-mobile-caption') || '',
       /независимая точность не подтверждена/,
       `mobile ${width}: independent-accuracy warning lost in 2D`);
     await waitForPaintedFlatMap('2026-02', 'modern 2D switch');

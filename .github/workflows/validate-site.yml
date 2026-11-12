@@ -82,6 +82,9 @@ jobs:
       - name: Verify month-by-month political title vs geometry lineage
         run: node scripts/test-history-month-political-track.mjs
 
+      - name: Verify dated Muscovy source contours are actually rendered
+        run: node scripts/test-rusmap-muscovy-geometry.mjs
+
       - name: Audit History Core completion state
         run: node scripts/audit-history-completion.mjs --require-complete
 
