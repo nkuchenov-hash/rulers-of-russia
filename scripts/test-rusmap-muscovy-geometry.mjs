@@ -94,7 +94,7 @@ for (const item of months.months) {
   assert.equal(output.metadata.sourceLicense, 'ODbL-1.0');
   assert.equal(f.properties.history_core_status, 'reconstruction-provisional');
 }
-assert.ok(sourcedMonths > 100, 'Imported contours did not reach any meaningful portion of the timeline');
+assert.ok(sourcedMonths > 100, `Imported contours insufficient: ${sourcedMonths} provisional months and ${seenSourceVersions.size} distinct source versions [${[...seenSourceVersions].join(', ')}]`);
 assert.ok(seenSourceVersions.size >= 5, 'The globe would show only one source version');
 
 console.log('Muscovy ODbL source: 17 versions, Kazan/Astrakhan spatial controls,',
