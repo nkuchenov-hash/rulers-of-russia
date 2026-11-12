@@ -72,7 +72,16 @@ export function normalizeMuscovy(source, upstreamSha256) {
       type: 'Feature',
       geometry: feature.geometry,
       properties: {
-        ...feature.properties,
+        // The ODbL covers coordinates, dates and object identifiers. The
+        // upstream 'description' and narrative 'note' fields are separately
+        // CC BY-SA 4.0 texts; deliberately do not copy or distribute them.
+        oid: feature.properties.oid,
+        name: feature.properties.name,
+        from: feature.properties.from,
+        to: feature.properties.to,
+        certainty: feature.properties.certainty,
+        status: feature.properties.status,
+        sources: feature.properties.sources,
         // Year-only evidence does not authorize an invented January change.
         // Select a year-only version at the December month-end; the exact
         // historical effective date remains unknown and is preserved in 'from'.
@@ -98,7 +107,7 @@ export function normalizeMuscovy(source, upstreamSha256) {
       license: 'ODbL-1.0',
       license_url: 'https://opendatacommons.org/licenses/odbl/1-0/',
       upstream_sha256: upstreamSha256,
-      adaptation: 'Preserved geometries and source properties; year-only from dates conservatively selected at year-end for monthly display (never asserted as historical dates); provisional History Core labels',
+      adaptation: 'Preserved geometries and ODbL date/source identifiers (excluded separately CC BY-SA descriptions and notes); year-only from dates conservatively selected at year-end for display only; provisional History Core labels',
       version_count: source.features.length,
       start_years: years,
     },
