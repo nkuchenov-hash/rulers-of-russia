@@ -39,6 +39,8 @@ export function HistoricalTerritoryFlatMap({
     :!hasHistoricalContour?'Нет контура History Core'
     :historyState?.status==='geometry-verified'
       ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
+      :historyState?.isAlternativeReconstruction
+      ?`Предварительная реконструкция · ${historyState.sourceAttribution??'исторический источник'} · ${historyState.sourceLicense??'лицензия не указана'} · пунктир · точность не подтверждена`
       :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
 
   // The historical background and its labels depend on the selected year,
@@ -206,7 +208,7 @@ export function HistoricalTerritoryFlatMap({
     // No geometry means no Russian territory is painted. The existing
     // History Core accuracy caption reports that state explicitly.
   },[size,terrain,worldFeatures,worldLabels,russiaFeatures,verifiedBoundaries,historyLoading,
-    worldYear,year,focusLon,focusLat,mode,camera,mobile]);
+    worldYear,year,focusLon,focusLat,mode,camera,mobile,historyState?.status]);
 
   const pinchSnapshot=useCallback(()=>{
     const points=[...pointersRef.current.values()];
