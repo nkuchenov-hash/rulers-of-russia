@@ -208,7 +208,8 @@ export function HistoricalTerritoryFlatMap({
     // No geometry means no Russian territory is painted. The existing
     // History Core accuracy caption reports that state explicitly.
   },[size,terrain,worldFeatures,worldLabels,russiaFeatures,verifiedBoundaries,historyLoading,
-    worldYear,year,focusLon,focusLat,mode,camera,mobile,historyState?.status]);
+    worldYear,year,focusLon,focusLat,mode,camera,mobile,
+    historyState?.status,historyState?.isAlternativeReconstruction]);
 
   const pinchSnapshot=useCallback(()=>{
     const points=[...pointersRef.current.values()];
