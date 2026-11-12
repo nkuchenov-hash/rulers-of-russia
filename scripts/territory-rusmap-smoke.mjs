@@ -28,12 +28,14 @@ try {
           && aside?.getAttribute('aria-busy')==='false'
           && aside.textContent?.includes('реконструкция')
           && aside.textContent?.includes('Историческая карта России')
-          && aside.textContent?.includes('не прошёл независимую')
+          && (aside.textContent?.includes('не проверено независимо') || aside.textContent?.includes('независимая точность не подтверждена'))
           && host?.width>200 && host?.height>100
           && host.getBoundingClientRect().height>100;
       },null,{timeout:30000});
-      const source=await page.locator('main aside a[href="https://rusmap.org/data/"]').count();
-      if(source!==1)throw new Error('Missing one visible credited ODbL source: '+source);
+      const sourceLink=page.locator('main aside a[href="https://rusmap.org/data/"]');
+      const source=await sourceLink.count();
+      if(source!==1 || !await sourceLink.isVisible())
+        throw new Error('Attribution must actually be visible at '+width+'px, count: '+source);
       if(!geographyRequests.some(u=>u.includes('/provisional/'))) {
         throw new Error('1556 globe never requested the chosen dated source geometry');
       }
