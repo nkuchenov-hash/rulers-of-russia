@@ -1,0 +1,29 @@
+{
+  "source_url": "https://rusmap.org/data/state-muscovy.geojson",
+  "upstream_sha256": "72b7bff7f2fcdc7127620fa7da62a2269b7813237bc2b4ad624f66e4b7066703",
+  "output_file": "state-muscovy.geojson",
+  "source_license": "ODbL-1.0",
+  "attribution": "Историческая карта России, rusmap.org",
+  "version_count": 17,
+  "dated_versions": [
+    1485,
+    1521,
+    1537,
+    1547,
+    1552,
+    1556,
+    1595,
+    1617,
+    1640,
+    1667,
+    1686,
+    1689,
+    1699,
+    1709,
+    1717,
+    1719,
+    1720
+  ],
+  "display_policy": "provisional bootstrap; do not override geometry-verified History Core months",
+  "downloaded_for_vendoring": true
+}
