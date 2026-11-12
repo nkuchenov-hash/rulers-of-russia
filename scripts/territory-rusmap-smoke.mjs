@@ -28,7 +28,7 @@ try {
         return aside?.getAttribute('data-history-loaded-month')==='1556-12'
           && aside?.getAttribute('aria-busy')==='false'
           && aside.textContent?.includes('реконструкция')
-          && aside.textContent?.includes('Историческая карта России')
+          && (aside.textContent?.includes('Историческая карта России') || aside.textContent?.includes('rusmap.org'))
           && (aside.textContent?.includes('не проверено независимо') || aside.textContent?.includes('независимая точность не подтверждена'))
           && host?.width>200 && host?.height>100
           && host.getBoundingClientRect().height>100;
