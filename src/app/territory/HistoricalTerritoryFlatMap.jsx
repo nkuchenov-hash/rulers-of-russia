@@ -129,6 +129,9 @@ export function HistoricalTerritoryFlatMap({
     // Draw only the world copies intersecting the viewport, so after crossing
     // the antimeridian (or panning several revolutions) state fills, verified
     // boundaries, graticule and labels remain aligned with the relief.
+    // Share occupied label rectangles across wrapped world copies to prevent
+    // overlapping country names at high zoom and near the antimeridian.
+    const occupiedLabels=[];
     for(const repeat of visibleTerrainCopies(tx-Math.PI*scale,fullWidth,width)){
       ctx.save();
       ctx.translate(repeat*fullWidth,0);
@@ -183,6 +186,12 @@ export function HistoricalTerritoryFlatMap({
         const point=projection(coordinates);
         const screenX=point?.[0]+repeat*fullWidth;
         if(!point||screenX<50||screenX>width-50||point[1]<16||point[1]>height-16)continue;
+        const labelWidth=Math.min(150,ctx.measureText(name).width);
+        const bounds={left:screenX-labelWidth/2-8,right:screenX+labelWidth/2+8,
+          top:point[1]-13,bottom:point[1]+13};
+        if(occupiedLabels.some(box=>bounds.left<box.right&&bounds.right>box.left
+          &&bounds.top<box.bottom&&bounds.bottom>box.top))continue;
+        occupiedLabels.push(bounds);
         ctx.lineWidth=3;ctx.strokeStyle='rgba(4,14,18,.9)';
         ctx.fillStyle='rgba(244,234,213,.92)';
         ctx.strokeText(name,point[0],point[1],150);
