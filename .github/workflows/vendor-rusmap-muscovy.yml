@@ -1,0 +1,65 @@
+name: Vendor dated Muscovy geometry from rusmap.org
+
+on:
+  push:
+    branches:
+      - feature/rusmap-muscovy-20261112
+    paths:
+      - scripts/vendor-rusmap-muscovy.mjs
+      - .github/workflows/vendor-rusmap-muscovy.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rusmap-source-vendoring
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download, validate and attribute historical GeoJSON
+        run: node scripts/vendor-rusmap-muscovy.mjs
+
+      - name: Validate all dated polygons before committing
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import {normalizeMuscovy} from './scripts/vendor-rusmap-muscovy.mjs';
+          const payload = JSON.parse(fs.readFileSync('public/data/territory/rusmap/state-muscovy.geojson','utf8'));
+          if (payload.metadata.license !== 'ODbL-1.0') throw new Error('Missing share-alike license');
+          if (!payload.metadata.upstream_sha256?.match(/^[0-9a-f]{64}$/)) throw new Error('Missing original source SHA-256');
+          if (payload.features.some(f => !f.properties?.history_core_status ||
+            f.properties.history_core_status !== 'reconstruction-provisional')) {
+            throw new Error('A provisional boundary was mislabeled');
+          }
+          if (payload.features.length < 12) throw new Error('Too few source versions');
+          console.log('Validated', payload.features.length, 'source geometries');
+          NODE
+
+      - name: Save vendored dataset as a reviewable commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add public/data/territory/rusmap/state-muscovy.geojson public/data/territory/rusmap/source-manifest.json
+          if git diff --cached --quiet; then
+            echo 'No upstream geometry change.'
+          else
+            git commit -m "Vendor attributed ODbL Muscovy dated boundaries for review"
+            git push origin HEAD:feature/rusmap-muscovy-20261112
+          fi
