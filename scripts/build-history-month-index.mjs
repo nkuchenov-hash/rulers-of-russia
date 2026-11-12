@@ -118,7 +118,18 @@ const selectFallbackFeatures = (period, month) => {
     const featureEnd = normalizeBoundaryDate(properties.end_date, 'end');
     if (featureStart <= end && featureEnd >= start) validIndices.push(i);
   }
-  if (validIndices.length) return {indices: validIndices, forwardProxy: false};
+  if (validIndices.length) {
+    // A historical source can close one dated version on the same year that
+    // the next begins. Never union successive whole-state polygons into a
+    // fictitious enlarged country at that overlap. Preserve multi-feature
+    // states that genuinely share the same latest source start.
+    if (period.fallbackSelectionMode === 'latest-started') {
+      const starts = validIndices.map(i => normalizeBoundaryDate(features[i]?.properties?.start_date, 'start'));
+      const newest = starts.reduce((max, x) => x > max ? x : max, starts[0]);
+      return {indices: validIndices.filter(i => normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === newest), forwardProxy: false};
+    }
+    return {indices: validIndices, forwardProxy: false};
+  }
 
   let latestStart = null;
   for (let i = 0; i < features.length; i += 1) {
@@ -163,6 +174,11 @@ const materializeProvisional = (period, month) => {
   const fileName = `${period.polityId}-${hash}.geojson`;
   const relativeFile = `data/history-core/generated/provisional/${fileName}`;
   const selected = indices.map(index => source.features[index]);
+  const sourceCertainties = [...new Set(selected.map(feature => feature.properties?.certainty).filter(Boolean))];
+  const sourceCertainty = sourceCertainties.length === 1 ? sourceCertainties[0] : (sourceCertainties.length ? 'mixed' : null);
+  // "Schematic" upstream geometry must not inherit a medium project
+  // confidence merely because it belongs to the same political era.
+  const confidence = sourceCertainties.includes('schematic') ? 'low' : period.confidence;
   const output = {
     type: 'FeatureCollection',
     metadata: {
@@ -170,8 +186,12 @@ const materializeProvisional = (period, month) => {
       coveragePeriodId: period.id,
       polityId: period.polityId,
       status: 'reconstruction-provisional',
-      confidence: period.confidence,
+      confidence,
       bootstrapGeometry: true,
+      sourceAttribution: period.sourceAttribution ?? null,
+      sourceUrl: period.sourceUrl ?? null,
+      sourceLicense: period.sourceLicense ?? null,
+      sourceCertainty,
       forwardProxy,
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
@@ -184,14 +204,20 @@ const materializeProvisional = (period, month) => {
       properties: {
         ...(feature.properties ?? {}),
         history_core_status: 'reconstruction-provisional',
-        history_core_confidence: period.confidence,
+        history_core_confidence: confidence,
         history_core_forward_proxy: forwardProxy,
         history_core_coverage_period_id: period.id,
       },
     })),
   };
   fs.writeFileSync(path.join(provisionalDir, fileName), JSON.stringify(output));
-  const result = {geometryFile: relativeFile, provisionalStateId: `provisional-${period.polityId}-${hash}`, forwardProxy};
+  const result = {
+    geometryFile: relativeFile,
+    provisionalStateId: `provisional-${period.polityId}-${hash}`,
+    forwardProxy,
+    confidence,
+    sourceCertainty,
+  };
   provisionalOutputCache.set(selectionKey, result);
   return result;
 };
@@ -292,10 +318,14 @@ while (cursor <= coverage.maxMonth) {
       geometryFile: provisional.geometryFile,
       uncertaintyGeometryFile: null,
       status: period.status,
-      confidence: period.confidence,
+      confidence: provisional.confidence,
       evidenceDocumentIds: period.evidenceDocumentIds ?? [],
       bootstrapGeometry: true,
       forwardProxy: provisional.forwardProxy,
+      sourceAttribution: period.sourceAttribution ?? null,
+      sourceUrl: period.sourceUrl ?? null,
+      sourceLicense: period.sourceLicense ?? null,
+      sourceCertainty: provisional.sourceCertainty,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
