@@ -37,10 +37,10 @@ export function HistoricalTerritoryFlatMap({
   // historical accuracy; do not present both as the same quality level.
   const contourStatus=historyLoading?'Загрузка границ'
     :!hasHistoricalContour?'Нет контура History Core'
-    :historyState?.status==='geometry-verified'
-      ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
-      :historyState?.isAlternativeReconstruction
+    :historyState?.isAlternativeReconstruction
       ?`Предварительная реконструкция · ${historyState.sourceAttribution??'исторический источник'} · ${historyState.sourceLicense??'лицензия не указана'} · пунктир · точность не подтверждена`
+      :historyState?.status==='geometry-verified'
+      ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
       :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
 
   // The historical background and its labels depend on the selected year,
@@ -163,7 +163,7 @@ export function HistoricalTerritoryFlatMap({
         ctx.globalAlpha=mode==='states'?.94:.70;
         ctx.fill('evenodd');
         ctx.globalAlpha=1;
-        const internallyVerified=historyState?.status==='geometry-verified';
+        const internallyVerified=historyState?.status==='geometry-verified' && !historyState?.isAlternativeReconstruction;
         ctx.strokeStyle=internallyVerified?'#efcf75':'#e8bc72';
         ctx.lineWidth=mobile?2.2:2.7;
         ctx.setLineDash(internallyVerified?[]:[7,5]);
