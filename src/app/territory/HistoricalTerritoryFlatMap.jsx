@@ -49,7 +49,7 @@ export function HistoricalTerritoryFlatMap({
   const worldFeatures=useMemo(()=>(world?.features??[])
     .filter(feature=>feature?.geometry)
     .map((feature,index)=>({feature,index}))
-    .filter(({feature})=>!isRussianWorldFeature(feature,year,month)),[world,year,backgroundPhase]);
+    .filter(({feature})=>!isRussianWorldFeature(feature,year,month)),[world,year,month,backgroundPhase]);
   const worldLabels=useMemo(()=>worldFeatures
     .map(({feature})=>({feature,area:geoArea(feature)}))
     .filter(({area})=>Number.isFinite(area)&&area>0)
