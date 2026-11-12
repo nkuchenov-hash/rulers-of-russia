@@ -1,6 +1,6 @@
 # Dated Muscovy / Russian Tsardom provisional geometry
 
-**Visible in the 3D globe only when no geometry-verified History Core snapshot applies.**
+**Chosen as an explicitly provisional visible alternative for the 3D globe, with the verified History Core lineage retained unchanged as canonical data and as a runtime fallback.**
 
 - Upstream publisher: [Историческая карта России — rusmap.org](https://rusmap.org/data/).
 - Source: [state-muscovy.geojson](https://rusmap.org/data/state-muscovy.geojson) (17 dated versions, 1485–1720).
@@ -10,7 +10,7 @@
 - All original geometry coordinates and ODbL-licensed identifiers and fields (`oid`, `name`, `from`, `to`, `certainty`, `status`, `sources`) are preserved. Separately CC BY-SA 4.0 licensed narrative `description` and `note` fields are **not** copied. The adapter adds `start_date`, `end_date` and status labels for the existing History Core viewer.
 - **Display date policy:** when `from` contains a year only, it is mapped to December of that year **for the monthly view**, not asserted to be the actual historical date. The upstream year remains in `from`. A precise `YYYY-MM` or `YYYY-MM-DD` is retained without adding a day.
 - The import uses the source's `documented` or `schematic` label to describe source confidence, not independent geographic correctness. Even `documented` remains `reconstruction-provisional`; `schematic` is shown at low confidence.
-- First use: 1485-12–1546-12 provisional Moscow states and 1547-01–1720-12 provisional Tsardom states. Existing verified History Core geometries always take precedence. State names and period transitions still come from our local chronology.
+- First use: 1485-12–1546-12 provisional Moscow states and 1547-01–1720-12 provisional Tsardom states. The History Core canonical snapshot stays in `month-index.json` as `geometryFile`, `status`, `snapshotId` and documentary evidence; the separately labelled `displayGeometryFile` is preferred only for map rendering on these date ranges. Its displayed status is `reconstruction-provisional`, regardless of the canonical status. If it cannot load, the renderer falls back to the canonical snapshot. State names and political period transitions still come from our local chronology.
 - **Do not use** this data as an authority for exact borders, dates, territorial control, or international recognition. Independent comparison, chronology audit and historical legal-source verification remain necessary. In particular, 1520–1599 Runivers baseline comparisons previously failed 26/26 and this import does not automatically change that result.
 
 Neither this data import nor the source's `documented` label certifies that the historical map is correct. Do not remove this notice or the accompanying database license if redistributing the imported geometry.
