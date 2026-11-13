@@ -190,12 +190,15 @@ export function HistoricalTerritoryFlatMap({
       for(const {name,coordinates} of worldLabels){
         const point=projection(coordinates);
         const screenX=point?.[0]+repeat*fullWidth;
-        const edgePadding=mobile?28:50;
-        if(!point||screenX<edgePadding||screenX>width-edgePadding||point[1]<16||point[1]>height-16)continue;
+        if(!point||!Number.isFinite(screenX)||point[1]<16||point[1]>height-16)continue;
         const maxLabelWidth=mobile?100:150;
         const labelWidth=Math.min(maxLabelWidth,ctx.measureText(name).width);
         const bounds={left:screenX-labelWidth/2-8,right:screenX+labelWidth/2+8,
           top:point[1]-13,bottom:point[1]+13};
+        // Keep the entire rendered label inside the viewport, not only its
+        // center. This prevents clipped names along narrow mobile edges.
+        const edgePadding=mobile?8:12;
+        if(bounds.left<edgePadding||bounds.right>width-edgePadding)continue;
         if(occupiedLabels.some(box=>bounds.left<box.right&&bounds.right>box.left
           &&bounds.top<box.bottom&&bounds.bottom>box.top))continue;
         occupiedLabels.push(bounds);
