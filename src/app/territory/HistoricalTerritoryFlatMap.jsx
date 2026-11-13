@@ -2,7 +2,7 @@
 
 import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-geo';
-import {isRussianWorldFeature,worldBackgroundTransitionPhase} from './worldRussiaFeatureFilter.mjs';
+import {isRussianWorldFeature,worldRussiaBackgroundIdentityKey} from './worldRussiaFeatureFilter.mjs';
 import {zoomFlatCameraAt,flatWheelZoomFactor} from './flatCameraZoom.mjs';
 import {visibleTerrainCopies} from './flatTerrainTiles.mjs';
 
@@ -47,11 +47,11 @@ export function HistoricalTerritoryFlatMap({
   // not on camera movement. Keep source feature indices for stable colors.
   // Filtering, area ranking and geographic centroids must not run on every
   // pointer move, wheel step or zoom-button redraw.
-  const backgroundPhase=worldBackgroundTransitionPhase(year,month);
+  const backgroundIdentityKey=worldRussiaBackgroundIdentityKey(year,month);
   const worldFeatures=useMemo(()=>(world?.features??[])
     .filter(feature=>feature?.geometry)
     .map((feature,index)=>({feature,index}))
-    .filter(({feature})=>!isRussianWorldFeature(feature,year,month)),[world,year,month,backgroundPhase]);
+    .filter(({feature})=>!isRussianWorldFeature(feature,year,month)),[world,backgroundIdentityKey]);
   const worldLabels=useMemo(()=>worldFeatures
     .map(({feature})=>({feature,area:geoArea(feature)}))
     .filter(({area})=>Number.isFinite(area)&&area>0)
