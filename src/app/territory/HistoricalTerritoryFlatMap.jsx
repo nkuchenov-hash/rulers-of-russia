@@ -282,6 +282,10 @@ export function HistoricalTerritoryFlatMap({
       case 'ArrowDown':
         onCameraChange(prev=>({...prev,dy:prev.dy-step}));
         break;
+      case 'Home':
+        // Restore the selected period's geographical focus without changing its date.
+        onCameraChange(prev=>({...prev,zoom:1,dx:0,dy:0}));
+        break;
       case '+':
       case '=':
         onCameraChange(prev=>zoomFlatCameraAt(prev,1.15,0,0));
@@ -327,7 +331,7 @@ export function HistoricalTerritoryFlatMap({
   return <div ref={hostRef} className="territory-flat-host"
       style={{touchAction:"none"}}
       role="group" tabIndex={0}
-      aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба. С клавиатуры: стрелки для перемещения, Shift со стрелками для быстрого перемещения, плюс и минус для масштаба"
+      aria-label="Плоская историческая карта: перетаскивайте для перемещения, используйте колесо мыши или два пальца для масштаба. С клавиатуры: стрелки для перемещения, Shift со стрелками для быстрого перемещения, плюс и минус для масштаба, Home для возврата к выбранному историческому периоду"
       onKeyDown={onKeyDown}
       onPointerDown={onPointerDown} onPointerMove={onPointerMove}
       onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
