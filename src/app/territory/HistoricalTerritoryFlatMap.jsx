@@ -184,14 +184,16 @@ export function HistoricalTerritoryFlatMap({
     ctx.globalAlpha=1;
 
     if(camera.zoom>=1.5){
-      ctx.font='600 16px Georgia,serif';
+      ctx.font=mobile?'600 12px Georgia,serif':'600 16px Georgia,serif';
       ctx.textAlign='center';
       ctx.textBaseline='middle';
       for(const {name,coordinates} of worldLabels){
         const point=projection(coordinates);
         const screenX=point?.[0]+repeat*fullWidth;
-        if(!point||screenX<50||screenX>width-50||point[1]<16||point[1]>height-16)continue;
-        const labelWidth=Math.min(150,ctx.measureText(name).width);
+        const edgePadding=mobile?28:50;
+        if(!point||screenX<edgePadding||screenX>width-edgePadding||point[1]<16||point[1]>height-16)continue;
+        const maxLabelWidth=mobile?100:150;
+        const labelWidth=Math.min(maxLabelWidth,ctx.measureText(name).width);
         const bounds={left:screenX-labelWidth/2-8,right:screenX+labelWidth/2+8,
           top:point[1]-13,bottom:point[1]+13};
         if(occupiedLabels.some(box=>bounds.left<box.right&&bounds.right>box.left
@@ -199,8 +201,8 @@ export function HistoricalTerritoryFlatMap({
         occupiedLabels.push(bounds);
         ctx.lineWidth=3;ctx.strokeStyle='rgba(4,14,18,.9)';
         ctx.fillStyle='rgba(244,234,213,.92)';
-        ctx.strokeText(name,point[0],point[1],150);
-        ctx.fillText(name,point[0],point[1],150);
+        ctx.strokeText(name,point[0],point[1],maxLabelWidth);
+        ctx.fillText(name,point[0],point[1],maxLabelWidth);
       }
     }
       ctx.restore();
