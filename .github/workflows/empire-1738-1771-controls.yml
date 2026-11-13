@@ -1,0 +1,18 @@
+name: Empire 1738 1771 controls
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-empire-1738-1771.mjs
+      - .github/workflows/empire-1738-1771-controls.yml
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-empire-1738-1771.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empire-1738-1771-controls
+          path: empire-1738-1771-controls.json
