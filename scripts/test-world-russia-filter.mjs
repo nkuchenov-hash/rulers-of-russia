@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {isRussianWorldFeature,worldBackgroundTransitionPhase} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
+import {isRussianWorldFeature,worldBackgroundTransitionPhase,worldRussiaBackgroundIdentityKey} from '../src/app/territory/worldRussiaFeatureFilter.mjs';
 import {worldHistoricalContextCaveat,worldHistoricalContextCompactCaveat} from '../src/app/territory/worldHistoricalContextCaveat.mjs';
 
 const russianNames = [
@@ -143,14 +143,39 @@ for (const [year, month, phase] of [
   [1521,8,0],[1521,9,1],[1521,12,1],[1510,9,0],[2026,10,0],
 ]) assert.equal(worldBackgroundTransitionPhase(year, month), phase);
 
+// The key must match all year/month-dependent cases in the real source filter.
+// Equal keys must imply identical world-feature decisions for Novgorod,
+// Novgorod-Seversky, Pskov and Ryazan, including both within-year cutoffs.
+const cachedBackgrounds = new Map();
+for (const year of [862,1100,1135,1136,1300,1477,1478,1499,1500,1501,1509,1510,1520,1521,1522,1550,1917,1991,2026]) {
+  for (const month of [1,4,5,8,9,12]) {
+    const key = worldRussiaBackgroundIdentityKey(year,month);
+    const decisions = [novgorod1400,seversky1500,pskov1500,ryazan1500]
+      .map(feature => isRussianWorldFeature(feature,year,month));
+    if(cachedBackgrounds.has(key)) {
+      assert.deepEqual(decisions,cachedBackgrounds.get(key),
+        `Identity key ${key} reused for a different background at ${year}-${month}`);
+    } else cachedBackgrounds.set(key,decisions);
+  }
+}
+assert.equal(worldRussiaBackgroundIdentityKey(1500,4),worldRussiaBackgroundIdentityKey(1499,12));
+assert.notEqual(worldRussiaBackgroundIdentityKey(1500,4),worldRussiaBackgroundIdentityKey(1500,5));
+assert.equal(worldRussiaBackgroundIdentityKey(1500,5),worldRussiaBackgroundIdentityKey(1501,1));
+assert.notEqual(worldRussiaBackgroundIdentityKey(1509,12),worldRussiaBackgroundIdentityKey(1510,1));
+assert.notEqual(worldRussiaBackgroundIdentityKey(1521,8),worldRussiaBackgroundIdentityKey(1521,9));
+assert.equal(worldRussiaBackgroundIdentityKey(1521,9),worldRussiaBackgroundIdentityKey(1522,1));
+assert.equal(worldRussiaBackgroundIdentityKey(2024,1),worldRussiaBackgroundIdentityKey(2026,11));
+
 // Both production projections must apply the same month-level identity rule.
 // The phase is a dependency so ordinary month scrubbing does not regenerate
 // large globe textures when the background identity has not changed.
 const flatSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryFlatMap.jsx', import.meta.url), 'utf8');
 const globeSource = readFileSync(new URL('../src/app/territory/HistoricalTerritoryGlobeWebGLV21.jsx', import.meta.url), 'utf8');
 assert.match(flatSource, /isRussianWorldFeature\(feature,year,month\)/);
-assert.match(flatSource, /\[world,year,month,backgroundPhase\]/,
-  'the flat world background must recompute when the selected historical month changes');
+assert.match(flatSource, /\[world,backgroundIdentityKey\]/,
+  'flat map background filtering should only recompute at documented identity transitions');
+assert.match(globeSource, /\[world,mobile,backgroundIdentityKey\]/,
+  'country label geometries must survive year scrubbing without an identity change');
 assert.equal((globeSource.match(/isRussianWorldFeature\(f,year,month\)/g) ?? []).length, 3,
   'globe fill, border and country-label layers must share month-level filtering');
 assert.match(globeSource, /buildStateTexture\(world,russiaFeatures,mobile\?2048:4096,year,month\)/);
