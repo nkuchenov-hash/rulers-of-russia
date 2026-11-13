@@ -204,8 +204,11 @@ export function HistoricalTerritoryFlatMap({
         occupiedLabels.push(bounds);
         ctx.lineWidth=3;ctx.strokeStyle='rgba(4,14,18,.9)';
         ctx.fillStyle='rgba(244,234,213,.92)';
-        ctx.strokeText(name,point[0],point[1],maxLabelWidth);
-        ctx.fillText(name,point[0],point[1],maxLabelWidth);
+        // Labels must use the same wrapped-world offset as their bounds.
+        // Otherwise copies beyond the antimeridian are culled correctly but
+        // their text is drawn at the original longitude.
+        ctx.strokeText(name,screenX,point[1],maxLabelWidth);
+        ctx.fillText(name,screenX,point[1],maxLabelWidth);
       }
     }
       ctx.restore();
