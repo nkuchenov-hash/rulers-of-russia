@@ -90,4 +90,12 @@ assert.match(source, /const current=wasJumping\?year:clamp\(/,
   'Wheel interruption must step from the selected year, not an intermediate animated position');
 assert.ok(source.includes('if(!shouldHandleTimelineWheel(e.target))return;'),
   'production wheel handler must ignore bubbled events from native timeline controls');
+assert.match(source, /timelineHostRef=useRef\\(null\\)/,
+  'Timeline should keep a DOM ref for native wheel capture');
+assert.ok(source.includes("node.addEventListener('wheel',onTimelineWheel,{passive:false})"),
+  'Year scrubbing must use a non-passive wheel listener in Chromium');
+assert.ok(source.includes("node.removeEventListener('wheel',onTimelineWheel)"),
+  'Unmount and year changes must not accumulate wheel listeners');
+assert.doesNotMatch(source, /onWheel=\\{onTimelineWheel\\}/,
+  'Do not use React passive delegated wheel handlers for scroll interception');
 console.log('Timeline smooth-jump gate, native control wheel isolation and production integration checks passed.');
