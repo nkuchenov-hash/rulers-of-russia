@@ -296,6 +296,7 @@ while (cursor <= coverage.maxMonth) {
     displaySourceLicense: period.sourceLicense ?? null,
     displaySourceCertainty: display.sourceCertainty,
     displayExpiredProxy: display.expiredProxy,
+    displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
   } : {};
 
