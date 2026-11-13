@@ -131,6 +131,24 @@ try {
     throw new Error('Wheel over a native timeline selector changed the year or canceled the dropdown gesture: '+JSON.stringify({yearBeforeSelectorWheel,yearAfterSelectorWheel,selectorWheel}));
   }
 
+  // React's passive delegated wheel listener cannot reliably prevent page
+  // scrolling. A native, non-passive timeline listener must consume the wheel
+  // gesture and actually step one historical year, then step back.
+  const timelineWheel = async deltaY => page.evaluate(delta => {
+    const target = document.querySelector('div[class*="timelineTitle"]');
+    if(!target)throw new Error('Timeline title missing for wheel regression');
+    const event = new WheelEvent('wheel',{bubbles:true,cancelable:true,deltaY:delta});
+    target.dispatchEvent(event);
+    return event.defaultPrevented;
+  },deltaY);
+  if(!(await timelineWheel(-120)))throw new Error('Timeline wheel was not canceled: browser may scroll the page');
+  await page.waitForFunction(expected => Number(document.querySelector('[class*="timelineYear"]')?.textContent)===expected,
+    Number(yearBeforeSelectorWheel)-1,{timeout:8000});
+  await page.waitForTimeout(85);
+  if(!(await timelineWheel(120)))throw new Error('Reverse timeline wheel was not canceled');
+  await page.waitForFunction(expected => Number(document.querySelector('[class*="timelineYear"]')?.textContent)===expected,
+    Number(yearBeforeSelectorWheel),{timeout:8000});
+
   const state = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
     const buttons = [...document.querySelectorAll('button')].map(x => x.textContent?.trim()).filter(Boolean);
