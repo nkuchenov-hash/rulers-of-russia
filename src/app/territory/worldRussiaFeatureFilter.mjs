@@ -61,6 +61,19 @@ const RYAZAN_CYRILLIC = /^рязан(?:ь|ская|ское|ский|ской)?(
 // Only May 1500 and September 1521 change the background identity within a
 // year. Consumers can use this phase in memo/effect dependencies so that
 // ordinary month scrubbing does not rebuild large world textures needlessly.
+// Reuse cached world-feature filtering when the answer cannot change.
+// Keep this key synchronized with every *dated* condition below; it must
+// change only when a stale world's Russian-polity identity actually changes.
+// A change of historical Russian GEOMETRY still redraws independently.
+export function worldRussiaBackgroundIdentityKey(year, month) {
+  const hasMonth = Number.isInteger(month) && month >= 1 && month <= 12;
+  const hasYear = Number.isInteger(year);
+  return (hasYear && year >= 1136 && year < 1478 ? 1 : 0)
+    | (hasYear && year >= 1510 ? 2 : 0)
+    | (hasYear && (year >= 1522 || (year === 1521 && hasMonth && month >= 9)) ? 4 : 0)
+    | (hasYear && (year >= 1501 || (year === 1500 && hasMonth && month >= 5)) ? 8 : 0);
+}
+
 export function worldBackgroundTransitionPhase(year, month) {
   if (!Number.isInteger(month) || month < 1 || month > 12) return 0;
   return year === 1500 ? Number(month >= 5) : year === 1521 ? Number(month >= 9) : 0;
