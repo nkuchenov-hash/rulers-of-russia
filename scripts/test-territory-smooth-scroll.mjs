@@ -84,10 +84,18 @@ assert.match(source, /function onTimelineScrollEnd\(\)\{if\(!timelineScrollGateR
   'Scrollend must cancel the gate and resynchronize the visible year');
 assert.match(source, /onTouchStart=\{cancelTimelineJump\}/,
   'Touch input must restore manual year scrubbing');
-assert.match(source, /const now=performance\.now\(\);if\(now-timelineWheelRef\.current<62\)return;timelineWheelRef\.current=now;const wasJumping=timelineScrollGateRef\.current\.isActive\(\);timelineScrollGateRef\.current\.cancel\(\)/,
+assert.match(source, /const now=performance\.now\(\);[\s\S]*if\(now-timelineWheelRef\.current<62\)return;[\s\S]*timelineWheelRef\.current=now;[\s\S]*const wasJumping=timelineScrollGateRef\.current\.isActive\(\);[\s\S]*timelineScrollGateRef\.current\.cancel\(\)/,
   'Only accepted wheel events may cancel a smooth jump');
 assert.match(source, /const current=wasJumping\?year:clamp\(/,
   'Wheel interruption must step from the selected year, not an intermediate animated position');
 assert.ok(source.includes('if(!shouldHandleTimelineWheel(e.target))return;'),
   'production wheel handler must ignore bubbled events from native timeline controls');
+assert.match(source, /timelineHostRef=useRef\(null\)/,
+  'Timeline should keep a DOM ref for native wheel capture');
+assert.ok(source.includes("node.addEventListener('wheel',onTimelineWheel,{passive:false})"),
+  'Year scrubbing must use a non-passive wheel listener in Chromium');
+assert.ok(source.includes("node.removeEventListener('wheel',onTimelineWheel)"),
+  'Unmount and year changes must not accumulate wheel listeners');
+assert.doesNotMatch(source, /onWheel=\{onTimelineWheel\}/,
+  'Do not use React passive delegated wheel handlers for scroll interception');
 console.log('Timeline smooth-jump gate, native control wheel isolation and production integration checks passed.');
