@@ -126,9 +126,9 @@ const selectFallbackFeatures = (period, month) => {
     if (period.fallbackSelectionMode === 'latest-started') {
       const starts = validIndices.map(i => normalizeBoundaryDate(features[i]?.properties?.start_date, 'start'));
       const newest = starts.reduce((max, x) => x > max ? x : max, starts[0]);
-      return {indices: validIndices.filter(i => normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === newest), forwardProxy: false};
+      return {indices: validIndices.filter(i => normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === newest), forwardProxy: false, expiredProxy: false};
     }
-    return {indices: validIndices, forwardProxy: false};
+    return {indices: validIndices, forwardProxy: false, expiredProxy: false};
   }
 
   let latestStart = null;
@@ -141,7 +141,7 @@ const selectFallbackFeatures = (period, month) => {
     for (let i = 0; i < features.length; i += 1) {
       if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === latestStart) indices.push(i);
     }
-    if (indices.length) return {indices, forwardProxy: false};
+    if (indices.length) return {indices, forwardProxy: false, expiredProxy: true};
   }
 
   if (period.allowForwardProxy === true) {
@@ -155,7 +155,7 @@ const selectFallbackFeatures = (period, month) => {
       for (let i = 0; i < features.length; i += 1) {
         if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === earliestStart) indices.push(i);
       }
-      if (indices.length) return {indices, forwardProxy: true};
+      if (indices.length) return {indices, forwardProxy: true, expiredProxy: false};
     }
   }
 
@@ -165,8 +165,8 @@ const selectFallbackFeatures = (period, month) => {
 const materializeProvisional = (period, month) => {
   const source = loadFallback(period);
   const selection = selectFallbackFeatures(period, month);
-  const {indices, forwardProxy} = selection;
-  const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}|forward:${forwardProxy}`;
+  const {indices, forwardProxy, expiredProxy} = selection;
+  const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}|forward:${forwardProxy}|expired:${expiredProxy}`;
   const cached = provisionalOutputCache.get(selectionKey);
   if (cached) return cached;
 
@@ -193,11 +193,14 @@ const materializeProvisional = (period, month) => {
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty,
       forwardProxy,
+      expiredProxy,
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
       warning: forwardProxy
         ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
-        : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
+        : expiredProxy
+          ? 'The last available source geometry has expired for this month; this is a visual carry-forward, not evidence that the historical border remained unchanged.'
+          : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
     },
     features: selected.map(feature => ({
       ...feature,
@@ -206,6 +209,7 @@ const materializeProvisional = (period, month) => {
         history_core_status: 'reconstruction-provisional',
         history_core_confidence: confidence,
         history_core_forward_proxy: forwardProxy,
+        history_core_expired_proxy: expiredProxy,
         history_core_coverage_period_id: period.id,
       },
     })),
@@ -215,6 +219,7 @@ const materializeProvisional = (period, month) => {
     geometryFile: relativeFile,
     provisionalStateId: `provisional-${period.polityId}-${hash}`,
     forwardProxy,
+    expiredProxy,
     confidence,
     sourceCertainty,
   };
@@ -290,6 +295,8 @@ while (cursor <= coverage.maxMonth) {
     displaySourceUrl: period.sourceUrl ?? null,
     displaySourceLicense: period.sourceLicense ?? null,
     displaySourceCertainty: display.sourceCertainty,
+    displayExpiredProxy: display.expiredProxy,
+    displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
   } : {};
 
@@ -339,6 +346,7 @@ while (cursor <= coverage.maxMonth) {
       evidenceDocumentIds: period.evidenceDocumentIds ?? [],
       bootstrapGeometry: true,
       forwardProxy: provisional.forwardProxy,
+      expiredProxy: provisional.expiredProxy,
       sourceAttribution: period.sourceAttribution ?? null,
       sourceUrl: period.sourceUrl ?? null,
       sourceLicense: period.sourceLicense ?? null,
