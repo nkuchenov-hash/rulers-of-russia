@@ -60,6 +60,15 @@ try {
    return spawnSync(process.execPath,[script],{cwd:root,encoding:'utf8',env:{...process.env,RUNIVERS_START_MONTH:'1920-01',RUNIVERS_END_MONTH:'1920-12',...expected}});
  };
  assert.equal(run(summary).status,0);
+ // Renaming a geometry file must not turn one dated source/state comparison
+ // into two independent geographic observations. This is synthetic only.
+ const repeatedState = metricRow('pass');
+ const renamedState = {...repeatedState, historyGeometryFile:'renamed-test-only.geojson'};
+ const duplicateStateReport = run({...summary,comparisons:2,passingComparisons:2},
+   completeShard,{},[repeatedState,renamedState]);
+ assert.equal(duplicateStateReport.status,1,
+   'a duplicate source/state pair with a different filename must fail');
+ assert.match(duplicateStateReport.stderr,/repeats a source\/state pair/);
  // The real preflight outage report contains no comparisons. It must fail
  // with an explicit source-availability reason rather than a misleading
  // "missing comparison evidence" error.
@@ -206,15 +215,15 @@ try {
    metricRow('pass'),
    {...metricRow('pass'),historyGeometryFile:'second-state.geojson'},
  ];
- assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},twoStatesSameResource).status,0,
-   'multiple state comparisons against one resource remain valid when counted as one source');
+ assert.equal(run({...summary,comparisons:2,passingComparisons:2},completeShard,{},twoStatesSameResource).status,1,
+   'renaming a file cannot create a second historical state for the same dated interval');
  const falselyCountedSources = run({
    ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
    usableReferenceLayers:2,comparisons:2,passingComparisons:2,
  },completeShard,{},twoStatesSameResource);
  assert.equal(falselyCountedSources.status,1,
    'two state comparisons against one source must not certify two independently usable reference layers');
- assert.match(falselyCountedSources.stderr,/1 distinct resource IDs/);
+ assert.match(falselyCountedSources.stderr,/repeats a source\/state pair/);
  assert.equal(run({
    ...summary,runiversLayersDiscovered:2,datedLayersAudited:2,
    usableReferenceLayers:2,comparisons:2,passingComparisons:2,
@@ -302,6 +311,48 @@ try {
  const twoYearSummary = {...summary,auditedRange:{startMonth:'1920-01',endMonth:'1921-12'}};
  const twoYearShard = {startMonth:'1920-01',endMonth:'1921-12',
    rangeMonthCount:24,comparedMonthCount:24,excludedMonthCount:0};
+ // Distinct complete-year states may legitimately use one dated source.
+ // Reject duplicate state intervals, not all repeated resource IDs.
+ const distinctStatesOneResource = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+   twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+     {...metricRow('pass'),runiversToYear:1922},
+     {...metricRow('pass'),runiversToYear:1922,
+       historyFirstMonth:'1921-01',historyLastMonth:'1921-12',
+       comparedFirstYear:1921,comparedLastYear:1921,
+       historyGeometryFile:'genuinely-distinct-state.geojson'},
+   ]);
+ assert.equal(distinctStatesOneResource.status,0,
+   'two genuinely distinct annual states can share one source without inflating source count');
+ // One dated reference resource must retain the same approximation class
+ // across different full-year History Core states. Otherwise the second
+ // state can silently receive a looser 100 km limit than the first.
+ const inconsistentApproximation = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+   twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+     {...metricRow('pass'),runiversToYear:1922},
+     {...metricRow('pass'),runiversToYear:1922,
+       historyFirstMonth:'1921-01',historyLastMonth:'1921-12',
+       runiversApproximate:true,toleranceMeters:100000,maxToleranceMeters:400000},
+   ]);
+ assert.equal(inconsistentApproximation.status,1,
+   'the same dated reference cannot change its approximation class between states');
+ assert.match(inconsistentApproximation.stderr,/inconsistent dated interval metadata/);
+ // One source ID cannot silently change its named-polity selection or
+ // original feature inventory between different History Core states.
+ // Such a report would compare different reference geometries as one source.
+ for (const scopeChange of [
+   {historyPolityId:'ussr',referenceScopePolityId:'ussr'},
+   {referenceScopeSelectedFeatures:2,referenceScopeTotalFeatures:2},
+ ]) {
+   const inconsistentScope = run({...twoYearSummary,comparisons:2,passingComparisons:2},
+     twoYearShard,{RUNIVERS_END_MONTH:'1921-12'},[
+       {...metricRow('pass'),runiversToYear:1922},
+       {...metricRow('pass'),runiversToYear:1922,
+         historyFirstMonth:'1921-01',historyLastMonth:'1921-12',...scopeChange},
+     ]);
+   assert.equal(inconsistentScope.status,1,
+     'one Runivers resource must retain its original named-polity scope');
+   assert.match(inconsistentScope.stderr,/inconsistent dated interval metadata/);
+ }
  const twoYearEvidence = {...metricRow('pass'),historyLastMonth:'1921-12'};
  const partialYearEvidence = run(twoYearSummary,twoYearShard,
    {RUNIVERS_END_MONTH:'1921-12'},[twoYearEvidence]);

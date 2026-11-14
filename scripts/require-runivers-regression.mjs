@@ -98,7 +98,14 @@ for (const row of evidence) {
   const historyStartYear = Number(row.historyFirstMonth.slice(0, 4));
   const historyEndYear = Number(row.historyLastMonth.slice(0, 4));
   const sourceLastYear = row.runiversToYear - (row.runiversIntervalSemantics === 'half-open' ? 1 : 0);
-  const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear, row.runiversIntervalSemantics]);
+  // Approximation and named-polity selection are properties of the Runivers
+  // reference resource, not of an individual History Core state. Reusing one
+  // resource ID with a different polity or selected-feature inventory could
+  // falsely count incomparable contours as independent geographic evidence.
+  const sourceInterval = JSON.stringify([row.runiversFromYear, row.runiversToYear,
+    row.runiversIntervalSemantics, row.runiversApproximate,
+    row.historyPolityId, row.referenceScopeKind, row.referenceScopePolityId,
+    row.referenceScopeSelectedFeatures, row.referenceScopeTotalFeatures]);
   const earlierInterval = resourceIntervals.get(row.runiversResourceId);
   if (earlierInterval && earlierInterval.identity !== sourceInterval) {
     console.error(`Runivers resource ${row.runiversResourceId} has inconsistent dated interval metadata across comparisons.`);
@@ -130,8 +137,11 @@ for (const row of evidence) {
     console.error('Runivers comparison evidence lacks a valid complete-calendar-year source/state overlap.');
     process.exit(1);
   }
+  // A resource/state comparison is unique regardless of the geometry filename.
+  // Otherwise a report could count the same dated state twice by renaming its
+  // file, inflating the number of supposedly independent border comparisons.
   const identity = JSON.stringify([row.runiversResourceId, row.runiversFromYear, row.runiversToYear,
-    row.historyFirstMonth, row.historyLastMonth, row.historyGeometryFile]);
+    row.historyFirstMonth, row.historyLastMonth]);
   if (seenEvidence.has(identity)) {
     console.error('Runivers comparison evidence repeats a source/state pair instead of independent comparisons.');
     process.exit(1);
