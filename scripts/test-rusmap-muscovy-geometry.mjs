@@ -68,7 +68,7 @@ assert.ok(source.features.every(f => insideFeature(MOSCOW, f)), 'Moscow must rem
 assert.equal(months.monthCount, 13980);
 const sourceFile = 'data/territory/rusmap/state-muscovy.geojson';
 const sourcedPeriods = coverage.periods.filter(p => p.fallbackGeometryFile === sourceFile);
-assert.equal(sourcedPeriods.length, 2);
+assert.equal(sourcedPeriods.length, 3, 'Muscovy source must cover Grand Moscow, Tsardom, and January–October 1721');
 const seenSourceVersions = new Set();
 let sourcedMonths = 0;
 for (const item of months.months) {
@@ -103,6 +103,18 @@ for (const item of months.months) {
 }
 assert.ok(sourcedMonths > 2000, `Imported contours insufficient: ${sourcedMonths} displayed months, ${seenSourceVersions.size} versions [${[...seenSourceVersions].join(', ')}]`);
 assert.equal(seenSourceVersions.size, 17, 'All 17 dated versions should reach the user');
+
+// The 1721 extension must retain its provisional source and make the
+// post-September carry-forward explicit instead of implying a verified border.
+const jan1721 = months.months.find(item => item.month === '1721-01');
+const oct1721 = months.months.find(item => item.month === '1721-10');
+const nov1721 = months.months.find(item => item.month === '1721-11');
+assert.equal(jan1721.politicalPolityId, 'russian-tsardom');
+assert.equal(oct1721.politicalPolityId, 'russian-tsardom');
+assert.equal(oct1721.displayExpiredProxy, true);
+assert.equal(oct1721.displaySourceLicense, 'ODbL-1.0');
+assert.equal(nov1721.politicalPolityId, 'russian-empire');
+assert.ok(!nov1721.displayGeometryFile, 'Muscovy display override must end in October 1721');
 
 console.log('Muscovy ODbL source: 17 versions, Kazan/Astrakhan spatial controls,',
   sourcedMonths, 'visible provisional-reconstruction months,',
