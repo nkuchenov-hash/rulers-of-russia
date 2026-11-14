@@ -131,16 +131,25 @@ const selectFallbackFeatures = (period, month) => {
     return {indices: validIndices, forwardProxy: false, expiredProxy: false};
   }
 
-  let latestStart = null;
+  // When every dated feature has expired, carry forward the most recently
+  // *ended* reconstruction. The most recently started feature may have ended
+  // earlier than another source version (or component), and choosing it would
+  // display an older state. Keep only the tied source interval; never combine
+  // differently dated whole-state versions into a fictitious union.
+  let latestEnd = null;
   for (let i = 0; i < features.length; i += 1) {
     const featureStart = normalizeBoundaryDate(features[i]?.properties?.start_date, 'start');
-    if (featureStart <= end && (latestStart === null || featureStart > latestStart)) latestStart = featureStart;
+    const featureEnd = normalizeBoundaryDate(features[i]?.properties?.end_date, 'end');
+    if (featureStart <= end && featureEnd < start && (latestEnd === null || featureEnd > latestEnd)) latestEnd = featureEnd;
   }
-  if (latestStart !== null) {
-    const indices = [];
-    for (let i = 0; i < features.length; i += 1) {
-      if (normalizeBoundaryDate(features[i]?.properties?.start_date, 'start') === latestStart) indices.push(i);
-    }
+  if (latestEnd !== null) {
+    const ending = features.map((feature, i) => ({
+      i,
+      start: normalizeBoundaryDate(feature?.properties?.start_date, 'start'),
+      end: normalizeBoundaryDate(feature?.properties?.end_date, 'end'),
+    })).filter(item => item.end === latestEnd && item.start <= end);
+    const latestStart = ending.reduce((latest, item) => item.start > latest ? item.start : latest, ending[0].start);
+    const indices = ending.filter(item => item.start === latestStart).map(item => item.i);
     if (indices.length) return {indices, forwardProxy: false, expiredProxy: true};
   }
 
