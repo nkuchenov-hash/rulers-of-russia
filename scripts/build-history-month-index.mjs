@@ -282,14 +282,16 @@ while (cursor <= coverage.maxMonth) {
   const period = matches[0];
   const key = `${period.polityId}::${period.track}`;
   const candidates = verifiedByPolityTrack.get(key) ?? [];
-  let latestStarted = null;
+  // A newer, short-lived verified snapshot must not hide an older
+  // independently verified snapshot whose declared interval still covers
+  // this month. Search backwards through eligible starts for a valid state.
+  let chosen = null;
   for (const candidate of candidates) {
-    if (candidate.__validFromMonth <= cursor) latestStarted = candidate;
-    else break;
+    if (candidate.__validFromMonth > cursor) break;
+    if (!candidate.__validThroughMonth || cursor <= candidate.__validThroughMonth) {
+      chosen = candidate;
+    }
   }
-  const chosen = latestStarted && (!latestStarted.__validThroughMonth || cursor <= latestStarted.__validThroughMonth)
-    ? latestStarted
-    : null;
   // Display choice and canonical verification are separate. This explicitly
   // source-backed provisional outline can be shown on the map without
   // relabeling/replacing an audited History Core historical snapshot.
