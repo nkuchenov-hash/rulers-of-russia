@@ -35,13 +35,23 @@ export function HistoricalTerritoryFlatMap({
   // History Core distinguishes a provisional reconstruction from a geometry
   // that passed its INTERNAL audit. Neither status certifies independent
   // historical accuracy; do not present both as the same quality level.
-  const contourStatus=historyLoading?'Загрузка границ'
+  // The date of a provisional outline can differ from the selected month.
+  // Keep that warning visible on the map itself, including narrow screens.
+  const proxyWarning=historyState?.forwardProxy||historyState?.displayForwardProxy
+    ?'контур перенесён из более позднего периода'
+    :historyState?.expiredProxy||historyState?.displayExpiredProxy
+      ?'контур использован после окончания периода источника'
+      :null;
+  const contourStatusBase=historyLoading?'Загрузка границ'
     :!hasHistoricalContour?'Нет контура History Core'
     :historyState?.isAlternativeReconstruction
       ?`Предварительная реконструкция · ${historyState.sourceAttribution??'исторический источник'} · ${historyState.sourceLicense??'лицензия не указана'} · пунктир · точность не подтверждена`
       :historyState?.status==='geometry-verified'
       ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
       :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
+  const contourStatus=proxyWarning&&hasHistoricalContour
+    ?`${contourStatusBase} · ${proxyWarning}`
+    :contourStatusBase;
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
