@@ -135,15 +135,20 @@
       "label": "Русское царство (до принятия императорского титула)",
       "track": "russian-legal-border",
       "territorialModel": "linear-border",
-      "fallbackGeometryFile": "data/territory/archive/russian-empire.geojson",
+      "fallbackGeometryFile": "data/territory/rusmap/state-muscovy.geojson",
       "status": "reconstruction-provisional",
-      "confidence": "medium",
+      "confidence": "low",
       "bootstrapGeometry": true,
       "evidenceDocumentIds": [
         "doc-nystad-1721-ebid",
         "doc-bucharest-1812-ebid"
       ],
-      "notes": "Political title and geometry are separate tracks. On 22 October 1721 Julian (2 November Gregorian) Peter I accepted the imperial title. January–October 1721 are Tsardom by Gregorian month-end, while the previously materialized russian-empire territorial track remains unchanged for all of 1721. This technical geometry-track identifier must NOT be interpreted as an imperial political title before November. No boundary is inferred from the title event."
+      "notes": "Political title and territory are separate tracks: January–October 1721 retains the Tsardom political label until the Gregorian November title event. Display the dated rusmap 1720–1721 Muscovy reconstruction (ODbL 1.0), not the undated whole-Empire bootstrap; its last source interval ends 10 September 1721, so October is explicitly marked as an expired visual carry-forward. The canonical verified geometry, where available, remains separate and is not replaced or promoted. No border change is inferred from the title event.",
+      "fallbackSelectionMode": "latest-started",
+      "sourceAttribution": "Историческая карта России, rusmap.org",
+      "sourceUrl": "https://rusmap.org/data/",
+      "sourceLicense": "ODbL-1.0",
+      "displaySelection": "source-reconstruction"
     },
     {
       "id": "coverage-1721-11-1916-empire",
