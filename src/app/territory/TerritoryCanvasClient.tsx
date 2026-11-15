@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { TERRITORY_MAX_YEAR, TERRITORY_MIN_YEAR } from './territoryChronology';
 import { parseTerritoryQueryDate, type ParsedTerritoryQueryDate } from './territoryQueryDate';
+import { TerritoryRenderBoundary } from './TerritoryRenderBoundary';
 
 type HistoricalTerritoryMapProps = {
   initialYear?: number;
@@ -58,10 +59,11 @@ export function TerritoryCanvasClient() {
   const dateKey = `${requestedDate.year}-${requestedDate.month ?? 'auto'}`;
 
   return (
-    <HistoricalTerritoryMap
-      key={dateKey}
-      initialYear={requestedDate.year}
-      initialMonth={requestedDate.month}
-    />
+    <TerritoryRenderBoundary key={dateKey}>
+      <HistoricalTerritoryMap
+        initialYear={requestedDate.year}
+        initialMonth={requestedDate.month}
+      />
+    </TerritoryRenderBoundary>
   );
 }
