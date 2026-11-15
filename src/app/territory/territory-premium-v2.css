@@ -45,3 +45,8 @@
   .territory-flat-provenance-details{max-width:min(260px,calc(100% - 20px))}
   .territory-flat-provenance-details[open]{max-width:calc(100% - 20px);right:10px;max-height:min(52%,260px)}
 }
+
+/* An expanded source explanation takes precedence over decorative map branding on phones. */
+@media(max-width:720px){
+  .territory-flat-host:has(.territory-flat-provenance-details[open]) .territory-flat-watermark{display:none}
+}
