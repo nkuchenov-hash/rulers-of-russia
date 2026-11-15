@@ -55,6 +55,14 @@ export function HistoricalTerritoryFlatMap({
   const contourStatus=proxyWarnings.length&&hasHistoricalContour
     ?`${contourStatusBase} · ${proxyWarnings.join(' · ')}`
     :contourStatusBase;
+  // The full provenance caption can cover much of a 360px map. Keep its
+  // complete wording accessible, but render a compact legend on mobile.
+  const mobileContourStatus=historyLoading?'Загрузка границ'
+    :!hasHistoricalContour?'Нет исторического контура'
+    :historyState?.status==='geometry-verified'&&!historyState?.isAlternativeReconstruction
+      ?'Внутренний аудит · точность не подтверждена'
+      :'Реконструкция · точность не подтверждена';
+  const mobileProxyStatus=proxyWarnings.length?' · перенос контура':'';
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
@@ -361,7 +369,7 @@ export function HistoricalTerritoryFlatMap({
       </div>
     )}
     <div className="territory-flat-watermark" aria-hidden="true">
-      2D · {contourStatus} · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}
+      <span title={contourStatus}>2D · {mobile?mobileContourStatus+mobileProxyStatus:contourStatus} · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}</span>
     </div>
   </div>;
 }
