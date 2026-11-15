@@ -24,3 +24,8 @@
 
 /* Distinguish a missing historical Russian outline from the approximate world backdrop. */
 .territory-flat-missing-history{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100% - 32px));box-sizing:border-box;padding:16px 20px;border:1px solid rgba(227,200,135,.55);border-radius:12px;background:rgba(3,14,19,.93);color:#f0e5cb;text-align:center;font:500 16px/1.5 Georgia,serif;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+
+/* On narrow screens, keep the map center available for exploring nearby historical context. */
+@media(max-width:560px){
+  .territory-flat-missing-history{top:12px;transform:translateX(-50%);width:calc(100% - 24px);max-width:390px;padding:10px 12px;font-size:13px;line-height:1.35;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+}
