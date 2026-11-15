@@ -48,5 +48,5 @@
 
 /* An expanded source explanation takes precedence over decorative map branding on phones. */
 @media(max-width:720px){
-  .territory-flat-host:has(.territory-flat-provenance-details[open]) .territory-flat-watermark{display:none}
+  body:has(.territory-flat-provenance-details[open]) .territory-flat-watermark{display:none}
 }
