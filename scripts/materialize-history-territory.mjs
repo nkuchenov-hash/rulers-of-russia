@@ -225,6 +225,12 @@ for (const entry of replay) {
 
   const change = entry.item;
   const action = inferAction(change);
+  // Unknown geometry actions must never produce an unchanged polygon that is
+  // incorrectly published as a new geometry-verified historical state.
+  if (!['add', 'remove', 'replace', 'metadata-only'].includes(action)) {
+    warnings.push(`Change ${change.id} skipped: unsupported geometry action ${action}`);
+    continue;
+  }
 
   // Geometry-verified metadata-only changes are overlays or documentary transitions, not
   // territory-area mutations. Boundary overlays are materialized independently by the boundary
