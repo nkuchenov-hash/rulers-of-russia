@@ -29,3 +29,12 @@
 @media(max-width:560px){
   .territory-flat-missing-history{top:12px;transform:translateX(-50%);width:calc(100% - 24px);max-width:390px;padding:10px 12px;font-size:13px;line-height:1.35;box-shadow:0 4px 16px rgba(0,0,0,.28)}
 }
+
+/* Touch-accessible provenance; keep the default legend compact until expanded. */
+.territory-flat-provenance-details{display:none}
+@media(max-width:720px){
+  .territory-flat-provenance-details{display:block;position:absolute;z-index:5;left:10px;bottom:10px;max-width:min(260px,calc(100% - 30px));box-sizing:border-box;padding:7px 10px;border:1px solid rgba(227,200,135,.55);border-radius:9px;background:rgba(3,14,19,.96);color:#f0e5cb;font:13px/1.4 Georgia,serif;touch-action:manipulation}
+  .territory-flat-provenance-details summary{cursor:pointer;min-height:26px;display:list-item;font-weight:600}
+  .territory-flat-provenance-details[open]{max-height:min(55%,270px);overflow:auto}
+  .territory-flat-provenance-details p{margin:8px 0 0;overflow-wrap:anywhere}
+}

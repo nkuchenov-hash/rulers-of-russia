@@ -368,6 +368,18 @@ export function HistoricalTerritoryFlatMap({
         Фоновая карта не является заменой исторической границы.
       </div>
     )}
+    {mobile && hasHistoricalContour && (
+      <details
+        className="territory-flat-provenance-details"
+        onPointerDown={e=>e.stopPropagation()}
+        onPointerMove={e=>e.stopPropagation()}
+        onPointerUp={e=>e.stopPropagation()}
+      >
+        <summary aria-label="Показать происхождение и достоверность исторической границы">О границе</summary>
+        <p>{contourStatus}</p>
+        <p>{worldYear===year?'Мировой срез соответствует выбранному году':'Мировой фон приблизительный и не соответствует точно выбранному году'}</p>
+      </details>
+    )}
     <div className="territory-flat-watermark" aria-hidden="true">
       <span title={contourStatus}>2D · {mobile?mobileContourStatus+mobileProxyStatus:contourStatus} · {worldYear===year?'Мировой срез':'Мировой фон приблизительный'}</span>
     </div>
