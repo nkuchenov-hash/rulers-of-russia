@@ -251,22 +251,26 @@ for (const entry of replay) {
     continue;
   }
 
+  // Compute the entire change before updating the active state. A later fragment can
+  // fail validation or clipping after earlier fragments succeeded; in that case the
+  // previous verified snapshot must remain intact for subsequent dated changes.
+  let nextGeometry = state.geometry;
   try {
     if (action === 'add') {
-      for (const id of areaIds) state.geometry = polygonClipping.union(state.geometry, geometryFor(id));
+      for (const id of areaIds) nextGeometry = polygonClipping.union(nextGeometry, geometryFor(id));
     } else if (action === 'remove') {
-      for (const id of areaIds) state.geometry = polygonClipping.difference(state.geometry, geometryFor(id));
+      for (const id of areaIds) nextGeometry = polygonClipping.difference(nextGeometry, geometryFor(id));
     } else if (action === 'replace') {
-      let replacement = [];
-      for (const id of areaIds) replacement = replacement.length ? polygonClipping.union(replacement, geometryFor(id)) : geometryFor(id);
-      state.geometry = replacement;
-      state.activeFragmentIds.clear();
+      nextGeometry = [];
+      for (const id of areaIds) nextGeometry = nextGeometry.length ? polygonClipping.union(nextGeometry, geometryFor(id)) : geometryFor(id);
     }
   } catch (error) {
     warnings.push(`Change ${change.id} skipped: polygon operation failed: ${error.message}`);
     continue;
   }
 
+  state.geometry = nextGeometry;
+  if (action === 'replace') state.activeFragmentIds.clear();
   if (action === 'remove') for (const id of areaIds) state.activeFragmentIds.delete(id);
   else for (const id of ids) state.activeFragmentIds.add(id);
   for (const id of change.evidenceDocumentIds ?? []) state.evidenceDocumentIds.add(id);
