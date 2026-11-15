@@ -83,10 +83,14 @@ const inferAction = change => {
 
 const confidenceRank = {low: 0, medium: 1, high: 2};
 const minConfidence = ids => {
+  // A missing or unrecognised confidence is not evidence of high confidence.
+  // Keep the displayed quality conservative even for legacy fragments.
   let value = 'high';
   for (const id of ids) {
     const fragment = fragments.get(id);
-    if (fragment && confidenceRank[fragment.confidence] < confidenceRank[value]) value = fragment.confidence;
+    const confidence = fragment?.confidence;
+    if (!Object.hasOwn(confidenceRank, confidence ?? '')) return 'low';
+    if (confidenceRank[confidence] < confidenceRank[value]) value = confidence;
   }
   return value;
 };
