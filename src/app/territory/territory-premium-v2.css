@@ -38,3 +38,10 @@
   .territory-flat-provenance-details[open]{max-height:min(55%,270px);overflow:auto}
   .territory-flat-provenance-details p{margin:8px 0 0;overflow-wrap:anywhere}
 }
+
+/* On phones the provenance drawer and map watermark must not cover one another. */
+@media(max-width:720px){
+  .territory-flat-watermark{bottom:56px;max-width:min(48vw,180px)}
+  .territory-flat-provenance-details{max-width:min(260px,calc(100% - 20px))}
+  .territory-flat-provenance-details[open]{max-width:calc(100% - 20px);right:10px;max-height:min(52%,260px)}
+}
