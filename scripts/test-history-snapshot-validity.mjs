@@ -18,4 +18,7 @@ assert.equal(resolveTerritorySnapshotAtMonth([base], '1900-06', 'test-polity')?.
 assert.equal(resolveTerritorySnapshotAtMonth([base], '1900-07', 'test-polity'), null);
 assert.equal(resolveTerritorySnapshotAtMonth([base], '1899-12', 'test-polity'), null);
 assert.equal(resolveTerritorySnapshotAtMonth([{...base, validThroughMonth: null}], '1900-07', 'test-polity')?.id, base.id);
-console.log('Verified source validity horizons respected at month boundaries.');
+const older = {...base, id: 'older-border', effectiveDate: {...base.effectiveDate, original: '1890-01', normalized: '1890-01'}, validThroughMonth: null};
+assert.equal(resolveTerritorySnapshotAtMonth([older, base], '1900-07', 'test-polity'), null, 'An expired newer border must not resurrect an obsolete older border');
+assert.equal(resolveTerritorySnapshotAtMonth([older, base], '1900-06', 'test-polity')?.id, base.id);
+console.log('Verified source validity horizons and obsolete-border fallback respected.');
