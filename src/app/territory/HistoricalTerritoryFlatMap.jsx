@@ -62,7 +62,9 @@ export function HistoricalTerritoryFlatMap({
     :historyState?.status==='geometry-verified'&&!historyState?.isAlternativeReconstruction
       ?'Внутренний аудит · точность не подтверждена'
       :'Реконструкция · точность не подтверждена';
-  const mobileProxyStatus=proxyWarnings.length?' · перенос контура':'';
+  const mobileProxyStatus=proxyWarnings.length
+    ?` · ${proxyWarnings.join(' · ')}`
+    :'';
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
