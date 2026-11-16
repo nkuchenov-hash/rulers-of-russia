@@ -64,11 +64,13 @@ export function resolveTerritorySnapshotAtMonth(
     if (!key || key > monthEnd || key < bestKey) continue;
     // A coverage-anchored source may explicitly expire. Do not silently
     // project its verified geometry into later centuries or regimes.
-    if (snapshot.validThroughMonth && month > snapshot.validThroughMonth) continue;
     best = snapshot;
     bestKey = key;
   }
 
+  // Expiration is evaluated after selecting the latest source. Falling back to
+  // an older contour would silently resurrect a superseded historical border.
+  if (best?.validThroughMonth && month > best.validThroughMonth) return null;
   return best;
 }
 
