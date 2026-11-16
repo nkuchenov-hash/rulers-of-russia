@@ -355,7 +355,9 @@
   .eyebrow{margin-bottom:14px;font-size:16px}
   .storyOverlay h1{font-size:40px}
   .periodLine{margin-top:18px;font-size:18px}
-  .storyOverlay p{display:none}
+  .storyOverlay p{display:block;margin-top:12px;max-width:290px;font-size:12px;line-height:1.4;color:rgba(238,231,213,.83)}
+  .storyOverlay p a{color:#dfc27f;text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
+  .storyOverlay{pointer-events:auto}
   .mapTools{right:14px;top:154px;gap:8px}
   .mapTools button{width:44px;height:44px}
   .timelineOverlay{left:18px;right:18px;bottom:12px;height:76px}
