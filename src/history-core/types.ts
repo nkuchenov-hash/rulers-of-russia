@@ -193,6 +193,8 @@ export type TerritorySnapshot = {
   track: TerritoryTrack;
   territorialModel: TerritoryModel;
   geometryFile: string;
+  /** Last source-supported month for a coverage-anchored reconstruction. */
+  validThroughMonth?: string | null;
   /** Optional generated overlays for uncertain/frontier evidence. */
   uncertaintyGeometryFile?: string;
   evidenceDocumentIds: string[];
