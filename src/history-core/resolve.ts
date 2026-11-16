@@ -62,6 +62,9 @@ export function resolveTerritorySnapshotAtMonth(
     if (snapshot.reviewStatus !== 'geometry-verified') continue;
     const key = normalizedSortKey(snapshot.effectiveDate);
     if (!key || key > monthEnd || key < bestKey) continue;
+    // A coverage-anchored source may explicitly expire. Do not silently
+    // project its verified geometry into later centuries or regimes.
+    if (snapshot.validThroughMonth && month > snapshot.validThroughMonth) continue;
     best = snapshot;
     bestKey = key;
   }
