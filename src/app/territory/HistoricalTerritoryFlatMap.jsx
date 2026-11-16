@@ -291,6 +291,9 @@ export function HistoricalTerritoryFlatMap({
   // Only act while the map host itself has keyboard focus; never intercept
   // the timeline, date selectors, or page-wide shortcuts.
   const onKeyDown=useCallback(e=>{
+    // Do not hijack keys pressed on the provenance disclosure or any future
+    // nested control. Only the focused map surface owns navigation shortcuts.
+    if(e.target!==e.currentTarget)return;
     const step=e.shiftKey?120:48;
     switch(e.key){
       case 'ArrowLeft':
