@@ -178,7 +178,7 @@ export function AtlasLabClient() {
         <div className={styles.periodLine}>
           {period.start} — {period.end === TERRITORY_MAX_YEAR ? 'настоящее время' : period.end}
         </div>
-        <p>Исторические границы — реконструкции разной степени достоверности. <a href="/rulers-of-russia/territory/">Открыть основную карту с информацией о качестве геометрии</a>.</p>
+        <p>Исторические границы — реконструкции разной степени достоверности. <a href="../">Открыть основную карту с информацией о качестве геометрии</a>.</p>
       </aside>
 
       <nav className={styles.mapTools} aria-label="Управление глобусом">
