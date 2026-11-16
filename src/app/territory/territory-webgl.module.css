@@ -15,3 +15,7 @@
   .worldContextCompact[open]{max-height:min(38vh,260px);overflow:auto;overscroll-behavior:contain}
   .worldContextCompact>div{margin-top:8px}
 }
+
+/* Evidence must remain readable even when the long descriptive paragraph is hidden on phones. */
+.story .evidenceStatus{display:block;max-width:520px;margin-top:8px;padding:7px 10px;border-left:2px solid #d7b96d;border-radius:0 6px 6px 0;background:rgba(2,12,16,.88);color:#f0dfb9;font:500 13px/1.4 system-ui,sans-serif;pointer-events:none}
+@media(max-width:720px){.story .evidenceStatus{display:block;max-width:min(70vw,340px);font-size:12px;line-height:1.35;padding:6px 8px}}
