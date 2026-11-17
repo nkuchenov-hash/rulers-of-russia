@@ -50,3 +50,12 @@
 @media(max-width:720px){
   body:has(.territory-flat-provenance-details[open]) .territory-flat-watermark{display:none}
 }
+
+/* Keep source disclosure usable with a thumb and above phone gesture bars. */
+@media(max-width:720px){
+  .territory-flat-provenance-details{bottom:max(10px,env(safe-area-inset-bottom));}
+  .territory-flat-provenance-details summary{min-height:44px;display:list-item;align-content:center;}
+  .territory-flat-provenance-details summary:focus-visible{outline:2px solid #e3c887;outline-offset:3px;border-radius:4px;}
+  .territory-flat-provenance-details[open]{overscroll-behavior:contain;}
+  .territory-flat-watermark{bottom:calc(56px + env(safe-area-inset-bottom));}
+}
