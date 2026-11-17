@@ -5,6 +5,7 @@ import {geoArea,geoCentroid,geoEquirectangular,geoGraticule,geoPath} from 'd3-ge
 import {isRussianWorldFeature,worldRussiaBackgroundIdentityKey} from './worldRussiaFeatureFilter.mjs';
 import {zoomFlatCameraAt,flatWheelZoomFactor} from './flatCameraZoom.mjs';
 import {visibleTerrainCopies} from './flatTerrainTiles.mjs';
+import {historicalGeometryCaveat} from './historicalGeometryCaveats.mjs';
 
 const TWO_PI=Math.PI*2;
 const PALETTE=['#879477','#b49b79','#808d9a','#9d8b72','#809995','#a18b89','#8d929e'];
@@ -39,6 +40,10 @@ export function HistoricalTerritoryFlatMap({
   // Keep that warning visible on the map itself, including narrow screens.
   // Both caveats can apply to a composite historical state. Never hide
   // one merely because the other is present: each affects interpretation.
+  // A reused internally audited outline can predate documented territorial
+  // changes. Show the same dated-source caveat on the flat map, not only in
+  // the underlying geometry metadata. No replacement border is inferred.
+  const staleSourceCaveat=historyLoading?null:historicalGeometryCaveat({year,month},historyState);
   const proxyWarnings=[
     (historyState?.forwardProxy||historyState?.displayForwardProxy)
       &&'контур перенесён из более позднего периода',
@@ -52,9 +57,10 @@ export function HistoricalTerritoryFlatMap({
       :historyState?.status==='geometry-verified'
       ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
       :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
-  const contourStatus=proxyWarnings.length&&hasHistoricalContour
-    ?`${contourStatusBase} · ${proxyWarnings.join(' · ')}`
-    :contourStatusBase;
+  const contourStatus=[contourStatusBase,
+    ...(hasHistoricalContour?proxyWarnings:[]),
+    ...(hasHistoricalContour&&staleSourceCaveat?[staleSourceCaveat.desktop]:[]),
+  ].join(' · ');
   // The full provenance caption can cover much of a 360px map. Keep its
   // complete wording accessible, but render a compact legend on mobile.
   const mobileContourStatus=historyLoading?'Загрузка границ'
@@ -62,9 +68,9 @@ export function HistoricalTerritoryFlatMap({
     :historyState?.status==='geometry-verified'&&!historyState?.isAlternativeReconstruction
       ?'Внутренний аудит · точность не подтверждена'
       :'Реконструкция · точность не подтверждена';
-  const mobileProxyStatus=proxyWarnings.length
-    ?` · ${proxyWarnings.join(' · ')}`
-    :'';
+  const mobileProxyStatus=[...proxyWarnings,
+    ...(hasHistoricalContour&&staleSourceCaveat?[staleSourceCaveat.mobile]:[]),
+  ].map(warning=>` · ${warning}`).join('');
 
   // The historical background and its labels depend on the selected year,
   // not on camera movement. Keep source feature indices for stable colors.
