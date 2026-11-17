@@ -33,6 +33,9 @@ export function HistoricalTerritoryFlatMap({
   const [terrain,setTerrain]=useState(null);
   const focusLon=focus[0],focusLat=focus[1];
   const hasHistoricalContour=!historyLoading&&(russiaFeatures?.length??0)>0;
+  // Internal geometry verification is not a confidence grade: a source-backed
+  // medieval reconstruction may still be explicitly marked low confidence.
+  const lowConfidenceContour=historyState?.confidence==='low';
   // History Core distinguishes a provisional reconstruction from a geometry
   // that passed its INTERNAL audit. Neither status certifies independent
   // historical accuracy; do not present both as the same quality level.
@@ -55,7 +58,9 @@ export function HistoricalTerritoryFlatMap({
     :historyState?.isAlternativeReconstruction
       ?`Предварительная реконструкция · ${historyState.sourceAttribution??'исторический источник'} · ${historyState.sourceLicense??'лицензия не указана'} · пунктир · точность не подтверждена`
       :historyState?.status==='geometry-verified'
-      ?'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
+      ?lowConfidenceContour
+        ?'Контур History Core · внутренний аудит пройден · низкая уверенность · пунктирная граница'
+        :'Контур History Core · внутренний аудит пройден · внешняя точность не подтверждена'
       :'Предварительная реконструкция History Core · пунктирная граница · точность не подтверждена';
   const contourStatus=[contourStatusBase,
     ...(hasHistoricalContour?proxyWarnings:[]),
@@ -66,7 +71,7 @@ export function HistoricalTerritoryFlatMap({
   const mobileContourStatus=historyLoading?'Загрузка границ'
     :!hasHistoricalContour?'Нет исторического контура'
     :historyState?.status==='geometry-verified'&&!historyState?.isAlternativeReconstruction
-      ?'Внутренний аудит · точность не подтверждена'
+      ?lowConfidenceContour?'Внутренний аудит · низкая уверенность · пунктир':'Внутренний аудит · точность не подтверждена'
       :'Реконструкция · точность не подтверждена';
   const mobileProxyStatus=[...proxyWarnings,
     ...(hasHistoricalContour&&staleSourceCaveat?[staleSourceCaveat.mobile]:[]),
@@ -192,7 +197,7 @@ export function HistoricalTerritoryFlatMap({
         ctx.globalAlpha=mode==='states'?.94:.70;
         ctx.fill('evenodd');
         ctx.globalAlpha=1;
-        const internallyVerified=historyState?.status==='geometry-verified' && !historyState?.isAlternativeReconstruction;
+        const internallyVerified=historyState?.status==='geometry-verified' && !historyState?.isAlternativeReconstruction && !lowConfidenceContour;
         ctx.strokeStyle=internallyVerified?'#efcf75':'#e8bc72';
         ctx.lineWidth=mobile?2.2:2.7;
         ctx.setLineDash(internallyVerified?[]:[7,5]);
@@ -243,7 +248,7 @@ export function HistoricalTerritoryFlatMap({
     // History Core accuracy caption reports that state explicitly.
   },[size,terrain,worldFeatures,worldLabels,russiaFeatures,verifiedBoundaries,historyLoading,
     worldYear,year,focusLon,focusLat,mode,camera,mobile,
-    historyState?.status,historyState?.isAlternativeReconstruction]);
+    historyState?.status,historyState?.isAlternativeReconstruction,lowConfidenceContour]);
 
   const pinchSnapshot=useCallback(()=>{
     const points=[...pointersRef.current.values()];
