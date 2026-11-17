@@ -235,7 +235,7 @@ try {
       attributes: true, attributeFilter: ['width', 'height']
     });
   });
-  await page.getByRole('button', {name: '+', exact: true}).click();
+  await page.getByRole('button', {name: 'Приблизить карту'}).click();
   await page.waitForFunction(oldZoom => {
     const canvas = document.querySelector('canvas[data-territory-flat-map="true"]');
     return Number(canvas?.dataset.cameraZoom) > oldZoom;
