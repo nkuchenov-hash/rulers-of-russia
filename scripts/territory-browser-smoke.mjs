@@ -393,7 +393,7 @@ try {
     await waitForGlobeCanvas(`repeat 2D to 3D cycle ${cycle}`, beforeGlobeReturn);
   }
 
-  const zoomIn = page.getByRole('button', { name: '+', exact: true });
+  const zoomIn = page.getByRole('button', { name: 'Приблизить карту' });
 
   await zoomIn.click();
   await page.waitForTimeout(250);
