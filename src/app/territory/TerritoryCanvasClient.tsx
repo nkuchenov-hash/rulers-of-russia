@@ -47,11 +47,12 @@ export function TerritoryCanvasClient() {
   if (!requestedDate) return <TerritoryLoading />;
   if (!requestedDate.valid) {
     return (
-      <main role="alert" style={{minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: '#071821', color: '#f7ecd8'}}>
-        <div style={{maxWidth: 560, fontSize: 18, lineHeight: 1.5}}>
-          <h1 style={{fontSize: 26}}>Некорректная дата карты</h1>
-          <p>{requestedDate.error}</p>
-          <a href="./" style={{color: '#f0d48b'}}>Открыть карту без параметров</a>
+      <main role="alert" style={{minHeight: '100dvh', display: 'grid', placeItems: 'center', padding: 24, background: '#071821', color: '#f7ecd8', textAlign: 'center'}}>
+        <div style={{width: '100%', maxWidth: 560, fontSize: 16, lineHeight: 1.6}}>
+          <h1 style={{fontFamily: 'Georgia, serif', fontWeight: 500, fontSize: 'clamp(24px, 6vw, 34px)', margin: '0 0 16px'}}>Некорректная дата карты</h1>
+          <p style={{margin: '0 0 12px'}}>{requestedDate.error}</p>
+          <p style={{color: '#d7cba9', margin: '0 0 24px'}}>Доступный период: {TERRITORY_MIN_YEAR}–{TERRITORY_MAX_YEAR} годы.</p>
+          <a href="./" style={{display: 'inline-flex', boxSizing: 'border-box', minHeight: 48, width: '100%', maxWidth: 320, alignItems: 'center', justifyContent: 'center', padding: '12px 20px', borderRadius: 10, background: '#d6bb7b', color: '#10252b', fontWeight: 600, textDecoration: 'none'}}>Открыть историческую карту</a>
         </div>
       </main>
     );
