@@ -19,6 +19,11 @@ export function parseTerritoryQueryDate(
   if (years.length > 1 || (years.length === 1 && boundedInteger(years[0], minYear, maxYear) === null)) {
     return {valid: false, error: 'Год должен быть целым числом от ' + minYear + ' до ' + maxYear + '.'};
   }
+  // A month without a year would otherwise silently select the latest year,
+  // showing a different historical state from the one the link author intended.
+  if (months.length > 0 && years.length === 0) {
+    return {valid: false, error: 'Для выбора месяца укажите также год (параметр year).'};
+  }
   if (months.length > 1 || (months.length === 1 && boundedInteger(months[0], 1, 12) === null)) {
     return {valid: false, error: 'Месяц должен быть целым числом от 1 до 12.'};
   }
