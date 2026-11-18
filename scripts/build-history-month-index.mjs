@@ -313,6 +313,12 @@ while (cursor <= coverage.maxMonth) {
     displaySourceAttribution: period.sourceAttribution ?? null,
     displaySourceUrl: period.sourceUrl ?? null,
     displaySourceLicense: period.sourceLicense ?? null,
+    // Keep documentary provenance in the month index so both map modes can
+    // show it without downloading and parsing a second registry.
+    displayEvidenceDocuments: period.evidenceDocumentIds.map(id => {
+      const document = documentById.get(id);
+      return {id, title: document.title, url: document.url ?? null, tier: document.tier ?? null};
+    }),
     displaySourceCertainty: display.sourceCertainty,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
