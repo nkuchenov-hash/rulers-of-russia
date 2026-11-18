@@ -111,13 +111,17 @@ export function HistoricalTerritoryFlatMap({
   },[]);
 
   useEffect(()=>{
+    // The relief texture is large and not used by the political map. Avoid
+    // downloading and decoding it until the user actually selects relief.
+    // Keep the decoded image when switching back to the political view.
+    if(mode!=='relief'||terrain)return;
     let mounted=true;
     const image=new Image();
     image.onload=()=>{if(mounted)setTerrain(image)};
     image.onerror=()=>{if(mounted)setTerrain(null)};
     image.src=(process.env.NEXT_PUBLIC_BASE_PATH??'')+'/data/territory/terrain/earth_relief_4096.webp';
     return()=>{mounted=false;image.onload=null;image.onerror=null};
-  },[]);
+  },[mode,terrain]);
 
   useEffect(()=>{
     if(size.width<2||size.height<2)return;
