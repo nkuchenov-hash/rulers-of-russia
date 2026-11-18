@@ -200,6 +200,11 @@ const materializeProvisional = (period, month) => {
       sourceAttribution: period.sourceAttribution ?? null,
       sourceUrl: period.sourceUrl ?? null,
       sourceLicense: period.sourceLicense ?? null,
+      // Documentary anchors are provenance, not proof of this polygon's accuracy.
+      evidenceDocuments: period.evidenceDocumentIds.map(id => {
+        const document = documentById.get(id);
+        return {id, title: document.title, url: document.url ?? null, tier: document.tier ?? null};
+      }),
       sourceCertainty,
       forwardProxy,
       expiredProxy,
