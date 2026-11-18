@@ -282,16 +282,19 @@ while (cursor <= coverage.maxMonth) {
   const period = matches[0];
   const key = `${period.polityId}::${period.track}`;
   const candidates = verifiedByPolityTrack.get(key) ?? [];
-  // A newer, short-lived verified snapshot must not hide an older
-  // independently verified snapshot whose declared interval still covers
-  // this month. Search backwards through eligible starts for a valid state.
-  let chosen = null;
+  // The latest source-backed transition supersedes earlier geometry on this
+  // polity/track. If that transition has expired, do not resurrect a previous
+  // polygon: the month must use its explicitly labelled provisional fallback.
+  // This prevents a historical border from silently reverting after expiry.
+  let latestStarted = null;
   for (const candidate of candidates) {
     if (candidate.__validFromMonth > cursor) break;
-    if (!candidate.__validThroughMonth || cursor <= candidate.__validThroughMonth) {
-      chosen = candidate;
-    }
+    latestStarted = candidate;
   }
+  const chosen = latestStarted &&
+    (!latestStarted.__validThroughMonth || cursor <= latestStarted.__validThroughMonth)
+    ? latestStarted
+    : null;
   // Display choice and canonical verification are separate. This explicitly
   // source-backed provisional outline can be shown on the map without
   // relabeling/replacing an audited History Core historical snapshot.
