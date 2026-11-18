@@ -59,3 +59,14 @@
   .territory-flat-provenance-details[open]{overscroll-behavior:contain;}
   .territory-flat-watermark{bottom:calc(56px + env(safe-area-inset-bottom));}
 }
+
+
+/* Short landscape viewports must retain a usable map rather than a narrow strip.
+   Desktop and portrait layouts remain unchanged. */
+@media (orientation:landscape) and (max-height:500px) and (max-width:980px){
+  .territory-flat-host{inset:64px 0 88px;min-height:120px}
+  .territory-flat-missing-history{top:8px;transform:translateX(-50%);width:min(420px,calc(100% - 24px));padding:8px 12px;font-size:12px;line-height:1.3}
+  .territory-flat-provenance-details{bottom:max(6px,env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left));max-width:min(240px,45vw)}
+  .territory-flat-provenance-details[open]{max-height:min(65%,180px);max-width:min(420px,calc(100% - 24px))}
+  .territory-flat-watermark{right:max(8px,env(safe-area-inset-right));bottom:8px;max-width:150px}
+}
