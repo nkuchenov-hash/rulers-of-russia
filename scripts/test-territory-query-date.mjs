@@ -6,9 +6,9 @@ assert.deepEqual(parse(''), {valid:true, year:2026, month:null});
 assert.deepEqual(parse('?year=0862&month=01'), {valid:true, year:862, month:1});
 assert.deepEqual(parse('?year=1721&month=11'), {valid:true, year:1721, month:11});
 assert.deepEqual(parse('?year=1922&month=12'), {valid:true, year:1922, month:12});
-assert.deepEqual(parse('?month=7'), {valid:true, year:2026, month:7});
+assert.deepEqual(parse('?year=2026&month=7'), {valid:true, year:2026, month:7});
 for (const query of [
-  '?year=1', '?year=2027', '?year=0', '?year=', '?year=NaN',
+  '?month=7', '?month=11', '?year=1', '?year=2027', '?year=0', '?year=', '?year=NaN',
   '?year=1721.5', '?year=-1', '?year=9007199254740993',
   '?year=1721&year=1922', '?year=1721&month=0',
   '?year=1721&month=13', '?year=1721&month=',
