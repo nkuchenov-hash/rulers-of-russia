@@ -236,6 +236,10 @@ const materializeProvisional = (period, month) => {
         history_core_forward_proxy: forwardProxy,
         history_core_expired_proxy: expiredProxy,
         history_core_coverage_period_id: period.id,
+        // Keep each component's own dates for map inspection; a union-level
+        // interval would incorrectly attribute one component's dates to another.
+        history_core_source_start_date: feature.properties?.start_date ?? null,
+        history_core_source_end_date: feature.properties?.end_date ?? null,
       },
     })),
   };
