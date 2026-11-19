@@ -20,6 +20,12 @@ const coverage = readJson(coverageFile);
 const documents = readJson(documentsFile).documents ?? [];
 const documentIds = new Set(documents.map(item => item.id));
 const documentById = new Map(documents.map(item => [item.id, item]));
+// Resolve documentary provenance for every month, not only the rusmap display override.
+// These documents support chronology/context; they do not verify polygon coordinates.
+const evidenceForIds = ids => (ids ?? []).map(id => {
+  const document = documentById.get(id);
+  return document ? {id, title: document.title, url: document.url ?? null, tier: document.tier ?? null} : null;
+}).filter(Boolean);
 const territoryChanges = fs.existsSync(territoryChangesDir)
   ? fs.readdirSync(territoryChangesDir)
     .filter(name => name.endsWith('.json'))
@@ -201,10 +207,7 @@ const materializeProvisional = (period, month) => {
       sourceUrl: period.sourceUrl ?? null,
       sourceLicense: period.sourceLicense ?? null,
       // Documentary anchors are provenance, not proof of this polygon's accuracy.
-      evidenceDocuments: period.evidenceDocumentIds.map(id => {
-        const document = documentById.get(id);
-        return {id, title: document.title, url: document.url ?? null, tier: document.tier ?? null};
-      }),
+      evidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
       sourceCertainty,
       forwardProxy,
       expiredProxy,
@@ -315,10 +318,7 @@ while (cursor <= coverage.maxMonth) {
     displaySourceLicense: period.sourceLicense ?? null,
     // Keep documentary provenance in the month index so both map modes can
     // show it without downloading and parsing a second registry.
-    displayEvidenceDocuments: period.evidenceDocumentIds.map(id => {
-      const document = documentById.get(id);
-      return {id, title: document.title, url: document.url ?? null, tier: document.tier ?? null};
-    }),
+    displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
@@ -341,6 +341,7 @@ while (cursor <= coverage.maxMonth) {
       status: 'geometry-verified',
       confidence: chosen.confidence,
       evidenceDocumentIds: chosen.evidenceDocumentIds ?? [],
+      evidenceDocuments: evidenceForIds(chosen.evidenceDocumentIds?.length ? chosen.evidenceDocumentIds : period.evidenceDocumentIds),
       bootstrapGeometry: false,
       snapshotId: chosen.id,
       effectiveDate: chosen.effectiveDate?.normalized ?? null,
@@ -369,6 +370,7 @@ while (cursor <= coverage.maxMonth) {
       status: period.status,
       confidence: provisional.confidence,
       evidenceDocumentIds: period.evidenceDocumentIds ?? [],
+      evidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
       bootstrapGeometry: true,
       forwardProxy: provisional.forwardProxy,
       expiredProxy: provisional.expiredProxy,
