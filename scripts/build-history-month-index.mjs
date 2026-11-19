@@ -189,6 +189,13 @@ const materializeProvisional = (period, month) => {
   const fileName = `${period.polityId}-${hash}.geojson`;
   const relativeFile = `data/history-core/generated/provisional/${fileName}`;
   const selected = indices.map(index => source.features[index]);
+  // Preserve the actual source date range for each displayed outline. A
+  // carried-forward or forward-proxy polygon must never appear to be dated
+  // to the currently selected month.
+  const sourceIntervals = [...new Set(selected.map(feature => {
+    const props = feature.properties ?? {};
+    return JSON.stringify({start: props.start_date ?? null, end: props.end_date ?? null});
+  }))].map(value => JSON.parse(value));
   const sourceCertainties = [...new Set(selected.map(feature => feature.properties?.certainty).filter(Boolean))];
   const sourceCertainty = sourceCertainties.length === 1 ? sourceCertainties[0] : (sourceCertainties.length ? 'mixed' : null);
   // "Schematic" upstream geometry must not inherit a medium project
@@ -213,6 +220,7 @@ const materializeProvisional = (period, month) => {
       expiredProxy,
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
+      sourceIntervals,
       warning: forwardProxy
         ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
         : expiredProxy
@@ -228,6 +236,10 @@ const materializeProvisional = (period, month) => {
         history_core_forward_proxy: forwardProxy,
         history_core_expired_proxy: expiredProxy,
         history_core_coverage_period_id: period.id,
+        // Keep each component's own dates for map inspection; a union-level
+        // interval would incorrectly attribute one component's dates to another.
+        history_core_source_start_date: feature.properties?.start_date ?? null,
+        history_core_source_end_date: feature.properties?.end_date ?? null,
       },
     })),
   };
@@ -239,6 +251,7 @@ const materializeProvisional = (period, month) => {
     expiredProxy,
     confidence,
     sourceCertainty,
+    sourceIntervals,
   };
   provisionalOutputCache.set(selectionKey, result);
   return result;
@@ -320,6 +333,7 @@ while (cursor <= coverage.maxMonth) {
     // show it without downloading and parsing a second registry.
     displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
+    displaySourceIntervals: display.sourceIntervals,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
@@ -378,6 +392,7 @@ while (cursor <= coverage.maxMonth) {
       sourceUrl: period.sourceUrl ?? null,
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty: provisional.sourceCertainty,
+      sourceIntervals: provisional.sourceIntervals,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
