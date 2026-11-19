@@ -177,6 +177,19 @@ const selectFallbackFeatures = (period, month) => {
   throw new Error(`Coverage ${period.id} cannot resolve provisional geometry for ${month}`);
 };
 
+// Compare selected source intervals with the requested month. This only
+// describes the age of the geometry, not its geographic accuracy.
+const sourceTemporalRelation = (intervals, month) => {
+  const start = monthStartKey(month);
+  const end = monthEndKey(month);
+  const relations = intervals.map(interval => {
+    const from = normalizeBoundaryDate(interval.start, 'start');
+    const through = normalizeBoundaryDate(interval.end, 'end');
+    return through < start ? 'after-source' : from > end ? 'before-source' : 'within-source';
+  });
+  return [...new Set(relations)].length === 1 ? relations[0] : 'mixed';
+};
+
 const materializeProvisional = (period, month) => {
   const source = loadFallback(period);
   const selection = selectFallbackFeatures(period, month);
@@ -334,6 +347,7 @@ while (cursor <= coverage.maxMonth) {
     displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
     displaySourceIntervals: display.sourceIntervals,
+    displaySourceTemporalRelation: sourceTemporalRelation(display.sourceIntervals, cursor),
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
@@ -393,6 +407,7 @@ while (cursor <= coverage.maxMonth) {
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty: provisional.sourceCertainty,
       sourceIntervals: provisional.sourceIntervals,
+      sourceTemporalRelation: sourceTemporalRelation(provisional.sourceIntervals, cursor),
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
