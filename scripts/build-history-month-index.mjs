@@ -154,8 +154,14 @@ const selectFallbackFeatures = (period, month) => {
       start: normalizeBoundaryDate(feature?.properties?.start_date, 'start'),
       end: normalizeBoundaryDate(feature?.properties?.end_date, 'end'),
     })).filter(item => item.end === latestEnd && item.start <= end);
-    const latestStart = ending.reduce((latest, item) => item.start > latest ? item.start : latest, ending[0].start);
-    const indices = ending.filter(item => item.start === latestStart).map(item => item.i);
+    // A composite fallback can contain independent territorial components
+    // whose start dates differ but whose last documented end date is shared.
+    // Keep all tied components unless this period explicitly models successive
+    // whole-state versions with latest-started selection.
+    const candidates = period.fallbackSelectionMode === 'latest-started'
+      ? ending.filter(item => item.start === ending.reduce((latest, entry) => entry.start > latest ? entry.start : latest, ending[0].start))
+      : ending;
+    const indices = candidates.map(item => item.i);
     if (indices.length) return {indices, forwardProxy: false, expiredProxy: true};
   }
 
