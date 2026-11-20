@@ -201,6 +201,13 @@ const materializeProvisional = (period, month) => {
   // "Schematic" upstream geometry must not inherit a medium project
   // confidence merely because it belongs to the same political era.
   const confidence = sourceCertainties.includes('schematic') ? 'low' : period.confidence;
+  const warning = forwardProxy
+    ? 'This outline comes from a later period and is not evidence of the selected historical date.'
+    : expiredProxy
+      ? 'The source outline predates the selected month; territorial continuity is unverified.'
+      : sourceIntervals.length > 1
+        ? 'This reconstruction combines components with different source date ranges; it is not a single dated historical snapshot.'
+        : 'This outline is a provisional reconstruction, not an independently verified historical boundary.';
   const output = {
     type: 'FeatureCollection',
     metadata: {
@@ -221,11 +228,7 @@ const materializeProvisional = (period, month) => {
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
       sourceIntervals,
-      warning: forwardProxy
-        ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
-        : expiredProxy
-          ? 'The last available source geometry has expired for this month; this is a visual carry-forward, not evidence that the historical border remained unchanged.'
-          : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
+      warning,
     },
     features: selected.map(feature => ({
       ...feature,
@@ -252,6 +255,7 @@ const materializeProvisional = (period, month) => {
     confidence,
     sourceCertainty,
     sourceIntervals,
+    warning,
   };
   provisionalOutputCache.set(selectionKey, result);
   return result;
@@ -334,6 +338,7 @@ while (cursor <= coverage.maxMonth) {
     displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
     displaySourceIntervals: display.sourceIntervals,
+    displayWarning: display.warning,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
@@ -393,6 +398,7 @@ while (cursor <= coverage.maxMonth) {
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty: provisional.sourceCertainty,
       sourceIntervals: provisional.sourceIntervals,
+      sourceWarning: provisional.warning,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
