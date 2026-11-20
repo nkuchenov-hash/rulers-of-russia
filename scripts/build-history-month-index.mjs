@@ -252,6 +252,9 @@ const materializeProvisional = (period, month) => {
     confidence,
     sourceCertainty,
     sourceIntervals,
+    // Carry the exact materialized-geometry warning into the monthly index.
+    // Map clients should not need to fetch every GeoJSON to explain uncertainty.
+    warning: output.metadata.warning,
   };
   provisionalOutputCache.set(selectionKey, result);
   return result;
@@ -334,6 +337,7 @@ while (cursor <= coverage.maxMonth) {
     displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
     displaySourceIntervals: display.sourceIntervals,
+    displayWarning: display.warning,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
@@ -393,6 +397,7 @@ while (cursor <= coverage.maxMonth) {
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty: provisional.sourceCertainty,
       sourceIntervals: provisional.sourceIntervals,
+      sourceWarning: provisional.warning,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
