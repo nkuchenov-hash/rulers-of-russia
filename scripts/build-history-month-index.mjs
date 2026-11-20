@@ -207,6 +207,14 @@ const materializeProvisional = (period, month) => {
   // "Schematic" upstream geometry must not inherit a medium project
   // confidence merely because it belongs to the same political era.
   const confidence = sourceCertainties.includes('schematic') ? 'low' : period.confidence;
+  const mixedSourceIntervals = sourceIntervals.length > 1;
+  const sourceWarning = forwardProxy
+    ? 'Контур перенесён из более позднего периода: это не граница выбранной даты.'
+    : expiredProxy
+      ? 'Последняя доступная реконструкция устарела: граница могла измениться.'
+      : mixedSourceIntervals
+        ? 'Контур объединяет компоненты с разными исходными датировками; единой подтверждённой границей он не является.'
+        : 'Предварительная историческая реконструкция; точность границы не подтверждена.';
   const output = {
     type: 'FeatureCollection',
     metadata: {
@@ -227,6 +235,8 @@ const materializeProvisional = (period, month) => {
       sourceFile: period.fallbackGeometryFile,
       selectedFeatureIndices: indices,
       sourceIntervals,
+      sourceWarning,
+      displayWarning: sourceWarning,
       warning: forwardProxy
         ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
         : expiredProxy
@@ -258,6 +268,7 @@ const materializeProvisional = (period, month) => {
     confidence,
     sourceCertainty,
     sourceIntervals,
+    sourceWarning,
   };
   provisionalOutputCache.set(selectionKey, result);
   return result;
@@ -340,6 +351,7 @@ while (cursor <= coverage.maxMonth) {
     displayEvidenceDocuments: evidenceForIds(period.evidenceDocumentIds),
     displaySourceCertainty: display.sourceCertainty,
     displaySourceIntervals: display.sourceIntervals,
+    displayWarning: display.sourceWarning,
     displayExpiredProxy: display.expiredProxy,
     displayForwardProxy: display.forwardProxy,
     displayRelationToCanonical: chosen ? 'provisional-alternative-to-internally-audited-core' : 'provisional-fallback',
@@ -399,6 +411,8 @@ while (cursor <= coverage.maxMonth) {
       sourceLicense: period.sourceLicense ?? null,
       sourceCertainty: provisional.sourceCertainty,
       sourceIntervals: provisional.sourceIntervals,
+      sourceWarning: provisional.sourceWarning,
+      displayWarning: provisional.sourceWarning,
       snapshotId: null,
       provisionalStateId: provisional.provisionalStateId,
       effectiveDate: period.startMonth,
