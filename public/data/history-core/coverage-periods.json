@@ -151,8 +151,32 @@
       "displaySelection": "source-reconstruction"
     },
     {
-      "id": "coverage-1721-11-1916-empire",
+      "id": "coverage-1721-11-empire-title-transition",
       "startMonth": "1721-11",
+      "endMonth": "1721-11",
+      "polityId": "russian-empire",
+      "politicalPolityId": "russian-empire",
+      "label": "Российская империя (принятие титула)",
+      "track": "russian-legal-border",
+      "territorialModel": "linear-border",
+      "fallbackGeometryFile": "data/territory/rusmap/state-muscovy.geojson",
+      "status": "reconstruction-provisional",
+      "confidence": "low",
+      "bootstrapGeometry": true,
+      "evidenceDocumentIds": [
+        "doc-nystad-1721-ebid",
+        "doc-bucharest-1812-ebid"
+      ],
+      "notes": "November 1721 title transition: continue displaying the same dated rusmap 1720–1721 provisional contour used in October, explicitly marked as expired source geometry. The 2 November Gregorian imperial title change does not itself establish a territorial boundary change. This avoids an unexplained jump to an undated whole-Empire bootstrap at the political title transition; the general Empire provisional contour resumes in December. No independent geometry verification is claimed.",
+      "fallbackSelectionMode": "latest-started",
+      "sourceAttribution": "Историческая карта России, rusmap.org",
+      "sourceUrl": "https://rusmap.org/data/",
+      "sourceLicense": "ODbL-1.0",
+      "displaySelection": "source-reconstruction"
+    },
+    {
+      "id": "coverage-1721-12-1916-empire",
+      "startMonth": "1721-12",
       "endMonth": "1916-12",
       "polityId": "russian-empire",
       "label": "Российская империя",
