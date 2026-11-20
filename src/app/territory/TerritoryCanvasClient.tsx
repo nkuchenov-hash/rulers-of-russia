@@ -23,12 +23,25 @@ const HistoricalTerritoryMap = dynamic<HistoricalTerritoryMapProps>(
 );
 
 function TerritoryLoading() {
+  const [slow, setSlow] = useState(false);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setSlow(true), 12000);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
   return (
     <main role="status" aria-live="polite" aria-label="Загрузка исторической карты" style={{minHeight:'100dvh',display:'grid',placeItems:'center',padding:24,background:'radial-gradient(circle at 50% 42%, #17343a 0%, #071821 48%, #02090d 100%)',color:'#f4ead3',textAlign:'center'}}>
       <div style={{maxWidth:480}}>
         <div aria-hidden="true" style={{width:88,height:88,margin:'0 auto 28px',borderRadius:'50%',border:'1px solid #bba36b',boxShadow:'inset -16px -10px 25px #091b22, 0 0 45px #36504b',background:'radial-gradient(circle at 34% 32%, #53786d, #183840 65%, #071821)'}} />
         <h1 style={{fontFamily:'Georgia,serif',fontSize:'clamp(24px,5vw,36px)',fontWeight:500,margin:'0 0 12px'}}>Правители России</h1>
         <p style={{fontSize:16,lineHeight:1.5,color:'#d7cba9',margin:0}}>Подготавливаем историческую карту…</p>
+        {slow && (
+          <div style={{marginTop:20}}>
+            <p style={{fontSize:14,lineHeight:1.5,color:'#d7cba9'}}>Загрузка занимает больше времени, чем обычно. Проверьте соединение или повторите попытку.</p>
+            <button type="button" onClick={() => window.location.reload()} style={{minHeight:44,padding:'10px 20px',borderRadius:10,border:'1px solid #d6bb7b',background:'transparent',color:'#f4ead3',fontSize:15,cursor:'pointer'}}>Повторить загрузку</button>
+          </div>
+        )}
       </div>
     </main>
   );
