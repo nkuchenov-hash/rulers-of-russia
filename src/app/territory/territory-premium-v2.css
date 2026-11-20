@@ -70,3 +70,12 @@
   .territory-flat-provenance-details[open]{max-height:min(65%,180px);max-width:min(420px,calc(100% - 24px))}
   .territory-flat-watermark{right:max(8px,env(safe-area-inset-right));bottom:8px;max-width:150px}
 }
+
+/* Compact portrait phones (360/390px): preserve a usable cartographic viewport.
+   The standard 172px bottom reserve consumes too much of a 640px screen.
+   Keep the source drawer above the gesture area and limit its expanded height. */
+@media (orientation:portrait) and (max-width:420px) and (max-height:700px){
+  .territory-flat-host{inset:92px 0 142px;min-height:220px}
+  .territory-flat-provenance-details[open]{max-height:min(42%,220px)}
+  .territory-flat-missing-history{max-width:calc(100% - 24px)}
+}
