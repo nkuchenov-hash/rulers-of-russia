@@ -225,7 +225,9 @@ const materializeProvisional = (period, month) => {
         ? 'This is an explicitly opted-in forward proxy from later bootstrap geometry. It is not evidence of the historical border at this date and can never be treated as geometry-verified.'
         : expiredProxy
           ? 'The last available source geometry has expired for this month; this is a visual carry-forward, not evidence that the historical border remained unchanged.'
-          : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
+          : sourceIntervals.length > 1
+            ? 'This provisional outline combines features from different source date intervals. It is not a single dated historical border and must not be treated as geometry-verified.'
+            : 'This geometry is an explicitly provisional rendering fallback, not a primary-source-verified boundary.'
     },
     features: selected.map(feature => ({
       ...feature,
