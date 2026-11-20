@@ -178,8 +178,8 @@ assert.match(globeSource, /\[world,mobile,backgroundIdentityKey\]/,
   'country label geometries must survive year scrubbing without an identity change');
 assert.equal((globeSource.match(/isRussianWorldFeature\(f,year,month\)/g) ?? []).length, 3,
   'globe fill, border and country-label layers must share month-level filtering');
-assert.match(globeSource, /buildStateTexture\(world,russiaFeatures,mobile\?2048:4096,year,month\)/);
-assert.match(globeSource, /\[mode,projection,world,russiaKey,mobile,historyLoading,year,backgroundPhase\]/);
+assert.match(globeSource, /buildStateTexture\(world,russiaFeatures,mobile\?2048:4096,year,month,provisional\)/);
+assert.match(globeSource, /\[mode,projection,world,russiaKey,mobile,historyLoading,year,month,backgroundPhase,historyState\?\.status,historyState\?\.confidence,historyState\?\.isAlternativeReconstruction\]/);
 assert.match(globeSource, /if\(!r\|\|projection!=='globe'\|\|mode!=='states'\)return/,
   'globe state textures must not rebuild while the flat projection is visible');
 assert.equal(isRussianWorldFeature(archivedFeature(1300, 'Grand Duchy of Moscow'), 1300), true,
