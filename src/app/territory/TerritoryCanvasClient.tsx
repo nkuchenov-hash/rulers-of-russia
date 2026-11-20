@@ -36,6 +36,7 @@ function TerritoryLoading() {
         <div aria-hidden="true" style={{width:88,height:88,margin:'0 auto 28px',borderRadius:'50%',border:'1px solid #bba36b',boxShadow:'inset -16px -10px 25px #091b22, 0 0 45px #36504b',background:'radial-gradient(circle at 34% 32%, #53786d, #183840 65%, #071821)'}} />
         <h1 style={{fontFamily:'Georgia,serif',fontSize:'clamp(24px,5vw,36px)',fontWeight:500,margin:'0 0 12px'}}>Правители России</h1>
         <p style={{fontSize:16,lineHeight:1.5,color:'#d7cba9',margin:0}}>Подготавливаем историческую карту…</p>
+        <p style={{fontSize:13,lineHeight:1.5,color:'#b9b39f',margin:'14px 0 0'}}>Границы отдельных эпох — предварительные реконструкции, а не точно установленные государственные рубежи.</p>
         {slow && (
           <div style={{marginTop:20}}>
             <p style={{fontSize:14,lineHeight:1.5,color:'#d7cba9'}}>Загрузка занимает больше времени, чем обычно. Проверьте соединение или повторите попытку.</p>
