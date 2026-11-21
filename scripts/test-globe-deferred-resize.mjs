@@ -138,6 +138,6 @@ assert.match(source,/ro\.disconnect\(\);stopVisibilityObserver\(\);/,
 // Returning in states mode must rebuild it because projection is a dependency.
 assert.match(source,/if\(!r\|\|projection!=='globe'\|\|mode!=='states'\)return/,
   'flat mode must not generate a hidden globe state texture');
-assert.match(source,/\[mode,projection,world,russiaKey,mobile,historyLoading,year,backgroundPhase\]/,
+assert.match(source,/\[mode,projection,world,russiaKey,mobile,historyLoading,year,month,backgroundPhase,historyState\?\.status,historyState\?\.confidence,historyState\?\.isAlternativeReconstruction\]/,
   'restoring the globe must re-evaluate state texture generation');
 console.log('Globe redraw is synchronous on projection restore, with a guarded cancellable post-commit task.');
