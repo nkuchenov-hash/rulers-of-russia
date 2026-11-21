@@ -186,7 +186,10 @@ const selectFallbackFeatures = (period, month) => {
 const materializeProvisional = (period, month) => {
   const source = loadFallback(period);
   const selection = selectFallbackFeatures(period, month);
-  const {indices, forwardProxy, expiredProxy} = selection;
+  const {indices, forwardProxy} = selection;
+  // A raster-derived fallback may lack feature-level dates. Respect its
+  // documented last source month rather than presenting later years as current.
+  const expiredProxy = selection.expiredProxy || Boolean(period.fallbackSourceEndMonth && month > period.fallbackSourceEndMonth);
   const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}|forward:${forwardProxy}|expired:${expiredProxy}`;
   const cached = provisionalOutputCache.get(selectionKey);
   if (cached) return cached;
@@ -208,13 +211,17 @@ const materializeProvisional = (period, month) => {
   // confidence merely because it belongs to the same political era.
   const confidence = sourceCertainties.includes('schematic') ? 'low' : period.confidence;
   const mixedSourceIntervals = sourceIntervals.length > 1;
-  const sourceWarning = forwardProxy
+  const baseSourceWarning = forwardProxy
     ? 'Контур перенесён из более позднего периода: это не граница выбранной даты.'
     : expiredProxy
       ? 'Последняя доступная реконструкция устарела: граница могла измениться.'
       : mixedSourceIntervals
         ? 'Контур объединяет компоненты с разными исходными датировками; единой подтверждённой границей он не является.'
         : 'Предварительная историческая реконструкция; точность границы не подтверждена.';
+  // This is the source's approximate georeferencing uncertainty, not a surveyed border tolerance.
+  const sourceWarning = Number.isFinite(period.fallbackUncertaintyKm) && period.fallbackUncertaintyKm > 0
+    ? `${baseSourceWarning} Ориентировочная неопределённость геопривязки: ±${period.fallbackUncertaintyKm} км.`
+    : baseSourceWarning;
   const output = {
     type: 'FeatureCollection',
     metadata: {

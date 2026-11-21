@@ -19,7 +19,7 @@
       "label": "Ранняя Русь / северный центр",
       "track": "de-facto-control",
       "territorialModel": "frontier-zone",
-      "fallbackGeometryFile": "data/territory/archive/novgorod-republic.geojson",
+      "fallbackGeometryFile": "data/history-core/geometry/early-rus-rurik-862-reconstruction.geojson",
       "status": "reconstruction-provisional",
       "confidence": "low",
       "bootstrapGeometry": true,
@@ -27,7 +27,12 @@
       "evidenceDocumentIds": [
         "doc-pvl-laurentian-1926"
       ],
-      "notes": "The verified replacement for this bootstrap is a low-confidence de-facto-control/frontier reconstruction, not a modern legal border. The later Novgorod Republic fallback remains only a provisional visual proxy where verified early geometry is unavailable."
+      "notes": "Для 862–879 используется геопривязанная реконструкция слоя карты Торнау 1910 года (не геодезическая граница). Для 880–881, когда отдельного контура нет, тот же контур показывается только как явно устаревшая предварительная визуальная замена, не как подтверждение неизменности владений. Более поздний контур Новгородской республики для IX века не используется.",
+      "sourceAttribution": "Карта А. Торнау (1910), реконструкция владений Рюрика 862–879",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_862.gif",
+      "sourceLicense": "public-domain",
+      "fallbackSourceEndMonth": "0879-12",
+      "fallbackUncertaintyKm": 120
     },
     {
       "id": "coverage-0882-1124-kievan-rus",
