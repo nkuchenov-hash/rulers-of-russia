@@ -208,6 +208,7 @@
       "label": "Россия в 1917 году",
       "track": "russian-legal-border",
       "territorialModel": "mixed",
+      "fallbackSelectionMode": "latest-started",
       "fallbackGeometryFile": "data/territory/archive/russian-empire.geojson",
       "status": "reconstruction-provisional",
       "confidence": "low",
