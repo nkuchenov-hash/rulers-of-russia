@@ -186,7 +186,10 @@ const selectFallbackFeatures = (period, month) => {
 const materializeProvisional = (period, month) => {
   const source = loadFallback(period);
   const selection = selectFallbackFeatures(period, month);
-  const {indices, forwardProxy, expiredProxy} = selection;
+  const {indices, forwardProxy} = selection;
+  // A raster-derived fallback may lack feature-level dates. Respect its
+  // documented last source month rather than presenting later years as current.
+  const expiredProxy = selection.expiredProxy || Boolean(period.fallbackSourceEndMonth && month > period.fallbackSourceEndMonth);
   const selectionKey = `${period.id}|${period.fallbackGeometryFile}|${indices.join(',')}|forward:${forwardProxy}|expired:${expiredProxy}`;
   const cached = provisionalOutputCache.get(selectionKey);
   if (cached) return cached;
