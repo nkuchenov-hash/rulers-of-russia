@@ -94,3 +94,16 @@
   .territory-flat-host{inset:104px 0 150px;min-height:280px}
   .territory-flat-provenance-details[open]{max-height:min(45%,300px)}
 }
+
+/* Keep the provenance heading and close affordance visible while reading long source notes. */
+@media(max-width:720px){
+  .territory-flat-provenance-details[open] summary{
+    position:sticky;
+    top:-7px;
+    z-index:1;
+    padding:7px 0;
+    background:#030e13;
+    border-bottom:1px solid rgba(227,200,135,.3);
+  }
+  .territory-flat-provenance-details[open]{scrollbar-gutter:stable;}
+}
