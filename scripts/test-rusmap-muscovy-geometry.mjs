@@ -115,7 +115,10 @@ assert.equal(oct1721.displayExpiredProxy, true);
 assert.equal(oct1721.displaySourceLicense, 'ODbL-1.0');
 assert.equal(nov1721.politicalPolityId, 'russian-empire');
 assert.ok(nov1721.displayGeometryFile, 'November 1721 must preserve the same provisional source contour across the title transition');
-assert.equal(nov1721.displayGeometryFile, oct1721.displayGeometryFile,
+// Separate coverage periods produce different file names and provenance metadata.
+// Compare the actual drawn coordinates, not the generated asset paths.
+const displayedCoordinates = item => readJson(`public/${item.displayGeometryFile}`).features.map(feature => feature.geometry);
+assert.deepEqual(displayedCoordinates(nov1721), displayedCoordinates(oct1721),
   'The imperial title change alone must not cause a territorial jump');
 assert.equal(nov1721.displayExpiredProxy, true);
 assert.equal(nov1721.displaySourceLicense, 'ODbL-1.0');
