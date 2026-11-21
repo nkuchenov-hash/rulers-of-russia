@@ -190,9 +190,10 @@
         "doc-nystad-1721-ebid",
         "doc-bucharest-1812-ebid"
       ],
-      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry. The Empire label begins in November 1721 (Gregorian month-end), following Peter I's acceptance of the imperial title on 22 October Julian / 2 November Gregorian. This is political chronology only; no border polygon is added, removed or promoted to verified status by this title change.",
+      "notes": "Treaties, demarcations, official maps and imperial legal publications allow this span to be progressively converted to high-confidence line geometry. The Empire label begins in November 1721 (Gregorian month-end), following Peter I's acceptance of the imperial title on 22 October Julian / 2 November Gregorian. This is political chronology only; no border polygon is added, removed or promoted to verified status by this title change. Dated archive features are successive whole-state snapshots: when source intervals overlap, select the latest-started state instead of unioning distinct dates. This does not change original coordinates, dates or provisional status.",
       "sourceAttribution": "Cliopatria / Seshat Global History Databank (архивная вторичная реконструкция)",
-      "sourceLicense": "CC BY 4.0"
+      "sourceLicense": "CC BY 4.0",
+      "fallbackSelectionMode": "latest-started"
     },
     {
       "id": "coverage-1917-01-08-revolutionary-russia-predecessor",
