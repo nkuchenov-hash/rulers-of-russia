@@ -31,7 +31,8 @@
       "sourceAttribution": "Карта А. Торнау (1910), реконструкция владений Рюрика 862–879",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Historical_map_of_Rus%27,_862.gif",
       "sourceLicense": "public-domain",
-      "fallbackSourceEndMonth": "0879-12"
+      "fallbackSourceEndMonth": "0879-12",
+      "fallbackUncertaintyKm": 120
     },
     {
       "id": "coverage-0882-1124-kievan-rus",
