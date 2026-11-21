@@ -79,3 +79,10 @@
   .territory-flat-provenance-details[open]{max-height:min(42%,220px)}
   .territory-flat-missing-history{max-width:calc(100% - 24px)}
 }
+
+/* Respect notches and gesture insets in portrait as well as landscape. */
+@media (orientation:portrait) and (max-width:720px){
+  .territory-flat-provenance-details{left:max(10px,env(safe-area-inset-left));}
+  .territory-flat-provenance-details[open]{right:max(10px,env(safe-area-inset-right));max-width:calc(100% - max(10px,env(safe-area-inset-left)) - max(10px,env(safe-area-inset-right)));}
+  .territory-flat-watermark{right:max(10px,env(safe-area-inset-right));}
+}
