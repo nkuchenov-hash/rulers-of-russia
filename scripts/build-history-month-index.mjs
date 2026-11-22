@@ -211,13 +211,15 @@ const materializeProvisional = (period, month) => {
   // confidence merely because it belongs to the same political era.
   const confidence = sourceCertainties.includes('schematic') ? 'low' : period.confidence;
   const mixedSourceIntervals = sourceIntervals.length > 1;
-  const baseSourceWarning = forwardProxy
-    ? 'Контур перенесён из более позднего периода: это не граница выбранной даты.'
-    : expiredProxy
-      ? 'Последняя доступная реконструкция устарела: граница могла измениться.'
-      : mixedSourceIntervals
-        ? 'Контур объединяет компоненты с разными исходными датировками; единой подтверждённой границей он не является.'
-        : 'Предварительная историческая реконструкция; точность границы не подтверждена.';
+  // These are independent limitations. A dated composite can also be expired
+  // or borrowed from the future; the map must disclose both, not just the
+  // first matching condition.
+  const baseSourceWarning = [
+    forwardProxy && 'Контур перенесён из более позднего периода: это не граница выбранной даты.',
+    expiredProxy && 'Последняя доступная реконструкция устарела: граница могла измениться.',
+    mixedSourceIntervals && 'Контур объединяет компоненты с разными исходными датировками; единой подтверждённой границей он не является.',
+    !forwardProxy && !expiredProxy && !mixedSourceIntervals && 'Предварительная историческая реконструкция; точность границы не подтверждена.',
+  ].filter(Boolean).join(' ');
   // This is the source's approximate georeferencing uncertainty, not a surveyed border tolerance.
   const sourceWarning = Number.isFinite(period.fallbackUncertaintyKm) && period.fallbackUncertaintyKm > 0
     ? `${baseSourceWarning} Ориентировочная неопределённость геопривязки: ±${period.fallbackUncertaintyKm} км.`
