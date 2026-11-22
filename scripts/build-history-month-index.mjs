@@ -259,6 +259,11 @@ const materializeProvisional = (period, month) => {
         history_core_forward_proxy: forwardProxy,
         history_core_expired_proxy: expiredProxy,
         history_core_coverage_period_id: period.id,
+        // Feature-level provenance survives renderers that discard FeatureCollection metadata.
+        history_core_source_attribution: period.sourceAttribution ?? null,
+        history_core_source_url: period.sourceUrl ?? null,
+        history_core_source_license: period.sourceLicense ?? null,
+        history_core_source_warning: sourceWarning,
         // Keep each component's own dates for map inspection; a union-level
         // interval would incorrectly attribute one component's dates to another.
         history_core_source_start_date: feature.properties?.start_date ?? null,
