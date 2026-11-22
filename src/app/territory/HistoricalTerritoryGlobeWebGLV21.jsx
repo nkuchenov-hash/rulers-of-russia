@@ -166,12 +166,18 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       const response=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});
       if(!response.ok)throw new Error(`Archive HTTP ${response.status}`);
       const archive=await response.json();
-      const features=(archive.features??[]).filter(feature=>{
+      const eligible=(archive.features??[]).filter(feature=>{
         const p=feature.properties??{};
         const start=Number(p.start_date),end=Number(p.end_date);
         return Array.isArray(p.source_ids)&&p.source_ids.includes('capture:cliopatria-v0.2.0')
           &&Number.isFinite(start)&&Number.isFinite(end)&&start<=year&&year<=end;
       });
+      // Archive snapshots may overlap in time. Never union two successive
+      // whole-state outlines: doing so invents territory absent from the newer
+      // reconstruction. Keep all component polygons of the latest-started
+      // snapshot, but no polygons from earlier overlapping snapshots.
+      const latestStart=eligible.length?Math.max(...eligible.map(feature=>Number(feature.properties.start_date))):null;
+      const features=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart);
       if(!features.length){failClosed();return}
       const collection=normalizeCollection({type:'FeatureCollection',features});
       if(!collection.features.length){failClosed();return}
