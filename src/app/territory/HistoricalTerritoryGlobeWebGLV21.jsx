@@ -148,7 +148,52 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
     isAlternativeReconstruction:true,
   }:canonical;
   const failClosed=()=>{if(!c.signal.aborted){setRussia(null);setHistoryState(null);setLoadedMonthKey(activeKey)}};
-  if(!displayed?.geometryFile){failClosed();return()=>c.abort()}
+  if(!displayed?.geometryFile){
+    // The archive is not an audited border source. Where the canonical month has
+    // no polygon, show only an exactly dated, CC BY 4.0 Cliopatria capture,
+    // explicitly identified as an unreviewed reconstruction.
+    const archiveByPolity={
+      'kievan-rus':'kievan-rus',
+      'grand-vladimir':'grand-vladimir',
+      'russian-empire':'russian-empire',
+      'ussr':'ussr',
+    };
+    const archiveName=archiveByPolity[polityId];
+    if(!archiveName){failClosed();return()=>c.abort()}
+    setLoadedMonthKey(null);
+    const file=`data/territory/archive/${archiveName}.geojson`;
+    const loadArchive=async()=>{
+      const response=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});
+      if(!response.ok)throw new Error(`Archive HTTP ${response.status}`);
+      const archive=await response.json();
+      const features=(archive.features??[]).filter(feature=>{
+        const p=feature.properties??{};
+        const start=Number(p.start_date),end=Number(p.end_date);
+        return Array.isArray(p.source_ids)&&p.source_ids.includes('capture:cliopatria-v0.2.0')
+          &&Number.isFinite(start)&&Number.isFinite(end)&&start<=year&&year<=end;
+      });
+      if(!features.length){failClosed();return}
+      const collection=normalizeCollection({type:'FeatureCollection',features});
+      if(!collection.features.length){failClosed();return}
+      if(!c.signal.aborted){
+        setRussia(collection);
+        setHistoryState({
+          ...canonical,
+          status:'provisional',
+          confidence:'unreviewed',
+          sourceAttribution:'Cliopatria / Seshat Global History Databank (CC BY 4.0)',
+          sourceUrl:'https://github.com/Seshat-Global-History-Databank/cliopatria',
+          sourceLicense:'CC BY 4.0',
+          sourceWarning:'Архивная реконструкция для указанного года. Контур не прошёл независимую историческую проверку.',
+          isAlternativeReconstruction:true,
+          geometryFile:file,
+        });
+        setLoadedMonthKey(activeKey);
+      }
+    };
+    loadArchive().catch(failClosed);
+    return()=>c.abort();
+  }
   setLoadedMonthKey(null);
   const load=async(state)=>{
     const file=String(state.geometryFile).replace(/^\/+/,''),key=`history:${file}`;
