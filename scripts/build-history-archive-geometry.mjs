@@ -84,8 +84,14 @@ for (const recipe of recipes) {
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid componentBboxFilter`);
     const polygonBbox = polygon => {
       const pts = polygon.flat();
-      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
-      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const [x, y] of pts) {
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+      return [minX, minY, maxX, maxY];
     };
     polygons = polygons.filter(polygon => {
       const [minX,minY,maxX,maxY] = polygonBbox(polygon);
@@ -131,8 +137,14 @@ for (const recipe of recipes) {
     assert([f.minLon,f.minLat,f.maxLon,f.maxLat].every(Number.isFinite), `Archive geometry recipe ${recipe.id} has invalid resultComponentBboxFilter`);
     const polygonBbox = polygon => {
       const pts = polygon.flat();
-      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
-      return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const [x, y] of pts) {
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+      return [minX, minY, maxX, maxY];
     };
     polygons = polygons.filter(polygon => {
       const [minX,minY,maxX,maxY] = polygonBbox(polygon);
