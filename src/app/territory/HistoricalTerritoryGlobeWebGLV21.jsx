@@ -228,7 +228,9 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
     // User must never see an empty globe solely because an optional alternative
     // reconstruction is missing. Fall back to the retained canonical state.
     if(canonical?.geometryFile&&canonical.geometryFile!==displayed.geometryFile){
-      load({...canonical,displayAlternativeUnavailable:true}).catch(failClosed);
+      load({...canonical,displayAlternativeUnavailable:true}).catch(()=>{
+        tryDatedArchive().then(ok=>{if(!ok)failClosed()}).catch(failClosed);
+      });
     }else {
       // A missing generated GeoJSON must not leave a blank territory when an
       // exactly dated, properly attributed archived reconstruction exists.
