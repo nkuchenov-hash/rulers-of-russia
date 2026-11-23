@@ -1,0 +1,18 @@
+name: USSR 1942 1952 controls
+on:
+  pull_request:
+    paths:
+      - scripts/analyze-ussr-1942-1952.mjs
+      - .github/workflows/ussr-1942-1952-controls.yml
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/analyze-ussr-1942-1952.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ussr-1942-1952-controls
+          path: ussr-1942-1952-controls.json
