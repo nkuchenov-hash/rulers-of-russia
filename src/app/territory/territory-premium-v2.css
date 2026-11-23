@@ -2,12 +2,12 @@
 .premiumCountryLabels,.premiumPlaceLabels{pointer-events:none}.premiumCountryLabel,.premiumRussiaLabel,.premiumCapitalLabel,.premiumCityLabel{font-family:Georgia,"Times New Roman",serif;paint-order:stroke fill;stroke:rgba(4,13,17,.72);stroke-linejoin:round}.premiumCountryLabel{fill:rgba(238,228,207,.82);stroke-width:1.8px;letter-spacing:.01em}.premiumRussiaLabel{fill:#f4ead3;font-size:20px;stroke:rgba(19,35,25,.82);stroke-width:2.6px}.premiumCapitalStar{fill:#ecd398;stroke:#17211e;stroke-width:.65px}.premiumCityDot{fill:#f3e8cf;stroke:#17211e;stroke-width:.65px}.premiumCapitalLabel{fill:#fff2d7;font-size:12px;font-weight:600;stroke-width:1.8px}.premiumCityLabel{fill:rgba(241,232,213,.88);font-size:10px;stroke-width:1.5px}.premiumLegend{position:absolute;z-index:9;left:24px;bottom:145px;display:grid;gap:6px;padding:10px 12px;border:1px solid rgba(218,185,108,.3);border-radius:11px;background:rgba(3,11,14,.9);color:#e9dfca;font:11px/1.25 Georgia,"Times New Roman",serif;pointer-events:none}
 @media(max-width:980px){.premiumCountryLabel{stroke-width:1.5px}.premiumRussiaLabel{font-size:18px;stroke-width:2.2px}.premiumCapitalLabel{font-size:11px;stroke-width:1.5px}.premiumCityLabel{font-size:10px;stroke-width:1.3px}.premiumLegend{left:12px;bottom:116px;font-size:10px}}
 @media(max-width:560px){
-  .premiumCountryLabel{font-size:10px!important;fill:rgba(241,232,212,.76);stroke-width:.9px}
+  .premiumCountryLabel{font-size:14px!important;fill:rgba(241,232,212,.76);stroke-width:.9px}
   .premiumCountryLabels>text:nth-child(n+7){display:none}
-  .premiumRussiaLabel{font-size:14px!important;stroke-width:1.25px}
+  .premiumRussiaLabel{font-size:18px!important;stroke-width:1.25px}
   .premiumPlaceLabels>g:nth-child(n+5){display:none}
   .premiumPlaceLabels>g:has(.premiumCityDot){display:none}
-  .premiumCapitalLabel{font-size:10px!important;font-weight:500;stroke-width:.9px}
+  .premiumCapitalLabel{font-size:14px!important;font-weight:500;stroke-width:.9px}
   .premiumCapitalStar{transform:scale(.72)}
   .premiumCityLabel{display:none}
   .premiumLegend{display:none}
@@ -27,13 +27,13 @@
 
 /* On narrow screens, keep the map center available for exploring nearby historical context. */
 @media(max-width:560px){
-  .territory-flat-missing-history{top:12px;transform:translateX(-50%);width:calc(100% - 24px);max-width:390px;padding:10px 12px;font-size:13px;line-height:1.35;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+  .territory-flat-missing-history{top:12px;transform:translateX(-50%);width:calc(100% - 24px);max-width:390px;padding:10px 12px;font-size:16px;line-height:1.35;box-shadow:0 4px 16px rgba(0,0,0,.28)}
 }
 
 /* Touch-accessible provenance; keep the default legend compact until expanded. */
 .territory-flat-provenance-details{display:none}
 @media(max-width:720px){
-  .territory-flat-provenance-details{display:block;position:absolute;z-index:5;left:10px;bottom:10px;max-width:min(260px,calc(100% - 30px));box-sizing:border-box;padding:7px 10px;border:1px solid rgba(227,200,135,.55);border-radius:9px;background:rgba(3,14,19,.96);color:#f0e5cb;font:13px/1.4 Georgia,serif;touch-action:manipulation}
+  .territory-flat-provenance-details{display:block;position:absolute;z-index:5;left:10px;bottom:10px;max-width:min(260px,calc(100% - 30px));box-sizing:border-box;padding:7px 10px;border:1px solid rgba(227,200,135,.55);border-radius:9px;background:rgba(3,14,19,.96);color:#f0e5cb;font:16px/1.45 Georgia,serif;touch-action:manipulation}
   .territory-flat-provenance-details summary{cursor:pointer;min-height:26px;display:list-item;font-weight:600}
   .territory-flat-provenance-details[open]{max-height:min(55%,270px);overflow:auto}
   .territory-flat-provenance-details p{margin:8px 0 0;overflow-wrap:anywhere}
@@ -65,7 +65,7 @@
    Desktop and portrait layouts remain unchanged. */
 @media (orientation:landscape) and (max-height:500px) and (max-width:980px){
   .territory-flat-host{inset:64px 0 88px;min-height:120px}
-  .territory-flat-missing-history{top:8px;transform:translateX(-50%);width:min(420px,calc(100% - 24px));padding:8px 12px;font-size:12px;line-height:1.3}
+  .territory-flat-missing-history{top:8px;transform:translateX(-50%);width:min(420px,calc(100% - 24px));padding:8px 12px;font-size:15px;line-height:1.35}
   .territory-flat-provenance-details{bottom:max(6px,env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left));max-width:min(240px,45vw)}
   .territory-flat-provenance-details[open]{max-height:min(65%,180px);max-width:min(420px,calc(100% - 24px))}
   .territory-flat-watermark{right:max(8px,env(safe-area-inset-right));bottom:8px;max-width:150px}
