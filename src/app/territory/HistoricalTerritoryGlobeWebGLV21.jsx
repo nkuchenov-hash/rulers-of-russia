@@ -189,9 +189,10 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       // reconstruction. Keep all component polygons of the latest-started
       // snapshot, but no polygons from earlier overlapping snapshots.
       const latestStart=eligible.length?Math.max(...eligible.map(feature=>Number(feature.properties.start_date))):null;
-      const latestEnd=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart).reduce((end,feature)=>Math.min(end,Number(feature.properties.end_date)),Infinity);
-      // Keep a single dated source snapshot, including its disjoint components.
-      // Equal start dates can still represent different successive snapshots.
+      const latestEnd=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart).reduce((end,feature)=>Math.max(end,Number(feature.properties.end_date)),-Infinity);
+      // Prefer the latest ending snapshot among equal start dates, matching
+      // selectRussia. An earlier ending snapshot must not hide later coverage.
+      // Keep every disjoint polygon belonging to the selected dated snapshot.
       const features=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart&&Number(feature.properties.end_date)===latestEnd);
       if(!features.length)return false;
       const collection=normalizeCollection({type:'FeatureCollection',features});
