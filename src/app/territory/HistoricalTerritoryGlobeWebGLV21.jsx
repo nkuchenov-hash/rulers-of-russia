@@ -41,7 +41,20 @@ function featureName(f){const p=f?.properties??{};return[p.NAME_RU,p.name_ru,p.R
 function featureSetKey(features){return(features??[]).map(f=>`${featureName(f)}:${yearPart(f?.properties?.start_date)??''}:${yearPart(f?.properties?.end_date)??''}`).join('|')}
 function countryColor(f,i=0){const name=featureName(f);let h=23+i*17;for(let k=0;k<name.length;k++)h=((h<<5)-h+name.charCodeAt(k))|0;return COUNTRY_PALETTE[Math.abs(h)%COUNTRY_PALETTE.length]}
 function validAt(f,y){const s=yearPart(f?.properties?.start_date),e=yearPart(f?.properties?.end_date);return(s===null||y>=s)&&(e===null||y<=e)}
-function selectRussia(c,y){if(!c?.features?.length)return[];const exact=c.features.filter(f=>validAt(f,y));if(exact.length)return exact;const prev=c.features.map(feature=>({feature,start:yearPart(feature.properties?.start_date)})).filter(x=>x.start!==null&&x.start<=y).sort((a,b)=>b.start-a.start);return prev.length?prev.filter(x=>x.start===prev[0].start).map(x=>x.feature):[]}
+function selectRussia(c,y){
+  if(!c?.features?.length)return[];
+  // Never combine successive whole-state snapshots that overlap in time.
+  // Keep every polygon belonging to the most recent matching dated interval.
+  // A feature whose interval has expired is not evidence of a border at y.
+  const eligible=c.features.filter(f=>validAt(f,y));
+  if(!eligible.length)return[];
+  const dated=eligible.filter(f=>yearPart(f.properties?.start_date)!==null&&yearPart(f.properties?.end_date)!==null);
+  if(!dated.length)return eligible;
+  const latestStart=Math.max(...dated.map(f=>yearPart(f.properties.start_date)));
+  const latest=dated.filter(f=>yearPart(f.properties.start_date)===latestStart);
+  const latestEnd=Math.max(...latest.map(f=>yearPart(f.properties.end_date)));
+  return latest.filter(f=>yearPart(f.properties.end_date)===latestEnd);
+}
 function latLonVector(lat,lon,r=1){const p=lat*Math.PI/180,l=lon*Math.PI/180;return new THREE.Vector3(Math.cos(p)*Math.cos(l),Math.sin(p),-Math.cos(p)*Math.sin(l)).multiplyScalar(r)}
 function labelVisibleFromCamera(point,cameraPosition,radius=1.007){const vx=point.x-cameraPosition.x,vy=point.y-cameraPosition.y,vz=point.z-cameraPosition.z,targetDistance=Math.hypot(vx,vy,vz);if(targetDistance<=0)return true;const dx=vx/targetDistance,dy=vy/targetDistance,dz=vz/targetDistance,b=cameraPosition.x*dx+cameraPosition.y*dy+cameraPosition.z*dz,c=cameraPosition.lengthSq()-radius*radius,disc=b*b-c;if(disc<=0)return true;const hit=-b-Math.sqrt(disc);return!(hit>0&&hit<targetDistance-.004)}
 function polygonRings(f){return f.geometry.type==='Polygon'?f.geometry.coordinates:f.geometry.coordinates.flat()}
