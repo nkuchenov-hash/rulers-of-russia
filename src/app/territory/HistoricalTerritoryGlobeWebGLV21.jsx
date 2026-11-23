@@ -148,10 +148,10 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
     isAlternativeReconstruction:true,
   }:canonical;
   const failClosed=()=>{if(!c.signal.aborted){setRussia(null);setHistoryState(null);setLoadedMonthKey(activeKey)}};
-  if(!displayed?.geometryFile){
-    // The archive is not an audited border source. Where the canonical month has
-    // no polygon, show only an exactly dated, CC BY 4.0 Cliopatria capture,
-    // explicitly identified as an unreviewed reconstruction.
+  // Reuse a dated, explicitly unreviewed CC BY archival snapshot when a
+  // materialized polygon is absent or its file fails to load. Never substitute
+  // an undated whole-state archive or a differently licensed OHM capture.
+  const tryDatedArchive=async()=>{
     const archiveByPolity={
       'kievan-rus':'kievan-rus',
       'grand-vladimir':'grand-vladimir',
@@ -159,8 +159,7 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       'ussr':'ussr',
     };
     const archiveName=archiveByPolity[polityId];
-    if(!archiveName){failClosed();return()=>c.abort()}
-    setLoadedMonthKey(null);
+    if(!archiveName)return false;
     const file=`data/territory/archive/${archiveName}.geojson`;
     const loadArchive=async()=>{
       const response=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});
@@ -181,9 +180,9 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       // Keep a single dated source snapshot, including its disjoint components.
       // Equal start dates can still represent different successive snapshots.
       const features=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart&&Number(feature.properties.end_date)===latestEnd);
-      if(!features.length){failClosed();return}
+      if(!features.length)return false;
       const collection=normalizeCollection({type:'FeatureCollection',features});
-      if(!collection.features.length){failClosed();return}
+      if(!collection.features.length)return false;
       if(!c.signal.aborted){
         setRussia(collection);
         setHistoryState({
@@ -199,8 +198,13 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
         });
         setLoadedMonthKey(activeKey);
       }
+      return true;
     };
-    loadArchive().catch(failClosed);
+    return loadArchive();
+  };
+  if(!displayed?.geometryFile){
+    setLoadedMonthKey(null);
+    tryDatedArchive().then(ok=>{if(!ok)failClosed()}).catch(failClosed);
     return()=>c.abort();
   }
   setLoadedMonthKey(null);
@@ -225,7 +229,11 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
     // reconstruction is missing. Fall back to the retained canonical state.
     if(canonical?.geometryFile&&canonical.geometryFile!==displayed.geometryFile){
       load({...canonical,displayAlternativeUnavailable:true}).catch(failClosed);
-    }else failClosed();
+    }else {
+      // A missing generated GeoJSON must not leave a blank territory when an
+      // exactly dated, properly attributed archived reconstruction exists.
+      tryDatedArchive().then(ok=>{if(!ok)failClosed()}).catch(failClosed);
+    }
   });
   return()=>c.abort();
 },[monthIndex,polityId,year,month]);useEffect(()=>{const entries=activeVerifiedBoundaryEntries(boundaryIndex,year,month,polityId);if(!entries.length){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey);return}const base=process.env.NEXT_PUBLIC_BASE_PATH??'',c=new AbortController();Promise.all(entries.map(async entry=>{const file=String(entry.geometryFile).replace(/^\/+/,''),key=`boundary:${file}`;let data=bc.current.get(key);if(!data){const r=await fetch(`${base}/${file}`,{signal:c.signal,cache:'force-cache'});if(!r.ok)throw new Error(`Verified boundary HTTP ${r.status}`);data=await r.json();bc.current.set(key,data)}return{entry,data}})).then(items=>{if(!c.signal.aborted){setVerifiedBoundaries(items);setLoadedBoundaryKey(activeKey)}}).catch(()=>{if(!c.signal.aborted){setVerifiedBoundaries([]);setLoadedBoundaryKey(activeKey)}});return()=>c.abort()},[boundaryIndex,polityId,year,month]);return{index,monthIndex,historyState:loadedMonthKey===activeKey?historyState:null,historyLoading:loadedMonthKey!==activeKey,world:loadedWorldFile===snapshotAt(index,year)?.file?world:null,worldYear:loadedWorldFile===snapshotAt(index,year)?.file?worldYear:null,russia:loadedMonthKey===activeKey?russia:null,rivers,verifiedBoundaries:loadedBoundaryKey===activeKey?verifiedBoundaries:[]}}
