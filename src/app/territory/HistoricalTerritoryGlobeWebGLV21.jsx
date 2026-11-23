@@ -177,7 +177,10 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
       // reconstruction. Keep all component polygons of the latest-started
       // snapshot, but no polygons from earlier overlapping snapshots.
       const latestStart=eligible.length?Math.max(...eligible.map(feature=>Number(feature.properties.start_date))):null;
-      const features=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart);
+      const latestEnd=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart).reduce((end,feature)=>Math.min(end,Number(feature.properties.end_date)),Infinity);
+      // Keep a single dated source snapshot, including its disjoint components.
+      // Equal start dates can still represent different successive snapshots.
+      const features=eligible.filter(feature=>Number(feature.properties.start_date)===latestStart&&Number(feature.properties.end_date)===latestEnd);
       if(!features.length){failClosed();return}
       const collection=normalizeCollection({type:'FeatureCollection',features});
       if(!collection.features.length){failClosed();return}
@@ -190,7 +193,7 @@ function useHistoricalData(year,month,polityId){const[index,setIndex]=useState(n
           sourceAttribution:'Cliopatria / Seshat Global History Databank (CC BY 4.0)',
           sourceUrl:'https://github.com/Seshat-Global-History-Databank/cliopatria',
           sourceLicense:'CC BY 4.0',
-          sourceWarning:'Архивная реконструкция для указанного года. Контур не прошёл независимую историческую проверку.',
+          sourceWarning:`Архивная реконструкция за ${latestStart}–${latestEnd} гг. (не помесячная граница). Контур не прошёл независимую историческую проверку.`,
           isAlternativeReconstruction:true,
           geometryFile:file,
         });
